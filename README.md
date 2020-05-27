@@ -46,14 +46,6 @@ sdpSendEndpoint.on('newproducer', (producer: mediasoupTypes.Producer) => {
   // => "new producer created: <Producer>"
 });
 
-// Listen for 'negotiationneeded' event to send SDPs answers to the remote
-// endpoint. `type` is always 'answer' for SdpSendEndpoint.
-sdpSendEndpoint.on('negotiationneeded', (type: 'offer' | 'answer') => {
-  const sdpAnswer = sdpSendEndpoint.createAnswer();
-
-  mySignaling.sendAnswer(sdpAnswer);
-});
-
 // Upon receipt of a SDP offer from the remote endpoint, apply it.
 mySignaling.on('sdp-offer', async (sdpOffer: string) => {
   // This will trigger 'negotiationneeded' event and may also trigger N
@@ -63,6 +55,11 @@ mySignaling.on('sdp-offer', async (sdpOffer: string) => {
   // Once the SDP offer is applied, we can obtain the created Producers.
   console.log('created producers:', sdpSendEndpoint.producers);
   // => "created producers: [<Producer>, <Producer>]"
+
+  // Obtain the corresponding SDP answer and reply the remote endpoint with it.
+  const sdpAnswer = sdpSendEndpoint.createAnswer();
+
+  mySignaling.sendAnswer(sdpAnswer);
 });
 ```
 
