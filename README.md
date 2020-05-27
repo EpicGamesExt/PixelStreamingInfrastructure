@@ -129,7 +129,7 @@ sdpRecvEndpoint.on('negotiationneeded', (type: 'offer' | 'answer') => {
 
   // Send the SDP (re-)offer to the remote endpoint and wait for its SDP
   // answer.
-  await answerSdp = await mySignaling.sendOffer(sdpOffer);
+  const answerSdp = await mySignaling.sendOffer(sdpOffer);
 
   // Provide the SdpRecvEndpoint with the SDP answer.
   await sdpRecvEndpoint.receiveAnswer(answerSdp);
