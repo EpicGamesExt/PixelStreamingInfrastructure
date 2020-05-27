@@ -29,20 +29,9 @@ import mySignaling from './my-signaling'; // Our own signaling stuff.
 
 // Create a WebRTC SdpSendEndpoint to receive media from the remote endpoint.
 const sdpSendEndpoint = await sdpBridge.createSdpSendEndpoint({
-  // A mediasoup Router instance.
-  router: router,
-  // Can be 'webrtc' or 'plain'.
-  type: 'webrtc',
-  // Options for the WebRtcTransport or PlainTransport.
-  transportOptions: {
-    listenIps: [ { ip: '10.10.0.123', announcedIp: '1.2.3.4' } ],
-    enableTcp: false,
-  }
+  // A mediasoup WebRtcTransport or PlainTransport.
+  transport: transport
 });
-
-// Can access the created mediasoup WebRtcTransport.
-console.log('created transport:', sdpSendEndpoint.transport);
-// => "created transport: <WebRtcTransport>"
 
 // Listen for 'transportclose' event (triggered by WebRtcTransport or Router
 // closure).
@@ -86,15 +75,8 @@ import mySignaling from './my-signaling'; // Our own signaling stuff.
 
 // Create a WebRTC SdpRecvEndpoint to send media to the remote endpoint.
 const sdpRecvEndpoint = await sdpBridge.createSdpSendEndpoint({
-  // A mediasoup Router instance.
-  router: router,
-  // Can be 'webrtc' or 'plain'.
-  type: 'webrtc',
-  // Options for the WebRtcTransport or PlainTransport.
-  transportOptions: {
-    listenIps: [ { ip: '10.10.0.123', announcedIp: '1.2.3.4' } ],
-    enableTcp: false,
-  },
+  // A mediasoup WebRtcTransport or PlainTransport.
+  transport: transport,
   // RTP capabilities of the remote endpoint. Must be a subseet of the
   // router.rtpCapabilities with matching codec payload types and header
   // extensions ids.
@@ -104,10 +86,6 @@ const sdpRecvEndpoint = await sdpBridge.createSdpSendEndpoint({
     headerExtensions: [...]
   }
 });
-
-// Can access the created mediasoup WebRtcTransport.
-console.log('created transport:', sdpRecvEndpoint.transport);
-// => "created transport: <WebRtcTransport>"
 
 // Listen for 'transportclose' event (triggered by WebRtcTransport or Router
 // closure).
