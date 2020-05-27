@@ -115,9 +115,10 @@ sdpRecvEndpoint.on('negotiationneeded', (type: 'offer' | 'answer') => {
 // SdpRecvEndpoint to consume them. consume() method will trigger
 // 'negotiationneeded' and 'newconsumer' events.
 //
-// NOTE: By calling consume() method in parallel (without waiting for the previous
-// one to complete) we ensure that the 'negotiationneeded' event will just be
-// emitted once upon completion of all consume() calls.
+// NOTE: By calling consume() method in parallel (without waiting for the
+// previous one to complete) we ensure that the 'negotiationneeded' event will
+// just be emitted once upon completion of all consume() calls, so a single
+// SDP O/A will be needed.
 await Promise.all([
   sdpRecvEndpoint
     .consume({ producer: producer1 })
