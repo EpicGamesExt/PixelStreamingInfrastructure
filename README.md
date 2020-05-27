@@ -62,7 +62,7 @@ sdpSendEndpoint.on('newproducer', (producer: mediasoupTypes.Producer) => {
 sdpSendEndpoint.on('negotiationneeded', (type: 'offer' | 'answer') => {
   const sdpAnswer = sdpSendEndpoint.createAnswer();
 
-  sdpSendEndpoint.sendAnswer(sdpAnswer);
+  mySignaling.sendAnswer(sdpAnswer);
 });
 
 // Upon receipt of a SDP offer from the remote endpoint, apply it.
