@@ -40,21 +40,10 @@ sdpSendEndpoint.on('transportclose', () => {
   // => "sdpSendEndpoint.closed: true"
 });
 
-// Listen for 'newproducer' event.
-sdpSendEndpoint.on('newproducer', (producer: mediasoupTypes.Producer) => {
-  console.log('new producer created:', producer);
-  // => "new producer created: <Producer>"
-});
-
 // Upon receipt of a SDP offer from the remote endpoint, apply it.
 mySignaling.on('sdp-offer', async (sdpOffer: string) => {
-  // This will trigger 'negotiationneeded' event and may also trigger N
-  // 'newproducer' events.
-  await sdpSendEndpoint.receiveOffer(sdpOffer);
-
-  // Once the SDP offer is applied, we can obtain the created Producers.
-  console.log('created producers:', sdpSendEndpoint.producers);
-  // => "created producers: [<Producer>, <Producer>]"
+  // This method will resolve with an array of created mediasoup Producers.
+  const producers = await sdpSendEndpoint.receiveOffer(sdpOffer);
 
   // Obtain the corresponding SDP answer and reply the remote endpoint with it.
   const sdpAnswer = sdpSendEndpoint.createAnswer();
@@ -91,15 +80,10 @@ sdpRecvEndpoint.on('transportclose', () => {
   // => "sdpRecvEndpoint.closed: true"
 });
 
-// Listen for 'newconsumer' event.
-sdpRecvEndpoint.on('newconsumer', (consumer: mediasoupTypes.Consumer) => {
-  console.log('new consumer created:', consumer);
-  // => "new consumer created: <consumer>"
-});
-
 // Listen for 'negotiationneeded' event to send SDPs offers to the remote
-// endpoint. `type` is always 'offer' for SdpRecvEndpoint.
-sdpRecvEndpoint.on('negotiationneeded', (type: 'offer' | 'answer') => {
+// endpoint. This event is emitted when sdpRecvEndpoint.consume() is called or
+// when a Producer being consumed is closed or paused/resumed.
+sdpRecvEndpoint.on('negotiationneeded', () => {
   const sdpOffer = sdpRecvEndpoint.createOffer();
 
   // Send the SDP (re-)offer to the remote endpoint and wait for its SDP
@@ -113,7 +97,7 @@ sdpRecvEndpoint.on('negotiationneeded', (type: 'offer' | 'answer') => {
 // If there were mediasoup Producers already created in the Router, or if a new
 // one is created, and we want to consume them in the remote endpoint, tell the
 // SdpRecvEndpoint to consume them. consume() method will trigger
-// 'negotiationneeded' and 'newconsumer' events.
+// 'negotiationneeded' and will resolve with the created mediasoup Consumer.
 //
 // NOTE: By calling consume() method in parallel (without waiting for the
 // previous one to complete) we ensure that the 'negotiationneeded' event will
@@ -127,10 +111,6 @@ await Promise.all([
     .consume({ producer: producer2 })
     .catch((error) => console.error('sdpRecvEndpoint.consume() failed:', error)),
 ]);
-
-// We can now obtain the created Consumers.
-console.log('created consumers:', sdpRecvEndpoint.consumers);
-// => "created consumers: [<Consumer>, <Consumer>]"
 ```
 
 
