@@ -153,7 +153,7 @@ await Promise.all([
 ]);
 
 // We can now obtain the created Consumers.
-console.log('created consumers:', sdpSendEndpoint.consumers);
+console.log('created consumers:', sdpRecvEndpoint.consumers);
 // => "created consumers: [<Consumer>, <Consumer>]"
 ```
 
