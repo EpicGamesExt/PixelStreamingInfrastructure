@@ -91,7 +91,7 @@ sdpRecvEndpoint.on('negotiationneeded', () => {
   const answerSdp = await mySignaling.sendOffer(sdpOffer);
 
   // Provide the SdpRecvEndpoint with the SDP answer.
-  await sdpRecvEndpoint.provideAnswer(answerSdp);
+  await sdpRecvEndpoint.processAnswer(answerSdp);
 });
 
 // If there were mediasoup Producers already created in the Router, or if a new
