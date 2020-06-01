@@ -43,7 +43,7 @@ sdpSendEndpoint.on('transportclose', () => {
 // Upon receipt of a SDP offer from the remote endpoint, apply it.
 mySignaling.on('sdp-offer', async (sdpOffer: string) => {
   // This method will resolve with an array of created mediasoup Producers.
-  const producers = await sdpSendEndpoint.receiveOffer(sdpOffer);
+  const producers = await sdpSendEndpoint.processOffer(sdpOffer);
 
   // Obtain the corresponding SDP answer and reply the remote endpoint with it.
   const sdpAnswer = sdpSendEndpoint.createAnswer();
@@ -60,7 +60,7 @@ import { types as mediasoupTypes } from 'mediasoup';
 import mySignaling from './my-signaling'; // Our own signaling stuff.
 
 // Create a WebRTC SdpRecvEndpoint to send media to the remote endpoint.
-const sdpRecvEndpoint = await sdpBridge.createSdpSendEndpoint({
+const sdpRecvEndpoint = await sdpBridge.createSdpRecvEndpoint({
   // A mediasoup WebRtcTransport or PlainTransport.
   transport: transport,
   // RTP capabilities of the remote endpoint. Must be a subseet of the
@@ -91,7 +91,7 @@ sdpRecvEndpoint.on('negotiationneeded', () => {
   const answerSdp = await mySignaling.sendOffer(sdpOffer);
 
   // Provide the SdpRecvEndpoint with the SDP answer.
-  await sdpRecvEndpoint.receiveAnswer(answerSdp);
+  await sdpRecvEndpoint.provideAnswer(answerSdp);
 });
 
 // If there were mediasoup Producers already created in the Router, or if a new
