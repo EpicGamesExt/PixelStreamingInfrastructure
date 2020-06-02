@@ -33,13 +33,6 @@ const sdpSendEndpoint = await sdpBridge.createSdpSendEndpoint({
   transport: transport
 });
 
-// Listen for 'transportclose' event (triggered by WebRtcTransport or Router
-// closure).
-sdpSendEndpoint.on('transportclose', () => {
-  console.log('sdpSendEndpoint.closed:', sdpSendEndpoint.closed);
-  // => "sdpSendEndpoint.closed: true"
-});
-
 // Upon receipt of a SDP offer from the remote endpoint, apply it.
 mySignaling.on('sdp-offer', async (sdpOffer: string) => {
   // This method will resolve with an array of created mediasoup Producers.
@@ -71,13 +64,6 @@ const sdpRecvEndpoint = await sdpBridge.createSdpRecvEndpoint({
     codecs: [...],
     headerExtensions: [...]
   }
-});
-
-// Listen for 'transportclose' event (triggered by WebRtcTransport or Router
-// closure).
-sdpRecvEndpoint.on('transportclose', () => {
-  console.log('sdpRecvEndpoint.closed:', sdpRecvEndpoint.closed);
-  // => "sdpRecvEndpoint.closed: true"
 });
 
 // Listen for 'negotiationneeded' event to send SDPs offers to the remote
