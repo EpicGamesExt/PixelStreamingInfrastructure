@@ -23,12 +23,12 @@ Within the Node.js server app running mediasoup:
 #### Remote SDP endpoint sends media to mediasoup
 
 ```typescript
-import { sdpBridge } from 'mediasoup-sdp-bridge';
+import { createSdpEndpoint } from 'mediasoup-sdp-bridge';
 import { types as mediasoupTypes } from 'mediasoup';
 import mySignaling from './my-signaling'; // Our own signaling stuff.
 
-// Create a WebRTC SdpSendEndpoint to receive media from the remote endpoint.
-const sdpSendEndpoint = await sdpBridge.createSdpSendEndpoint({
+// Create a SdpEndpoint to receive media from the remote endpoint.
+const sdpEndpoint = await createSdpEndpoint({
   // A mediasoup WebRtcTransport or PlainTransport.
   transport: transport
 });
@@ -36,10 +36,12 @@ const sdpSendEndpoint = await sdpBridge.createSdpSendEndpoint({
 // Upon receipt of a SDP offer from the remote endpoint, apply it.
 mySignaling.on('sdp-offer', async (sdpOffer: string) => {
   // This method will resolve with an array of created mediasoup Producers.
-  const producers = await sdpSendEndpoint.processOffer(sdpOffer);
+  const producers = await sdpEndpoint.processOffer(sdpOffer);
 
   // Obtain the corresponding SDP answer and reply the remote endpoint with it.
-  const sdpAnswer = sdpSendEndpoint.createAnswer();
+  const sdpAnswer = sdpEndpoint.createAnswer();
+  // or:
+  const sdpAnswerObject = sdpEndpoint.createAnswerObject();
 
   mySignaling.sendAnswer(sdpAnswer);
 });
@@ -48,51 +50,65 @@ mySignaling.on('sdp-offer', async (sdpOffer: string) => {
 #### mediasoup sends media to the remote SDP endpoint
 
 ```typescript
-import { sdpBridge, generateRtpCapabilities } from 'mediasoup-sdp-bridge';
+import {
+  createSdpEndpoint, 
+  generateRtpCapabilities
+} from 'mediasoup-sdp-bridge';
 import { types as mediasoupTypes } from 'mediasoup';
 import mySignaling from './my-signaling'; // Our own signaling stuff.
 
-// Create a WebRTC SdpRecvEndpoint to send media to the remote endpoint.
-const sdpRecvEndpoint = await sdpBridge.createSdpRecvEndpoint({
+// Create a SdpEndpoint to send media to the remote endpoint.
+const sdpEndpoint = await createSdpEndpoint({
   // A mediasoup WebRtcTransport or PlainTransport.
   transport: transport,
-  // RTP capabilities of the remote endpoint. Must be a subset of the
-  // router.rtpCapabilities with matching codec payload types and header
-  // extensions ids.
-  // TODO: Document this.
-  rtpCapabilities: generateRtpCapabilities(remoteSdp);
 });
 
+// Generate remote endpoint's RTP capabilities based on a remote SDP or based
+// on handmade capabilities.
+const endpointRtpCapabilities =
+  generateRtpCapabilities(router.rtpCapabilities, remoteSdp);
+// or:
+const endpointRtpCapabilities =
+  generateRtpCapabilities(router.rtpCapabilities, handmadeRtpCapabilities);
+
 // Listen for 'negotiationneeded' event to send SDPs offers to the remote
-// endpoint. This event is emitted when sdpRecvEndpoint.consume() is called or
+// endpoint. This event is emitted when transport.consume() is called or
 // when a Producer being consumed is closed or paused/resumed.
-sdpRecvEndpoint.on('negotiationneeded', () => {
-  const sdpOffer = sdpRecvEndpoint.createOffer();
+sdpEndpoint.on('negotiationneeded', () => {
+  const sdpOffer = sdpEndpoint.createOffer();
+  // or:
+  const sdpOfferObject = sdpEndpoint.createOfferObject();
 
   // Send the SDP (re-)offer to the remote endpoint and wait for its SDP
   // answer.
   const answerSdp = await mySignaling.sendOffer(sdpOffer);
 
-  // Provide the SdpRecvEndpoint with the SDP answer.
-  await sdpRecvEndpoint.processAnswer(answerSdp);
+  // Provide the SdpEndpoint with the SDP answer.
+  await sdpEndpoint.processAnswer(answerSdp);
 });
 
 // If there were mediasoup Producers already created in the Router, or if a new
 // one is created, and we want to consume them in the remote endpoint, tell the
-// SdpRecvEndpoint to consume them. consume() method will trigger
-// 'negotiationneeded' and will resolve with the created mediasoup Consumer.
+// Transport to consume them. transport.consume() method will trigger
+// 'negotiationneeded' event above.
 //
 // NOTE: By calling consume() method in parallel (without waiting for the
 // previous one to complete) we ensure that the 'negotiationneeded' event will
 // just be emitted once upon completion of all consume() calls, so a single
 // SDP O/A will be needed.
-sdpRecvEndpoint
-  .consume({ producer: producer1 })
-  .catch((error) => console.error('sdpRecvEndpoint.consume() failed:', error)),
+transport
+  .consume({
+    producerId: producer1.id,
+    rtpCapabilities: endpointRtpCapabilities 
+  })
+  .catch((error) => console.error('transport.consume() failed:', error));
 
-sdpRecvEndpoint
-  .consume({ producer: producer2 })
-  .catch((error) => console.error('sdpRecvEndpoint.consume() failed:', error)),
+transport
+  .consume({
+    producerId: producer2.id,
+    rtpCapabilities: endpointRtpCapabilities 
+  })
+  .catch((error) => console.error('transport.consume() failed:', error));
 ```
 
 
