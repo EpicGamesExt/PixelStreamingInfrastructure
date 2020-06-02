@@ -60,7 +60,7 @@ const sdpRecvEndpoint = await sdpBridge.createSdpRecvEndpoint({
   // router.rtpCapabilities with matching codec payload types and header
   // extensions ids.
   // TODO: Document this.
-  remoteSdp: generateRtpCapabilities(remoteSdp);
+  rtpCapabilities: generateRtpCapabilities(remoteSdp);
 });
 
 // Listen for 'negotiationneeded' event to send SDPs offers to the remote
