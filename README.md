@@ -56,7 +56,7 @@ import mySignaling from './my-signaling'; // Our own signaling stuff.
 const sdpRecvEndpoint = await sdpBridge.createSdpRecvEndpoint({
   // A mediasoup WebRtcTransport or PlainTransport.
   transport: transport,
-  // RTP capabilities of the remote endpoint. Must be a subseet of the
+  // RTP capabilities of the remote endpoint. Must be a subset of the
   // router.rtpCapabilities with matching codec payload types and header
   // extensions ids.
   // TODO: Document this.
