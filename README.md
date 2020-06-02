@@ -86,14 +86,13 @@ sdpRecvEndpoint.on('negotiationneeded', () => {
 // previous one to complete) we ensure that the 'negotiationneeded' event will
 // just be emitted once upon completion of all consume() calls, so a single
 // SDP O/A will be needed.
-await Promise.all([
-  sdpRecvEndpoint
-    .consume({ producer: producer1 })
-    .catch((error) => console.error('sdpRecvEndpoint.consume() failed:', error)),
-  sdpRecvEndpoint
-    .consume({ producer: producer2 })
-    .catch((error) => console.error('sdpRecvEndpoint.consume() failed:', error)),
-]);
+sdpRecvEndpoint
+  .consume({ producer: producer1 })
+  .catch((error) => console.error('sdpRecvEndpoint.consume() failed:', error)),
+
+sdpRecvEndpoint
+  .consume({ producer: producer2 })
+  .catch((error) => console.error('sdpRecvEndpoint.consume() failed:', error)),
 ```
 
 
