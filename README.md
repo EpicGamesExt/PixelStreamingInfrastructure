@@ -48,7 +48,7 @@ mySignaling.on('sdp-offer', async (sdpOffer: string) => {
 #### mediasoup sends media to the remote SDP endpoint
 
 ```typescript
-import { sdpBridge, generateCapabilities } from 'mediasoup-sdp-bridge';
+import { sdpBridge, generateRtpCapabilities } from 'mediasoup-sdp-bridge';
 import { types as mediasoupTypes } from 'mediasoup';
 import mySignaling from './my-signaling'; // Our own signaling stuff.
 
@@ -60,7 +60,7 @@ const sdpRecvEndpoint = await sdpBridge.createSdpRecvEndpoint({
   // router.rtpCapabilities with matching codec payload types and header
   // extensions ids.
   // TODO: Document this.
-  rtpCapabilities: generateCapabilities(remoteSdp);
+  remoteSdp: generateRtpCapabilities(remoteSdp);
 });
 
 // Listen for 'negotiationneeded' event to send SDPs offers to the remote
