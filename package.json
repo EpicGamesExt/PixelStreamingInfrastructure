@@ -39,6 +39,8 @@
     "awaitqueue": "^2.1.1",
     "debug": "^4.1.1",
     "h264-profile-level-id": "^1.0.1",
+    "mediasoup": "~3.6.0",
+    "mediasoup-client": "~3.6.0",
     "sdp-transform": "^2.14.0",
     "supports-color": "^7.1.0",
     "uuid": "^8.1.0"
