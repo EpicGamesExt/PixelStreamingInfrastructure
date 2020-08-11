@@ -14,7 +14,7 @@ require("util").inspect.defaultOptions.depth = null;
 // ======================================
 
 export function sdpToRecvRtpCapabilities(
-  sdpObject: any,
+  sdpObject: object,
   routerCaps: RtpCapabilities
 ): RtpCapabilities {
   const caps: RtpCapabilities = MsSdpUtils.extractRtpCapabilities({

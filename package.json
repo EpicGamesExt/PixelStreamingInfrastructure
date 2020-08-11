@@ -15,12 +15,13 @@
     "type": "opencollective",
     "url": "https://opencollective.com/mediasoup"
   },
-  "main": "lib/index.js",
-  "types": "lib/index.d.ts",
+  "main": "lib/main.js",
+  "types": "lib/main.d.ts",
   "engines": {
     "node": ">=10"
   },
   "scripts": {
+    "build": "npm run typescript:build",
     "typescript:build": "node npm-scripts.js typescript:build",
     "typescript:watch": "node npm-scripts.js typescript:watch",
     "lint": "node npm-scripts.js lint",
@@ -51,9 +52,11 @@
     "eslint-plugin-jest": "^23.13.2",
     "jest": "^26.0.1",
     "jest-tobetype": "^1.2.3",
+    "mediasoup": "~3.6.0",
+    "mediasoup-client": "~3.6.0",
     "open-cli": "^6.0.1",
     "tsc-watch": "^4.2.8",
-    "typescript": "~3.8.3"
+    "typescript": "^3.0.0"
   },
   "peerDependencies": {
     "mediasoup": "~3.6.0"

@@ -66,7 +66,7 @@ switch (task)
 
 function taskReplaceVersion()
 {
-	const file = 'lib/index.js';
+	const file = 'lib/main.js';
 	const text = fs.readFileSync(file, { encoding: 'utf8' });
 	const result = text.replace(/__MEDIASOUP_CLIENT_VERSION__/g, version);
 

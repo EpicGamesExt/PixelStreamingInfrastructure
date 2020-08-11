@@ -30,13 +30,13 @@ export class SdpEndpoint {
   private localCaps: RtpCapabilities;
 
   // Local and remote SDPs, obtained/created from SDP Offer/Answer negotiation.
-  private localSdp: any;
-  private remoteSdp: any;
+  private localSdp: string;
+  private remoteSdp: string;
 
-  private producers: Producer[];
-  private producerMedias: any[];
+  private producers: Producer[] = [];
+  private producerMedias: object[] = [];
 
-  private consumers: Consumer[];
+  private consumers: Consumer[] = [];
 
   constructor(webRtcTransport: WebRtcTransport, localCaps: RtpCapabilities) {
     this.webRtcTransport = webRtcTransport;
@@ -58,8 +58,6 @@ export class SdpEndpoint {
       );
       return [];
     }
-
-    console.log("[SdpEndpoint.processOffer] SDP Offer:\n", sdpOffer);
 
     this.remoteSdp = sdpOffer;
     const remoteSdpObj = SdpTransform.parse(sdpOffer);
@@ -86,8 +84,8 @@ export class SdpEndpoint {
         continue;
       }
       if (media.direction !== "sendonly") {
-        // Skip media which is not "sendonly", as we are only implementing a
-        // receive-only SDP endpoint for remote SDP Offers.
+        // Skip media which is not "sendonly", because this is a receive-only
+        // SDP endpoint for remote SDP Offers.
         // FIXME: A proper SDP endpoint should be able to handle all directions.
         continue;
       }
@@ -117,7 +115,7 @@ export class SdpEndpoint {
     return this.producers;
   }
 
-  public async createAnswer(): Promise<string> {
+  public createAnswer(): string {
     if (this.localSdp) {
       console.error(
         "[SdpEndpoint.createAnswer] ERROR: A local description was already set"
@@ -153,8 +151,6 @@ export class SdpEndpoint {
 
     this.localSdp = sdpBuilder.getSdp();
 
-    console.log("[SdpEndpoint.createAnswer] SDP Answer:\n", this.localSdp);
-
     return this.localSdp;
   }
 
@@ -165,11 +161,11 @@ export class SdpEndpoint {
   // * createOffer
   // * processAnswer
 
-  public async addConsumer(consumer: Consumer): Promise<void> {
+  public addConsumer(consumer: Consumer): void {
     this.consumers.push(consumer);
   }
 
-  public async createOffer(): Promise<string> {
+  public createOffer(): string {
     if (this.localSdp) {
       console.error(
         "[SdpEndpoint.createOffer] ERROR: A local description was already set"
@@ -211,8 +207,6 @@ export class SdpEndpoint {
 
     this.localSdp = sdpBuilder.getSdp();
 
-    console.log("[SdpEndpoint.createOffer] SDP Offer:\n", this.localSdp);
-
     return this.localSdp;
   }
 
@@ -223,8 +217,6 @@ export class SdpEndpoint {
       );
       return;
     }
-
-    console.log("[SdpEndpoint.processAnswer] SDP Answer:\n", sdpAnswer);
 
     this.remoteSdp = sdpAnswer;
     const remoteSdpObj = SdpTransform.parse(sdpAnswer);
@@ -244,14 +236,13 @@ export class SdpEndpoint {
     // match local and remote capabilities, and decide a subset of encodings
     // that can be received by the remote peer. However, for the current
     // implementation we just extract and print the remote capabilities.
-    const remoteCaps = SdpUtils.sdpToRecvRtpCapabilities(
-      remoteSdpObj,
-      this.localCaps
-    );
 
     // DEBUG: Uncomment for details.
     // prettier-ignore
-    // console.log("[SdpEndpoint.processAnswer] Remote RECV RtpCapabilities:\n%O", remoteCaps);
+    // {
+    //   const remoteCaps = SdpUtils.sdpToRecvRtpCapabilities(remoteSdpObj, this.localCaps);
+    //   console.log("[SdpEndpoint.processAnswer] Remote RECV RtpCapabilities:\n%O", remoteCaps);
+    // }
   }
 }
 
@@ -262,18 +253,27 @@ export function createSdpEndpoint(
   return new SdpEndpoint(webRtcTransport, localCaps);
 }
 
+export function generateRtpCapabilities0(): RtpCapabilities {
+  return BrowserRtpCapabilities.chrome;
+}
+
 export function generateRtpCapabilities1(
   localCaps: RtpCapabilities,
   remoteSdp: string
 ): RtpCapabilities {
-  // TODO: Use proper SDP Offer/Answer method to retrieve remote capabilities.
-  return BrowserRtpCapabilities.chrome;
+  // TODO: Use proper SDP Offer/Answer negotiation to obtain capabilities.
+  console.error("[SdpEndpoint.generateRtpCapabilities1] BUG: Not implemented");
+  process.exit(1);
+
+  let caps: RtpCapabilities;
+  return caps;
 }
 
 export function generateRtpCapabilities2(
   localCaps: RtpCapabilities,
   remoteCaps: RtpCapabilities
 ): RtpCapabilities {
+  // TODO: Use matching to obtain capabilities.
   console.error("[SdpEndpoint.generateRtpCapabilities2] BUG: Not implemented");
   process.exit(1);
 
