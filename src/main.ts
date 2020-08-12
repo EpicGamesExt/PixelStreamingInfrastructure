@@ -1,5 +1,6 @@
 import * as MsSdpUtils from "mediasoup-client/lib/handlers/sdp/commonUtils";
 import { RemoteSdp } from "mediasoup-client/lib/handlers/sdp/RemoteSdp";
+import { IceCandidate as ClientIceCandidate } from "mediasoup-client/lib/Transport";
 
 import {
   Consumer,
@@ -30,8 +31,8 @@ export class SdpEndpoint {
   private localCaps: RtpCapabilities;
 
   // Local and remote SDPs, obtained/created from SDP Offer/Answer negotiation.
-  private localSdp: string;
-  private remoteSdp: string;
+  private localSdp: string | undefined;
+  private remoteSdp: string | undefined;
 
   private producers: Producer[] = [];
   private producerMedias: object[] = [];
@@ -125,7 +126,7 @@ export class SdpEndpoint {
 
     const sdpBuilder: RemoteSdp = new RemoteSdp({
       iceParameters: this.webRtcTransport.iceParameters,
-      iceCandidates: this.webRtcTransport.iceCandidates,
+      iceCandidates: this.webRtcTransport.iceCandidates as ClientIceCandidate[],
       dtlsParameters: this.webRtcTransport.dtlsParameters,
       sctpParameters: this.webRtcTransport.sctpParameters,
       planB: false,
@@ -175,7 +176,7 @@ export class SdpEndpoint {
 
     const sdpBuilder: RemoteSdp = new RemoteSdp({
       iceParameters: this.webRtcTransport.iceParameters,
-      iceCandidates: this.webRtcTransport.iceCandidates,
+      iceCandidates: this.webRtcTransport.iceCandidates as ClientIceCandidate[],
       dtlsParameters: this.webRtcTransport.dtlsParameters,
       sctpParameters: this.webRtcTransport.sctpParameters,
       planB: false,
@@ -187,7 +188,7 @@ export class SdpEndpoint {
     console.log("[SdpEndpoint.createOffer] Make 'sendonly' SDP Offer");
 
     for (let i = 0; i < this.consumers.length; i++) {
-      const mid = this.consumers[i].rtpParameters.mid;
+      const mid = this.consumers[i].rtpParameters.mid ?? "nomid";
       const kind = this.consumers[i].kind;
       const sendParams = this.consumers[i].rtpParameters;
 

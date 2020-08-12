@@ -45,6 +45,7 @@
     "uuid": "^8.1.0"
   },
   "devDependencies": {
+    "@tsconfig/node10": "^1.0.0",
     "@types/sdp-transform": "^2.4.3",
     "@typescript-eslint/eslint-plugin": "^3.0.1",
     "@typescript-eslint/parser": "^3.0.1",

@@ -1,23 +1,19 @@
 {
-	"compileOnSave": true,
-	"compilerOptions":
-	{
-		"lib": [ "es6", "dom" ],
-		"target": "es2020",
-		"module": "commonjs",
-		"moduleResolution": "node",
-		"esModuleInterop": true,
-		"declaration": true,
-		"declarationMap": true,
-		"outDir": "lib",
-		"strict": true,
-		"strictNullChecks": false,
-		"noUnusedLocals": true,
-		"noUnusedParameters": false,
-		"noImplicitAny" : true,
-		"noImplicitReturns": true,
-		"noFallthroughCasesInSwitch": true,
-		"resolveJsonModule": false
-	},
-	"include": [ "src" ]
+  "extends": "@tsconfig/node10/tsconfig.json",
+
+  "compileOnSave": true,
+  "compilerOptions": {
+    "baseUrl": "./",
+    "declaration": true,
+    "declarationMap": true,
+    "incremental": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitReturns": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": false,
+    "outDir": "./lib",
+    "removeComments": true,
+    "sourceMap": true,
+  },
+  "include": ["./src"]
 }
