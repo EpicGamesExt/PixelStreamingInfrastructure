@@ -111,6 +111,17 @@ export class SdpEndpoint {
 
       this.producers.push(producer);
       this.producerMedias.push(media);
+
+      console.log(
+        "[SdpEndpoint.processOffer] mediasoup Producer created, kind: %s, type: %s, paused: %s",
+        producer.kind,
+        producer.type,
+        producer.paused
+      );
+
+      // DEBUG: Uncomment for details.
+      // prettier-ignore
+      // console.log("[SdpEndpoint.processOffer] mediasoup Producer RtpParameters:\n%O", producer.rtpParameters);
     }
 
     return this.producers;
@@ -238,12 +249,15 @@ export class SdpEndpoint {
     // that can be received by the remote peer. However, for the current
     // implementation we just extract and print the remote capabilities.
 
+    // TODO:
+    // * Disable header extensions that are not accepted by the remote peer.
+
     // DEBUG: Uncomment for details.
     // prettier-ignore
-    // {
-    //   const remoteCaps = SdpUtils.sdpToRecvRtpCapabilities(remoteSdpObj, this.localCaps);
-    //   console.log("[SdpEndpoint.processAnswer] Remote RECV RtpCapabilities:\n%O", remoteCaps);
-    // }
+    {
+      // const remoteCaps = SdpUtils.sdpToRecvRtpCapabilities(remoteSdpObj, this.localCaps);
+      // console.log("[SdpEndpoint.processAnswer] Remote RECV RtpCapabilities:\n%O", remoteCaps);
+    }
   }
 }
 
