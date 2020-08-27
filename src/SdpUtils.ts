@@ -1,11 +1,7 @@
 import * as MsRtpUtils from "mediasoup-client/lib/handlers/sdp/plainRtpUtils";
 import * as MsSdpUtils from "mediasoup-client/lib/handlers/sdp/commonUtils";
 import * as MsOrtc from "mediasoup-client/lib/ortc";
-import {
-  RtpParameters,
-  RtpCapabilities,
-  MediaKind,
-} from "mediasoup/lib/types";
+import { RtpParameters, RtpCapabilities, MediaKind } from "mediasoup/lib/types";
 
 // Print whole objects instead of giving up after two levels of nesting.
 require("util").inspect.defaultOptions.depth = null;
@@ -15,7 +11,7 @@ require("util").inspect.defaultOptions.depth = null;
 
 export function sdpToRecvRtpCapabilities(
   sdpObject: object,
-  routerCaps: RtpCapabilities
+  localCaps: RtpCapabilities
 ): RtpCapabilities {
   const caps: RtpCapabilities = MsSdpUtils.extractRtpCapabilities({
     sdpObject,
@@ -28,7 +24,7 @@ export function sdpToRecvRtpCapabilities(
     process.exit(1);
   }
 
-  const extendedCaps = MsOrtc.getExtendedRtpCapabilities(caps, routerCaps);
+  const extendedCaps = MsOrtc.getExtendedRtpCapabilities(caps, localCaps);
 
   const recvCaps: RtpCapabilities = MsOrtc.getRecvRtpCapabilities(extendedCaps);
 
@@ -45,7 +41,7 @@ export function sdpToRecvRtpCapabilities(
 
 export function sdpToSendRtpParameters(
   sdpObject: any,
-  routerCaps: RtpCapabilities,
+  localCaps: RtpCapabilities,
   kind: MediaKind
 ): RtpParameters {
   const caps: RtpCapabilities = MsSdpUtils.extractRtpCapabilities({
@@ -59,7 +55,7 @@ export function sdpToSendRtpParameters(
     process.exit(1);
   }
 
-  const extendedCaps = MsOrtc.getExtendedRtpCapabilities(caps, routerCaps);
+  const extendedCaps = MsOrtc.getExtendedRtpCapabilities(caps, localCaps);
   const sendParams = MsOrtc.getSendingRemoteRtpParameters(kind, extendedCaps);
 
   // Now we have to fill "mid", "encodings", and "rtcp" fields.
@@ -74,10 +70,20 @@ export function sdpToSendRtpParameters(
     sendParams.mid = kind === "audio" ? "0" : "1";
   }
 
-  sendParams.encodings = MsRtpUtils.getRtpEncodings({
-    sdpObject,
-    kind,
-  });
+  if ("rids" in sdpMediaObj) {
+    for (const mediaRid of sdpMediaObj.rids) {
+      // FIXME: Maybe MsRtpUtils.getRtpEncodings() should just be improved
+      // to include doing this, so we don't need to branch an if() here.
+
+      // Push an RTCRtpEncodingParameters.
+      sendParams.encodings?.push({ rid: mediaRid.id });
+    }
+  } else {
+    sendParams.encodings = MsRtpUtils.getRtpEncodings({
+      sdpObject,
+      kind,
+    });
+  }
 
   sendParams.rtcp = {
     cname: MsSdpUtils.getCname({ offerMediaObject: sdpMediaObj }),
@@ -90,7 +96,7 @@ export function sdpToSendRtpParameters(
   // DEBUG: Uncomment for details.
   // prettier-ignore
   {
-    // console.log(`[sdpToSendRtpParameters] ${kind} RtpCapabilities:\n%O`, rtpCaps);
+    // console.log(`[sdpToSendRtpParameters] ${kind} RtpCapabilities:\n%O`, caps);
     // console.log(`[sdpToSendRtpParameters] ${kind} Extended RtpCapabilities:\n%O`, extendedCaps);
     // console.log(`[sdpToSendRtpParameters] ${kind} SEND RtpParameters:\n%O`, sendParams);
   }
