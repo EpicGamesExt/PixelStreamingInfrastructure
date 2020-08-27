@@ -13,7 +13,7 @@
     "noUnusedParameters": false,
     "outDir": "./lib",
     "removeComments": true,
-    "sourceMap": true,
+    "sourceMap": true
   },
   "include": ["./src"]
 }
