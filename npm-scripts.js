@@ -12,9 +12,22 @@ switch (task)
 {
 	case 'typescript:build':
 	{
-		execute('rm -rf lib');
-		execute('tsc');
-		taskReplaceVersion();
+		build();
+
+		break;
+	}
+
+	case 'typescript:clean':
+	{
+		clean()
+
+		break;
+	}
+
+	case 'typescript:rebuild':
+	{
+		clean()
+		build()
 
 		break;
 	}
@@ -23,7 +36,7 @@ switch (task)
 	{
 		const TscWatchClient = require('tsc-watch/client');
 
-		execute('rm -rf lib');
+		clean();
 
 		const watch = new TscWatchClient();
 
@@ -62,6 +75,15 @@ switch (task)
 	{
 		throw new TypeError(`unknown task "${task}"`);
 	}
+}
+
+function build() {
+	execute("tsc");
+	taskReplaceVersion();
+}
+
+function clean() {
+	execute("rm -rf lib");
 }
 
 function taskReplaceVersion()

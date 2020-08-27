@@ -22,6 +22,10 @@
   },
   "scripts": {
     "build": "npm run typescript:build",
+    "build:watch": "npm run typescript:watch",
+    "clean": "npm run typescript:clean",
+    "rebuild": "npm run typescript:rebuild",
+    "format": "prettier --write './*.{js,json}' '{src,test}/**/*.{js,json,ts}'",
     "typescript:build": "node npm-scripts.js typescript:build",
     "typescript:watch": "node npm-scripts.js typescript:watch",
     "lint": "node npm-scripts.js lint",
@@ -56,6 +60,7 @@
     "mediasoup": "~3.6.0",
     "mediasoup-client": "~3.6.0",
     "open-cli": "^6.0.1",
+    "prettier": "~2.0.0",
     "tsc-watch": "^4.2.8",
     "typescript": "^3.0.0"
   },
