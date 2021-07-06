@@ -15,8 +15,8 @@
     "type": "opencollective",
     "url": "https://opencollective.com/mediasoup"
   },
-  "main": "lib/main.js",
-  "types": "lib/main.d.ts",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "engines": {
     "node": ">=10"
   },
