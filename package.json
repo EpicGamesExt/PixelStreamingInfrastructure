@@ -21,6 +21,7 @@
     "node": ">=10"
   },
   "scripts": {
+    "prepare": "npm run build",
     "build": "npm run typescript:build",
     "build:watch": "npm run typescript:watch",
     "clean": "npm run typescript:clean",

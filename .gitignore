@@ -5,6 +5,9 @@
 *.swp
 *.swo
 
+# Build output
+lib/
+
 
 
 # github/gitignore/macOS

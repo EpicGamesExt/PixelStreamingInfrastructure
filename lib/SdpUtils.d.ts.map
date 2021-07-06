@@ -1,1 +1,0 @@
-{"version":3,"file":"SdpUtils.d.ts","sourceRoot":"","sources":["../src/SdpUtils.ts"],"names":[],"mappings":"AAGA,OAAO,EAAE,aAAa,EAAE,eAAe,EAAE,SAAS,EAAE,MAAM,qBAAqB,CAAC;AAQhF,wBAAgB,wBAAwB,CACtC,SAAS,EAAE,MAAM,EACjB,SAAS,EAAE,eAAe,GACzB,eAAe,CAyBjB;AAED,wBAAgB,sBAAsB,CACpC,SAAS,EAAE,GAAG,EACd,SAAS,EAAE,eAAe,EAC1B,IAAI,EAAE,SAAS,GACd,aAAa,CA2Df"}
