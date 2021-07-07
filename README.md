@@ -135,20 +135,22 @@ However, in practice both of these options conflict with the current design prop
 
 * (2) is the ideal but *it's not possible* with the current design, because the remote capabilities must be already known by the time `sdpEndpoint.createOffer()` is called.
 
-(Note: Additionally, the *sendrecv* direction is also not considered for now. Either the local application or the remote endpoints are be assumed to be *sendonly* or *recvonly*.)
+(Note: Additionally, the *sendrecv* direction is also not considered for now. Both the local application or the remote endpoints are be assumed to be either *sendonly* or *recvonly*.)
 
 
 ### Current implementation
 
-The implementation found in this repo is not complete, and also tries to work around the limitations described above, using alternatives that are far from ideal.
+The implementation found in this repo is enough to cover basic usage, but is not complete by any means. Also, it tries to work around the limitations described above, using alternatives that are far from ideal.
 
 Some notes:
 
-* Receiving media is the part that works best. It suffices with calling `SdpEndpoint.processOffer()`, and this will return one Producer for each media section found in the SDP Offer.
+* Receiving media is the part that works best. It suffices to call `SdpEndpoint.processOffer()`, and this will return one Producer for each media section found in the SDP Offer.
 
 * Sending media, on the other hand, suffers from the limitation described in (2) above. To work around this, the class `BrowserRtpCapabilities` contains predefined capabilities objects for some of the most common web browsers. These can be used by the application to provide `transport.consume()` with something to work with.
 
   The obvious drawback to this solution is that the objects in `BrowserRtpCapabilities` must be kept up to date from time to time, in order to accurately represent the actual capabilities of web browsers. To help with this task, there is a handy tool that can be found in the [tools/browser-rtpcapabilities](./tools/browser-rtpcapabilities/) subdirectory.
+
+* SDP renegotiation is not implemented. The local endpoint cannot make an SDP Re-Offer when the state of the Producers or Consumers changes.
 
 * There are minor improvements to be done in the implementation.
 
