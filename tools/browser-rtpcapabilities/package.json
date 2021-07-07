@@ -1,0 +1,25 @@
+{
+  "name": "browser-rtpcapabilities",
+  "version": "1.0.0",
+  "description": "Obtain mediasoup RtpCapabilities from any web browser",
+  "author": "Juan Navarro <juan.navarro@gmx.es> (https://github.com/j1elo)",
+  "private": true,
+  "license": "ISC",
+  "scripts": {
+    "format": "prettier --write \"*.{js,json}\" src/",
+    "build": "browserify src/client/index.js --outfile lib/client/index.js",
+    "postbuild": "copyup \"src/client/*.html\" lib/",
+    "prestart": "npm run build",
+    "start": "http-server lib/client/ -c-1"
+  },
+  "dependencies": {
+    "http-server": "^0.12.3",
+    "mediasoup-client": "^3.0.0",
+    "sdp-transform": "^2.0.0"
+  },
+  "devDependencies": {
+    "browserify": "^17.0.0",
+    "copyfiles": "^2.0.0",
+    "prettier": "~2.0.0"
+  }
+}
