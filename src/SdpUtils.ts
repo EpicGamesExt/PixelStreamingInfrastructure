@@ -1,4 +1,8 @@
-import * as MsRtpUtils from "mediasoup-client/lib/handlers/sdp/plainRtpUtils";
+// TODO, FIXME: Here we're assuming that Unified Plan is the correct way to
+// handle the SDP messages. For a more robust handling, this should probably
+// depend on the actual type of SDP: plain, PlanB, or UnifiedPlan.
+import * as MsSdpUnifiedPlanUtils from "mediasoup-client/lib/handlers/sdp/unifiedPlanUtils";
+
 import * as MsSdpCommonUtils from "mediasoup-client/lib/handlers/sdp/commonUtils";
 import * as MsOrtc from "mediasoup-client/lib/ortc";
 import { RtpParameters, RtpCapabilities, MediaKind } from "mediasoup/lib/types";
@@ -72,16 +76,15 @@ export function sdpToSendRtpParameters(
 
   if ("rids" in sdpMediaObj) {
     for (const mediaRid of sdpMediaObj.rids) {
-      // FIXME: Maybe MsRtpUtils.getRtpEncodings() should just be improved
+      // FIXME: Maybe mediasoup's getRtpEncodings() should just be improved
       // to include doing this, so we don't need to branch an if() here.
 
       // Push an RTCRtpEncodingParameters.
       sendParams.encodings?.push({ rid: mediaRid.id });
     }
   } else {
-    sendParams.encodings = MsRtpUtils.getRtpEncodings({
-      sdpObject,
-      kind,
+    sendParams.encodings = MsSdpUnifiedPlanUtils.getRtpEncodings({
+      offerMediaObject: sdpMediaObj,
     });
   }
 
