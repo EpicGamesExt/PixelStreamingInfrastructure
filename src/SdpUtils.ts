@@ -1,5 +1,5 @@
 import * as MsRtpUtils from "mediasoup-client/lib/handlers/sdp/plainRtpUtils";
-import * as MsSdpUtils from "mediasoup-client/lib/handlers/sdp/commonUtils";
+import * as MsSdpCommonUtils from "mediasoup-client/lib/handlers/sdp/commonUtils";
 import * as MsOrtc from "mediasoup-client/lib/ortc";
 import { RtpParameters, RtpCapabilities, MediaKind } from "mediasoup/lib/types";
 
@@ -13,7 +13,7 @@ export function sdpToRecvRtpCapabilities(
   sdpObject: object,
   localCaps: RtpCapabilities
 ): RtpCapabilities {
-  const caps: RtpCapabilities = MsSdpUtils.extractRtpCapabilities({
+  const caps: RtpCapabilities = MsSdpCommonUtils.extractRtpCapabilities({
     sdpObject,
   });
 
@@ -44,7 +44,7 @@ export function sdpToSendRtpParameters(
   localCaps: RtpCapabilities,
   kind: MediaKind
 ): RtpParameters {
-  const caps: RtpCapabilities = MsSdpUtils.extractRtpCapabilities({
+  const caps: RtpCapabilities = MsSdpCommonUtils.extractRtpCapabilities({
     sdpObject,
   });
 
@@ -61,7 +61,7 @@ export function sdpToSendRtpParameters(
   // Now we have to fill "mid", "encodings", and "rtcp" fields.
 
   const sdpMediaObj: any =
-    (sdpObject.media || []).find((m: { type: string }) => m.type === kind) ||
+    (sdpObject.media || []).find((m: { type: MediaKind }) => m.type === kind) ||
     {};
 
   if ("mid" in sdpMediaObj) {
@@ -86,7 +86,7 @@ export function sdpToSendRtpParameters(
   }
 
   sendParams.rtcp = {
-    cname: MsSdpUtils.getCname({ offerMediaObject: sdpMediaObj }),
+    cname: MsSdpCommonUtils.getCname({ offerMediaObject: sdpMediaObj }),
 
     // These are boolean fields.
     reducedSize: "rtcpRsize" in sdpMediaObj && sdpMediaObj.rtcpRsize,
@@ -96,8 +96,8 @@ export function sdpToSendRtpParameters(
   // DEBUG: Uncomment for details.
   // prettier-ignore
   {
-    // console.log(`[sdpToSendRtpParameters] ${kind} RtpCapabilities:\n%O`, caps);
-    // console.log(`[sdpToSendRtpParameters] ${kind} Extended RtpCapabilities:\n%O`, extendedCaps);
+    // console.log(`[sdpToSendRtpParameters] RtpCapabilities:\n%O`, caps);
+    // console.log(`[sdpToSendRtpParameters] Extended RtpCapabilities:\n%O`, extendedCaps);
     // console.log(`[sdpToSendRtpParameters] ${kind} SEND RtpParameters:\n%O`, sendParams);
   }
 
