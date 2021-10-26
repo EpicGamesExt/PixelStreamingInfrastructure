@@ -14,7 +14,7 @@
 // * Chrome 91.
 // * Safari 14.1.1 (macOS).
 
-import { RtpCapabilities } from "mediasoup/lib/types";
+import { RtpCapabilities } from "mediasoup/node/lib/types";
 
 export const firefox: RtpCapabilities = {
   codecs: [

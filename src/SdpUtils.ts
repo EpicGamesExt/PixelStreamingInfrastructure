@@ -5,7 +5,11 @@ import * as MsSdpUnifiedPlanUtils from "mediasoup-client/lib/handlers/sdp/unifie
 
 import * as MsSdpCommonUtils from "mediasoup-client/lib/handlers/sdp/commonUtils";
 import * as MsOrtc from "mediasoup-client/lib/ortc";
-import { RtpParameters, RtpCapabilities, MediaKind } from "mediasoup/lib/types";
+import {
+  MediaKind,
+  RtpCapabilities,
+  RtpParameters,
+} from "mediasoup/node/lib/types";
 
 // Print whole objects instead of giving up after two levels of nesting.
 require("util").inspect.defaultOptions.depth = null;

@@ -9,7 +9,7 @@ import {
   RtpCapabilities,
   Transport,
   WebRtcTransport,
-} from "mediasoup/lib/types";
+} from "mediasoup/node/lib/types";
 
 import * as SdpTransform from "sdp-transform";
 import { v4 as uuidv4 } from "uuid";
