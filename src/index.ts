@@ -7,6 +7,7 @@ import {
   MediaKind,
   Producer,
   RtpCapabilities,
+  RtpParameters,
   Transport,
   WebRtcTransport,
 } from "mediasoup/node/lib/types";
@@ -35,7 +36,8 @@ export class SdpEndpoint {
   private remoteSdp: string | undefined;
 
   private producers: Producer[] = [];
-  private producerMedias: object[] = [];
+  private producerOfferMedias: object[] = [];
+  private producerOfferParams: RtpParameters[] = [];
 
   private consumers: Consumer[] = [];
 
@@ -97,20 +99,27 @@ export class SdpEndpoint {
         this.localCaps,
         media.type as MediaKind
       );
-      let producer;
+      let producer: Producer;
       try {
         producer = await this.transport.produce({
           kind: media.type as MediaKind,
           rtpParameters: sendParams,
           paused: false,
         });
-      } catch (err) {
-        console.error("FIXME BUG:", err);
-        process.exit(1);
+      } catch (error) {
+        let message = `Error creating Producer for '${media.type}'`;
+        if (error instanceof Error) {
+          message += `: ${error.message}`;
+        }
+
+        console.error(`[SdpEndpoint.processOffer] ${message}`);
+
+        continue;
       }
 
       this.producers.push(producer);
-      this.producerMedias.push(media);
+      this.producerOfferMedias.push(media);
+      this.producerOfferParams.push(sendParams);
 
       console.log(
         "[SdpEndpoint.processOffer] mediasoup Producer created, kind: %s, type: %s, paused: %s",
@@ -146,16 +155,13 @@ export class SdpEndpoint {
     console.log("[SdpEndpoint.createAnswer] Make 'recvonly' SDP Answer");
 
     for (let i = 0; i < this.producers.length; i++) {
-      const sdpMediaObj = this.producerMedias[i];
-      const recvParams = this.producers[i].rtpParameters;
-
       // Each call to RemoteSdp.send() creates a new AnswerMediaSection,
       // which always assumes an `a=recvonly` direction.
       sdpBuilder.send({
-        offerMediaObject: sdpMediaObj,
+        offerMediaObject: this.producerOfferMedias[i],
         reuseMid: undefined,
-        offerRtpParameters: recvParams,
-        answerRtpParameters: recvParams,
+        offerRtpParameters: this.producerOfferParams[i],
+        answerRtpParameters: this.producers[i].rtpParameters,
         codecOptions: undefined,
         extmapAllowMixed: false,
       });
