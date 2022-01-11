@@ -56,10 +56,9 @@ export class SdpEndpoint {
 
   public async processOffer(sdpOffer: string): Promise<Producer[]> {
     if (this.remoteSdp) {
-      console.error(
-        "[SdpEndpoint.processOffer] ERROR: A remote description was already set"
+      throw new Error(
+        "[SdpEndpoint.processOffer] A remote description was already set"
       );
-      return [];
     }
 
     this.remoteSdp = sdpOffer;
@@ -107,14 +106,14 @@ export class SdpEndpoint {
           paused: false,
         });
       } catch (error) {
-        let message = `Error creating Producer for '${media.type}'`;
+        let message = `mediasoup Producer failed, kind: ${media.type}`;
         if (error instanceof Error) {
           message += `: ${error.message}`;
         }
 
-        console.error(`[SdpEndpoint.processOffer] ${message}`);
+        console.error(`[SdpEndpoint.processOffer] ERROR: ${message}`);
 
-        continue;
+        throw new Error(message);
       }
 
       this.producers.push(producer);
