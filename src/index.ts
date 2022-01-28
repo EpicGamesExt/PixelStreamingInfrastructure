@@ -92,12 +92,29 @@ export class SdpEndpoint {
         continue;
       }
 
-      // Add a new Producer for the given media.
+      // Generate RtpSendParameters to be used for the new Producer.
       const sendParams = SdpUtils.sdpToSendRtpParameters(
         remoteSdpObj,
         this.localCaps,
         media.type as MediaKind
       );
+      if (
+        media.type === "video" &&
+        (sendParams.encodings?.length ?? 0) > 1 &&
+        "rid" in sendParams.encodings![0]
+      ) {
+        // If there are multiple encodings, it means multiple simultaneous RTP
+        // streams, so it's fair to assume that Simulcast is being used.
+        // SDP includes information of the spatial layers in each encoding, but
+        // it lacks any indication of how many temporal layers there are.
+        // Here we asume that all implementations are hardcoded to generate
+        // exactly 3 temporal layers (Chrome and Firefox do it).
+        for (let i = 0; i < sendParams.encodings!.length; i++) {
+          sendParams.encodings![i].scalabilityMode ??= "L1T3";
+        }
+      }
+
+      // Add a new Producer for the given media.
       let producer: Producer;
       try {
         producer = await this.transport.produce({
