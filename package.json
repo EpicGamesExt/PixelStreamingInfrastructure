@@ -19,7 +19,7 @@
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "engines": {
-    "node": ">=10"
+    "node": ">=16.0"
   },
   "scripts": {
     "prepare": "npm run build",
