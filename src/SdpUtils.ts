@@ -10,6 +10,7 @@ import {
   RtpCapabilities,
   RtpParameters,
 } from "mediasoup/node/lib/types";
+import { MediaAttributes } from "sdp-transform";
 
 // Print whole objects instead of giving up after two levels of nesting.
 require("util").inspect.defaultOptions.depth = null;
@@ -66,12 +67,11 @@ export function sdpToSendRtpParameters(
   const extendedCaps = MsOrtc.getExtendedRtpCapabilities(caps, localCaps);
   const sendParams = MsOrtc.getSendingRemoteRtpParameters(kind, extendedCaps);
 
-  // Now we have to fill "mid", "encodings", and "rtcp" fields.
-
-  const sdpMediaObj: any =
+  const sdpMediaObj: MediaAttributes =
     (sdpObject.media || []).find((m: { type: MediaKind }) => m.type === kind) ||
     {};
 
+  // Fill `RtpParameters.mid`.
   if ("mid" in sdpMediaObj) {
     sendParams.mid = String(sdpMediaObj.mid);
   } else {
@@ -92,12 +92,11 @@ export function sdpToSendRtpParameters(
     });
   }
 
+  // Fill `RtpParameters.rtcp`.
   sendParams.rtcp = {
     cname: MsSdpCommonUtils.getCname({ offerMediaObject: sdpMediaObj }),
-
-    // These are boolean fields.
-    reducedSize: "rtcpRsize" in sdpMediaObj && sdpMediaObj.rtcpRsize,
-    mux: "rtcpMux" in sdpMediaObj && sdpMediaObj.rtcpMux,
+    reducedSize: (sdpMediaObj.rtcpRsize ?? "") === "rtcp-rsize",
+    mux: (sdpMediaObj.rtcpMux ?? "") === "rtcp-mux",
   };
 
   // DEBUG: Uncomment for details.
