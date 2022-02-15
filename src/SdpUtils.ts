@@ -78,18 +78,36 @@ export function sdpToSendRtpParameters(
     sendParams.mid = kind === "audio" ? "0" : "1";
   }
 
-  if ("rids" in sdpMediaObj) {
-    for (const mediaRid of sdpMediaObj.rids) {
+  // Fill `RtpParameters.encodings`.
+  {
+    if ("ssrcs" in sdpMediaObj) {
+      sendParams.encodings = MsSdpUnifiedPlanUtils.getRtpEncodings({
+        offerMediaObject: sdpMediaObj,
+      });
+    } else {
+      sendParams.encodings = [];
+    }
+
+    if ("rids" in sdpMediaObj) {
       // FIXME: Maybe mediasoup's getRtpEncodings() should just be improved
       // to include doing this, so we don't need to branch an if() here.
+      sdpMediaObj.rids
+        ?.filter((rid) => rid.direction === "send")
+        .forEach((rid, i) => {
+          sendParams.encodings![i] = {
+            ...sendParams.encodings![i],
 
-      // Push an RTCRtpEncodingParameters.
-      sendParams.encodings?.push({ rid: mediaRid.id });
+            rid: String(rid.id),
+
+            // If "rid" is in use it means multiple simulcast RTP streams.
+            // SDP includes information of the spatial layers in each encoding,
+            // but it doesn't tell the amount of temporal layers.
+            // Here we asume that all implementations are hardcoded to generate
+            // exactly 3 temporal layers (verified with Chrome and Firefox).
+            scalabilityMode: "L1T3",
+          };
+        });
     }
-  } else {
-    sendParams.encodings = MsSdpUnifiedPlanUtils.getRtpEncodings({
-      offerMediaObject: sdpMediaObj,
-    });
   }
 
   // Fill `RtpParameters.rtcp`.
