@@ -12,9 +12,6 @@ import {
 } from "mediasoup/node/lib/types";
 import { MediaAttributes } from "sdp-transform";
 
-// Print whole objects instead of giving up after two levels of nesting.
-require("util").inspect.defaultOptions.depth = null;
-
 // SDP to RTP Capabilities and Parameters
 // ======================================
 
@@ -39,11 +36,11 @@ export function sdpToRecvRtpCapabilities(
 
   // DEBUG: Uncomment for details.
   // prettier-ignore
-  {
-    // console.log(`[sdpToRecvRtpCapabilities] RtpCapabilities:\n%O`, caps);
-    // console.log(`[sdpToRecvRtpCapabilities] Extended RtpCapabilities:\n%O`, extendedCaps);
-    // console.log(`[sdpToRecvRtpCapabilities] RECV RtpCapabilities:\n%O`, recvCaps);
-  }
+  // {
+  //   console.debug(`DEBUG [sdpToRecvRtpCapabilities] RtpCapabilities:\n${JSON.stringify(caps, null, 2)}`);
+  //   console.debug(`DEBUG [sdpToRecvRtpCapabilities] Extended RtpCapabilities:\n${JSON.stringify(extendedCaps, null, 2)}`);
+  //   console.debug(`DEBUG [sdpToRecvRtpCapabilities] RECV RtpCapabilities:\n${JSON.stringify(recvCaps, null, 2)}`);
+  // }
 
   return recvCaps;
 }
@@ -119,11 +116,11 @@ export function sdpToSendRtpParameters(
 
   // DEBUG: Uncomment for details.
   // prettier-ignore
-  {
-    // console.log(`[sdpToSendRtpParameters] RtpCapabilities:\n%O`, caps);
-    // console.log(`[sdpToSendRtpParameters] Extended RtpCapabilities:\n%O`, extendedCaps);
-    // console.log(`[sdpToSendRtpParameters] ${kind} SEND RtpParameters:\n%O`, sendParams);
-  }
+  // {
+  //   console.debug(`DEBUG [sdpToSendRtpParameters] (${kind}) RtpCapabilities:\n${JSON.stringify(caps, null, 2)}`);
+  //   console.debug(`DEBUG [sdpToSendRtpParameters] (${kind}) Extended RtpCapabilities:\n${JSON.stringify(extendedCaps, null, 2)}`);
+  //   console.debug(`DEBUG [sdpToSendRtpParameters] (${kind}) SEND RtpParameters:\n${JSON.stringify(sendParams, null, 2)}`);
+  // }
 
   return sendParams;
 }

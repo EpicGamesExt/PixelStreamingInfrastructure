@@ -18,9 +18,6 @@ import { v4 as uuidv4 } from "uuid";
 import * as BrowserRtpCapabilities from "./BrowserRtpCapabilities";
 import * as SdpUtils from "./SdpUtils";
 
-// Print whole objects instead of giving up after two levels of nesting.
-require("util").inspect.defaultOptions.depth = null;
-
 export class SdpEndpoint {
   // TODO: Currently this only handles WebRTC. At some point the implementation
   // should just use the Transport class and not its subclasses.
@@ -66,7 +63,9 @@ export class SdpEndpoint {
 
     // DEBUG: Uncomment for details.
     // prettier-ignore
-    // console.log("[SdpEndpoint.processOffer] Remote SDP object:\n%O", remoteSdpObj);
+    // {
+    //   console.debug(`DEBUG [SdpEndpoint.processOffer] Remote SDP object:\n${JSON.stringify(remoteSdpObj, null, 2)}`);
+    // }
 
     // Use DTLS info from the remote SDP to connect the WebRTC transport.
     await this.webRtcTransport.connect({
@@ -122,16 +121,14 @@ export class SdpEndpoint {
       this.producerOfferMedias.push(media);
       this.producerOfferParams.push(sendParams);
 
-      console.log(
-        "[SdpEndpoint.processOffer] mediasoup Producer created, kind: %s, type: %s, paused: %s",
-        producer.kind,
-        producer.type,
-        producer.paused
-      );
+      // prettier-ignore
+      console.log(`[SdpEndpoint.processOffer] mediasoup Producer created, kind: ${producer.kind}, type: ${producer.type}, paused: ${producer.paused}`);
 
       // DEBUG: Uncomment for details.
       // prettier-ignore
-      // console.log("[SdpEndpoint.processOffer] mediasoup Producer RtpParameters:\n%O", producer.rtpParameters);
+      // {
+      //   console.debug(`DEBUG [SdpEndpoint.processOffer] mediasoup Producer RtpParameters:\n${JSON.stringify(producer.rtpParameters, null, 2)}`);
+      // }
     }
 
     return this.producers;
@@ -242,7 +239,9 @@ export class SdpEndpoint {
 
     // DEBUG: Uncomment for details.
     // prettier-ignore
-    // console.log("[SdpEndpoint.processAnswer] Remote SDP object:\n%O", remoteSdpObj);
+    // {
+    //   console.debug(`DEBUG [SdpEndpoint.processAnswer] Remote SDP object:\n${JSON.stringify(remoteSdpObj, null, 2)}`);
+    // }
 
     // Use DTLS info from the remote SDP to connect the WebRTC transport.
     await this.webRtcTransport.connect({
@@ -261,10 +260,10 @@ export class SdpEndpoint {
 
     // DEBUG: Uncomment for details.
     // prettier-ignore
-    {
-      // const remoteCaps = SdpUtils.sdpToRecvRtpCapabilities(remoteSdpObj, this.localCaps);
-      // console.log("[SdpEndpoint.processAnswer] Remote RECV RtpCapabilities:\n%O", remoteCaps);
-    }
+    // {
+    //   const remoteCaps = SdpUtils.sdpToRecvRtpCapabilities(remoteSdpObj, this.localCaps);
+    //   console.debug(`DEBUG [SdpEndpoint.processAnswer] Remote RECV RtpCapabilities:\n${JSON.stringify(remoteCaps, null, 2)}`);
+    // }
   }
 }
 
