@@ -61,7 +61,7 @@ export function sdpToSendRtpParameters(
     process.exit(1);
   }
 
-  const extendedCaps = MsOrtc.getExtendedRtpCapabilities(caps, localCaps);
+  const extendedCaps = MsOrtc.getExtendedRtpCapabilities(localCaps, caps);
   const sendParams = MsOrtc.getSendingRemoteRtpParameters(kind, extendedCaps);
 
   const sdpMediaObj: MediaAttributes =
