@@ -53,9 +53,7 @@ export class SdpEndpoint {
 
   public async processOffer(sdpOffer: string): Promise<Producer[]> {
     if (this.remoteSdp) {
-      throw new Error(
-        "[SdpEndpoint.processOffer] A remote description was already set"
-      );
+      throw new Error("A remote description was already set");
     }
 
     this.remoteSdp = sdpOffer;
@@ -107,13 +105,11 @@ export class SdpEndpoint {
           paused: false,
         });
       } catch (error) {
-        let message = `mediasoup Producer failed, kind: ${media.type}`;
+        let message = `Error making a mediasoup Producer, kind: ${media.type}`;
         if (error instanceof Error) {
           message += `: ${error.message}`;
         }
-
-        console.error(`[SdpEndpoint.processOffer] ERROR: ${message}`);
-
+        console.error(`ERROR [SdpEndpoint.processOffer] ${message}`);
         throw new Error(message);
       }
 
@@ -137,7 +133,7 @@ export class SdpEndpoint {
   public createAnswer(): string {
     if (this.localSdp) {
       console.error(
-        "[SdpEndpoint.createAnswer] ERROR: A local description was already set"
+        "ERROR [SdpEndpoint.createAnswer] A local description was already set"
       );
       return "";
     }
@@ -184,7 +180,7 @@ export class SdpEndpoint {
   public createOffer(): string {
     if (this.localSdp) {
       console.error(
-        "[SdpEndpoint.createOffer] ERROR: A local description was already set"
+        "ERROR [SdpEndpoint.createOffer] A local description was already set"
       );
       return "";
     }
@@ -229,7 +225,7 @@ export class SdpEndpoint {
   public async processAnswer(sdpAnswer: string): Promise<void> {
     if (this.remoteSdp) {
       console.error(
-        "[SdpEndpoint.processAnswer] ERROR: A remote description was already set"
+        "ERROR [SdpEndpoint.processAnswer] A remote description was already set"
       );
       return;
     }
@@ -283,7 +279,7 @@ export function generateRtpCapabilities1(
   remoteSdp: string
 ): RtpCapabilities {
   // TODO: Use proper SDP Offer/Answer negotiation to obtain capabilities.
-  console.error("[SdpEndpoint.generateRtpCapabilities1] BUG: Not implemented");
+  console.error("BUG [SdpEndpoint.generateRtpCapabilities1] Not implemented");
   process.exit(1);
 
   let caps: RtpCapabilities;
@@ -295,7 +291,7 @@ export function generateRtpCapabilities2(
   remoteCaps: RtpCapabilities
 ): RtpCapabilities {
   // TODO: Use matching to obtain capabilities.
-  console.error("[SdpEndpoint.generateRtpCapabilities2] BUG: Not implemented");
+  console.error("BUG [SdpEndpoint.generateRtpCapabilities2] Not implemented");
   process.exit(1);
 
   let caps: RtpCapabilities;

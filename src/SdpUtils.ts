@@ -25,9 +25,13 @@ export function sdpToConsumerRtpCapabilities(
 
   try {
     MsOrtc.validateRtpCapabilities(caps);
-  } catch (err) {
-    console.error("FIXME BUG:", err);
-    process.exit(1);
+  } catch (error) {
+    let message = "SDP validation failed";
+    if (error instanceof Error) {
+      message += `: ${error.message}`;
+    }
+    console.error(`ERROR [SdpUtils.sdpToConsumerRtpCapabilities] ${message}`);
+    throw new Error(message);
   }
 
   const extendedCaps = MsOrtc.getExtendedRtpCapabilities(caps, localCaps);
@@ -37,9 +41,9 @@ export function sdpToConsumerRtpCapabilities(
   // DEBUG: Uncomment for details.
   // prettier-ignore
   // {
-  //   console.debug(`DEBUG [sdpToConsumerRtpCapabilities] SDP RtpCapabilities:\n${JSON.stringify(caps, null, 2)}`);
-  //   console.debug(`DEBUG [sdpToConsumerRtpCapabilities] SDP Extended RtpCapabilities:\n${JSON.stringify(extendedCaps, null, 2)}`);
-  //   console.debug(`DEBUG [sdpToConsumerRtpCapabilities] Consumer RtpCapabilities:\n${JSON.stringify(consumerCaps, null, 2)}`);
+  //   console.debug(`DEBUG [SdpUtils.sdpToConsumerRtpCapabilities] SDP RtpCapabilities:\n${JSON.stringify(caps, null, 2)}`);
+  //   console.debug(`DEBUG [SdpUtils.sdpToConsumerRtpCapabilities] SDP Extended RtpCapabilities:\n${JSON.stringify(extendedCaps, null, 2)}`);
+  //   console.debug(`DEBUG [SdpUtils.sdpToConsumerRtpCapabilities] Consumer RtpCapabilities:\n${JSON.stringify(consumerCaps, null, 2)}`);
   // }
 
   return consumerCaps;
@@ -56,9 +60,13 @@ export function sdpToProducerRtpParameters(
 
   try {
     MsOrtc.validateRtpCapabilities(caps);
-  } catch (err) {
-    console.error("FIXME BUG:", err);
-    process.exit(1);
+  } catch (error) {
+    let message = "SDP validation failed";
+    if (error instanceof Error) {
+      message += `: ${error.message}`;
+    }
+    console.error(`ERROR [SdpUtils.sdpToProducerRtpParameters] ${message}`);
+    throw new Error(message);
   }
 
   const extendedCaps = MsOrtc.getExtendedRtpCapabilities(localCaps, caps);
@@ -117,9 +125,9 @@ export function sdpToProducerRtpParameters(
   // DEBUG: Uncomment for details.
   // prettier-ignore
   // {
-  //   console.debug(`DEBUG [sdpToProducerRtpParameters] (${kind}) SDP RtpCapabilities:\n${JSON.stringify(caps, null, 2)}`);
-  //   console.debug(`DEBUG [sdpToProducerRtpParameters] (${kind}) SDP Extended RtpCapabilities:\n${JSON.stringify(extendedCaps, null, 2)}`);
-  //   console.debug(`DEBUG [sdpToProducerRtpParameters] (${kind}) Producer RtpParameters:\n${JSON.stringify(producerParams, null, 2)}`);
+  //   console.debug(`DEBUG [SdpUtils.sdpToProducerRtpParameters] (${kind}) SDP RtpCapabilities:\n${JSON.stringify(caps, null, 2)}`);
+  //   console.debug(`DEBUG [SdpUtils.sdpToProducerRtpParameters] (${kind}) SDP Extended RtpCapabilities:\n${JSON.stringify(extendedCaps, null, 2)}`);
+  //   console.debug(`DEBUG [SdpUtils.sdpToProducerRtpParameters] (${kind}) Producer RtpParameters:\n${JSON.stringify(producerParams, null, 2)}`);
   // }
 
   return producerParams;
