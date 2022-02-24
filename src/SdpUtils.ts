@@ -122,6 +122,19 @@ export function sdpToProducerRtpParameters(
     mux: (sdpMediaObj.rtcpMux ?? "") === "rtcp-mux",
   };
 
+  // FIXME: Use the correct header extension IDs.
+  // This is needed because `MsOrtc.getSendingRtpParameters` assumes
+  // the sending side, when we really need the receiving side in here.
+  for (const producerExt of producerParams.headerExtensions ?? []) {
+    const extendedExt = extendedCaps.headerExtensions.find(
+      (h: any) => h.kind === kind && h.uri === producerExt.uri
+    );
+
+    if (extendedExt) {
+      producerExt.id = extendedExt.recvId;
+    }
+  }
+
   // DEBUG: Uncomment for details.
   // prettier-ignore
   // {
