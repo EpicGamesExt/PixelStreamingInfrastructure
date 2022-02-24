@@ -92,7 +92,7 @@ export class SdpEndpoint {
       }
 
       // Generate RtpSendParameters to be used for the new Producer.
-      const sendParams = SdpUtils.sdpToSendRtpParameters(
+      const producerParams = SdpUtils.sdpToProducerRtpParameters(
         remoteSdpObj,
         this.localCaps,
         media.type as MediaKind
@@ -103,7 +103,7 @@ export class SdpEndpoint {
       try {
         producer = await this.transport.produce({
           kind: media.type as MediaKind,
-          rtpParameters: sendParams,
+          rtpParameters: producerParams,
           paused: false,
         });
       } catch (error) {
@@ -119,7 +119,7 @@ export class SdpEndpoint {
 
       this.producers.push(producer);
       this.producerOfferMedias.push(media);
-      this.producerOfferParams.push(sendParams);
+      this.producerOfferParams.push(producerParams);
 
       // prettier-ignore
       console.log(`[SdpEndpoint.processOffer] mediasoup Producer created, kind: ${producer.kind}, type: ${producer.type}, paused: ${producer.paused}`);
@@ -261,7 +261,7 @@ export class SdpEndpoint {
     // DEBUG: Uncomment for details.
     // prettier-ignore
     // {
-    //   const remoteCaps = SdpUtils.sdpToRecvRtpCapabilities(remoteSdpObj, this.localCaps);
+    //   const remoteCaps = SdpUtils.sdpToConsumerRtpCapabilities(remoteSdpObj, this.localCaps);
     //   console.debug(`DEBUG [SdpEndpoint.processAnswer] Remote RECV RtpCapabilities:\n${JSON.stringify(remoteCaps, null, 2)}`);
     // }
   }

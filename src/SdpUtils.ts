@@ -15,7 +15,7 @@ import { MediaAttributes } from "sdp-transform";
 // SDP to RTP Capabilities and Parameters
 // ======================================
 
-export function sdpToRecvRtpCapabilities(
+export function sdpToConsumerRtpCapabilities(
   sdpObject: object,
   localCaps: RtpCapabilities
 ): RtpCapabilities {
@@ -32,20 +32,20 @@ export function sdpToRecvRtpCapabilities(
 
   const extendedCaps = MsOrtc.getExtendedRtpCapabilities(caps, localCaps);
 
-  const recvCaps: RtpCapabilities = MsOrtc.getRecvRtpCapabilities(extendedCaps);
+  const consumerCaps = MsOrtc.getRecvRtpCapabilities(extendedCaps);
 
   // DEBUG: Uncomment for details.
   // prettier-ignore
   // {
-  //   console.debug(`DEBUG [sdpToRecvRtpCapabilities] RtpCapabilities:\n${JSON.stringify(caps, null, 2)}`);
-  //   console.debug(`DEBUG [sdpToRecvRtpCapabilities] Extended RtpCapabilities:\n${JSON.stringify(extendedCaps, null, 2)}`);
-  //   console.debug(`DEBUG [sdpToRecvRtpCapabilities] RECV RtpCapabilities:\n${JSON.stringify(recvCaps, null, 2)}`);
+  //   console.debug(`DEBUG [sdpToConsumerRtpCapabilities] SDP RtpCapabilities:\n${JSON.stringify(caps, null, 2)}`);
+  //   console.debug(`DEBUG [sdpToConsumerRtpCapabilities] SDP Extended RtpCapabilities:\n${JSON.stringify(extendedCaps, null, 2)}`);
+  //   console.debug(`DEBUG [sdpToConsumerRtpCapabilities] Consumer RtpCapabilities:\n${JSON.stringify(consumerCaps, null, 2)}`);
   // }
 
-  return recvCaps;
+  return consumerCaps;
 }
 
-export function sdpToSendRtpParameters(
+export function sdpToProducerRtpParameters(
   sdpObject: any,
   localCaps: RtpCapabilities,
   kind: MediaKind
@@ -62,7 +62,7 @@ export function sdpToSendRtpParameters(
   }
 
   const extendedCaps = MsOrtc.getExtendedRtpCapabilities(localCaps, caps);
-  const sendParams = MsOrtc.getSendingRemoteRtpParameters(kind, extendedCaps);
+  const producerParams = MsOrtc.getSendingRtpParameters(kind, extendedCaps);
 
   const sdpMediaObj: MediaAttributes =
     (sdpObject.media || []).find((m: { type: MediaKind }) => m.type === kind) ||
@@ -70,19 +70,19 @@ export function sdpToSendRtpParameters(
 
   // Fill `RtpParameters.mid`.
   if ("mid" in sdpMediaObj) {
-    sendParams.mid = String(sdpMediaObj.mid);
+    producerParams.mid = String(sdpMediaObj.mid);
   } else {
-    sendParams.mid = kind === "audio" ? "0" : "1";
+    producerParams.mid = kind === "audio" ? "0" : "1";
   }
 
   // Fill `RtpParameters.encodings`.
   {
     if ("ssrcs" in sdpMediaObj) {
-      sendParams.encodings = MsSdpUnifiedPlanUtils.getRtpEncodings({
+      producerParams.encodings = MsSdpUnifiedPlanUtils.getRtpEncodings({
         offerMediaObject: sdpMediaObj,
       });
     } else {
-      sendParams.encodings = [];
+      producerParams.encodings = [];
     }
 
     if ("rids" in sdpMediaObj) {
@@ -91,8 +91,8 @@ export function sdpToSendRtpParameters(
       sdpMediaObj.rids
         ?.filter((rid) => rid.direction === "send")
         .forEach((rid, i) => {
-          sendParams.encodings![i] = {
-            ...sendParams.encodings![i],
+          producerParams.encodings![i] = {
+            ...producerParams.encodings![i],
 
             rid: String(rid.id),
 
@@ -108,7 +108,7 @@ export function sdpToSendRtpParameters(
   }
 
   // Fill `RtpParameters.rtcp`.
-  sendParams.rtcp = {
+  producerParams.rtcp = {
     cname: MsSdpCommonUtils.getCname({ offerMediaObject: sdpMediaObj }),
     reducedSize: (sdpMediaObj.rtcpRsize ?? "") === "rtcp-rsize",
     mux: (sdpMediaObj.rtcpMux ?? "") === "rtcp-mux",
@@ -117,10 +117,10 @@ export function sdpToSendRtpParameters(
   // DEBUG: Uncomment for details.
   // prettier-ignore
   // {
-  //   console.debug(`DEBUG [sdpToSendRtpParameters] (${kind}) RtpCapabilities:\n${JSON.stringify(caps, null, 2)}`);
-  //   console.debug(`DEBUG [sdpToSendRtpParameters] (${kind}) Extended RtpCapabilities:\n${JSON.stringify(extendedCaps, null, 2)}`);
-  //   console.debug(`DEBUG [sdpToSendRtpParameters] (${kind}) SEND RtpParameters:\n${JSON.stringify(sendParams, null, 2)}`);
+  //   console.debug(`DEBUG [sdpToProducerRtpParameters] (${kind}) SDP RtpCapabilities:\n${JSON.stringify(caps, null, 2)}`);
+  //   console.debug(`DEBUG [sdpToProducerRtpParameters] (${kind}) SDP Extended RtpCapabilities:\n${JSON.stringify(extendedCaps, null, 2)}`);
+  //   console.debug(`DEBUG [sdpToProducerRtpParameters] (${kind}) Producer RtpParameters:\n${JSON.stringify(producerParams, null, 2)}`);
   // }
 
-  return sendParams;
+  return producerParams;
 }
