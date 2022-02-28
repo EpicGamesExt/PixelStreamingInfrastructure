@@ -11,6 +11,7 @@ import {
   RtpParameters,
 } from "mediasoup/node/lib/types";
 import { MediaAttributes } from "sdp-transform";
+import _ from "lodash";
 
 // SDP to RTP Capabilities and Parameters
 // ======================================
@@ -35,7 +36,6 @@ export function sdpToConsumerRtpCapabilities(
   }
 
   const extendedCaps = MsOrtc.getExtendedRtpCapabilities(caps, localCaps);
-
   const consumerCaps = MsOrtc.getRecvRtpCapabilities(extendedCaps);
 
   // DEBUG: Uncomment for details.
@@ -71,6 +71,42 @@ export function sdpToProducerRtpParameters(
 
   const extendedCaps = MsOrtc.getExtendedRtpCapabilities(localCaps, caps);
   const producerParams = MsOrtc.getSendingRtpParameters(kind, extendedCaps);
+
+  // FIXME: Use correct values for an SDP Answer.
+  // This is needed because `MsOrtc.getSendingRtpParameters` gets all the local
+  // (mediasoup server) values, but we actually want to keep some of the remote
+  // ones on SDP Answers, such as codec payload types or header extension IDs.
+  const rtxCodecRegex = /.+\/rtx$/i;
+  for (const codec of producerParams.codecs) {
+    if (rtxCodecRegex.test(codec.mimeType)) {
+      const extendedCodec = extendedCaps.codecs.find(
+        (c: any) => c.localPayloadType === codec.parameters.apt
+      );
+      if (extendedCodec) {
+        codec.payloadType = extendedCodec.remoteRtxPayloadType;
+        codec.parameters.apt = extendedCodec.remotePayloadType;
+      }
+    } else {
+      const extendedCodec = extendedCaps.codecs.find(
+        (c: any) =>
+          c.mimeType === codec.mimeType &&
+          c.clockRate === codec.clockRate &&
+          c.channels === codec.channels &&
+          _.isEqual(c.localParameters, codec.parameters)
+      );
+      if (extendedCodec) {
+        codec.payloadType = extendedCodec.remotePayloadType;
+      }
+    }
+  }
+  for (const headerExt of producerParams.headerExtensions ?? []) {
+    const extendedExt = extendedCaps.headerExtensions.find(
+      (h: any) => h.kind === kind && h.uri === headerExt.uri
+    );
+    if (extendedExt) {
+      headerExt.id = extendedExt.recvId;
+    }
+  }
 
   const sdpMediaObj: MediaAttributes =
     (sdpObject.media || []).find((m: { type: MediaKind }) => m.type === kind) ||
@@ -121,19 +157,6 @@ export function sdpToProducerRtpParameters(
     reducedSize: (sdpMediaObj.rtcpRsize ?? "") === "rtcp-rsize",
     mux: (sdpMediaObj.rtcpMux ?? "") === "rtcp-mux",
   };
-
-  // FIXME: Use the correct header extension IDs.
-  // This is needed because `MsOrtc.getSendingRtpParameters` assumes
-  // the sending side, when we really need the receiving side in here.
-  for (const producerExt of producerParams.headerExtensions ?? []) {
-    const extendedExt = extendedCaps.headerExtensions.find(
-      (h: any) => h.kind === kind && h.uri === producerExt.uri
-    );
-
-    if (extendedExt) {
-      producerExt.id = extendedExt.recvId;
-    }
-  }
 
   // DEBUG: Uncomment for details.
   // prettier-ignore
