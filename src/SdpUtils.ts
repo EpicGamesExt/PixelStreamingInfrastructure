@@ -58,6 +58,10 @@ export function sdpToProducerRtpParameters(
     sdpObject,
   });
 
+  // Filter out all caps that don't match the desired media kind.
+  caps.codecs = caps.codecs?.filter((c) => c.kind === kind);
+  caps.headerExtensions = caps.headerExtensions?.filter((e) => e.kind === kind);
+
   try {
     MsOrtc.validateRtpCapabilities(caps);
   } catch (error) {
