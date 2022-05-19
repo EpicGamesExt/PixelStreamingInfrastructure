@@ -57,7 +57,16 @@ export class SdpEndpoint {
     }
 
     this.remoteSdp = sdpOffer;
+
+    // Parse the SDP message text into an object.
     const remoteSdpObj = SdpTransform.parse(sdpOffer);
+
+    // sdp-transform bug #94: Type inconsistency in payloads
+    // https://github.com/clux/sdp-transform/issues/94
+    // Force "payloads" to be a string field.
+    for (const media of remoteSdpObj.media) {
+      media.payloads = "" + media.payloads;
+    }
 
     // DEBUG: Uncomment for details.
     // prettier-ignore
