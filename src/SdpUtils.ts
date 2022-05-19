@@ -27,9 +27,9 @@ export function sdpToConsumerRtpCapabilities(
   try {
     MsOrtc.validateRtpCapabilities(caps);
   } catch (error) {
-    let message = "SDP validation failed";
+    let message = "Cannot validate SDP";
     if (error instanceof Error) {
-      message += `: ${error.message}`;
+      message += `, error: ${error.message}`;
     }
     console.error(`ERROR [SdpUtils.sdpToConsumerRtpCapabilities] ${message}`);
     throw new Error(message);
@@ -61,9 +61,9 @@ export function sdpToProducerRtpParameters(
   try {
     MsOrtc.validateRtpCapabilities(caps);
   } catch (error) {
-    let message = "SDP validation failed";
+    let message = "Cannot validate SDP";
     if (error instanceof Error) {
-      message += `: ${error.message}`;
+      message += `, error: ${error.message}`;
     }
     console.error(`ERROR [SdpUtils.sdpToProducerRtpParameters] ${message}`);
     throw new Error(message);

@@ -105,9 +105,9 @@ export class SdpEndpoint {
           paused: false,
         });
       } catch (error) {
-        let message = `Error making a mediasoup Producer, kind: ${media.type}`;
+        let message = `Cannot create mediasoup Producer, kind: ${media.type}`;
         if (error instanceof Error) {
-          message += `: ${error.message}`;
+          message += `, error: ${error.message}`;
         }
         console.error(`ERROR [SdpEndpoint.processOffer] ${message}`);
         throw new Error(message);
