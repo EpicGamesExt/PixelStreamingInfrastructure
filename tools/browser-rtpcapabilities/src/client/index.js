@@ -2,10 +2,11 @@
 
 const MsSdpUtils = require("mediasoup-client/lib/handlers/sdp/commonUtils");
 const SdpTransform = require("sdp-transform");
+const JSON5 = require("json5");
 
 const ui = {
-  run: document.getElementById("uiRun"),
-  output: document.getElementById("uiOutput"),
+  run: document.getElementById("run"),
+  output: document.getElementById("output"),
 };
 
 ui.run.addEventListener("click", startSdp);
@@ -47,10 +48,12 @@ function printRtpCapabilities(sdp) {
   const sdpObject = SdpTransform.parse(sdp);
 
   const caps = MsSdpUtils.extractRtpCapabilities({ sdpObject });
-  const capsStr = JSON.stringify(caps, null, 4);
+  //const capsStr = JSON5.stringify(caps, null, 2); // Uses single quotes, `'`.
+  const capsStr = JSON5.stringify(caps, { space: 2, quote: `"` });
 
-  const text =
-    `const ${adapter.browserDetails.browser}: RtpCapabilities = ` + capsStr;
+  const text = `export const ${
+    window.adapter?.browserDetails.browser ?? "browser"
+  }: RtpCapabilities = ${capsStr};`;
   console.log(text);
   ui.output.innerHTML = text;
 }

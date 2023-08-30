@@ -14,6 +14,7 @@
   },
   "dependencies": {
     "http-server": "^0.12.3",
+    "json5": "2.2.3",
     "mediasoup-client": "^3.0.0",
     "sdp-transform": "^2.0.0"
   },
