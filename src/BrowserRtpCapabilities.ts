@@ -6,12 +6,12 @@
 //
 // These objects are obtained from the SDP Answer that each browser generates
 // in response to its own default SDP Offer. For convenience, the tool
-// "browser-RtpCapabilities" is included in this project, which can be used
+// "browser-rtpcapabilities" is included in this project, which can be used
 // to easily extract the RtpCapabilities from a web browser.
 //
-// Last update: 2021-07-05
-// * Firefox 88.
-// * Chrome 91.
+// Last update: 2023-08-30
+// * Firefox 116.
+// * Chrome 116.
 // * Safari 14.1.1 (macOS).
 
 import { RtpCapabilities } from "mediasoup/node/lib/types";
@@ -277,17 +277,10 @@ export const chrome: RtpCapabilities = {
     },
     {
       kind: "audio",
-      mimeType: "audio/ISAC",
-      preferredPayloadType: 103,
-      clockRate: 16000,
-      parameters: {},
-      rtcpFeedback: [],
-    },
-    {
-      kind: "audio",
-      mimeType: "audio/ISAC",
-      preferredPayloadType: 104,
-      clockRate: 32000,
+      mimeType: "audio/red",
+      preferredPayloadType: 63,
+      clockRate: 48000,
+      channels: 2,
       parameters: {},
       rtcpFeedback: [],
     },
@@ -318,22 +311,6 @@ export const chrome: RtpCapabilities = {
     {
       kind: "audio",
       mimeType: "audio/CN",
-      preferredPayloadType: 106,
-      clockRate: 32000,
-      parameters: {},
-      rtcpFeedback: [],
-    },
-    {
-      kind: "audio",
-      mimeType: "audio/CN",
-      preferredPayloadType: 105,
-      clockRate: 16000,
-      parameters: {},
-      rtcpFeedback: [],
-    },
-    {
-      kind: "audio",
-      mimeType: "audio/CN",
       preferredPayloadType: 13,
       clockRate: 8000,
       parameters: {},
@@ -344,22 +321,6 @@ export const chrome: RtpCapabilities = {
       mimeType: "audio/telephone-event",
       preferredPayloadType: 110,
       clockRate: 48000,
-      parameters: {},
-      rtcpFeedback: [],
-    },
-    {
-      kind: "audio",
-      mimeType: "audio/telephone-event",
-      preferredPayloadType: 112,
-      clockRate: 32000,
-      parameters: {},
-      rtcpFeedback: [],
-    },
-    {
-      kind: "audio",
-      mimeType: "audio/telephone-event",
-      preferredPayloadType: 113,
-      clockRate: 16000,
       parameters: {},
       rtcpFeedback: [],
     },
@@ -404,6 +365,282 @@ export const chrome: RtpCapabilities = {
       clockRate: 90000,
       parameters: {
         apt: 96,
+      },
+      rtcpFeedback: [],
+    },
+    {
+      kind: "video",
+      mimeType: "video/H264",
+      preferredPayloadType: 102,
+      clockRate: 90000,
+      parameters: {
+        "level-asymmetry-allowed": 1,
+        "packetization-mode": 1,
+        "profile-level-id": "42001f",
+      },
+      rtcpFeedback: [
+        {
+          type: "goog-remb",
+        },
+        {
+          type: "transport-cc",
+        },
+        {
+          type: "ccm",
+          parameter: "fir",
+        },
+        {
+          type: "nack",
+        },
+        {
+          type: "nack",
+          parameter: "pli",
+        },
+      ],
+    },
+    {
+      kind: "video",
+      mimeType: "video/rtx",
+      preferredPayloadType: 103,
+      clockRate: 90000,
+      parameters: {
+        apt: 102,
+      },
+      rtcpFeedback: [],
+    },
+    {
+      kind: "video",
+      mimeType: "video/H264",
+      preferredPayloadType: 104,
+      clockRate: 90000,
+      parameters: {
+        "level-asymmetry-allowed": 1,
+        "packetization-mode": 0,
+        "profile-level-id": "42001f",
+      },
+      rtcpFeedback: [
+        {
+          type: "goog-remb",
+        },
+        {
+          type: "transport-cc",
+        },
+        {
+          type: "ccm",
+          parameter: "fir",
+        },
+        {
+          type: "nack",
+        },
+        {
+          type: "nack",
+          parameter: "pli",
+        },
+      ],
+    },
+    {
+      kind: "video",
+      mimeType: "video/rtx",
+      preferredPayloadType: 105,
+      clockRate: 90000,
+      parameters: {
+        apt: 104,
+      },
+      rtcpFeedback: [],
+    },
+    {
+      kind: "video",
+      mimeType: "video/H264",
+      preferredPayloadType: 106,
+      clockRate: 90000,
+      parameters: {
+        "level-asymmetry-allowed": 1,
+        "packetization-mode": 1,
+        "profile-level-id": "42e01f",
+      },
+      rtcpFeedback: [
+        {
+          type: "goog-remb",
+        },
+        {
+          type: "transport-cc",
+        },
+        {
+          type: "ccm",
+          parameter: "fir",
+        },
+        {
+          type: "nack",
+        },
+        {
+          type: "nack",
+          parameter: "pli",
+        },
+      ],
+    },
+    {
+      kind: "video",
+      mimeType: "video/rtx",
+      preferredPayloadType: 107,
+      clockRate: 90000,
+      parameters: {
+        apt: 106,
+      },
+      rtcpFeedback: [],
+    },
+    {
+      kind: "video",
+      mimeType: "video/H264",
+      preferredPayloadType: 108,
+      clockRate: 90000,
+      parameters: {
+        "level-asymmetry-allowed": 1,
+        "packetization-mode": 0,
+        "profile-level-id": "42e01f",
+      },
+      rtcpFeedback: [
+        {
+          type: "goog-remb",
+        },
+        {
+          type: "transport-cc",
+        },
+        {
+          type: "ccm",
+          parameter: "fir",
+        },
+        {
+          type: "nack",
+        },
+        {
+          type: "nack",
+          parameter: "pli",
+        },
+      ],
+    },
+    {
+      kind: "video",
+      mimeType: "video/rtx",
+      preferredPayloadType: 109,
+      clockRate: 90000,
+      parameters: {
+        apt: 108,
+      },
+      rtcpFeedback: [],
+    },
+    {
+      kind: "video",
+      mimeType: "video/H264",
+      preferredPayloadType: 127,
+      clockRate: 90000,
+      parameters: {
+        "level-asymmetry-allowed": 1,
+        "packetization-mode": 1,
+        "profile-level-id": "4d001f",
+      },
+      rtcpFeedback: [
+        {
+          type: "goog-remb",
+        },
+        {
+          type: "transport-cc",
+        },
+        {
+          type: "ccm",
+          parameter: "fir",
+        },
+        {
+          type: "nack",
+        },
+        {
+          type: "nack",
+          parameter: "pli",
+        },
+      ],
+    },
+    {
+      kind: "video",
+      mimeType: "video/rtx",
+      preferredPayloadType: 125,
+      clockRate: 90000,
+      parameters: {
+        apt: 127,
+      },
+      rtcpFeedback: [],
+    },
+    {
+      kind: "video",
+      mimeType: "video/H264",
+      preferredPayloadType: 39,
+      clockRate: 90000,
+      parameters: {
+        "level-asymmetry-allowed": 1,
+        "packetization-mode": 0,
+        "profile-level-id": "4d001f",
+      },
+      rtcpFeedback: [
+        {
+          type: "goog-remb",
+        },
+        {
+          type: "transport-cc",
+        },
+        {
+          type: "ccm",
+          parameter: "fir",
+        },
+        {
+          type: "nack",
+        },
+        {
+          type: "nack",
+          parameter: "pli",
+        },
+      ],
+    },
+    {
+      kind: "video",
+      mimeType: "video/rtx",
+      preferredPayloadType: 40,
+      clockRate: 90000,
+      parameters: {
+        apt: 39,
+      },
+      rtcpFeedback: [],
+    },
+    {
+      kind: "video",
+      mimeType: "video/AV1",
+      preferredPayloadType: 45,
+      clockRate: 90000,
+      parameters: {},
+      rtcpFeedback: [
+        {
+          type: "goog-remb",
+        },
+        {
+          type: "transport-cc",
+        },
+        {
+          type: "ccm",
+          parameter: "fir",
+        },
+        {
+          type: "nack",
+        },
+        {
+          type: "nack",
+          parameter: "pli",
+        },
+      ],
+    },
+    {
+      kind: "video",
+      mimeType: "video/rtx",
+      preferredPayloadType: 46,
+      clockRate: 90000,
+      parameters: {
+        apt: 45,
       },
       rtcpFeedback: [],
     },
@@ -485,204 +722,8 @@ export const chrome: RtpCapabilities = {
     },
     {
       kind: "video",
-      mimeType: "video/H264",
-      preferredPayloadType: 102,
-      clockRate: 90000,
-      parameters: {
-        "level-asymmetry-allowed": 1,
-        "packetization-mode": 1,
-        "profile-level-id": "42001f",
-      },
-      rtcpFeedback: [
-        {
-          type: "goog-remb",
-        },
-        {
-          type: "transport-cc",
-        },
-        {
-          type: "ccm",
-          parameter: "fir",
-        },
-        {
-          type: "nack",
-        },
-        {
-          type: "nack",
-          parameter: "pli",
-        },
-      ],
-    },
-    {
-      kind: "video",
-      mimeType: "video/rtx",
-      preferredPayloadType: 121,
-      clockRate: 90000,
-      parameters: {
-        apt: 102,
-      },
-      rtcpFeedback: [],
-    },
-    {
-      kind: "video",
-      mimeType: "video/H264",
-      preferredPayloadType: 127,
-      clockRate: 90000,
-      parameters: {
-        "level-asymmetry-allowed": 1,
-        "packetization-mode": 0,
-        "profile-level-id": "42001f",
-      },
-      rtcpFeedback: [
-        {
-          type: "goog-remb",
-        },
-        {
-          type: "transport-cc",
-        },
-        {
-          type: "ccm",
-          parameter: "fir",
-        },
-        {
-          type: "nack",
-        },
-        {
-          type: "nack",
-          parameter: "pli",
-        },
-      ],
-    },
-    {
-      kind: "video",
-      mimeType: "video/rtx",
-      preferredPayloadType: 120,
-      clockRate: 90000,
-      parameters: {
-        apt: 127,
-      },
-      rtcpFeedback: [],
-    },
-    {
-      kind: "video",
-      mimeType: "video/H264",
-      preferredPayloadType: 125,
-      clockRate: 90000,
-      parameters: {
-        "level-asymmetry-allowed": 1,
-        "packetization-mode": 1,
-        "profile-level-id": "42e01f",
-      },
-      rtcpFeedback: [
-        {
-          type: "goog-remb",
-        },
-        {
-          type: "transport-cc",
-        },
-        {
-          type: "ccm",
-          parameter: "fir",
-        },
-        {
-          type: "nack",
-        },
-        {
-          type: "nack",
-          parameter: "pli",
-        },
-      ],
-    },
-    {
-      kind: "video",
-      mimeType: "video/rtx",
-      preferredPayloadType: 107,
-      clockRate: 90000,
-      parameters: {
-        apt: 125,
-      },
-      rtcpFeedback: [],
-    },
-    {
-      kind: "video",
-      mimeType: "video/H264",
-      preferredPayloadType: 108,
-      clockRate: 90000,
-      parameters: {
-        "level-asymmetry-allowed": 1,
-        "packetization-mode": 0,
-        "profile-level-id": "42e01f",
-      },
-      rtcpFeedback: [
-        {
-          type: "goog-remb",
-        },
-        {
-          type: "transport-cc",
-        },
-        {
-          type: "ccm",
-          parameter: "fir",
-        },
-        {
-          type: "nack",
-        },
-        {
-          type: "nack",
-          parameter: "pli",
-        },
-      ],
-    },
-    {
-      kind: "video",
-      mimeType: "video/rtx",
-      preferredPayloadType: 109,
-      clockRate: 90000,
-      parameters: {
-        apt: 108,
-      },
-      rtcpFeedback: [],
-    },
-    {
-      kind: "video",
-      mimeType: "video/AV1X",
-      preferredPayloadType: 35,
-      clockRate: 90000,
-      parameters: {},
-      rtcpFeedback: [
-        {
-          type: "goog-remb",
-        },
-        {
-          type: "transport-cc",
-        },
-        {
-          type: "ccm",
-          parameter: "fir",
-        },
-        {
-          type: "nack",
-        },
-        {
-          type: "nack",
-          parameter: "pli",
-        },
-      ],
-    },
-    {
-      kind: "video",
-      mimeType: "video/rtx",
-      preferredPayloadType: 36,
-      clockRate: 90000,
-      parameters: {
-        apt: 35,
-      },
-      rtcpFeedback: [],
-    },
-    {
-      kind: "video",
       mimeType: "video/red",
-      preferredPayloadType: 124,
+      preferredPayloadType: 112,
       clockRate: 90000,
       parameters: {},
       rtcpFeedback: [],
@@ -690,17 +731,17 @@ export const chrome: RtpCapabilities = {
     {
       kind: "video",
       mimeType: "video/rtx",
-      preferredPayloadType: 119,
+      preferredPayloadType: 113,
       clockRate: 90000,
       parameters: {
-        apt: 124,
+        apt: 112,
       },
       rtcpFeedback: [],
     },
     {
       kind: "video",
       mimeType: "video/ulpfec",
-      preferredPayloadType: 123,
+      preferredPayloadType: 114,
       clockRate: 90000,
       parameters: {},
       rtcpFeedback: [],
@@ -728,16 +769,6 @@ export const chrome: RtpCapabilities = {
       preferredId: 4,
     },
     {
-      kind: "audio",
-      uri: "urn:ietf:params:rtp-hdrext:sdes:rtp-stream-id",
-      preferredId: 5,
-    },
-    {
-      kind: "audio",
-      uri: "urn:ietf:params:rtp-hdrext:sdes:repaired-rtp-stream-id",
-      preferredId: 6,
-    },
-    {
       kind: "video",
       uri: "urn:ietf:params:rtp-hdrext:toffset",
       preferredId: 14,
@@ -760,12 +791,12 @@ export const chrome: RtpCapabilities = {
     {
       kind: "video",
       uri: "http://www.webrtc.org/experiments/rtp-hdrext/playout-delay",
-      preferredId: 12,
+      preferredId: 5,
     },
     {
       kind: "video",
       uri: "http://www.webrtc.org/experiments/rtp-hdrext/video-content-type",
-      preferredId: 11,
+      preferredId: 6,
     },
     {
       kind: "video",
@@ -785,12 +816,12 @@ export const chrome: RtpCapabilities = {
     {
       kind: "video",
       uri: "urn:ietf:params:rtp-hdrext:sdes:rtp-stream-id",
-      preferredId: 5,
+      preferredId: 10,
     },
     {
       kind: "video",
       uri: "urn:ietf:params:rtp-hdrext:sdes:repaired-rtp-stream-id",
-      preferredId: 6,
+      preferredId: 11,
     },
   ],
 };
