@@ -31,6 +31,7 @@ window.addEventListener("load", () => {
     console.warn(
       "[window.on('load')] webrtc-adapter is not loaded! an install or config issue?"
     );
+    window.adapter = { browserDetails: { browser: "browser" } };
   }
 });
 
