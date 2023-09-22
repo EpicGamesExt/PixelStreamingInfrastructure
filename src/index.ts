@@ -99,6 +99,7 @@ export class SdpEndpoint {
       }
 
       // Generate RtpSendParameters to be used for the new Producer.
+      // WARNING: This function only works well for max. 1 audio and 1 video.
       const producerParams = SdpUtils.sdpToProducerRtpParameters(
         remoteSdpObj,
         this.localCaps,

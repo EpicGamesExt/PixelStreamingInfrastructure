@@ -49,6 +49,10 @@ export function sdpToConsumerRtpCapabilities(
   return consumerCaps;
 }
 
+// WARNING: This function works for SDP messages that contain ONLY 1 media
+// of the desired kind.
+// TODO: Count the current amount of medias and assign different mid values
+// to each one of them. Also assign correct SSRCs for each media.
 export function sdpToProducerRtpParameters(
   sdpObject: any,
   localCaps: RtpCapabilities,
