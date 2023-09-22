@@ -53,7 +53,9 @@ export class SdpEndpoint {
 
   public async processOffer(sdpOffer: string): Promise<Producer[]> {
     if (this.remoteSdp) {
-      throw new Error("A remote description was already set");
+      throw new Error(
+        "[SdpEndpoint.processOffer] A remote description was already set"
+      );
     }
 
     this.remoteSdp = sdpOffer;
@@ -75,10 +77,24 @@ export class SdpEndpoint {
     // }
 
     // Use DTLS info from the remote SDP to connect the WebRTC transport.
-    await this.webRtcTransport.connect({
-      dtlsParameters: MsSdpUtils.extractDtlsParameters({
+    let dtlsParameters;
+    try {
+      dtlsParameters = MsSdpUtils.extractDtlsParameters({
         sdpObject: remoteSdpObj,
-      }),
+      });
+    } catch (error) {
+      const err = new Error(
+        "[SdpEndpoint.processOffer] Unexpected error while extracting DTLS parameters"
+      );
+      if (error instanceof Error) {
+        err.message += `; error: ${error.message}`;
+      }
+      (err as any).cause = error as any;
+      console.error(`ERROR ${err.message}`);
+      throw err;
+    }
+    await this.webRtcTransport.connect({
+      dtlsParameters,
     });
 
     // Get a list of media and make Producers for all of them.
@@ -115,11 +131,11 @@ export class SdpEndpoint {
           paused: false,
         });
       } catch (error) {
-        let message = `Cannot create mediasoup Producer, kind: ${media.type}`;
+        let message = `[SdpEndpoint.processOffer] Cannot create mediasoup Producer, kind: ${media.type}`;
         if (error instanceof Error) {
           message += `, error: ${error.message}`;
         }
-        console.error(`ERROR [SdpEndpoint.processOffer] ${message}`);
+        console.error(`ERROR ${message}`);
         throw new Error(message);
       }
 
@@ -142,10 +158,9 @@ export class SdpEndpoint {
 
   public createAnswer(): string {
     if (this.localSdp) {
-      console.error(
-        "ERROR [SdpEndpoint.createAnswer] A local description was already set"
+      throw new Error(
+        "[SdpEndpoint.createAnswer] A local description was already set"
       );
-      return "";
     }
 
     const sdpBuilder: RemoteSdp = new RemoteSdp({
@@ -189,10 +204,9 @@ export class SdpEndpoint {
 
   public createOffer(): string {
     if (this.localSdp) {
-      console.error(
-        "ERROR [SdpEndpoint.createOffer] A local description was already set"
+      throw new Error(
+        "[SdpEndpoint.createOffer] A local description was already set"
       );
-      return "";
     }
 
     const sdpBuilder: RemoteSdp = new RemoteSdp({
@@ -234,10 +248,9 @@ export class SdpEndpoint {
 
   public async processAnswer(sdpAnswer: string): Promise<void> {
     if (this.remoteSdp) {
-      console.error(
-        "ERROR [SdpEndpoint.processAnswer] A remote description was already set"
+      throw new Error(
+        "[SdpEndpoint.processAnswer] A remote description was already set"
       );
-      return;
     }
 
     this.remoteSdp = sdpAnswer;
@@ -250,10 +263,24 @@ export class SdpEndpoint {
     // }
 
     // Use DTLS info from the remote SDP to connect the WebRTC transport.
-    await this.webRtcTransport.connect({
-      dtlsParameters: MsSdpUtils.extractDtlsParameters({
+    let dtlsParameters;
+    try {
+      dtlsParameters = MsSdpUtils.extractDtlsParameters({
         sdpObject: remoteSdpObj,
-      }),
+      });
+    } catch (error) {
+      const err = new Error(
+        "[SdpEndpoint.processAnswer] Unexpected error while extracting DTLS parameters"
+      );
+      if (error instanceof Error) {
+        err.message += `; error: ${error.message}`;
+      }
+      (err as any).cause = error as any;
+      console.error(`ERROR ${err.message}`);
+      throw err;
+    }
+    await this.webRtcTransport.connect({
+      dtlsParameters,
     });
 
     // TODO: Normally in a proper SDP endpoint the SDP Answer would be used to
