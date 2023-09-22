@@ -15,7 +15,7 @@
 
     <p>
       This page generates a mediasoup <code>RtpCapabilities</code> object that
-      represents the WebRTC capabilities of this web browser.
+      represents the WebRTC receiving capabilities of this web browser.
     </p>
 
     <div>
@@ -23,9 +23,46 @@
     </div>
 
     <div>
-      <h2>Output:</h2>
+      <h2>SDP:</h2>
       <code>
-        <div id="output" style="white-space: pre-wrap;"></div>
+        <div id="recvSdp" style="white-space: pre-wrap;"></div>
+      </code>
+    </div>
+
+    <div>
+      <h2>RtpCapabilities:</h2>
+      <code>
+        <div id="recvCaps" style="white-space: pre-wrap;"></div>
+      </code>
+    </div>
+
+    <hr />
+
+    <h1>mediasoup RtpParameters</h1>
+
+    <p>
+      Optional: This section shows the equivalent <code>RtpParameters</code>
+      that represents the WebRTC sending parameters of this web browser.
+    </p>
+
+    <div>
+      <h2>SDP:</h2>
+      <code>
+        <div id="sendSdp" style="white-space: pre-wrap;"></div>
+      </code>
+    </div>
+
+    <div>
+      <h2>Audio RtpParameters:</h2>
+      <code>
+        <div id="sendAudioParams" style="white-space: pre-wrap;"></div>
+      </code>
+    </div>
+
+    <div>
+      <h2>Video RtpParameters:</h2>
+      <code>
+        <div id="sendVideoParams" style="white-space: pre-wrap;"></div>
       </code>
     </div>
 
