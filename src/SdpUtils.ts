@@ -3,7 +3,7 @@
 // depend on the actual type of SDP: plain, PlanB, or UnifiedPlan.
 import * as MsSdpUnifiedPlanUtils from "mediasoup-client/lib/handlers/sdp/unifiedPlanUtils";
 
-import * as MsSdpCommonUtils from "mediasoup-client/lib/handlers/sdp/commonUtils";
+import * as MsSdpUtils from "mediasoup-client/lib/handlers/sdp/commonUtils";
 import * as MsOrtc from "mediasoup-client/lib/ortc";
 import {
   MediaKind,
@@ -20,7 +20,7 @@ export function sdpToConsumerRtpCapabilities(
   sdpObject: object,
   localCaps: RtpCapabilities
 ): RtpCapabilities {
-  const caps: RtpCapabilities = MsSdpCommonUtils.extractRtpCapabilities({
+  const caps: RtpCapabilities = MsSdpUtils.extractRtpCapabilities({
     sdpObject,
   });
 
@@ -54,7 +54,7 @@ export function sdpToProducerRtpParameters(
   localCaps: RtpCapabilities,
   kind: MediaKind
 ): RtpParameters {
-  const caps: RtpCapabilities = MsSdpCommonUtils.extractRtpCapabilities({
+  const caps: RtpCapabilities = MsSdpUtils.extractRtpCapabilities({
     sdpObject,
   });
 
@@ -157,7 +157,7 @@ export function sdpToProducerRtpParameters(
 
   // Fill `RtpParameters.rtcp`.
   producerParams.rtcp = {
-    cname: MsSdpCommonUtils.getCname({ offerMediaObject: sdpMediaObj }),
+    cname: MsSdpUtils.getCname({ offerMediaObject: sdpMediaObj }),
     reducedSize: (sdpMediaObj.rtcpRsize ?? "") === "rtcp-rsize",
     mux: (sdpMediaObj.rtcpMux ?? "") === "rtcp-mux",
   };
