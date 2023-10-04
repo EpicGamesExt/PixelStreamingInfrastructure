@@ -30,6 +30,11 @@ export function sdpToConsumerRtpCapabilities(
     sdpObject,
   });
 
+  // DEBUG: Uncomment for details.
+  // prettier-ignore
+  // {
+  //   console.debug(`DEBUG [SdpUtils.sdpToConsumerRtpCapabilities] RtpCapabilities:\n${JSON.stringify(caps, null, 2)}`);
+  // }
 
   // This may throw.
   MsOrtc.validateRtpCapabilities(_localCaps);
@@ -41,9 +46,8 @@ export function sdpToConsumerRtpCapabilities(
   // DEBUG: Uncomment for details.
   // prettier-ignore
   // {
-  //   console.debug(`DEBUG [SdpUtils.sdpToConsumerRtpCapabilities] SDP RtpCapabilities:\n${JSON.stringify(caps, null, 2)}`);
-  //   console.debug(`DEBUG [SdpUtils.sdpToConsumerRtpCapabilities] SDP Extended RtpCapabilities:\n${JSON.stringify(extendedCaps, null, 2)}`);
-  //   console.debug(`DEBUG [SdpUtils.sdpToConsumerRtpCapabilities] Consumer RtpCapabilities:\n${JSON.stringify(consumerCaps, null, 2)}`);
+  //   console.debug(`DEBUG [SdpUtils.sdpToConsumerRtpCapabilities] ExtendedRtpCapabilities:\n${JSON.stringify(extendedCaps, null, 2)}`);
+  //   console.debug(`DEBUG [SdpUtils.sdpToConsumerRtpCapabilities] Recv/ConsumerRtpCapabilities:\n${JSON.stringify(consumerCaps, null, 2)}`);
   // }
 
   return consumerCaps;
@@ -64,6 +68,12 @@ export function sdpToProducerRtpParameters(
     sdpObject,
   });
 
+  // DEBUG: Uncomment for details.
+  // prettier-ignore
+  // {
+  //   console.debug(`DEBUG [SdpUtils.sdpToProducerRtpParameters] (${kind}) RtpCapabilities:\n${JSON.stringify(caps, null, 2)}`);
+  // }
+
   // Filter out all caps that don't match the desired media kind.
   caps.codecs = caps.codecs?.filter((c) => c.kind === kind);
   caps.headerExtensions = caps.headerExtensions?.filter((e) => e.kind === kind);
@@ -74,6 +84,12 @@ export function sdpToProducerRtpParameters(
 
   const extendedCaps = MsOrtc.getExtendedRtpCapabilities(_localCaps, caps);
   const producerParams = MsOrtc.getSendingRtpParameters(kind, extendedCaps);
+
+  // DEBUG: Uncomment for details.
+  // prettier-ignore
+  // {
+  //   console.debug(`DEBUG [SdpUtils.sdpToProducerRtpParameters] (${kind}) SendingRtpParameters:\n${JSON.stringify(producerParams, null, 2)}`);
+  // }
 
   // FIXME: Use correct values for an SDP Answer.
   // This is needed because `MsOrtc.getSendingRtpParameters` gets all the local
@@ -164,9 +180,8 @@ export function sdpToProducerRtpParameters(
   // DEBUG: Uncomment for details.
   // prettier-ignore
   // {
-  //   console.debug(`DEBUG [SdpUtils.sdpToProducerRtpParameters] (${kind}) SDP RtpCapabilities:\n${JSON.stringify(caps, null, 2)}`);
-  //   console.debug(`DEBUG [SdpUtils.sdpToProducerRtpParameters] (${kind}) SDP Extended RtpCapabilities:\n${JSON.stringify(extendedCaps, null, 2)}`);
-  //   console.debug(`DEBUG [SdpUtils.sdpToProducerRtpParameters] (${kind}) Producer RtpParameters:\n${JSON.stringify(producerParams, null, 2)}`);
+  //   console.debug(`DEBUG [SdpUtils.sdpToProducerRtpParameters] (${kind}) ExtendedRtpCapabilities:\n${JSON.stringify(extendedCaps, null, 2)}`);
+  //   console.debug(`DEBUG [SdpUtils.sdpToProducerRtpParameters] (${kind}) ProducerRtpParameters:\n${JSON.stringify(producerParams, null, 2)}`);
   // }
 
   return producerParams;
