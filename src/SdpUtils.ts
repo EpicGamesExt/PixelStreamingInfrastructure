@@ -16,26 +16,26 @@ import _ from "lodash";
 // SDP to RTP Capabilities and Parameters
 // ======================================
 
+// WARNING: This function works for SDP messages that contain ONLY 1 media
+// of each kind.
+// MsSdpUtils.extractRtpCapabilities() only works for 1 audio and 1 video.
 export function sdpToConsumerRtpCapabilities(
   sdpObject: object,
   localCaps: RtpCapabilities
 ): RtpCapabilities {
+  // Clone input to avoid side effect modifications.
+  const _localCaps = JSON.parse(JSON.stringify(localCaps));
+
   const caps: RtpCapabilities = MsSdpUtils.extractRtpCapabilities({
     sdpObject,
   });
 
-  try {
-    MsOrtc.validateRtpCapabilities(caps);
-  } catch (error) {
-    let message = "Cannot validate SDP";
-    if (error instanceof Error) {
-      message += `, error: ${error.message}`;
-    }
-    console.error(`ERROR [SdpUtils.sdpToConsumerRtpCapabilities] ${message}`);
-    throw new Error(message);
-  }
 
-  const extendedCaps = MsOrtc.getExtendedRtpCapabilities(caps, localCaps);
+  // This may throw.
+  MsOrtc.validateRtpCapabilities(_localCaps);
+  MsOrtc.validateRtpCapabilities(caps);
+
+  const extendedCaps = MsOrtc.getExtendedRtpCapabilities(caps, _localCaps);
   const consumerCaps = MsOrtc.getRecvRtpCapabilities(extendedCaps);
 
   // DEBUG: Uncomment for details.
@@ -50,14 +50,16 @@ export function sdpToConsumerRtpCapabilities(
 }
 
 // WARNING: This function works for SDP messages that contain ONLY 1 media
-// of the desired kind.
-// TODO: Count the current amount of medias and assign different mid values
-// to each one of them. Also assign correct SSRCs for each media.
+// of each kind.
+// MsSdpUtils.extractRtpCapabilities() only works for 1 audio and 1 video.
 export function sdpToProducerRtpParameters(
   sdpObject: any,
   localCaps: RtpCapabilities,
   kind: MediaKind
 ): RtpParameters {
+  // Clone input to avoid side effect modifications.
+  const _localCaps = JSON.parse(JSON.stringify(localCaps));
+
   const caps: RtpCapabilities = MsSdpUtils.extractRtpCapabilities({
     sdpObject,
   });
@@ -66,18 +68,11 @@ export function sdpToProducerRtpParameters(
   caps.codecs = caps.codecs?.filter((c) => c.kind === kind);
   caps.headerExtensions = caps.headerExtensions?.filter((e) => e.kind === kind);
 
-  try {
-    MsOrtc.validateRtpCapabilities(caps);
-  } catch (error) {
-    let message = "Cannot validate SDP";
-    if (error instanceof Error) {
-      message += `, error: ${error.message}`;
-    }
-    console.error(`ERROR [SdpUtils.sdpToProducerRtpParameters] ${message}`);
-    throw new Error(message);
-  }
+  // This may throw.
+  MsOrtc.validateRtpCapabilities(_localCaps);
+  MsOrtc.validateRtpCapabilities(caps);
 
-  const extendedCaps = MsOrtc.getExtendedRtpCapabilities(localCaps, caps);
+  const extendedCaps = MsOrtc.getExtendedRtpCapabilities(_localCaps, caps);
   const producerParams = MsOrtc.getSendingRtpParameters(kind, extendedCaps);
 
   // FIXME: Use correct values for an SDP Answer.
