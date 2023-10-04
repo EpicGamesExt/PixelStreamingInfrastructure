@@ -9,12 +9,12 @@ const SdpUtils = require("mediasoup-sdp-bridge/lib/SdpUtils");
 const ui = {
   run: document.getElementById("run"),
 
-  recvSdp: document.getElementById("recvSdp"),
+  sdpAnswer: document.getElementById("sdpAnswer"),
   recvCaps: document.getElementById("recvCaps"),
 
-  sendSdp: document.getElementById("sendSdp"),
-  sendAudioParams: document.getElementById("sendAudioParams"),
-  sendVideoParams: document.getElementById("sendVideoParams"),
+  sdpOffer: document.getElementById("sdpOffer"),
+  audioProducerParams: document.getElementById("audioProducerParams"),
+  videoProducerParams: document.getElementById("videoProducerParams"),
 };
 
 ui.run.addEventListener("click", run);
@@ -56,25 +56,29 @@ async function run() {
 
 // Generate RtpCapabilities from SDP Answer.
 function processAnswer(sdpAnswer) {
+  console.log(`sdpAnswer:\n${sdpAnswer}`);
+
   const sdpObject = SdpTransform.parse(sdpAnswer);
+
   const caps = MsSdpUtils.extractRtpCapabilities({ sdpObject });
+
   const capsStr = JSON5.stringify(caps, { space: 2, quote: `"` });
   const capsText = `export const ${adapter.browserDetails.browser}: RtpCapabilities = ${capsStr}`;
 
-  console.log(`recvSdp:\n${sdpAnswer}`);
-  console.log(capsText);
-
-  ui.recvSdp.innerHTML = sdpAnswer;
+  ui.sdpAnswer.innerHTML = sdpAnswer;
   ui.recvCaps.innerHTML = capsText;
 
-  // Optional. Run if you're curious about the Consumer caps.
-  //const consumerCaps = SdpUtils.sdpToConsumerRtpCapabilities(sdpObject, caps);
-  //const consumerCapsStr = JSON5.stringify(consumerCaps, { space: 2, quote: `"` });
-  //console.log(`consumerCaps:\n${consumerCapsStr}`);
+  // Optional. Run to get a log of the Consumer caps.
+  // (First enable debug logs in SdpUtils source code)
+  {
+    SdpUtils.sdpToConsumerRtpCapabilities(sdpObject, caps);
+  }
 }
 
 // Generate RtpParameters from SDP Offer.
 function processOffer(sdpOffer) {
+  console.log(`sdpOffer:\n${sdpOffer}`);
+
   const sdpObject = SdpTransform.parse(sdpOffer);
 
   // sdp-transform bug #94: Type inconsistency in payloads
@@ -86,25 +90,27 @@ function processOffer(sdpOffer) {
 
   const caps = MsSdpUtils.extractRtpCapabilities({ sdpObject });
 
-  const audioParams = SdpUtils.sdpToProducerRtpParameters(
+  const audioProducerParams = SdpUtils.sdpToProducerRtpParameters(
     sdpObject,
     caps,
     "audio"
   );
-  const audioParamsStr = JSON5.stringify(audioParams, { space: 2, quote: `"` });
+  const audioProducerParamsStr = JSON5.stringify(audioProducerParams, {
+    space: 2,
+    quote: `"`,
+  });
 
-  const videoParams = SdpUtils.sdpToProducerRtpParameters(
+  const videoProducerParams = SdpUtils.sdpToProducerRtpParameters(
     sdpObject,
     caps,
     "video"
   );
-  const videoParamsStr = JSON5.stringify(videoParams, { space: 2, quote: `"` });
+  const videoProducerParamsStr = JSON5.stringify(videoProducerParams, {
+    space: 2,
+    quote: `"`,
+  });
 
-  console.log(`sendSdp:\n${sdpOffer}`);
-  console.log(`audioParams:\n${audioParamsStr}`);
-  console.log(`videoParams:\n${videoParamsStr}`);
-
-  ui.sendSdp.innerHTML = sdpOffer;
-  ui.sendAudioParams.innerHTML = audioParamsStr;
-  ui.sendVideoParams.innerHTML = videoParamsStr;
+  ui.sdpOffer.innerHTML = sdpOffer;
+  ui.audioProducerParams.innerHTML = audioProducerParamsStr;
+  ui.videoProducerParams.innerHTML = videoProducerParamsStr;
 }
