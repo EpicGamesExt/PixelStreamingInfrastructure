@@ -98,6 +98,8 @@ export class SdpEndpoint {
     });
 
     // Get a list of media and make Producers for all of them.
+    // NOTE: Only up to 1 audio and 1 video are accepted.
+    const mediaKinds = new Set<MediaKind>();
     for (const media of remoteSdpObj.media) {
       if (!("rtp" in media)) {
         // Skip media that is not RTP.
@@ -114,24 +116,35 @@ export class SdpEndpoint {
         continue;
       }
 
+      const mediaKind = media.type as MediaKind
+
+      if (mediaKinds.has(mediaKind)) {
+        // Skip media if the same kind was already processed.
+        // WARNING: Sending more than 1 audio or 1 video is a BUG in the client.
+        console.warn(
+          `WARNING [SdpEndpoint.processOffer] Client BUG: More than 1 '${mediaKind}' media was requested; skipping it`
+        );
+        continue;
+      }
+
       // Generate RtpSendParameters to be used for the new Producer.
       // WARNING: This function only works well for max. 1 audio and 1 video.
       const producerParams = SdpUtils.sdpToProducerRtpParameters(
         remoteSdpObj,
         this.localCaps,
-        media.type as MediaKind
+        mediaKind
       );
 
       // Add a new Producer for the given media.
       let producer: Producer;
       try {
         producer = await this.transport.produce({
-          kind: media.type as MediaKind,
+          kind: mediaKind,
           rtpParameters: producerParams,
           paused: false,
         });
       } catch (error) {
-        let message = `[SdpEndpoint.processOffer] Cannot create mediasoup Producer, kind: ${media.type}`;
+        let message = `[SdpEndpoint.processOffer] Cannot create mediasoup Producer, kind: ${mediaKind}`;
         if (error instanceof Error) {
           message += `, error: ${error.message}`;
         }
@@ -151,6 +164,9 @@ export class SdpEndpoint {
       // {
       //   console.debug(`DEBUG [SdpEndpoint.processOffer] mediasoup Producer RtpParameters:\n${JSON.stringify(producer.rtpParameters, null, 2)}`);
       // }
+
+      // A new Producer was successfully added, so mark this media kind as added.
+      mediaKinds.add(mediaKind);
     }
 
     return this.producers;
