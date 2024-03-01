@@ -4,7 +4,7 @@ The changelog is a summary of commits between releases of Unreal Engine.
 
 As a reminder each UE-X branch/tag in this repository corresponds to a version of Unreal Engine.
 
-## [UE 5.3 (Current)](https://github.com/EpicGames/PixelStreamingInfrastructure/commits/UE5.3)
+## [UE 5.3 (Current)](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/commits/UE5.3)
 
 ### Features
 - Protocol structures can now contain strings by @Belchy06 in https://github.com/EpicGames/PixelStreamingInfrastructure/pull/336
