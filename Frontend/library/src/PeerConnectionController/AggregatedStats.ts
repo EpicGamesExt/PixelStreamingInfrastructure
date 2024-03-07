@@ -33,6 +33,7 @@ export class AggregatedStats {
     sessionStats: SessionStats;
     streamStats: StreamStats;
     codecs: Map<string, string>;
+    transport: RTCTransportStats;
 
     constructor() {
         this.inboundVideoStats = new InboundVideoStats();
@@ -94,6 +95,7 @@ export class AggregatedStats {
                     this.handleTrack(stat);
                     break;
                 case 'transport':
+                    this.handleTransport(stat);
                     break;
                 case 'stream':
                     this.handleStream(stat);
@@ -267,6 +269,11 @@ export class AggregatedStats {
         }
     }
 
+    handleTransport(stat: RTCTransportStats){
+        this.transport = stat;
+    }
+
+
     handleCodec(stat: CodecStats) {
         const codecId = stat.id;
         const codecType = `${stat.mimeType
@@ -312,6 +319,14 @@ export class AggregatedStats {
      * @returns The candidate pair that is currently receiving data
      */
     public getActiveCandidatePair(): CandidatePairStats | null {
-        return this.candidatePairs.find((candidatePair) => candidatePair.bytesReceived > 0, null)
+        
+        // Check if the RTCTransport stat is not undefined
+        if (this.transport){
+            // Return the candidate pair that matches the transport candidate pair id
+            return this.candidatePairs.find((candidatePair) => candidatePair.id = this.transport.selectedCandidatePairId, null);
+        }
+        
+        // Fall back to the selected candidate pair
+        return this.candidatePairs.find((candidatePair) => candidatePair.selected, null);
     }  
 }
