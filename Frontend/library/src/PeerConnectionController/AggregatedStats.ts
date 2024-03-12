@@ -323,7 +323,7 @@ export class AggregatedStats {
         // Check if the RTCTransport stat is not undefined
         if (this.transportStats){
             // Return the candidate pair that matches the transport candidate pair id
-            return this.candidatePairs.find((candidatePair) => candidatePair.id = this.transportStats.selectedCandidatePairId, null);
+            return this.candidatePairs.find((candidatePair) => candidatePair.id === this.transportStats.selectedCandidatePairId, null);
         }
         
         // Fall back to the selected candidate pair
