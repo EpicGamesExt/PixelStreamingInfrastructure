@@ -27,7 +27,7 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           context: .
-          tags: 'pixel-streaming-signalling-server:5.4'
+          tags: 'pixelstreamingunofficial/pixel-streaming-signalling-server:5.4'
           push: true
           file: SignallingWebServer/Dockerfile
       -
@@ -35,7 +35,7 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           context: .
-          tags: 'pixel-streaming-sfu:5.4'
+          tags: 'pixelstreamingunofficial/pixel-streaming-sfu:5.4'
           push: true
           file: SFU/Dockerfile
           
