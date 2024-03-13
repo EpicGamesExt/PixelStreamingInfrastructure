@@ -1,7 +1,7 @@
 name: Publish frontend-ui lib
 on:
-  push:
-    workflow_dispatch:
+  workflow_dispatch:
+  push:  
     branches: ['UE5.4']
     paths: ['Frontend/ui-library/package.json']
 jobs:
