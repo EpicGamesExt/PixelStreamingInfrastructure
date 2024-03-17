@@ -156,22 +156,71 @@ export class WebXRController {
         this.onSessionStarted.dispatchEvent(new Event('xrSessionStarted'));
     }
 
+    sendXRDataToUE(pose: XRViewerPose) {
+        // Extract HMD transform matrix and convert from row-major to column-major before sending
+        const mat = pose.transform.matrix;
+
+        // Send HMD transform matrix to UE
+        // prettier-ignore
+        // this.webRtcController.streamMessageController.toStreamerHandlers.get('XRHMDTransform')([
+        //     mat[0], mat[4], mat[8], mat[12],
+        //     mat[1], mat[5], mat[9], mat[13],
+        //     mat[2], mat[6], mat[10], mat[14],
+        //     mat[3], mat[7], mat[11], mat[15]
+        // ]);
+
+        let leftView: XRView = null;
+        let rightView: XRView = null;
+
+        // iterate through each view (eye) in the XRViewerPose.Views[] and send to UE
+        for (const view of pose.views) {
+            if (view.eye === "left") {
+                leftView = view;
+            }
+            else if(view.eye === "right") {
+                rightView = view;
+            }
+        }
+
+        if(leftView == null || rightView == null) {
+            return;
+        }
+
+        const leftEyeTrans = leftView.transform.matrix;
+        const leftEyeProj = leftView.projectionMatrix;
+        const rightEyeTrans = rightView.transform.matrix;
+        const rightEyeProj = rightView.projectionMatrix;
+
+        // send transform (4x4) and projection matrix (4x4) data for each eye (left first, then right)
+        // prettier-ignore
+        this.webRtcController.streamMessageController.toStreamerHandlers.get('XREyeViews')([
+            // Left eye 4x4 transform matrix
+            leftEyeTrans[0], leftEyeTrans[4], leftEyeTrans[8],  leftEyeTrans[12],
+            leftEyeTrans[1], leftEyeTrans[5], leftEyeTrans[9],  leftEyeTrans[13],
+            leftEyeTrans[2], leftEyeTrans[6], leftEyeTrans[10], leftEyeTrans[14],
+            leftEyeTrans[3], leftEyeTrans[7], leftEyeTrans[11], leftEyeTrans[15],
+            // Left eye 4x4 projection matrix
+            leftEyeProj[0], leftEyeProj[4], leftEyeProj[8],  leftEyeProj[12],
+            leftEyeProj[1], leftEyeProj[5], leftEyeProj[9],  leftEyeProj[13],
+            leftEyeProj[2], leftEyeProj[6], leftEyeProj[10], leftEyeProj[14],
+            leftEyeProj[3], leftEyeProj[7], leftEyeProj[11], leftEyeProj[15],
+            // Right eye 4x4 transform matrix
+            rightEyeTrans[0], rightEyeTrans[4], rightEyeTrans[8],  rightEyeTrans[12],
+            rightEyeTrans[1], rightEyeTrans[5], rightEyeTrans[9],  rightEyeTrans[13],
+            rightEyeTrans[2], rightEyeTrans[6], rightEyeTrans[10], rightEyeTrans[14],
+            rightEyeTrans[3], rightEyeTrans[7], rightEyeTrans[11], rightEyeTrans[15],
+            // right eye 4x4 projection matrix
+            rightEyeProj[0], rightEyeProj[4], rightEyeProj[8],  rightEyeProj[12],
+            rightEyeProj[1], rightEyeProj[5], rightEyeProj[9],  rightEyeProj[13],
+            rightEyeProj[2], rightEyeProj[6], rightEyeProj[10], rightEyeProj[14],
+            rightEyeProj[3], rightEyeProj[7], rightEyeProj[11], rightEyeProj[15],
+        ]);
+    }
+
     onXrFrame(time: DOMHighResTimeStamp, frame: XRFrame) {
         const pose = frame.getViewerPose(this.xrRefSpace);
         if (pose) {
-            const matrix = pose.transform.matrix;
-            const mat = [];
-            for (let i = 0; i < 16; i++) {
-                mat[i] = new Float32Array([matrix[i]])[0];
-            }
-
-            // prettier-ignore
-            this.webRtcController.streamMessageController.toStreamerHandlers.get('XRHMDTransform')([
-                mat[0], mat[4], mat[8], mat[12],
-                mat[1], mat[5], mat[9], mat[13], 
-                mat[2], mat[6], mat[10], mat[14], 
-                mat[3], mat[7], mat[11], mat[15]
-            ]);
+            this.sendXRDataToUE(pose);
 
             const glLayer = this.xrSession.renderState.baseLayer;
             // If we do have a valid pose, bind the WebGL layer's framebuffer,
