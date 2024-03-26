@@ -192,11 +192,15 @@ export class ConfigUI {
         );
         this.addSettingFlag(
             psSettingsSection,
-            this.flagsUi.get(Flags.AFKDetection)
+            this.flagsUi.get(Flags.WaitForStreamer)
         );
         this.addSettingFlag(
             psSettingsSection,
-            this.flagsUi.get(Flags.WaitForStreamer)
+            this.flagsUi.get(Flags.UseFlexFec)
+        );
+        this.addSettingFlag(
+            psSettingsSection,
+            this.flagsUi.get(Flags.AFKDetection)
         );
         this.addSettingNumeric(
             psSettingsSection,
