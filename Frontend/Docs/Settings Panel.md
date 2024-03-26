@@ -23,6 +23,8 @@ This page will be updated with new features and commands as they become availabl
 | **Force mono audio** | Force the browser to request mono audio in the SDP. |
 | **Force TURN** | Will attempt to connect exclusively via the TURN server. Will not work without an active TURN server. |
 | **Suppress browser keys** | Suppress or allow certain keys we use in UE, for example F5 to show shader complexity instead of refreshing the page. |
+| **Wait for streamer** | Will continue trying to connect until a streamer becomes available, at which point it will automatically subscribe to it. |
+| **Use FlexFec** | Will signal to WebRTC to enable Flexible Forward Error Correction |
 | **AFK if Idle** | Timeout the connection if no input is detected for a period of time. |
 | **AFK timeout** | Allows you to specify the AFK timeout period. |
 | **Max Reconnects** | The maximum number of reconnects the application will attempt when a streamer disconnects. |

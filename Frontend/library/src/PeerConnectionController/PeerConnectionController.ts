@@ -407,7 +407,7 @@ export class PeerConnectionController {
                             });
                         });
 
-                    // If the user has toggle the "UseFlexFec" flag, we want to add it to the top of the codec preferences list.
+                    // If the user has toggle the "UseFlexFec" flag, we want to add it to the top of the preferences list.
                     // We don't want it as a selectable codec because the first "actual" codec in the list is the codec that will be
                     // protected.
                     if(this.config.isFlagEnabled(Flags.UseFlexFec)) {
