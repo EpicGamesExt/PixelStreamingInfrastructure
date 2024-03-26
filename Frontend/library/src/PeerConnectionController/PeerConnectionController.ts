@@ -407,6 +407,26 @@ export class PeerConnectionController {
                             });
                         });
 
+                    // If the user has toggle the "UseFlexFec" flag, we want to add it to the top of the codec preferences list.
+                    // We don't want it as a selectable codec because the first "actual" codec in the list is the codec that will be
+                    // protected.
+                    if(this.config.isFlagEnabled(Flags.UseFlexFec)) {
+                        const matcher = /(flexfec).*/;
+                        RTCRtpReceiver.getCapabilities('video').codecs.forEach((codec) => {
+                            const str = codec.mimeType.split('/')[1] + ' ' + (codec.sdpFmtpLine || '');
+                            const match = matcher.exec(str);
+                            if (match !== null) {
+                                codecs.push({
+                                    mimeType: codec.mimeType,
+                                    clockRate: codec.clockRate,
+                                    sdpFmtpLine: codec.sdpFmtpLine
+                                        ? codec.sdpFmtpLine
+                                        : ''
+                                });
+                            }
+                        });
+                    }
+
                     for (const codec of codecs) {
                         if (codec.sdpFmtpLine === '') {
                             // We can't dynamically add members to the codec, so instead remove the field if it's empty

@@ -32,6 +32,7 @@ export class Flags {
     static GamepadInput = 'GamepadInput' as const;
     static XRControllerInput = 'XRControllerInput' as const;
     static WaitForStreamer = "WaitForStreamer" as const;
+    static UseFlexFec = "UseFlexFec" as const;
 }
 
 export type FlagsKeys = Exclude<keyof typeof Flags, 'prototype'>;
@@ -497,6 +498,19 @@ export class Config {
                 settings && settings.hasOwnProperty(Flags.WaitForStreamer) ?
                     settings[Flags.WaitForStreamer] :
                     true,
+                useUrlParams
+            )
+        );
+
+        this.flags.set(
+            Flags.UseFlexFec,
+            new SettingFlag(
+                Flags.UseFlexFec,
+                'Use FlexFec',
+                'Will signal to WebRTC to enable Flexible Forward Error Correction',
+                settings && settings.hasOwnProperty(Flags.UseFlexFec) ?
+                    settings[Flags.UseFlexFec] :
+                    false,
                 useUrlParams
             )
         );
