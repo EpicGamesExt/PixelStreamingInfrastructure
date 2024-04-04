@@ -44,10 +44,8 @@ We release a number of different components under this repository, specifically:
 
 The following container images are built from this repository:
 
-- [ghcr.io/epicgames/pixel-streaming-signalling-server](https://github.com/orgs/EpicGames/packages/container/package/pixel-streaming-signalling-server) (since Unreal Engine 5.1)  
-( This link requires you to join Epic's Github org )
-- [ghcr.io/epicgames/pixel-streaming-sfu](https://github.com/orgs/EpicGames/packages/container/package/pixel-streaming-sfu) (since Unreal Engine 5.4)  
-( This link requires you to join Epic's Github org )
+- [[Unofficial] pixel-streaming-signalling-server](https://hub.docker.com/r/pixelstreamingunofficial/pixel-streaming-signalling-server/tags)
+- [[Unofficial] pixel-streaming-sfu](https://hub.docker.com/r/pixelstreamingunofficial/pixel-streaming-sfu/tags)
 
 ### NPM Packages
 The following are `unofficial` NPM packages (official ones coming soon):
@@ -60,9 +58,9 @@ The following are `unofficial` NPM packages (official ones coming soon):
 
 ```bash
 #frontend (core lib)
-npm i @epicgames-ps/lib-pixelstreamingfrontend-ue5.3
+npm i @epicgames-ps/lib-pixelstreamingfrontend-ue5.5
 #frontend ui
-npm i @epicgames-ps/lib-pixelstreamingfrontend-ui-ue5.3
+npm i @epicgames-ps/lib-pixelstreamingfrontend-ui-ue5.5
 ```
 
 ## Documentation 
