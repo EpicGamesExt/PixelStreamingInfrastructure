@@ -69,9 +69,9 @@ export class WebSocketTransportNJS extends EventEmitter implements ITransport {
      * @param event - Message Received
      */
     handleOnMessage(event: WebSocket.MessageEvent): void {
-        let parsedMessage;
+        let parsedMessage: BaseMessage;
         try {
-            parsedMessage = JSON.parse(event.data as string);
+            parsedMessage = JSON.parse(event.data as string) as BaseMessage;
         } catch (e) {
             return;
         }
@@ -111,9 +111,11 @@ export class WebSocketTransportNJS extends EventEmitter implements ITransport {
     }
 
     private setupSocketHandlers(): void {
+        /* eslint-disable @typescript-eslint/no-unsafe-argument */
         this.webSocket.addEventListener("open", this.handleOnOpen.bind(this));
         this.webSocket.addEventListener("error", this.handleOnError.bind(this));
         this.webSocket.addEventListener("close", this.handleOnClose.bind(this));
         this.webSocket.addEventListener("message", this.handleOnMessage.bind(this));
+        /* eslint-enable @typescript-eslint/no-unsafe-argument */
     }
 }

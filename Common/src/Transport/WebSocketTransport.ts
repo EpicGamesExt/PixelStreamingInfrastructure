@@ -47,10 +47,10 @@ export class WebSocketTransport extends EventEmitter implements ITransport {
             this.webSocket.onerror = (_: Event) => this.handleOnError();
             this.webSocket.onclose = (event: CloseEvent) => this.handleOnClose(event);
             this.webSocket.onmessage = (event: MessageEvent) => this.handleOnMessage(event);
-            this.webSocket.onmessagebinary = (event: MessageEvent) => this.handleOnMessageBinary(event);
+            this.webSocket.onmessagebinary = (event: MessageEvent<Blob>) => this.handleOnMessageBinary(event);
             return true;
         } catch (error) {
-            Logger.Error(error, error);
+            Logger.Error(Logger.GetStackTrace(), error as string);
             return false;
         }
     }
@@ -76,7 +76,7 @@ export class WebSocketTransport extends EventEmitter implements ITransport {
      * Handles what happens when a message is received in binary form
      * @param event - Message Received
      */
-    handleOnMessageBinary(event: MessageEvent): void {
+    handleOnMessageBinary(event: MessageEvent<Blob>): void {
         // if the event is empty return
         if (!event || !event.data) {
             return;
@@ -100,7 +100,7 @@ export class WebSocketTransport extends EventEmitter implements ITransport {
             .catch((error: Error) => {
                 Logger.Error(
                     Logger.GetStackTrace(),
-                    `Failed to parse binary blob from websocket, reason: ${error}`
+                    `Failed to parse binary blob from websocket, reason: ${error.message}`
                 );
             });
     }
@@ -112,20 +112,20 @@ export class WebSocketTransport extends EventEmitter implements ITransport {
     handleOnMessage(event: MessageEvent): void {
         // Check if websocket message is binary, if so, stringify it.
         if (event.data && event.data instanceof Blob) {
-            this.handleOnMessageBinary(event);
+            this.handleOnMessageBinary(event as MessageEvent<Blob>);
             return;
         }
 
         Logger.Log(
             Logger.GetStackTrace(),
             'received => \n' +
-                JSON.stringify(JSON.parse(event.data), undefined, 4),
+                JSON.stringify(JSON.parse(event.data as string), undefined, 4),
             6
         );
 
-        let parsedMessage;
+        let parsedMessage: BaseMessage;
         try {
-            parsedMessage = JSON.parse(event.data);
+            parsedMessage = JSON.parse(event.data as string) as BaseMessage;
         } catch (e) {
             Logger.Error(Logger.GetStackTrace(), `Error parsing message string ${event.data}.\n${e}`);
             return;

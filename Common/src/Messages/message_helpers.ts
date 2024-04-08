@@ -36,7 +36,7 @@ export function validateMessage(msg: BaseMessage): IMessageType<BaseMessage> | n
 
     const messageType = MessageRegistry[msg.type];
     if (!messageType) {
-        Logger.Error(Logger.GetStackTrace(), `Message is of an unknown type: "${messageType}". Rejected.`);
+        Logger.Error(Logger.GetStackTrace(), `Message is of an unknown type: "${msg.type}". Rejected.`);
         return null;
     }
 
