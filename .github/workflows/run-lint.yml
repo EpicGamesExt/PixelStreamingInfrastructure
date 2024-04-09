@@ -1,0 +1,32 @@
+name: Run lint tests
+
+on:
+  workflow_dispatch:
+  push:
+    branches: ['UE5.5']
+    paths: ['Common/**', 'Signalling/**', 'SignallingWebServer/**']
+  pull_request:
+    branches: ['UE5.5']
+    paths: ['Common/**', 'Signalling/**', 'SignallingWebServer/**']
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: Common
+    steps:
+    - name: "Checkout source code"
+      uses: actions/checkout@v3
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '18.17.0'
+        registry-url: 'https://registry.npmjs.org'
+        
+    - working-directory: Common
+      run: npm ci && npm run build && npm run lint
+    - working-directory: Signalling
+      run: npm ci && npm link ../Common && npm run build && npm run lint
+    - working-directory: SignallingWebServer
+      run: npm ci && npm link ../Signalling && npm run build && npm run lint
+      
