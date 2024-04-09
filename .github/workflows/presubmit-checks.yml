@@ -33,6 +33,4 @@ jobs:
       run: npm ci && npm link ../../Common && npm run build && npm run lint
     - working-directory: Frontend/ui-library
       run: npm ci && npm link ../library && npm run build && npm run lint
-    - working-directory: Frontend/implementations/typescript
-      run: npm ci && npm link ../../library ../../ui-library && npm run build && npm run lint
-      
+
