@@ -260,7 +260,7 @@ export class GamePadController {
         // Default Functionality: Do Nothing
     }
 
-    onBeforeUnload(ev: Event) {
+    onBeforeUnload(_: Event) {
         // When a user navigates away from the page, we need to inform UE of all the disconnecting
         // controllers
         for(const controller of this.controllers) {
@@ -284,6 +284,8 @@ declare global {
         webkitGetGamepads(): Gamepad[];
     }
 }
+
+/* eslint-disable @typescript-eslint/no-duplicate-enum-values */
 
 /**
  * Gamepad layout codes enum
@@ -312,3 +314,6 @@ export enum gamepadLayout {
     RightStickHorizontal = 2,
     RightStickVertical = 3
 }
+
+/* eslint-enable @typescript-eslint/no-duplicate-enum-values */
+

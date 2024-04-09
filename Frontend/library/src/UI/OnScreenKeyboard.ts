@@ -35,10 +35,7 @@ export class OnScreenKeyboard {
      * @returns unquantizeAndDenormalizeUnsigned object
      */
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    unquantizeAndDenormalizeUnsigned(
-        x: number,
-        y: number
-    ): UnquantizedDenormalizedUnsignedCoord {
+    unquantizeAndDenormalizeUnsigned(x: number, y: number): UnquantizedDenormalizedUnsignedCoord {
         return null;
     }
 
