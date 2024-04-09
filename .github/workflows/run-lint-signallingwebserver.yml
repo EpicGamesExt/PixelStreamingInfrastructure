@@ -1,23 +1,24 @@
-name: Run lint tests on Common lib
+name: Run lint tests on Wilbur
 
 on:
   workflow_dispatch:
   push:
     branches: ['UE5.5']
-    paths: ['Common/**']
+    paths: ['SignallingWebServer/**']
   pull_request:
     branches: ['UE5.5']
-    paths: ['Common/**']
+    paths: ['SignallingWebServer/**']
 
 jobs:
   build:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: Common
+        working-directory: SignallingWebServer
     steps:
     - name: "Checkout source code"
       uses: actions/checkout@v3
     - run: npm ci
+    - run: npm link ../Signalling
     - run: npm run lint
       
