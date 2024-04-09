@@ -1,4 +1,4 @@
-name: Publish container images
+name: Publish SFU image
 
 on:
   workflow_dispatch:

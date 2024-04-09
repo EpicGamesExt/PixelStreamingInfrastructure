@@ -1,4 +1,4 @@
-name: Publish container images
+name: Publish signalling web server image
 
 on:
   workflow_dispatch:
