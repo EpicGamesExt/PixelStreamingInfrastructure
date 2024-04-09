@@ -18,6 +18,8 @@ jobs:
     steps:
     - name: "Checkout source code"
       uses: actions/checkout@v3
+    - run: npm --version
+    - run: node --version
     - run: npm ci
     - run: npm link ../Common
     - run: npm run lint
