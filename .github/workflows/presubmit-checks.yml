@@ -30,7 +30,7 @@ jobs:
     - working-directory: SignallingWebServer
       run: npm ci && npm link ../Signalling && npm run build && npm run lint
     - working-directory: Frontend/library
-      run: npm ci && npm link ../Common && npm run build && npm run lint
+      run: npm ci && npm link ../../Common && npm run build && npm run lint
     - working-directory: Frontend/ui-library
       run: npm ci && npm link ../library && npm run build && npm run lint
     - working-directory: Frontend/implementations/typescript
