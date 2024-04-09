@@ -1,8 +1,10 @@
 import { SignallingServer } from '@epicgames-ps/lib-pixelstreamingsignalling-ue5.5';
 
-/* eslint-disable  @typescript-eslint/no-var-requires */
+// eslint-disable-next-line  @typescript-eslint/no-var-requires, @typescript-eslint/no-unsafe-assignment
 const pjson = require('../../package.json');
-/* eslint-enable  @typescript-eslint/no-var-requires */
+
+/* eslint-disable @typescript-eslint/no-unsafe-call,
+                  @typescript-eslint/no-unsafe-member-access */
 
 export default function(signallingServer: SignallingServer) {
     const operations = {
@@ -16,6 +18,7 @@ export default function(signallingServer: SignallingServer) {
             uptime: uptime,
             streamer_count: signallingServer.streamerRegistry.count(),
             player_count: signallingServer.playerRegistry.count(),
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
             version: pjson.version,
         });
     }

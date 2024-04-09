@@ -12,14 +12,15 @@ import { initInputHandler } from './InputHandler';
 import { Command, Option } from 'commander';
 import { initialize } from 'express-openapi';
 
-/* eslint-disable  @typescript-eslint/no-var-requires */
+// eslint-disable-next-line  @typescript-eslint/no-var-requires, @typescript-eslint/no-unsafe-assignment
 const pjson = require('../package.json');
-/* eslint-enable  @typescript-eslint/no-var-requires */
 
 const program = new Command();
 program
     .name('node build/index.js')
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
     .description(pjson.description)
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
     .version(pjson.version);
 
 // For any switch that doesn't take an argument, like --serve, its important to give it the default
@@ -79,6 +80,8 @@ program
 // parsed command line options
 const cli_options: IProgramOptions = program.opts();
 
+/* eslint-disable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-argument */
+
 // possible config file options
 let config_file: any = {};
 if (!cli_options.no_config) {
@@ -116,6 +119,7 @@ InitLogging({
     logLevelFile: options.log_level_file,
 });
 
+// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
 Logger.info(`${pjson.name} v${pjson.version} starting...`);
 if (options.log_config) {
     Logger.info(`Config: ${stringify(options)}`);
@@ -163,7 +167,7 @@ if (options.stdin) {
 }
 
 if (options.rest_api) {
-    initialize({
+    void initialize({
         app,
         docsPath: "/api-definition",
         exposeApiDocs: true,
