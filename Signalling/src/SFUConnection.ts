@@ -120,6 +120,7 @@ export class SFUConnection extends EventEmitter implements IPlayer, IStreamer, L
     }
 
     private registerMessageHandlers(): void {
+        /* eslint-disable @typescript-eslint/unbound-method */
         this.protocol.on(Messages.subscribe.typeName, LogUtils.createHandlerListener(this, this.onSubscribeMessage));
         this.protocol.on(Messages.unsubscribe.typeName, LogUtils.createHandlerListener(this, this.onUnsubscribeMessage));
         this.protocol.on(Messages.listStreamers.typeName, LogUtils.createHandlerListener(this, this.onListStreamers));
@@ -127,6 +128,7 @@ export class SFUConnection extends EventEmitter implements IPlayer, IStreamer, L
         this.protocol.on(Messages.streamerDataChannels.typeName, LogUtils.createHandlerListener(this, this.onStreamerDataChannels));
         this.protocol.on(Messages.startStreaming.typeName, LogUtils.createHandlerListener(this, this.onStartStreaming));
         this.protocol.on(Messages.stopStreaming.typeName, LogUtils.createHandlerListener(this, this.onStopStreaming));
+        /* eslint-enable @typescript-eslint/unbound-method */
 
         this.protocol.on(Messages.offer.typeName, this.sendToPlayer.bind(this));
         this.protocol.on(Messages.answer.typeName, this.sendToStreamer.bind(this));
@@ -219,7 +221,7 @@ export class SFUConnection extends EventEmitter implements IPlayer, IStreamer, L
     }
 
     private onTransportError(error: ErrorEvent): void {
-        Logger.error(`SFU (${this.playerId}) transport error ${error}`);
+        Logger.error(`SFU (${this.playerId}) transport error ${error.message}`);
     }
 
     private onTransportClose(_event: CloseEvent): void {

@@ -16,7 +16,7 @@ export interface ITransport extends EventEmitter {
     /**
      * Callback filled in by the SignallingProtocol and should be called by the transport when a new message arrives.
      */
-    onMessage: (msg: BaseMessage) => void;
+    onMessage?: (msg: BaseMessage) => void;
 
     /**
      * Connect to a given URL.

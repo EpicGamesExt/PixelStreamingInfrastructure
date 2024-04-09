@@ -3,14 +3,19 @@
 module.exports = {
     root: true,
     parser: '@typescript-eslint/parser',
+    parserOptions: { project: './tsconfig.json' },
     plugins: [
         '@typescript-eslint',
         'eslint-plugin-tsdoc'
         ],
-    extends: ['eslint:recommended', 'plugin:@typescript-eslint/recommended'],
+    extends: [
+        'eslint:recommended',
+        'plugin:@typescript-eslint/recommended-type-checked'
+    ],
     rules: {
         "tsdoc/syntax": "warn",
         "@typescript-eslint/no-explicit-any": "off",
+        "@typescript-eslint/require-array-sort-compare": "error",
         "@typescript-eslint/no-unused-vars": [
             "error",
             {

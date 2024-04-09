@@ -13,8 +13,7 @@ import { EventEmitter } from 'events';
  */
 export class WebSocketTransportNJS extends EventEmitter implements ITransport {
     WS_OPEN_STATE = 1;
-    webSocket: WebSocket;
-    webSocketServer: WebSocket.Server;
+    webSocket?: WebSocket;
 
     constructor(existingSocket?: WebSocket) {
         super();
@@ -30,11 +29,13 @@ export class WebSocketTransportNJS extends EventEmitter implements ITransport {
      * @param msg - The message to send.
      */
     sendMessage(msg: BaseMessage): void {
-        this.webSocket.send(JSON.stringify(msg));
+        if (this.webSocket) {
+            this.webSocket.send(JSON.stringify(msg));
+        }
     }
 
     // A handler for when messages are received.
-    onMessage: (msg: BaseMessage) => void;
+    onMessage?: (msg: BaseMessage) => void;
 
     /**
      * Connect to the signaling server
@@ -53,7 +54,9 @@ export class WebSocketTransportNJS extends EventEmitter implements ITransport {
      * @param reason - A descriptive string for the disconnect reason.
      */
     disconnect(code?: number, reason?: string): void {
-        this.webSocket.close(code, reason);
+        if (this.webSocket) {
+            this.webSocket.close(code, reason);
+        }
     }
 
     /**
@@ -61,7 +64,7 @@ export class WebSocketTransportNJS extends EventEmitter implements ITransport {
      * @returns True if the transport is connected.
      */
     isConnected(): boolean {
-        return this.webSocket && this.webSocket.readyState != WebSocket.CLOSED
+        return !!this.webSocket && this.webSocket.readyState != WebSocket.CLOSED
     }
     
     /**
@@ -69,14 +72,16 @@ export class WebSocketTransportNJS extends EventEmitter implements ITransport {
      * @param event - Message Received
      */
     handleOnMessage(event: WebSocket.MessageEvent): void {
-        let parsedMessage;
+        let parsedMessage: BaseMessage;
         try {
-            parsedMessage = JSON.parse(event.data as string);
+            parsedMessage = JSON.parse(event.data as string) as BaseMessage;
         } catch (e) {
             return;
         }
 
-        this.onMessage(parsedMessage);
+        if (this.onMessage) {
+            this.onMessage(parsedMessage);
+        }
     }
 
     /**
@@ -111,9 +116,11 @@ export class WebSocketTransportNJS extends EventEmitter implements ITransport {
     }
 
     private setupSocketHandlers(): void {
-        this.webSocket.addEventListener("open", this.handleOnOpen.bind(this));
-        this.webSocket.addEventListener("error", this.handleOnError.bind(this));
-        this.webSocket.addEventListener("close", this.handleOnClose.bind(this));
-        this.webSocket.addEventListener("message", this.handleOnMessage.bind(this));
+        if (this.webSocket) {
+            this.webSocket.addEventListener("open", this.handleOnOpen.bind(this));
+            this.webSocket.addEventListener("error", this.handleOnError.bind(this));
+            this.webSocket.addEventListener("close", this.handleOnClose.bind(this));
+            this.webSocket.addEventListener("message", this.handleOnMessage.bind(this));
+        }
     }
 }

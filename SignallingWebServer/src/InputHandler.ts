@@ -52,9 +52,9 @@ function printServerInfo(_options: IProgramOptions, _signallingServer: Signallin
 }
 
 function printStreamerList(_options: IProgramOptions, signallingServer: SignallingServer) {
-    process.stdout.write(`Streamer Ids: ${signallingServer.streamerRegistry.streamers.map(streamer => streamer.streamerId)}\n`);
+    process.stdout.write(`Streamer Ids: ${JSON.stringify(signallingServer.streamerRegistry.streamers.map(streamer => streamer.streamerId))}\n`);
 }
 
 function printPlayerList(_options: IProgramOptions, signallingServer: SignallingServer) {
-    process.stdout.write(`Player Ids: ${signallingServer.playerRegistry.listPlayers().map(player => player.playerId)}\n`);
+    process.stdout.write(`Player Ids: ${JSON.stringify(signallingServer.playerRegistry.listPlayers().map(player => player.playerId))}\n`);
 }

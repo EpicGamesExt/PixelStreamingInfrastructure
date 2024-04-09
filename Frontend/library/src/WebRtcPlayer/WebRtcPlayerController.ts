@@ -25,9 +25,7 @@ import {
     NumericParameters
 } from '../Config/Config';
 import {
-    EncoderSettings,
     InitialSettings,
-    WebRTCSettings
 } from '../DataChannel/InitialSettings';
 import { LatencyTestResults } from '../DataChannel/LatencyTestResults';
 import { FileTemplate, FileUtil } from '../Util/FileUtil';
@@ -1331,7 +1329,7 @@ export class WebRtcPlayerController {
         // get the current selected streamer id option
         const streamerIDOption = this.config.getSettingOption(OptionParameters.StreamerId);
         const existingSelection = streamerIDOption.selected.toString().trim();
-        if (!!existingSelection) {
+        if (existingSelection) {
             // default to selected option if it exists
             wantedStreamerId = streamerIDOption.selected;
         }

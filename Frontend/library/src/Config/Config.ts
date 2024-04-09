@@ -181,7 +181,7 @@ export class Config {
                 TextParameters.SignallingServerUrl,
                 'Signalling url',
                 'Url of the signalling server',
-                settings && settings.hasOwnProperty(TextParameters.SignallingServerUrl) ? 
+                settings && Object.prototype.hasOwnProperty.call(settings, TextParameters.SignallingServerUrl) ? 
                     settings[TextParameters.SignallingServerUrl] :
                     (location.protocol === 'https:' ? 'wss://' : 'ws://') +
                         window.location.hostname +
@@ -200,7 +200,7 @@ export class Config {
                 OptionParameters.StreamerId,
                 'Streamer ID',
                 'The ID of the streamer to stream.',
-                settings && settings.hasOwnProperty(OptionParameters.StreamerId) ?
+                settings && Object.prototype.hasOwnProperty.call(settings, OptionParameters.StreamerId) ?
                     settings[OptionParameters.StreamerId] :
                     '',
                 [],
@@ -218,7 +218,7 @@ export class Config {
                 'Preferred Codec',
                 'The preferred codec to be used during codec negotiation',
                 'H264 level-asymmetry-allowed=1;packetization-mode=1;profile-level-id=42e01f',
-                settings && settings.hasOwnProperty(OptionParameters.PreferredCodec) ?
+                settings && Object.prototype.hasOwnProperty.call(settings, OptionParameters.PreferredCodec) ?
                     [settings[OptionParameters.PreferredCodec]] :
                     (function (): Array<string> {
                         const browserSupportedCodecs: Array<string> = [];
@@ -257,7 +257,7 @@ export class Config {
                 Flags.AutoConnect,
                 'Auto connect to stream',
                 'Whether we should attempt to auto connect to the signalling server or show a click to start prompt.',
-                settings && settings.hasOwnProperty(Flags.AutoConnect) ?
+                settings && Object.prototype.hasOwnProperty.call(settings, Flags.AutoConnect) ?
                     settings[Flags.AutoConnect] :
                     false,
                 useUrlParams
@@ -270,7 +270,7 @@ export class Config {
                 Flags.AutoPlayVideo,
                 'Auto play video',
                 'When video is ready automatically start playing it as opposed to showing a play button.',
-                settings && settings.hasOwnProperty(Flags.AutoPlayVideo) ?
+                settings && Object.prototype.hasOwnProperty.call(settings, Flags.AutoPlayVideo) ?
                     settings[Flags.AutoPlayVideo] :
                     true,
                 useUrlParams
@@ -283,7 +283,7 @@ export class Config {
                 Flags.BrowserSendOffer,
                 'Browser send offer',
                 'Browser will initiate the WebRTC handshake by sending the offer to the streamer',
-                settings && settings.hasOwnProperty(Flags.BrowserSendOffer) ?
+                settings && Object.prototype.hasOwnProperty.call(settings, Flags.BrowserSendOffer) ?
                     settings[Flags.BrowserSendOffer] :
                     false,
                 useUrlParams
@@ -296,7 +296,7 @@ export class Config {
                 Flags.UseMic,
                 'Use microphone',
                 'Make browser request microphone access and open an input audio track.',
-                settings && settings.hasOwnProperty(Flags.UseMic) ?
+                settings && Object.prototype.hasOwnProperty.call(settings, Flags.UseMic) ?
                     settings[Flags.UseMic] :
                     false,
                 useUrlParams
@@ -309,7 +309,7 @@ export class Config {
                 Flags.StartVideoMuted,
                 'Start video muted',
                 'Video will start muted if true.',
-                settings && settings.hasOwnProperty(Flags.StartVideoMuted) ?
+                settings && Object.prototype.hasOwnProperty.call(settings, Flags.StartVideoMuted) ?
                     settings[Flags.StartVideoMuted] :
                     false,
                 useUrlParams
@@ -322,7 +322,7 @@ export class Config {
                 Flags.SuppressBrowserKeys,
                 'Suppress browser keys',
                 'Suppress certain browser keys that we use in UE, for example F5 to show shader complexity instead of refresh the page.',
-                settings && settings.hasOwnProperty(Flags.SuppressBrowserKeys) ?
+                settings && Object.prototype.hasOwnProperty.call(settings, Flags.SuppressBrowserKeys) ?
                     settings[Flags.SuppressBrowserKeys] :
                     true,
                 useUrlParams
@@ -335,7 +335,7 @@ export class Config {
                 Flags.IsQualityController,
                 'Is quality controller?',
                 'True if this peer controls stream quality',
-                settings && settings.hasOwnProperty(Flags.IsQualityController) ?
+                settings && Object.prototype.hasOwnProperty.call(settings, Flags.IsQualityController) ?
                     settings[Flags.IsQualityController] :
                     true,
                 useUrlParams
@@ -348,7 +348,7 @@ export class Config {
                 Flags.ForceMonoAudio,
                 'Force mono audio',
                 'Force browser to request mono audio in the SDP',
-                settings && settings.hasOwnProperty(Flags.ForceMonoAudio) ?
+                settings && Object.prototype.hasOwnProperty.call(settings, Flags.ForceMonoAudio) ?
                     settings[Flags.ForceMonoAudio] :
                     false,
                 useUrlParams
@@ -361,7 +361,7 @@ export class Config {
                 Flags.ForceTURN,
                 'Force TURN',
                 'Only generate TURN/Relayed ICE candidates.',
-                settings && settings.hasOwnProperty(Flags.ForceTURN) ?
+                settings && Object.prototype.hasOwnProperty.call(settings, Flags.ForceTURN) ?
                     settings[Flags.ForceTURN] :
                     false,
                 useUrlParams
@@ -374,7 +374,7 @@ export class Config {
                 Flags.AFKDetection,
                 'AFK if idle',
                 'Timeout the experience if user is AFK for a period.',
-                settings && settings.hasOwnProperty(Flags.AFKDetection) ?
+                settings && Object.prototype.hasOwnProperty.call(settings, Flags.AFKDetection) ?
                     settings[Flags.AFKDetection] :
                     false,
                 useUrlParams
@@ -387,7 +387,7 @@ export class Config {
                 Flags.MatchViewportResolution,
                 'Match viewport resolution',
                 'Pixel Streaming will be instructed to dynamically resize the video stream to match the size of the video element.',
-                settings && settings.hasOwnProperty(Flags.MatchViewportResolution) ?
+                settings && Object.prototype.hasOwnProperty.call(settings, Flags.MatchViewportResolution) ?
                     settings[Flags.MatchViewportResolution] :
                     false,
                 useUrlParams
@@ -400,7 +400,7 @@ export class Config {
                 Flags.HoveringMouseMode,
                 'Control Scheme: Locked Mouse',
                 'Either locked mouse, where the pointer is consumed by the video and locked to it, or hovering mouse, where the mouse is not consumed.',
-                settings && settings.hasOwnProperty(Flags.HoveringMouseMode) ?
+                settings && Object.prototype.hasOwnProperty.call(settings, Flags.HoveringMouseMode) ?
                     settings[Flags.HoveringMouseMode] :
                     false,
                 useUrlParams,
@@ -416,7 +416,7 @@ export class Config {
                 Flags.FakeMouseWithTouches,
                 'Fake mouse with touches',
                 'A single finger touch is converted into a mouse event. This allows a non-touch application to be controlled partially via a touch device.',
-                settings && settings.hasOwnProperty(Flags.FakeMouseWithTouches) ?
+                settings && Object.prototype.hasOwnProperty.call(settings, Flags.FakeMouseWithTouches) ?
                     settings[Flags.FakeMouseWithTouches] :
                     true,
                 useUrlParams
@@ -429,7 +429,7 @@ export class Config {
                 Flags.KeyboardInput,
                 'Keyboard input',
                 'If enabled, send keyboard events to streamer',
-                settings && settings.hasOwnProperty(Flags.KeyboardInput) ?
+                settings && Object.prototype.hasOwnProperty.call(settings, Flags.KeyboardInput) ?
                     settings[Flags.KeyboardInput] :
                     true,
                 useUrlParams
@@ -442,7 +442,7 @@ export class Config {
                 Flags.MouseInput,
                 'Mouse input',
                 'If enabled, send mouse events to streamer',
-                settings && settings.hasOwnProperty(Flags.MouseInput) ?
+                settings && Object.prototype.hasOwnProperty.call(settings, Flags.MouseInput) ?
                     settings[Flags.MouseInput] :
                     true,
                 useUrlParams
@@ -455,7 +455,7 @@ export class Config {
                 Flags.TouchInput,
                 'Touch input',
                 'If enabled, send touch events to streamer',
-                settings && settings.hasOwnProperty(Flags.TouchInput) ?
+                settings && Object.prototype.hasOwnProperty.call(settings, Flags.TouchInput) ?
                     settings[Flags.TouchInput] :
                     true,
                 useUrlParams
@@ -468,7 +468,7 @@ export class Config {
                 Flags.GamepadInput,
                 'Gamepad input',
                 'If enabled, send gamepad events to streamer',
-                settings && settings.hasOwnProperty(Flags.GamepadInput) ?
+                settings && Object.prototype.hasOwnProperty.call(settings, Flags.GamepadInput) ?
                     settings[Flags.GamepadInput] :
                     true,
                 useUrlParams
@@ -481,7 +481,7 @@ export class Config {
                 Flags.XRControllerInput,
                 'XR controller input',
                 'If enabled, send XR controller events to streamer',
-                settings && settings.hasOwnProperty(Flags.XRControllerInput) ?
+                settings && Object.prototype.hasOwnProperty.call(settings, Flags.XRControllerInput) ?
                     settings[Flags.XRControllerInput] :
                     true,
                 useUrlParams
@@ -494,7 +494,7 @@ export class Config {
                 Flags.WaitForStreamer,
                 'Wait for streamer',
                 'Will continue trying to connect to the first streamer available.',
-                settings && settings.hasOwnProperty(Flags.WaitForStreamer) ?
+                settings && Object.prototype.hasOwnProperty.call(settings, Flags.WaitForStreamer) ?
                     settings[Flags.WaitForStreamer] :
                     true,
                 useUrlParams
@@ -513,7 +513,7 @@ export class Config {
                 'The time (in seconds) it takes for the application to time out if AFK timeout is enabled.',
                 0 /*min*/,
                 600 /*max*/,
-                settings && settings.hasOwnProperty(NumericParameters.AFKTimeoutSecs) ?
+                settings && Object.prototype.hasOwnProperty.call(settings, NumericParameters.AFKTimeoutSecs) ?
                     settings[NumericParameters.AFKTimeoutSecs] :
                     120, /*value*/
                 useUrlParams
@@ -528,7 +528,7 @@ export class Config {
                 'Maximum number of reconnects the application will attempt when a streamer disconnects.',
                 0 /*min*/,
                 999 /*max*/,
-                settings && settings.hasOwnProperty(NumericParameters.MaxReconnectAttempts) ?
+                settings && Object.prototype.hasOwnProperty.call(settings, NumericParameters.MaxReconnectAttempts) ?
                     settings[NumericParameters.MaxReconnectAttempts] :
                     3, /*value*/
                 useUrlParams
@@ -543,7 +543,7 @@ export class Config {
                 'The lower bound for the quantization parameter (QP) of the encoder. 0 = Best quality, 51 = worst quality.',
                 0 /*min*/,
                 51 /*max*/,
-                settings && settings.hasOwnProperty(NumericParameters.MinQP) ?
+                settings && Object.prototype.hasOwnProperty.call(settings, NumericParameters.MinQP) ?
                     settings[NumericParameters.MinQP] :
                     0, /*value*/
                 useUrlParams
@@ -558,7 +558,7 @@ export class Config {
                 'The upper bound for the quantization parameter (QP) of the encoder. 0 = Best quality, 51 = worst quality.',
                 0 /*min*/,
                 51 /*max*/,
-                settings && settings.hasOwnProperty(NumericParameters.MaxQP) ?
+                settings && Object.prototype.hasOwnProperty.call(settings, NumericParameters.MaxQP) ?
                     settings[NumericParameters.MaxQP] :
                     51, /*value*/
                 useUrlParams
@@ -573,7 +573,7 @@ export class Config {
                 'The maximum FPS that WebRTC will try to transmit frames at.',
                 1 /*min*/,
                 999 /*max*/,
-                settings && settings.hasOwnProperty(NumericParameters.WebRTCFPS) ?
+                settings && Object.prototype.hasOwnProperty.call(settings, NumericParameters.WebRTCFPS) ?
                     settings[NumericParameters.WebRTCFPS] :
                     60, /*value*/
                 useUrlParams
@@ -588,7 +588,7 @@ export class Config {
                 'The minimum bitrate that WebRTC should use.',
                 0 /*min*/,
                 500000 /*max*/,
-                settings && settings.hasOwnProperty(NumericParameters.WebRTCMinBitrate) ?
+                settings && Object.prototype.hasOwnProperty.call(settings, NumericParameters.WebRTCMinBitrate) ?
                     settings[NumericParameters.WebRTCMinBitrate] :
                     0, /*value*/
                 useUrlParams
@@ -603,7 +603,7 @@ export class Config {
                 'The maximum bitrate that WebRTC should use.',
                 0 /*min*/,
                 500000 /*max*/,
-                settings && settings.hasOwnProperty(NumericParameters.WebRTCMaxBitrate) ?
+                settings && Object.prototype.hasOwnProperty.call(settings, NumericParameters.WebRTCMaxBitrate) ?
                     settings[NumericParameters.WebRTCMaxBitrate] :
                     0, /*value*/
                 useUrlParams
@@ -618,7 +618,7 @@ export class Config {
                 'Delay between retries when waiting for an available streamer.',
                 500 /*min*/,
                 900000 /*max*/,
-                settings && settings.hasOwnProperty(NumericParameters.StreamerAutoJoinInterval) ?
+                settings && Object.prototype.hasOwnProperty.call(settings, NumericParameters.StreamerAutoJoinInterval) ?
                     settings[NumericParameters.StreamerAutoJoinInterval] :
                     3000, /*value*/
                 useUrlParams

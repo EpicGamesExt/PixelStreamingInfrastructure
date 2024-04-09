@@ -95,9 +95,11 @@ export class PlayerConnection implements IPlayer, LogUtils.IMessageLogger {
     }
 
     private registerMessageHandlers(): void {
+        /* eslint-disable @typescript-eslint/unbound-method */
         this.protocol.on(Messages.subscribe.typeName, LogUtils.createHandlerListener(this, this.onSubscribeMessage));
         this.protocol.on(Messages.unsubscribe.typeName, LogUtils.createHandlerListener(this, this.onUnsubscribeMessage));
         this.protocol.on(Messages.listStreamers.typeName, LogUtils.createHandlerListener(this, this.onListStreamers));
+        /* eslint-enable @typescript-eslint/unbound-method */
 
         this.protocol.on(Messages.offer.typeName, this.sendToStreamer.bind(this));
         this.protocol.on(Messages.answer.typeName, this.sendToStreamer.bind(this));
@@ -171,7 +173,7 @@ export class PlayerConnection implements IPlayer, LogUtils.IMessageLogger {
     }
 
     private onTransportError(error: ErrorEvent): void {
-        Logger.error(`Player (${this.playerId}) transport error ${error}`);
+        Logger.error(`Player (${this.playerId}) transport error ${error.message}`);
     }
 
     private onTransportClose(_event: CloseEvent): void {

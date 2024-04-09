@@ -28,7 +28,7 @@ export class ConnectOverlay extends ActionOverlay {
 
     /**
      * Construct a connect overlay with a connection button.
-     * @param parentElem the parent element this overlay will be inserted into.
+     * @param parentElem - the parent element this overlay will be inserted into.
      */
     public constructor(parentElem: HTMLElement) {
         super(

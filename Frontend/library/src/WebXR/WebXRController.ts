@@ -193,7 +193,7 @@ export class WebXRController {
 
         if (this.webRtcController.config.isFlagEnabled(Flags.XRControllerInput)) {
             this.xrSession.inputSources.forEach(
-                (source: XRInputSource, index: number, array: XRInputSource[]) => {
+                (source: XRInputSource, _index: number, _array: XRInputSource[]) => {
                     this.xrGamepadController.updateStatus(
                         source,
                         frame,

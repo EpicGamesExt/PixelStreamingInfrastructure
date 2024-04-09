@@ -1,0 +1,24 @@
+name: Publish signalling lib
+on:
+  push:
+    workflow_dispatch:
+    branches: ['UE5.5']
+    paths: ['Signalling/package.json']
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: Signalling
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '18.17.0'
+          registry-url: 'https://registry.npmjs.org'
+      - working-directory: Common
+        run: npm ci && npm run build
+      - run: npm ci && npm link ../Common && npm run build
+      - run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

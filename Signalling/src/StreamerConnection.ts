@@ -91,10 +91,12 @@ export class StreamerConnection extends EventEmitter implements IStreamer, LogUt
     }
 
     private registerMessageHandlers(): void {
+        /* eslint-disable @typescript-eslint/unbound-method */
         this.protocol.on(Messages.endpointId.typeName, LogUtils.createHandlerListener(this, this.onEndpointId));
         this.protocol.on(Messages.ping.typeName, LogUtils.createHandlerListener(this, this.onPing));
         this.protocol.on(Messages.disconnectPlayer.typeName, LogUtils.createHandlerListener(this, this.onDisconnectPlayerRequest));
         this.protocol.on(Messages.layerPreference.typeName, LogUtils.createHandlerListener(this, this.onLayerPreference));
+        /* eslint-enable @typescript-eslint/unbound-method */
 
         this.protocol.on(Messages.offer.typeName, this.forwardMessage.bind(this));
         this.protocol.on(Messages.answer.typeName, this.forwardMessage.bind(this));
@@ -115,7 +117,7 @@ export class StreamerConnection extends EventEmitter implements IStreamer, LogUt
     }
 
     private onTransportError(error: ErrorEvent): void {
-        Logger.error(`Streamer (${this.streamerId}) transport error ${error}`);
+        Logger.error(`Streamer (${this.streamerId}) transport error ${error.message}`);
     }
 
     private onTransportClose(): void {

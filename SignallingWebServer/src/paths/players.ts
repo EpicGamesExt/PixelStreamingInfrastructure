@@ -1,5 +1,8 @@
 import { SignallingServer } from '@epicgames-ps/lib-pixelstreamingsignalling-ue5.5';
 
+/* eslint-disable @typescript-eslint/no-unsafe-call,
+                  @typescript-eslint/no-unsafe-member-access */
+
 export default function(signallingServer: SignallingServer) {
     const operations = {
         GET,
