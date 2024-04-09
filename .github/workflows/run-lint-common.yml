@@ -1,0 +1,23 @@
+name: Run lint tests
+
+on:
+  workflow_dispatch:
+  push:
+    branches: ['UE5.5']
+    paths: ['Common/**']
+  pull_request:
+    branches: ['UE5.5']
+    paths: ['Common/**']
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: Common
+    steps:
+    - name: "Checkout source code"
+      uses: actions/checkout@v3
+    - run: npm ci
+    - run: npm run lint
+      
