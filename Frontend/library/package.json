@@ -1,6 +1,6 @@
 {
     "name": "@epicgames-ps/lib-pixelstreamingfrontend-ue5.5",
-    "version": "0.0.9",
+    "version": "0.0.10",
     "description": "Frontend library for Unreal Engine 5.5 Pixel Streaming",
     "main": "dist/lib-pixelstreamingfrontend.js",
     "module": "dist/lib-pixelstreamingfrontend.esm.js",
@@ -16,10 +16,10 @@
         "spellcheck": "cspell \"{README.md,.github/*.md,src/**/*.ts}\""
     },
     "devDependencies": {
-        "@epicgames-ps/lib-pixelstreamingcommon-ue5.5": "^0.0.11",
+        "@epicgames-ps/lib-pixelstreamingcommon-ue5.5": "^0.0.12",
         "@types/jest": "27.5.1",
         "@types/webxr": "^0.5.1",
-        "@typescript-eslint/eslint-plugin": "^7.5.0",
+        "@typescript-eslint/eslint-plugin": "^6.21.0",
         "cspell": "^4.1.0",
         "eslint": "^8.11.0",
         "jest": "^27.5.1",
