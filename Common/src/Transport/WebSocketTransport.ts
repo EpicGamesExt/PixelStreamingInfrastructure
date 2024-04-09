@@ -17,7 +17,7 @@ declare global {
  */
 export class WebSocketTransport extends EventEmitter implements ITransport {
     WS_OPEN_STATE = 1;
-    webSocket: WebSocket;
+    webSocket?: WebSocket;
 
     constructor() {
         super();
@@ -28,11 +28,13 @@ export class WebSocketTransport extends EventEmitter implements ITransport {
      * @param msg - The message to send.
      */
     sendMessage(msg: BaseMessage): void {
-        this.webSocket.send(JSON.stringify(msg));
+        if (this.webSocket) {
+            this.webSocket.send(JSON.stringify(msg));
+        }
     }
 
     // A handler for when messages are received.
-    onMessage: (msg: BaseMessage) => void;
+    onMessage?: (msg: BaseMessage) => void;
 
     /**
      * Connect to the signaling server
@@ -61,7 +63,9 @@ export class WebSocketTransport extends EventEmitter implements ITransport {
      * @param reason - A descriptive string for the disconnect reason.
      */
     disconnect(code?: number, reason?: string): void {
-        this.webSocket.close(code, reason);
+        if (this.webSocket) {
+            this.webSocket.close(code, reason);
+        }
     }
 
     /**
@@ -69,7 +73,7 @@ export class WebSocketTransport extends EventEmitter implements ITransport {
      * @returns True if the transport is connected.
      */
     isConnected(): boolean {
-        return this.webSocket && this.webSocket.readyState != WebSocket.CLOSED
+        return !!this.webSocket && this.webSocket.readyState != WebSocket.CLOSED
     }
     
     /**
@@ -126,12 +130,18 @@ export class WebSocketTransport extends EventEmitter implements ITransport {
         let parsedMessage: BaseMessage;
         try {
             parsedMessage = JSON.parse(event.data as string) as BaseMessage;
-        } catch (e) {
-            Logger.Error(Logger.GetStackTrace(), `Error parsing message string ${event.data}.\n${e}`);
+        } catch (e: unknown) {
+            if (e instanceof Error) {
+                Logger.Error(Logger.GetStackTrace(), `Error parsing message string ${event.data}.\n${e.message}`);
+            } else {
+                Logger.Error(Logger.GetStackTrace(), `Unknown error while parsing message data in handleOnMessage`);
+            }
             return;
         }
 
-        this.onMessage(parsedMessage);
+        if (this.onMessage) {
+            this.onMessage(parsedMessage);
+        }
     }
 
     /**
