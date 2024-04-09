@@ -1,7 +1,7 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 import { LatencyTest } from './LatencyTest';
-import { InitialSettings, Logger, PixelStreaming } from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.5';
+import { Logger, PixelStreaming } from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.5';
 import { AggregatedStats } from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.5';
 import { MathUtils } from '../Util/MathUtils';
 import {DataChannelLatencyTest} from "./DataChannelLatencyTest";
@@ -142,7 +142,7 @@ export class StatsPanel {
             stream.requestLatencyTest();
         };
         this.dataChannelLatencyTest.latencyTestButton.onclick = () => {
-            let started = stream.requestDataChannelLatencyTest({
+            const started = stream.requestDataChannelLatencyTest({
                 duration: 1000,
                 rps: 10,
                 requestSize: 200,
@@ -204,7 +204,7 @@ export class StatsPanel {
 
     /**
      * Handle stats coming in from browser/UE
-     * @param stats the stats structure
+     * @param stats - the stats structure
      */
     public handleStats(stats: AggregatedStats) {
         // format numbering based on the browser language
@@ -354,15 +354,15 @@ export class StatsPanel {
 
         Logger.Log(
             Logger.GetStackTrace(),
-            `--------- Stats ---------\n ${stats}\n------------------------`,
+            `--------- Stats ---------\n ${JSON.stringify(stats)}\n------------------------`,
             6
         );
     }
 
     /**
      * Adds a new stat to the stats results in the DOM or updates an exiting stat.
-     * @param id The id of the stat to add/update.
-     * @param stat The contents of the stat.
+     * @param id - The id of the stat to add/update.
+     * @param stat - The contents of the stat.
      */
     public addOrUpdateStat(id: string, statLabel: string, stat: string) {
         const statHTML = `${statLabel}: ${stat}`;

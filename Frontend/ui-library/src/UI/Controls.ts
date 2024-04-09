@@ -61,23 +61,23 @@ export class Controls {
         if (!this._rootElement) {
             this._rootElement = document.createElement('div');
             this._rootElement.id = 'controls';
-            if (!!this.fullscreenIcon) {
+            if (this.fullscreenIcon) {
                 this._rootElement.appendChild(this.fullscreenIcon.rootElement);
             }
-            if (!!this.settingsIcon) {
+            if (this.settingsIcon) {
                 this._rootElement.appendChild(this.settingsIcon.rootElement);
             }
-            if (!!this.statsIcon) {
+            if (this.statsIcon) {
                 this._rootElement.appendChild(this.statsIcon.rootElement);
             }
-            if (!!this.xrIcon) {
-                WebXRController.isSessionSupported('immersive-vr').then(
+            if (this.xrIcon) {
+                void WebXRController.isSessionSupported('immersive-vr').then(
                 (supported: boolean) => {
                     if (supported) {
                         this._rootElement.appendChild(this.xrIcon.rootElement);
                     }
                 });
-            };
+            }
         }
         return this._rootElement;
     }

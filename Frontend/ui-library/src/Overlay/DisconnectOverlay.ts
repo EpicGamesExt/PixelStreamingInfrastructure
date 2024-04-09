@@ -30,7 +30,7 @@ export class DisconnectOverlay extends ActionOverlay {
 
     /**
      * Construct a disconnect overlay with a retry connection icon.
-     * @param parentElem the parent element this overlay will be inserted into.
+     * @param parentElem - the parent element this overlay will be inserted into.
      */
     public constructor(parentElem: HTMLElement) {
         super(

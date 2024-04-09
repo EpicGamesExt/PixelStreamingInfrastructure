@@ -65,10 +65,10 @@ export class LatencyTest {
 
     /**
      * Populate the UI based on the latency test's results.
-     * @param latencyTimings The latency test results.
+     * @param latencyTimings - The latency test results.
      */
     public handleTestResult(latencyTimings: LatencyTestResults) {
-        Logger.Log(Logger.GetStackTrace(), latencyTimings.toString(), 6);
+        Logger.Log(Logger.GetStackTrace(), JSON.stringify(latencyTimings), 6);
         let latencyStatsInnerHTML = '';
         latencyStatsInnerHTML +=
             '<div>Net latency RTT (ms): ' +

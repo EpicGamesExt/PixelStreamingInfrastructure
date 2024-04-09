@@ -82,7 +82,7 @@ export class ConfigUI {
 
     /**
      * Creates UI wrapper components for each setting element in config.
-     * @param config
+     * @param config -
      */
     registerSettingsUIComponents(config: Config) {
         for (const setting of config.getFlags()) {
@@ -113,8 +113,8 @@ export class ConfigUI {
 
     /**
      * Make DOM elements for a settings section with a heading.
-     * @param settingsElem The parent container for our DOM elements.
-     * @param sectionHeading The heading element to go into the section.
+     * @param settingsElem - The parent container for our DOM elements.
+     * @param sectionHeading - The heading element to go into the section.
      * @returns The constructed DOM element for the section.
      */
     buildSectionWithHeading(settingsElem: HTMLElement, sectionHeading: string) {
@@ -136,7 +136,7 @@ export class ConfigUI {
 
     /**
      * Setup flags with their default values and add them to the `Config.flags` map.
-     * @param settingsElem - The element that contains all the individual settings sections, flags, and so on.
+     * @param settingsElem - - The element that contains all the individual settings sections, flags, and so on.
      */
     populateSettingsElement(settingsElem: HTMLElement): void {
         /* Setup all Pixel Streaming specific settings */
@@ -312,8 +312,8 @@ export class ConfigUI {
 
     /**
      * Add a SettingText element to a particular settings section in the DOM and registers that text in the text settings map.
-     * @param settingsSection The settings section HTML element.
-     * @param settingText The textual settings object.
+     * @param settingsSection - The settings section HTML element.
+     * @param settingText - The textual settings object.
      */
     addSettingText(
         settingsSection: HTMLElement,
@@ -327,8 +327,8 @@ export class ConfigUI {
 
     /**
      * Add a SettingFlag element to a particular settings section in the DOM and registers that flag in the Config.flag map.
-     * @param settingsSection The settings section HTML element.
-     * @param settingFlag The settings flag object.
+     * @param settingsSection - The settings section HTML element.
+     * @param settingFlag - The settings flag object.
      */
     addSettingFlag(
         settingsSection: HTMLElement,
@@ -342,8 +342,8 @@ export class ConfigUI {
 
     /**
      * Add a numeric setting element to a particular settings section in the DOM and registers that flag in the Config.numericParameters map.
-     * @param settingsSection The settings section HTML element.
-     * @param settingFlag The settings flag object.
+     * @param settingsSection - The settings section HTML element.
+     * @param settingFlag - The settings flag object.
      */
     addSettingNumeric(
         settingsSection: HTMLElement,
@@ -357,8 +357,8 @@ export class ConfigUI {
 
     /**
      * Add an enum based settings element to a particular settings section in the DOM and registers that flag in the Config.enumParameters map.
-     * @param settingsSection The settings section HTML element.
-     * @param settingFlag The settings flag object.
+     * @param settingsSection - The settings section HTML element.
+     * @param settingFlag - The settings flag object.
      */
     addSettingOption(
         settingsSection: HTMLElement,
@@ -432,8 +432,8 @@ export class ConfigUI {
 
     /**
      * Add a callback to fire when the flag is toggled.
-     * @param id The id of the flag.
-     * @param onChangeListener The callback to fire when the value changes.
+     * @param id - The id of the flag.
+     * @param onChangeListener - The callback to fire when the value changes.
      */
     addCustomFlagOnSettingChangedListener(
         id: ExtraFlags,
@@ -446,8 +446,8 @@ export class ConfigUI {
 
     /**
      * Set the label for the flag.
-     * @param id The id of the flag.
-     * @param label The new label to use for the flag.
+     * @param id - The id of the flag.
+     * @param label - The new label to use for the flag.
      */
     setCustomFlagLabel(id: ExtraFlags, label: string) {
         if (!this.customFlags.has(id)) {
@@ -463,7 +463,7 @@ export class ConfigUI {
 
     /**
      * Get the value of the configuration flag which has the given id.
-     * @param id The unique id for the flag.
+     * @param id - The unique id for the flag.
      * @returns True if the flag is enabled.
      */
     isCustomFlagEnabled(id: ExtraFlags): boolean {

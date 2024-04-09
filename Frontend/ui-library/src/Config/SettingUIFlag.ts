@@ -88,7 +88,7 @@ export class SettingUIFlag<
 
     /**
      * Update the setting's stored value.
-     * @param inValue The new value for the setting.
+     * @param inValue - The new value for the setting.
      */
     public set flag(inValue: boolean) {
         this.checkbox.checked = inValue;
@@ -103,7 +103,7 @@ export class SettingUIFlag<
 
     /**
      * Set the label text for the setting.
-     * @param label setting label.
+     * @param label - setting label.
      */
     public set label(inLabel: string) {
         this.settingsTextElem.innerText = inLabel;
