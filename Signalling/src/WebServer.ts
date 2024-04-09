@@ -7,9 +7,8 @@ import helmet from 'helmet';
 import { Logger } from './Logger';
 import RateLimit from 'express-rate-limit';
 
-/* eslint-disable  @typescript-eslint/no-var-requires */
+// eslint-disable-next-line  @typescript-eslint/no-var-requires, @typescript-eslint/no-unsafe-assignment
 const hsts = require('hsts');
-/* eslint-enable  @typescript-eslint/no-var-requires */
 
 /**
  * An interface that describes the possible options to pass to
@@ -38,7 +37,7 @@ export interface IWebServerConfig {
     ssl_cert?: Buffer;
 
     // If true, connections to http will be redirected to https.
-    https_redirect?: Boolean;
+    https_redirect?: boolean;
 }
 
 /**
@@ -46,10 +45,10 @@ export interface IWebServerConfig {
  * pixel streaming frontend.
  */
 export class WebServer {
-    httpServer: http.Server;
-    httpsServer: https.Server;
+    httpServer: http.Server | undefined;
+    httpsServer: https.Server | undefined;
 
-    constructor(app: any, config: IWebServerConfig) {
+    constructor(app: express.Express, config: IWebServerConfig) {
         Logger.debug('Starting WebServer with config: %s', config);
 
         // only listen on the http port if we're not using https or if we want to redirect
@@ -59,6 +58,8 @@ export class WebServer {
                 Logger.info(`Http server listening on port ${config.httpPort}`);
             });
         }
+
+        /* eslint-disable @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access */
 
         // if using https listen on the given ports and setup some details
         if (config.httpsPort) {
@@ -78,14 +79,16 @@ export class WebServer {
                 app.use((req: any, res: any, next: any) => {
                     if (!req.secure) {
                         if (req.get('Host')) {
-                            const hostAddressParts = req.get('Host').split(':');
+                            const hostAddressParts: string[] = req.get('Host').split(':') as string[];
                             let hostAddress = hostAddressParts[0];
                             if (config.httpsPort != 443) {
                                 hostAddress = `${hostAddress}:${config.httpsPort}`;
                             }
+                            // eslint-disable-next-line @typescript-eslint/no-unsafe-return
                             return res.redirect(['https://', hostAddress, req.originalUrl].join(''));
                         } else {
                             Logger.error(`Unable to get host name from header. Requestor ${req.ip}, url path: '${req.originalUrl}', available headers ${JSON.stringify(req.headers)}`);
+                            // eslint-disable-next-line @typescript-eslint/no-unsafe-return
                             return res.status(400).send('Bad Request');
                         }
                     }
@@ -112,6 +115,8 @@ export class WebServer {
             res.status(404).send(error);
             return;
         });
+
+        /* eslint-enable @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access */
 
         if (config.perMinuteRateLimit) {
             const limiter = RateLimit({

@@ -1,7 +1,10 @@
 import { stringify, beautify } from './Utils';
+import { IProtoLogObj } from './LoggingUtils';
 import path from 'path';
 import winston from 'winston';
 import 'winston-daily-rotate-file';
+import { TransformableInfo } from 'logform';
+import { BaseMessage } from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
 
 const { combine, timestamp, printf, colorize, splat } = winston.format;
 
@@ -68,12 +71,17 @@ function createConsoleTransport(logLevel: string) {
     });
 }
 
+function isLogObject(object: any): object is IProtoLogObj {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    return 'event' in object && object.event == 'proto_message' && 'direction' in object && 'protoMessage' in object;
+}
+
 function createConsoleFormat() {
-    return printf((logObj: any) => {
+    return printf((logObj: TransformableInfo) => {
         const prefix = `[${logObj.timestamp}] ${logObj.level}: `;
         if (typeof logObj.message === 'string') {
             return prefix + logObj.message;
-        } else if (logObj.message.event && logObj.message.event == 'proto_message') {
+        } else if (isLogObject(logObj.message)) {
             const { direction, receiver, sender, target, protoMessage } = logObj.message;
             switch (direction) {
             case 'incoming': return prefix + `> ${receiver} :: ${formatMessageForConsole(protoMessage)}`;
@@ -86,7 +94,7 @@ function createConsoleFormat() {
     });
 }
 
-function formatMessageForConsole(message: any) {
+function formatMessageForConsole(message: BaseMessage) {
     switch (logMessagesToConsole) {
     case 'verbose': return stringify(message);
     case 'formatted': return beautify(message);
@@ -95,9 +103,9 @@ function formatMessageForConsole(message: any) {
 }
 
 function createProtoMessageFilter() {
-    return winston.format((info: any, _opts: any) => {
+    return winston.format((info: TransformableInfo, _opts: any) => {
         if (typeof info.message !== 'string'
-            && info.message.event == 'proto_message'
+            && isLogObject(info.message)
             && logMessagesToConsole == 'none') {
             return false;
         }
@@ -119,8 +127,9 @@ function createFileTransport(logDirPath: string, logLevel: string) {
     });
 }
 
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 function createFileFormat() {
-    return printf((logObj: any) => {
+    return printf((logObj: TransformableInfo) => {
         if (typeof logObj.message === 'string') {
             const { timestamp, level, message } = logObj;
             return JSON.stringify({
@@ -129,7 +138,7 @@ function createFileFormat() {
                 event: 'message',
                 message,
             });
-        } else if (logObj.message.event && logObj.message.event == 'proto_message') {
+        } else if (isLogObject(logObj.message)) {
             const { timestamp, level, message } = logObj;
             return JSON.stringify({
                 timestamp,
@@ -140,3 +149,5 @@ function createFileFormat() {
         return '';
     });
 }
+/* eslint-enable @typescript-eslint/no-unsafe-assignment */
+

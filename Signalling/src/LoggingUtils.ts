@@ -1,6 +1,15 @@
 import { BaseMessage } from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
 import { Logger } from './Logger';
 
+export interface IProtoLogObj {
+    event: string,
+    direction: string,
+    sender?: string,
+    receiver?: string,
+    target?: string,
+    protoMessage: BaseMessage
+}
+
 /**
  * Most methods in here rely on connections implementing this interface so we can identify
  * who is sending or receiving etc.
@@ -15,12 +24,13 @@ export interface IMessageLogger {
  * @param recvr - IMessageLogger The connection the message was received on.
  */
 export function logIncoming(recvr: IMessageLogger, message: BaseMessage): void {
-    Logger.info({
+    const logObj: IProtoLogObj = {
         event: 'proto_message',
         direction: 'incoming',
         receiver: recvr.getReadableIdentifier(),
         protoMessage: message
-    });
+    };
+    Logger.info(logObj);
 }
 
 /**

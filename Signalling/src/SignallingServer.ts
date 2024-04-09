@@ -33,16 +33,16 @@ export interface IServerConfig {
     sfuPort?: number;
 
     // The peer configuration object to send to peers in the config message when they connect.
-    peerOptions: any;
+    peerOptions: unknown;
 
     // Additional websocket options for the streamer listening websocket.
-    streamerWsOptions?: any;
+    streamerWsOptions?: WebSocket.ServerOptions;
 
     // Additional websocket options for the player listening websocket.
-    playerWsOptions?: any;
+    playerWsOptions?: WebSocket.ServerOptions;
 
     // Additional websocket options for the SFU listening websocket.
-    sfuWsOptions?: any;
+    sfuWsOptions?: WebSocket.ServerOptions;
 
     // Enables the matchmaker connection.
     useMatchmaker?: boolean;
@@ -66,6 +66,10 @@ export interface IServerConfig {
     publicPort?: number;
 }
 
+type ProtocolConfig = {
+    [key: string]: any;
+}
+
 /**
  * The main signalling server object.
  * Contains a streamer and player registry and handles setting up of websockets
@@ -73,7 +77,7 @@ export interface IServerConfig {
  */
 export class SignallingServer {
     config: IServerConfig;
-    protocolConfig: any;
+    protocolConfig: ProtocolConfig;
     streamerRegistry: StreamerRegistry;
     playerRegistry: PlayerRegistry;
     startTime: Date;
@@ -126,13 +130,13 @@ export class SignallingServer {
         // Optional Matchmaker connections
         if (config.useMatchmaker) {
             const mmConfig: IMatchmakerConfig = {
-                publicIp: config.publicIp,
-                publicPort: config.publicPort,
-                address: config.matchmakerAddress,
-                port: config.matchmakerPort,
+                publicIp: config.publicIp!,
+                publicPort: config.publicPort!,
+                address: config.matchmakerAddress!,
+                port: config.matchmakerPort!,
                 https: config.httpsServer != undefined,
-                retryInterval: config.matchmakerRetryInterval,
-                keepAliveInterval: config.matchmakerKeepAliveInterval,
+                retryInterval: config.matchmakerRetryInterval!,
+                keepAliveInterval: config.matchmakerKeepAliveInterval!,
             };
             const _matchmakerConnection = new MatchmakerConnection(mmConfig, this.streamerRegistry, this.playerRegistry);
         }
