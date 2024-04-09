@@ -19,14 +19,13 @@ jobs:
         name: Login to GitHub Container Registry
         uses: docker/login-action@v2
         with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          username: pixelstreamingunofficial
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
       -
         name: Build and push the Signalling Server container image for Unreal Engine based on our development branch
         uses: docker/build-push-action@v3
         with:
           context: .
-          tags: 'ghcr.io/epicgames/pixel-streaming-signalling-server:5.2'
+          tags: 'pixelstreamingunofficial/pixel-streaming-sfu:5.2'
           push: true
           file: SignallingWebServer/Dockerfile

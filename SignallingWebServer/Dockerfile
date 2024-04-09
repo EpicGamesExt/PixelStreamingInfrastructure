@@ -31,3 +31,4 @@ EXPOSE 3479
 
 # Set the signalling server as the container's entrypoint
 ENTRYPOINT ["/usr/local/bin/node", "/SignallingWebServer/cirrus.js"]
+
