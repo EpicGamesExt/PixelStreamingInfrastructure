@@ -55,13 +55,13 @@ npm i @epicgames-ps/lib-pixelstreamingfrontend-ui-ue5.2
 ## Documentation 
 * [General Docs](/Docs/README.md)
 * [Frontend Docs](/Frontend/Docs/README.md)
-* Signalling Server Docs [TO DO](https://github.com/EpicGames/PixelStreamingInfrastructure/issues/255)
-* Matchmaker Docs [TO DO](https://github.com/EpicGames/PixelStreamingInfrastructure/issues/256)
-* SFU Docs [TO DO](https://github.com/EpicGames/PixelStreamingInfrastructure/issues/257)
+* Signalling Server Docs [TO DO](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/issues/255)
+* Matchmaker Docs [TO DO](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/issues/256)
+* SFU Docs [TO DO](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/issues/257)
 
 ### Tagged source releases + built typescript frontend
 
-[Github releases](https://github.com/EpicGames/PixelStreamingInfrastructure/releases)
+[Github releases](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/releases)
 
 ## Versions
 
@@ -69,19 +69,19 @@ We maintain versions of the servers and frontend that are compatible with existi
 
 :warning: **There are breaking changes between UE versions - so make sure you get the right version**. :warning:
 
-<ins>For a list of major changes between versions please refer to the [changelog](https://github.com/EpicGames/PixelStreamingInfrastructure/blob/master/CHANGELOG.md).</ins>
+<ins>For a list of major changes between versions please refer to the [changelog](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/master/CHANGELOG.md).</ins>
 
 This repository contains the following in branches that track Unreal Engine versions:
 
 | Branch | Status |
 |--------|--------|
-|[Master](https://github.com/EpicGames/PixelStreamingInfrastructure/tree/master)| Dev |
-|[UE5.3](https://github.com/EpicGames/PixelStreamingInfrastructure/tree/UE5.3)| Pre-release |
-|[UE5.2](https://github.com/EpicGames/PixelStreamingInfrastructure/tree/UE5.2)| Current |
-|[UE5.1](https://github.com/EpicGames/PixelStreamingInfrastructure/tree/UE5.1)| Supported |
-|[UE5.0](https://github.com/EpicGames/PixelStreamingInfrastructure/tree/UE5.0)| End of life |
-|[UE4.27](https://github.com/EpicGames/PixelStreamingInfrastructure/tree/UE4.27)| Unsupported |
-|[UE4.26](https://github.com/EpicGames/PixelStreamingInfrastructure/tree/UE4.26)| Unsupported |
+|[Master](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/tree/master)| Dev |
+|[UE5.3](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/tree/UE5.3)| Pre-release |
+|[UE5.2](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/tree/UE5.2)| Current |
+|[UE5.1](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/tree/UE5.1)| Supported |
+|[UE5.0](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/tree/UE5.0)| End of life |
+|[UE4.27](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/tree/UE4.27)| Unsupported |
+|[UE4.26](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/tree/UE4.26)| Unsupported |
 
 | Legend | Meaning |
 |---------|-----------|
