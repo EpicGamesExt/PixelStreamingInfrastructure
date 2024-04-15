@@ -12,7 +12,7 @@ jobs:
         id: lychee
         uses: lycheeverse/lychee-action@v1.9.0
         with:
-          args: --exclude 'localhost' --exclude 'github.com/EpicGames/UnrealEngine' --exclude '.png' --exclude '.jpg' ./**/*.md'
+          args: --exclude 'localhost' --exclude 'github.com/EpicGames/UnrealEngine' --exclude '.png' --exclude '.jpg' './**/*.md'
 
       - name: Create Issue From File
         if: env.lychee_exit_code != 0
