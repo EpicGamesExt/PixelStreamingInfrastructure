@@ -12,7 +12,7 @@ If the user continues not to respond, the AFK system waits 10 more seconds befor
 
 Any user interaction with the player panel resets the AFK timer. This includes mouse moves and drags, mouse button presses, keyboard presses, touch events on mobile devices, and custom interactions you set up with the `emitCommand` and `emitUIInteraction` functions.
 
-To use the AFK system, set the following properties in the [`Config`](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/master/Frontend/library/src/Config/Config.ts) object passed used to create a [`PixelStreaming`](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/master/Frontend/library/src/PixelStreaming/PixelStreaming.tx) stream.
+To use the AFK system, set the following properties in the [`Config`](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/master/Frontend/library/src/Config/Config.ts) object passed used to create a [`PixelStreaming`](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/master/Frontend/library/src/PixelStreaming/PixelStreaming.ts) stream.
 
 | Property | Default | Description |
 |    ---   | --- |
