@@ -148,7 +148,7 @@ As a reminder each UE-X branch/tag in this repository corresponds to a version o
 - Bumped engine.io and socket.io in /Matchmaker by @dependabot in https://github.com/EpicGames/PixelStreamingInfrastructure/pull/72
 - Bumped socket.io-parser from 4.2.2 to 4.2.4 in /Matchmaker by @dependabot in https://github.com/EpicGames/PixelStreamingInfrastructure/pull/244
 - Patched Uncaught exception in PixelStreamingInfrastructure via engine by @imhunterand in https://github.com/EpicGames/PixelStreamingInfrastructure/pull/61
-- Fixed insufficient validation when decoding a Socket packet by @iot-defcon in https://github.com/EpicGames/PixelStreamingInfrastructure/pull/57
+- Fixed insufficient validation when decoding a Socket packet by @iot-defcon
 - @ CVE-2022-25896 by @mik-patient in https://github.com/EpicGames/PixelStreamingInfrastructure/pull/35
 - Bump webpack from 5.75.0 to 5.76.0 in /Frontend/library by @dependabot in https://github.com/EpicGames/PixelStreamingInfrastructure/pull/153
 - Bump webpack from 5.75.0 to 5.76.0 in /Frontend/ui-library by @dependabot in https://github.com/EpicGames/PixelStreamingInfrastructure/pull/155
