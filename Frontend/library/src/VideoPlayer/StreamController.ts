@@ -31,6 +31,11 @@ export class StreamController {
             'handleOnTrack ' + JSON.stringify(rtcTrackEvent.streams),
             6
         );
+        
+        if (rtcTrackEvent.track.id == 'probator') {
+            return;
+        }
+
         const videoElement = this.videoElementProvider.getVideoElement();
 
         if (rtcTrackEvent.track) {
