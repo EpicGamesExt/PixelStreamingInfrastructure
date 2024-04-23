@@ -138,10 +138,14 @@ class SdpEndpoint {
         });
         const sendMsid = uuid_1.v4().substr(0, 8);
         console.log("[SdpEndpoint.createOffer] Make 'sendonly' SDP Offer");
+        var videoRtpParameters;        
         for (let i = 0; i < this.consumers.length; i++) {
             const mid = (_a = this.consumers[i].rtpParameters.mid) !== null && _a !== void 0 ? _a : "nomid";
             const kind = this.consumers[i].kind;
             const sendParams = this.consumers[i].rtpParameters;
+            if (kind === 'video') {
+                videoRtpParameters = JSON.parse(JSON.stringify(sendParams))
+            }            
             sdpBuilder.receive({
                 mid,
                 kind,
@@ -150,6 +154,23 @@ class SdpEndpoint {
                 trackId: `${sendMsid}-${kind}`,
             });
         }
+        if (videoRtpParameters) {
+            videoRtpParameters.codecs[0].payloadType = 127;
+            const rtpParameters = {
+                mid: 'probator',
+                codecs: [videoRtpParameters.codecs[0]],
+                headerExtensions: videoRtpParameters.headerExtensions,
+                encodings: [{ ssrc: 1234 }],
+                rtcp: { cname: 'probator' },
+            };    
+            sdpBuilder.receive({
+                mid: 'probator',
+                kind: 'video',
+                offerRtpParameters: rtpParameters,
+                streamId: 'probator',
+                trackId: 'probator',
+            });
+        }        
         if (this.consumeData) {
             sdpBuilder.receiveSctpAssociation();
         }
