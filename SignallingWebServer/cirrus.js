@@ -590,7 +590,7 @@ function onStreamerMessageDisconnectPlayer(streamer, msg) {
 	const playerId = getPlayerIdFromMessage(msg);
 	const player = players.get(playerId);
 	if (player) {
-		player.ws.close(1011 /* internal error */, msg.reason);
+		player.ws.close(3000 /* kick */, msg.reason);
 	}
 }
 

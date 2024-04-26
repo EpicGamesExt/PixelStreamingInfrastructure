@@ -220,9 +220,11 @@ export class WebRtcPlayerController {
             // https://developer.mozilla.org/en-US/docs/Web/API/CloseEvent/code
             // lists all the codes. 
             const CODE_GOING_AWAY = 1001;
+            const CODE_KICK = 3000;
 
             const willTryReconnect = this.shouldReconnect
                && event.detail.code != CODE_GOING_AWAY
+               && event.detail.code != CODE_KICK
                && this.config.getNumericSettingValue(NumericParameters.MaxReconnectAttempts) > 0
 
             const disconnectMessage = this.disconnectMessage ? this.disconnectMessage : event.detail.reason;
