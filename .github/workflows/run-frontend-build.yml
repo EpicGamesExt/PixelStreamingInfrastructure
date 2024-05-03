@@ -23,6 +23,9 @@ jobs:
         node-version: "${{ env.NODE_VERSION }}"
         registry-url: 'https://registry.npmjs.org'
 
+    - working-directory: ./Frontend/implementations/typescript
+      run: npm ci
+
     - name: Build frontend
       working-directory: ./Frontend/implementations/typescript
       run: npm run build-all
