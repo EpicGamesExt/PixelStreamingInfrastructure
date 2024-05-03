@@ -2,10 +2,8 @@ name: Run frontend build
 
 on: 
   push:
-    branches: ['master']
     paths: ['Frontend/**']
   pull_request:
-    branches: ['master']
     paths: ['Frontend/**']
 
 env:
