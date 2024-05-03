@@ -26,7 +26,7 @@ jobs:
     - name: Setup node
       uses: actions/setup-node@v3
       with:
-        node-version: '$NODE_VERSION'
+        node-version: "$NODE_VERSION"
         registry-url: 'https://registry.npmjs.org'
 
     - name: Install library deps
