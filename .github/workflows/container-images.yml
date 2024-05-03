@@ -1,4 +1,4 @@
-name: Publish Cirrus container
+name: Publish container images
 
 on:
   workflow_dispatch:
