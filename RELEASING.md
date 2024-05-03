@@ -7,17 +7,20 @@ There are multiple things in this repository that can be released:
 - The `/ui-library` NPM package
 - The entire repo and built frontend as a Github release .zip/tar.gz archive
 
-## Signalling Server Container
-1. Switch to the target branch (e.g 5.5)
-2. Make/merge any changes into `/SignallingWebServer` directory
-3. This will automatically kick off a [this action](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/master/.github/workflows/container-images.yml) for a build+push of the signalling server container image.
-
 ## The `/Common` NPM package
 1. Switch to the target branch (e.g 5.5)
 2. Make/merge any changes into `/Common` directory
 3. Based on the changes made, bump the version number according to [semver](https://semver.org/) in the [`package.json`](https://github.com/EpicGames/PixelStreamingInfrastructure/blob/30611b625736f49b7f407204ee3b0c455cb3130b/Common/package.json#L3) file
 4. Commit the changes to the `package.json` file.
 5. This will automatically kick off a [this action](https://github.com/EpicGames/PixelStreamingInfrastructure/blob/master/.github/workflows/publish-common-library-to-npm.yml) for a build+push to NPM.
+
+## The `/Signalling` NPM package
+1. Switch to the target branch (e.g 5.5)
+2. Make/merge any changes into `/Signalling` directory
+3. Based on the changes made, bump the version number according to [semver](https://semver.org/) in the [`package.json`](https://github.com/EpicGames/PixelStreamingInfrastructure/blob/30611b625736f49b7f407204ee3b0c455cb3130b/Signalling/package.json#L3) file
+4. **Optional: Update the version of the common library in the package.json if it got bumped.
+5. Commit the changes to `package.json` and potentially the `package-lock.json` file.
+6. This will automatically kick off a [this action](https://github.com/EpicGames/PixelStreamingInfrastructure/blob/master/.github/workflows/publish-signalling-library-to-npm.yml) for a build+push to NPM.
 
 ## The `/library` NPM package
 1. Switch to the target branch (e.g 5.5)
@@ -34,6 +37,11 @@ There are multiple things in this repository that can be released:
 5. Commit the changes to `package.json` and potentially the `package-lock.json` file.
 6. This will automatically kick off a [this action](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/master/.github/workflows/publish-ui-library-to-npm.yml) for a build+push to NPM.
 
+## Signalling Server Container
+1. Switch to the target branch (e.g 5.5)
+2. Make/merge any changes into `/SignallingWebServer` directory
+3. This will automatically kick off a [this action](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/master/.github/workflows/container-images.yml) for a build+push of the signalling server container image.
+
 ## The Github releases archives
 1. Switch to the target branch (e.g 5.5)
 2. Make/merge any changes anywhere in the repo.
@@ -45,6 +53,8 @@ There are multiple things in this repository that can be released:
 If multiple changes have been made, the order of releases should usually be like so:
 
 1. `/Common`
-2. `/library`
-3. `/ui-library`
-4. `RELEASE_VERSION` file
+2. `/Signalling`
+3. `/library`
+4. `/ui-library`
+5. `/SignallingWebServer`
+6. `RELEASE_VERSION` file
