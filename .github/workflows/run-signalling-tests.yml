@@ -7,9 +7,6 @@ on:
   pull_request:
     paths: ['Common/**', 'SignallingWebServer/**', 'SS_Test/**']
 
-env:
-  NODE_VERSION: 18.17.x
-
 jobs:
 
   build:

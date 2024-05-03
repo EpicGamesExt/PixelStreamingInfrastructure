@@ -3,24 +3,34 @@ name: Run presubmit build and lint checks
 on:
   workflow_dispatch:
   push:
-    branches: ['UE5.5']
-    paths: ['Common/**', 'Signalling/**', 'SignallingWebServer/**', 'Frontend/library/**', 'Frontend/ui-library/**', 'Frontend/implementations/typescript/**']
+    paths:
+      - 'Common/**'
+      - 'Signalling/**'
+      - 'SignallingWebServer/**'
+      - 'Frontend/library/**'
+      - 'Frontend/ui-library/**'
+      - 'Frontend/implementations/typescript/**'
   pull_request:
-    branches: ['UE5.5']
-    paths: ['Common/**', 'Signalling/**', 'SignallingWebServer/**', 'Frontend/library/**', 'Frontend/ui-library/**', 'Frontend/implementations/typescript/**']
+    paths:
+      - 'Common/**'
+      - 'Signalling/**'
+      - 'SignallingWebServer/**'
+      - 'Frontend/library/**'
+      - 'Frontend/ui-library/**'
+      - 'Frontend/implementations/typescript/**'
+
+env:
+  NODE_VERSION: 18.17.x
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: Common
     steps:
     - name: "Checkout source code"
       uses: actions/checkout@v3
     - uses: actions/setup-node@v4
       with:
-        node-version: '18.17.0'
+        node-version: "${{ env.NODE_VERSION }}"
         registry-url: 'https://registry.npmjs.org'
         
     - working-directory: Common
