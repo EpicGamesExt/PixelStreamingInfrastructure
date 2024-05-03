@@ -1,0 +1,38 @@
+name: Run frontend build
+
+on: 
+  push:
+    paths: ['Frontend/**']
+  pull_request:
+    paths: ['Frontend/**']
+
+env:
+  NODE_VERSION: 18.17.x
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: "Checkout source code"
+      uses: actions/checkout@v3
+
+    - name: "Setup node"
+      uses: actions/setup-node@v3
+      with:
+        node-version: "${{ env.NODE_VERSION }}"
+        registry-url: 'https://registry.npmjs.org'
+
+    - working-directory: ./Frontend/library
+      run: npm ci
+
+    - working-directory: ./Frontend/ui-library
+      run: npm ci
+
+    - working-directory: ./Frontend/implementations/typescript
+      run: npm ci
+
+    - name: Build frontend
+      working-directory: ./Frontend/implementations/typescript
+      run: npm run build-all
+

@@ -138,6 +138,17 @@ export class Application {
         this.showConnectOrAutoConnectOverlays();
 
         this.setColorMode(this.configUI.isCustomFlagEnabled(LightMode));
+
+        this.stream.config._addOnSettingChangedListener(
+            Flags.HideUI,
+            (isEnabled: boolean) => {
+                this._uiFeatureElement.style.visibility = isEnabled ? "hidden" : "visible";
+            }
+        );
+
+        if (this.stream.config.isFlagEnabled(Flags.HideUI)) {
+            this._uiFeatureElement.style.visibility = "hidden";
+        }
     }
 
     public createOverlays(): void {
@@ -377,6 +388,14 @@ export class Application {
             'playerCount', 
             ({ data: { count }}) => 
                 this.onPlayerCount(count)
+        );
+        this.stream.addEventListener(
+            'webRtcTCPRelayDetected', 
+            ({}) => 
+                Logger.Warning(
+                    Logger.GetStackTrace(),
+                    `Stream quailty degraded due to network enviroment, stream is relayed over TCP.`
+               )
         );
     }
 

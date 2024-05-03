@@ -31,7 +31,8 @@ export class Flags {
     static TouchInput = 'TouchInput' as const;
     static GamepadInput = 'GamepadInput' as const;
     static XRControllerInput = 'XRControllerInput' as const;
-    static WaitForStreamer = "WaitForStreamer" as const;
+    static WaitForStreamer = 'WaitForStreamer' as const;
+    static HideUI = 'HideUI' as const;
 }
 
 export type FlagsKeys = Exclude<keyof typeof Flags, 'prototype'>;
@@ -497,6 +498,19 @@ export class Config {
                 settings && Object.prototype.hasOwnProperty.call(settings, Flags.WaitForStreamer) ?
                     settings[Flags.WaitForStreamer] :
                     true,
+                useUrlParams
+            )
+        );
+        
+        this.flags.set(
+            Flags.HideUI,
+            new SettingFlag(
+                Flags.HideUI,
+                'Hide the UI overlay',
+                'Will hide all UI overlay details',
+                settings && settings.hasOwnProperty(Flags.HideUI) ?
+                    settings[Flags.HideUI] :
+                    false,
                 useUrlParams
             )
         );

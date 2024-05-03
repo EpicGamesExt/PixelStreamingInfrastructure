@@ -4,6 +4,10 @@ on:
     workflow_dispatch:
     branches: ['UE5.5']
     paths: ['Frontend/ui-library/package.json']
+
+env:
+  NODE_VERSION: 18.17.x
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -14,7 +18,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: '18.17.0'
+          node-version: "${{ env.NODE_VERSION }}"
           registry-url: 'https://registry.npmjs.org'
       - run: npm ci
       - run: npm run build

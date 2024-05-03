@@ -3,11 +3,12 @@ name: Run signalling tests
 on:
   workflow_dispatch:
   push:
-    branches: ['UE5.5']
     paths: ['Common/**', 'SignallingWebServer/**', 'SS_Test/**']
   pull_request:
-    branches: ['UE5.5']
     paths: ['Common/**', 'SignallingWebServer/**', 'SS_Test/**']
+
+env:
+  NODE_VERSION: 18.17.x
 
 jobs:
 

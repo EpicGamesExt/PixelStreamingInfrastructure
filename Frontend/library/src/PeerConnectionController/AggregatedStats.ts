@@ -25,7 +25,7 @@ export class AggregatedStats {
     inboundAudioStats: InboundAudioStats;
     lastVideoStats: InboundVideoStats;
     lastAudioStats: InboundAudioStats;
-    candidatePair: CandidatePairStats;
+    candidatePairs: Array<CandidatePairStats>;
     DataChannelStats: DataChannelStats;
     localCandidates: Array<CandidateStat>;
     remoteCandidates: Array<CandidateStat>;
@@ -33,11 +33,11 @@ export class AggregatedStats {
     sessionStats: SessionStats;
     streamStats: StreamStats;
     codecs: Map<string, string>;
+    transportStats: RTCTransportStats;
 
     constructor() {
         this.inboundVideoStats = new InboundVideoStats();
         this.inboundAudioStats = new InboundAudioStats();
-        this.candidatePair = new CandidatePairStats();
         this.DataChannelStats = new DataChannelStats();
         this.outBoundVideoStats = new OutBoundVideoStats();
         this.sessionStats = new SessionStats();
@@ -52,6 +52,7 @@ export class AggregatedStats {
     processStats(rtcStatsReport: RTCStatsReport) {
         this.localCandidates = new Array<CandidateStat>();
         this.remoteCandidates = new Array<CandidateStat>();
+        this.candidatePairs = new Array<CandidatePairStats>();
 
         rtcStatsReport.forEach((stat) => {
             const type: RTCStatsTypePS = stat.type;
@@ -94,6 +95,7 @@ export class AggregatedStats {
                     this.handleTrack(stat);
                     break;
                 case 'transport':
+                    this.handleTransport(stat);
                     break;
                 case 'stream':
                     this.handleStream(stat);
@@ -120,16 +122,10 @@ export class AggregatedStats {
      * @param stat - the stats coming in from ice candidates
      */
     handleCandidatePair(stat: CandidatePairStats) {
-        this.candidatePair.bytesReceived = stat.bytesReceived;
-        this.candidatePair.bytesSent = stat.bytesSent;
-        this.candidatePair.localCandidateId = stat.localCandidateId;
-        this.candidatePair.remoteCandidateId = stat.remoteCandidateId;
-        this.candidatePair.nominated = stat.nominated;
-        this.candidatePair.readable = stat.readable;
-        this.candidatePair.selected = stat.selected;
-        this.candidatePair.writable = stat.writable;
-        this.candidatePair.state = stat.state;
-        this.candidatePair.currentRoundTripTime = stat.currentRoundTripTime;
+
+        // Add the candidate pair to the candidate pair array
+        this.candidatePairs.push(stat)
+
     }
 
     /**
@@ -162,6 +158,8 @@ export class AggregatedStats {
         localCandidate.protocol = stat.protocol;
         localCandidate.candidateType = stat.candidateType;
         localCandidate.id = stat.id;
+        localCandidate.relayProtocol = stat.relayProtocol;
+        localCandidate.transportId = stat.transportId;
         this.localCandidates.push(localCandidate);
     }
 
@@ -171,12 +169,14 @@ export class AggregatedStats {
      */
     handleRemoteCandidate(stat: CandidateStat) {
         const RemoteCandidate = new CandidateStat();
-        RemoteCandidate.label = 'local-candidate';
+        RemoteCandidate.label = 'remote-candidate';
         RemoteCandidate.address = stat.address;
         RemoteCandidate.port = stat.port;
         RemoteCandidate.protocol = stat.protocol;
         RemoteCandidate.id = stat.id;
         RemoteCandidate.candidateType = stat.candidateType;
+        RemoteCandidate.relayProtocol = stat.relayProtocol;
+        RemoteCandidate.transportId = stat.transportId
         this.remoteCandidates.push(RemoteCandidate);
     }
 
@@ -269,6 +269,11 @@ export class AggregatedStats {
         }
     }
 
+    handleTransport(stat: RTCTransportStats){
+        this.transportStats = stat;
+    }
+
+
     handleCodec(stat: CodecStats) {
         const codecId = stat.id;
         const codecType = `${stat.mimeType
@@ -308,4 +313,20 @@ export class AggregatedStats {
     isNumber(value: unknown): boolean {
         return typeof value === 'number' && isFinite(value);
     }
+
+    /**
+     * Helper function to return the active candidate pair
+     * @returns The candidate pair that is currently receiving data
+     */
+    public getActiveCandidatePair(): CandidatePairStats | null {
+        
+        // Check if the RTCTransport stat is not undefined
+        if (this.transportStats){
+            // Return the candidate pair that matches the transport candidate pair id
+            return this.candidatePairs.find((candidatePair) => candidatePair.id === this.transportStats.selectedCandidatePairId, null);
+        }
+        
+        // Fall back to the selected candidate pair
+        return this.candidatePairs.find((candidatePair) => candidatePair.selected, null);
+    }  
 }
