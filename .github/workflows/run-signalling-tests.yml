@@ -9,6 +9,9 @@ on:
     branches: ['signalling_tester']
     paths: ['SS_Test/**']
 
+env:
+  NODE_VERSION: 18.17.x
+
 jobs:
 
   build:
@@ -24,9 +27,10 @@ jobs:
     - name: "Checkout source code"
       uses: actions/checkout@v3
 
-    - uses: actions/setup-node@v3
+    - name: Setup node
+      uses: actions/setup-node@v3
       with:
-        node-version: '18.x'
+        node-version: '$NODE_VERSION'
         registry-url: 'https://registry.npmjs.org'
 
     - name: Run signalling server
