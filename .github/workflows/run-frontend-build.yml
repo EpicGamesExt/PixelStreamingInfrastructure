@@ -23,6 +23,12 @@ jobs:
         node-version: "${{ env.NODE_VERSION }}"
         registry-url: 'https://registry.npmjs.org'
 
+    - working-directory: ./Frontend/library
+      run: npm ci
+
+    - working-directory: ./Frontend/ui-library
+      run: npm ci
+
     - working-directory: ./Frontend/implementations/typescript
       run: npm ci
 
