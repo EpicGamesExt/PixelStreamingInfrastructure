@@ -101,6 +101,12 @@ export class WebServer {
 
         // Request has been sent to site root, send the homepage file
         app.get('/', function (req: any, res: any) {
+            const limiter = RateLimit({
+                windowMs: 60 * 1000,
+                max: config.perMinuteRateLimit
+            });
+            app.use(limiter);
+
             // Try a few paths, see if any resolve to a homepage file the user has set
             const p = path.resolve(path.join(config.root, config.homepageFile));
             if (fs.existsSync(p)) {

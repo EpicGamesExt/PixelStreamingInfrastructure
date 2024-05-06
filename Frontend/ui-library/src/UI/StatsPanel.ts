@@ -1,7 +1,7 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 import { LatencyTest } from './LatencyTest';
-import { CandidatePairStats, InitialSettings, Logger, PixelStreaming } from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.5';
+import { CandidatePairStats, Logger, PixelStreaming } from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.5';
 import { AggregatedStats } from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.5';
 import { MathUtils } from '../Util/MathUtils';
 import {DataChannelLatencyTest} from "./DataChannelLatencyTest";
@@ -319,7 +319,7 @@ export class StatsPanel {
         }
 
         // Store the active candidate pair return a new Candidate pair stat if getActiveCandidate is null
-        let activeCandidatePair = stats.getActiveCandidatePair() != null ? stats.getActiveCandidatePair() : new CandidatePairStats();
+        const activeCandidatePair = stats.getActiveCandidatePair() != null ? stats.getActiveCandidatePair() : new CandidatePairStats();
 
         // RTT
         const netRTT =
