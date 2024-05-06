@@ -99,6 +99,14 @@ export class WebServer {
 
         app.use(express.static(config.root));
 
+        const limiter = RateLimit({
+          windowMs: 60 * 1000, // 1 minute
+          max: config.perMinuteRateLimit ? config.perMinuteRateLimit : 3000
+        });
+
+        // apply rate limiter to all requests
+        app.use(limiter);
+
         // Request has been sent to site root, send the homepage file
         app.get('/', function (req: any, res: any) {
             // Try a few paths, see if any resolve to a homepage file the user has set
@@ -117,13 +125,5 @@ export class WebServer {
         });
 
         /* eslint-enable @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access */
-
-        const limiter = RateLimit({
-          windowMs: 60 * 1000, // 1 minute
-          max: config.perMinuteRateLimit ? config.perMinuteRateLimit : 3000
-        });
-
-        // apply rate limiter to all requests
-        app.use(limiter);
     }
 }
