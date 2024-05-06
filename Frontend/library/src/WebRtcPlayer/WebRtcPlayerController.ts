@@ -222,6 +222,7 @@ export class WebRtcPlayerController {
                 const message = MessageHelpers.createMessage(Messages.listStreamers);
                 this.protocol.sendMessage(message);
             }
+            this.reconnectAttempt = 0;
         });
         this.protocol.transport.addListener('error', () => {
             // dont really need to do anything here since the close event should follow.
@@ -1324,7 +1325,7 @@ export class WebRtcPlayerController {
             6
         );
 
-        let wantedStreamerId: string = null;
+        let wantedStreamerId: string = '';
 
         // get the current selected streamer id option
         const streamerIDOption = this.config.getSettingOption(OptionParameters.StreamerId);
@@ -1342,7 +1343,7 @@ export class WebRtcPlayerController {
             settingOptions
         );
 
-        let autoSelectedStreamerId: string = null;
+        let autoSelectedStreamerId: string = '';
         const waitForStreamer = this.config.isFlagEnabled(Flags.WaitForStreamer);
         const reconnectLimit = this.config.getNumericSettingValue(NumericParameters.MaxReconnectAttempts);
         const reconnectDelay = this.config.getNumericSettingValue(NumericParameters.StreamerAutoJoinInterval);

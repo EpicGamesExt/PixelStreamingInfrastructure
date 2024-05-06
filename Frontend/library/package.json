@@ -33,6 +33,7 @@
         "webpack-cli": "^5.0.1"
     },
     "dependencies": {
+        "jsonc": "^2.0.0",
         "sdp": "^3.1.0"
     },
     "repository": {

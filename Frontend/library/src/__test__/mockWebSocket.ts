@@ -1,3 +1,5 @@
+import { BaseMessage } from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
+
 export interface MockWebSocketSpyFunctions {
     constructorSpy: null | ((url: string) => void);
     openSpy: null | ((event: Event) => void);
@@ -12,7 +14,7 @@ export interface MockWebSocketTriggerFunctions {
     triggerOnOpen: null | (() => void);
     triggerOnError: null | (() => void);
     triggerOnClose: null | ((closeReason?: CloseEventInit) => void);
-    triggerOnMessage: null | ((message?: object) => void);
+    triggerOnMessage: null | ((message?: BaseMessage) => void);
     triggerOnMessageBinary: null | ((message?: Blob) => void);
     triggerRemoteClose: null | ((code?: number, reason?: string) => void);
 }
@@ -88,10 +90,8 @@ export class MockWebSocketImpl extends WebSocket {
         this.close(code, reason);
     }
 
-    triggerOnMessage(message?: object) {
-        const data = message
-            ? JSON.stringify(message)
-            : JSON.stringify({ type: 'test' });
+    triggerOnMessage(message: BaseMessage) {
+        const data = JSON.stringify(message);
         const event = new MessageEvent('message', { data });
         this.onmessage?.(event);
         spyFunctions.messageSpy?.(event);
