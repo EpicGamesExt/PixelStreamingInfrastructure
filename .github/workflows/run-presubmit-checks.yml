@@ -1,0 +1,46 @@
+name: Run presubmit build and lint checks
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'Common/**'
+      - 'Signalling/**'
+      - 'SignallingWebServer/**'
+      - 'Frontend/library/**'
+      - 'Frontend/ui-library/**'
+      - 'Frontend/implementations/typescript/**'
+  pull_request:
+    paths:
+      - 'Common/**'
+      - 'Signalling/**'
+      - 'SignallingWebServer/**'
+      - 'Frontend/library/**'
+      - 'Frontend/ui-library/**'
+      - 'Frontend/implementations/typescript/**'
+
+env:
+  NODE_VERSION: 18.17.x
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: "Checkout source code"
+      uses: actions/checkout@v3
+    - uses: actions/setup-node@v4
+      with:
+        node-version: "${{ env.NODE_VERSION }}"
+        registry-url: 'https://registry.npmjs.org'
+        
+    - working-directory: Common
+      run: npm ci && npm run build && npm run lint
+    - working-directory: Signalling
+      run: npm ci && npm link ../Common && npm run build && npm run lint
+    - working-directory: SignallingWebServer
+      run: npm ci && npm link ../Signalling && npm run build && npm run lint
+    - working-directory: Frontend/library
+      run: npm ci && npm link ../../Common && npm run build && npm run lint
+    - working-directory: Frontend/ui-library
+      run: npm ci && npm link ../library && npm run build && npm run lint
+

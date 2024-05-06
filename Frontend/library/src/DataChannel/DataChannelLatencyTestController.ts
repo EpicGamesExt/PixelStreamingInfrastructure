@@ -1,6 +1,6 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
-import { Logger } from '../Logger/Logger';
+import { Logger } from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
 import {
     DataChannelLatencyTestRecord,
     DataChannelLatencyTestRequest,
@@ -105,15 +105,15 @@ export class DataChannelLatencyTestController {
             );
             return;
         }
-        let record = this.records.get(response.Seq);
+        const record = this.records.get(response.Seq);
         if (record) {
             record.update(response);
         }
     }
 
     sendRequest(requestSize: number, responseSize: number) {
-        let request = this.createRequest(requestSize, responseSize);
-        let record = new DataChannelLatencyTestRecord(request);
+        const request = this.createRequest(requestSize, responseSize);
+        const record = new DataChannelLatencyTestRecord(request);
         this.records.set(record.seq, record);
         this.sink(request);
     }

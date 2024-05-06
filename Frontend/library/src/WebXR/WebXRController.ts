@@ -1,6 +1,6 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
-import { Logger } from '../Logger/Logger';
+import { Logger } from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
 import { WebRtcPlayerController } from '../WebRtcPlayer/WebRtcPlayerController';
 import { WebGLUtils } from '../Util/WebGLUtils';
 import { Controller } from '../Inputs/GamepadTypes';
@@ -193,7 +193,7 @@ export class WebXRController {
 
         if (this.webRtcController.config.isFlagEnabled(Flags.XRControllerInput)) {
             this.xrSession.inputSources.forEach(
-                (source: XRInputSource, index: number, array: XRInputSource[]) => {
+                (source: XRInputSource, _index: number, _array: XRInputSource[]) => {
                     this.xrGamepadController.updateStatus(
                         source,
                         frame,

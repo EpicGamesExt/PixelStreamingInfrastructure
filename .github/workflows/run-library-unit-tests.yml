@@ -29,10 +29,15 @@ jobs:
         node-version: "${{ env.NODE_VERSION }}"
         registry-url: 'https://registry.npmjs.org'
 
+    - name: Build common library
+      working-directory: ./Common
+      run: npm ci && npm run build
+
     - name: Install library deps
       working-directory: ./Frontend/library
-      run: npm ci
+      run: npm ci && npm link ../../Common
 
     - name: Run frontend lib tests
       working-directory: ./Frontend/library
       run: npm run test
+

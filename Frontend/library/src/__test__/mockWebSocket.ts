@@ -1,3 +1,5 @@
+import { BaseMessage } from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
+
 export interface MockWebSocketSpyFunctions {
     constructorSpy: null | ((url: string) => void);
     openSpy: null | ((event: Event) => void);
@@ -12,8 +14,9 @@ export interface MockWebSocketTriggerFunctions {
     triggerOnOpen: null | (() => void);
     triggerOnError: null | (() => void);
     triggerOnClose: null | ((closeReason?: CloseEventInit) => void);
-    triggerOnMessage: null | ((message?: object) => void);
+    triggerOnMessage: null | ((message?: BaseMessage) => void);
     triggerOnMessageBinary: null | ((message?: Blob) => void);
+    triggerRemoteClose: null | ((code?: number, reason?: string) => void);
 }
 
 const spyFunctions: MockWebSocketSpyFunctions = {
@@ -31,7 +34,8 @@ const triggerFunctions: MockWebSocketTriggerFunctions = {
     triggerOnError: null,
     triggerOnClose: null,
     triggerOnMessage: null,
-    triggerOnMessageBinary: null
+    triggerOnMessageBinary: null,
+    triggerRemoteClose: null
 };
 
 export class MockWebSocketImpl extends WebSocket {
@@ -45,8 +49,8 @@ export class MockWebSocketImpl extends WebSocket {
         triggerFunctions.triggerOnError = this.triggerOnError.bind(this);
         triggerFunctions.triggerOnClose = this.triggerOnClose.bind(this);
         triggerFunctions.triggerOnMessage = this.triggerOnMessage.bind(this);
-        triggerFunctions.triggerOnMessageBinary =
-            this.triggerOnMessageBinary.bind(this);
+        triggerFunctions.triggerOnMessageBinary = this.triggerOnMessageBinary.bind(this);
+        triggerFunctions.triggerRemoteClose = this.triggerRemoteClose.bind(this);
     }
 
     get readyState() {
@@ -82,10 +86,12 @@ export class MockWebSocketImpl extends WebSocket {
         spyFunctions.closeSpy?.(event);
     }
 
-    triggerOnMessage(message?: object) {
-        const data = message
-            ? JSON.stringify(message)
-            : JSON.stringify({ type: 'test' });
+    triggerRemoteClose(code?: number, reason?: string) {
+        this.close(code, reason);
+    }
+
+    triggerOnMessage(message: BaseMessage) {
+        const data = JSON.stringify(message);
         const event = new MessageEvent('message', { data });
         this.onmessage?.(event);
         spyFunctions.messageSpy?.(event);

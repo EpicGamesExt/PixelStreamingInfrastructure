@@ -1,0 +1,23 @@
+{
+    "compilerOptions": {
+        "noImplicitAny": true,
+        "esModuleInterop": true,
+        "target": "ES6",
+        "moduleResolution": "node",
+        "sourceMap": true,
+        "allowJs": true,
+        "strict": true
+    },
+    "include": ["./src/*.ts"],
+    "typedocOptions": {
+        "entryPoints": ["src/**/*.ts"],
+        "out": "docs",
+        "exclude": ["src/Messages/signalling_messages.ts"],
+        "excludeExternals": true,
+        "excludePrivate": true,
+        "excludeInternal": true,
+        "cleanOutputDir": false,
+        "plugin": "typedoc-plugin-markdown",
+        "readme": "none"
+    }
+}

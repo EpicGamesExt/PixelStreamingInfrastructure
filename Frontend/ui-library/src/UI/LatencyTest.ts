@@ -1,7 +1,7 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
-import { LatencyTestResults } from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.4';
-import { Logger } from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.4';
+import { LatencyTestResults } from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.5';
+import { Logger } from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.5';
 
 /**
  * Latency test UI elements and results handling.
@@ -65,10 +65,10 @@ export class LatencyTest {
 
     /**
      * Populate the UI based on the latency test's results.
-     * @param latencyTimings The latency test results.
+     * @param latencyTimings - The latency test results.
      */
     public handleTestResult(latencyTimings: LatencyTestResults) {
-        Logger.Log(Logger.GetStackTrace(), latencyTimings.toString(), 6);
+        Logger.Log(Logger.GetStackTrace(), JSON.stringify(latencyTimings), 6);
         let latencyStatsInnerHTML = '';
         latencyStatsInnerHTML +=
             '<div>Net latency RTT (ms): ' +

@@ -1,7 +1,6 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 import { UnquantizedDenormalizedUnsignedCoord } from '../Util/CoordinateConverter';
-import { MessageOnScreenKeyboard } from '../WebSockets/MessageReceive';
 
 /**
  * Class for handling on screen keyboard usage
@@ -36,10 +35,7 @@ export class OnScreenKeyboard {
      * @returns unquantizeAndDenormalizeUnsigned object
      */
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    unquantizeAndDenormalizeUnsigned(
-        x: number,
-        y: number
-    ): UnquantizedDenormalizedUnsignedCoord {
+    unquantizeAndDenormalizeUnsigned(x: number, y: number): UnquantizedDenormalizedUnsignedCoord {
         return null;
     }
 
@@ -76,7 +72,7 @@ export class OnScreenKeyboard {
      * Shows the on screen keyboard
      * @param command the command received via the data channel containing keyboard positions
      */
-    showOnScreenKeyboard(command: MessageOnScreenKeyboard) {
+    showOnScreenKeyboard(command: any) {
         if (command.showOnScreenKeyboard) {
             // Show the 'edit text' button.
             this.editTextButton.classList.remove('hiddenState');

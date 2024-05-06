@@ -1,9 +1,9 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
-import { Logger } from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.4';
+import { Logger } from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.5';
 import {
     DataChannelLatencyTestResult
-} from "@epicgames-ps/lib-pixelstreamingfrontend-ue5.4/types/DataChannel/DataChannelLatencyTestResults";
+} from "@epicgames-ps/lib-pixelstreamingfrontend-ue5.5/types/DataChannel/DataChannelLatencyTestResults";
 
 /**
  * DataChannel Latency test UI elements and results handling.
@@ -67,12 +67,12 @@ export class DataChannelLatencyTest {
 
     /**
      * Populate the UI based on the latency test's results.
-     * @param result The latency test results.
+     * @param result - The latency test results.
      */
     public handleTestResult(result: DataChannelLatencyTestResult) {
         Logger.Log(
             Logger.GetStackTrace(),
-            result.toString(),
+            JSON.stringify(result),
             6
         );
         /**
@@ -100,15 +100,15 @@ export class DataChannelLatencyTest {
         }
         this.latencyTestResultsElement.innerHTML = latencyStatsInnerHTML;
         //setup button to download the detailed results
-        let downloadButton: HTMLInputElement = document.createElement('input');
+        const downloadButton: HTMLInputElement = document.createElement('input');
         downloadButton.type = 'button';
         downloadButton.value = 'Download';
         downloadButton.classList.add('streamTools-button');
         downloadButton.classList.add('btn-flat');
         downloadButton.onclick = () => {
-            let file = new Blob([result.exportLatencyAsCSV()], {type: 'text/plain'});
-            let a = document.createElement("a"),
-                url = URL.createObjectURL(file);
+            const file = new Blob([result.exportLatencyAsCSV()], {type: 'text/plain'});
+            const a = document.createElement("a");
+            const url = URL.createObjectURL(file);
             a.href = url;
             a.download = "data_channel_latency_test_results.csv";
             document.body.appendChild(a);

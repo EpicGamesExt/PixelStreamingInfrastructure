@@ -7,8 +7,8 @@ import {
     AggregatedStats,
     LatencyTestResults,
     InitialSettings,
-    MessageStreamerList
-} from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.4';
+    Messages
+} from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.5';
 import { OverlayBase } from '../Overlay/BaseOverlay';
 import { ActionOverlay } from '../Overlay/ActionOverlay';
 import { TextOverlay } from '../Overlay/TextOverlay';
@@ -33,7 +33,7 @@ import {
 import { FullScreenIconBase, FullScreenIconExternal } from '../UI/FullscreenIcon';
 import {
     DataChannelLatencyTestResult
-} from "@epicgames-ps/lib-pixelstreamingfrontend-ue5.4/types/DataChannel/DataChannelLatencyTestResults";
+} from "@epicgames-ps/lib-pixelstreamingfrontend-ue5.5/types/DataChannel/DataChannelLatencyTestResults";
 
 
 /** 
@@ -186,10 +186,10 @@ export class Application {
      */
     public createButtons() {
         const controlsUIConfig : ControlsUIConfiguration = {
-            statsButtonType : !!this._options.statsPanelConfig
+            statsButtonType : this._options.statsPanelConfig
                 ? this._options.statsPanelConfig.visibilityButtonConfig
                 : undefined,
-            settingsButtonType: !!this._options.settingsPanelConfig
+            settingsButtonType: this._options.settingsPanelConfig
                 ? this._options.settingsPanelConfig.visibilityButtonConfig
                 : undefined,
             fullscreenButtonType: this._options.fullScreenControlsConfig,
@@ -214,33 +214,33 @@ export class Application {
 
         // Add settings button to controls
         const settingsButton : HTMLElement | undefined = 
-            !!controls.settingsIcon ? controls.settingsIcon.rootElement : 
+            controls.settingsIcon ? controls.settingsIcon.rootElement : 
             this._options.settingsPanelConfig.visibilityButtonConfig.customElement;
-        if (!!settingsButton) settingsButton.onclick = () =>
+        if (settingsButton) settingsButton.onclick = () =>
             this.settingsClicked();
-        if (!!this.settingsPanel) this.settingsPanel.settingsCloseButton.onclick = () =>
+        if (this.settingsPanel) this.settingsPanel.settingsCloseButton.onclick = () =>
             this.settingsClicked();
 
         // Add WebXR button to controls
         const xrButton : HTMLElement | undefined = 
-            !!controls.xrIcon ? controls.xrIcon.rootElement : 
+            controls.xrIcon ? controls.xrIcon.rootElement : 
             this._options.xrControlsConfig.creationMode === UIElementCreationMode.UseCustomElement ?
             this._options.xrControlsConfig.customElement : undefined;
-        if (!!xrButton) xrButton.onclick = () =>
+        if (xrButton) xrButton.onclick = () =>
             this.stream.toggleXR();
 
         // setup the stats/info button
         const statsButton : HTMLElement | undefined = 
-            !!controls.statsIcon ? controls.statsIcon.rootElement : 
+            controls.statsIcon ? controls.statsIcon.rootElement : 
             this._options.statsPanelConfig.visibilityButtonConfig.customElement;
-        if (!!statsButton) statsButton.onclick = () => this.statsClicked()
+        if (statsButton) statsButton.onclick = () => this.statsClicked()
 
-        if (!!this.statsPanel) {
+        if (this.statsPanel) {
             this.statsPanel.statsCloseButton.onclick = () => this.statsClicked();
         }
 
         // Add command buttons (if we have somewhere to add them to)
-        if (!!this.settingsPanel) {
+        if (this.settingsPanel) {
             // Add button for toggle fps
             const showFPSButton = new LabelledButton('Show FPS', 'Toggle');
             showFPSButton.addOnClickListener(() => {
@@ -391,7 +391,7 @@ export class Application {
         );
         this.stream.addEventListener(
             'webRtcTCPRelayDetected', 
-            ({}) => 
+            () => 
                 Logger.Warning(
                     Logger.GetStackTrace(),
                     `Stream quailty degraded due to network enviroment, stream is relayed over TCP.`
@@ -641,6 +641,7 @@ export class Application {
         this.showErrorOverlay(message);
     }
 
+    /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
     onPlayStreamRejected(onRejectedReason: unknown) {
         this.showPlayOverlay();
     }
@@ -658,7 +659,7 @@ export class Application {
      */
     onVideoEncoderAvgQP(QP: number) {
         // Update internal QP indicator if one is present
-        if (!!this.videoQpIndicator) {
+        if (this.videoQpIndicator) {
             this.videoQpIndicator.updateQpTooltip(QP);
         }
     }
@@ -686,7 +687,7 @@ export class Application {
         this.statsPanel?.handlePlayerCount(playerCount);
     }
 
-    handleStreamerListMessage(messageStreamingList: MessageStreamerList, autoSelectedStreamerId: string, wantedStreamerId: string) {
+    handleStreamerListMessage(messageStreamingList: Messages.streamerList, autoSelectedStreamerId: string, wantedStreamerId: string) {
         const waitForStreamer = this.stream.config.isFlagEnabled(Flags.WaitForStreamer);
         const isReconnecting = this.stream.isReconnecting();
         let message: string = null;

@@ -1,0 +1,27 @@
+name: Publish common lib
+on:
+  push:
+    workflow_dispatch:
+    branches: ['UE5.5']
+    paths: ['Common/package.json']
+
+env:
+  NODE_VERSION: 18.17.x
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: Common
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "${{ env.NODE_VERSION }}"
+          registry-url: 'https://registry.npmjs.org'
+      - run: npm ci
+      - run: npm run build
+      - run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

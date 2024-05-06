@@ -3,14 +3,9 @@ name: Run signalling tests
 on:
   workflow_dispatch:
   push:
-    branches: ['signalling_tester']
-    paths: ['SignallingWebServer/**']
+    paths: ['Common/**', 'SignallingWebServer/**', 'SS_Test/**']
   pull_request:
-    branches: ['signalling_tester']
-    paths: ['SS_Test/**']
-
-env:
-  NODE_VERSION: 18.17.x
+    paths: ['Common/**', 'SignallingWebServer/**', 'SS_Test/**']
 
 jobs:
 
@@ -27,20 +22,8 @@ jobs:
     - name: "Checkout source code"
       uses: actions/checkout@v3
 
-    - name: Setup node
-      uses: actions/setup-node@v3
+    - name: "Docker compose"
+      uses: isbang/compose-action@v1.5.1
       with:
-        node-version: "${{ env.NODE_VERSION }}"
-        registry-url: 'https://registry.npmjs.org'
-
-    - name: Run signalling server
-      working-directory: ./SignallingWebServer
-      run: ./platform_scripts/bash/run_local.sh &
-
-    - name: Install library deps
-      working-directory: ./SS_Test
-      run: npm ci
-
-    - name: Run frontend lib tests
-      working-directory: ./SS_Test
-      run: npm run start
+        compose-file: "SS_Test/docker-compose.yml"
+        up-flags: "--build --abort-on-container-exit --exit-code-from tester"

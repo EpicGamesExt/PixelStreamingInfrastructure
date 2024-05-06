@@ -29,7 +29,7 @@ export class AFKOverlay extends ActionOverlay {
 
     /**
      * Construct an Afk overlay
-     * @param parentElement the element this overlay will be inserted into
+     * @param parentElement - the element this overlay will be inserted into
      */
     public constructor(rootDiv: HTMLElement) {
         super(
@@ -45,7 +45,7 @@ export class AFKOverlay extends ActionOverlay {
 
     /**
      * Update the count down spans number for the overlay
-     * @param countdown the count down number to be inserted into the span for updating
+     * @param countdown - the count down number to be inserted into the span for updating
      */
     public updateCountdown(countdown: number): void {
         this.textElement.innerHTML = `<center>No activity detected<br>Disconnecting in <span id="afkCountDownNumber">${countdown}</span> seconds<br>Click to continue<br></center>`;

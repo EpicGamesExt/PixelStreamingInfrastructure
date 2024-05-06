@@ -1,11 +1,11 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 import { LatencyTest } from './LatencyTest';
-import { CandidatePairStats, InitialSettings, Logger, PixelStreaming } from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.4';
-import { AggregatedStats } from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.4';
+import { CandidatePairStats, Logger, PixelStreaming } from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.5';
+import { AggregatedStats } from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.5';
 import { MathUtils } from '../Util/MathUtils';
 import {DataChannelLatencyTest} from "./DataChannelLatencyTest";
-import {PixelStreamingSettings} from "@epicgames-ps/lib-pixelstreamingfrontend-ue5.4/types/DataChannel/InitialSettings";
+import {PixelStreamingSettings} from "@epicgames-ps/lib-pixelstreamingfrontend-ue5.5/types/DataChannel/InitialSettings";
 
 /**
  * A stat structure, an id, the stat string, and the element where it is rendered.
@@ -142,7 +142,7 @@ export class StatsPanel {
             stream.requestLatencyTest();
         };
         this.dataChannelLatencyTest.latencyTestButton.onclick = () => {
-            let started = stream.requestDataChannelLatencyTest({
+            const started = stream.requestDataChannelLatencyTest({
                 duration: 1000,
                 rps: 10,
                 requestSize: 200,
@@ -204,7 +204,7 @@ export class StatsPanel {
 
     /**
      * Handle stats coming in from browser/UE
-     * @param stats the stats structure
+     * @param stats - the stats structure
      */
     public handleStats(stats: AggregatedStats) {
         // format numbering based on the browser language
@@ -319,7 +319,7 @@ export class StatsPanel {
         }
 
         // Store the active candidate pair return a new Candidate pair stat if getActiveCandidate is null
-        let activeCandidatePair = stats.getActiveCandidatePair() != null ? stats.getActiveCandidatePair() : new CandidatePairStats();
+        const activeCandidatePair = stats.getActiveCandidatePair() != null ? stats.getActiveCandidatePair() : new CandidatePairStats();
 
         // RTT
         const netRTT =
@@ -357,15 +357,15 @@ export class StatsPanel {
 
         Logger.Log(
             Logger.GetStackTrace(),
-            `--------- Stats ---------\n ${stats}\n------------------------`,
+            `--------- Stats ---------\n ${JSON.stringify(stats)}\n------------------------`,
             6
         );
     }
 
     /**
      * Adds a new stat to the stats results in the DOM or updates an exiting stat.
-     * @param id The id of the stat to add/update.
-     * @param stat The contents of the stat.
+     * @param id - The id of the stat to add/update.
+     * @param stat - The contents of the stat.
      */
     public addOrUpdateStat(id: string, statLabel: string, stat: string) {
         const statHTML = `${statLabel}: ${stat}`;

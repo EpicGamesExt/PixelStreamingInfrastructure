@@ -3,8 +3,8 @@
 import type {
     NumericParametersIds,
     SettingNumber
-} from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.4';
-import { Logger } from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.4';
+} from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.5';
+import { Logger } from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.5';
 import { SettingUIBase } from './SettingUIBase';
 
 /**
@@ -114,7 +114,7 @@ export class SettingUINumber<
 
     /**
      * Set the label text for the setting.
-     * @param label setting label.
+     * @param label - setting label.
      */
     public set label(inLabel: string) {
         this.settingsTextElem.innerText = inLabel;

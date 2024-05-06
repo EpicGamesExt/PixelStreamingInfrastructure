@@ -2,7 +2,7 @@ name: Releases
 
 on: 
   push:
-    branches: ['UE5.4']
+    branches: ['UE5.5']
     paths: ['RELEASE_VERSION']
 
 jobs:
@@ -25,40 +25,24 @@ jobs:
 
     - uses: actions/setup-node@v3
       with:
-        node-version: '16.x'
+        node-version: '18.17.0'
         registry-url: 'https://registry.npmjs.org'
 
-    - name: Install library deps
+    - name: Build common library
+      working-directory: ./Common
+      run: npm ci && npm run build
+
+    - name: Build frontend library
       working-directory: ./Frontend/library
-      run: npm ci
-
-    - name: Build frontend lib
-      working-directory: ./Frontend/library
-      run: npm run build
-
-    - name: Install ui-library deps
-      working-directory: ./Frontend/ui-library
-      run: npm ci
-
-    - name: NPM link frontend lib into ui-library
-      working-directory: ./Frontend/ui-library
-      run: npm link ../library
+      run: npm ci && npm link ../../Common && npm run build
 
     - name: Build frontend ui-library
       working-directory: ./Frontend/ui-library
-      run: npm run build-all
+      run: npm ci && npm link ../library && npm run build
 
     - name: Install implementations/typescript deps
       working-directory: ./Frontend/implementations/typescript
-      run: npm ci
-
-    - name: NPM link frontend and ui-library into implementations/typescript
-      working-directory: ./Frontend/implementations/typescript
-      run: npm link ../../library ../../ui-library
-
-    - name: Build implementations/typescript
-      working-directory: ./Frontend/implementations/typescript
-      run: npm run build-all
+      run: npm ci && npm link ../../library ../../ui-library && npm run build
 
     - name: Move all content into output directory for archiving
       run: items=(*) && mkdir PixelStreamingInfrastructure-${{ github.ref_name }}-${{ steps.getversion.outputs.version }} && mv ${items[*]} PixelStreamingInfrastructure-${{ github.ref_name }}-${{ steps.getversion.outputs.version }}/
