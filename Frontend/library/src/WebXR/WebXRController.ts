@@ -7,6 +7,7 @@ import { XRGamepadController } from '../Inputs/XRGamepadController';
 import { XrFrameEvent } from '../Util/EventEmitter'
 import { Flags } from '../pixelstreamingfrontend';
 import WebXRLayersPolyfill from '@epicgames-ps/webxr-layers-polyfill';
+import { vec3, mat4, quat } from 'gl-matrix';
 
 export class WebXRController {
     private xrSession: XRSession;
@@ -14,7 +15,11 @@ export class WebXRController {
     private gl: WebGL2RenderingContext;
     private xrFramebuffer: WebGLFramebuffer;
     private xrGLFactory: XRWebGLBinding;
+    private xrMediaFactory: XRMediaBinding;
     private xrProjectionLayer: XRProjectionLayer;
+    private xrQuadLayer: XRQuadLayer = null;
+    private xrViewerPose : XRViewerPose = null;
+    private quadDist = 1.0;
 
     private positionLocation: number;
     private texcoordLocation: number;
@@ -29,6 +34,9 @@ export class WebXRController {
     // Ignore unused, simply initializing this polyfill patches browser API for browser's
     // that do not support the WebXR layers API.
     private xrLayersPolyfill: WebXRLayersPolyfill;
+
+    private leftView: XRView = null;
+    private rightView: XRView = null;
 
     onSessionStarted: EventTarget;
     onSessionEnded: EventTarget;
@@ -114,6 +122,17 @@ export class WebXRController {
 
         const texture: WebGLTexture = this.gl.createTexture();
         this.gl.bindTexture(this.gl.TEXTURE_2D, texture);
+
+        // Create initial texture first time, use glTexSubImage to update
+        this.gl.texImage2D(
+            this.gl.TEXTURE_2D,
+            0,
+            this.gl.RGBA,
+            this.gl.RGBA,
+            this.gl.UNSIGNED_BYTE,
+            this.webRtcController.videoPlayer.getVideoElement()
+        );
+
         // Set the parameters so we can render any size image.
         this.gl.texParameteri(
             this.gl.TEXTURE_2D,
@@ -128,12 +147,12 @@ export class WebXRController {
         this.gl.texParameteri(
             this.gl.TEXTURE_2D,
             this.gl.TEXTURE_MIN_FILTER,
-            this.gl.NEAREST
+            this.gl.LINEAR
         );
         this.gl.texParameteri(
             this.gl.TEXTURE_2D,
             this.gl.TEXTURE_MAG_FILTER,
-            this.gl.NEAREST
+            this.gl.LINEAR
         );
     }
 
@@ -227,55 +246,53 @@ export class WebXRController {
         this.initTexture();
 
         this.xrGLFactory = new XRWebGLBinding(this.xrSession, this.gl);
+        this.xrMediaFactory = new XRMediaBinding(this.xrSession);
 
         session.requestReferenceSpace('local').then((refSpace) => {
             this.xrRefSpace = refSpace;
 
             // Set up the projection layer, this fills the entire XR viewport.
-            this.xrProjectionLayer = this.xrGLFactory.createProjectionLayer({ textureType: "texture" });
+            this.xrProjectionLayer = this.xrGLFactory.createProjectionLayer({ textureType: "texture", depthFormat: 0 });
             this.xrSession.updateRenderState({ layers: [this.xrProjectionLayer] });
 
-            // When WebXR "layers" mode is turned on requesting frames this way will still allow timewarp on devices that support it.
-            // See: https://developer.oculus.com/blog/achieve-better-rendering-and-performance-with-webxr-layers-in-oculus-browser/
+            if(this.xrSession.supportedFrameRates) {
+                session.updateTargetFrameRate(90);
+            }
+
+            // Binding to each new frame to get latest XR updates
             this.xrSession.requestAnimationFrame(this.onXrFrame.bind(this));
         });
 
         this.onSessionStarted.dispatchEvent(new Event('xrSessionStarted'));
+
+        // Tie frame submission to video FPS.
+        // When WebXR "layers" mode is turned on requesting frames this way will still allow timewarp on devices that support it.
+        // See: https://developer.oculus.com/blog/achieve-better-rendering-and-performance-with-webxr-layers-in-oculus-browser/
+        // const sendFrameToXR = () => {
+        //     // Now we have the new frame, send request to XR to do the next frame
+        //     this.renderEyes();
+
+        //     // Re-register the callback to be notified about the next frame.
+        //     this.webRtcController.videoPlayer.getVideoElement().requestVideoFrameCallback(sendFrameToXR);
+        // };
+
+        // // When new video frames comes, send it to XR
+        // this.webRtcController.videoPlayer.getVideoElement().requestVideoFrameCallback(sendFrameToXR);
+
     }
 
-    sendXRDataToUE(pose: XRViewerPose) {
-        // Extract HMD transform matrix and convert from row-major to column-major before sending
-        const mat = pose.transform.matrix;
+    sendXRDataToUE() {
+        // Note: no longer send the `XRHMDTransform` message to UE as the below `XREyeViews` contains all the relevant information.
 
-        // No longer send the XRHMDTransform as the below `XREyeViews` contains all the relevant information.
-        // this.webRtcController.streamMessageController.toStreamerHandlers.get('XRHMDTransform')([
-        //     mat[0], mat[4], mat[8], mat[12],
-        //     mat[1], mat[5], mat[9], mat[13],
-        //     mat[2], mat[6], mat[10], mat[14],
-        //     mat[3], mat[7], mat[11], mat[15]
-        // ]);
-
-        let leftView: XRView = null;
-        let rightView: XRView = null;
-
-        // iterate through each view (eye) in the XRViewerPose.Views[] and send to UE
-        for (const view of pose.views) {
-            if (view.eye === "left") {
-                leftView = view;
-            }
-            else if(view.eye === "right") {
-                rightView = view;
-            }
-        }
-
-        if(leftView == null || rightView == null) {
+        // Send each view (eye) in the XRViewerPose.Views[] and send to UE
+        if(this.leftView == null || this.rightView == null) {
             return;
         }
 
-        const leftEyeTrans = leftView.transform.matrix;
-        const leftEyeProj = leftView.projectionMatrix;
-        const rightEyeTrans = rightView.transform.matrix;
-        const rightEyeProj = rightView.projectionMatrix;
+        const leftEyeTrans = this.leftView.transform.matrix;
+        const leftEyeProj = this.leftView.projectionMatrix;
+        const rightEyeTrans = this.rightView.transform.matrix;
+        const rightEyeProj = this.rightView.projectionMatrix;
 
         // send transform (4x4) and projection matrix (4x4) data for each eye (left first, then right)
         // prettier-ignore
@@ -304,26 +321,14 @@ export class WebXRController {
     }
 
     onXrFrame(time: DOMHighResTimeStamp, frame: XRFrame) {
-        const pose = frame.getViewerPose(this.xrRefSpace);
-        if (pose) {
-            this.sendXRDataToUE(pose);
+        this.xrViewerPose = frame.getViewerPose(this.xrRefSpace);
+        if (this.xrViewerPose) {
+            this.updateViews();
+            this.sendXRDataToUE();
+            this.updateXRQuad();
 
-            // Make video texture available to shader
-            // Only need to make the texture available once as same shader is used each eye
-            this.gl.texImage2D(
-                this.gl.TEXTURE_2D,
-                0,
-                this.gl.RGBA,
-                this.gl.RGBA,
-                this.gl.UNSIGNED_BYTE,
-                this.webRtcController.videoPlayer.getVideoElement()
-            );
-
-            // Go through each eye and render to the layer's "subimage" color buffer
-            for(let view of pose.views){
-                // Draw each half the video element's texture to each eye.
-                this.render(view);
-            }
+            // Uncomment if we are not tying rendering to video fps
+            //this.renderEyes();
         }
 
         if (this.webRtcController.config.isFlagEnabled(Flags.XRControllerInput)) {
@@ -350,7 +355,121 @@ export class WebXRController {
         }));
     }
 
-    private render(eyeView: XRView) {
+    private updateViews() {
+        if(!this.xrViewerPose) {
+            return;
+        }
+        for (const view of this.xrViewerPose.views) {
+            if (view.eye === "left") {
+                this.leftView = view;
+            }
+            else if(view.eye === "right") {
+                this.rightView = view;
+            }
+        }
+    }
+
+    private createQuadLayer() {
+
+        if(this.leftView == null || this.rightView == null) {
+            return;
+        }
+
+        let l = vec3.fromValues(this.leftView.transform.position.x, this.leftView.transform.position.y, this.leftView.transform.position.z);
+        let r = vec3.fromValues(this.rightView.transform.position.x, this.rightView.transform.position.y, this.rightView.transform.position.z);
+        let IPD = vec3.distance(l,r);
+
+        // Set quad width to 1.0 in XR space, based its height and distance from eyes on this constant
+        const quadWidth = 1.0;
+        const nearClip = this.leftView.projectionMatrix[14] / (this.leftView.projectionMatrix[10] - 1.0);
+        const x = (quadWidth  * 0.5) - (IPD * 0.5);
+        const halfHFOVRads = Math.atan(1.0 / this.leftView.projectionMatrix[0]);
+        const halfVFOVRads = Math.atan(1.0 / this.leftView.projectionMatrix[5]);
+
+        // Calculate distance the quad layer should be from the eyes so it covers the entire horizontal field of view (account for perspective)
+        const screenSpaceWidth = (x * nearClip) / (2.0 * Math.tan(halfHFOVRads));
+        this.quadDist =  (x * nearClip) / screenSpaceWidth / 2.0;
+
+        // Calculate the height of the quad layer to cover the entire vertical field of view (account for perspective)
+        let quadHeight = Math.tan(halfVFOVRads) * this.quadDist * 2.0;
+        const screenSpaceHeight = (quadHeight * nearClip) / (2.0 * Math.tan(halfVFOVRads));
+        quadHeight = (quadHeight * nearClip) / screenSpaceHeight / 2.0
+
+        let transform : XRRigidTransform = new XRRigidTransform({x: 0, y: 0, z: -this.quadDist, w: 1}, {x: 0, y: 0, z: 0, w: 1});
+
+        this.xrQuadLayer = this.xrMediaFactory.createQuadLayer(this.webRtcController.videoPlayer.getVideoElement(), {
+            space: this.xrRefSpace,
+            layout: "stereo-left-right",
+            transform: transform,
+            width: quadWidth,
+            height: quadHeight
+        });
+
+        this.xrSession.updateRenderState({ layers: [this.xrQuadLayer] });
+    }
+
+    private updateXRQuad() {
+
+        if(this.xrQuadLayer == null) {
+            this.createQuadLayer();
+        }
+
+        let quadPos = vec3.create();
+
+        let hmdPos = vec3.fromValues(this.xrViewerPose.transform.position.x,
+                                     this.xrViewerPose.transform.position.y,
+                                     this.xrViewerPose.transform.position.z);
+
+        // Find the HMD's forward vector
+        let hmdRot = quat.fromValues(this.xrViewerPose.transform.orientation.x, this.xrViewerPose.transform.orientation.y, this.xrViewerPose.transform.orientation.z, this.xrViewerPose.transform.orientation.w);
+        let hmdForward = vec3.create();
+        vec3.transformQuat(hmdForward, vec3.fromValues(0,0,1), hmdRot);
+
+        // Find the HMD's up vector
+        let hmdUp = vec3.create();
+        vec3.transformQuat(hmdUp, vec3.fromValues(0,1,0), hmdRot);
+
+        // Find the new quad position using hmd's forward vector and quad's distance away
+        let hmdOffset = vec3.create();
+        vec3.scale(hmdOffset, hmdForward, -this.quadDist);
+        vec3.add(quadPos, hmdPos, hmdOffset);
+
+        let transform : XRRigidTransform = new XRRigidTransform(
+            {x: quadPos[0], y: quadPos[1], z: quadPos[2], w: 1}, // position
+            {x: hmdRot[0], y: hmdRot[1], z: hmdRot[2], w: hmdRot[3]} // rotation
+        );
+        this.xrQuadLayer.transform = transform;
+
+    }
+
+    private renderEyes() {
+        if (!this.gl) {
+            return;
+        }
+
+        if(this.leftView == null || this.rightView == null) {
+            return;
+        }
+
+        // Texture for video is still bound.
+        // Update the texture using the video.
+        this.gl.texSubImage2D(
+            this.gl.TEXTURE_2D,
+            0,
+            0,
+            0,
+            this.webRtcController.videoPlayer.getVideoElement().videoWidth,
+            this.webRtcController.videoPlayer.getVideoElement().videoHeight,
+            this.gl.RGBA,
+            this.gl.UNSIGNED_BYTE,
+            this.webRtcController.videoPlayer.getVideoElement()
+        );
+
+        this.renderEye(this.leftView);
+        this.renderEye(this.rightView);
+    }
+
+    private renderEye(eyeView: XRView) {
         if (!this.gl) {
             return;
         }
