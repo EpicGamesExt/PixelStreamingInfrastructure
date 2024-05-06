@@ -121,7 +121,7 @@ export class PixelStreaming {
         this._setupWebRtcTCPRelayDetection = this._setupWebRtcTCPRelayDetection.bind(this)
 
         // Add event listener for the webRtcConnected event
-        this._eventEmitter.addEventListener("webRtcConnected", (webRtcConnectedEvent: WebRtcConnectedEvent) => {
+        this._eventEmitter.addEventListener("webRtcConnected", (_: WebRtcConnectedEvent) => {
 
             // Bind to the stats received event
             this._eventEmitter.addEventListener("statsReceived",  this._setupWebRtcTCPRelayDetection);
@@ -640,13 +640,13 @@ export class PixelStreaming {
     // Sets up to emit the webrtc tcp relay detect event 
     _setupWebRtcTCPRelayDetection(statsReceivedEvent: StatsReceivedEvent) {
         // Get the active candidate pair
-        let activeCandidatePair = statsReceivedEvent.data.aggregatedStats.getActiveCandidatePair();
+        const activeCandidatePair = statsReceivedEvent.data.aggregatedStats.getActiveCandidatePair();
                 
         // Check if the active candidate pair is not null
         if (activeCandidatePair != null) {
 
             // Get the local candidate assigned to the active candidate pair
-            let localCandidate = statsReceivedEvent.data.aggregatedStats.localCandidates.find((candidate) => candidate.id == activeCandidatePair.localCandidateId, null)
+            const localCandidate = statsReceivedEvent.data.aggregatedStats.localCandidates.find((candidate) => candidate.id == activeCandidatePair.localCandidateId, null)
 
             // Check if the local candidate is not null, candidate type is relay and the relay protocol is tcp
             if (localCandidate != null && localCandidate.candidateType == 'relay' && localCandidate.relayProtocol == 'tcp') {

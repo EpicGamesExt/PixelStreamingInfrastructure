@@ -508,7 +508,7 @@ export class Config {
                 Flags.HideUI,
                 'Hide the UI overlay',
                 'Will hide all UI overlay details',
-                settings && settings.hasOwnProperty(Flags.HideUI) ?
+                settings && Object.prototype.hasOwnProperty.call(settings, Flags.HideUI) ?
                     settings[Flags.HideUI] :
                     false,
                 useUrlParams
