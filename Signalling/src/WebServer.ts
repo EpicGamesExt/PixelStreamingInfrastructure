@@ -101,12 +101,6 @@ export class WebServer {
 
         // Request has been sent to site root, send the homepage file
         app.get('/', function (req: any, res: any) {
-            const limiter = RateLimit({
-                windowMs: 60 * 1000,
-                max: config.perMinuteRateLimit
-            });
-            app.use(limiter);
-
             // Try a few paths, see if any resolve to a homepage file the user has set
             const p = path.resolve(path.join(config.root, config.homepageFile));
             if (fs.existsSync(p)) {
@@ -124,14 +118,12 @@ export class WebServer {
 
         /* eslint-enable @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access */
 
-        if (config.perMinuteRateLimit) {
-            const limiter = RateLimit({
-              windowMs: 60 * 1000, // 1 minute
-              max: config.perMinuteRateLimit
-            });
+        const limiter = RateLimit({
+          windowMs: 60 * 1000, // 1 minute
+          max: config.perMinuteRateLimit ? config.perMinuteRateLimit : 3000
+        });
 
-            // apply rate limiter to all requests
-            app.use(limiter);
-        }
+        // apply rate limiter to all requests
+        app.use(limiter);
     }
 }
