@@ -8,6 +8,7 @@ on:
 jobs:
 
   build:
+    if: github.repository == 'EpicGamesExt/PixelStreamingInfrastructure'
     runs-on: ubuntu-latest
     defaults:
       run:
