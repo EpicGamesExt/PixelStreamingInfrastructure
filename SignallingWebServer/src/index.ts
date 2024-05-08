@@ -97,6 +97,9 @@ if (!cli_options.no_config) {
 // merge the configurations
 const options: IProgramOptions = { ...config_file, ...cli_options };
 
+// sanitize starting and ending double quotes on http_root in options from default arguments
+options.http_root = options.http_root.replace(/^"(.*)"$/, '$1');
+
 // save out new configuration (unless disabled)
 if (!options.no_save) {
 
