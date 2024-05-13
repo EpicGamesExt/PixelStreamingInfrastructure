@@ -151,7 +151,12 @@ export class SignallingServer {
         this.streamerRegistry.add(newStreamer);
         newStreamer.transport.on('close', () => { this.streamerRegistry.remove(newStreamer); });
 
-        newStreamer.sendMessage(MessageHelpers.createMessage(Messages.config, this.protocolConfig));
+        // because peer connection options is a general field with all optional fields
+        // it doesnt play nice with mergePartial so we just add it verbatim
+        const message: Messages.config = MessageHelpers.createMessage(Messages.config, this.protocolConfig);
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        message.peerConnectionOptions = this.protocolConfig.peerConnectionOptions;
+        newStreamer.sendMessage(message);
     }
 
     private onPlayerConnected(ws: WebSocket, request: http.IncomingMessage) {
@@ -172,7 +177,12 @@ export class SignallingServer {
         this.playerRegistry.add(newPlayer);
         newPlayer.transport.on('close', () => { this.playerRegistry.remove(newPlayer); });
 
-        newPlayer.sendMessage(MessageHelpers.createMessage(Messages.config, this.protocolConfig));
+        // because peer connection options is a general field with all optional fields
+        // it doesnt play nice with mergePartial so we just add it verbatim
+        const message: Messages.config = MessageHelpers.createMessage(Messages.config, this.protocolConfig);
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        message.peerConnectionOptions = this.protocolConfig.peerConnectionOptions;
+        newPlayer.sendMessage(message);
     }
 
     private onSFUConnected(ws: WebSocket, request: http.IncomingMessage) {
@@ -187,6 +197,11 @@ export class SignallingServer {
             this.playerRegistry.remove(newSFU);
         });
 
-        newSFU.sendMessage(MessageHelpers.createMessage(Messages.config, this.protocolConfig));
+        // because peer connection options is a general field with all optional fields
+        // it doesnt play nice with mergePartial so we just add it verbatim
+        const message: Messages.config = MessageHelpers.createMessage(Messages.config, this.protocolConfig);
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        message.peerConnectionOptions = this.protocolConfig.peerConnectionOptions;
+        newSFU.sendMessage(message);
     }
 }
