@@ -153,7 +153,7 @@ export class SignallingServer {
 
         // because peer connection options is a general field with all optional fields
         // it doesnt play nice with mergePartial so we just add it verbatim
-        let message:Messages.config = MessageHelpers.createMessage(Messages.config, this.protocolConfig);
+        const message:Messages.config = MessageHelpers.createMessage(Messages.config, this.protocolConfig);
         message.peerConnectionOptions = this.protocolConfig.peerConnectionOptions;
         newStreamer.sendMessage(message);
     }
@@ -178,7 +178,7 @@ export class SignallingServer {
 
         // because peer connection options is a general field with all optional fields
         // it doesnt play nice with mergePartial so we just add it verbatim
-        let message:Messages.config = MessageHelpers.createMessage(Messages.config, this.protocolConfig);
+        const message:Messages.config = MessageHelpers.createMessage(Messages.config, this.protocolConfig);
         message.peerConnectionOptions = this.protocolConfig.peerConnectionOptions;
         newPlayer.sendMessage(message);
     }
@@ -197,7 +197,7 @@ export class SignallingServer {
 
         // because peer connection options is a general field with all optional fields
         // it doesnt play nice with mergePartial so we just add it verbatim
-        let message:Messages.config = MessageHelpers.createMessage(Messages.config, this.protocolConfig);
+        const message:Messages.config = MessageHelpers.createMessage(Messages.config, this.protocolConfig);
         message.peerConnectionOptions = this.protocolConfig.peerConnectionOptions;
         newSFU.sendMessage(message);
     }
