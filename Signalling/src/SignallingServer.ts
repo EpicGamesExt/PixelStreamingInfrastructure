@@ -153,7 +153,7 @@ export class SignallingServer {
 
         // because peer connection options is a general field with all optional fields
         // it doesnt play nice with mergePartial so we just add it verbatim
-        const message:Messages.config = MessageHelpers.createMessage(Messages.config, this.protocolConfig);
+        const message: Messages.config = MessageHelpers.createMessage(Messages.config, this.protocolConfig);
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         message.peerConnectionOptions = this.protocolConfig.peerConnectionOptions;
         newStreamer.sendMessage(message);
@@ -179,7 +179,7 @@ export class SignallingServer {
 
         // because peer connection options is a general field with all optional fields
         // it doesnt play nice with mergePartial so we just add it verbatim
-        const message:Messages.config = MessageHelpers.createMessage(Messages.config, this.protocolConfig);
+        const message: Messages.config = MessageHelpers.createMessage(Messages.config, this.protocolConfig);
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         message.peerConnectionOptions = this.protocolConfig.peerConnectionOptions;
         newPlayer.sendMessage(message);
@@ -199,7 +199,7 @@ export class SignallingServer {
 
         // because peer connection options is a general field with all optional fields
         // it doesnt play nice with mergePartial so we just add it verbatim
-        const message:Messages.config = MessageHelpers.createMessage(Messages.config, this.protocolConfig);
+        const message: Messages.config = MessageHelpers.createMessage(Messages.config, this.protocolConfig);
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         message.peerConnectionOptions = this.protocolConfig.peerConnectionOptions;
         newSFU.sendMessage(message);
