@@ -7,7 +7,7 @@ import { XRGamepadController } from '../Inputs/XRGamepadController';
 import { XrFrameEvent } from '../Util/EventEmitter'
 import { Flags } from '../pixelstreamingfrontend';
 import WebXRLayersPolyfill from '@epicgames-ps/webxr-layers-polyfill';
-import { vec3, mat4, quat } from 'gl-matrix';
+import { vec3, quat } from 'gl-matrix';
 
 export class WebXRController {
     private xrSession: XRSession;
@@ -28,12 +28,17 @@ export class WebXRController {
     private positionBuffer: WebGLBuffer;
     private texcoordBuffer: WebGLBuffer;
 
+    private videoTexture: WebGLTexture = null;
+    private prevVideoWidth: number = 0;
+    private prevVideoHeight: number = 0;
+
     private webRtcController: WebRtcPlayerController;
     private xrGamepadController: XRGamepadController;
 
     // Ignore unused, simply initializing this polyfill patches browser API for browser's
     // that do not support the WebXR layers API.
     private xrLayersPolyfill: WebXRLayersPolyfill;
+    private useMediaLayers: Boolean = false;
 
     private leftView: XRView = null;
     private rightView: XRView = null;
@@ -116,44 +121,71 @@ export class WebXRController {
         );
     }
 
-    initTexture(){
-        // Create our texture that we use in our shader
-        // and bind it once because we never use any other texture.
+    updateVideoTexture(){
 
-        const texture: WebGLTexture = this.gl.createTexture();
-        this.gl.bindTexture(this.gl.TEXTURE_2D, texture);
+        if(!this.videoTexture){
+            // Create our texture that we use in our shader
+            // and bind it once because we never use any other texture.
+            this.videoTexture = this.gl.createTexture();
+            this.gl.bindTexture(this.gl.TEXTURE_2D, this.videoTexture);
 
-        // Create initial texture first time, use glTexSubImage to update
-        this.gl.texImage2D(
-            this.gl.TEXTURE_2D,
-            0,
-            this.gl.RGBA,
-            this.gl.RGBA,
-            this.gl.UNSIGNED_BYTE,
-            this.webRtcController.videoPlayer.getVideoElement()
-        );
+            // Set the parameters so we can render any size image.
+            this.gl.texParameteri(
+                this.gl.TEXTURE_2D,
+                this.gl.TEXTURE_WRAP_S,
+                this.gl.CLAMP_TO_EDGE
+            );
+            this.gl.texParameteri(
+                this.gl.TEXTURE_2D,
+                this.gl.TEXTURE_WRAP_T,
+                this.gl.CLAMP_TO_EDGE
+            );
+            this.gl.texParameteri(
+                this.gl.TEXTURE_2D,
+                this.gl.TEXTURE_MIN_FILTER,
+                this.gl.LINEAR
+            );
+            this.gl.texParameteri(
+                this.gl.TEXTURE_2D,
+                this.gl.TEXTURE_MAG_FILTER,
+                this.gl.LINEAR
+            );
+        }
 
-        // Set the parameters so we can render any size image.
-        this.gl.texParameteri(
-            this.gl.TEXTURE_2D,
-            this.gl.TEXTURE_WRAP_S,
-            this.gl.CLAMP_TO_EDGE
-        );
-        this.gl.texParameteri(
-            this.gl.TEXTURE_2D,
-            this.gl.TEXTURE_WRAP_T,
-            this.gl.CLAMP_TO_EDGE
-        );
-        this.gl.texParameteri(
-            this.gl.TEXTURE_2D,
-            this.gl.TEXTURE_MIN_FILTER,
-            this.gl.LINEAR
-        );
-        this.gl.texParameteri(
-            this.gl.TEXTURE_2D,
-            this.gl.TEXTURE_MAG_FILTER,
-            this.gl.LINEAR
-        );
+        let videoHeight = this.webRtcController.videoPlayer.getVideoElement().videoHeight;
+        let videoWidth = this.webRtcController.videoPlayer.getVideoElement().videoWidth;
+
+        if(this.prevVideoHeight != videoHeight || this.prevVideoWidth != videoWidth){
+            // Do full update of texture if dimensions do not match
+            this.gl.texImage2D(
+                this.gl.TEXTURE_2D,
+                0,
+                this.gl.RGBA,
+                videoWidth,
+                videoHeight,
+                0,
+                this.gl.RGBA,
+                this.gl.UNSIGNED_BYTE,
+                this.webRtcController.videoPlayer.getVideoElement()
+            );
+        } else {
+            // If dimensions match just update the sub region
+            this.gl.texSubImage2D(
+                this.gl.TEXTURE_2D,
+                0,
+                0,
+                0,
+                videoWidth,
+                videoHeight,
+                this.gl.RGBA,
+                this.gl.UNSIGNED_BYTE,
+                this.webRtcController.videoPlayer.getVideoElement()
+            );
+        }
+
+        // Update prev video width/height
+        this.prevVideoHeight = videoHeight;
+        this.prevVideoWidth = videoWidth;
     }
 
     initBuffers(){
@@ -241,12 +273,14 @@ export class WebXRController {
 
         // Initialization
         this.initGL();
-        this.initShaders();
-        this.initBuffers();
-        this.initTexture();
+
+        // If we are not using media layers and rendering everything ourselves init shaders, buffers, textures
+        if(!this.useMediaLayers){
+            this.initShaders();
+            this.initBuffers();
+        }
 
         this.xrGLFactory = new XRWebGLBinding(this.xrSession, this.gl);
-        this.xrMediaFactory = new XRMediaBinding(this.xrSession);
 
         session.requestReferenceSpace('local').then((refSpace) => {
             this.xrRefSpace = refSpace;
@@ -255,8 +289,13 @@ export class WebXRController {
             this.xrProjectionLayer = this.xrGLFactory.createProjectionLayer({ textureType: "texture", depthFormat: 0 });
             this.xrSession.updateRenderState({ layers: [this.xrProjectionLayer] });
 
+            // Update target framerate to 90 fps if 90 fps is supported in this XR device
             if(this.xrSession.supportedFrameRates) {
-                session.updateTargetFrameRate(90);
+                for (let frameRate of this.xrSession.supportedFrameRates) {
+                    if(frameRate == 90){
+                        session.updateTargetFrameRate(90);
+                    }
+                }
             }
 
             // Binding to each new frame to get latest XR updates
@@ -325,10 +364,14 @@ export class WebXRController {
         if (this.xrViewerPose) {
             this.updateViews();
             this.sendXRDataToUE();
-            this.updateXRQuad();
 
-            // Uncomment if we are not tying rendering to video fps
-            //this.renderEyes();
+            if(this.useMediaLayers){
+                // Use the quad media layer to show the video
+                this.updateXRQuad();
+            } else {
+                // Render the video to each eye ourselves
+                this.renderEyes();
+            }
         }
 
         if (this.webRtcController.config.isFlagEnabled(Flags.XRControllerInput)) {
@@ -397,6 +440,8 @@ export class WebXRController {
 
         let transform : XRRigidTransform = new XRRigidTransform({x: 0, y: 0, z: -this.quadDist, w: 1}, {x: 0, y: 0, z: 0, w: 1});
 
+        this.xrMediaFactory = new XRMediaBinding(this.xrSession);
+
         this.xrQuadLayer = this.xrMediaFactory.createQuadLayer(this.webRtcController.videoPlayer.getVideoElement(), {
             space: this.xrRefSpace,
             layout: "stereo-left-right",
@@ -451,20 +496,7 @@ export class WebXRController {
             return;
         }
 
-        // Texture for video is still bound.
-        // Update the texture using the video.
-        this.gl.texSubImage2D(
-            this.gl.TEXTURE_2D,
-            0,
-            0,
-            0,
-            this.webRtcController.videoPlayer.getVideoElement().videoWidth,
-            this.webRtcController.videoPlayer.getVideoElement().videoHeight,
-            this.gl.RGBA,
-            this.gl.UNSIGNED_BYTE,
-            this.webRtcController.videoPlayer.getVideoElement()
-        );
-
+        this.updateVideoTexture();
         this.renderEye(this.leftView);
         this.renderEye(this.rightView);
     }
