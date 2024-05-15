@@ -141,7 +141,7 @@ IF "%FRONTEND_DIR%"=="" (
 )
 
 rem try to make it an absolute path
-call :NormalizePath "%FRONTEND_DIR%"
+call :NormalizePath %FRONTEND_DIR%
 set FRONTEND_DIR=%RETVAL%
 
 rem Set this for webpack
