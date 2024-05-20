@@ -132,12 +132,10 @@ rem NOTE: We want to use our NodeJS (not system NodeJS!) to build the web fronte
 rem Save our current directory (the NodeJS dir) in a variable
 set NODE_DIR=%SCRIPT_DIR%node
 
-rem Prepend NODE_DIR to PATH temporarily
-set "OLDPATH=%PATH%"
-set "PATH=%PATH%;%NODE_DIR%"
-
 IF "%FRONTEND_DIR%"=="" (
     set FRONTEND_DIR="%SCRIPT_DIR%..\..\www"
+) else (
+    set FRONTEND_DIR="%FRONTEND_DIR%"
 )
 
 rem try to make it an absolute path
@@ -147,45 +145,72 @@ set FRONTEND_DIR=%RETVAL%
 rem Set this for webpack
 set WEBPACK_OUTPUT_PATH=%FRONTEND_DIR%
 
-IF NOT exist %FRONTEND_DIR%\player.html (
+IF NOT exist "%FRONTEND_DIR%\player.html" (
     set FORCE_BUILD=1
+)
+
+rem Query the registry to get the value of the PATH variable for the current user (We DO NOT want the system PATH - %PATH% combines user and system PATH.)
+for /f "tokens=2*" %%A in ('reg query "HKCU\Environment" /v PATH ^| find "PATH"') do (
+    set "USER_PATH=%%B"
+)
+
+rem Store OLD_PATH NODE_PATH
+set OLD_PATH=%USER_PATH%
+rem Update this processes PATH to have node dir (this WILL NOT persist outside this process which is a problem for NPM run scripts we use)
+set PATH=%PATH%%NODE_DIR%
+set PATH_LENGTH=0
+for %%A in ("!OLD_PATH!") do set "PATH_LENGTH=%%~zA"
+
+IF !PATH_LENGTH! GTR 1024 (
+    echo "Your PATH is greater than 1024 characters, cmd setx cannot change it. Either shorten your user's PATH contents or hope you have NodeJS in your PATH already..."
+) else (
+    rem Set new user PATH for all processes
+    setx PATH "%OLD_PATH%%NODE_DIR%"
+    set PATH_NEEDS_RESTORE=1
 )
 
 IF "%FORCE_BUILD%"=="1" (
     rem We could replace this all with a single npm script that does all this. we do have several build-all scripts already
     rem but this does give a good reference about the dependency chain for all of this.
     rem Note: npm link will also run npm install so we dont need that here
+    echo Testing common library...
+    pushd %CD%\Common
+    call "%SCRIPT_DIR%node\npm" run compile
+    popd
     echo Building common library...
     echo ----------------------------
     pushd %CD%\Common
-    call %SCRIPT_DIR%\node\npm install
-    call %SCRIPT_DIR%\node\npm run build
+    call "%SCRIPT_DIR%node\npm" install
+    call "%SCRIPT_DIR%node\npm" run build
     popd
     echo Building frontend library...
     echo ----------------------------
     pushd %CD%\Frontend\library
-    call %SCRIPT_DIR%\node\npm link ../../Common
-    call %SCRIPT_DIR%\node\npm run build
+    call "%SCRIPT_DIR%node\npm" link ../../Common
+    call "%SCRIPT_DIR%node\npm" run build
     popd
     echo Building frontend-ui library...
     echo ----------------------------
     pushd %CD%\Frontend\ui-library
-    call %SCRIPT_DIR%\node\npm link ../library
-    call %SCRIPT_DIR%\node\npm run build
+    call "%SCRIPT_DIR%node\npm" link ../library
+    call "%SCRIPT_DIR%node\npm" run build
     popd
     echo Building Epic Games reference frontend...
     echo ----------------------------
     pushd %CD%\Frontend\implementations\typescript
-    call %SCRIPT_DIR%\node\npm link ../../library ../../ui-library
-    call %SCRIPT_DIR%\node\npm run build
+    call "%SCRIPT_DIR%node\npm" link ../../library ../../ui-library
+    call "%SCRIPT_DIR%node\npm" run build
     popd
     popd
 ) else (
     echo Skipping rebuilding frontend... %FRONTEND_DIR% has content already, use --build to force a frontend rebuild.
 )
 
-rem Restore path
-set "PATH=%OLDPATH%"
+IF "%PATH_NEEDS_RESTORE%"=="1" (
+    rem Restore PATH
+    setx PATH "%OLD_PATH%"
+)
+
 exit /b
 
 :SetupCoturn
@@ -271,13 +296,13 @@ pushd %SCRIPT_DIR%\..\..\
 echo Building signalling library...
 echo ----------------------------
 pushd ..\Signalling
-call %SCRIPT_DIR%\node\npm link ../Common
-call %SCRIPT_DIR%\node\npm run build
+call "%SCRIPT_DIR%node\npm" link ../Common
+call "%SCRIPT_DIR%node\npm" run build
 popd
 echo Building wilbur...
 echo ----------------------------
-call %SCRIPT_DIR%\node\npm link ../Signalling
-call %SCRIPT_DIR%\node\npm run build
+call "%SCRIPT_DIR%node\npm" link ../Signalling
+call "%SCRIPT_DIR%node\npm" run build
 call %NPM% run start -- %SERVER_ARGS%
 exit /b
 
