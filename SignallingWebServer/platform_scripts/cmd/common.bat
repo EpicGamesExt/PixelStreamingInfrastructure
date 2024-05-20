@@ -154,18 +154,18 @@ for /f "tokens=2*" %%A in ('reg query "HKCU\Environment" /v PATH ^| find "PATH"'
     set "USER_PATH=%%B"
 )
 
-rem Store OLD_PATH NODE_PATH
+rem Store user's PATH in OLD_PATH
 set OLD_PATH=%USER_PATH%
 rem Update this processes PATH to have node dir (this WILL NOT persist outside this process which is a problem for NPM run scripts we use)
 set PATH=%PATH%%NODE_DIR%
 set PATH_LENGTH=0
-for %%A in ("%OLD_PATH%%NODE_DIR%") do set "PATH_LENGTH=%%~zA"
+for %%A in ("%NODE_DIR%;%OLD_PATH%") do set "PATH_LENGTH=%%~zA"
 
 IF !PATH_LENGTH! GTR 1024 (
     echo "Your PATH is greater than 1024 characters, cmd setx cannot change it. Either shorten your user's PATH contents or hope you have NodeJS in your PATH already..."
 ) else (
     rem Set new user PATH for all processes
-    setx PATH "%OLD_PATH%%NODE_DIR%"
+    setx PATH "%NODE_DIR%;%OLD_PATH%"
     set PATH_NEEDS_RESTORE=1
 )
 
