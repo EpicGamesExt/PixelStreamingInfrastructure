@@ -157,7 +157,7 @@ for /f "tokens=2*" %%A in ('reg query "HKCU\Environment" /v PATH ^| find "PATH"'
 rem Store user's PATH in OLD_PATH
 set OLD_PATH=%USER_PATH%
 rem Update this processes PATH to have node dir (this WILL NOT persist outside this process which is a problem for NPM run scripts we use)
-set PATH=%PATH%%NODE_DIR%
+set PATH="%NODE_DIR%;%PATH%"
 set PATH_LENGTH=0
 for %%A in ("%NODE_DIR%;%OLD_PATH%") do set "PATH_LENGTH=%%~zA"
 
@@ -173,10 +173,6 @@ IF "%FORCE_BUILD%"=="1" (
     rem We could replace this all with a single npm script that does all this. we do have several build-all scripts already
     rem but this does give a good reference about the dependency chain for all of this.
     rem Note: npm link will also run npm install so we dont need that here
-    echo Testing common library...
-    pushd %CD%\Common
-    call "%SCRIPT_DIR%node\npm" run compile
-    popd
     echo Building common library...
     echo ----------------------------
     pushd %CD%\Common
