@@ -237,7 +237,7 @@ call :SetupCoturn
 exit /b
 
 :SetPublicIP
-FOR /f %%A IN ('powershell -command "(Invoke-Webrequest "http://api.ipify.org").content"') DO set PUBLIC_IP=%%A
+FOR /f %%A IN ('curl http://api.ipify.org') DO set PUBLIC_IP=%%A
 Echo External IP is : %PUBLIC_IP%
 exit /b
 
@@ -250,13 +250,15 @@ IF "%DEFAULT_TURN%"=="1" (
 IF "%DEFAULT_STUN%"=="1" (
     set STUN_SERVER=stun.l.google.com:19302
 )
-FOR /f %%A IN ('powershell -command "(Test-Connection -ComputerName (hostname) -Count 1  | Select IPV4Address).IPV4Address.IPAddressToString"') DO set LOCAL_IP=%%A
+
+rem Ping own computer name to get local IP
+FOR /F "delims=[] tokens=2" %%A in ('ping -4 -n 1 %ComputerName% ^| findstr [') do set LOCAL_IP=%%A
 FOR /F "tokens=1,2 delims=:" %%i in ("%TURN_SERVER%") do (
     set TURN_PORT=%j
 )
 IF "%TURN_PORT%"=="" ( set TURN_PORT=3478 )
 
-set TURN_PROCESS=%SCRIPT_DIR%coturn\turnserver.exe
+set TURN_PROCESS=turnserver.exe
 set TURN_REALM=PixelStreaming
 set TURN_ARGS=-c ..\..\..\turnserver.conf --allowed-peer-ip=%LOCAL_IP% -p %TURN_PORT% -r %TURN_REALM% -X %PUBLIC_IP% -E %LOCAL_IP% -L %LOCAL_IP% --no-cli --no-tls --no-dtls --pidfile `"C:\coturn.pid`" -f -a -v -u %TURN_USER%:%TURN_PASS%
 
@@ -268,7 +270,7 @@ if "%START_TURN%"=="1" (
                 IF "%1"=="bg" (
                     start "%TURN_PROCESS%" %TURN_PROCESS% %TURN_ARGS%
                 ) else (
-                    call %TURN_PROCESS% %TURN_ARGS%
+                    call "%TURN_PROCESS%" %TURN_ARGS%
                 )
                 popd
             )
