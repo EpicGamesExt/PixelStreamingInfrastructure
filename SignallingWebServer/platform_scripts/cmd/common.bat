@@ -157,7 +157,7 @@ for /f "tokens=2*" %%A in ('reg query "HKCU\Environment" /v PATH ^| find "PATH"'
 rem Store user's PATH in OLD_PATH
 set OLD_PATH=%USER_PATH%
 rem Update this processes PATH to have node dir (this WILL NOT persist outside this process which is a problem for NPM run scripts we use)
-set PATH="%NODE_DIR%;%PATH%"
+set PATH=%NODE_DIR%;%PATH%
 set PATH_LENGTH=0
 for %%A in ("%NODE_DIR%;%OLD_PATH%") do set "PATH_LENGTH=%%~zA"
 
