@@ -240,6 +240,7 @@ end
 | Param Name | Type | Description |
 |-|-|-|
 | peerConnectionOptions | Object | The object describing the peer connection options for this server. |
+| protocolVersion | string | The signalling protocol version this [Signalling Server](#term-signallingserver) supports. |
 
 ### identify<a name="signalling-identify"></a>
 
