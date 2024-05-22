@@ -28,7 +28,7 @@ WebServer.
 
 #### Defined in
 
-[WebServer.ts:26](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1d8a258/Signalling/src/WebServer.ts#L26)
+[WebServer.ts:25](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Signalling/src/WebServer.ts#L25)
 
 ___
 
@@ -38,7 +38,7 @@ ___
 
 #### Defined in
 
-[WebServer.ts:20](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1d8a258/Signalling/src/WebServer.ts#L20)
+[WebServer.ts:19](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Signalling/src/WebServer.ts#L19)
 
 ___
 
@@ -48,17 +48,17 @@ ___
 
 #### Defined in
 
-[WebServer.ts:32](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1d8a258/Signalling/src/WebServer.ts#L32)
+[WebServer.ts:31](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Signalling/src/WebServer.ts#L31)
 
 ___
 
 ### https\_redirect
 
-• `Optional` **https\_redirect**: `Boolean`
+• `Optional` **https\_redirect**: `boolean`
 
 #### Defined in
 
-[WebServer.ts:41](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1d8a258/Signalling/src/WebServer.ts#L41)
+[WebServer.ts:40](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Signalling/src/WebServer.ts#L40)
 
 ___
 
@@ -68,7 +68,7 @@ ___
 
 #### Defined in
 
-[WebServer.ts:29](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1d8a258/Signalling/src/WebServer.ts#L29)
+[WebServer.ts:28](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Signalling/src/WebServer.ts#L28)
 
 ___
 
@@ -78,7 +78,7 @@ ___
 
 #### Defined in
 
-[WebServer.ts:23](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1d8a258/Signalling/src/WebServer.ts#L23)
+[WebServer.ts:22](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Signalling/src/WebServer.ts#L22)
 
 ___
 
@@ -88,7 +88,7 @@ ___
 
 #### Defined in
 
-[WebServer.ts:38](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1d8a258/Signalling/src/WebServer.ts#L38)
+[WebServer.ts:37](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Signalling/src/WebServer.ts#L37)
 
 ___
 
@@ -98,4 +98,4 @@ ___
 
 #### Defined in
 
-[WebServer.ts:35](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1d8a258/Signalling/src/WebServer.ts#L35)
+[WebServer.ts:34](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Signalling/src/WebServer.ts#L34)

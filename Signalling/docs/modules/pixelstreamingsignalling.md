@@ -10,6 +10,7 @@
 - [IMessageLogger](pixelstreamingsignalling.md#imessagelogger)
 - [IPlayer](pixelstreamingsignalling.md#iplayer)
 - [IPlayerInfo](pixelstreamingsignalling.md#iplayerinfo)
+- [IProtoLogObj](pixelstreamingsignalling.md#iprotologobj)
 - [IServerConfig](pixelstreamingsignalling.md#iserverconfig)
 - [IStreamer](pixelstreamingsignalling.md#istreamer)
 - [IStreamerInfo](pixelstreamingsignalling.md#istreamerinfo)
@@ -51,6 +52,12 @@ ___
 ### IPlayerInfo
 
 Re-exports [IPlayerInfo](../interfaces/PlayerRegistry.IPlayerInfo.md)
+
+___
+
+### IProtoLogObj
+
+Re-exports [IProtoLogObj](../interfaces/LoggingUtils.IProtoLogObj.md)
 
 ___
 

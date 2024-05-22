@@ -36,7 +36,7 @@ a new SignallingServer object.
 
 #### Defined in
 
-[SignallingServer.ts:21](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1d8a258/Signalling/src/SignallingServer.ts#L21)
+[SignallingServer.ts:21](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Signalling/src/SignallingServer.ts#L21)
 
 ___
 
@@ -46,7 +46,7 @@ ___
 
 #### Defined in
 
-[SignallingServer.ts:24](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1d8a258/Signalling/src/SignallingServer.ts#L24)
+[SignallingServer.ts:24](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Signalling/src/SignallingServer.ts#L24)
 
 ___
 
@@ -56,7 +56,7 @@ ___
 
 #### Defined in
 
-[SignallingServer.ts:51](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1d8a258/Signalling/src/SignallingServer.ts#L51)
+[SignallingServer.ts:51](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Signalling/src/SignallingServer.ts#L51)
 
 ___
 
@@ -66,7 +66,7 @@ ___
 
 #### Defined in
 
-[SignallingServer.ts:60](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1d8a258/Signalling/src/SignallingServer.ts#L60)
+[SignallingServer.ts:60](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Signalling/src/SignallingServer.ts#L60)
 
 ___
 
@@ -76,7 +76,7 @@ ___
 
 #### Defined in
 
-[SignallingServer.ts:54](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1d8a258/Signalling/src/SignallingServer.ts#L54)
+[SignallingServer.ts:54](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Signalling/src/SignallingServer.ts#L54)
 
 ___
 
@@ -86,17 +86,17 @@ ___
 
 #### Defined in
 
-[SignallingServer.ts:57](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1d8a258/Signalling/src/SignallingServer.ts#L57)
+[SignallingServer.ts:57](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Signalling/src/SignallingServer.ts#L57)
 
 ___
 
 ### peerOptions
 
-• **peerOptions**: `any`
+• **peerOptions**: `unknown`
 
 #### Defined in
 
-[SignallingServer.ts:36](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1d8a258/Signalling/src/SignallingServer.ts#L36)
+[SignallingServer.ts:36](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Signalling/src/SignallingServer.ts#L36)
 
 ___
 
@@ -106,17 +106,17 @@ ___
 
 #### Defined in
 
-[SignallingServer.ts:30](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1d8a258/Signalling/src/SignallingServer.ts#L30)
+[SignallingServer.ts:30](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Signalling/src/SignallingServer.ts#L30)
 
 ___
 
 ### playerWsOptions
 
-• `Optional` **playerWsOptions**: `any`
+• `Optional` **playerWsOptions**: `ServerOptions`\<typeof `WebSocket`, typeof `IncomingMessage`\>
 
 #### Defined in
 
-[SignallingServer.ts:42](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1d8a258/Signalling/src/SignallingServer.ts#L42)
+[SignallingServer.ts:42](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Signalling/src/SignallingServer.ts#L42)
 
 ___
 
@@ -126,7 +126,7 @@ ___
 
 #### Defined in
 
-[SignallingServer.ts:63](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1d8a258/Signalling/src/SignallingServer.ts#L63)
+[SignallingServer.ts:63](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Signalling/src/SignallingServer.ts#L63)
 
 ___
 
@@ -136,7 +136,7 @@ ___
 
 #### Defined in
 
-[SignallingServer.ts:66](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1d8a258/Signalling/src/SignallingServer.ts#L66)
+[SignallingServer.ts:66](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Signalling/src/SignallingServer.ts#L66)
 
 ___
 
@@ -146,17 +146,17 @@ ___
 
 #### Defined in
 
-[SignallingServer.ts:33](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1d8a258/Signalling/src/SignallingServer.ts#L33)
+[SignallingServer.ts:33](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Signalling/src/SignallingServer.ts#L33)
 
 ___
 
 ### sfuWsOptions
 
-• `Optional` **sfuWsOptions**: `any`
+• `Optional` **sfuWsOptions**: `ServerOptions`\<typeof `WebSocket`, typeof `IncomingMessage`\>
 
 #### Defined in
 
-[SignallingServer.ts:45](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1d8a258/Signalling/src/SignallingServer.ts#L45)
+[SignallingServer.ts:45](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Signalling/src/SignallingServer.ts#L45)
 
 ___
 
@@ -166,17 +166,17 @@ ___
 
 #### Defined in
 
-[SignallingServer.ts:27](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1d8a258/Signalling/src/SignallingServer.ts#L27)
+[SignallingServer.ts:27](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Signalling/src/SignallingServer.ts#L27)
 
 ___
 
 ### streamerWsOptions
 
-• `Optional` **streamerWsOptions**: `any`
+• `Optional` **streamerWsOptions**: `ServerOptions`\<typeof `WebSocket`, typeof `IncomingMessage`\>
 
 #### Defined in
 
-[SignallingServer.ts:39](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1d8a258/Signalling/src/SignallingServer.ts#L39)
+[SignallingServer.ts:39](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Signalling/src/SignallingServer.ts#L39)
 
 ___
 
@@ -186,4 +186,4 @@ ___
 
 #### Defined in
 
-[SignallingServer.ts:48](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1d8a258/Signalling/src/SignallingServer.ts#L48)
+[SignallingServer.ts:48](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Signalling/src/SignallingServer.ts#L48)
