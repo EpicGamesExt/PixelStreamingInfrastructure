@@ -300,6 +300,13 @@ exit /b
 
 :BuildWilbur
 pushd %SCRIPT_DIR%\..\..\
+pushd ..\Common
+IF NOT EXIST build\ (
+    echo Building common library...
+    echo ------------------------
+    call "%SCRIPT_DIR%node\npm" run build
+)
+popd
 echo Building signalling library...
 echo ----------------------------
 pushd ..\Signalling
