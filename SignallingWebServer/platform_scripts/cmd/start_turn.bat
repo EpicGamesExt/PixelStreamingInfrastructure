@@ -23,4 +23,4 @@ goto :eof
 :SetupTurnStun
 :PrintConfig
 :StartWilbur
-%~dp0common.bat %*
+"%~dp0common.bat" %*
