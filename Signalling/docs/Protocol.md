@@ -9,46 +9,6 @@ Major version number - breaking protocol change such as a required new message o
 Minor version number - independent new message.  
 Hotfix version - a non-breaking new field in an existing message type.  
 
-## Table of Contents
-- [Terms](#terms)
-- [Example Streaming Message Sequence](#example-message-sequence)
-- [Player Sent Messages](#source-player)
-	- [answer](#player-answer)
-	- [dataChannelRequest](#player-datachannelrequest)
-	- [iceCandidate](#player-icecandidate)
-	- [listStreamers](#player-liststreamers)
-	- [offer](#player-offer)
-	- [peerDataChannelsReady](#player-peerdatachannelsready)
-	- [stats](#player-stats)
-	- [subscribe](#player-subscribe)
-	- [unsubscribe](#player-unsubscribe)
-- [SFU Sent Messages](#source-sfu)
-	- [answer](#sfu-answer)
-	- [offer](#sfu-offer)
-	- [peerDataChannels](#sfu-peerdatachannels)
-	- [streamerDataChannels](#sfu-streamerdatachannels)
-    - [startStreaming](#sfu-startstreaming)
-    - [stopStreaming](#sfu-stopstreaming)
-- [Signalling Server Sent Messages](#source-signalling)
-	- [config](#signalling-config)
-	- [identify](#signalling-identify)
-    - [endpointIdConfirm](#signalling-endpointidconfirm)
-	- [streamerIdChanged](#signalling-streameridchanged)
-	- [playerConnected](#signalling-playerconnected)
-	- [playerCount](#signalling-playercount)
-	- [playerDisconnected](#signalling-playerdisconnected)
-	- [pong](#signalling-pong)
-	- [streamerDisconnected](#signalling-streamerDisconnected)
-	- [streamerList](#signalling-streamerlist)
-- [Streamer Sent Message](#source-streamer)
-	- [answer](#streamer-answer)
-	- [disconnectPlayer](#streamer-disconnectplayer)
-	- [endpointId](#streamer-endpointid)
-	- [iceCandidate](#streamer-icecandidate)
-	- [layerPreference](#streamer-layerpreference)
-	- [offer](#streamer-offer)
-	- [ping](#streamer-ping)
-
 ## Terms<a name="terms"></a>
 
 ### Signalling Server<a name="term-signallingserver"></a>
