@@ -334,7 +334,7 @@ function start_process() {
     if [[ "${NO_SUDO}" == 1 ]]; then
         eval $(echo "$@" | sed 's/sudo//g')
     else
-        eval $@
+        eval "$@"
     fi
 }
 
@@ -357,7 +357,7 @@ function start_wilbur() {
     echo "Starting wilbur signalling server use ctrl-c to exit"
     echo "----------------------------------"
     
-    start_process "sudo PATH=$PATH ${NPM} start -- ${SERVER_ARGS}"
+    start_process "sudo PATH=\"$PATH\" ${NPM} start -- ${SERVER_ARGS}"
 
     popd > /dev/null
 }
