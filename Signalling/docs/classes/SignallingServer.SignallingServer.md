@@ -43,7 +43,7 @@ players and optionally SFU connections.
 
 #### Defined in
 
-[SignallingServer.ts:86](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1d8a258/Signalling/src/SignallingServer.ts#L86)
+[SignallingServer.ts:90](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Signalling/src/SignallingServer.ts#L90)
 
 ## Properties
 
@@ -53,7 +53,7 @@ players and optionally SFU connections.
 
 #### Defined in
 
-[SignallingServer.ts:75](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1d8a258/Signalling/src/SignallingServer.ts#L75)
+[SignallingServer.ts:79](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Signalling/src/SignallingServer.ts#L79)
 
 ___
 
@@ -63,17 +63,17 @@ ___
 
 #### Defined in
 
-[SignallingServer.ts:78](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1d8a258/Signalling/src/SignallingServer.ts#L78)
+[SignallingServer.ts:82](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Signalling/src/SignallingServer.ts#L82)
 
 ___
 
 ### protocolConfig
 
-• **protocolConfig**: `any`
+• **protocolConfig**: `ProtocolConfig`
 
 #### Defined in
 
-[SignallingServer.ts:76](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1d8a258/Signalling/src/SignallingServer.ts#L76)
+[SignallingServer.ts:80](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Signalling/src/SignallingServer.ts#L80)
 
 ___
 
@@ -83,7 +83,7 @@ ___
 
 #### Defined in
 
-[SignallingServer.ts:79](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1d8a258/Signalling/src/SignallingServer.ts#L79)
+[SignallingServer.ts:83](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Signalling/src/SignallingServer.ts#L83)
 
 ___
 
@@ -93,4 +93,4 @@ ___
 
 #### Defined in
 
-[SignallingServer.ts:77](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1d8a258/Signalling/src/SignallingServer.ts#L77)
+[SignallingServer.ts:81](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Signalling/src/SignallingServer.ts#L81)

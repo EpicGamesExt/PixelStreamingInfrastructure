@@ -57,7 +57,7 @@ EventEmitter.constructor
 
 #### Defined in
 
-[Transport/WebSocketTransport.ts:22](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1d8a258/Common/src/Transport/WebSocketTransport.ts#L22)
+[Transport/WebSocketTransport.ts:22](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Common/src/Transport/WebSocketTransport.ts#L22)
 
 ## Properties
 
@@ -67,13 +67,13 @@ EventEmitter.constructor
 
 #### Defined in
 
-[Transport/WebSocketTransport.ts:19](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1d8a258/Common/src/Transport/WebSocketTransport.ts#L19)
+[Transport/WebSocketTransport.ts:19](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Common/src/Transport/WebSocketTransport.ts#L19)
 
 ___
 
 ### onMessage
 
-• **onMessage**: (`msg`: [`BaseMessage`](../interfaces/Messages_base_message.BaseMessage.md)) => `void`
+• `Optional` **onMessage**: (`msg`: [`BaseMessage`](../interfaces/Messages_base_message.BaseMessage.md)) => `void`
 
 Callback filled in by the SignallingProtocol and should be called by the transport when a new message arrives.
 
@@ -97,17 +97,17 @@ Callback filled in by the SignallingProtocol and should be called by the transpo
 
 #### Defined in
 
-[Transport/WebSocketTransport.ts:35](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1d8a258/Common/src/Transport/WebSocketTransport.ts#L35)
+[Transport/WebSocketTransport.ts:37](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Common/src/Transport/WebSocketTransport.ts#L37)
 
 ___
 
 ### webSocket
 
-• **webSocket**: `WebSocket`
+• `Optional` **webSocket**: `WebSocket`
 
 #### Defined in
 
-[Transport/WebSocketTransport.ts:20](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1d8a258/Common/src/Transport/WebSocketTransport.ts#L20)
+[Transport/WebSocketTransport.ts:20](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Common/src/Transport/WebSocketTransport.ts#L20)
 
 ## Methods
 
@@ -123,7 +123,7 @@ Closes the Websocket connection
 
 #### Defined in
 
-[Transport/WebSocketTransport.ts:175](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1d8a258/Common/src/Transport/WebSocketTransport.ts#L175)
+[Transport/WebSocketTransport.ts:185](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Common/src/Transport/WebSocketTransport.ts#L185)
 
 ___
 
@@ -151,7 +151,7 @@ If there is a connection
 
 #### Defined in
 
-[Transport/WebSocketTransport.ts:42](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1d8a258/Common/src/Transport/WebSocketTransport.ts#L42)
+[Transport/WebSocketTransport.ts:44](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Common/src/Transport/WebSocketTransport.ts#L44)
 
 ___
 
@@ -178,7 +178,7 @@ Disconnect this transport.
 
 #### Defined in
 
-[Transport/WebSocketTransport.ts:63](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1d8a258/Common/src/Transport/WebSocketTransport.ts#L63)
+[Transport/WebSocketTransport.ts:65](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Common/src/Transport/WebSocketTransport.ts#L65)
 
 ___
 
@@ -200,7 +200,7 @@ Handles when the Websocket is closed
 
 #### Defined in
 
-[Transport/WebSocketTransport.ts:161](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1d8a258/Common/src/Transport/WebSocketTransport.ts#L161)
+[Transport/WebSocketTransport.ts:171](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Common/src/Transport/WebSocketTransport.ts#L171)
 
 ___
 
@@ -216,7 +216,7 @@ Handles when there is an error on the websocket
 
 #### Defined in
 
-[Transport/WebSocketTransport.ts:152](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1d8a258/Common/src/Transport/WebSocketTransport.ts#L152)
+[Transport/WebSocketTransport.ts:162](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Common/src/Transport/WebSocketTransport.ts#L162)
 
 ___
 
@@ -238,7 +238,7 @@ Handles what happens when a message is received
 
 #### Defined in
 
-[Transport/WebSocketTransport.ts:112](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1d8a258/Common/src/Transport/WebSocketTransport.ts#L112)
+[Transport/WebSocketTransport.ts:116](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Common/src/Transport/WebSocketTransport.ts#L116)
 
 ___
 
@@ -252,7 +252,7 @@ Handles what happens when a message is received in binary form
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `event` | `MessageEvent`\<`any`\> | Message Received |
+| `event` | `MessageEvent`\<`Blob`\> | Message Received |
 
 #### Returns
 
@@ -260,7 +260,7 @@ Handles what happens when a message is received in binary form
 
 #### Defined in
 
-[Transport/WebSocketTransport.ts:79](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1d8a258/Common/src/Transport/WebSocketTransport.ts#L79)
+[Transport/WebSocketTransport.ts:83](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Common/src/Transport/WebSocketTransport.ts#L83)
 
 ___
 
@@ -276,7 +276,7 @@ Handles when the Websocket is opened
 
 #### Defined in
 
-[Transport/WebSocketTransport.ts:140](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1d8a258/Common/src/Transport/WebSocketTransport.ts#L140)
+[Transport/WebSocketTransport.ts:150](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Common/src/Transport/WebSocketTransport.ts#L150)
 
 ___
 
@@ -298,7 +298,7 @@ True if the transport is connected.
 
 #### Defined in
 
-[Transport/WebSocketTransport.ts:71](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1d8a258/Common/src/Transport/WebSocketTransport.ts#L71)
+[Transport/WebSocketTransport.ts:75](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Common/src/Transport/WebSocketTransport.ts#L75)
 
 ___
 
@@ -324,4 +324,4 @@ Sends a message over the websocket.
 
 #### Defined in
 
-[Transport/WebSocketTransport.ts:30](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1d8a258/Common/src/Transport/WebSocketTransport.ts#L30)
+[Transport/WebSocketTransport.ts:30](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Common/src/Transport/WebSocketTransport.ts#L30)

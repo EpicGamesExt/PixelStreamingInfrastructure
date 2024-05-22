@@ -40,7 +40,7 @@ player registry.
 
 #### Defined in
 
-[PlayerRegistry.ts:12](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1d8a258/Signalling/src/PlayerRegistry.ts#L12)
+[PlayerRegistry.ts:12](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Signalling/src/PlayerRegistry.ts#L12)
 
 ___
 
@@ -50,17 +50,17 @@ ___
 
 #### Defined in
 
-[PlayerRegistry.ts:13](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1d8a258/Signalling/src/PlayerRegistry.ts#L13)
+[PlayerRegistry.ts:13](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Signalling/src/PlayerRegistry.ts#L13)
 
 ___
 
 ### subscribedStreamer
 
-• **subscribedStreamer**: [`IStreamer`](StreamerRegistry.IStreamer.md)
+• **subscribedStreamer**: ``null`` \| [`IStreamer`](StreamerRegistry.IStreamer.md)
 
 #### Defined in
 
-[PlayerRegistry.ts:14](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1d8a258/Signalling/src/PlayerRegistry.ts#L14)
+[PlayerRegistry.ts:14](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Signalling/src/PlayerRegistry.ts#L14)
 
 ## Methods
 
@@ -74,7 +74,7 @@ ___
 
 #### Defined in
 
-[PlayerRegistry.ts:17](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1d8a258/Signalling/src/PlayerRegistry.ts#L17)
+[PlayerRegistry.ts:17](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Signalling/src/PlayerRegistry.ts#L17)
 
 ___
 
@@ -92,7 +92,7 @@ ___
 
 #### Defined in
 
-[LoggingUtils.ts:9](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1d8a258/Signalling/src/LoggingUtils.ts#L9)
+[LoggingUtils.ts:18](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Signalling/src/LoggingUtils.ts#L18)
 
 ___
 
@@ -112,4 +112,4 @@ ___
 
 #### Defined in
 
-[PlayerRegistry.ts:16](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1d8a258/Signalling/src/PlayerRegistry.ts#L16)
+[PlayerRegistry.ts:16](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Signalling/src/PlayerRegistry.ts#L16)
