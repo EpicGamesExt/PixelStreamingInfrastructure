@@ -7,6 +7,7 @@
 ### Interfaces
 
 - [IMessageLogger](../interfaces/LoggingUtils.IMessageLogger.md)
+- [IProtoLogObj](../interfaces/LoggingUtils.IProtoLogObj.md)
 
 ### Functions
 
@@ -53,7 +54,7 @@ be preceded by the logging call.
 
 #### Defined in
 
-[LoggingUtils.ts:64](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1d8a258/Signalling/src/LoggingUtils.ts#L64)
+[LoggingUtils.ts:74](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Signalling/src/LoggingUtils.ts#L74)
 
 ___
 
@@ -78,7 +79,7 @@ one connection and being sent to another with only minor changes being made.
 
 #### Defined in
 
-[LoggingUtils.ts:46](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1d8a258/Signalling/src/LoggingUtils.ts#L46)
+[LoggingUtils.ts:56](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Signalling/src/LoggingUtils.ts#L56)
 
 ___
 
@@ -102,7 +103,7 @@ Do not call this for messages being forwarded to another connection.
 
 #### Defined in
 
-[LoggingUtils.ts:17](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1d8a258/Signalling/src/LoggingUtils.ts#L17)
+[LoggingUtils.ts:26](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Signalling/src/LoggingUtils.ts#L26)
 
 ___
 
@@ -126,4 +127,4 @@ Do not call this for messages being forwarded to this connection.
 
 #### Defined in
 
-[LoggingUtils.ts:31](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1d8a258/Signalling/src/LoggingUtils.ts#L31)
+[LoggingUtils.ts:41](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Signalling/src/LoggingUtils.ts#L41)

@@ -8,9 +8,7 @@ Signalling protocol for handling messages from the signalling server.
 
 Listen on this emitter for messages. Message type is the name of the event to listen for.
 Example:  
-     ```
-     signallingProtocol.on('config', (message: Messages.config) => console.log(`Got a config message: ${message}`)));
-     ```
+     signallingProtocol.on('config', (message: Messages.config) =\> console.log(`Got a config message: ${message}`)));
 
 The transport in this class will also emit on message events.
 
@@ -73,7 +71,7 @@ EventEmitter.constructor
 
 #### Defined in
 
-[Protocol/SignallingProtocol.ts:36](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1d8a258/Common/src/Protocol/SignallingProtocol.ts#L36)
+[Protocol/SignallingProtocol.ts:34](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Common/src/Protocol/SignallingProtocol.ts#L34)
 
 ## Properties
 
@@ -83,7 +81,7 @@ EventEmitter.constructor
 
 #### Defined in
 
-[Protocol/SignallingProtocol.ts:34](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1d8a258/Common/src/Protocol/SignallingProtocol.ts#L34)
+[Protocol/SignallingProtocol.ts:32](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Common/src/Protocol/SignallingProtocol.ts#L32)
 
 ## Accessors
 
@@ -97,7 +95,7 @@ EventEmitter.constructor
 
 #### Defined in
 
-[Protocol/SignallingProtocol.ts:31](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1d8a258/Common/src/Protocol/SignallingProtocol.ts#L31)
+[Protocol/SignallingProtocol.ts:29](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Common/src/Protocol/SignallingProtocol.ts#L29)
 
 ## Methods
 
@@ -121,7 +119,7 @@ True if the connection call succeeded.
 
 #### Defined in
 
-[Protocol/SignallingProtocol.ts:58](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1d8a258/Common/src/Protocol/SignallingProtocol.ts#L58)
+[Protocol/SignallingProtocol.ts:56](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Common/src/Protocol/SignallingProtocol.ts#L56)
 
 ___
 
@@ -144,7 +142,7 @@ Asks the transport to disconnect from any connection it might have.
 
 #### Defined in
 
-[Protocol/SignallingProtocol.ts:67](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1d8a258/Common/src/Protocol/SignallingProtocol.ts#L67)
+[Protocol/SignallingProtocol.ts:65](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Common/src/Protocol/SignallingProtocol.ts#L65)
 
 ___
 
@@ -162,7 +160,7 @@ True if the protocol is connected.
 
 #### Defined in
 
-[Protocol/SignallingProtocol.ts:75](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1d8a258/Common/src/Protocol/SignallingProtocol.ts#L75)
+[Protocol/SignallingProtocol.ts:73](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Common/src/Protocol/SignallingProtocol.ts#L73)
 
 ___
 
@@ -184,4 +182,4 @@ Passes a message to the transport to send to the other end.
 
 #### Defined in
 
-[Protocol/SignallingProtocol.ts:83](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1d8a258/Common/src/Protocol/SignallingProtocol.ts#L83)
+[Protocol/SignallingProtocol.ts:81](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Common/src/Protocol/SignallingProtocol.ts#L81)
