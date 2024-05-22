@@ -132,23 +132,41 @@ rem NOTE: We want to use our NodeJS (not system NodeJS!) to build the web fronte
 rem Save our current directory (the NodeJS dir) in a variable
 set NODE_DIR=%SCRIPT_DIR%node
 
-rem Prepend NODE_DIR to PATH temporarily
-set "OLDPATH=%PATH%"
-set "PATH=%PATH%;%NODE_DIR%"
-
 IF "%FRONTEND_DIR%"=="" (
     set FRONTEND_DIR="%SCRIPT_DIR%..\..\www"
+) else (
+    set FRONTEND_DIR="%FRONTEND_DIR%"
 )
 
 rem try to make it an absolute path
-call :NormalizePath "%FRONTEND_DIR%"
+call :NormalizePath %FRONTEND_DIR%
 set FRONTEND_DIR=%RETVAL%
 
 rem Set this for webpack
 set WEBPACK_OUTPUT_PATH=%FRONTEND_DIR%
 
-IF NOT exist %FRONTEND_DIR%\player.html (
+IF NOT exist "%FRONTEND_DIR%\player.html" (
     set FORCE_BUILD=1
+)
+
+rem Query the registry to get the value of the PATH variable for the current user (We DO NOT want the system PATH - %PATH% combines user and system PATH.)
+for /f "tokens=2*" %%A in ('reg query "HKCU\Environment" /v PATH ^| find "PATH"') do (
+    set "USER_PATH=%%B"
+)
+
+rem Store user's PATH in OLD_PATH
+set OLD_PATH=%USER_PATH%
+rem Update this processes PATH to have node dir (this WILL NOT persist outside this process which is a problem for NPM run scripts we use)
+set PATH=%NODE_DIR%;%PATH%
+set PATH_LENGTH=0
+for %%A in ("%NODE_DIR%;%OLD_PATH%") do set "PATH_LENGTH=%%~zA"
+
+IF !PATH_LENGTH! GTR 1024 (
+    echo "Your PATH is greater than 1024 characters, cmd setx cannot change it. Either shorten your user's PATH contents or hope you have NodeJS in your PATH already..."
+) else (
+    rem Set new user PATH for all processes
+    setx PATH "%NODE_DIR%;%OLD_PATH%"
+    set PATH_NEEDS_RESTORE=1
 )
 
 IF "%FORCE_BUILD%"=="1" (
@@ -158,34 +176,37 @@ IF "%FORCE_BUILD%"=="1" (
     echo Building common library...
     echo ----------------------------
     pushd %CD%\Common
-    call %SCRIPT_DIR%\node\npm install
-    call %SCRIPT_DIR%\node\npm run build
+    call "%SCRIPT_DIR%node\npm" install
+    call "%SCRIPT_DIR%node\npm" run build
     popd
     echo Building frontend library...
     echo ----------------------------
     pushd %CD%\Frontend\library
-    call %SCRIPT_DIR%\node\npm link ../../Common
-    call %SCRIPT_DIR%\node\npm run build
+    call "%SCRIPT_DIR%node\npm" link ../../Common
+    call "%SCRIPT_DIR%node\npm" run build
     popd
     echo Building frontend-ui library...
     echo ----------------------------
     pushd %CD%\Frontend\ui-library
-    call %SCRIPT_DIR%\node\npm link ../library
-    call %SCRIPT_DIR%\node\npm run build
+    call "%SCRIPT_DIR%node\npm" link ../library
+    call "%SCRIPT_DIR%node\npm" run build
     popd
     echo Building Epic Games reference frontend...
     echo ----------------------------
     pushd %CD%\Frontend\implementations\typescript
-    call %SCRIPT_DIR%\node\npm link ../../library ../../ui-library
-    call %SCRIPT_DIR%\node\npm run build
+    call "%SCRIPT_DIR%node\npm" link ../../library ../../ui-library
+    call "%SCRIPT_DIR%node\npm" run build
     popd
     popd
 ) else (
     echo Skipping rebuilding frontend... %FRONTEND_DIR% has content already, use --build to force a frontend rebuild.
 )
 
-rem Restore path
-set "PATH=%OLDPATH%"
+IF "%PATH_NEEDS_RESTORE%"=="1" (
+    rem Restore PATH
+    setx PATH "%OLD_PATH%"
+)
+
 exit /b
 
 :SetupCoturn
@@ -216,7 +237,7 @@ call :SetupCoturn
 exit /b
 
 :SetPublicIP
-FOR /f %%A IN ('powershell -command "(Invoke-Webrequest "http://api.ipify.org").content"') DO set PUBLIC_IP=%%A
+FOR /f %%A IN ('curl http://api.ipify.org') DO set PUBLIC_IP=%%A
 Echo External IP is : %PUBLIC_IP%
 exit /b
 
@@ -229,13 +250,15 @@ IF "%DEFAULT_TURN%"=="1" (
 IF "%DEFAULT_STUN%"=="1" (
     set STUN_SERVER=stun.l.google.com:19302
 )
-FOR /f %%A IN ('powershell -command "(Test-Connection -ComputerName (hostname) -Count 1  | Select IPV4Address).IPV4Address.IPAddressToString"') DO set LOCAL_IP=%%A
+
+rem Ping own computer name to get local IP
+FOR /F "delims=[] tokens=2" %%A in ('ping -4 -n 1 %ComputerName% ^| findstr [') do set LOCAL_IP=%%A
 FOR /F "tokens=1,2 delims=:" %%i in ("%TURN_SERVER%") do (
     set TURN_PORT=%j
 )
 IF "%TURN_PORT%"=="" ( set TURN_PORT=3478 )
 
-set TURN_PROCESS=%SCRIPT_DIR%coturn\turnserver.exe
+set TURN_PROCESS=turnserver.exe
 set TURN_REALM=PixelStreaming
 set TURN_ARGS=-c ..\..\..\turnserver.conf --allowed-peer-ip=%LOCAL_IP% -p %TURN_PORT% -r %TURN_REALM% -X %PUBLIC_IP% -E %LOCAL_IP% -L %LOCAL_IP% --no-cli --no-tls --no-dtls --pidfile `"C:\coturn.pid`" -f -a -v -u %TURN_USER%:%TURN_PASS%
 
@@ -247,7 +270,7 @@ if "%START_TURN%"=="1" (
                 IF "%1"=="bg" (
                     start "%TURN_PROCESS%" %TURN_PROCESS% %TURN_ARGS%
                 ) else (
-                    call %TURN_PROCESS% %TURN_ARGS%
+                    call "%TURN_PROCESS%" %TURN_ARGS%
                 )
                 popd
             )
@@ -271,13 +294,13 @@ pushd %SCRIPT_DIR%\..\..\
 echo Building signalling library...
 echo ----------------------------
 pushd ..\Signalling
-call %SCRIPT_DIR%\node\npm link ../Common
-call %SCRIPT_DIR%\node\npm run build
+call "%SCRIPT_DIR%node\npm" link ../Common
+call "%SCRIPT_DIR%node\npm" run build
 popd
 echo Building wilbur...
 echo ----------------------------
-call %SCRIPT_DIR%\node\npm link ../Signalling
-call %SCRIPT_DIR%\node\npm run build
+call "%SCRIPT_DIR%node\npm" link ../Signalling
+call "%SCRIPT_DIR%node\npm" run build
 call %NPM% run start -- %SERVER_ARGS%
 exit /b
 
