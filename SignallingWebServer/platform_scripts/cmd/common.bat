@@ -46,7 +46,7 @@ set TURN_USER=
 set TURN_PASS=
 set STUN_SERVER=
 set PUBLIC_IP=
-if not exist build\ (
+if not exist "%SCRIPT_DIR%\..\..\build\" (
     set BUILD_WILBUR=1
 )
 :arg_loop
