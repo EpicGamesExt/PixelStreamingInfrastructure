@@ -44,7 +44,7 @@ jobs:
     - working-directory: Frontend/ui-library
       run: npm ci && npm link ../library && npm run build && npm run lint
 
-  run:
+  run-linux:
     runs-on: ubuntu-latest
     steps:
       - name: "Checkout source code"
@@ -55,4 +55,14 @@ jobs:
           last_pid=$!
           curl --retry 10 --retry-delay 2 --retry-connrefused --max-time 3 http://localhost/api/status
           sudo kill $last_pid
+
+  run-windows:
+    runs-on: windows-latest
+    steps:
+      - name: "Checkout source code"
+        uses: actions/checkout@v3
+      - working-directory: SignallingWebServer
+        run: >
+          start /B platform_scripts\cmd\start.bat --rest_api
+          curl --retry 10 --retry-delay 2 --retry-connrefused --max-time 3 http://localhost/api/status
 
