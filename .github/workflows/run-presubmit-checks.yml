@@ -49,7 +49,8 @@ jobs:
     steps:
       - name: "Checkout source code"
         uses: actions/checkout@v3
-      - working-directory: SignallingWebServer
+      - name: "Launch and query signalling server using the REST API"
+        working-directory: SignallingWebServer
         run: |
           ./platform_scripts/bash/start.sh --rest_api &
           curl --retry 10 --retry-delay 20 --retry-connrefused http://localhost/api/status
@@ -59,7 +60,8 @@ jobs:
     steps:
       - name: "Checkout source code"
         uses: actions/checkout@v3
-      - working-directory: SignallingWebServer
+      - name: "Launch and query signalling server using the REST API"
+        working-directory: SignallingWebServer
         run: |
           Start-Process -NoNewWindow .\platform_scripts\cmd\start.bat --rest_api
           curl --retry 10 --retry-delay 20 --retry-connrefused http://localhost/api/status
