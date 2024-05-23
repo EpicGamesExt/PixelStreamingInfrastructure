@@ -64,3 +64,21 @@ jobs:
           Start-Process -NoNewWindow .\platform_scripts\cmd\start.bat --rest_api
           curl --retry 10 --retry-delay 20 --retry-connrefused http://localhost/api/status
 
+  build-signalling-image:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Build the Signalling Server container image
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          push: false
+          file: SignallingWebServer/Dockerfile
+      - name: Build the SFU container image
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          push: false
+          file: SFU/Dockerfile
+
