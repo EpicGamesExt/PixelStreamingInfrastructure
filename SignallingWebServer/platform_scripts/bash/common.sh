@@ -24,6 +24,7 @@ function print_usage() {
                             Default value as above
         --build             Force a rebuild of the typescript frontend even if it already exists
         --frontend-dir      Sets the output path for the fontend build
+        --dev               Dev mode. (forces build of wilbur and its dependencies)
 
     Other options: stored and passed to the server.  All parameters printed once the script values are set.
     Command line options might be omitted to run with defaults and it is a good practice to omit specific ones when just starting the TURN or the STUN server alone, not the whole set of scripts.
@@ -38,6 +39,10 @@ function parse_args() {
     FORCE_BUILD=0
     DEFAULT_STUN=0
     DEFAULT_TURN=0
+    BUILD_WILBUR=0
+    if [[ ! -d "${SCRIPT_DIR}/../../build/" ]]; then
+        BUILD_WILBUR=1
+    fi
     while(($#)) ; do
         case "$1" in
         --debug ) IS_DEBUG=1; shift;;
@@ -53,6 +58,7 @@ function parse_args() {
         --start-turn ) START_TURN=1; shift;;
         --publicip ) PUBLIC_IP="$2"; shift 2;;
         --frontend-dir ) FRONTEND_DIR="$(realpath "$2")"; shift 2;;
+        --dev ) BUILD_WILBUR=1; shift;;
         --help ) print_usage;;
         * ) SERVER_ARGS+=" $1"; shift;;
         esac
@@ -117,7 +123,7 @@ function check_and_install() { #dep_name #get_version_string #version_min #insta
 		check_version "$current" "$minimum"
 		if [ "$?" -lt 2 ]; then
 			echo "$1 is installed."
-			return 0
+            is_installed=1
 		else
 			echo "Required install of $1 not found installing"
 		fi
@@ -129,7 +135,7 @@ function check_and_install() { #dep_name #get_version_string #version_min #insta
 		start_process $4
 
 		if [ $? -ge 1 ]; then
-			echo "Installation of $1 failed try running `export VERBOSE=1` then run this script again for more details"
+			echo "Installation of $1 failed try running 'export VERBOSE=1' then run this script again for more details"
 		fi
 	fi
 }
@@ -341,18 +347,36 @@ function start_process() {
 # Assumes the following are set
 # SCRIPT_DIR = The path to the root of the PixelStreamingInfrastructure repo.
 # NPM = The npm command path
-# SERVER_ARGS The arguments to be passed to the server
-function start_wilbur() {
+function build_wilbur() {
     pushd ${SCRIPT_DIR}/../../.. > /dev/null
 
+    pushd Common > /dev/null
+    if [[ ! -d "build" ]]; then
+        echo Building common
+        ${NPM} run build
+    fi
+    popd
+
     pushd Signalling > /dev/null
+    echo Building signalling
     ${NPM} link ../Common
     ${NPM} run build
     popd > /dev/null
 
     pushd SignallingWebServer > /dev/null
+    echo Building wilbur
     ${NPM} link ../Signalling
     ${NPM} run build
+
+    popd > /dev/null
+}
+
+# Assumes the following are set
+# SCRIPT_DIR = The path to the root of the PixelStreamingInfrastructure repo.
+# NPM = The npm command path
+# SERVER_ARGS The arguments to be passed to the server
+function start_wilbur() {
+    pushd ${SCRIPT_DIR}/../../../SignallingWebServer > /dev/null
 
     echo "Starting wilbur signalling server use ctrl-c to exit"
     echo "----------------------------------"
@@ -361,4 +385,3 @@ function start_wilbur() {
 
     popd > /dev/null
 }
-

@@ -31,19 +31,25 @@ IF "%CONTINUE%"=="1" (
 		set SERVER_ARGS=!SERVER_ARGS! --http_root="!FRONTEND_DIR!"
 	)
 	
-	call :PrintConfig
+    if "%BUILD_WILBUR%"=="1" (
+        call :BuildWilbur
+    )
+    
+    call :PrintConfig
 	call :StartWilbur
 	pause
 )
 
 goto :eof
 
+REM These labels will all jump to common.bat but also jump to the label inside common.bat
 :Init
 :ParseArgs
 :Setup
 :SetPublicIP
 :SetupTurnStun
 :PrintConfig
+:BuildWilbur
 :StartWilbur
 "%~dp0common.bat" %*
 
