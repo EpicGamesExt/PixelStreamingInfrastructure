@@ -44,3 +44,15 @@ jobs:
     - working-directory: Frontend/ui-library
       run: npm ci && npm link ../library && npm run build && npm run lint
 
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Checkout source code"
+        uses: actions/checkout@v3
+      - working-directory: SignallingWebServer
+        run: >
+          ./platform_scripts/bash/start.sh --rest_api &
+          last_pid=$!
+          curl --retry 10 --retry-delay 2 --retry-connrefused --max-time 3 http://localhost/api/status
+          sudo kill $last_pid
+
