@@ -120,7 +120,7 @@ function check_and_install() { #dep_name #get_version_string #version_min #insta
 		check_version "$current" "$minimum"
 		if [ "$?" -lt 2 ]; then
 			echo "$1 is installed."
-			return 0
+            is_installed=1
 		else
 			echo "Required install of $1 not found installing"
 		fi
@@ -132,10 +132,8 @@ function check_and_install() { #dep_name #get_version_string #version_min #insta
 		start_process $4
 
 		if [ $? -ge 1 ]; then
-			echo "Installation of $1 failed try running `export VERBOSE=1` then run this script again for more details"
-            return -1
+			echo "Installation of $1 failed try running 'export VERBOSE=1' then run this script again for more details"
 		fi
-        return 1
 	fi
 }
 
@@ -180,11 +178,9 @@ function setup_node() {
                                                                 && rm node.tar.xz
                                                                 && mv node-v*-*-* \"${SCRIPT_DIR}/node\""
 
-    # only run install if needed
-    if [[ $? == 1 ]]; then
-        PATH="${SCRIPT_DIR}/node/bin:$PATH"
-        "${SCRIPT_DIR}/node/lib/node_modules/npm/bin/npm-cli.js" install
-    fi
+    PATH="${SCRIPT_DIR}/node/bin:$PATH"
+    "${SCRIPT_DIR}/node/lib/node_modules/npm/bin/npm-cli.js" install
+
     popd > /dev/null
 }
 
