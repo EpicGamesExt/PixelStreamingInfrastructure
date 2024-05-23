@@ -52,9 +52,7 @@ jobs:
       - working-directory: SignallingWebServer
         run: |
           ./platform_scripts/bash/start.sh --rest_api &
-          last_pid=$!
           curl --retry 10 --retry-delay 20 --retry-connrefused http://localhost/api/status
-          sudo kill $last_pid
 
   run-windows:
     runs-on: windows-latest
@@ -64,6 +62,5 @@ jobs:
       - working-directory: SignallingWebServer
         run: |
           Start-Process -NoNewWindow .\platform_scripts\cmd\start.bat --rest_api
-          Start-Sleep -Seconds 30
-          curl --retry 10 --retry-delay 2 --retry-connrefused http://nonsense/api/status
+          curl --retry 10 --retry-delay 20 --retry-connrefused http://localhost/api/status
 
