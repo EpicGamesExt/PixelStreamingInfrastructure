@@ -53,8 +53,7 @@ jobs:
         run: |
           ./platform_scripts/bash/start.sh --rest_api &
           last_pid=$!
-          sleep 60
-          curl --retry 10 --retry-delay 2 --retry-connrefused --max-time 3 http://localhost/api/status
+          curl --retry 10 --retry-delay 20 --retry-connrefused http://localhost/api/status
           sudo kill $last_pid
 
   run-windows:
@@ -63,9 +62,8 @@ jobs:
       - name: "Checkout source code"
         uses: actions/checkout@v3
       - working-directory: SignallingWebServer
-        run: start /B platform_scripts\cmd\start.bat --rest_api
-      - working-directory: SignallingWebServer
-        run: timeout /t 30
-      - working-directory: SignallingWebServer
-        run: curl --retry 10 --retry-delay 2 --retry-connrefused --max-time 3 http://localhost/api/status
+        run: |
+          Start-Process -NoNewWindow .\platform_scripts\cmd\start.bat --rest_api
+          Start-Sleep -Seconds 30
+          curl --retry 10 --retry-delay 2 --retry-connrefused http://localhost/api/status
 
