@@ -65,5 +65,5 @@ jobs:
         run: |
           Start-Process -NoNewWindow .\platform_scripts\cmd\start.bat --rest_api
           Start-Sleep -Seconds 30
-          curl --retry 10 --retry-delay 2 --retry-connrefused http://localhost/api/status
+          curl --retry 10 --retry-delay 2 --retry-connrefused http://nonsense/api/status
 
