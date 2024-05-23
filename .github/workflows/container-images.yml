@@ -3,7 +3,7 @@ name: Publish container images
 on:
   workflow_dispatch:
   push:
-    branches: ['UE5.4']
+    branches: ['UE5.5']
     paths: ['SignallingWebServer/**']
 
 jobs:
