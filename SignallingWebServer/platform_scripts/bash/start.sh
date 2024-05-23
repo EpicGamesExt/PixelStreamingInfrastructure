@@ -24,6 +24,10 @@ if [[ ! -z "$FRONTEND_DIR" ]]; then
     SERVER_ARGS+=" --http_root=\"$FRONTEND_DIR\""
 fi
 
+if [[ ! -d "build/" ]]; then
+    BUILD_WILBUR=1
+fi
+
 if [[ "$BUILD_WILBUR" == "1" ]]; then
     build_wilbur
 fi
