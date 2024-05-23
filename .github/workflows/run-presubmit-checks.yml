@@ -53,6 +53,7 @@ jobs:
         run: >
           ./platform_scripts/bash/start.sh --rest_api &
           last_pid=$!
+          sleep 20
           curl --retry 10 --retry-delay 2 --retry-connrefused --max-time 3 http://localhost/api/status
           sudo kill $last_pid
 
@@ -64,5 +65,6 @@ jobs:
       - working-directory: SignallingWebServer
         run: >
           start /B platform_scripts\cmd\start.bat --rest_api
+          timeout /t 20
           curl --retry 10 --retry-delay 2 --retry-connrefused --max-time 3 http://localhost/api/status
 
