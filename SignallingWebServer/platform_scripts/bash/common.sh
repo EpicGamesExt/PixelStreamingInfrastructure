@@ -40,6 +40,9 @@ function parse_args() {
     DEFAULT_STUN=0
     DEFAULT_TURN=0
     BUILD_WILBUR=0
+    if [[ ! -d "${SCRIPT_DIR}/../../build/" ]]; then
+        BUILD_WILBUR=1
+    fi
     while(($#)) ; do
         case "$1" in
         --debug ) IS_DEBUG=1; shift;;
