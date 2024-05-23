@@ -92,7 +92,7 @@ IF NOT "%1"=="" (
     )
     IF "%1"=="--frontend-dir" (
         set HANDLED=1
-        set FRONTEND_DIR=%2
+        set FRONTEND_DIR=%~2
         SHIFT
     )
     IF NOT "!HANDLED!"=="1" (

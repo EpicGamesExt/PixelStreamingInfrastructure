@@ -24,17 +24,17 @@ Used by the API to describe the current state of the player.
 
 #### Defined in
 
-[PlayerRegistry.ts:24](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1d8a258/Signalling/src/PlayerRegistry.ts#L24)
+[PlayerRegistry.ts:24](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Signalling/src/PlayerRegistry.ts#L24)
 
 ___
 
 ### remoteAddress
 
-• **remoteAddress**: `string`
+• **remoteAddress**: `undefined` \| `string`
 
 #### Defined in
 
-[PlayerRegistry.ts:28](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1d8a258/Signalling/src/PlayerRegistry.ts#L28)
+[PlayerRegistry.ts:28](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Signalling/src/PlayerRegistry.ts#L28)
 
 ___
 
@@ -44,17 +44,17 @@ ___
 
 #### Defined in
 
-[PlayerRegistry.ts:27](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1d8a258/Signalling/src/PlayerRegistry.ts#L27)
+[PlayerRegistry.ts:27](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Signalling/src/PlayerRegistry.ts#L27)
 
 ___
 
 ### subscribedTo
 
-• **subscribedTo**: `string`
+• **subscribedTo**: `undefined` \| `string`
 
 #### Defined in
 
-[PlayerRegistry.ts:26](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1d8a258/Signalling/src/PlayerRegistry.ts#L26)
+[PlayerRegistry.ts:26](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Signalling/src/PlayerRegistry.ts#L26)
 
 ___
 
@@ -64,4 +64,4 @@ ___
 
 #### Defined in
 
-[PlayerRegistry.ts:25](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1d8a258/Signalling/src/PlayerRegistry.ts#L25)
+[PlayerRegistry.ts:25](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Signalling/src/PlayerRegistry.ts#L25)
