@@ -10,14 +10,14 @@ There are multiple things in this repository that can be released:
 ## The `/Common` NPM package
 1. Switch to the target branch (e.g 5.5)
 2. Make/merge any changes into `/Common` directory
-3. Based on the changes made, bump the version number according to [semver](https://semver.org/) in the [`package.json`](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/bca2d6b0526dd2333690828f129a0d96a8e42fbf/Common/package.json#L3) file
+3. Based on the changes made, bump the version number according to [semver](https://semver.org/) in the [`package.json`](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/master/Common/package.json#L3) file
 4. Commit the changes to the `package.json` file.
 5. This will automatically kick off a [this action](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/actions/workflows/publish-common-library-to-npm.yml) for a build+push to NPM.
 
 ## The `/Signalling` NPM package
 1. Switch to the target branch (e.g 5.5)
 2. Make/merge any changes into `/Signalling` directory
-3. Based on the changes made, bump the version number according to [semver](https://semver.org/) in the [`package.json`](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/bca2d6b0526dd2333690828f129a0d96a8e42fbf/Signalling/package.json#L3) file
+3. Based on the changes made, bump the version number according to [semver](https://semver.org/) in the [`package.json`](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/master/Signalling/package.json) file
 4. **Optional: Update the version of the common library in the package.json if it got bumped.
 5. Commit the changes to `package.json` and potentially the `package-lock.json` file.
 6. This will automatically kick off a [this action](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/actions/workflows/publish-signalling-library-to-npm.yml) for a build+push to NPM.
@@ -25,16 +25,16 @@ There are multiple things in this repository that can be released:
 ## The `/library` NPM package
 1. Switch to the target branch (e.g 5.5)
 2. Make/merge any changes into `/library` directory
-3. Based on the changes made, bump the version number according to [semver](https://semver.org/) in the [`package.json`](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/bca2d6b0526dd2333690828f129a0d96a8e42fbf/Frontend/library/package.json#L3) file
+3. Based on the changes made, bump the version number according to [semver](https://semver.org/) in the [`package.json`](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/master/Frontend/library/package.json) file
 4. Commit the changes to the `package.json` file.
 5. This will automatically kick off a [this action](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/actions/workflows/publish-library-to-npm.yml) for a build+push to NPM.
 
 ## The `ui-library` NPM package
 1. Switch to the target branch (e.g 5.5)
 2. Make/merge any changes into `/ui-library` directory
-3. Based on the changes made, bump the version number according to [semver](https://semver.org/) in the [`package.json`](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/bca2d6b0526dd2333690828f129a0d96a8e42fbf/Frontend/ui-library/package.json#L3) file
-4. **Optional: Update the version of the common library in the package.json if it got bumped ([here](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/bca2d6b0526dd2333690828f129a0d96a8e42fbf/Frontend/ui-library/package.json#L19)).**
-5. **Optional: Update the version of the frontent library in the package.json if it got bumped ([here](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/bca2d6b0526dd2333690828f129a0d96a8e42fbf/Frontend/ui-library/package.json#L20) & [here](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/bca2d6b0526dd2333690828f129a0d96a8e42fbf/Frontend/ui-library/package.json#L38)).**
+3. Based on the changes made, bump the version number according to [semver](https://semver.org/) in the [`package.json`](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/master/Frontend/ui-library/package.json#L3) file
+4. **Optional: Update the version of the common library in the package.json if it got bumped ([here](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/master/Frontend/ui-library/package.json#L19)).**
+5. **Optional: Update the version of the frontent library in the package.json if it got bumped ([here](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/master/Frontend/ui-library/package.json#L20) & [here](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/master/Frontend/ui-library/package.json#L38)).**
 6. Commit the changes to `package.json` and potentially the `package-lock.json` file.
 7. This will automatically kick off a [this action](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/actions/workflows/publish-ui-library-to-npm.yml) for a build+push to NPM.
 
