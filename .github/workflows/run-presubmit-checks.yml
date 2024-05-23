@@ -64,7 +64,7 @@ jobs:
           Start-Process -NoNewWindow .\platform_scripts\cmd\start.bat --rest_api
           curl --retry 10 --retry-delay 20 --retry-connrefused http://localhost/api/status
 
-  build-signalling-image:
+  build-docker-images:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
