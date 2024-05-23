@@ -50,7 +50,7 @@ jobs:
       - name: "Checkout source code"
         uses: actions/checkout@v3
       - working-directory: SignallingWebServer
-        run: >
+        run: |
           ./platform_scripts/bash/start.sh --rest_api &
           last_pid=$!
           sleep 20
@@ -63,7 +63,7 @@ jobs:
       - name: "Checkout source code"
         uses: actions/checkout@v3
       - working-directory: SignallingWebServer
-        run: >
+        run: |
           start /B platform_scripts\cmd\start.bat --rest_api
           timeout /t 20
           curl --retry 10 --retry-delay 2 --retry-connrefused --max-time 3 http://localhost/api/status
