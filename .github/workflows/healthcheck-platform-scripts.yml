@@ -1,0 +1,36 @@
+name: Check health of platform scripts
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "SignallingWebServer/**"
+  pull_request:
+    paths:
+      - "SignallingWebServer/**"
+
+jobs:
+  run-script-linux:
+    if: github.repository == 'EpicGamesExt/PixelStreamingInfrastructure'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v3
+      - name: Launch and query signalling server using the REST API
+        working-directory: SignallingWebServer
+        run: |
+          ./platform_scripts/bash/start.sh --rest_api &
+          curl --retry 10 --retry-delay 20 --retry-connrefused http://localhost/api/status
+
+  run-script-windows:
+    if: github.repository == 'EpicGamesExt/PixelStreamingInfrastructure'
+    runs-on: windows-latest
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v3
+      - name: Launch and query signalling server using the REST API
+        working-directory: SignallingWebServer
+        run: |
+          Start-Process -NoNewWindow .\platform_scripts\cmd\start.bat --rest_api
+          curl --retry 10 --retry-delay 20 --retry-connrefused http://localhost/api/status
+
