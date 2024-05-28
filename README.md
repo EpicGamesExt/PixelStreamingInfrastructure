@@ -1,4 +1,4 @@
-[![Check health of library code](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/actions/workflows/healthchecks-libraries.yml/badge.svg?branch=master)](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/actions/workflows/healthcheck-libraries.yml)
+[![Check health of library code](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/actions/workflows/healthcheck-libraries.yml/badge.svg?branch=master)](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/actions/workflows/healthcheck-libraries.yml)
 
 | Action | UE5.5 | UE5.4 | UE5.3 |
 | -------|--|--|--|
