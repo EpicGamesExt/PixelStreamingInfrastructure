@@ -1,0 +1,27 @@
+name: Check health of SFU docker image
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "SFU/**"
+  pull_request:
+    paths:
+      - "SFU/**"
+
+jobs:
+  build-docker-image:
+    if: github.repository == 'EpicGamesExt/PixelStreamingInfrastructure'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Build the SFU container image
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          push: false
+          file: SFU/Dockerfile
+
+

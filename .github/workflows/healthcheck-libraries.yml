@@ -1,0 +1,61 @@
+name: Check health of library code
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "Common/**"
+      - "Signalling/**"
+      - "SignallingWebServer/**"
+      - "Frontend/library/**"
+      - "Frontend/ui-library/**"
+      - "Frontend/implementations/typescript/**"
+  pull_request:
+    paths:
+      - "Common/**"
+      - "Signalling/**"
+      - "SignallingWebServer/**"
+      - "Frontend/library/**"
+      - "Frontend/ui-library/**"
+      - "Frontend/implementations/typescript/**"
+
+env:
+  NODE_VERSION: 18.17.x
+
+jobs:
+  build:
+    if: github.repository == 'EpicGamesExt/PixelStreamingInfrastructure'
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout source code
+      uses: actions/checkout@v3
+
+    - uses: actions/setup-node@v4
+      with:
+        node-version: "${{ env.NODE_VERSION }}"
+        registry-url: 'https://registry.npmjs.org'
+        
+    - name: Clean build and lint checks on common library
+      working-directory: Common
+      run: npm ci && npm run build && npm run lint
+
+    - name: Clean build and lint checks on signalling library
+      working-directory: Signalling
+      run: npm ci && npm link ../Common && npm run build && npm run lint
+
+    - name: Clean build and lint checks on wilbur
+      working-directory: SignallingWebServer
+      run: npm ci && npm link ../Signalling && npm run build && npm run lint
+
+    - name: Clean build, lint and unit tests on frontend library
+      working-directory: Frontend/library
+      run: npm ci && npm link ../../Common && npm run build && npm run lint && npm run test
+        
+    - name: Clean build and lint checks on frontend ui library
+      working-directory: Frontend/ui-library
+      run: npm ci && npm link ../library && npm run build && npm run lint
+
+    - name: Clean build of frontend implementation
+      working-directory: Frontend/implementations/typescript
+      run: npm ci && npm link ../ui-library && npm run build
+

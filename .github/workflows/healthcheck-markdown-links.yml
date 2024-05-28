@@ -1,4 +1,4 @@
-name: Check Markdown links
+name: Check health of document links
 
 on: push
 
