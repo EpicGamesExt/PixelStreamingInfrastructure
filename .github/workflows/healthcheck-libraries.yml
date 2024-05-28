@@ -57,5 +57,5 @@ jobs:
 
     - name: Clean build of frontend implementation
       working-directory: Frontend/implementations/typescript
-      run: npm ci && npm link ../ui-library && npm run build
+      run: npm ci && npm link ../../ui-library && npm run build
 
