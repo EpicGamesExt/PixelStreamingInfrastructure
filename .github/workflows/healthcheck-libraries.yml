@@ -1,4 +1,4 @@
-name: Check health of library code
+name: Library Health
 
 on:
   workflow_dispatch:
