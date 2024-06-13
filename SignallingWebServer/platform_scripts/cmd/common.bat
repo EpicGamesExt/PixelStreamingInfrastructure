@@ -263,7 +263,7 @@ IF "%DEFAULT_STUN%"=="1" (
 rem Ping own computer name to get local IP
 FOR /F "delims=[] tokens=2" %%A in ('ping -4 -n 1 %ComputerName% ^| findstr [') do set LOCAL_IP=%%A
 FOR /F "tokens=1,2 delims=:" %%i in ("%TURN_SERVER%") do (
-    set TURN_PORT=%j
+    set TURN_PORT=%%j
 )
 IF "%TURN_PORT%"=="" ( set TURN_PORT=3478 )
 
