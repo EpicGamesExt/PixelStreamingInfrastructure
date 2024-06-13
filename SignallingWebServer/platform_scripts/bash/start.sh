@@ -11,17 +11,21 @@ setup_turn_stun "bg"
 
 SERVER_ARGS+=" --serve --https_redirect --console_messages verbose --public_ip=${PUBLIC_IP}"
 if [[ ! -z "$STUN_SERVER" && ! -z "$TURN_SERVER" ]]; then
-    PEER_OPTIONS='{\"iceServers\":[{\"urls\":[\"stun:'${STUN_SERVER}'\",\"turn:'${TURN_SERVER}'\"],\"username\":\"'${TURN_USER}'\",\"credential\":\"'${TURN_PASS}'\"}]}'
+    PEER_OPTIONS="{\"iceServers\":[{\"urls\":[\"stun:${STUN_SERVER}\",\"turn:${TURN_SERVER}\"],\"username\":\"${TURN_USER}\",\"credential\":\"${TURN_PASS}\"}]}"
 elif [[ ! -z "$STUN_SERVER" ]]; then
-    PEER_OPTIONS='{\"iceServers\":[{\"urls\":[\"stun:'${STUN_SERVER}'\"]}]}'
+    PEER_OPTIONS="{\"iceServers\":[{\"urls\":[\"stun:${STUN_SERVER}\"]}]}"
 elif [[ ! -z "$TURN_SERVER" ]]; then
-    PEER_OPTIONS='{\"iceServers\":[{\"urls\":[\"turn:'${TURN_SERVER}'\"],\"username\":\"'${TURN_USER}'\",\"credentials\":\"'${TURN_PASS}'\"}]}'
+    PEER_OPTIONS="{\"iceServers\":[{\"urls\":[\"turn:${TURN_SERVER}\"],\"username\":\"${TURN_USER}\",\"credentials\":\"${TURN_PASS}\"}]}"
 fi
 if [[ ! -z "$PEER_OPTIONS" ]]; then
-    SERVER_ARGS+=" --peer_options=\"${PEER_OPTIONS}\""
+    SERVER_ARGS+=" --peer_options='${PEER_OPTIONS}'"
 fi
 if [[ ! -z "$FRONTEND_DIR" ]]; then
-    SERVER_ARGS+=" --http_root=\"$FRONTEND_DIR\""
+    SERVER_ARGS+=" --http_root='$FRONTEND_DIR'"
+fi
+
+if [[ "$BUILD_WILBUR" == "1" ]]; then
+    build_wilbur
 fi
 
 print_config

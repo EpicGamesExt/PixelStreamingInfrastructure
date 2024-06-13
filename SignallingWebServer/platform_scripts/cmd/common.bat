@@ -28,11 +28,13 @@ echo        --stun ^<stun_ip^>        STUN server to be used
 echo        --default-stun          Uses IP address downloaded from https://api.ipify.org and sets up default stun parameters
 echo        --build                 Force a rebuild of the typescript frontend even if it already exists
 echo        --frontend-dir ^<path^>   Sets the output path for the fontend build
+echo        --dev                   Dev mode (forces build of wilbur and its dependencies)
 echo    Other options: stored and passed to the server.
 set CONTINUE=0
 exit /b
 
 :ParseArgs
+set BUILD_WILBUR=0
 set FORCE_BUILD=0
 set DEFAULT_STUN=0
 set DEFAULT_TURN=0
@@ -44,6 +46,9 @@ set TURN_USER=
 set TURN_PASS=
 set STUN_SERVER=
 set PUBLIC_IP=
+if not exist "%SCRIPT_DIR%\..\..\build\" (
+    set BUILD_WILBUR=1
+)
 :arg_loop
 IF NOT "%1"=="" (
     set HANDLED=0
@@ -95,6 +100,9 @@ IF NOT "%1"=="" (
         set FRONTEND_DIR=%~2
         SHIFT
     )
+    IF "%1"=="--dev" (
+        set BUILD_WILBUR=1
+    )
     IF NOT "!HANDLED!"=="1" (
         set SERVER_ARGS=%SERVER_ARGS% %1
     )
@@ -120,7 +128,8 @@ if exist node\ (
 )
 
 rem Print node version
-echo Node version: & node\node.exe -v
+FOR /f %%A IN ('node\node.exe -v') DO set NODE_VERSION=%%A
+echo Node version: %NODE_VERSION%
 popd
 exit /b
 
@@ -165,7 +174,7 @@ IF !PATH_LENGTH! GTR 1024 (
     echo "Your PATH is greater than 1024 characters, cmd setx cannot change it. Either shorten your user's PATH contents or hope you have NodeJS in your PATH already..."
 ) else (
     rem Set new user PATH for all processes
-    setx PATH "%NODE_DIR%;%OLD_PATH%"
+    setx PATH "%NODE_DIR%;%OLD_PATH%" >NUL
     set PATH_NEEDS_RESTORE=1
 )
 
@@ -204,7 +213,7 @@ IF "%FORCE_BUILD%"=="1" (
 
 IF "%PATH_NEEDS_RESTORE%"=="1" (
     rem Restore PATH
-    setx PATH "%OLD_PATH%"
+    setx PATH "%OLD_PATH%" >NUL
 )
 
 exit /b
@@ -237,7 +246,7 @@ call :SetupCoturn
 exit /b
 
 :SetPublicIP
-FOR /f %%A IN ('curl http://api.ipify.org') DO set PUBLIC_IP=%%A
+FOR /f %%A IN ('curl --silent http://api.ipify.org') DO set PUBLIC_IP=%%A
 Echo External IP is : %PUBLIC_IP%
 exit /b
 
@@ -254,7 +263,7 @@ IF "%DEFAULT_STUN%"=="1" (
 rem Ping own computer name to get local IP
 FOR /F "delims=[] tokens=2" %%A in ('ping -4 -n 1 %ComputerName% ^| findstr [') do set LOCAL_IP=%%A
 FOR /F "tokens=1,2 delims=:" %%i in ("%TURN_SERVER%") do (
-    set TURN_PORT=%j
+    set TURN_PORT=%%j
 )
 IF "%TURN_PORT%"=="" ( set TURN_PORT=3478 )
 
@@ -289,8 +298,15 @@ echo Server command line arguments: %SERVER_ARGS%
 echo.
 exit /b
 
-:StartWilbur
+:BuildWilbur
 pushd %SCRIPT_DIR%\..\..\
+pushd ..\Common
+IF NOT EXIST build\ (
+    echo Building common library...
+    echo ------------------------
+    call "%SCRIPT_DIR%node\npm" run build
+)
+popd
 echo Building signalling library...
 echo ----------------------------
 pushd ..\Signalling
@@ -301,6 +317,11 @@ echo Building wilbur...
 echo ----------------------------
 call "%SCRIPT_DIR%node\npm" link ../Signalling
 call "%SCRIPT_DIR%node\npm" run build
+popd
+exit /b
+
+:StartWilbur
+pushd %SCRIPT_DIR%\..\..\
 call %NPM% run start -- %SERVER_ARGS%
 exit /b
 
