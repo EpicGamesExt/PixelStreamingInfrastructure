@@ -179,8 +179,13 @@ export class PeerConnectionController {
     generateStats() {
         const statsHandler = (StatsData: RTCStatsReport) => {
             this.aggregatedStats.processStats(StatsData);
-            this.onVideoStats(this.aggregatedStats);
+        };
 
+        const audioPromise = this.peerConnection?.getStats(this.audioTrack).then(statsHandler);
+        const videoPromise = this.peerConnection?.getStats(this.videoTrack).then(statsHandler);
+
+        Promise.allSettled([audioPromise, videoPromise]).then(() => {
+            this.onVideoStats(this.aggregatedStats);
             // Update the preferred codec selection based on what was actually negotiated
             if (this.updateCodecSelection && !!this.aggregatedStats.inboundVideoStats.codecId) {
                 this.config.setOptionSettingValue(
@@ -190,10 +195,7 @@ export class PeerConnectionController {
                     )
                 );
             }
-        };
-
-        this.peerConnection?.getStats(this.audioTrack).then(statsHandler);
-        this.peerConnection?.getStats(this.videoTrack).then(statsHandler);
+        });
     }
 
     /**
