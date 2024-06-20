@@ -1,6 +1,6 @@
 {
   "name": "@epicgames-ps/wilbur",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "A basic signalling server application for Unreal Engine's Pixel Streaming applications.",
   "main": "index.js",
   "scripts": {
