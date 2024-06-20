@@ -319,7 +319,6 @@ function setup_turn_stun() {
     TURN_REALM="PixelStreaming"
     TURN_ARGUMENTS="-c turnserver.conf --allowed-peer-ip=$LOCAL_IP -p ${TURN_PORT} -r ${TURN_REALM} -X ${PUBLIC_IP} -E ${LOCAL_IP} --no-cli --no-tls --no-dtls --pidfile /var/run/turnserver.pid -f -a -v -u ${TURN_USER}:${TURN_PASS}"
 
-    echo TURN_ARGUMENTS=$TURN_ARGUMENTS
     if [[ "$1" == "bg" ]]; then
         TURN_ARGUMENTS+=" >/dev/null &"
     fi
