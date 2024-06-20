@@ -385,7 +385,6 @@ function start_wilbur() {
     echo "Starting wilbur signalling server use ctrl-c to exit"
     echo "----------------------------------"
     
-    echo sudo PATH=\"$PATH\" ${NPM} start -- ${SERVER_ARGS}
     start_process "sudo PATH=\"$PATH\" ${NPM} start -- ${SERVER_ARGS}"
 
     popd > /dev/null
