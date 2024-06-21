@@ -15,6 +15,8 @@ export class PeerConnectionController {
     config: Config;
     preferredCodec: string;
     updateCodecSelection: boolean;
+    videoTrack: MediaStreamTrack;
+    audioTrack: MediaStreamTrack;
 
     /**
      * Create a new RTC Peer Connection client
@@ -175,10 +177,15 @@ export class PeerConnectionController {
      * Generate Aggregated Stats and then fire a onVideo Stats event
      */
     generateStats() {
-        this.peerConnection?.getStats(null).then((StatsData: RTCStatsReport) => {
+        const statsHandler = (StatsData: RTCStatsReport) => {
             this.aggregatedStats.processStats(StatsData);
-            this.onVideoStats(this.aggregatedStats);
+        };
 
+        const audioPromise = this.peerConnection?.getStats(this.audioTrack).then(statsHandler);
+        const videoPromise = this.peerConnection?.getStats(this.videoTrack).then(statsHandler);
+
+        Promise.allSettled([audioPromise, videoPromise]).then(() => {
+            this.onVideoStats(this.aggregatedStats);
             // Update the preferred codec selection based on what was actually negotiated
             if (this.updateCodecSelection && !!this.aggregatedStats.inboundVideoStats.codecId) {
                 this.config.setOptionSettingValue(
@@ -300,6 +307,15 @@ export class PeerConnectionController {
      * @param event - The webRtc track event
      */
     handleOnTrack(event: RTCTrackEvent) {
+        if (event.streams.length < 1 || event.streams[0].id == 'probator') {
+            return;
+        }
+        if (event.track.kind == 'video') {
+            this.videoTrack = event.track;
+        }
+        if (event.track.kind == 'audio') {
+            this.audioTrack = event.track;
+        }
         this.onTrack(event);
     }
 
