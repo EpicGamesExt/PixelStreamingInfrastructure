@@ -104,6 +104,22 @@ async function main(): Promise<void> {
         onFailedPhase('subscribing', context);
     }
 
+    // test layerPreference
+    
+    player.sendMessage(Messages.layerPreference, { temporalLayer: 9, spatialLayer: 6 });
+    streamer.addExpect(Messages.layerPreference, (msg: Messages.layerPreference) => {
+        if (msg.temporalLayer != 9) {
+            return 'Temporal layer does not match';
+        }
+        if (msg.spatialLayer != 6) {
+            return 'Spatial layer does not match';
+        }
+    });
+
+    if (!await context.validateStep(3000, [streamer, player])) {
+        onFailedPhase('layerPreference message', context);
+    }
+
     // test force disconnect player
 
     streamer.sendMessage(Messages.disconnectPlayer, { playerId: playerId });
@@ -130,6 +146,7 @@ async function main(): Promise<void> {
     if (!await context.validateStep(3000, [streamer, player])) {
         onFailedPhase('disconnect notify', context);
     }
+
 
     console.log('Done.');
     process.exit(0);
