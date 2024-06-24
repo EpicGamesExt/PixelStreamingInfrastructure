@@ -107,7 +107,6 @@ function check_version() { #current_version #min_version
 
 function check_and_install() { #dep_name #get_version_string #version_min #install_command
 	local is_installed=0
-    NODE_WAS_INSTALLED=0
 
 	echo "Checking for required $1 install"
 
@@ -137,8 +136,6 @@ function check_and_install() { #dep_name #get_version_string #version_min #insta
 
 		if [ $? -ge 1 ]; then
 			echo "Installation of $1 failed try running 'export VERBOSE=1' then run this script again for more details"
-        else
-            NODE_WAS_INSTALLED=1
 		fi
 	fi
 }
