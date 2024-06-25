@@ -1,4 +1,3 @@
-[![Run library unit tests](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/actions/workflows/run-library-unit-tests.yml/badge.svg?branch=master)](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/actions/workflows/run-library-unit-tests.yml)
 
 | Branch | UE5.5 | UE5.4 | UE5.3 |
 | -------|--|--|--|
