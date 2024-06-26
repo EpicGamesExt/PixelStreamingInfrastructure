@@ -4,7 +4,29 @@ The changelog is a summary of commits between releases of Unreal Engine.
 
 As a reminder each UE-X branch/tag in this repository corresponds to a version of Unreal Engine.
 
-## [UE 5.3 (Current)](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/commits/UE5.3)
+## [UE 5.4 (Current)](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/commits/UE5.4)
+### Features
+
+### Enhancements
+- Adding an option to hide the UI. by @mcottontensor in https://github.com/EpicGamesExt/PixelStreamingInfrastructure/pull/88
+
+### Documentation
+
+### Bug Fixes
+- Added SDP for probator by @zuvola in https://github.com/EpicGamesExt/PixelStreamingInfrastructure/pull/86
+- Bug fix to retrieve the correct selected ice candidate pair by @david-macpherson in https://github.com/EpicGamesExt/PixelStreamingInfrastructure/pull/25
+
+### Security
+- Bump webpack-dev-middleware from 5.3.3 to 5.3.4 in /Frontend/implementations/typescript by @dependabot in https://github.com/EpicGamesExt/PixelStreamingInfrastructure/pull/37
+- Bump webpack-dev-middleware from 5.3.3 to 5.3.4 in /Frontend/implementations/react by @dependabot in https://github.com/EpicGamesExt/PixelStreamingInfrastructure/pull/39
+- Bump follow-redirects from 1.15.4 to 1.15.6 in /Frontend/implementations/typescript by @dependabot in https://github.com/EpicGamesExt/PixelStreamingInfrastructure/pull/41
+- Bump follow-redirects from 1.15.4 to 1.15.6 in /Frontend/implementations/react by @dependabot in https://github.com/EpicGamesExt/PixelStreamingInfrastructure/pull/43
+- Bump express from 4.18.2 to 4.19.2 in /SignallingWebServer by @dependabot in https://github.com/EpicGamesExt/PixelStreamingInfrastructure/pull/65
+- Bump express from 4.18.2 to 4.19.2 in /Matchmaker by @dependabot in https://github.com/EpicGamesExt/PixelStreamingInfrastructure/pull/70
+- Bump express in from 4.18.2 to 4.19.2 /Frontend/implementations/typescript by @dependabot in https://github.com/EpicGamesExt/PixelStreamingInfrastructure/pull/73
+- Bump express from 4.18.2 to 4.19.2 in /Frontend/implementations/react by @dependabot in https://github.com/EpicGamesExt/PixelStreamingInfrastructure/pull/79
+
+## [UE 5.3](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/commits/UE5.3)
 
 ### Features
 - Protocol structures can now contain strings by @Belchy06 in https://github.com/EpicGames/PixelStreamingInfrastructure/pull/336
