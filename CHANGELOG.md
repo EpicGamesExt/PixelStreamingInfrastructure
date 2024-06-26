@@ -4,7 +4,67 @@ The changelog is a summary of commits between releases of Unreal Engine.
 
 As a reminder each UE-X branch/tag in this repository corresponds to a version of Unreal Engine.
 
-## [UE 5.3 (Current)](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/commits/UE5.3)
+## [UE 5.4 (Current)](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/commits/UE5.4)
+### Features
+- Add support for non-latin characters by @Belchy06 in https://github.com/EpicGames/PixelStreamingInfrastructure/pull/452
+- Adding an option to hide the UI. by @mcottontensor in https://github.com/EpicGamesExt/PixelStreamingInfrastructure/pull/88
+
+### Enhancements
+- Updating NPM libs to 5.4 by @mcottontensor in https://github.com/EpicGames/PixelStreamingInfrastructure/pull/362
+- Update SignallingWebServer platform scripts to support Mac by @Belchy06 in https://github.com/EpicGames/PixelStreamingInfrastructure/pull/389
+- Expose JSS InsertionPoint (#390) by @timbotimbo in https://github.com/EpicGames/PixelStreamingInfrastructure/pull/397
+- Fix/allow video autoplay without click by @bramford in https://github.com/EpicGames/PixelStreamingInfrastructure/pull/409
+- Removing authentication features. by @mcottontensor in https://github.com/EpicGames/PixelStreamingInfrastructure/pull/414
+- Fixes for Streamers changing IDs when connecting & Updates to SFU behaviour relating to multi streamer changes. by @mcottontensor in https://github.com/EpicGames/PixelStreamingInfrastructure/pull/416
+- Rewriting a bunch of reconnect and disconnect handling. by @mcottontensor in https://github.com/EpicGames/PixelStreamingInfrastructure/pull/419
+- Exposing the pixelstreaming interface to the browser. by @mcottontensor in https://github.com/EpicGames/PixelStreamingInfrastructure/pull/420
+- Bitrate negotiation on stream startup by @mcottontensor in https://github.com/EpicGames/PixelStreamingInfrastructure/pull/425
+- Dockerfile for SFU by @mcottontensor in https://github.com/EpicGames/PixelStreamingInfrastructure/pull/431
+- Remove auto-assigned prop by @evenstensberg in https://github.com/EpicGames/PixelStreamingInfrastructure/pull/434
+- Update cirrus.js - More informative error messages - Fixes #184 by @alien299 in https://github.com/EpicGames/PixelStreamingInfrastructure/pull/441
+- Re-order settings order by @Belchy06 in https://github.com/EpicGames/PixelStreamingInfrastructure/pull/471
+- Add TCP+Relay detection event by @david-macpherson in https://github.com/EpicGames/PixelStreamingInfrastructure/pull/485
+
+### Documentation
+- Shift of Matchmaker and SFU pages to Infra by @MWillWallT in https://github.com/EpicGames/PixelStreamingInfrastructure/pull/361
+- New docs by @mcottontensor in https://github.com/EpicGames/PixelStreamingInfrastructure/pull/429
+- Update CONTRIBUTING.md - Added Verified Commits as a Requirement - Closes#445 by @alien299 in https://github.com/EpicGames/PixelStreamingInfrastructure/pull/448
+- Update copyright/license year by @DenisTensorWorks in https://github.com/EpicGames/PixelStreamingInfrastructure/pull/474
+- Fix typo readme by @Ahhj93 in https://github.com/EpicGames/PixelStreamingInfrastructure/pull/488
+
+### Bug Fixes
+- Bug fix to retrieve the correct selected ice candidate pair by @david-macpherson in https://github.com/EpicGamesExt/PixelStreamingInfrastructure/pull/25
+- Added SDP for probator by @zuvola in https://github.com/EpicGamesExt/PixelStreamingInfrastructure/pull/86
+- Remove unit conversion for bitrate from URL. URL is already in kbps (#369) by @Belchy06 in https://github.com/EpicGames/PixelStreamingInfrastructure/pull/372
+- Handle statsPanel or settingsPanel being undefined. (#392) by @timbotimbo in https://github.com/EpicGames/PixelStreamingInfrastructure/pull/394
+- Allowing the Matchmaker to run on linux by @mcottontensor in https://github.com/EpicGames/PixelStreamingInfrastructure/pull/406
+- Fixing missed function rename. by @mcottontensor in https://github.com/EpicGames/PixelStreamingInfrastructure/pull/427
+- Update platform scripts so that the BASH_LOCATION works on Mac as well by @Belchy06 in https://github.com/EpicGames/PixelStreamingInfrastructure/pull/428
+- Fixing left behind streamer IDs when they're late to ID themselves. by @mcottontensor in https://github.com/EpicGames/PixelStreamingInfrastructure/pull/432
+- Fixing handling of StreamerId in the initial config settings. by @mcottontensor in https://github.com/EpicGames/PixelStreamingInfrastructure/pull/438
+- Small signalling server fixes. by @mcottontensor in https://github.com/EpicGames/PixelStreamingInfrastructure/pull/443
+- Fix warnings about GamepadButtonReleased by @Belchy06 in https://github.com/EpicGames/PixelStreamingInfrastructure/pull/451
+- Fix for build-all script dependencies by @kroecks in https://github.com/EpicGames/PixelStreamingInfrastructure/pull/453
+- Export NO_SUDO so it's available for use in launched processes by @Belchy06 in https://github.com/EpicGames/PixelStreamingInfrastructure/pull/472
+- Fix touch events not working on iOS by @Belchy06 in https://github.com/EpicGames/PixelStreamingInfrastructure/pull/486
+- Bug Fix TCP Relay event to only be emitted once by @david-macpherson in https://github.com/EpicGames/PixelStreamingInfrastructure/pull/490
+
+### Security
+- Bump webpack-dev-middleware from 5.3.3 to 5.3.4 in /Frontend/implementations/typescript by @dependabot in https://github.com/EpicGamesExt/PixelStreamingInfrastructure/pull/37
+- Bump webpack-dev-middleware from 5.3.3 to 5.3.4 in /Frontend/implementations/react by @dependabot in https://github.com/EpicGamesExt/PixelStreamingInfrastructure/pull/39
+- Bump follow-redirects from 1.15.4 to 1.15.6 in /Frontend/implementations/typescript by @dependabot in https://github.com/EpicGamesExt/PixelStreamingInfrastructure/pull/41
+- Bump follow-redirects from 1.15.4 to 1.15.6 in /Frontend/implementations/react by @dependabot in https://github.com/EpicGamesExt/PixelStreamingInfrastructure/pull/43
+- Bump express from 4.18.2 to 4.19.2 in /SignallingWebServer by @dependabot in https://github.com/EpicGamesExt/PixelStreamingInfrastructure/pull/65
+- Bump express from 4.18.2 to 4.19.2 in /Matchmaker by @dependabot in https://github.com/EpicGamesExt/PixelStreamingInfrastructure/pull/70
+- Bump express in from 4.18.2 to 4.19.2 /Frontend/implementations/typescript by @dependabot in https://github.com/EpicGamesExt/PixelStreamingInfrastructure/pull/73
+- Bump express from 4.18.2 to 4.19.2 in /Frontend/implementations/react by @dependabot in https://github.com/EpicGamesExt/PixelStreamingInfrastructure/pull/79
+- Bump postcss from 8.4.21 to 8.4.31 in /Frontend/implementations/typescript (#380) by @dependabot in https://github.com/EpicGames/PixelStreamingInfrastructure/pull/383
+- Bump postcss from 8.4.21 to 8.4.31 in /Frontend/implementations/react (#379) by @dependabot in https://github.com/EpicGames/PixelStreamingInfrastructure/pull/386
+- Bump @babel/traverse from 7.21.3 to 7.23.2 in /Frontend/library (#384) by @dependabot in https://github.com/EpicGames/PixelStreamingInfrastructure/pull/388
+- Bump follow-redirects from 1.15.2 to 1.15.4 in /Frontend/implementations/typescript by @dependabot in https://github.com/EpicGames/PixelStreamingInfrastructure/pull/465
+- Bump follow-redirects from 1.15.2 to 1.15.4 in /Frontend/implementations/react by @dependabot in https://github.com/EpicGames/PixelStreamingInfrastructure/pull/464
+
+## [UE 5.3](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/commits/UE5.3)
 
 ### Features
 - Protocol structures can now contain strings by @Belchy06 in https://github.com/EpicGames/PixelStreamingInfrastructure/pull/336
