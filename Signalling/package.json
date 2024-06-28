@@ -1,6 +1,6 @@
 {
   "name": "@epicgames-ps/lib-pixelstreamingsignalling-ue5.5",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Basic signalling library for developers wishing to build applications that signal a Pixel Streaming application.",
   "main": "build/commonjs/pixelstreamingsignalling.js",
   "module": "build/esm/pixelstreamingsignalling.js",
@@ -30,7 +30,7 @@
     "typescript": "^5.3.3"
   },
   "dependencies": {
-    "@epicgames-ps/lib-pixelstreamingcommon-ue5.5": "^0.0.13",
+    "@epicgames-ps/lib-pixelstreamingcommon-ue5.5": "^0.0.14",
     "commander": "^12.0.0",
     "express": "^4.18.2",
     "express-openapi": "^12.1.3",
