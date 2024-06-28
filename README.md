@@ -31,7 +31,6 @@ If you would like to contribute to our repository, please reference our [contrib
 The Pixel Streaming Infrastructure contains reference implementations for all the components needed to run a pixel streaming application. They are structured as separate projects, which work together, but are designed to be modular and interoperable with other implementations which use WebRTC technology. These implementations include: 
 - A signalling web server, called Cirrus, found in [`SignallingWebServer/`](SignallingWebServer/).
 - An SFU (Selective Forwarding Unit), found in [`SFU/`](SFU/).
-- A matchmaker, found in [`Matchmaker/`](Matchmaker/).
 - A common library for frontend applications, found in [`Common/`](Common/).
 - Several frontend projects for the WebRTC player and input, found in [`Frontend/`](Frontend/):
   - shared libraries for [communication](Frontend/library/) and [UI](Frontend/ui-library/) functionality
@@ -75,7 +74,6 @@ npm i @epicgames-ps/lib-pixelstreamingfrontend-ui-ue5.5
 * [General Docs](/Docs/README.md)
 * [Frontend Docs](/Frontend/README.md)
 * [Signalling Server Docs](/SignallingWebServer/README.md)
-* [Matchmaker Docs](/Matchmaker/README.md)
 * [SFU Docs](/SFU/README.md)
 
 ### Tagged source releases + built typescript frontend
