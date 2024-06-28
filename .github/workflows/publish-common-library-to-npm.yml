@@ -1,7 +1,7 @@
 name: Publish common lib
 on:
+  workflow_dispatch:
   push:
-    workflow_dispatch:
     branches: ['UE5.5']
     paths: ['Common/package.json']
 
