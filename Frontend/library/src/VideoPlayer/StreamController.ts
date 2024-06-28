@@ -33,7 +33,7 @@ export class StreamController {
         );
         // Do not add the track if the ID is `probator` as this is special track created by mediasoup for bitrate probing.
         // Refer to https://github.com/EpicGamesExt/PixelStreamingInfrastructure/pull/86 for more details.
-        if (rtcTrackEvent.track.id == 'probator') {
+        if (rtcTrackEvent.streams.length < 1 || rtcTrackEvent.streams[0].id == 'probator') {
             return;
         }
 

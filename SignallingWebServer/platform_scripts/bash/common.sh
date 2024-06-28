@@ -182,7 +182,6 @@ function setup_node() {
                                                                 && mv node-v*-*-* \"${SCRIPT_DIR}/node\""
 
     PATH="${SCRIPT_DIR}/node/bin:$PATH"
-    "${SCRIPT_DIR}/node/lib/node_modules/npm/bin/npm-cli.js" install
 
     popd > /dev/null
 }
@@ -282,9 +281,11 @@ function setup() {
 
 # Sets PUBLIC_IP to the external ip
 function set_public_ip() {
-    PUBLIC_IP=$(curl -s https://api.ipify.org)
-    if [[ -z "$PUBLIC_IP" ]]; then
-        PUBLIC_IP="127.0.0.1"
+    if [ -z "$PUBLIC_IP" ]; then
+        PUBLIC_IP=$(curl -s https://api.ipify.org)
+        if [[ -z "$PUBLIC_IP" ]]; then
+            PUBLIC_IP="127.0.0.1"
+        fi
     fi
 }
 
@@ -316,7 +317,7 @@ function setup_turn_stun() {
     TURN_ARGUMENTS="-c turnserver.conf --allowed-peer-ip=$LOCAL_IP -p ${TURN_PORT} -r ${TURN_REALM} -X ${PUBLIC_IP} -E ${LOCAL_IP} --no-cli --no-tls --no-dtls --pidfile /var/run/turnserver.pid -f -a -v -u ${TURN_USER}:${TURN_PASS}"
 
     if [[ "$1" == "bg" ]]; then
-        TURN_ARGUMENTS+=" &"
+        TURN_ARGUMENTS+=" >/dev/null &"
     fi
 
     if [[ "${START_TURN}" == "1" && ! -z "${TURN_SERVER}" && ! -z "${TURN_USER}" && ! -z "${TURN_PASS}" ]]; then

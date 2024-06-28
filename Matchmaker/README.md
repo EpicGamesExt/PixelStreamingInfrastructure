@@ -1,12 +1,5 @@
-# Pixel Streaming Matchmaker
+### Where is matchmaker?
+The matchmaker has been removed. It was not a good refernce for how to handle Pixel Streaming at scale and was adding to maintenance work, so we made the decision to remove it and discontinue its support.
 
-Instead of having all users connect to the same stream, you may want each person to end up in their own interactive experiences. To do this, you can run a separate stack of Pixel Streaming components for each user, and direct each user to a separate Signaling and Web Server to start a connection.
-
-You can set up each stack of Pixel Streaming components on a separate host, or you can put more than one stack on the same host as long as you configure the port settings for the components within each stack so that they all communicate over different ports. See the Pixel Streaming Reference for details on these port settings.
-
-To help set up this kind of configuration, the Pixel Streaming system can use a **matchmaker** server that tracks which Signaling and Web Servers are available, and whether they are being used by a client connection.
-
-
-## Docs
-- [Hosting and Networking Guide](https://docs.unrealengine.com/5.1/en-US/hosting-and-networking-guide-for-pixel-streaming-in-unreal-engine/)
-- [Customizing the Queue UI](Docs/Customizing%20the%20Queue%20UI.md)
+### What if I still need Matchmaker?
+You can still obtain it from older revisions of this repo. It is removed for UE5.5, but any previous version of the Infrastructure repo will still have it, latest one being [UE 5.4 matchmaker](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/tree/UE5.4/Matchmaker).
