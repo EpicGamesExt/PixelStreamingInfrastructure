@@ -2,7 +2,6 @@
 
 import { StreamMessageController } from '../UeInstanceMessage/StreamMessageController';
 import { Controller } from './GamepadTypes';
-import { WebXRUtils } from '../Util/WebXRUtils';
 
 /**
  * The class that handles the functionality of xrgamepads and controllers
@@ -17,6 +16,28 @@ export class XRGamepadController {
     constructor(toStreamerMessagesProvider: StreamMessageController) {
         this.toStreamerMessagesProvider = toStreamerMessagesProvider;
         this.controllers = [];
+    }
+
+    /**
+     * Deep copies a gamepad's values by first converting it to a JSON object and then back to a gamepad
+     *
+     * @param gamepad the original gamepad
+     * @returns a new gamepad object, populated with the original gamepads values
+     */
+    static deepCopyGamepad(gamepad: Gamepad): Gamepad {
+        return JSON.parse(
+            JSON.stringify({
+                buttons: gamepad.buttons.map((b) =>
+                    JSON.parse(
+                        JSON.stringify({
+                            pressed: b.pressed,
+                            touched: b.touched
+                        })
+                    )
+                ),
+                axes: gamepad.axes
+            })
+        );
     }
 
     updateStatus(
@@ -75,12 +96,10 @@ export class XRGamepadController {
                     currentState: undefined,
 					id: undefined
                 };
-                this.controllers[handedness].prevState =
-                    WebXRUtils.deepCopyGamepad(source.gamepad);
+                this.controllers[handedness].prevState = XRGamepadController.deepCopyGamepad(source.gamepad);
             }
 
-            this.controllers[handedness].currentState =
-                WebXRUtils.deepCopyGamepad(source.gamepad);
+            this.controllers[handedness].currentState = XRGamepadController.deepCopyGamepad(source.gamepad);
 
             const controller = this.controllers[handedness];
             const currState = controller.currentState;
