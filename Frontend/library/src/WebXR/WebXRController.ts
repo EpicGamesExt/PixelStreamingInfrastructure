@@ -2,7 +2,6 @@
 
 import { Logger } from '../Logger/Logger';
 import { WebRtcPlayerController } from '../WebRtcPlayer/WebRtcPlayerController';
-import { WebGLUtils } from '../Util/WebGLUtils';
 import { XRGamepadController } from '../Inputs/XRGamepadController';
 import { XrFrameEvent } from '../Util/EventEmitter'
 import { Flags } from '../pixelstreamingfrontend';
@@ -20,6 +19,8 @@ export class WebXRController {
     private xrQuadLayer: XRQuadLayer = null;
     private xrViewerPose : XRViewerPose = null;
     private quadDist = 1.0;
+    // Used for comparisons to ensure two numbers are close enough.
+    private EPSILON = 0.0000001;
 
     private positionLocation: number;
     private texcoordLocation: number;
@@ -37,18 +38,23 @@ export class WebXRController {
 
     // Ignore unused, simply initializing this polyfill patches browser API for browser's
     // that do not support the WebXR layers API.
-    private xrLayersPolyfill: WebXRLayersPolyfill;
+    private xrLayersPolyfill: WebXRLayersPolyfill = null;
     private useMediaLayers: Boolean = false;
 
     private leftView: XRView = null;
     private rightView: XRView = null;
+
+    // Store the HMD data we have last sent (not all of it is needed every frame unless it changes)
+    private lastSentLeftEyeProj: Float32Array = null;
+    private lastSentRightEyeProj: Float32Array = null;
+    private lastSentRelativeLeftEyePos: DOMPointReadOnly = null;
+    private lastSentRelativeRightEyePos: DOMPointReadOnly = null;
 
     onSessionStarted: EventTarget;
     onSessionEnded: EventTarget;
     onFrame: EventTarget;
 
     constructor(webRtcPlayerController: WebRtcPlayerController) {
-        this.xrLayersPolyfill = new WebXRLayersPolyfill();
         this.xrSession = null;
         this.webRtcController = webRtcPlayerController;
         this.xrGamepadController = new XRGamepadController(
@@ -61,6 +67,17 @@ export class WebXRController {
 
     public xrClicked() {
         if (!this.xrSession) {
+
+            if(!navigator.xr){
+                Logger.Error(Logger.GetStackTrace(), "This browser does not support XR.");
+                return;
+            }
+
+            // Apply the XR Polyfill before we start XR
+            if(this.xrLayersPolyfill == null){
+                this.xrLayersPolyfill = new WebXRLayersPolyfill();
+            }
+
             navigator.xr
                 /* Enable WebXR layers as user agent's which support this can optimize rendering path. */
                 .requestSession('immersive-vr', { optionalFeatures: ['layers'] })
@@ -88,14 +105,50 @@ export class WebXRController {
     }
 
     initShaders() {
+
+        // shader source code
+        const vertexShaderSource: string =
+        `
+        attribute vec2 a_position;
+        attribute vec2 a_texCoord;
+
+        // input
+        uniform vec4 u_texOffset;
+
+        // varyings
+        varying vec2 v_texCoord;
+
+        void main() {
+           gl_Position = vec4(a_position.x, a_position.y, 0, 1);
+           // pass the texCoord to the fragment shader
+           // The GPU will interpolate this value between points.
+           v_texCoord = (a_texCoord * u_texOffset.xy) + u_texOffset.zw;
+        }
+        `;
+
+        const fragmentShaderSource: string =
+        `
+        precision mediump float;
+
+        // our texture
+        uniform sampler2D u_image;
+
+        // the texCoords passed in from the vertex shader.
+        varying vec2 v_texCoord;
+
+        void main() {
+           gl_FragColor = texture2D(u_image, v_texCoord);
+        }
+        `;
+
         // setup vertex shader
         const vertexShader = this.gl.createShader(this.gl.VERTEX_SHADER);
-        this.gl.shaderSource(vertexShader, WebGLUtils.vertexShader());
+        this.gl.shaderSource(vertexShader, vertexShaderSource);
         this.gl.compileShader(vertexShader);
 
         // setup fragment shader
         const fragmentShader = this.gl.createShader(this.gl.FRAGMENT_SHADER);
-        this.gl.shaderSource(fragmentShader, WebGLUtils.fragmentShader());
+        this.gl.shaderSource(fragmentShader, fragmentShaderSource);
         this.gl.compileShader(fragmentShader);
 
         // setup GLSL program
@@ -320,43 +373,109 @@ export class WebXRController {
 
     }
 
-    sendXRDataToUE() {
-        // Note: no longer send the `XRHMDTransform` message to UE as the below `XREyeViews` contains all the relevant information.
+    areArraysEqual(a: Float32Array, b: Float32Array) : boolean {
+        return a.length === b.length && a.every((element, index) => Math.abs(element - b[index]) <= this.EPSILON);
+    }
 
-        // Send each view (eye) in the XRViewerPose.Views[] and send to UE
+    arePointsEqual(a: DOMPointReadOnly, b: DOMPointReadOnly) : boolean {
+        return Math.abs(a.x - b.x) >= this.EPSILON && Math.abs(a.y - b.y) >= this.EPSILON && Math.abs(a.z - b.z) >= this.EPSILON;
+    }
+
+    sendXRDataToUE() {
         if(this.leftView == null || this.rightView == null) {
             return;
         }
+
+        // We selectively send either the `XREyeViews` or `XRHMDTransform`
+        // messages over the datachannel. The reason for this selective sending is that
+        // the `XREyeViews` is a much larger message and changes infrequently (e.g. only when user changes headset IPD).
+        // Therefore, we only need to send it once on startup and then any time it changes.
+        // The rest of the time we can send the `XRHMDTransform` message.
+        let shouldSendEyeViews = this.lastSentLeftEyeProj == null ||
+                                 this.lastSentRightEyeProj == null ||
+                                 this.lastSentRelativeLeftEyePos == null ||
+                                 this.lastSentRelativeRightEyePos == null;
 
         const leftEyeTrans = this.leftView.transform.matrix;
         const leftEyeProj = this.leftView.projectionMatrix;
         const rightEyeTrans = this.rightView.transform.matrix;
         const rightEyeProj = this.rightView.projectionMatrix;
+        const hmdTrans = this.xrViewerPose.transform.matrix;
 
-        // send transform (4x4) and projection matrix (4x4) data for each eye (left first, then right)
-        // prettier-ignore
-        this.webRtcController.streamMessageController.toStreamerHandlers.get('XREyeViews')([
-            // Left eye 4x4 transform matrix
-            leftEyeTrans[0], leftEyeTrans[4], leftEyeTrans[8],  leftEyeTrans[12],
-            leftEyeTrans[1], leftEyeTrans[5], leftEyeTrans[9],  leftEyeTrans[13],
-            leftEyeTrans[2], leftEyeTrans[6], leftEyeTrans[10], leftEyeTrans[14],
-            leftEyeTrans[3], leftEyeTrans[7], leftEyeTrans[11], leftEyeTrans[15],
-            // Left eye 4x4 projection matrix
-            leftEyeProj[0], leftEyeProj[4], leftEyeProj[8],  leftEyeProj[12],
-            leftEyeProj[1], leftEyeProj[5], leftEyeProj[9],  leftEyeProj[13],
-            leftEyeProj[2], leftEyeProj[6], leftEyeProj[10], leftEyeProj[14],
-            leftEyeProj[3], leftEyeProj[7], leftEyeProj[11], leftEyeProj[15],
-            // Right eye 4x4 transform matrix
-            rightEyeTrans[0], rightEyeTrans[4], rightEyeTrans[8],  rightEyeTrans[12],
-            rightEyeTrans[1], rightEyeTrans[5], rightEyeTrans[9],  rightEyeTrans[13],
-            rightEyeTrans[2], rightEyeTrans[6], rightEyeTrans[10], rightEyeTrans[14],
-            rightEyeTrans[3], rightEyeTrans[7], rightEyeTrans[11], rightEyeTrans[15],
-            // right eye 4x4 projection matrix
-            rightEyeProj[0], rightEyeProj[4], rightEyeProj[8],  rightEyeProj[12],
-            rightEyeProj[1], rightEyeProj[5], rightEyeProj[9],  rightEyeProj[13],
-            rightEyeProj[2], rightEyeProj[6], rightEyeProj[10], rightEyeProj[14],
-            rightEyeProj[3], rightEyeProj[7], rightEyeProj[11], rightEyeProj[15],
-        ]);
+        // Check if projection matrices have changed
+        if(!shouldSendEyeViews && this.lastSentLeftEyeProj != null && this.lastSentRightEyeProj != null) {
+            let leftEyeProjUnchanged = this.areArraysEqual(leftEyeProj, this.lastSentLeftEyeProj);
+            let rightEyeProjUnchanged = this.areArraysEqual(rightEyeProj, this.lastSentRightEyeProj);
+            shouldSendEyeViews = leftEyeProjUnchanged == false || rightEyeProjUnchanged == false;
+        }
+
+        let leftEyeRelativePos = new DOMPointReadOnly(
+            this.leftView.transform.position.x - this.xrViewerPose.transform.position.x,
+            this.leftView.transform.position.y - this.xrViewerPose.transform.position.y,
+            this.leftView.transform.position.z - this.xrViewerPose.transform.position.z,
+            1.0
+        );
+
+        let rightEyeRelativePos = new DOMPointReadOnly(
+            this.leftView.transform.position.x - this.xrViewerPose.transform.position.x,
+            this.leftView.transform.position.y - this.xrViewerPose.transform.position.y,
+            this.leftView.transform.position.z - this.xrViewerPose.transform.position.z,
+            1.0
+        );
+
+        // Check if relative eye pos has changed (e.g IPD changed)
+        if(!shouldSendEyeViews && this.lastSentRelativeLeftEyePos != null && this.lastSentRelativeRightEyePos != null) {
+            let leftEyePosUnchanged = this.arePointsEqual(leftEyeRelativePos, this.lastSentRelativeLeftEyePos);
+            let rightEyePosUnchanged = this.arePointsEqual(rightEyeRelativePos, this.lastSentRelativeRightEyePos);
+            shouldSendEyeViews = leftEyePosUnchanged == false || rightEyePosUnchanged == false;
+            // Note: We are not checking if EyeView rotation changes (afaict no HMD's support changing this value at runtime).
+        }
+
+        if(shouldSendEyeViews) {
+            // send transform (4x4) and projection matrix (4x4) data for each eye (left first, then right)
+            // prettier-ignore
+            this.webRtcController.streamMessageController.toStreamerHandlers.get('XREyeViews')([
+                // Left eye 4x4 transform matrix
+                leftEyeTrans[0], leftEyeTrans[4], leftEyeTrans[8],  leftEyeTrans[12],
+                leftEyeTrans[1], leftEyeTrans[5], leftEyeTrans[9],  leftEyeTrans[13],
+                leftEyeTrans[2], leftEyeTrans[6], leftEyeTrans[10], leftEyeTrans[14],
+                leftEyeTrans[3], leftEyeTrans[7], leftEyeTrans[11], leftEyeTrans[15],
+                // Left eye 4x4 projection matrix
+                leftEyeProj[0], leftEyeProj[4], leftEyeProj[8],  leftEyeProj[12],
+                leftEyeProj[1], leftEyeProj[5], leftEyeProj[9],  leftEyeProj[13],
+                leftEyeProj[2], leftEyeProj[6], leftEyeProj[10], leftEyeProj[14],
+                leftEyeProj[3], leftEyeProj[7], leftEyeProj[11], leftEyeProj[15],
+                // Right eye 4x4 transform matrix
+                rightEyeTrans[0], rightEyeTrans[4], rightEyeTrans[8],  rightEyeTrans[12],
+                rightEyeTrans[1], rightEyeTrans[5], rightEyeTrans[9],  rightEyeTrans[13],
+                rightEyeTrans[2], rightEyeTrans[6], rightEyeTrans[10], rightEyeTrans[14],
+                rightEyeTrans[3], rightEyeTrans[7], rightEyeTrans[11], rightEyeTrans[15],
+                // right eye 4x4 projection matrix
+                rightEyeProj[0], rightEyeProj[4], rightEyeProj[8],  rightEyeProj[12],
+                rightEyeProj[1], rightEyeProj[5], rightEyeProj[9],  rightEyeProj[13],
+                rightEyeProj[2], rightEyeProj[6], rightEyeProj[10], rightEyeProj[14],
+                rightEyeProj[3], rightEyeProj[7], rightEyeProj[11], rightEyeProj[15],
+                // HMD 4x4 transform
+                hmdTrans[0], hmdTrans[4], hmdTrans[8],  hmdTrans[12],
+                hmdTrans[1], hmdTrans[5], hmdTrans[9],  hmdTrans[13],
+                hmdTrans[2], hmdTrans[6], hmdTrans[10], hmdTrans[14],
+                hmdTrans[3], hmdTrans[7], hmdTrans[11], hmdTrans[15],
+            ]);
+            this.lastSentLeftEyeProj = leftEyeProj;
+            this.lastSentRightEyeProj = rightEyeProj;
+            this.lastSentRelativeLeftEyePos = leftEyeRelativePos;
+            this.lastSentRelativeRightEyePos = rightEyeRelativePos;
+        }
+        else {
+            // If we don't need to the entire eye views being sent just send the HMD transform
+            this.webRtcController.streamMessageController.toStreamerHandlers.get('XRHMDTransform')([
+                // HMD 4x4 transform
+                hmdTrans[0], hmdTrans[4], hmdTrans[8],  hmdTrans[12],
+                hmdTrans[1], hmdTrans[5], hmdTrans[9],  hmdTrans[13],
+                hmdTrans[2], hmdTrans[6], hmdTrans[10], hmdTrans[14],
+                hmdTrans[3], hmdTrans[7], hmdTrans[11], hmdTrans[15],
+            ]);
+        }
     }
 
     onXrFrame(time: DOMHighResTimeStamp, frame: XRFrame) {
@@ -532,6 +651,10 @@ export class WebXRController {
     }
 
     static isSessionSupported(mode: XRSessionMode): Promise<boolean> {
+        if (location.protocol !== "https:") {
+            Logger.Info(null, "WebXR requires https, if you want WebXR use https.");
+        }
+
         if (navigator.xr) {
             return navigator.xr.isSessionSupported(mode);
         } else {
