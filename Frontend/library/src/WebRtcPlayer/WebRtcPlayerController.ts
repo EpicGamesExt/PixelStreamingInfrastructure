@@ -709,6 +709,15 @@ export class WebRtcPlayerController {
         );
         this.streamMessageController.registerMessageHandler(
             MessageDirection.ToStreamer,
+            'XREyeViews',
+            (data: Array<number | string>) =>
+                this.sendMessageController.sendMessageToStreamer(
+                    'XREyeViews',
+                    data
+                )
+        );
+        this.streamMessageController.registerMessageHandler(
+            MessageDirection.ToStreamer,
             'XRHMDTransform',
             (data: Array<number | string>) =>
                 this.sendMessageController.sendMessageToStreamer(

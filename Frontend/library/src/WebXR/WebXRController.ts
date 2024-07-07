@@ -173,6 +173,34 @@ export class WebXRController {
                 mat[3], mat[7], mat[11], mat[15]
             ]);
 
+            if (pose.views.length >= 2) {
+                const leftEyeIndex = pose.views[0].eye === "left" ? 0 : 1;
+                const rightEyeIndex = 1 - leftEyeIndex;
+                const leftEyeMatrix = pose.views[leftEyeIndex].transform.matrix;
+                const leftEyeViewport = pose.views[leftEyeIndex].projectionMatrix;
+                const rightEyeMatrix = pose.views[rightEyeIndex].transform.matrix;
+                const rightEyeViewport = pose.views[rightEyeIndex].projectionMatrix;
+
+                this.webRtcController.streamMessageController.toStreamerHandlers.get('XREyeViews')([
+                    leftEyeMatrix[0], leftEyeMatrix[4], leftEyeMatrix[8], leftEyeMatrix[12],
+                    leftEyeMatrix[1], leftEyeMatrix[5], leftEyeMatrix[9], leftEyeMatrix[13],
+                    leftEyeMatrix[2], leftEyeMatrix[6], leftEyeMatrix[10], leftEyeMatrix[14],
+                    leftEyeMatrix[3], leftEyeMatrix[7], leftEyeMatrix[11], leftEyeMatrix[15],
+                    leftEyeViewport[0], leftEyeViewport[4], leftEyeViewport[8], leftEyeViewport[12],
+                    leftEyeViewport[1], leftEyeViewport[5], leftEyeViewport[9], leftEyeViewport[13],
+                    leftEyeViewport[2], leftEyeViewport[6], leftEyeViewport[10], leftEyeViewport[14],
+                    leftEyeViewport[3], leftEyeViewport[7], leftEyeViewport[11], leftEyeViewport[15],
+                    rightEyeMatrix[0], rightEyeMatrix[4], rightEyeMatrix[8], rightEyeMatrix[12],
+                    rightEyeMatrix[1], rightEyeMatrix[5], rightEyeMatrix[9], rightEyeMatrix[13],
+                    rightEyeMatrix[2], rightEyeMatrix[6], rightEyeMatrix[10], rightEyeMatrix[14],
+                    rightEyeMatrix[3], rightEyeMatrix[7], rightEyeMatrix[11], rightEyeMatrix[15],
+                    rightEyeViewport[0], rightEyeViewport[4], rightEyeViewport[8], rightEyeViewport[12],
+                    rightEyeViewport[1], rightEyeViewport[5], rightEyeViewport[9], rightEyeViewport[13],
+                    rightEyeViewport[2], rightEyeViewport[6], rightEyeViewport[10], rightEyeViewport[14],
+                    rightEyeViewport[3], rightEyeViewport[7], rightEyeViewport[11], rightEyeViewport[15],
+                ]);
+            }
+
             const glLayer = this.xrSession.renderState.baseLayer;
             // If we do have a valid pose, bind the WebGL layer's framebuffer,
             // which is where any content to be displayed on the XRDevice must be
