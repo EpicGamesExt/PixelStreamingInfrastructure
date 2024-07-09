@@ -511,10 +511,7 @@ export class WebXRController {
                 this.onXrFrame(time, frame)
         );
 
-        this.onFrame.dispatchEvent(new XrFrameEvent({
-            time,
-            frame
-        }));
+        this.onFrame.dispatchEvent(new XrFrameEvent({ time, frame }));
     }
 
     private updateViews() {

@@ -31,7 +31,8 @@ export class XRGamepadController {
                     JSON.parse(
                         JSON.stringify({
                             pressed: b.pressed,
-                            touched: b.touched
+                            touched: b.touched,
+                            value: b.value
                         })
                     )
                 ),
@@ -111,32 +112,30 @@ export class XRGamepadController {
 
                 if (currButton.pressed) {
                     // press
-                    this.toStreamerMessagesProvider.toStreamerHandlers.get(
-                        'XRButtonPressed'
-                    )([handedness, i, prevButton.pressed ? 1 : 0]);
-                } else if (!currButton.pressed && prevButton.pressed) {
-                    this.toStreamerMessagesProvider.toStreamerHandlers.get(
-                        'XRButtonReleased'
-                    )([handedness, i, 0]);
+                    let isRepeat = prevButton.pressed ? 1 : 0;
+                    this.toStreamerMessagesProvider.toStreamerHandlers.get('XRButtonPressed')([handedness, i, isRepeat, currButton.value]);
+                } else if (prevButton.pressed) {
+                    this.toStreamerMessagesProvider.toStreamerHandlers.get('XRButtonReleased')([handedness, i, 0]);
                 }
 
-                if (currButton.touched && !currButton.pressed) {
-                    // press
-                    this.toStreamerMessagesProvider.toStreamerHandlers.get(
-                        'XRButtonPressed'
-                    )([handedness, 3, prevButton.touched ? 1 : 0]);
-                } else if (!currButton.touched && prevButton.touched) {
-                    this.toStreamerMessagesProvider.toStreamerHandlers.get(
-                        'XRButtonReleased'
-                    )([handedness, 3, 0]);
+                if (currButton.touched) {
+                    // touched
+                    let isRepeat = prevButton.touched ? 1 : 0;
+                    this.toStreamerMessagesProvider.toStreamerHandlers.get('XRButtonTouched')([handedness, i, isRepeat]);
+                }
+                else if (prevButton.touched) {
+                    this.toStreamerMessagesProvider.toStreamerHandlers.get('XRButtonTouchReleased')([handedness, i, 0]);
                 }
             }
 
             // Iterate over gamepad axes
             for (let i = 0; i < currState.axes.length; i++) {
-                this.toStreamerMessagesProvider.toStreamerHandlers.get(
-                    'XRAnalog'
-                )([handedness, i, currState.axes[i]]);
+                let curAxisValue = currState.axes[i];
+                let prevAxisValue = prevState.axes[i];
+                // Only send axis update if there is a change
+                if(curAxisValue != prevAxisValue) {
+                    this.toStreamerMessagesProvider.toStreamerHandlers.get('XRAnalog')([handedness, i, curAxisValue]);
+                }
             }
 
             this.controllers[handedness].prevState = currState;

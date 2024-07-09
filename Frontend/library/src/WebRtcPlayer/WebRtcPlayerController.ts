@@ -739,6 +739,15 @@ export class WebRtcPlayerController {
         );
         this.streamMessageController.registerMessageHandler(
             MessageDirection.ToStreamer,
+            'XRButtonTouchReleased',
+            (data: Array<number | string>) =>
+                this.sendMessageController.sendMessageToStreamer(
+                    'XRButtonTouchReleased',
+                    data
+                )
+        );
+        this.streamMessageController.registerMessageHandler(
+            MessageDirection.ToStreamer,
             'XRButtonPressed',
             (data: Array<number | string>) =>
                 this.sendMessageController.sendMessageToStreamer(
