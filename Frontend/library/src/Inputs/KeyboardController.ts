@@ -19,7 +19,7 @@ export class KeyboardController {
     activeKeysProvider: ActiveKeys;
     config: Config;
 
-    // Utility for keeping track of event handlers and unregistering them
+    // Utility for keeping track of event handlers and to unregister them.
     private keyboardEventListenerTracker = new EventListenerTracker();
 
     /*
@@ -177,7 +177,7 @@ export class KeyboardController {
     }
 
     /**
-     * Unregisters document keyboard events
+     * Unregister document keyboard events.
      */
     unregisterKeyBoardEvents() {
         this.keyboardEventListenerTracker.unregisterAll();

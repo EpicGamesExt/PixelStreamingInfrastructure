@@ -13,7 +13,7 @@ export class GamePadController {
     requestAnimationFrame: (callback: FrameRequestCallback) => number;
     toStreamerMessagesProvider: StreamMessageController;
 
-    // Utility for keeping track of event handlers and unregistering them
+    // Utility for keeping track of event handlers and to unregister them.
     private gamePadEventListenerTracker = new EventListenerTracker();
 
     /**
@@ -69,7 +69,7 @@ export class GamePadController {
     }
 
     /**
-     * Unregisters all event handlers
+     * Unregister all event handlers.
      */
     unregisterGamePadEvents() {
         this.gamePadEventListenerTracker.unregisterAll();

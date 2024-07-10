@@ -23,7 +23,7 @@ export interface ITouchController {
     onTouchMove(touchEvent: TouchEvent): void;
 
     /**
-     * Unregisters all touch event handlers
+     * Unregister all touch event handlers.
      */
     unregisterTouchEvents(): void;
 }

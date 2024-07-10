@@ -7,7 +7,7 @@ import { SignallingServer,
          InitLogging,
          Logger,
          IWebServerConfig } from '@epicgames-ps/lib-pixelstreamingsignalling-ue5.5';
-import { stringify, beautify, IProgramOptions } from './Utils';
+import { beautify, IProgramOptions } from './Utils';
 import { initInputHandler } from './InputHandler';
 import { Command, Option } from 'commander';
 import { initialize } from 'express-openapi';
@@ -44,14 +44,14 @@ program
     .option('--player_port <port>', 'Sets the listening port for player connections.', '80')
     .option('--sfu_port <port>', 'Sets the listening port for SFU connections.', '8889')
     .option('--serve', 'Enables the webserver on player_port.', false)
-    .option('--http_root <path>', 'Sets the path for the webserver root.', 'www')
+    .option('--http_root <path>', 'Sets the path for the webserver root.', `${path.resolve(__dirname, '..', 'www')}`)
     .option('--homepage <filename>', 'The default html file to serve on the web server.', 'player.html')
     .option('--https', 'Enables the webserver on https_port and enabling SSL', false)
     .addOption(new Option('--https_port <port>', 'Sets the listen port for the https server.')
         .implies({https: true})
         .default(443))
-    .option('--ssl_key_path <path>', 'Sets the path for the SSL key file.','ssl/key.pem')
-    .option('--ssl_cert_path <path>', 'Sets the path for the SSL certificate file.','ssl/cert.pem')
+    .option('--ssl_key_path <path>', 'Sets the path for the SSL key file.','certificates/client-key.pem')
+    .option('--ssl_cert_path <path>', 'Sets the path for the SSL certificate file.','certificates/client-cert.pem')
     .option('--https_redirect', 'Enables the redirection of connection attempts on http to https. If this is not set the webserver will only listen on https_port. Player websockets will still listen on player_port.', false)
     .option('--rest_api', 'Enables the rest API interface that can be accessed at <server_url>/api/api-definition', false)
     .addOption(new Option('--peer_options <json-string>', 'Additional JSON data to send in peerConnectionOptions of the config message.')
@@ -71,7 +71,7 @@ program
     .option('--log_config', 'Will print the program configuration on startup.', false)
     .option('--stdin', 'Allows stdin input while running.', false)
     .option('--no_config', 'Skips the reading of the config file. Only CLI options will be used.', false)
-    .option('--config_file <path>', 'Sets the path of the config file.', 'config.json')
+    .option('--config_file <path>', 'Sets the path of the config file.', `${path.resolve(__dirname, '..', 'config.json')}`)
     .option('--no_save', 'On startup the given configuration is resaved out to config.json. This switch will prevent this behaviour allowing the config.json file to remain untouched while running with new configurations.', false)
     .helpOption('-h, --help', 'Display this help text.')
     .allowUnknownOption() // ignore unknown options which will allow versions to be swapped out into existing scripts with maybe older/newer options
@@ -87,15 +87,22 @@ let config_file: any = {};
 if (!cli_options.no_config) {
     // read any config file
     try {
-        const configData = fs.readFileSync(cli_options.config_file, { encoding: 'utf8' });
-        config_file = JSON.parse(configData);
-    } catch(error) {
-        // silently fail here since we havent started the logging system yet.
+        if(fs.existsSync(cli_options.config_file)){
+            console.log(`Config file configured as: ${cli_options.config_file}`);
+            const configData = fs.readFileSync(cli_options.config_file, { encoding: 'utf8' });
+            config_file = JSON.parse(configData);
+        }
+        else {
+            // Even though proper logging is not intialized, logging here is better than nothing.
+            console.log(`No config file found at: ${cli_options.config_file}`);
+        }
+    } catch(error: unknown) {
+        console.error(error);
     }
 }
 
-// merge the configurations
-const options: IProgramOptions = { ...config_file, ...cli_options };
+// merge the configurations, CLI options first, then overriden by config file (remember --no_config if you don't want CLI options)
+const options: IProgramOptions = { ...cli_options, ...config_file };
 
 // save out new configuration (unless disabled)
 if (!options.no_save) {
@@ -122,7 +129,10 @@ InitLogging({
 // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
 Logger.info(`${pjson.name} v${pjson.version} starting...`);
 if (options.log_config) {
-    Logger.info(`Config: ${stringify(options)}`);
+    Logger.info("Config:")
+    for(const key in options) {
+        Logger.info(`"${key}": "${options[key]}"`)
+    }
 }
 
 const app = express();
@@ -149,8 +159,15 @@ if (options.serve) {
     };
     if (options.https) {
         webserverOptions.httpsPort = options.https_port;
-        webserverOptions.ssl_key = fs.readFileSync(path.join(__dirname, '..', options.ssl_key_path));
-        webserverOptions.ssl_cert = fs.readFileSync(path.join(__dirname, '..', options.ssl_cert_path));
+        const sslKeyPath = path.join(__dirname, '..', options.ssl_key_path);
+        const sslCertPath = path.join(__dirname, '..', options.ssl_cert_path);
+        if(fs.existsSync(sslKeyPath) && fs.existsSync(sslCertPath)) {
+            Logger.info(`Reading SSL key and cert. Key path: ${sslKeyPath} | Cert path: ${sslCertPath}`);
+            webserverOptions.ssl_key = fs.readFileSync(sslKeyPath);
+            webserverOptions.ssl_cert = fs.readFileSync(sslCertPath);
+        } else {
+            Logger.warn(`No SSL key/cert found. Key path: ${sslKeyPath} | Cert path: ${sslCertPath}`);
+        }
         webserverOptions.https_redirect = options.https_redirect;
     }
     const webServer = new WebServer(app, webserverOptions);
