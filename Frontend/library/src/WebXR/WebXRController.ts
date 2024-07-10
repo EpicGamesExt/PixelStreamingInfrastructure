@@ -180,8 +180,8 @@ export class WebXRController {
             );
         }
 
-        let videoHeight = this.webRtcController.videoPlayer.getVideoElement().videoHeight;
-        let videoWidth = this.webRtcController.videoPlayer.getVideoElement().videoWidth;
+        const videoHeight = this.webRtcController.videoPlayer.getVideoElement().videoHeight;
+        const videoWidth = this.webRtcController.videoPlayer.getVideoElement().videoWidth;
 
         if(this.prevVideoHeight != videoHeight || this.prevVideoWidth != videoWidth){
             // Do full update of texture if dimensions do not match
@@ -257,7 +257,7 @@ export class WebXRController {
             this.texcoordBuffer = this.gl.createBuffer();
             // Bind the texture coordinate buffer
             this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.texcoordBuffer);
-            // Enable `texcoordLocation` to be used as a vertext shader attribute
+            // Enable `texcoordLocation` to be used as a vertex shader attribute
             this.gl.enableVertexAttribArray(this.texcoordLocation);
 
             // The texture coordinates to apply for rectangle we are drawing
@@ -309,7 +309,7 @@ export class WebXRController {
 
             // Update target framerate to 90 fps if 90 fps is supported in this XR device
             if(this.xrSession.supportedFrameRates) {
-                for (let frameRate of this.xrSession.supportedFrameRates) {
+                for (const frameRate of this.xrSession.supportedFrameRates) {
                     if(frameRate == 90){
                         session.updateTargetFrameRate(90);
                     }
@@ -354,19 +354,19 @@ export class WebXRController {
 
         // Check if projection matrices have changed
         if(!shouldSendEyeViews && this.lastSentLeftEyeProj != null && this.lastSentRightEyeProj != null) {
-            let leftEyeProjUnchanged = this.areArraysEqual(leftEyeProj, this.lastSentLeftEyeProj);
-            let rightEyeProjUnchanged = this.areArraysEqual(rightEyeProj, this.lastSentRightEyeProj);
+            const leftEyeProjUnchanged = this.areArraysEqual(leftEyeProj, this.lastSentLeftEyeProj);
+            const rightEyeProjUnchanged = this.areArraysEqual(rightEyeProj, this.lastSentRightEyeProj);
             shouldSendEyeViews = leftEyeProjUnchanged == false || rightEyeProjUnchanged == false;
         }
 
-        let leftEyeRelativePos = new DOMPointReadOnly(
+        const leftEyeRelativePos = new DOMPointReadOnly(
             this.leftView.transform.position.x - this.xrViewerPose.transform.position.x,
             this.leftView.transform.position.y - this.xrViewerPose.transform.position.y,
             this.leftView.transform.position.z - this.xrViewerPose.transform.position.z,
             1.0
         );
 
-        let rightEyeRelativePos = new DOMPointReadOnly(
+        const rightEyeRelativePos = new DOMPointReadOnly(
             this.leftView.transform.position.x - this.xrViewerPose.transform.position.x,
             this.leftView.transform.position.y - this.xrViewerPose.transform.position.y,
             this.leftView.transform.position.z - this.xrViewerPose.transform.position.z,
@@ -375,10 +375,10 @@ export class WebXRController {
 
         // Check if relative eye pos has changed (e.g IPD changed)
         if(!shouldSendEyeViews && this.lastSentRelativeLeftEyePos != null && this.lastSentRelativeRightEyePos != null) {
-            let leftEyePosUnchanged = this.arePointsEqual(leftEyeRelativePos, this.lastSentRelativeLeftEyePos);
-            let rightEyePosUnchanged = this.arePointsEqual(rightEyeRelativePos, this.lastSentRelativeRightEyePos);
+            const leftEyePosUnchanged = this.arePointsEqual(leftEyeRelativePos, this.lastSentRelativeLeftEyePos);
+            const rightEyePosUnchanged = this.arePointsEqual(rightEyeRelativePos, this.lastSentRelativeRightEyePos);
             shouldSendEyeViews = leftEyePosUnchanged == false || rightEyePosUnchanged == false;
-            // Note: We are not checking if EyeView rotation changes (afaict no HMD's support changing this value at runtime).
+            // Note: We are not checking if EyeView rotation changes (as far as I know no HMD supports changing this value at runtime).
         }
 
         if(shouldSendEyeViews) {
@@ -443,7 +443,7 @@ export class WebXRController {
 
         if (this.webRtcController.config.isFlagEnabled(Flags.XRControllerInput)) {
             this.xrSession.inputSources.forEach(
-                (source: XRInputSource, index: number, array: XRInputSource[]) => {
+                (source: XRInputSource, _index: number, _array: XRInputSource[]) => {
                     this.xrGamepadController.updateStatus(
                         source,
                         frame,

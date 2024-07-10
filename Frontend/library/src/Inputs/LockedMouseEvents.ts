@@ -22,7 +22,7 @@ export class LockedMouseEvents implements IMouseEvents {
         this.updateMouseMovePosition(mouseEvent);
     };
 
-    // Utility for keeping track of event handlers and unregistering them
+    // Utility for keeping track of event handlers and to unregister them.
     private mouseEventListenerTracker = new EventListenerTracker();
 
     /**
@@ -51,7 +51,7 @@ export class LockedMouseEvents implements IMouseEvents {
     }
 
     /**
-     * Unregisters all event handlers
+     * Unregister all event handlers.
      */
     unregisterMouseEvents() {
         this.mouseEventListenerTracker.unregisterAll();

@@ -4,7 +4,7 @@ import { StreamMessageController } from '../UeInstanceMessage/StreamMessageContr
 import { Controller } from './GamepadTypes';
 
 /**
- * The class that handles the functionality of xrgamepads and controllers
+ * The class that handles the functionality of XR gamepads and controllers.
  */
 export class XRGamepadController {
     controllers: Array<Controller>;
@@ -19,7 +19,7 @@ export class XRGamepadController {
     }
 
     /**
-     * Deep copies a gamepad's values by first converting it to a JSON object and then back to a gamepad
+     * Deep copies the values from a gamepad by first converting it to a JSON object and then back to a gamepad
      *
      * @param gamepad the original gamepad
      * @returns a new gamepad object, populated with the original gamepads values
@@ -112,7 +112,7 @@ export class XRGamepadController {
 
                 if (currButton.pressed) {
                     // press
-                    let isRepeat = prevButton.pressed ? 1 : 0;
+                    const isRepeat = prevButton.pressed ? 1 : 0;
                     this.toStreamerMessagesProvider.toStreamerHandlers.get('XRButtonPressed')([handedness, i, isRepeat, currButton.value]);
                 } else if (prevButton.pressed) {
                     this.toStreamerMessagesProvider.toStreamerHandlers.get('XRButtonReleased')([handedness, i, 0]);
@@ -120,7 +120,7 @@ export class XRGamepadController {
 
                 if (currButton.touched) {
                     // touched
-                    let isRepeat = prevButton.touched ? 1 : 0;
+                    const isRepeat = prevButton.touched ? 1 : 0;
                     this.toStreamerMessagesProvider.toStreamerHandlers.get('XRButtonTouched')([handedness, i, isRepeat]);
                 }
                 else if (prevButton.touched) {
@@ -130,8 +130,8 @@ export class XRGamepadController {
 
             // Iterate over gamepad axes
             for (let i = 0; i < currState.axes.length; i++) {
-                let curAxisValue = currState.axes[i];
-                let prevAxisValue = prevState.axes[i];
+                const curAxisValue = currState.axes[i];
+                const prevAxisValue = prevState.axes[i];
                 // Only send axis update if there is a change
                 if(curAxisValue != prevAxisValue) {
                     this.toStreamerMessagesProvider.toStreamerHandlers.get('XRAnalog')([handedness, i, curAxisValue]);

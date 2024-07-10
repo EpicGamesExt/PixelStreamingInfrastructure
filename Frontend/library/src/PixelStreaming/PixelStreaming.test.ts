@@ -122,7 +122,7 @@ describe('PixelStreaming', () => {
         expect(webSocketSpyFunctions.constructorSpy).toHaveBeenCalledWith(mockSignallingUrl);
     });
 
-    it('should autoconnect to signalling server if autoconnect setting is enabled', () => {
+    it('should auto connect to signalling server if auto connect setting is enabled', () => {
         const config = new Config({ initialSettings: {ss: mockSignallingUrl, AutoConnect: true}});
 
         expect(webSocketSpyFunctions.constructorSpy).not.toHaveBeenCalled();
@@ -212,7 +212,7 @@ describe('PixelStreaming', () => {
         // We don't have a signalling server to respond with data so lets just fake a response with no streamers
         triggerStreamerListMessage([]);
         // Wait 2 seconds. This delay waits for the WebRtcPlayerController to realise the previously received list doesn't contain
-        // the streamer is was preiously subscribed to, so it'll request the list again
+        // the streamer is was previously subscribed to, so it'll request the list again
         jest.advanceTimersByTime(2000);
 
         // Same as above but repeated for the second call
@@ -244,7 +244,7 @@ describe('PixelStreaming', () => {
         );
     });
 
-    it('should autoselect a streamer if receiving only one streamer in streamerList message', () => {
+    it('should auto select a streamer if receiving only one streamer in streamerList message', () => {
         const config = new Config({ initialSettings: {ss: mockSignallingUrl, AutoConnect: true}});
         const streamerListSpy = jest.fn();
         const pixelStreaming = new PixelStreaming(config);
@@ -267,7 +267,7 @@ describe('PixelStreaming', () => {
         );
     });
 
-    it('should not autoselect a streamer if receiving multiple streamers in streamerList message', () => {
+    it('should not auto select a streamer if receiving multiple streamers in streamerList message', () => {
         const config = new Config({ initialSettings: {ss: mockSignallingUrl, AutoConnect: true}});
         const streamerId2 = "MOCK_2_PIXEL_STREAMING";
         const extendedStreamerIdList = [streamerId, streamerId2];

@@ -1,5 +1,5 @@
 export class RTCUtils {
-    static isVideoTransciever(transceiver : RTCRtpTransceiver | undefined) : boolean {
+    static isVideoTransceiver(transceiver : RTCRtpTransceiver | undefined) : boolean {
         return this.canTransceiverReceiveVideo(transceiver) || this.canTransceiverSendVideo(transceiver);
     }
 
@@ -19,7 +19,7 @@ export class RTCUtils {
             transceiver.sender.track.kind === 'video';    
     }
 
-    static isAudioTransciever(transceiver : RTCRtpTransceiver | undefined) : boolean {
+    static isAudioTransceiver(transceiver : RTCRtpTransceiver | undefined) : boolean {
         return this.canTransceiverReceiveAudio(transceiver) || this.canTransceiverSendAudio(transceiver);
     }
 

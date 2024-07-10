@@ -8,7 +8,7 @@ See [lib-pixelstreamingfrontend-ui](/Frontend/implementations/typescript) for an
 - Create a websocket connection to communicate with the signalling server.
 - Create a WebRTC player that displays the Unreal Engine video and audio.
 - Handling of input from the user and transmitting it back to Unreal Engine.
-- Opens a datachannel connection sending and receiving custom data (in addition to input).
+- Opens a data channel connection sending and receiving custom data (in addition to input).
 
 ### Adding it to your project
 `npm i @epicgames-ps/lib-pixelstreamingfrontend-ue5.4`

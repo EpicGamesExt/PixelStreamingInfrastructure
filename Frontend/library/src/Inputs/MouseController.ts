@@ -20,7 +20,7 @@ export class MouseController {
     coordinateConverter: CoordinateConverter;
     activeKeysProvider: ActiveKeys;
 
-    // Utility for keeping track of event handlers and unregistering them
+    // Utility for keeping track of event handlers and to unregister them.
     private mouseEventListenerTracker = new EventListenerTracker();
 
     /**
