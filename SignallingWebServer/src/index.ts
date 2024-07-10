@@ -7,7 +7,7 @@ import { SignallingServer,
          InitLogging,
          Logger,
          IWebServerConfig } from '@epicgames-ps/lib-pixelstreamingsignalling-ue5.5';
-import { stringify, beautify, IProgramOptions } from './Utils';
+import { beautify, IProgramOptions } from './Utils';
 import { initInputHandler } from './InputHandler';
 import { Command, Option } from 'commander';
 import { initialize } from 'express-openapi';
@@ -96,8 +96,8 @@ if (!cli_options.no_config) {
             // Even though proper logging is not intialized, logging here is better than nothing.
             console.log(`No config file found at: ${cli_options.config_file}`);
         }
-    } catch(error) {
-        console.error(`Could not open config file: ${error}`);
+    } catch(error: unknown) {
+        console.error(error);
     }
 }
 
@@ -130,7 +130,7 @@ InitLogging({
 Logger.info(`${pjson.name} v${pjson.version} starting...`);
 if (options.log_config) {
     Logger.info("Config:")
-    for(let key in options) {
+    for(const key in options) {
         Logger.info(`"${key}": "${options[key]}"`)
     }
 }
