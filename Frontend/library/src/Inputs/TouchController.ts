@@ -18,7 +18,7 @@ export class TouchController implements ITouchController {
     fingerIds = new Map();
     maxByteValue = 255;
 
-    // Utility for keeping track of event handlers and unregistering them
+    // Utility for keeping track of event handlers and to unregister them.
     private touchEventListenerTracker = new EventListenerTracker();
 
     /**

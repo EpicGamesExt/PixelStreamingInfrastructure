@@ -382,7 +382,7 @@ export class PeerConnectionController {
         // Setup a transceiver for getting UE video
         this.peerConnection?.addTransceiver('video', { direction: 'recvonly' });
 
-        // We can only set preferrec codec on Chrome
+        // We can only set preferred codec on Chrome
         if (RTCRtpReceiver.getCapabilities && this.preferredCodec != '') {
             for (const transceiver of this.peerConnection?.getTransceivers() ?? []) {
                 if (
@@ -412,7 +412,7 @@ export class PeerConnectionController {
                             return option != this.preferredCodec;
                         })
                         .forEach((option) => {
-                            // Ammend the rest of the browsers supported codecs
+                            // Amend the rest of the browsers supported codecs
                             const altCodec = option.split(' ');
                             codecs.push({
                                 mimeType: 'video/' + altCodec[0] /* Name */,

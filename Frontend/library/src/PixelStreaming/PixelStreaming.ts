@@ -45,7 +45,7 @@ import { RTCUtils } from '../Util/RTCUtils';
 
 
 export interface PixelStreamingOverrides {
-    /** The DOM elment where Pixel Streaming video and user input event handlers are attached to.
+    /** The DOM element where Pixel Streaming video and user input event handlers are attached to.
      * You can give an existing DOM element here. If not given, the library will create a new div element
      * that is not attached anywhere. In this case you can later get access to this new element and
      * attach it to your web page. */
@@ -146,7 +146,7 @@ export class PixelStreaming {
         this.config._addOnSettingChangedListener(
             Flags.IsQualityController,
             (wantsQualityController: boolean) => {
-                // If the setting has been set to true (either programatically or the user has flicked the toggle)
+                // If the setting has been set to true (either programmatically or the user has flicked the toggle)
                 // and we aren't currently quality controller, send the request
                 if (
                     wantsQualityController === true &&

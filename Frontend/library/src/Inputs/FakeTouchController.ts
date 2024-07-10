@@ -19,7 +19,7 @@ export class FakeTouchController implements ITouchController {
     coordinateConverter: CoordinateConverter;
     videoElementParentClientRect: DOMRect;
 
-    // Utility for keeping track of event handlers and unregistering them
+    // Utility for keeping track of event handlers and to unregister them.
     private touchEventListenerTracker = new EventListenerTracker();
 
     /**

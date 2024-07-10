@@ -58,7 +58,7 @@ export interface IMouseEvents {
     handleContextMenu?(mouseEvent: MouseEvent): void;
 
     /**
-     * Unregisters any registered mouse event handlers
+     * Unregister any registered mouse event handlers
      */
     unregisterMouseEvents(): void;
 }
