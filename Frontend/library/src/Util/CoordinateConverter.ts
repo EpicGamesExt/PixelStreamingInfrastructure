@@ -92,11 +92,12 @@ export class CoordinateConverter {
         this.videoElement = this.videoElementProvider.getVideoElement();
 
         if (this.videoElementParent && this.videoElement) {
-            const playerAspectRatio =
-                this.videoElementParent.clientHeight /
-                this.videoElementParent.clientWidth;
-            const videoAspectRatio =
-                this.videoElement.videoHeight / this.videoElement.videoWidth;
+            const playerWidth = this.videoElementParent.clientWidth || 1;
+            const playerHeight = this.videoElementParent.clientHeight || 1;
+            const videoWidth = this.videoElement.videoWidth || 1;
+            const videoHeight = this.videoElement.videoHeight || 1;
+            const playerAspectRatio = playerHeight / playerWidth;
+            const videoAspectRatio = videoHeight / videoWidth;
             if (playerAspectRatio > videoAspectRatio) {
                 Logger.Log(
                     Logger.GetStackTrace(),
