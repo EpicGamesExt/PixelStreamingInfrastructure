@@ -1,6 +1,6 @@
 {
   "name": "@epicgames-ps/cirrus-webserver",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "The reference signalling and web server for Pixel Streaming: Cirrus",
   "private": true,
   "scripts": {

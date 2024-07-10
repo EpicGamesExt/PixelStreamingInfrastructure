@@ -2,8 +2,6 @@
 
 import { Logger } from '../Logger/Logger';
 import { WebRtcPlayerController } from '../WebRtcPlayer/WebRtcPlayerController';
-import { WebGLUtils } from '../Util/WebGLUtils';
-import { Controller } from '../Inputs/GamepadTypes';
 import { XRGamepadController } from '../Inputs/XRGamepadController';
 import { XrFrameEvent } from '../Util/EventEmitter'
 import { Flags } from '../pixelstreamingfrontend';
@@ -12,18 +10,32 @@ export class WebXRController {
     private xrSession: XRSession;
     private xrRefSpace: XRReferenceSpace;
     private gl: WebGL2RenderingContext;
+    private xrViewerPose : XRViewerPose = null;
+    // Used for comparisons to ensure two numbers are close enough.
+    private EPSILON = 0.0000001;
 
     private positionLocation: number;
     private texcoordLocation: number;
-    private resolutionLocation: WebGLUniformLocation;
-    private offsetLocation: WebGLUniformLocation;
+    private textureOffsetUniform: WebGLUniformLocation;
 
     private positionBuffer: WebGLBuffer;
     private texcoordBuffer: WebGLBuffer;
 
+    private videoTexture: WebGLTexture = null;
+    private prevVideoWidth: number = 0;
+    private prevVideoHeight: number = 0;
+
     private webRtcController: WebRtcPlayerController;
     private xrGamepadController: XRGamepadController;
-    private xrControllers: Array<Controller>;
+
+    private leftView: XRView = null;
+    private rightView: XRView = null;
+
+    // Store the HMD data we have last sent (not all of it is needed every frame unless it changes)
+    private lastSentLeftEyeProj: Float32Array = null;
+    private lastSentRightEyeProj: Float32Array = null;
+    private lastSentRelativeLeftEyePos: DOMPointReadOnly = null;
+    private lastSentRelativeRightEyePos: DOMPointReadOnly = null;
 
     onSessionStarted: EventTarget;
     onSessionEnded: EventTarget;
@@ -32,7 +44,6 @@ export class WebXRController {
     constructor(webRtcPlayerController: WebRtcPlayerController) {
         this.xrSession = null;
         this.webRtcController = webRtcPlayerController;
-        this.xrControllers = [];
         this.xrGamepadController = new XRGamepadController(
             this.webRtcController.streamMessageController
         );
@@ -43,8 +54,15 @@ export class WebXRController {
 
     public xrClicked() {
         if (!this.xrSession) {
+
+            if(!navigator.xr){
+                Logger.Error(Logger.GetStackTrace(), "This browser does not support XR.");
+                return;
+            }
+
             navigator.xr
-                .requestSession('immersive-vr')
+                /* Request immersive-vr session without any optional features. */
+                .requestSession('immersive-vr', { optionalFeatures: [] })
                 .then((session: XRSession) => {
                     this.onXrSessionStarted(session);
                 });
@@ -59,31 +77,59 @@ export class WebXRController {
         this.onSessionEnded.dispatchEvent(new Event('xrSessionEnded'));
     }
 
-    onXrSessionStarted(session: XRSession) {
-        Logger.Log(Logger.GetStackTrace(), 'XR Session started');
-
-        this.xrSession = session;
-        this.xrSession.addEventListener('end', () => {
-            this.onXrSessionEnded();
-        });
-
+    initGL() {
+        if (this.gl) { return; }
         const canvas = document.createElement('canvas');
         this.gl = canvas.getContext('webgl2', {
             xrCompatible: true
         });
 
-        this.xrSession.updateRenderState({
-            baseLayer: new XRWebGLLayer(this.xrSession, this.gl)
-        });
+        // Set our clear color
+        this.gl.clearColor(0.0, 0.0, 0.0, 1);
+    }
+
+    initShaders() {
+
+        // shader source code
+        const vertexShaderSource: string =
+        `
+        attribute vec2 a_position;
+        attribute vec2 a_texCoord;
+
+        // varyings
+        varying vec2 v_texCoord;
+
+        void main() {
+           gl_Position = vec4(a_position.x, a_position.y, 0, 1);
+           // pass the texCoord to the fragment shader
+           // The GPU will interpolate this value between points.
+           v_texCoord = a_texCoord;
+        }
+        `;
+
+        const fragmentShaderSource: string =
+        `
+        precision mediump float;
+
+        // our texture
+        uniform sampler2D u_image;
+
+        // the texCoords passed in from the vertex shader.
+        varying vec2 v_texCoord;
+
+        void main() {
+           gl_FragColor = texture2D(u_image, v_texCoord);
+        }
+        `;
 
         // setup vertex shader
         const vertexShader = this.gl.createShader(this.gl.VERTEX_SHADER);
-        this.gl.shaderSource(vertexShader, WebGLUtils.vertexShader());
+        this.gl.shaderSource(vertexShader, vertexShaderSource);
         this.gl.compileShader(vertexShader);
 
         // setup fragment shader
         const fragmentShader = this.gl.createShader(this.gl.FRAGMENT_SHADER);
-        this.gl.shaderSource(fragmentShader, WebGLUtils.fragmentShader());
+        this.gl.shaderSource(fragmentShader, fragmentShaderSource);
         this.gl.compileShader(fragmentShader);
 
         // setup GLSL program
@@ -102,93 +148,298 @@ export class WebXRController {
             shaderProgram,
             'a_texCoord'
         );
-        // Create a buffer to put three 2d clip space points in
-        this.positionBuffer = this.gl.createBuffer();
-        // Bind it to ARRAY_BUFFER (think of it as ARRAY_BUFFER = positionBuffer)
-        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.positionBuffer);
+    }
 
-        // Turn on the position attribute
-        this.gl.enableVertexAttribArray(this.positionLocation);
-        // Create a texture.
-        const texture = this.gl.createTexture();
-        this.gl.bindTexture(this.gl.TEXTURE_2D, texture);
-        // Set the parameters so we can render any size image.
-        this.gl.texParameteri(
-            this.gl.TEXTURE_2D,
-            this.gl.TEXTURE_WRAP_S,
-            this.gl.CLAMP_TO_EDGE
-        );
-        this.gl.texParameteri(
-            this.gl.TEXTURE_2D,
-            this.gl.TEXTURE_WRAP_T,
-            this.gl.CLAMP_TO_EDGE
-        );
-        this.gl.texParameteri(
-            this.gl.TEXTURE_2D,
-            this.gl.TEXTURE_MIN_FILTER,
-            this.gl.NEAREST
-        );
-        this.gl.texParameteri(
-            this.gl.TEXTURE_2D,
-            this.gl.TEXTURE_MAG_FILTER,
-            this.gl.NEAREST
-        );
+    updateVideoTexture(){
 
-        this.texcoordBuffer = this.gl.createBuffer();
-        // lookup uniforms
-        this.resolutionLocation = this.gl.getUniformLocation(
-            shaderProgram,
-            'u_resolution'
-        );
-        this.offsetLocation = this.gl.getUniformLocation(
-            shaderProgram,
-            'u_offset'
-        );
+        if(!this.videoTexture){
+            // Create our texture that we use in our shader
+            // and bind it once because we never use any other texture.
+            this.videoTexture = this.gl.createTexture();
+            this.gl.bindTexture(this.gl.TEXTURE_2D, this.videoTexture);
+
+            // Set the parameters so we can render any size image.
+            this.gl.texParameteri(
+                this.gl.TEXTURE_2D,
+                this.gl.TEXTURE_WRAP_S,
+                this.gl.CLAMP_TO_EDGE
+            );
+            this.gl.texParameteri(
+                this.gl.TEXTURE_2D,
+                this.gl.TEXTURE_WRAP_T,
+                this.gl.CLAMP_TO_EDGE
+            );
+            this.gl.texParameteri(
+                this.gl.TEXTURE_2D,
+                this.gl.TEXTURE_MIN_FILTER,
+                this.gl.LINEAR
+            );
+            this.gl.texParameteri(
+                this.gl.TEXTURE_2D,
+                this.gl.TEXTURE_MAG_FILTER,
+                this.gl.LINEAR
+            );
+        }
+
+        let videoHeight = this.webRtcController.videoPlayer.getVideoElement().videoHeight;
+        let videoWidth = this.webRtcController.videoPlayer.getVideoElement().videoWidth;
+
+        if(this.prevVideoHeight != videoHeight || this.prevVideoWidth != videoWidth){
+            // Do full update of texture if dimensions do not match
+            this.gl.texImage2D(
+                this.gl.TEXTURE_2D,
+                0,
+                this.gl.RGBA,
+                videoWidth,
+                videoHeight,
+                0,
+                this.gl.RGBA,
+                this.gl.UNSIGNED_BYTE,
+                this.webRtcController.videoPlayer.getVideoElement()
+            );
+        } else {
+            // If dimensions match just update the sub region
+            this.gl.texSubImage2D(
+                this.gl.TEXTURE_2D,
+                0,
+                0,
+                0,
+                videoWidth,
+                videoHeight,
+                this.gl.RGBA,
+                this.gl.UNSIGNED_BYTE,
+                this.webRtcController.videoPlayer.getVideoElement()
+            );
+        }
+
+        // Update prev video width/height
+        this.prevVideoHeight = videoHeight;
+        this.prevVideoWidth = videoWidth;
+    }
+
+    initBuffers(){
+        // Create out position buffer and its vertex shader attribute
+        {
+            // Create a buffer to put the the vertices of the plane we will draw the video stream onto
+            this.positionBuffer = this.gl.createBuffer();
+            // Bind the position buffer
+            this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.positionBuffer);
+            // Enable `positionLocation` to be used as vertex shader attribute
+            this.gl.enableVertexAttribArray(this.positionLocation);
+
+            // Note: positions are passed in clip-space coordinates [-1..1] so no need to convert in-shader
+            // prettier-ignore
+            this.gl.bufferData(
+                this.gl.ARRAY_BUFFER,
+                new Float32Array([
+                    -1.0,  1.0,
+                     1.0,  1.0,
+                    -1.0, -1.0,
+                    -1.0, -1.0,
+                     1.0,  1.0,
+                     1.0, -1.0
+                ]),
+                this.gl.STATIC_DRAW
+            );
+
+            // Tell position attribute of the vertex shader how to get data out of the bound buffer (the positionBuffer)
+            this.gl.vertexAttribPointer(
+                this.positionLocation,
+                2 /*size*/,
+                this.gl.FLOAT /*type*/,
+                false /*normalize*/,
+                0 /*stride*/,
+                0 /*offset*/
+            );
+        }
+
+        // Create our texture coordinate buffers for accessing our texture
+        {
+            this.texcoordBuffer = this.gl.createBuffer();
+            // Bind the texture coordinate buffer
+            this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.texcoordBuffer);
+            // Enable `texcoordLocation` to be used as a vertext shader attribute
+            this.gl.enableVertexAttribArray(this.texcoordLocation);
+
+            // The texture coordinates to apply for rectangle we are drawing
+            this.gl.bufferData(
+                this.gl.ARRAY_BUFFER,
+                new Float32Array([
+                    0.0, 0.0,
+                    1.0, 0.0,
+                    0.0, 1.0,
+                    0.0, 1.0,
+                    1.0, 0.0,
+                    1.0, 1.0
+                ]),
+                this.gl.STATIC_DRAW
+            );
+
+            // Tell texture coordinate attribute of the vertex shader how to get data out of the bound buffer (the texcoordBuffer)
+            this.gl.vertexAttribPointer(
+                this.texcoordLocation,
+                2 /*size*/,
+                this.gl.FLOAT /*type*/,
+                false /*normalize*/,
+                0 /*stride*/,
+                0 /*offset*/
+            );
+        }
+    }
+
+    onXrSessionStarted(session: XRSession) {
+        Logger.Log(Logger.GetStackTrace(), 'XR Session started');
+
+        this.xrSession = session;
+        this.xrSession.addEventListener('end', () => {
+            this.onXrSessionEnded();
+        });
+
+        // Initialization
+        this.initGL();
+        this.initShaders();
+        this.initBuffers();
 
         session.requestReferenceSpace('local').then((refSpace) => {
             this.xrRefSpace = refSpace;
-            this.xrSession.requestAnimationFrame(
-                (time: DOMHighResTimeStamp, frame: XRFrame) =>
-                    this.onXrFrame(time, frame)
-            );
+
+            // Set up our base layer (i.e. a projection layer that fills the entire XR viewport).
+            this.xrSession.updateRenderState({
+                baseLayer: new XRWebGLLayer(this.xrSession, this.gl)
+            });
+
+            // Update target framerate to 90 fps if 90 fps is supported in this XR device
+            if(this.xrSession.supportedFrameRates) {
+                for (let frameRate of this.xrSession.supportedFrameRates) {
+                    if(frameRate == 90){
+                        session.updateTargetFrameRate(90);
+                    }
+                }
+            }
+
+            // Binding to each new frame to get latest XR updates
+            this.xrSession.requestAnimationFrame(this.onXrFrame.bind(this));
         });
 
         this.onSessionStarted.dispatchEvent(new Event('xrSessionStarted'));
     }
 
+    areArraysEqual(a: Float32Array, b: Float32Array) : boolean {
+        return a.length === b.length && a.every((element, index) => Math.abs(element - b[index]) <= this.EPSILON);
+    }
+
+    arePointsEqual(a: DOMPointReadOnly, b: DOMPointReadOnly) : boolean {
+        return Math.abs(a.x - b.x) >= this.EPSILON && Math.abs(a.y - b.y) >= this.EPSILON && Math.abs(a.z - b.z) >= this.EPSILON;
+    }
+
+    sendXRDataToUE() {
+        if(this.leftView == null || this.rightView == null) {
+            return;
+        }
+
+        // We selectively send either the `XREyeViews` or `XRHMDTransform`
+        // messages over the datachannel. The reason for this selective sending is that
+        // the `XREyeViews` is a much larger message and changes infrequently (e.g. only when user changes headset IPD).
+        // Therefore, we only need to send it once on startup and then any time it changes.
+        // The rest of the time we can send the `XRHMDTransform` message.
+        let shouldSendEyeViews = this.lastSentLeftEyeProj == null ||
+                                 this.lastSentRightEyeProj == null ||
+                                 this.lastSentRelativeLeftEyePos == null ||
+                                 this.lastSentRelativeRightEyePos == null;
+
+        const leftEyeTrans = this.leftView.transform.matrix;
+        const leftEyeProj = this.leftView.projectionMatrix;
+        const rightEyeTrans = this.rightView.transform.matrix;
+        const rightEyeProj = this.rightView.projectionMatrix;
+        const hmdTrans = this.xrViewerPose.transform.matrix;
+
+        // Check if projection matrices have changed
+        if(!shouldSendEyeViews && this.lastSentLeftEyeProj != null && this.lastSentRightEyeProj != null) {
+            let leftEyeProjUnchanged = this.areArraysEqual(leftEyeProj, this.lastSentLeftEyeProj);
+            let rightEyeProjUnchanged = this.areArraysEqual(rightEyeProj, this.lastSentRightEyeProj);
+            shouldSendEyeViews = leftEyeProjUnchanged == false || rightEyeProjUnchanged == false;
+        }
+
+        let leftEyeRelativePos = new DOMPointReadOnly(
+            this.leftView.transform.position.x - this.xrViewerPose.transform.position.x,
+            this.leftView.transform.position.y - this.xrViewerPose.transform.position.y,
+            this.leftView.transform.position.z - this.xrViewerPose.transform.position.z,
+            1.0
+        );
+
+        let rightEyeRelativePos = new DOMPointReadOnly(
+            this.leftView.transform.position.x - this.xrViewerPose.transform.position.x,
+            this.leftView.transform.position.y - this.xrViewerPose.transform.position.y,
+            this.leftView.transform.position.z - this.xrViewerPose.transform.position.z,
+            1.0
+        );
+
+        // Check if relative eye pos has changed (e.g IPD changed)
+        if(!shouldSendEyeViews && this.lastSentRelativeLeftEyePos != null && this.lastSentRelativeRightEyePos != null) {
+            let leftEyePosUnchanged = this.arePointsEqual(leftEyeRelativePos, this.lastSentRelativeLeftEyePos);
+            let rightEyePosUnchanged = this.arePointsEqual(rightEyeRelativePos, this.lastSentRelativeRightEyePos);
+            shouldSendEyeViews = leftEyePosUnchanged == false || rightEyePosUnchanged == false;
+            // Note: We are not checking if EyeView rotation changes (afaict no HMD's support changing this value at runtime).
+        }
+
+        if(shouldSendEyeViews) {
+            // send transform (4x4) and projection matrix (4x4) data for each eye (left first, then right)
+            // prettier-ignore
+            this.webRtcController.streamMessageController.toStreamerHandlers.get('XREyeViews')([
+                // Left eye 4x4 transform matrix
+                leftEyeTrans[0], leftEyeTrans[4], leftEyeTrans[8],  leftEyeTrans[12],
+                leftEyeTrans[1], leftEyeTrans[5], leftEyeTrans[9],  leftEyeTrans[13],
+                leftEyeTrans[2], leftEyeTrans[6], leftEyeTrans[10], leftEyeTrans[14],
+                leftEyeTrans[3], leftEyeTrans[7], leftEyeTrans[11], leftEyeTrans[15],
+                // Left eye 4x4 projection matrix
+                leftEyeProj[0], leftEyeProj[4], leftEyeProj[8],  leftEyeProj[12],
+                leftEyeProj[1], leftEyeProj[5], leftEyeProj[9],  leftEyeProj[13],
+                leftEyeProj[2], leftEyeProj[6], leftEyeProj[10], leftEyeProj[14],
+                leftEyeProj[3], leftEyeProj[7], leftEyeProj[11], leftEyeProj[15],
+                // Right eye 4x4 transform matrix
+                rightEyeTrans[0], rightEyeTrans[4], rightEyeTrans[8],  rightEyeTrans[12],
+                rightEyeTrans[1], rightEyeTrans[5], rightEyeTrans[9],  rightEyeTrans[13],
+                rightEyeTrans[2], rightEyeTrans[6], rightEyeTrans[10], rightEyeTrans[14],
+                rightEyeTrans[3], rightEyeTrans[7], rightEyeTrans[11], rightEyeTrans[15],
+                // right eye 4x4 projection matrix
+                rightEyeProj[0], rightEyeProj[4], rightEyeProj[8],  rightEyeProj[12],
+                rightEyeProj[1], rightEyeProj[5], rightEyeProj[9],  rightEyeProj[13],
+                rightEyeProj[2], rightEyeProj[6], rightEyeProj[10], rightEyeProj[14],
+                rightEyeProj[3], rightEyeProj[7], rightEyeProj[11], rightEyeProj[15],
+                // HMD 4x4 transform
+                hmdTrans[0], hmdTrans[4], hmdTrans[8],  hmdTrans[12],
+                hmdTrans[1], hmdTrans[5], hmdTrans[9],  hmdTrans[13],
+                hmdTrans[2], hmdTrans[6], hmdTrans[10], hmdTrans[14],
+                hmdTrans[3], hmdTrans[7], hmdTrans[11], hmdTrans[15],
+            ]);
+            this.lastSentLeftEyeProj = leftEyeProj;
+            this.lastSentRightEyeProj = rightEyeProj;
+            this.lastSentRelativeLeftEyePos = leftEyeRelativePos;
+            this.lastSentRelativeRightEyePos = rightEyeRelativePos;
+        }
+        else {
+            // If we don't need to the entire eye views being sent just send the HMD transform
+            this.webRtcController.streamMessageController.toStreamerHandlers.get('XRHMDTransform')([
+                // HMD 4x4 transform
+                hmdTrans[0], hmdTrans[4], hmdTrans[8],  hmdTrans[12],
+                hmdTrans[1], hmdTrans[5], hmdTrans[9],  hmdTrans[13],
+                hmdTrans[2], hmdTrans[6], hmdTrans[10], hmdTrans[14],
+                hmdTrans[3], hmdTrans[7], hmdTrans[11], hmdTrans[15],
+            ]);
+        }
+    }
+
     onXrFrame(time: DOMHighResTimeStamp, frame: XRFrame) {
-        const pose = frame.getViewerPose(this.xrRefSpace);
-        if (pose) {
-            const matrix = pose.transform.matrix;
-            const mat = [];
-            for (let i = 0; i < 16; i++) {
-                mat[i] = new Float32Array([matrix[i]])[0];
+        this.xrViewerPose = frame.getViewerPose(this.xrRefSpace);
+        if (this.xrViewerPose) {
+            this.updateViews();
+            if(this.leftView == null || this.rightView == null) {
+                return;
             }
 
-            // prettier-ignore
-            this.webRtcController.streamMessageController.toStreamerHandlers.get('XRHMDTransform')([
-                mat[0], mat[4], mat[8], mat[12],
-                mat[1], mat[5], mat[9], mat[13], 
-                mat[2], mat[6], mat[10], mat[14], 
-                mat[3], mat[7], mat[11], mat[15]
-            ]);
-
-            const glLayer = this.xrSession.renderState.baseLayer;
-            // If we do have a valid pose, bind the WebGL layer's framebuffer,
-            // which is where any content to be displayed on the XRDevice must be
-            // rendered.
-            this.gl.bindFramebuffer(this.gl.FRAMEBUFFER, glLayer.framebuffer);
-
-            // Upload the image into the texture. WebGL knows how to extract the current frame from the video element
-            this.gl.texImage2D(
-                this.gl.TEXTURE_2D,
-                0,
-                this.gl.RGBA,
-                this.gl.RGBA,
-                this.gl.UNSIGNED_BYTE,
-                this.webRtcController.videoPlayer.getVideoElement()
-            );
-            this.render(this.webRtcController.videoPlayer.getVideoElement());
+            this.sendXRDataToUE();
+            this.updateVideoTexture();
+            this.render();
         }
 
         if (this.webRtcController.config.isFlagEnabled(Flags.XRControllerInput)) {
@@ -209,105 +460,44 @@ export class WebXRController {
                 this.onXrFrame(time, frame)
         );
 
-        this.onFrame.dispatchEvent(new XrFrameEvent({
-            time,
-            frame
-        }));
+        this.onFrame.dispatchEvent(new XrFrameEvent({ time, frame }));
     }
 
-    private render(videoElement: HTMLVideoElement) {
+    private updateViews() {
+        if(!this.xrViewerPose) {
+            return;
+        }
+        for (const view of this.xrViewerPose.views) {
+            if (view.eye === "left") {
+                this.leftView = view;
+            }
+            else if(view.eye === "right") {
+                this.rightView = view;
+            }
+        }
+    }
+
+    private render() {
         if (!this.gl) {
             return;
         }
 
+        // Bind the framebuffer to the base layer's framebuffer
         const glLayer = this.xrSession.renderState.baseLayer;
-        this.gl.viewport(
-            0,
-            0,
-            glLayer.framebufferWidth,
-            glLayer.framebufferHeight
-        );
-        this.gl.uniform4f(this.offsetLocation, 1.0, 1.0, 0.0, 0.0);
+        this.gl.bindFramebuffer(this.gl.FRAMEBUFFER, glLayer.framebuffer);
 
-        // Set rectangle
-        // prettier-ignore
-        this.gl.bufferData(
-            this.gl.ARRAY_BUFFER,
-            new Float32Array([
-                0, 0, 
-                videoElement.videoWidth, 0,
-                0, videoElement.videoHeight, 
-                0, videoElement.videoHeight,
-                videoElement.videoWidth, 0,
-                videoElement.videoWidth, videoElement.videoHeight
-            ]),
-            this.gl.STATIC_DRAW
-        );
+        // Set the relevant portion of clip space
+        this.gl.viewport(0, 0, glLayer.framebufferWidth, glLayer.framebufferHeight);
 
-        // Provide texture coordinates for the rectangle
-        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.texcoordBuffer);
-        this.gl.bufferData(
-            this.gl.ARRAY_BUFFER,
-            new Float32Array([
-                0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0
-            ]),
-            this.gl.STATIC_DRAW
-        );
-
-        let size; // components per iteration
-        let type; // the data type
-        let normalize; // normalize the data
-        let stride; // 0 = move forward size * sizeof(type) each iteration to get the next position
-        let offset; // start position of the buffer
-
-        // Bind the position buffer.
-        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.positionBuffer);
-        // Tell the position attribute how to get data out of positionBuffer (ARRAY_BUFFER)
-        size = 2; // 2 components per iteration
-        type = this.gl.FLOAT; // the data is 32bit floats
-        normalize = false; // don't normalize the data
-        stride = 0; // 0 = move forward size * sizeof(type) each iteration to get the next position
-        offset = 0; // start at the beginning of the buffer
-        this.gl.vertexAttribPointer(
-            this.positionLocation,
-            size,
-            type,
-            normalize,
-            stride,
-            offset
-        );
-        // Turn on the texcoord attribute
-        this.gl.enableVertexAttribArray(this.texcoordLocation);
-        // bind the texcoord buffer.
-        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.texcoordBuffer);
-        // Tell the texcoord attribute how to get data out of texcoordBuffer (ARRAY_BUFFER)
-        size = 2; // 2 components per iteration
-        type = this.gl.FLOAT; // the data is 32bit floats
-        normalize = false; // don't normalize the data
-        stride = 0; // 0 = move forward size * sizeof(type) each iteration to get the next position
-        offset = 0; // start at the beginning of the buffer
-        this.gl.vertexAttribPointer(
-            this.texcoordLocation,
-            size,
-            type,
-            normalize,
-            stride,
-            offset
-        );
-        // set the resolution
-        this.gl.uniform2f(
-            this.resolutionLocation,
-            videoElement.videoWidth,
-            videoElement.videoHeight
-        );
-        // draw the rectangle.
-        const primitiveType = this.gl.TRIANGLES;
-        const count = 6;
-        offset = 0;
-        this.gl.drawArrays(primitiveType, offset, count);
+        // Draw the rectangle we will show the video stream texture on
+        this.gl.drawArrays(this.gl.TRIANGLES /*primitiveType*/, 0 /*offset*/, 6 /*count*/);
     }
 
     static isSessionSupported(mode: XRSessionMode): Promise<boolean> {
+        if (location.protocol !== "https:") {
+            Logger.Info(null, "WebXR requires https, if you want WebXR use https.");
+        }
+
         if (navigator.xr) {
             return navigator.xr.isSessionSupported(mode);
         } else {
