@@ -4,6 +4,10 @@ on:
   push:  
     branches: ['UE5.4']
     paths: ['Frontend/library/package.json']
+
+env:
+  NODE_VERSION: 18.17.x
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -14,7 +18,7 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
-          node-version: '18.17.0'
+          node-version: "${{ env.NODE_VERSION }}"
           registry-url: 'https://registry.npmjs.org'
       - run: npm ci
       - run: npm run build

@@ -1,6 +1,6 @@
 {
   "name": "@epicgames-ps/cirrus-webserver",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "The reference signalling and web server for Pixel Streaming: Cirrus",
   "private": true,
   "scripts": {
@@ -22,7 +22,7 @@
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
-    "express": "^4.18.2",
+    "express": "^4.19.2",
     "express-rate-limit": "^6.7.0",
     "express-session": "^1.15.6",
     "helmet": "^3.21.3",
