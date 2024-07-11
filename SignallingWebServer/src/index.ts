@@ -50,12 +50,12 @@ program
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
     .version(pjson.version);
 
-// For any switch that doesn't take an argument, like --serve, its important to give it a the default value.
-// Without the default, not supplying the default will mean the option is undefined in
-// cli_options and loading from config file will not work as intended.
-// The way the config file works is that if it is found it will parsed for key/values that match
+// For any switch that doesn't take an argument, like --serve, its important to give it a default value.
+// Without the default, not supplying the default will mean the option is `undefined` in
+// `cli_option`s` and loading from the configuration file will not work as intended.
+// The way the configuration file works is that if it is found it will parsed for key/values that match
 // the argument names specified below. If one is found it will become the new default value for that option.
-// This allow the user to have values in the config file but also override them by specifying an argument on the command line.
+// This allow the user to have values in the configuration file but also override them by specifying an argument on the command line.
 program
     .option('--log_folder <path>', 'Sets the path for the log files.', config_file.log_folder || 'logs')
     .addOption(new Option('--log_level_console <level>', 'Sets the logging level for console messages.')
