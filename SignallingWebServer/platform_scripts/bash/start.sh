@@ -9,7 +9,7 @@ setup $@
 set_public_ip
 setup_turn_stun "bg"
 
-SERVER_ARGS+=" --serve --https_redirect --console_messages verbose --log_config --public_ip=${PUBLIC_IP}"
+SERVER_ARGS+=" --serve --https_redirect --console_messages verbose --log_config --https_redirect --public_ip=${PUBLIC_IP}"
 if [[ ! -z "$STUN_SERVER" && ! -z "$TURN_SERVER" ]]; then
     PEER_OPTIONS="{\"iceServers\":[{\"urls\":[\"stun:${STUN_SERVER}\",\"turn:${TURN_SERVER}\"],\"username\":\"${TURN_USER}\",\"credential\":\"${TURN_PASS}\"}]}"
 elif [[ ! -z "$STUN_SERVER" ]]; then

@@ -8,7 +8,6 @@ import { SFUConnection } from './SFUConnection';
 import { Logger } from './Logger';
 import { StreamerRegistry } from './StreamerRegistry';
 import { PlayerRegistry } from './PlayerRegistry';
-import { IMatchmakerConfig, MatchmakerConnection } from './MatchmakerConnection';
 import { Messages, MessageHelpers, SignallingProtocol } from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
 import { stringify } from './Utils';
 
@@ -43,27 +42,6 @@ export interface IServerConfig {
 
     // Additional websocket options for the SFU listening websocket.
     sfuWsOptions?: WebSocket.ServerOptions;
-
-    // Enables the matchmaker connection.
-    useMatchmaker?: boolean;
-
-    // The ip/hostname of the matchmaker application.
-    matchmakerAddress?: string;
-
-    // The port that the matchmaker is listening for connections on.
-    matchmakerPort?: number;
-
-    // Number of seconds to delay before a reconnection attempt when the matchmaker connection is lost.
-    matchmakerRetryInterval?: number;
-
-    // Number of seconds between keep alive pings to the matchmaker.
-    matchmakerKeepAliveInterval?: number;
-
-    // Sent to the matchmaker so it can tell clients the ip/hostname to connect to
-    publicIp?: string;
-
-    // Sent to the matchmaker so it can tell clients what port to connect to
-    publicPort?: number;
 }
 
 type ProtocolConfig = {
@@ -125,20 +103,6 @@ export class SignallingServer {
             const sfuServer = new WebSocket.Server({ port: config.sfuPort, backlog: 1, ...config.sfuWsOptions });
             sfuServer.on('connection', this.onSFUConnected.bind(this));
             Logger.info(`Listening for SFU connections on port ${config.sfuPort}`);
-        }
-
-        // Optional Matchmaker connections
-        if (config.useMatchmaker) {
-            const mmConfig: IMatchmakerConfig = {
-                publicIp: config.publicIp!,
-                publicPort: config.publicPort!,
-                address: config.matchmakerAddress!,
-                port: config.matchmakerPort!,
-                https: config.httpsServer != undefined,
-                retryInterval: config.matchmakerRetryInterval!,
-                keepAliveInterval: config.matchmakerKeepAliveInterval!,
-            };
-            const _matchmakerConnection = new MatchmakerConnection(mmConfig, this.streamerRegistry, this.playerRegistry);
         }
     }
 
