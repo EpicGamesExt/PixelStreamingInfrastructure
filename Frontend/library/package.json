@@ -1,6 +1,6 @@
 {
     "name": "@epicgames-ps/lib-pixelstreamingfrontend-ue5.5",
-    "version": "0.1.1",
+    "version": "0.1.2",
     "description": "Frontend library for Unreal Engine 5.5 Pixel Streaming",
     "main": "dist/lib-pixelstreamingfrontend.js",
     "module": "dist/lib-pixelstreamingfrontend.esm.js",
@@ -8,7 +8,7 @@
     "sideEffects": false,
     "scripts": {
         "compile": "tsc --build --clean && tsc",
-        "build": "npm link ../../Common && webpack --config webpack.prod.js",
+        "build": "webpack --config webpack.prod.js",
         "build-all": "cd ../../Common && npm ci && npm run build && cd ../Frontend/library && npm link ../../Common && webpack --config webpack.prod.js",
         "build-dev": "cd ../../Common && npm ci && npm run build && cd ../Frontend/library && npm link ../../Common && webpack --config webpack.dev.js",
         "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
@@ -32,7 +32,8 @@
         "webpack-cli": "^5.0.1"
     },
     "dependencies": {
-        "sdp": "^3.1.0"
+        "sdp": "^3.1.0",
+        "@epicgames-ps/lib-pixelstreamingcommon-ue5.5": "^0.0.14"
     },
     "repository": {
         "type": "git",
