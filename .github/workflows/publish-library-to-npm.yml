@@ -22,7 +22,7 @@ jobs:
           node-version: "${{ env.NODE_VERSION }}"
           registry-url: 'https://registry.npmjs.org'
       - run: npm ci
-      - run: npm run build
+      - run: npm run build-all
       - run: npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
