@@ -53,14 +53,6 @@ Options:
   --rest_api                        Enables the rest API interface that can be accessed at
                                     <server_url>/api/api-definition (default: false)
   --peer_options <json-string>      Additional JSON data to send in peerConnectionOptions of the config message.
-  --matchmaker                      Enable matchmaker connection. (default: false)
-  --matchmaker_address <address>    Sets the matchmaker address to connect to. (default: "127.0.0.1")
-  --matchmaker_port <port>          Sets the matchmaker port to connect to. (default: "9999")
-  --matchmaker_retry <seconds>      Sets the delay before reconnecting to the matchmaker after a disconnect. (default:
-                                    "5")
-  --matchmaker_keepalive <seconds>  Sets the delay between matchmaker pings. (default: "30")
-  --public_ip <ip address>          The public IP address to be used to connect to this server. Only needed when using
-                                    matchmaker. (default: "127.0.0.1")
   --log_config                      Will print the program configuration on startup. (default: false)
   --stdin                           Allows stdin input while running. (default: false)
   --no_config                       Skips the reading of the config file. Only CLI options will be used. (default:
@@ -89,7 +81,7 @@ These CLI options can also be described in a `config.json` (default config file 
 ```
 Given these options, to start the server with the closest behaviour as the old cirrus, you would invoke,
 ```
-npm start -- --console_messages verbose --serve --log_config --http_root Public --homepage player.html
+npm start -- --console_messages --https_redirect verbose --serve --log_config --http_root Public --homepage player.html
 ```
 Note that `Public` being used as the http root assumes your Frontend is in that directory from the old behaviour of the scripts. The new convenience scripts (`platform_scripts` directory) will now build the frontend into the `www` directory.
 
