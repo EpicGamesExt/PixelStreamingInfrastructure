@@ -9,8 +9,8 @@
     "scripts": {
         "compile": "tsc --build --clean && tsc",
         "build": "npm link ../../Common && webpack --config webpack.prod.js",
-        "build-all": "cd ../../Common && npm run build && cd ../Frontend/library && npm link ../../Common && webpack --config webpack.prod.js",
-        "build-dev": "cd ../../Common && npm run build && cd ../Frontend/library && npm link ../../Common && webpack --config webpack.dev.js",
+        "build-all": "cd ../../Common && npm ci && npm run build && cd ../Frontend/library && npm link ../../Common && webpack --config webpack.prod.js",
+        "build-dev": "cd ../../Common && npm ci && npm run build && cd ../Frontend/library && npm link ../../Common && webpack --config webpack.dev.js",
         "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
         "test": "jest --detectOpenHandles --coverage=true",
         "spellcheck": "cspell \"{README.md,.github/*.md,src/**/*.ts}\""
