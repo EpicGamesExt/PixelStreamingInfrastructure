@@ -113,7 +113,7 @@ export class XRGamepadController {
                 if (currButton.pressed) {
                     // press
                     let isRepeat = prevButton.pressed ? 1 : 0;
-                    this.toStreamerMessagesProvider.toStreamerHandlers.get('XRButtonPressed')([handedness, i, isRepeat, currButton.value]);
+                    this.toStreamerMessagesProvider.toStreamerHandlers.get('XRButtonPressed')([handedness, i, isRepeat]);
                 } else if (prevButton.pressed) {
                     this.toStreamerMessagesProvider.toStreamerHandlers.get('XRButtonReleased')([handedness, i, 0]);
                 }
