@@ -28,7 +28,7 @@ export class PixelStreamingApplicationStyle {
     };
 
     defaultDarkModePalette: ColorPalette = {
-        '--color0': '#1D1F2280',
+        '--color0': '#1d1f22e0',
         '--color1': '#000000',
         '--color2': '#FFFFFF',
         '--color3': '#0585fe',
@@ -40,7 +40,7 @@ export class PixelStreamingApplicationStyle {
 
     defaultStyles = {
         ':root': {
-            '--color0': '#1D1F2280',
+            '--color0': '#1d1f22e0',
             '--color1': '#000000',
             '--color2': '#FFFFFF',
             '--color3': '#0585fe',
@@ -244,8 +244,6 @@ export class PixelStreamingApplicationStyle {
             transform: 'translateX(100%)',
             transition: '.3s ease-out',
             pointerEvents: 'all',
-            backdropFilter: 'blur(10px)',
-            '-webkit-backdrop-filter': 'blur(10px)',
             overflowY: 'auto',
             overflowX: 'hidden',
             backgroundColor: 'var(--color0)'
