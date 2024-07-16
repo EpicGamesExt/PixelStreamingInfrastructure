@@ -1000,10 +1000,7 @@ export class WebRtcPlayerController {
         // if the connection is open, first close it. wait some time and try again.
         this.isReconnecting = true;
         if (this.protocol.isConnected()) {
-            this.closeSignalingServer(`${message} Restarting stream...`);
-            setTimeout(() => {
-                this.tryReconnect(message);
-            }, 3000);
+            this.resetSignalingServer(`${message} Restarting stream...`);
         } else {
             this.pixelStreaming._onWebRtcAutoConnect();
             this.connectToSignallingServer();
@@ -1673,6 +1670,16 @@ export class WebRtcPlayerController {
         // We explicitly called close, therefore we don't want to trigger auto reconnect
         this.locallyClosed = true;
         this.shouldReconnect = false;
+        this.disconnectMessage = message;
+        this.protocol?.disconnect();
+    }
+
+    /**
+     * Close and reconnect the Connection to the signaling server
+     */
+    resetSignalingServer(message: string) {
+        this.locallyClosed = true;
+        this.shouldReconnect = true;
         this.disconnectMessage = message;
         this.protocol?.disconnect();
     }
