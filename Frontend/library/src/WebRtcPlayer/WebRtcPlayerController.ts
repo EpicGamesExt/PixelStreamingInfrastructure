@@ -135,7 +135,7 @@ export class WebRtcPlayerController {
             this.onAfkTriggered.bind(this)
         );
         this.afkController.onAFKTimedOutCallback = () => {
-            this.closeSignalingServer('You have been disconnected due to inactivity');
+            this.closeSignalingServer('You have been disconnected due to inactivity.');
         };
 
         this.freezeFrameController = new FreezeFrameController(
@@ -235,12 +235,12 @@ export class WebRtcPlayerController {
             // lists all the codes. 
             const CODE_GOING_AWAY = 1001;
 
-            const willTryReconnect = this.shouldReconnect
-                && event.code != CODE_GOING_AWAY
-                && this.config.getNumericSettingValue(NumericParameters.MaxReconnectAttempts) > 0
-
+            const maxReconnectAttempts = this.config.getNumericSettingValue(NumericParameters.MaxReconnectAttempts);
+            const willTryReconnect = this.shouldReconnect && event.code != CODE_GOING_AWAY && maxReconnectAttempts > 0 && this.reconnectAttempt < maxReconnectAttempts;
+            const allowClickToReconnect = !this.isReconnecting && (!willTryReconnect || maxReconnectAttempts == 0);
             const disconnectMessage = this.disconnectMessage ? this.disconnectMessage : event.reason;
-            this.pixelStreaming._onDisconnect(disconnectMessage, !willTryReconnect && !this.isReconnecting);
+
+            this.pixelStreaming._onDisconnect(disconnectMessage, allowClickToReconnect);
 
             this.afkController.stopAfkWarningTimer();
 
