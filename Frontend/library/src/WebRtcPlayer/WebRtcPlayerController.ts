@@ -63,6 +63,10 @@ import {
     DataChannelLatencyTestRequest,
     DataChannelLatencyTestResponse
 } from "../DataChannel/DataChannelLatencyTestResults";
+import {
+    IURLSearchParams
+} from '../Util/IURLSearchParams';
+
 /**
  * Entry point for the WebRTC Player
  */
@@ -1368,7 +1372,7 @@ export class WebRtcPlayerController {
 
         // first we figure out a wanted streamer id through various means
         const useUrlParams = this.config.useUrlParams;
-        const urlParams = new URLSearchParams(window.location.search);
+        const urlParams = new IURLSearchParams(window.location.search);
         if (useUrlParams && urlParams.has(OptionParameters.StreamerId)) {
             // if we've set the streamer id on the url we only want that streamer id
             wantedStreamerId = urlParams.get(OptionParameters.StreamerId);
