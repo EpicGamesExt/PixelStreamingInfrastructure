@@ -11,7 +11,6 @@ export class SettingFlag<
 > extends SettingBase {
     id: FlagsIds | CustomIds;
     onChangeEmit: (changedValue: boolean) => void;
-    useUrlParams: boolean;
 
     constructor(
         id: FlagsIds | CustomIds,
@@ -24,55 +23,18 @@ export class SettingFlag<
     ) {
         super(id, label, description, defaultFlagValue, defaultOnChangeListener);
 
-        const urlParams = new URLSearchParams(window.location.search);
-        if (!useUrlParams || !urlParams.has(this.id)) {
+        if (!useUrlParams || !this.hasURLParam(this.id)) {
             this.flag = defaultFlagValue;
         } else {
             // parse flag from url parameters
-            const urlParamFlag = this.getUrlParamFlag();
-            this.flag = urlParamFlag;
+            const urlParamFlag = this.getURLParam(this.id);
+            this.flag = urlParamFlag.toLowerCase() != 'false';
         }
         this.useUrlParams = useUrlParams;
     }
 
-    /**
-     * Parse the flag value from the url parameters.
-     * @returns True if the url parameters contains /?id, but False if /?id=false
-     */
-    getUrlParamFlag(): boolean {
-        const urlParams = new URLSearchParams(window.location.search);
-        if (urlParams.has(this.id)) {
-            if (
-                urlParams.get(this.id) === 'false' ||
-                urlParams.get(this.id) === 'False'
-            ) {
-                return false;
-            }
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * Persist the setting value in URL.
-     */
-    public updateURLParams() {
-        if (this.useUrlParams) {
-            // set url params
-            const urlParams = new URLSearchParams(window.location.search);
-            if (this.flag === true) {
-                urlParams.set(this.id, 'true');
-            } else {
-                urlParams.set(this.id, 'false');
-            }
-            window.history.replaceState(
-                {},
-                '',
-                urlParams.toString() !== ''
-                    ? `${location.pathname}?${urlParams}`
-                    : `${location.pathname}`
-            );
-        }
+    protected getValueAsString(): string {
+        return this.flag ? 'true' : 'false';
     }
 
     /**
