@@ -595,7 +595,7 @@ export class Application {
      * @param allowClickToReconnect - true if we want to allow the user to click to reconnect. Otherwise it's just a message.
      */
     onDisconnect(eventString: string, allowClickToReconnect: boolean) {
-        const overlayMessage = 'Disconnected' + (eventString ? `: ${eventString}` : '');
+        const overlayMessage = 'Disconnected' + (eventString ? `: ${eventString}` : '.');
         if (allowClickToReconnect) {
             this.showDisconnectOverlay(`${overlayMessage} Click To Restart.`);
         } else {
