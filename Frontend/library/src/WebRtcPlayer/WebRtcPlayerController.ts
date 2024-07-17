@@ -1688,7 +1688,7 @@ export class WebRtcPlayerController {
         this.locallyClosed = true;
         this.enableAutoReconnect = allowReconnect;
         this.disconnectMessage = message;
-        this.protocol?.disconnect();
+        this.protocol?.disconnect(1000, message);
     }
 
     /**
