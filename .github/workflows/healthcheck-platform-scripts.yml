@@ -19,8 +19,8 @@ jobs:
       - name: Launch and query signalling server using the REST API
         working-directory: SignallingWebServer
         run: |
-          ./platform_scripts/bash/start.sh --rest_api &
-          curl --retry 10 --retry-delay 20 --retry-connrefused http://localhost/api/status
+          ./platform_scripts/bash/start.sh --rest_api --player_port 999 &
+          curl --retry 10 --retry-delay 20 --retry-connrefused http://localhost:999/api/status
 
   run-script-macos:
     if: github.repository == 'EpicGamesExt/PixelStreamingInfrastructure'
@@ -31,8 +31,8 @@ jobs:
       - name: Launch and query signalling server using the REST API
         working-directory: SignallingWebServer
         run: |
-          ./platform_scripts/bash/start.sh --rest_api &
-          curl --retry 10 --retry-delay 20 --retry-connrefused http://localhost/api/status
+          ./platform_scripts/bash/start.sh --rest_api --player_port 999 &
+          curl --retry 10 --retry-delay 20 --retry-connrefused http://localhost:999/api/status
 
   run-script-windows:
     if: github.repository == 'EpicGamesExt/PixelStreamingInfrastructure'
@@ -43,6 +43,6 @@ jobs:
       - name: Launch and query signalling server using the REST API
         working-directory: SignallingWebServer
         run: |
-          Start-Process -NoNewWindow .\platform_scripts\cmd\start.bat --rest_api
-          curl --retry 10 --retry-delay 20 --retry-connrefused http://localhost/api/status
+          Start-Process -NoNewWindow ".\platform_scripts\cmd\start.bat" -ArgumentList "--rest_api","--player_port 999"
+          curl --retry 10 --retry-delay 20 --retry-connrefused http://localhost:999/api/status
 
