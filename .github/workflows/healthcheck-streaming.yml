@@ -1,0 +1,114 @@
+name: Check health of streaming
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "Common/**"
+      - "Frontend/**"
+      - "Signalling/**"
+      - "SignallingWebServer/**"
+      - "Extras/**"
+  pull_request:
+    paths:
+      - "Common/**"
+      - "Frontend/**"
+      - "Signalling/**"
+      - "SignallingWebServer/**"
+      - "Extras/**"
+
+jobs:
+  streaming-test:
+    runs-on: windows-latest
+    steps:
+    - name: Checkout source code
+      uses: actions/checkout@v3
+
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 'v18.17.0'
+
+    - name: Download streamer
+      uses: robinraju/release-downloader@v1
+      with:
+        repository: 'EpicGamesExt/PixelStreamingInfrastructure'
+        tag: 'minimal-streamer'
+        fileName: 'Minimal-PixelStreamer.7z'
+
+    - name: Extract streamer
+      run: 7z x -oStreamer Minimal-PixelStreamer.7z
+
+    - name: Build Common
+      working-directory: Common
+      run: |
+        npm ci
+        npm run build
+
+    - name: Build Signalling
+      working-directory: Signalling
+      run: |
+        npm ci
+        npm link ../Common
+        npm run build
+
+    - name: Build Wilbur
+      working-directory: SignallingWebServer
+      run: |
+        npm ci
+        npm link ../Signalling
+        npm run build
+
+    - name: Build Frontend lib
+      working-directory: Frontend/library
+      run: |
+        npm ci
+        npm link ../../Common
+        npm run build
+
+    - name: Build Frontend ui lib
+      working-directory: Frontend/ui-library
+      run: |
+        npm ci
+        npm link ../library
+        npm run build
+
+    - name: Build Frontend implementation
+      working-directory: Frontend/implementations/typescript
+      run: |
+        $Env:WEBPACK_OUTPUT_PATH='${{ github.workspace }}\www'
+        npm ci
+        npm link ../../library ../../ui-library
+        npm run build
+
+    - name: Run Signalling
+      working-directory: SignallingWebServer
+      run: Start-Process "npm" -ArgumentList "run","start","--","--rest_api","--player_port 999","--http_root ${{ github.workspace }}\www"
+
+    - name: Run Streamer
+      working-directory: Streamer
+      run: Start-Process ".\Minimal\Binaries\Win64\Minimal-Win64-Shipping-Cmd.exe" -ArgumentList "-warp","-dx12","-windowed","-res=1920","-resy=720","-PixelStreamingURL=ws://localhost:8888","-RenderOffScreen","-AllowSoftwaRerendering","-PixelStreamingEncoderCodec=vp8"
+
+    - name: Prepare test
+      working-directory: Extras\MinimalStreamTester
+      run: |
+        npm i
+        npx playwright install --with-deps
+        npx playwright install chrome
+
+    - name: Wait for signalling to come up
+      run: curl --retry 10 --retry-delay 20 --retry-connrefused http://localhost:999/api/status
+
+    - name: Wait for streamer to come up
+      run: curl --retry 10 --retry-delay 20 --retry-connrefused http://localhost:999/api/streamers/DefaultStreamer
+
+    - name: Test if we can stream
+      working-directory: Extras\MinimalStreamTester
+      run: |
+        $Env:PIXELSTREAMING_URL = 'http://localhost:999'
+        npx playwright test
+
+    - name: Upload screenshot
+      uses: actions/upload-artifact@v4
+      with:
+        name: Screenshot
+        path: Extras\MinimalStreamTester\StreamResult.png
