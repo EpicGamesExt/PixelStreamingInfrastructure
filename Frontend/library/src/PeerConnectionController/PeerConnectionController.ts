@@ -350,7 +350,7 @@ export class PeerConnectionController {
      */
     fuzzyIntersectUEAndBrowserCodecs(sdp: RTCSessionDescriptionInit) : string[] {
         // We want to build an array of all supported codecs on both sides
-        let allSupportedCodecs: Array<string> = new Array<string>();
+        const allSupportedCodecs: Array<string> = new Array<string>();
         const allUECodecs: string[] = this.parseAvailableCodecs(sdp);
         const allBrowserCodecs: string[] = this.config.getSettingOption(OptionParameters.PreferredCodec).options;
         for(const ueCodec of allUECodecs) {
