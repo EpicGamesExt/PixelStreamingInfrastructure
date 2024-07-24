@@ -87,3 +87,4 @@ jobs:
         tag: "${{ github.ref_name }}-${{ steps.getversion.outputs.version }}"
         artifacts: "${{ github.ref_name }}-${{ steps.getversion.outputs.version }}.zip,${{ github.ref_name }}-${{ steps.getversion.outputs.version }}.tar.gz"
         generateReleaseNotes: true
+        commit: "${{ github.sha }}"
