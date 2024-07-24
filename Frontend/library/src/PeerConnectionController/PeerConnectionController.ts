@@ -104,6 +104,7 @@ export class PeerConnectionController {
      *
      */
     async receiveOffer(offer: RTCSessionDescriptionInit, config: Config) {
+
         Logger.Log(Logger.GetStackTrace(), 'Receive Offer', 6);
 
         this.peerConnection?.setRemoteDescription(offer).then(() => {
@@ -123,6 +124,9 @@ export class PeerConnectionController {
                     "For testing you can enable HTTP microphone access Chrome by visiting chrome://flags/ and enabling 'unsafely-treat-insecure-origin-as-secure'"
                 );
             }
+
+            // Add our list of preferred codecs, in order of preference
+            this.config.setOptionSettingOptions(OptionParameters.PreferredCodec, this.fuzzyIntersectUEAndBrowserCodecs(offer));
 
             this.setupTransceiversAsync(useMic).finally(() => {
                 this.peerConnection
@@ -144,33 +148,17 @@ export class PeerConnectionController {
                     });
             });
         });
-
-        // Ugly syntax, but this achieves the intersection of the browser supported list and the UE supported list
-        this.config.setOptionSettingOptions(
-            OptionParameters.PreferredCodec,
-            this.parseAvailableCodecs(offer).filter((value) =>
-                this.config
-                    .getSettingOption(OptionParameters.PreferredCodec)
-                    .options.includes(value)
-            )
-        );
     }
 
-    /**
+	/**
      * Set the Remote Descriptor from the signaling server to the RTC Peer Connection
      * @param answer - RTC Session Descriptor from the Signaling Server
      */
     receiveAnswer(answer: RTCSessionDescriptionInit) {
         this.peerConnection?.setRemoteDescription(answer);
-        // Ugly syntax, but this achieves the intersection of the browser supported list and the UE supported list
-        this.config.setOptionSettingOptions(
-            OptionParameters.PreferredCodec,
-            this.parseAvailableCodecs(answer).filter((value) =>
-                this.config
-                    .getSettingOption(OptionParameters.PreferredCodec)
-                    .options.includes(value)
-            )
-        );
+
+        // Add our list of preferred codecs, in order of preference
+        this.config.setOptionSettingOptions(OptionParameters.PreferredCodec, this.fuzzyIntersectUEAndBrowserCodecs(answer));
     }
 
     /**
@@ -372,15 +360,54 @@ export class PeerConnectionController {
     }
 
     /**
+     * Find the intersection between UE and browser codecs, with fuzzy matching if some parameters are mismatched.
+     * @param sdp The remote sdp
+     * @returns The intersection between browser supported codecs and ue supported codecs.
+     */
+    fuzzyIntersectUEAndBrowserCodecs(sdp: RTCSessionDescriptionInit) : string[] {
+        // We want to build an array of all supported codecs on both sides
+        let allSupportedCodecs: Array<string> = new Array<string>();
+        const allUECodecs: string[] = this.parseAvailableCodecs(sdp);
+        const allBrowserCodecs: string[] = this.config.getSettingOption(OptionParameters.PreferredCodec).options;
+        for(const ueCodec of allUECodecs) {
+            // Check if browser codecs directly matches UE codec (with parameters and everything)
+            if(allBrowserCodecs.includes(ueCodec)) {
+                allSupportedCodecs.push(ueCodec);
+                continue;
+            }
+            // Otherwise check if browser codec at least contains a match for the UE codec name (without parameters).
+            else {
+                const ueCodecNameAndParams: string[] = ueCodec.split(" ");
+                const ueCodecName = ueCodecNameAndParams[0];
+                for(const browserCodec of allBrowserCodecs) {
+                    if(browserCodec.includes(ueCodecName)) {
+                        // We pass browser codec here as they option contain extra parameters.
+                        allSupportedCodecs.push(browserCodec);
+                        break;
+                    }
+                }
+            }
+        }
+        return allSupportedCodecs;
+    }
+
+    /**
      * Setup tracks on the RTC Peer Connection
      * @param useMic - is mic in use
      */
     async setupTransceiversAsync(useMic: boolean) {
-        const hasTransceivers =
-            this.peerConnection?.getTransceivers().length > 0;
 
-        // Setup a transceiver for getting UE video
-        this.peerConnection?.addTransceiver('video', { direction: 'recvonly' });
+        // Setup a transceiver for receiving video (if we need to)
+        let hasVideoReceiver = false;
+        for (const transceiver of this.peerConnection?.getTransceivers() ?? []) {
+            if (transceiver && transceiver.receiver && transceiver.receiver.track && transceiver.receiver.track.kind === 'video') {
+                hasVideoReceiver = true;
+                break;
+            }
+        }
+        if(!hasVideoReceiver) {
+            this.peerConnection?.addTransceiver('video', { direction: 'recvonly' });
+        }
 
         // We can only set preferred codec on Chrome
         if (RTCRtpReceiver.getCapabilities && this.preferredCodec != '') {
@@ -390,7 +417,6 @@ export class PeerConnectionController {
                     transceiver.receiver &&
                     transceiver.receiver.track &&
                     transceiver.receiver.track.kind === 'video' &&
-                    // As of 06/2023, FireFox has added RTCRtpReceiver.getCapabilities, but hasn't added the ability to set codec preferences
                     transceiver.setCodecPreferences
                 ) {
                     const preferredRTPCodec = this.preferredCodec.split(' ');
@@ -435,11 +461,21 @@ export class PeerConnectionController {
             }
         }
 
+        let hasAudioReceiver = false;
+        for (const transceiver of this.peerConnection?.getTransceivers() ?? []) {
+            if (transceiver && transceiver.receiver && transceiver.receiver.track && transceiver.receiver.track.kind === 'audio') {
+                hasAudioReceiver = true;
+                break;
+            }
+        }
+
         // Setup a transceiver for sending mic audio to UE and receiving audio from UE
         if (!useMic) {
-            this.peerConnection?.addTransceiver('audio', {
-                direction: 'recvonly'
-            });
+            if(!hasAudioReceiver) {
+                this.peerConnection?.addTransceiver('audio', {
+                    direction: 'recvonly'
+                });
+            }
         } else {
             // set the audio options based on mic usage
             const audioOptions = {
@@ -464,7 +500,7 @@ export class PeerConnectionController {
                 mediaSendOptions
             );
             if (stream) {
-                if (hasTransceivers) {
+                if (hasAudioReceiver) {
                     for (const transceiver of this.peerConnection?.getTransceivers() ?? []) {
                         if (RTCUtils.canTransceiverReceiveAudio(transceiver)) {
                             for (const track of stream.getTracks()) {
@@ -485,9 +521,11 @@ export class PeerConnectionController {
                     }
                 }
             } else {
-                this.peerConnection?.addTransceiver('audio', {
-                    direction: 'recvonly'
-                });
+                if(!hasAudioReceiver) {
+                    this.peerConnection?.addTransceiver('audio', {
+                        direction: 'recvonly'
+                    });
+                }
             }
         }
     }
