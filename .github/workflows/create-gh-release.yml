@@ -21,8 +21,7 @@ jobs:
       run:
         working-directory: ./
 
-    permissions:
-      contents: write
+    permissions: write-all
     steps:
     - name: "Checkout source code"
       uses: actions/checkout@v3
