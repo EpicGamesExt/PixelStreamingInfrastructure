@@ -1,4 +1,4 @@
-name: Library Health
+name: Check health of libraries
 
 on:
   workflow_dispatch:
