@@ -33,10 +33,10 @@ jobs:
       with:
         repository: 'EpicGamesExt/PixelStreamingInfrastructure'
         tag: 'minimal-streamer'
-        fileName: 'Minimal-PixelStreamer.7z'
+        fileName: 'Minimal-PixelStreamer-5.5.7z'
 
     - name: Extract streamer
-      run: 7z x -oStreamer Minimal-PixelStreamer.7z
+      run: 7z x -oStreamer Minimal-PixelStreamer-5.5.7z
 
     - name: Build Common
       working-directory: Common
