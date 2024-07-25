@@ -139,8 +139,8 @@ message playerConnected {
   bool dataChannel = 2;
   // True if the player connected is an SFU
   bool sfu = 3;
-  // True if the streamer should send an offer. False if the player is offering to receive
-  bool sendOffer = 4;
+  // Removed
+  bool _unused = 4;
   // The ID of the player that connected.
   string playerId = 5;
 }
@@ -157,13 +157,9 @@ message playerDisconnected {
 }
 
 /**
- * An offer message can be an offer of a WebRTC stream, or an offer to
- * receive a WebRTC stream, depending on the configuration of the player.
- * The default behaviour is that when a player subscribes to a streamer
- * the streamer will offer the stream to the new player.
- * An alternative configuration exists where a player can be configured
- * to offer to receive and in that case the player will subscribe to a
- * streamer and then offer to receive the stream.
+ * An offer message is an offer of a WebRTC stream.
+ * When a player subscribes to a streamer the streamer will offer the
+ * stream to the new player.
  */
 message offer {
   // Should always be 'offer'

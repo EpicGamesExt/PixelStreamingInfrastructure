@@ -259,11 +259,11 @@ export interface playerConnected {
      */
     sfu: boolean;
     /**
-     * True if the streamer should send an offer. False if the player is offering to receive
+     * Removed
      *
-     * @generated from protobuf field: bool sendOffer = 4;
+     * @generated from protobuf field: bool _unused = 4;
      */
-    sendOffer: boolean;
+    Unused: boolean;
     /**
      * The ID of the player that connected.
      *
@@ -294,13 +294,9 @@ export interface playerDisconnected {
 }
 /**
  * *
- * An offer message can be an offer of a WebRTC stream, or an offer to
- * receive a WebRTC stream, depending on the configuration of the player.
- * The default behaviour is that when a player subscribes to a streamer
- * the streamer will offer the stream to the new player.
- * An alternative configuration exists where a player can be configured
- * to offer to receive and in that case the player will subscribe to a
- * streamer and then offer to receive the stream.
+ * An offer message is an offer of a WebRTC stream.
+ * When a player subscribes to a streamer the streamer will offer the
+ * stream to the new player.
  *
  * @generated from protobuf message offer
  */
@@ -1259,7 +1255,7 @@ class playerConnected$Type extends MessageType<playerConnected> {
             { no: 1, name: "type", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
             { no: 2, name: "dataChannel", kind: "scalar", T: 8 /*ScalarType.BOOL*/ },
             { no: 3, name: "sfu", kind: "scalar", T: 8 /*ScalarType.BOOL*/ },
-            { no: 4, name: "sendOffer", kind: "scalar", T: 8 /*ScalarType.BOOL*/ },
+            { no: 4, name: "_unused", kind: "scalar", T: 8 /*ScalarType.BOOL*/ },
             { no: 5, name: "playerId", kind: "scalar", T: 9 /*ScalarType.STRING*/ }
         ]);
     }
@@ -1268,7 +1264,7 @@ class playerConnected$Type extends MessageType<playerConnected> {
         message.type = "";
         message.dataChannel = false;
         message.sfu = false;
-        message.sendOffer = false;
+        message.Unused = false;
         message.playerId = "";
         if (value !== undefined)
             reflectionMergePartial<playerConnected>(this, message, value);
@@ -1288,8 +1284,8 @@ class playerConnected$Type extends MessageType<playerConnected> {
                 case /* bool sfu */ 3:
                     message.sfu = reader.bool();
                     break;
-                case /* bool sendOffer */ 4:
-                    message.sendOffer = reader.bool();
+                case /* bool _unused */ 4:
+                    message.Unused = reader.bool();
                     break;
                 case /* string playerId */ 5:
                     message.playerId = reader.string();
@@ -1315,9 +1311,9 @@ class playerConnected$Type extends MessageType<playerConnected> {
         /* bool sfu = 3; */
         if (message.sfu !== false)
             writer.tag(3, WireType.Varint).bool(message.sfu);
-        /* bool sendOffer = 4; */
-        if (message.sendOffer !== false)
-            writer.tag(4, WireType.Varint).bool(message.sendOffer);
+        /* bool _unused = 4; */
+        if (message.Unused !== false)
+            writer.tag(4, WireType.Varint).bool(message.Unused);
         /* string playerId = 5; */
         if (message.playerId !== "")
             writer.tag(5, WireType.LengthDelimited).string(message.playerId);
