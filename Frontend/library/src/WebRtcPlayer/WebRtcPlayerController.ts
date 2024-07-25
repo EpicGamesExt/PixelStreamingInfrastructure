@@ -321,7 +321,7 @@ export class WebRtcPlayerController {
         this.setVideoEncoderAvgQP(-1);
 
         this.signallingUrlBuilder = () => {
-            let signallingServerUrl = this.config.getTextSettingValue(
+            const signallingServerUrl = this.config.getTextSettingValue(
                 TextParameters.SignallingServerUrl
             );
 
