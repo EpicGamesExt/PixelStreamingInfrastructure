@@ -24,7 +24,6 @@ export interface IPlayerInfo {
     playerId: string,
     type: string,
     subscribedTo: string | undefined,
-    sendOffer: boolean,
     remoteAddress: string | undefined,
 }
 

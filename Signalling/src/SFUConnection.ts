@@ -115,7 +115,6 @@ export class SFUConnection extends EventEmitter implements IPlayer, IStreamer, L
             type: 'SFU',
             remoteAddress: this.remoteAddress,
             subscribedTo: this.subscribedStreamer?.streamerId,
-            sendOffer: true,
         };
     }
 
@@ -149,8 +148,7 @@ export class SFUConnection extends EventEmitter implements IPlayer, IStreamer, L
 
         const connectedMessage = MessageHelpers.createMessage(Messages.playerConnected, { playerId: this.playerId,
                                                                                           dataChannel: true,
-                                                                                          sfu: true,
-                                                                                          sendOffer: true });
+                                                                                          sfu: true });
         this.sendToStreamer(connectedMessage);
     }
 
