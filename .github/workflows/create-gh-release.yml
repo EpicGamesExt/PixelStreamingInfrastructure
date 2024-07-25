@@ -5,6 +5,14 @@ on:
     branches: ['UE5.3']
     paths: ['RELEASE_VERSION']
 
+  workflow_dispatch:
+    inputs:
+      commitsha:
+        description: "Commit SHA for the release (if blank use latest on this branch)"
+
+env:
+  commitsha: "${{ github.event.inputs.commitsha || github.sha }}"
+
 jobs:
 
   build:
@@ -18,6 +26,8 @@ jobs:
     steps:
     - name: "Checkout source code"
       uses: actions/checkout@v3
+      with:
+        ref: "${{ env.commitsha }}"
 
     - name: Read the RELEASE_VERSION file
       id: getversion
@@ -87,3 +97,4 @@ jobs:
         tag: "${{ github.ref_name }}-${{ steps.getversion.outputs.version }}"
         artifacts: "${{ github.ref_name }}-${{ steps.getversion.outputs.version }}.zip,${{ github.ref_name }}-${{ steps.getversion.outputs.version }}.tar.gz"
         generateReleaseNotes: true
+        commit: "${{ env.commitsha }}"
