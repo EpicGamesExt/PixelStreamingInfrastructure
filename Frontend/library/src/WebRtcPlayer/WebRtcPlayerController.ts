@@ -222,11 +222,8 @@ export class WebRtcPlayerController {
             this.handleIceCandidate(iceCandidateMessage.candidate);
         });
         this.protocol.transport.addListener('open', () => {
-            const BrowserSendsOffer = this.config.isFlagEnabled(Flags.BrowserSendOffer);
-            if (!BrowserSendsOffer) {
-                const message = MessageHelpers.createMessage(Messages.listStreamers);
-                this.protocol.sendMessage(message);
-            }
+            const message = MessageHelpers.createMessage(Messages.listStreamers);
+            this.protocol.sendMessage(message);
             this.reconnectAttempt = 0;
             this.isReconnecting = false;
         });
@@ -327,16 +324,6 @@ export class WebRtcPlayerController {
             let signallingServerUrl = this.config.getTextSettingValue(
                 TextParameters.SignallingServerUrl
             );
-
-            // If we are connecting to the SFU add a special url parameter to the url
-            if (this.config.isFlagEnabled(Flags.BrowserSendOffer)) {
-                signallingServerUrl += '?' + Flags.BrowserSendOffer + '=true';
-            }
-
-            // This code is no longer needed, but is a good example for how subsequent config flags can be appended
-            // if (this.config.isFlagEnabled(Flags.BrowserSendOffer)) {
-            //     signallingServerUrl += (signallingServerUrl.includes('?') ? '&' : '?') + Flags.BrowserSendOffer + '=true';
-            // }
 
             return signallingServerUrl;
         }
@@ -1292,26 +1279,6 @@ export class WebRtcPlayerController {
         /* RTC Peer Connection on Track event -> handle on track */
         this.peerConnectionController.onTrack = (trackEvent: RTCTrackEvent) =>
             this.streamController.handleOnTrack(trackEvent);
-
-        /* Start the Hand shake process by creating an Offer */
-        const BrowserSendsOffer = this.config.isFlagEnabled(
-            Flags.BrowserSendOffer
-        );
-        if (BrowserSendsOffer) {
-            // If browser is sending the offer, create an offer and send it to the streamer
-            this.sendrecvDataChannelController.createDataChannel(
-                this.peerConnectionController.peerConnection,
-                'cirrus',
-                this.datachannelOptions
-            );
-            this.sendrecvDataChannelController.handleOnMessage = (
-                ev: MessageEvent<ArrayBuffer>
-            ) => this.handleOnMessage(ev);
-            this.peerConnectionController.createOffer(
-                this.sdpConstraints,
-                this.config
-            );
-        }
     }
 
     /**
