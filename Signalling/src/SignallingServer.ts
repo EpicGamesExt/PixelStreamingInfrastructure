@@ -1,7 +1,6 @@
 import http from 'http';
 import https from 'https';
 import WebSocket from 'ws';
-import url from 'url';
 import { StreamerConnection } from './StreamerConnection';
 import { PlayerConnection } from './PlayerConnection';
 import { SFUConnection } from './SFUConnection';
