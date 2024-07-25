@@ -9,7 +9,6 @@ on:
       inputs:
         commitsha:
           description: "Commit SHA for the release (if blank use latest on this branch)"
-          default: "${{ github.sha }}"
 
 env:
   commitsha: "${{ github.event.inputs.commitsha || github.sha }}"
