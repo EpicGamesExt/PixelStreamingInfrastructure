@@ -259,12 +259,6 @@ export interface playerConnected {
      */
     sfu: boolean;
     /**
-     * Removed
-     *
-     * @generated from protobuf field: bool _unused = 4;
-     */
-    Unused: boolean;
-    /**
      * The ID of the player that connected.
      *
      * @generated from protobuf field: string playerId = 5;
@@ -1255,7 +1249,6 @@ class playerConnected$Type extends MessageType<playerConnected> {
             { no: 1, name: "type", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
             { no: 2, name: "dataChannel", kind: "scalar", T: 8 /*ScalarType.BOOL*/ },
             { no: 3, name: "sfu", kind: "scalar", T: 8 /*ScalarType.BOOL*/ },
-            { no: 4, name: "_unused", kind: "scalar", T: 8 /*ScalarType.BOOL*/ },
             { no: 5, name: "playerId", kind: "scalar", T: 9 /*ScalarType.STRING*/ }
         ]);
     }
@@ -1264,7 +1257,6 @@ class playerConnected$Type extends MessageType<playerConnected> {
         message.type = "";
         message.dataChannel = false;
         message.sfu = false;
-        message.Unused = false;
         message.playerId = "";
         if (value !== undefined)
             reflectionMergePartial<playerConnected>(this, message, value);
@@ -1283,9 +1275,6 @@ class playerConnected$Type extends MessageType<playerConnected> {
                     break;
                 case /* bool sfu */ 3:
                     message.sfu = reader.bool();
-                    break;
-                case /* bool _unused */ 4:
-                    message.Unused = reader.bool();
                     break;
                 case /* string playerId */ 5:
                     message.playerId = reader.string();
@@ -1311,9 +1300,6 @@ class playerConnected$Type extends MessageType<playerConnected> {
         /* bool sfu = 3; */
         if (message.sfu !== false)
             writer.tag(3, WireType.Varint).bool(message.sfu);
-        /* bool _unused = 4; */
-        if (message.Unused !== false)
-            writer.tag(4, WireType.Varint).bool(message.Unused);
         /* string playerId = 5; */
         if (message.playerId !== "")
             writer.tag(5, WireType.LengthDelimited).string(message.playerId);

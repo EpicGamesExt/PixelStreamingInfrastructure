@@ -139,8 +139,6 @@ message playerConnected {
   bool dataChannel = 2;
   // True if the player connected is an SFU
   bool sfu = 3;
-  // Removed
-  bool _unused = 4;
   // The ID of the player that connected.
   string playerId = 5;
 }
