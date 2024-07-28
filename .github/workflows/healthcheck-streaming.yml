@@ -19,6 +19,7 @@ on:
 
 jobs:
   streaming-test:
+    if: github.repository == 'EpicGamesExt/PixelStreamingInfrastructure'
     runs-on: windows-latest
     steps:
     - name: Checkout source code
