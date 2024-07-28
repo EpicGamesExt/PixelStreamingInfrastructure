@@ -185,6 +185,14 @@ export class Application {
      * Set up button click functions and button functionality
      */
     public createButtons() {
+
+        // IPhone does not support fullscreen API as at 28th July 2024 (see: https://caniuse.com/fullscreen) so if
+        // we are on IPhone and user has not specified explicitly configured UI config for
+        // fullscreen button then we should disable this button as it doesn't work.
+        if(this._options.fullScreenControlsConfig === undefined && /iPhone/.test(navigator.userAgent)) {
+            this._options.fullScreenControlsConfig = { creationMode: UIElementCreationMode.Disable };
+        }
+
         const controlsUIConfig : ControlsUIConfiguration = {
             statsButtonType : this._options.statsPanelConfig
                 ? this._options.statsPanelConfig.visibilityButtonConfig
@@ -195,6 +203,7 @@ export class Application {
             fullscreenButtonType: this._options.fullScreenControlsConfig,
             xrIconType: this._options.xrControlsConfig
         }
+
         // Setup controls
         const controls = new Controls(controlsUIConfig);
         this.uiFeaturesElement.appendChild(controls.rootElement);
