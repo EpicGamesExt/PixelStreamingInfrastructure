@@ -16,7 +16,6 @@ export class Flags {
     static AutoConnect = 'AutoConnect' as const;
     static AutoPlayVideo = 'AutoPlayVideo' as const;
     static AFKDetection = 'TimeoutIfIdle' as const;
-    static BrowserSendOffer = 'OfferToReceive' as const;
     static HoveringMouseMode = 'HoveringMouse' as const;
     static ForceMonoAudio = 'ForceMonoAudio' as const;
     static ForceTURN = 'ForceTURN' as const;
@@ -274,19 +273,6 @@ export class Config {
                 settings && Object.prototype.hasOwnProperty.call(settings, Flags.AutoPlayVideo) ?
                     settings[Flags.AutoPlayVideo] :
                     true,
-                useUrlParams
-            )
-        );
-
-        this.flags.set(
-            Flags.BrowserSendOffer,
-            new SettingFlag(
-                Flags.BrowserSendOffer,
-                'Browser send offer',
-                'Browser will initiate the WebRTC handshake by sending the offer to the streamer',
-                settings && Object.prototype.hasOwnProperty.call(settings, Flags.BrowserSendOffer) ?
-                    settings[Flags.BrowserSendOffer] :
-                    false,
                 useUrlParams
             )
         );

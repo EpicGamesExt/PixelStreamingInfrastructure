@@ -65,7 +65,7 @@ EventEmitter.constructor
 
 #### Defined in
 
-[Transport/WebSocketTransportNJS.ts:18](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Common/src/Transport/WebSocketTransportNJS.ts#L18)
+[Transport/WebSocketTransportNJS.ts:18](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/841ef6a/Common/src/Transport/WebSocketTransportNJS.ts#L18)
 
 ## Properties
 
@@ -75,7 +75,7 @@ EventEmitter.constructor
 
 #### Defined in
 
-[Transport/WebSocketTransportNJS.ts:15](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Common/src/Transport/WebSocketTransportNJS.ts#L15)
+[Transport/WebSocketTransportNJS.ts:15](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/841ef6a/Common/src/Transport/WebSocketTransportNJS.ts#L15)
 
 ___
 
@@ -105,7 +105,7 @@ Callback filled in by the SignallingProtocol and should be called by the transpo
 
 #### Defined in
 
-[Transport/WebSocketTransportNJS.ts:38](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Common/src/Transport/WebSocketTransportNJS.ts#L38)
+[Transport/WebSocketTransportNJS.ts:38](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/841ef6a/Common/src/Transport/WebSocketTransportNJS.ts#L38)
 
 ___
 
@@ -115,7 +115,7 @@ ___
 
 #### Defined in
 
-[Transport/WebSocketTransportNJS.ts:16](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Common/src/Transport/WebSocketTransportNJS.ts#L16)
+[Transport/WebSocketTransportNJS.ts:16](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/841ef6a/Common/src/Transport/WebSocketTransportNJS.ts#L16)
 
 ## Methods
 
@@ -131,7 +131,7 @@ Closes the Websocket connection
 
 #### Defined in
 
-[Transport/WebSocketTransportNJS.ts:114](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Common/src/Transport/WebSocketTransportNJS.ts#L114)
+[Transport/WebSocketTransportNJS.ts:114](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/841ef6a/Common/src/Transport/WebSocketTransportNJS.ts#L114)
 
 ___
 
@@ -159,7 +159,7 @@ If there is a connection
 
 #### Defined in
 
-[Transport/WebSocketTransportNJS.ts:45](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Common/src/Transport/WebSocketTransportNJS.ts#L45)
+[Transport/WebSocketTransportNJS.ts:45](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/841ef6a/Common/src/Transport/WebSocketTransportNJS.ts#L45)
 
 ___
 
@@ -186,7 +186,7 @@ Disconnect this transport.
 
 #### Defined in
 
-[Transport/WebSocketTransportNJS.ts:56](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Common/src/Transport/WebSocketTransportNJS.ts#L56)
+[Transport/WebSocketTransportNJS.ts:56](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/841ef6a/Common/src/Transport/WebSocketTransportNJS.ts#L56)
 
 ___
 
@@ -208,7 +208,7 @@ Handles when the Websocket is closed
 
 #### Defined in
 
-[Transport/WebSocketTransportNJS.ts:107](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Common/src/Transport/WebSocketTransportNJS.ts#L107)
+[Transport/WebSocketTransportNJS.ts:107](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/841ef6a/Common/src/Transport/WebSocketTransportNJS.ts#L107)
 
 ___
 
@@ -230,7 +230,7 @@ Handles when there is an error on the websocket
 
 #### Defined in
 
-[Transport/WebSocketTransportNJS.ts:99](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Common/src/Transport/WebSocketTransportNJS.ts#L99)
+[Transport/WebSocketTransportNJS.ts:99](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/841ef6a/Common/src/Transport/WebSocketTransportNJS.ts#L99)
 
 ___
 
@@ -252,7 +252,7 @@ Handles what happens when a message is received
 
 #### Defined in
 
-[Transport/WebSocketTransportNJS.ts:74](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Common/src/Transport/WebSocketTransportNJS.ts#L74)
+[Transport/WebSocketTransportNJS.ts:74](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/841ef6a/Common/src/Transport/WebSocketTransportNJS.ts#L74)
 
 ___
 
@@ -274,7 +274,7 @@ Handles when the Websocket is opened
 
 #### Defined in
 
-[Transport/WebSocketTransportNJS.ts:91](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Common/src/Transport/WebSocketTransportNJS.ts#L91)
+[Transport/WebSocketTransportNJS.ts:91](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/841ef6a/Common/src/Transport/WebSocketTransportNJS.ts#L91)
 
 ___
 
@@ -296,7 +296,7 @@ True if the transport is connected.
 
 #### Defined in
 
-[Transport/WebSocketTransportNJS.ts:66](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Common/src/Transport/WebSocketTransportNJS.ts#L66)
+[Transport/WebSocketTransportNJS.ts:66](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/841ef6a/Common/src/Transport/WebSocketTransportNJS.ts#L66)
 
 ___
 
@@ -322,4 +322,4 @@ Sends a message over the websocket.
 
 #### Defined in
 
-[Transport/WebSocketTransportNJS.ts:31](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Common/src/Transport/WebSocketTransportNJS.ts#L31)
+[Transport/WebSocketTransportNJS.ts:31](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/841ef6a/Common/src/Transport/WebSocketTransportNJS.ts#L31)
