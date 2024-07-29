@@ -27,7 +27,7 @@ message config {
   // The user defined peer connnection options
   peerConnectionOptions peerConnectionOptions = 2;
   // The signalling protocol version the signalling server is using
-  optional string protocolVersion = 4;
+  optional string protocolVersion = 3;
 }
 
 /**
