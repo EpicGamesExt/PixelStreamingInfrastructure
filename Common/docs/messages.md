@@ -271,13 +271,9 @@ available streamers it could possibly subscribe to.
 <a name="-offer"></a>
 
 ### offer
-An offer message can be an offer of a WebRTC stream, or an offer to
-receive a WebRTC stream, depending on the configuration of the player.
-The default behaviour is that when a player subscribes to a streamer
-the streamer will offer the stream to the new player.
-An alternative configuration exists where a player can be configured
-to offer to receive and in that case the player will subscribe to a
-streamer and then offer to receive the stream.
+An offer message is an offer of a WebRTC stream.
+When a player subscribes to a streamer the streamer will offer the
+stream to the new player.
 
 
 | Field | Type | Label | Description |
@@ -366,7 +362,6 @@ subscribed to it.
 | type | [string](#string) |  | Should always be &#39;playerConnected&#39; |
 | dataChannel | [bool](#bool) |  | True if the player should be given a datachannel for stream control purposes. |
 | sfu | [bool](#bool) |  | True if the player connected is an SFU |
-| sendOffer | [bool](#bool) |  | True if the streamer should send an offer. False if the player is offering to receive |
 | playerId | [string](#string) |  | The ID of the player that connected. |
 
 
