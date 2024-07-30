@@ -4,7 +4,14 @@ on:
   workflow_dispatch:
   push:
     branches: ['UE5.5']
-    paths: ['SignallingWebServer/**']
+    paths: 
+      - "Common/**"
+      - "Signalling/**"
+      - "SignallingWebServer/**"
+      - "SFU/**"
+      - "Frontend/library/**"
+      - "Frontend/ui-library/**"
+      - "Frontend/implementations/typescript/**"
 
 jobs:
   signalling-server-image:
