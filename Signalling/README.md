@@ -1,10 +1,20 @@
 # @epicgames-ps/lib-pixelstreamingsignalling
 
-A library for developers wanting to implement tools that signal Pixel Streaming applications
+A library for developers wanting to implement tools that signal Pixel Streaming applications.
 
 ## Building
 
-`npm run build`
+To build the `Signalling` module invoke the following commands in the `Common` and `Signalling` directories.
+
+```bash
+npm install
+npm run build
+# Or npm run build-dev
+```
+
+This will result in a `/dist` or `/build` output directory.
+
+**Note:** If you just want to get a signalling server up and running refer to ["Getting Started"](../README.md#getting-started)
 
 ## Documentation
 
