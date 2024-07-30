@@ -13,11 +13,16 @@ Building is handled by `npm` and `tsc`. However, the easiest method to install a
 .\SignallingWebServer\platform_scripts\cmd\start.bat --dev
 ```
 
-This will install and build all the required components. However, if you would like to manually build them yourself (or build other configs), you will need to:
+This will install and build all the required components.
 
-```
+## Building manually
+
+However, if you would like to manually build them yourself (or build other configs), you will need to:
+
+```bash
 npm install
 npm run build
+# Or npm run build-dev
 ```
 
 In the `/common`, `/Signalling`, and `/SignallingWebServer` directories (in that order).
