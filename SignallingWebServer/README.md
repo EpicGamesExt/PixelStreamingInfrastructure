@@ -7,14 +7,25 @@ Wilbur is a small intermediary application that sits between streamers and other
 Differences of behaviour from the old cirrus are described [here](from_cirrus.md).
 
 ## Building
-Building is handled by `npm` and `tsc` as a very basic typescript project. The easiest method is to invoke
+Building is handled by `npm` and `tsc`. However, the easiest method to install and build everything is to invoke:
+
 ```
+.\SignallingWebServer\platform_scripts\cmd\start.bat --dev
+```
+
+This will install and build all the required components. However, if you would like to manually build them yourself (or build other configs), you will need to:
+
+```
+npm install
 npm run build
 ```
-Which will output built files into the `build` directory.
+
+In the `/common`, `/Signalling`, and `/SignallingWebServer` directories (in that order).
+
+Each of these will output built files into the `build` or `dist` directory.
 
 ## Running
-You can run with both `node` directly or the `npm start` script.
+After you have build the server you can run it with both `node` directly or the `npm start` script.
 ```
 npm start -- [arguments]
 ```
