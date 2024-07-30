@@ -19,6 +19,19 @@
 # The official home for the Pixel Streaming servers and frontend!
 The frontend and web server elements for Unreal Pixel Streaming (previously located in `Samples/PixelStreaming/WebServers`) are now in this repository, for all to contribute to. They are referred to as the **Pixel Streaming Infrastructure**.
 
+## Getting Started
+To **build** and **run** everything you need to connect to the Pixel Streaming plugin simply run the following in the root of your `PixelStreamingInfrastructure` directory:
+
+**Windows**
+```
+.\SignallingWebServer\platform_scripts\cmd\start.bat
+```
+
+**Linux or Mac**
+```
+./SignallingWebServer/platform_scripts/bash/start.sh
+```
+
 ## Goals
 
 The goals of this repository are to:
