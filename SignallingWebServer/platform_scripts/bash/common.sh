@@ -354,6 +354,7 @@ function build_wilbur() {
     pushd Common > /dev/null
     if [[ ! -d "build" ]]; then
         echo Building common
+        ${NPM} ci
         ${NPM} run build
     fi
     popd

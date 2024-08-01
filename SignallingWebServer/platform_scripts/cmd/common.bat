@@ -167,7 +167,7 @@ IF "%FORCE_BUILD%"=="1" (
     echo Building common library...
     echo ----------------------------
     pushd %CD%\Common
-    call "%SCRIPT_DIR%node\npm" install
+    call "%SCRIPT_DIR%node\npm" ci
     call "%SCRIPT_DIR%node\npm" run build
     popd
     echo Building frontend library...
@@ -281,6 +281,7 @@ pushd ..\Common
 IF NOT EXIST build\ (
     echo Building common library...
     echo ------------------------
+    call "%SCRIPT_DIR%node\npm" ci
     call "%SCRIPT_DIR%node\npm" run build
 )
 popd
