@@ -99,14 +99,24 @@ jobs:
         type: 'zip'
         filename: '${{ github.ref_name }}-${{ steps.getversion.outputs.version }}.zip'
         exclusions: >-
-          *.git*
-          /*node_modules/*
-          .editorconfig
-          /*build/*
-          /*types/*
-          /*dist/*
-          /*output/*
-          /*Docs/*'
+          */.git/*
+          */.github/*
+          */node_modules/*
+          */output/*
+          /*/Common/build/*
+          /*/Common/docs/*
+          /*/Docs/*
+          /*/Extras/*
+          /*/Frontend/Docs/*
+          /*/Frontend/library/dist/*
+          /*/Frontend/library/types/*
+          /*/Frontend/ui-library/dist/*
+          /*/Frontend/ui-library/types/*
+          /*/SFU/Docs/*
+          /*/Signalling/build/*
+          /*/Signalling/docs/*
+          /*/SignallingWebServer/build/*
+          /*/SS_Test/*
 
     - name: "Make the release"
       uses: ncipollo/release-action@v1
