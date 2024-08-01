@@ -158,25 +158,7 @@ IF NOT exist "%FRONTEND_DIR%\player.html" (
     set FORCE_BUILD=1
 )
 
-rem Query the registry to get the value of the PATH variable for the current user (We DO NOT want the system PATH - %PATH% combines user and system PATH.)
-for /f "tokens=2*" %%A in ('reg query "HKCU\Environment" /v PATH ^| find "PATH"') do (
-    set "USER_PATH=%%B"
-)
-
-rem Store user's PATH in OLD_PATH
-set OLD_PATH=%USER_PATH%
-rem Update this processes PATH to have node dir (this WILL NOT persist outside this process which is a problem for NPM run scripts we use)
 set PATH=%NODE_DIR%;%PATH%
-set PATH_LENGTH=0
-for %%A in ("%NODE_DIR%;%OLD_PATH%") do set "PATH_LENGTH=%%~zA"
-
-IF !PATH_LENGTH! GTR 1024 (
-    echo "Your PATH is greater than 1024 characters, cmd setx cannot change it. Either shorten your user's PATH contents or hope you have NodeJS in your PATH already..."
-) else (
-    rem Set new user PATH for all processes
-    setx PATH "%NODE_DIR%;%OLD_PATH%" >NUL
-    set PATH_NEEDS_RESTORE=1
-)
 
 IF "%FORCE_BUILD%"=="1" (
     rem We could replace this all with a single npm script that does all this. we do have several build-all scripts already
@@ -185,7 +167,7 @@ IF "%FORCE_BUILD%"=="1" (
     echo Building common library...
     echo ----------------------------
     pushd %CD%\Common
-    call "%SCRIPT_DIR%node\npm" install
+    call "%SCRIPT_DIR%node\npm" ci
     call "%SCRIPT_DIR%node\npm" run build
     popd
     echo Building frontend library...
@@ -209,11 +191,6 @@ IF "%FORCE_BUILD%"=="1" (
     popd
 ) else (
     echo Skipping rebuilding frontend... %FRONTEND_DIR% has content already, use --build to force a frontend rebuild.
-)
-
-IF "%PATH_NEEDS_RESTORE%"=="1" (
-    rem Restore PATH
-    setx PATH "%OLD_PATH%" >NUL
 )
 
 exit /b
@@ -304,6 +281,7 @@ pushd ..\Common
 IF NOT EXIST build\ (
     echo Building common library...
     echo ------------------------
+    call "%SCRIPT_DIR%node\npm" ci
     call "%SCRIPT_DIR%node\npm" run build
 )
 popd

@@ -65,7 +65,31 @@ jobs:
         path: 'PixelStreamingInfrastructure-${{ github.ref_name }}-${{ steps.getversion.outputs.version }}'
         type: 'tar'
         filename: '${{ github.ref_name }}-${{ steps.getversion.outputs.version }}.tar.gz'
-        exclusions: '.git .github output Frontend/Docs Frontend/library/dist Frontend/library/types Frontend/library/node_modules Frontend/ui-library/dist Frontend/ui-library/types Frontend/ui-library/node_modules Frontend/implementations/typescript/node_modules'
+        exclusions: >-
+          .git
+          .github
+          output
+          Common/build
+          Common/docs
+          Common/node_modules
+          Docs
+          Extras
+          Frontend/Docs
+          Frontend/implementations/typescript/node_modules
+          Frontend/library/dist
+          Frontend/library/node_modules
+          Frontend/library/types
+          Frontend/ui-library/dist
+          Frontend/ui-library/node_modules
+          Frontend/ui-library/types
+          SFU/Docs
+          SFU/node_modules
+          Signalling/build
+          Signalling/docs
+          Signalling/node_modules
+          SignallingWebServer/build
+          SignallingWebServer/node_modules
+          SS_Test
 
     - name: Archive Release .zip
       uses: thedoctor0/zip-release@0.7.1
@@ -74,7 +98,25 @@ jobs:
         path: 'PixelStreamingInfrastructure-${{ github.ref_name }}-${{ steps.getversion.outputs.version }}'
         type: 'zip'
         filename: '${{ github.ref_name }}-${{ steps.getversion.outputs.version }}.zip'
-        exclusions: '*.git* /*node_modules/* .editorconfig /*types/* /*dist/* /*output/* /*Docs/*'
+        exclusions: >-
+          */.git/*
+          */.github/*
+          */node_modules/*
+          */output/*
+          /*/Common/build/*
+          /*/Common/docs/*
+          /*/Docs/*
+          /*/Extras/*
+          /*/Frontend/Docs/*
+          /*/Frontend/library/dist/*
+          /*/Frontend/library/types/*
+          /*/Frontend/ui-library/dist/*
+          /*/Frontend/ui-library/types/*
+          /*/SFU/Docs/*
+          /*/Signalling/build/*
+          /*/Signalling/docs/*
+          /*/SignallingWebServer/build/*
+          /*/SS_Test/*
 
     - name: "Make the release"
       uses: ncipollo/release-action@v1

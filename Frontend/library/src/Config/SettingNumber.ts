@@ -14,7 +14,6 @@ export class SettingNumber<
 
     id: NumericParametersIds | CustomIds;
     onChangeEmit: (changedValue: number) => void;
-    useUrlParams: boolean;
 
     constructor(
         id: NumericParametersIds | CustomIds,
@@ -33,34 +32,17 @@ export class SettingNumber<
         this._max = max;
 
         // attempt to read the number from the url params
-        const urlParams = new URLSearchParams(window.location.search);
-        if (!useUrlParams || !urlParams.has(this.id)) {
+        if (!useUrlParams || !this.hasURLParam(this.id)) {
             this.number = defaultNumber;
         } else {
-            const parsedValue = Number.parseFloat(urlParams.get(this.id));
-            this.number = Number.isNaN(parsedValue)
-                ? defaultNumber
-                : parsedValue;
+            const parsedValue = Number.parseFloat(this.getURLParam(this.id));
+            this.number = Number.isNaN(parsedValue) ? defaultNumber : parsedValue;
         }
         this.useUrlParams = useUrlParams;
     }
 
-    /**
-     * Persist the setting value in URL.
-     */
-    public updateURLParams(): void {
-        if (this.useUrlParams) {
-            // set url params like ?id=number
-            const urlParams = new URLSearchParams(window.location.search);
-            urlParams.set(this.id, this.number.toString());
-            window.history.replaceState(
-                {},
-                '',
-                urlParams.toString() !== ''
-                    ? `${location.pathname}?${urlParams}`
-                    : `${location.pathname}`
-            );
-        }
+    protected getValueAsString(): string {
+        return this.number.toString();
     }
 
     /**

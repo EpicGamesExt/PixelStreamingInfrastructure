@@ -35,7 +35,6 @@ export class PlayerConnection implements IPlayer, LogUtils.IMessageLogger {
     remoteAddress?: string;
 
     private server: SignallingServer;
-    private sendOffer: boolean;
     private streamerIdChangeListener: (newId: string) => void;
     private streamerDisconnectedListener: () => void;
 
@@ -44,16 +43,14 @@ export class PlayerConnection implements IPlayer, LogUtils.IMessageLogger {
      * websocket close and error so it can react by unsubscribing and resetting itself.
      * @param server - The signalling server object that spawned this player.
      * @param ws - The websocket coupled to this player connection.
-     * @param sendOffer - True if the player is requesting to receive offers from streamers.
      * @param remoteAddress - The remote address of this connection. Only used as display.
      */
-    constructor(server: SignallingServer, ws: WebSocket, sendOffer: boolean, remoteAddress?: string) {
+    constructor(server: SignallingServer, ws: WebSocket, remoteAddress?: string) {
         this.server = server;
         this.playerId = '';
         this.subscribedStreamer = null;
         this.transport = new WebSocketTransportNJS(ws);
         this.protocol = new SignallingProtocol(this.transport);
-        this.sendOffer = sendOffer;
         this.remoteAddress = remoteAddress;
 
         this.transport.on('error', this.onTransportError.bind(this));
@@ -89,7 +86,6 @@ export class PlayerConnection implements IPlayer, LogUtils.IMessageLogger {
             playerId: this.playerId,
             type: 'Player',
             subscribedTo: this.subscribedStreamer?.streamerId,
-            sendOffer: this.sendOffer,
             remoteAddress: this.remoteAddress,
         };
     }
@@ -146,8 +142,7 @@ export class PlayerConnection implements IPlayer, LogUtils.IMessageLogger {
 
         const connectedMessage = MessageHelpers.createMessage(Messages.playerConnected, { playerId: this.playerId,
                                                                                           dataChannel: true,
-                                                                                          sfu: false,
-                                                                                          sendOffer: this.sendOffer });
+                                                                                          sfu: false });
         this.sendToStreamer(connectedMessage);
     }
 

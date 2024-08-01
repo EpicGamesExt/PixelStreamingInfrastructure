@@ -163,10 +163,6 @@ export class ConfigUI {
             this.flagsUi.get(Flags.AutoPlayVideo)
         );
         this.addSettingFlag(
-            psSettingsSection,
-            this.flagsUi.get(Flags.BrowserSendOffer)
-        );
-        this.addSettingFlag(
             psSettingsSection, 
             this.flagsUi.get(Flags.UseMic)
         );

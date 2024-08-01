@@ -42,6 +42,7 @@ import {
     DataChannelLatencyTestResult
 } from "../DataChannel/DataChannelLatencyTestResults";
 import { RTCUtils } from '../Util/RTCUtils';
+import { IURLSearchParams } from '../Util/IURLSearchParams';
 
 
 export interface PixelStreamingOverrides {
@@ -575,7 +576,7 @@ export class PixelStreaming {
         }
 
         const useUrlParams = this.config.useUrlParams;
-        const urlParams = new URLSearchParams(window.location.search);
+        const urlParams = new IURLSearchParams(window.location.search);
         Logger.Info(
             Logger.GetStackTrace(),
             `using URL parameters ${useUrlParams}`

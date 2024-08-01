@@ -12,7 +12,6 @@ export class SettingOption<
     id: OptionParametersIds | CustomIds;
     onChangeEmit: (changedValue: string) => void;
     _options: Array<string>;
-    useUrlParams: boolean;
 
     constructor(
         id: OptionParametersIds | CustomIds,
@@ -27,43 +26,13 @@ export class SettingOption<
         super(id, label, description, defaultTextValue, defaultOnChangeListener);
 
         this.options = options;
-        const urlParams = new URLSearchParams(window.location.search);
-        const stringToMatch: string =
-            useUrlParams && urlParams.has(this.id)
-                ? this.getUrlParamText()
-                : defaultTextValue;
+        const stringToMatch: string = this.hasURLParam(this.id) ? this.getURLParam(this.id) : defaultTextValue;
         this.selected = stringToMatch;
         this.useUrlParams = useUrlParams;
     }
 
-    /**
-     * Parse the text value from the url parameters.
-     * @returns The text value parsed from the url if the url parameters contains /?id=value, but empty string if just /?id or no url param found.
-     */
-    getUrlParamText(): string {
-        const urlParams = new URLSearchParams(window.location.search);
-        if (urlParams.has(this.id)) {
-            return urlParams.get(this.id) ?? '';
-        }
-        return '';
-    }
-
-    /**
-     * Persist the setting value in URL.
-     */
-    public updateURLParams() {
-        if (this.useUrlParams) {
-            // set url params
-            const urlParams = new URLSearchParams(window.location.search);
-            urlParams.set(this.id, this.selected);
-            window.history.replaceState(
-                {},
-                '',
-                urlParams.toString() !== ''
-                    ? `${location.pathname}?${urlParams}`
-                    : `${location.pathname}`
-            );
-        }
+    protected getValueAsString(): string {
+        return this.selected;
     }
 
     /**

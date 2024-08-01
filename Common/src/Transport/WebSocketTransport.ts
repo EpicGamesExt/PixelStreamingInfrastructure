@@ -178,11 +178,4 @@ export class WebSocketTransport extends EventEmitter implements ITransport {
         );
         this.emit('close', event);
     }
-
-    /**
-     * Closes the Websocket connection
-     */
-    close(): void {
-        this.webSocket?.close();
-    }
 }

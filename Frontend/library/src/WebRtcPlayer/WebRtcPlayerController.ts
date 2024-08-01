@@ -63,6 +63,10 @@ import {
     DataChannelLatencyTestRequest,
     DataChannelLatencyTestResponse
 } from "../DataChannel/DataChannelLatencyTestResults";
+import {
+    IURLSearchParams
+} from '../Util/IURLSearchParams';
+
 /**
  * Entry point for the WebRTC Player
  */
@@ -104,9 +108,10 @@ export class WebRtcPlayerController {
     peerConfig: RTCConfiguration;
     videoAvgQp: number;
     locallyClosed: boolean;
-    shouldReconnect: boolean;
-    isReconnecting: boolean;
+    enableAutoReconnect: boolean;
+    forceReconnect: boolean;
     reconnectAttempt: number;
+    isReconnecting: boolean;
     disconnectMessage: string;
     subscribedStream: string;
     signallingUrlBuilder: () => string;
@@ -135,7 +140,7 @@ export class WebRtcPlayerController {
             this.onAfkTriggered.bind(this)
         );
         this.afkController.onAFKTimedOutCallback = () => {
-            this.closeSignalingServer('You have been disconnected due to inactivity');
+            this.closeSignalingServer('You have been disconnected due to inactivity.', false);
         };
 
         this.freezeFrameController = new FreezeFrameController(
@@ -217,12 +222,10 @@ export class WebRtcPlayerController {
             this.handleIceCandidate(iceCandidateMessage.candidate);
         });
         this.protocol.transport.addListener('open', () => {
-            const BrowserSendsOffer = this.config.isFlagEnabled(Flags.BrowserSendOffer);
-            if (!BrowserSendsOffer) {
-                const message = MessageHelpers.createMessage(Messages.listStreamers);
-                this.protocol.sendMessage(message);
-            }
+            const message = MessageHelpers.createMessage(Messages.listStreamers);
+            this.protocol.sendMessage(message);
             this.reconnectAttempt = 0;
+            this.isReconnecting = false;
         });
         this.protocol.transport.addListener('error', () => {
             // dont really need to do anything here since the close event should follow.
@@ -235,12 +238,16 @@ export class WebRtcPlayerController {
             // lists all the codes. 
             const CODE_GOING_AWAY = 1001;
 
-            const willTryReconnect = this.shouldReconnect
-                && event.code != CODE_GOING_AWAY
-                && this.config.getNumericSettingValue(NumericParameters.MaxReconnectAttempts) > 0
-
+            const maxReconnectAttempts = this.config.getNumericSettingValue(NumericParameters.MaxReconnectAttempts);
+            const attemptsLeft = this.reconnectAttempt < maxReconnectAttempts;
+            const reconnectEnabled = this.forceReconnect || (this.enableAutoReconnect && maxReconnectAttempts > 0 && attemptsLeft);
+            const willTryReconnect = reconnectEnabled && event.code != CODE_GOING_AWAY;
+            const allowClickToReconnect = !willTryReconnect;
             const disconnectMessage = this.disconnectMessage ? this.disconnectMessage : event.reason;
-            this.pixelStreaming._onDisconnect(disconnectMessage, !willTryReconnect && !this.isReconnecting);
+
+            this.forceReconnect = false;
+
+            this.pixelStreaming._onDisconnect(disconnectMessage, allowClickToReconnect);
 
             this.afkController.stopAfkWarningTimer();
 
@@ -261,9 +268,8 @@ export class WebRtcPlayerController {
             if (willTryReconnect) {
                 // need a small delay here to prevent reconnect spamming
                 setTimeout(() => {
-                    this.isReconnecting = true;
                     this.reconnectAttempt++;
-                    this.tryReconnect(event.reason);
+                    this.doReconnect(event.reason);
                 }, 2000);
             }
         });
@@ -288,9 +294,10 @@ export class WebRtcPlayerController {
         this.isUsingSFU = false;
         this.isQualityController = false;
         this.preferredCodec = '';
-        this.shouldReconnect = true;
-        this.isReconnecting = false;
+        this.enableAutoReconnect = true;
+        this.forceReconnect = false;
         this.reconnectAttempt = 0;
+        this.isReconnecting = false;
 
         this.config._addOnOptionSettingChangedListener(
             OptionParameters.StreamerId,
@@ -314,19 +321,9 @@ export class WebRtcPlayerController {
         this.setVideoEncoderAvgQP(-1);
 
         this.signallingUrlBuilder = () => {
-            let signallingServerUrl = this.config.getTextSettingValue(
+            const signallingServerUrl = this.config.getTextSettingValue(
                 TextParameters.SignallingServerUrl
             );
-
-            // If we are connecting to the SFU add a special url parameter to the url
-            if (this.config.isFlagEnabled(Flags.BrowserSendOffer)) {
-                signallingServerUrl += '?' + Flags.BrowserSendOffer + '=true';
-            }
-
-            // This code is no longer needed, but is a good example for how subsequent config flags can be appended
-            // if (this.config.isFlagEnabled(Flags.BrowserSendOffer)) {
-            //     signallingServerUrl += (signallingServerUrl.includes('?') ? '&' : '?') + Flags.BrowserSendOffer + '=true';
-            // }
 
             return signallingServerUrl;
         }
@@ -985,9 +982,17 @@ export class WebRtcPlayerController {
     }
 
     /**
-     * Attempt a reconnection to the signalling server
+     * Attempt a reconnection to the signalling server. Manual trigger
      */
     tryReconnect(message: string) {
+        this.forceReconnect = true;
+        this.doReconnect(message);
+    }
+
+    /**
+     * Does the actual reconnect work. Used by the auto reconnect feature to skip the manual flag.
+     */
+    doReconnect(message: string) {
         // if there is no webSocketController return immediately or this will not work
         if (!this.protocol) {
             Logger.Log(
@@ -997,13 +1002,14 @@ export class WebRtcPlayerController {
             return;
         }
 
-        // if the connection is open, first close it. wait some time and try again.
         this.isReconnecting = true;
+
+        // if the connection is open, first close it and force a reconnect.
         if (this.protocol.isConnected()) {
-            this.closeSignalingServer(`${message} Restarting stream...`);
-            setTimeout(() => {
-                this.tryReconnect(message);
-            }, 3000);
+            if (!this.forceReconnect) {
+                message = `${message} Reconnecting.`;
+            }
+            this.closeSignalingServer(message, true);
         } else {
             this.pixelStreaming._onWebRtcAutoConnect();
             this.connectToSignallingServer();
@@ -1109,7 +1115,7 @@ export class WebRtcPlayerController {
             Logger.Error(Logger.GetStackTrace(), message);
 
             // close the connection
-            this.closeSignalingServer('Stream not initialized correctly');
+            this.closeSignalingServer('Stream not initialized correctly', false);
             return;
         }
 
@@ -1193,7 +1199,7 @@ export class WebRtcPlayerController {
      */
     connectToSignallingServer() {
         this.locallyClosed = false;
-        this.shouldReconnect = true;
+        this.enableAutoReconnect = true;
         this.disconnectMessage = null;
         const signallingUrl = this.signallingUrlBuilder();
         this.protocol.connect(signallingUrl);
@@ -1217,7 +1223,7 @@ export class WebRtcPlayerController {
                     Logger.GetStackTrace(),
                     'No turn server was found in the Peer Connection Options. TURN cannot be forced, closing connection. Please use STUN instead'
                 );
-                this.closeSignalingServer('TURN cannot be forced, closing connection. Please use STUN instead.');
+                this.closeSignalingServer('TURN cannot be forced, closing connection. Please use STUN instead.', false);
                 return;
             }
         }
@@ -1273,26 +1279,6 @@ export class WebRtcPlayerController {
         /* RTC Peer Connection on Track event -> handle on track */
         this.peerConnectionController.onTrack = (trackEvent: RTCTrackEvent) =>
             this.streamController.handleOnTrack(trackEvent);
-
-        /* Start the Hand shake process by creating an Offer */
-        const BrowserSendsOffer = this.config.isFlagEnabled(
-            Flags.BrowserSendOffer
-        );
-        if (BrowserSendsOffer) {
-            // If browser is sending the offer, create an offer and send it to the streamer
-            this.sendrecvDataChannelController.createDataChannel(
-                this.peerConnectionController.peerConnection,
-                'cirrus',
-                this.datachannelOptions
-            );
-            this.sendrecvDataChannelController.handleOnMessage = (
-                ev: MessageEvent<ArrayBuffer>
-            ) => this.handleOnMessage(ev);
-            this.peerConnectionController.createOffer(
-                this.sdpConstraints,
-                this.config
-            );
-        }
     }
 
     /**
@@ -1368,7 +1354,7 @@ export class WebRtcPlayerController {
 
         // first we figure out a wanted streamer id through various means
         const useUrlParams = this.config.useUrlParams;
-        const urlParams = new URLSearchParams(window.location.search);
+        const urlParams = new IURLSearchParams(window.location.search);
         if (useUrlParams && urlParams.has(OptionParameters.StreamerId)) {
             // if we've set the streamer id on the url we only want that streamer id
             wantedStreamerId = urlParams.get(OptionParameters.StreamerId);
@@ -1388,8 +1374,8 @@ export class WebRtcPlayerController {
 
         // if we found a streamer id to auto select, select it
         if (autoSelectedStreamerId) {
-            this.isReconnecting = false;
             this.reconnectAttempt = 0;
+            this.isReconnecting = false;
             this.config.setOptionSettingValue(
                 OptionParameters.StreamerId,
                 autoSelectedStreamerId
@@ -1400,8 +1386,8 @@ export class WebRtcPlayerController {
             if (waitForStreamer) {
                 if (this.reconnectAttempt < reconnectLimit) {
                     // still reconnects available
-                    this.isReconnecting = true;
                     this.reconnectAttempt++;
+                    this.isReconnecting = true;
                     setTimeout(() => {
                         this.protocol.sendMessage(MessageHelpers.createMessage(Messages.listStreamers));
                     }, reconnectDelay);
@@ -1409,7 +1395,7 @@ export class WebRtcPlayerController {
                     // We've exhausted our reconnect attempts, return to main screen
                     this.reconnectAttempt = 0;
                     this.isReconnecting = false;
-                    this.shouldReconnect = false;
+                    this.enableAutoReconnect = false;
                 }
             }
         }
@@ -1669,12 +1655,11 @@ export class WebRtcPlayerController {
     /**
      * Close the Connection to the signaling server
      */
-    closeSignalingServer(message: string) {
-        // We explicitly called close, therefore we don't want to trigger auto reconnect
+    closeSignalingServer(message: string, allowReconnect: boolean) {
         this.locallyClosed = true;
-        this.shouldReconnect = false;
+        this.enableAutoReconnect = allowReconnect;
         this.disconnectMessage = message;
-        this.protocol?.disconnect();
+        this.protocol?.disconnect(1000, message);
     }
 
     /**
@@ -1688,7 +1673,7 @@ export class WebRtcPlayerController {
      * Close all connections
      */
     close() {
-        this.closeSignalingServer('');
+        this.closeSignalingServer('', false);
         this.closePeerConnection();
     }
 

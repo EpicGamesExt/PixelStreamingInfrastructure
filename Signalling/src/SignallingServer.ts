@@ -1,7 +1,6 @@
 import http from 'http';
 import https from 'https';
 import WebSocket from 'ws';
-import url from 'url';
 import { StreamerConnection } from './StreamerConnection';
 import { PlayerConnection } from './PlayerConnection';
 import { SFUConnection } from './SFUConnection';
@@ -126,16 +125,7 @@ export class SignallingServer {
     private onPlayerConnected(ws: WebSocket, request: http.IncomingMessage) {
         Logger.info(`New player connection: %s (%s)`, request.socket.remoteAddress, request.url);
 
-        // extract some options from the request url
-        let sendOffer = true;
-        if (request.url) {
-            const parsedUrl = url.parse(request.url);
-            const urlParams = new URLSearchParams(parsedUrl.search!);
-            const offerToReceive: boolean = (urlParams.get('OfferToReceive') === 'true');
-            sendOffer = offerToReceive ? false : true;
-        }
-
-        const newPlayer = new PlayerConnection(this, ws, sendOffer, request.socket.remoteAddress);
+        const newPlayer = new PlayerConnection(this, ws, request.socket.remoteAddress);
 
         // add it to the registry and when the transport closes, remove it
         this.playerRegistry.add(newPlayer);
