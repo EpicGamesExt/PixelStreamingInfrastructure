@@ -33,11 +33,14 @@ jobs:
         compose-file: "Extras/MinimalStreamTester/docker-compose.yml"
         up-flags: "--build --abort-on-container-exit --exit-code-from tester"
 
+    - name: List results directory
+      run: ls -l Extras/MinimalStreamTester/results
+      
     - name: Upload results
       uses: actions/upload-artifact@v4
       with:
         name: Results
-        path: Extras\MinimalStreamTester\results
+        path: Extras/MinimalStreamTester/results
 
   streaming-test-win:
     if: github.repository == 'EpicGamesExt/PixelStreamingInfrastructure'
