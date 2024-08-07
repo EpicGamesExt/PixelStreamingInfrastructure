@@ -18,7 +18,7 @@ services:
         start_interval: 5s # only supported on docker engine 25+
 
   streamer:
-    image: pixelstreamingunoffical/ps-minimal-streamer-linux
+    image: pixelstreamingunofficial/ps-minimal-streamer-linux
     command: -PixelStreamingURL=ws://signalling:8888 -nothreadtimeout
     networks:
       - testing
