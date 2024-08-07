@@ -30,7 +30,7 @@ test('Test default stream.', async ({ page }, testinfo) => {
     await waitForVideo(page);
 
     // let the stream run for a small duration
-    await delay(3000);
+    await delay(15000);
 
     // query the frontend for its calculated stats
     const frame_count:number = await page.evaluate(()=> {
