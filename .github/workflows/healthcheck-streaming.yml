@@ -18,7 +18,28 @@ on:
       - "Extras/**"
 
 jobs:
-  streaming-test:
+  streaming-test-linux:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout source code
+      uses: actions/checkout@v3
+        
+    - name: Create results directory
+      run: mkdir Extras/MinimalStreamTester/results
+
+    - name: Launch stream test in docker containers
+      uses: isbang/compose-action@v1.5.1
+      with:
+        compose-file: "Extras/MinimalStreamTester/docker-compose.yml"
+        up-flags: "--build --abort-on-container-exit --exit-code-from tester"
+
+    - name: Upload results
+      uses: actions/upload-artifact@v4
+      with:
+        name: Results
+        path: Extras\MinimalStreamTester\results
+
+  streaming-test-win:
     if: github.repository == 'EpicGamesExt/PixelStreamingInfrastructure'
     runs-on: windows-latest
     steps:
