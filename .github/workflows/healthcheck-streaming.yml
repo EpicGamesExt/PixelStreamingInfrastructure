@@ -33,17 +33,18 @@ jobs:
         compose-file: "Extras/MinimalStreamTester/docker-compose.yml"
         up-flags: "--build --abort-on-container-exit --exit-code-from tester"
 
-    - name: List results directory
-      run: ls -l Extras/MinimalStreamTester/results
+    - name: Get short sha
+      id: vars
+      run: echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
       
     - name: Upload results
       uses: actions/upload-artifact@v4
       with:
-        name: Results
+        name: Results-${{ steps.vars.outputs.sha_short }}-Linux
         path: Extras/MinimalStreamTester/results
 
   streaming-test-win:
-    if: github.repository == 'EpicGamesExt/PixelStreamingInfrastructure'
+#    if: github.repository == 'EpicGamesExt/PixelStreamingInfrastructure'
     runs-on: windows-latest
     steps:
     - name: Checkout source code
@@ -132,8 +133,12 @@ jobs:
         $Env:PIXELSTREAMING_URL = 'http://localhost:999'
         npx playwright test
 
-    - name: Upload screenshot
+    - name: Get short sha
+      id: vars
+      run: echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+      
+    - name: Upload results
       uses: actions/upload-artifact@v4
       with:
-        name: Screenshot
-        path: Extras\MinimalStreamTester\StreamResult.png
+        name: Results-${{ steps.vars.outputs.sha_short }}-Win
+        path: Extras\MinimalStreamTester\results
