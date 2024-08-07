@@ -141,4 +141,4 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: Results-${{ steps.vars.outputs.sha_short }}-Win
-        path: Extras\MinimalStreamTester\results
+        path: Extras\MinimalStreamTester\playwright-report
