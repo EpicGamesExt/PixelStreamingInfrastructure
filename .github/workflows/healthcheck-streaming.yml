@@ -18,7 +18,33 @@ on:
       - "Extras/**"
 
 jobs:
-  streaming-test:
+  streaming-test-linux:
+    if: github.repository == 'EpicGamesExt/PixelStreamingInfrastructure'
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout source code
+      uses: actions/checkout@v3
+        
+    - name: Create results directory
+      run: mkdir Extras/MinimalStreamTester/results
+
+    - name: Launch stream test in docker containers
+      uses: isbang/compose-action@v1.5.1
+      with:
+        compose-file: "Extras/MinimalStreamTester/docker-compose.yml"
+        up-flags: "--build --abort-on-container-exit --exit-code-from tester"
+
+    - name: Get short sha
+      id: vars
+      run: echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+      
+    - name: Upload results
+      uses: actions/upload-artifact@v4
+      with:
+        name: Results-${{ steps.vars.outputs.sha_short }}-Linux
+        path: Extras/MinimalStreamTester/results
+
+  streaming-test-win:
     if: github.repository == 'EpicGamesExt/PixelStreamingInfrastructure'
     runs-on: windows-latest
     steps:
@@ -108,8 +134,12 @@ jobs:
         $Env:PIXELSTREAMING_URL = 'http://localhost:999'
         npx playwright test
 
-    - name: Upload screenshot
+    - name: Get short sha
+      id: vars
+      run: echo "sha_short=$(git rev-parse --short HEAD)" >> $Env:GITHUB_OUTPUT
+      
+    - name: Upload results
       uses: actions/upload-artifact@v4
       with:
-        name: Screenshot
-        path: Extras\MinimalStreamTester\StreamResult.png
+        name: Results-${{ steps.vars.outputs.sha_short }}-Win
+        path: Extras\MinimalStreamTester\playwright-report
