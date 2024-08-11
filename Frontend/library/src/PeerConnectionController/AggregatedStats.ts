@@ -19,7 +19,7 @@ import { Logger } from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
  * The Aggregated Stats that is generated from the RTC Stats Report
  */
 
-type RTCStatsTypePS = RTCStatsType | 'stream' | 'media-playout';
+type RTCStatsTypePS = RTCStatsType | 'stream' | 'media-playout' | 'track';
 export class AggregatedStats {
     inboundVideoStats: InboundVideoStats;
     inboundAudioStats: InboundAudioStats;
