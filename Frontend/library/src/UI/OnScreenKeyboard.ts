@@ -48,6 +48,14 @@ export class OnScreenKeyboard {
             this.hiddenInput = document.createElement('input');
             this.hiddenInput.id = 'hiddenInput';
             this.hiddenInput.maxLength = 0;
+
+            // Set inline style so that users not using the UI library
+            // will  still have this element display correctly
+            this.hiddenInput.style.position = 'absolute';
+            this.hiddenInput.style.left = '-10%';
+            this.hiddenInput.style.width = '0px';
+            this.hiddenInput.style.opacity = '0';
+
             videoElementParent.appendChild(this.hiddenInput);
         }
 
@@ -58,7 +66,7 @@ export class OnScreenKeyboard {
             videoElementParent.appendChild(this.editTextButton);
 
             // Hide the 'edit text' button.
-            this.editTextButton.classList.add('hiddenState');
+            this.editTextButton.style.display = 'none';
 
             this.editTextButton.addEventListener('touchend', (event: Event) => {
                 // Show the on-screen keyboard.
@@ -75,7 +83,7 @@ export class OnScreenKeyboard {
     showOnScreenKeyboard(command: any) {
         if (command.showOnScreenKeyboard) {
             // Show the 'edit text' button.
-            this.editTextButton.classList.remove('hiddenState');
+            this.editTextButton.style.display = 'default';
             // Place the 'edit text' button near the UE input widget.
             const pos = this.unquantizeAndDenormalizeUnsigned(
                 command.x,
@@ -85,7 +93,7 @@ export class OnScreenKeyboard {
             this.editTextButton.style.left = (pos.x - 40).toString() + 'px';
         } else {
             // Hide the 'edit text' button.
-            this.editTextButton.classList.add('hiddenState');
+            this.editTextButton.style.display = 'none';
             // Hide the on-screen keyboard.
             this.hiddenInput.blur();
         }
