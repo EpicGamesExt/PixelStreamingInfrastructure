@@ -63,9 +63,6 @@ class SdpEndpoint {
                 if (!("direction" in media)) {
                     continue;
                 }
-                if (media.direction !== "sendonly") {
-                    continue;
-                }
                 const sendParams = SdpUtils.sdpToSendRtpParameters(remoteSdpObj, media, this.localCaps, media.type);
                 let producer;
                 try {
