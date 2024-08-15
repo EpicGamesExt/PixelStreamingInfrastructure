@@ -393,7 +393,6 @@ export class PeerConnectionController {
             this.peerConnection?.addTransceiver('video', { direction: 'recvonly' });
         }
 
-        // We can only set preferrec codec on Chrome
         if (RTCRtpReceiver.getCapabilities && this.preferredCodec != '') {
             for (const transceiver of this.peerConnection?.getTransceivers() ?? []) {
                 if (
@@ -403,44 +402,36 @@ export class PeerConnectionController {
                     transceiver.receiver.track.kind === 'video' &&
                     transceiver.setCodecPreferences
                 ) {
+                    // Get our preferred codec from the codecs options drop down
                     const preferredRTPCodec = this.preferredCodec.split(' ');
-                    const codecs = [
-                        {
-                            mimeType:
-                                'video/' + preferredRTPCodec[0] /* Name */,
-                            clockRate: 90000,
-                            sdpFmtpLine: preferredRTPCodec[1] /* sdpFmtpLine */
-                                ? preferredRTPCodec[1]
-                                : ''
+                    const preferredRTCRtpCodecCapability: RTCRtpCodecCapability = {
+                        mimeType: 'video/' + preferredRTPCodec[0] /* Name */,
+                        clockRate: 90000, /* All current video formats in browsers have 90khz clock rate */
+                        sdpFmtpLine: preferredRTPCodec[1] ? preferredRTPCodec[1] : ''
+                    }
+
+                    // Populate a list of codecs we will support with our preferred one in the first position
+                    const ourSupportedCodecs: Array<RTCRtpCodecCapability> = [preferredRTCRtpCodecCapability];
+
+                    // Go through all codecs the browser supports and add them to the list (in any order)
+                    RTCRtpReceiver.getCapabilities('video').codecs.forEach((browserSupportedCodec : RTCRtpCodecCapability) => {
+                        // Don't add our preferred codec again, but add everything else
+                        if(browserSupportedCodec.mimeType != preferredRTCRtpCodecCapability.mimeType) {
+                            ourSupportedCodecs.push(browserSupportedCodec);
                         }
-                    ];
+                        else if(browserSupportedCodec?.sdpFmtpLine != preferredRTCRtpCodecCapability?.sdpFmtpLine) {
+                            ourSupportedCodecs.push(browserSupportedCodec);
+                        }
+                    });
 
-                    this.config
-                        .getSettingOption(OptionParameters.PreferredCodec)
-                        .options.filter((option) => {
-                            // Remove the preferred codec from the list of possible codecs as we've set it already
-                            return option != this.preferredCodec;
-                        })
-                        .forEach((option) => {
-                            // Ammend the rest of the browsers supported codecs
-                            const altCodec = option.split(' ');
-                            codecs.push({
-                                mimeType: 'video/' + altCodec[0] /* Name */,
-                                clockRate: 90000,
-                                sdpFmtpLine: altCodec[1] /* sdpFmtpLine */
-                                    ? altCodec[1]
-                                    : ''
-                            });
-                        });
-
-                    for (const codec of codecs) {
-                        if (codec.sdpFmtpLine === '') {
+                    for (const codec of ourSupportedCodecs) {
+                        if (codec?.sdpFmtpLine === undefined || codec.sdpFmtpLine === '') {
                             // We can't dynamically add members to the codec, so instead remove the field if it's empty
                             delete codec.sdpFmtpLine;
                         }
                     }
 
-                    transceiver.setCodecPreferences(codecs);
+                    transceiver.setCodecPreferences(ourSupportedCodecs);
                 }
             }
         }
