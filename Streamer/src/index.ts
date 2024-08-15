@@ -5,6 +5,7 @@ import {
     MessageHelpers,
     BaseMessage
 } from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
+import { DataProtocol } from './protocol';
 
 // TS doesn't like the captureStream method. FF also names it differently
 interface HTMLCaptureableMediaElement extends HTMLMediaElement {
@@ -32,7 +33,13 @@ let protocol: SignallingProtocol;
 let playback_element: HTMLCaptureableMediaElement;
 let local_stream: MediaStream;
 
-const player_map: Map<string, RTCPeerConnection> = new Map<string, RTCPeerConnection>();
+interface PlayerPeer {
+    id: string;
+    peer_connection: RTCPeerConnection;
+    data_channel: RTCDataChannel;
+};
+
+const player_map: Map<string, PlayerPeer> = new Map<string, PlayerPeer>();
 
 function handleConfigMessage(msg: Messages.config) {
     peer_connection_options = msg.peerConnectionOptions;
@@ -65,11 +72,31 @@ async function handlePlayerConnectedMessage(msg: Messages.playerConnected) {
             peer_connection.addTrack(track, local_stream);
         });
 
+        const data_channel = peer_connection.createDataChannel("datachannel", { ordered: true, negotiated: false });
+        data_channel.binaryType = "arraybuffer";
+        data_channel.onopen = () => {
+            console.log(`data channel for ${player_id} opened`);
+            sendDataProtocol(player_id);
+            sendInitialSettings(player_id);
+        };
+        data_channel.onclose = () => {
+            console.log(`data channel for ${player_id} closed`);
+        };
+        data_channel.onmessage = (e: MessageEvent) => {
+            const message = new Uint8Array(e.data)
+            console.log(`data channel for ${player_id} message type: ${message[0]}`);
+            handleDataChannelMessage(player_id, message);
+        }
+
+        player_map[player_id] = {
+            player_id: player_id,
+            peer_connection: peer_connection,
+            data_channel: data_channel
+        };
+        
         const offer = await peer_connection.createOffer();
         await peer_connection.setLocalDescription(offer);
-
         protocol.sendMessage(MessageHelpers.createMessage(Messages.offer, { playerId: msg.playerId, sdp: offer.sdp }));
-        player_map[player_id] = peer_connection;
     }
 }
 
@@ -81,19 +108,163 @@ function handlePlayerDisconnectedMessage(msg: Messages.playerDisconnected) {
 function handleAnswerMessage(msg: Messages.answer) {
     const player_id = msg.playerId;
     if (player_id && player_map[player_id]) {
-        const peer_connection = player_map[player_id];
+        const player_peer = player_map[player_id];
         const answer = new RTCSessionDescription({ type: 'answer', sdp: msg.sdp });
-        peer_connection.setRemoteDescription(answer);
+        player_peer.peer_connection.setRemoteDescription(answer);
     }
 }
 
 function handleIceMessage(msg: Messages.iceCandidate) {
     const player_id = msg.playerId;
     if (player_id && player_map[player_id]) {
-        const peer_connection = player_map[player_id];
+        const player_peer = player_map[player_id];
         const candidate = new RTCIceCandidate(msg.candidate);
-        peer_connection.addIceCandidate(candidate);
+        player_peer.peer_connection.addIceCandidate(candidate);
     }
+}
+
+function sendDataProtocol(player_id: string) {
+    const player_peer = player_map[player_id];
+    if (player_peer) {
+        const streamer_proto_str = JSON.stringify({ Direction: 0, ...DataProtocol.ToStreamer });
+        const streamer_buffer = constructMessage(DataProtocol.FromStreamer.Protocol, streamer_proto_str);
+        player_peer.data_channel.send(streamer_buffer);
+
+        const player_proto_str = JSON.stringify({ Direction: 1, ...DataProtocol.FromStreamer });
+        const player_buffer = constructMessage(DataProtocol.FromStreamer.Protocol, player_proto_str);
+        player_peer.data_channel.send(player_buffer);
+    }
+}
+
+function sendInitialSettings(player_id: string) {
+    const temp_settings = {
+        PixelStreaming:
+        {
+            AllowPixelStreamingCommands: false,
+            DisableLatencyTest: false
+        },
+        Encoder:
+        {
+            TargetBitrate: -1,
+            MaxBitrate: 20000000,
+            MinQP: 5,
+            MaxQP: 23,
+            RateControl: "CBR",
+            FillerData: 0,
+            MultiPass: "FULL"
+        },
+        WebRTC:
+        {
+            DegradationPref: "MAINTAIN_FRAMERATE",
+            FPS: 60,
+            MinBitrate: 400000,
+            MaxBitrate: 678000000,
+            LowQP: 25,
+            HighQP: 37
+        },
+        ConfigOptions:
+        {}
+    }
+
+    const player_peer = player_map[player_id];
+    if (player_peer) {
+        const settings_str = JSON.stringify(temp_settings);
+        console.log(settings_str);
+        const settings_buffer = constructMessage(DataProtocol.FromStreamer.InitialSettings, settings_str);
+        player_peer.data_channel.send(settings_buffer);
+    }
+}
+
+function constructMessage(message_def: any, ...args): ArrayBuffer {
+    let data_size = 0;
+    let arg_index = 0;
+
+    if (message_def.structure.length != args.length) {
+        console.log(`Incorrect number of parameters given to constructMessage. Got ${args.length}, expected ${message_def.structure.length}`);
+        return null;
+    }
+
+    data_size += 1; // message type
+    // fields
+    message_def.structure.forEach((type_str: string) => {
+        switch (type_str) {
+            case "uint8": data_size += 1; break;
+            case "uint16": data_size += 2; break;
+            case "int16": data_size += 2; break;
+            case "float": data_size += 4; break;
+            case "double": data_size += 8; break;
+            case "string": {
+                    // size prepended string
+                    const str_val = args[arg_index] as string;
+                    data_size += 2;
+                    data_size += 2 * str_val.length;
+                }
+                break;
+            case "only_string": {
+                    // string takes up the full message
+                    const str_val = args[arg_index] as string;
+                    data_size += 2 * str_val.length;
+                }
+                break;
+        }
+        arg_index += 1;
+    });
+
+    const data = new DataView(new ArrayBuffer(data_size));
+
+    data_size = 0;
+    arg_index = 0;
+
+    data.setUint8(data_size, message_def.id);
+    data_size += 1;
+    message_def.structure.forEach((type_str: string) => {
+        switch (type_str) {
+            case "uint8":
+                data.setUint8(data_size, args[arg_index] as number);
+                data_size += 1;
+                break;
+            case "uint16":
+                data.setUint16(data_size, args[arg_index] as number, true);
+                data_size += 2;
+                break;
+            case "int16":
+                data.setInt16(data_size, args[arg_index] as number, true);
+                data_size += 2;
+                break;
+            case "float":
+                data.setFloat32(data_size, args[arg_index] as number, true);
+                data_size += 4;
+                break;
+            case "double":
+                data.setFloat64(data_size, args[arg_index] as number, true);
+                data_size += 8;
+                break;
+            case "string": {
+                    const str_val = args[arg_index] as string;
+                    data.setUint16(data_size, str_val.length, true);
+                    data_size += 2;
+                    for (let i = 0; i < str_val.length; ++i) {
+                        data.setUint16(data_size, str_val.charCodeAt(i), true);
+                        data_size += 2;
+                    }
+                }
+                break;
+            case "only_string": {
+                    const str_val = args[arg_index] as string;
+                    for (let i = 0; i < str_val.length; ++i) {
+                        data.setUint16(data_size, str_val.charCodeAt(i), true);
+                        data_size += 2;
+                    }
+                }
+                break;
+        }
+        arg_index += 1;
+    });
+
+    return data.buffer;
+}
+
+function handleDataChannelMessage(player_id: string, message: Uint8Array) {
 }
 
 function startStreaming() {
@@ -133,7 +304,7 @@ function startStreaming() {
         }
     });
 
-    transport.connect(`wss://${window.location.hostname}:8888`);
+    transport.connect(`ws://${window.location.hostname}:8888`);
 }
 
 declare global {

@@ -43,7 +43,7 @@ module.exports = {
     devtool: 'source-map',
     devServer: {
         server: {
-            type: 'https',
+            type: 'http',
             options: {
                 key: './certs/server.key',
                 cert: './certs/server.crt',
