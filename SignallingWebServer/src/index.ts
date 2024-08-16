@@ -86,7 +86,7 @@ program
         .default(config_file.peer_options || ""))
     .option('--log_config', 'Will print the program configuration on startup.', config_file.log_config || false)
     .option('--stdin', 'Allows stdin input while running.', config_file.stdin || false)
-    .option('--no_save', 'On startup the given configuration is resaved out to config.json. This switch will prevent this behaviour allowing the config.json file to remain untouched while running with new configurations.', config_file.no_save || false)
+    .option('--save', 'After arguments are parsed the config.json is saved with whatever arguments were specified at launch.', config_file.save || false)
     .helpOption('-h, --help', 'Display this help text.')
     .allowUnknownOption() // ignore unknown options which will allow versions to be swapped out into existing scripts with maybe older/newer options
     .parse();
@@ -96,13 +96,13 @@ const cli_options: IProgramOptions = program.opts();
 const options: IProgramOptions = { ...cli_options };
 
 // save out new configuration (unless disabled)
-if (!options.no_save) {
+if (options.save) {
 
     // dont save certain options
     const save_options = { ...options };
     delete save_options.no_config;
     delete save_options.config_file;
-    delete save_options.no_save;
+    delete save_options.save;
 
     // save out the config file with the current settings
     fs.writeFile(configArgsParser.config_file, beautify(save_options), (error: any) => {
