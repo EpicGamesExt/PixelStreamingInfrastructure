@@ -84,7 +84,6 @@ async function handlePlayerConnectedMessage(msg: Messages.playerConnected) {
         };
         data_channel.onmessage = (e: MessageEvent) => {
             const message = new Uint8Array(e.data)
-            console.log(`data channel for ${player_id} message type: ${message[0]}`);
             handleDataChannelMessage(player_id, message);
         }
 
@@ -126,11 +125,29 @@ function handleIceMessage(msg: Messages.iceCandidate) {
 function sendDataProtocol(player_id: string) {
     const player_peer = player_map[player_id];
     if (player_peer) {
-        const streamer_proto_str = JSON.stringify({ Direction: 0, ...DataProtocol.ToStreamer });
+        const streamer_proto = {
+            Direction: 0,
+        };
+        for (const [message_name, message_def] of Object.entries(DataProtocol.ToStreamer)) {
+            streamer_proto[message_name] = { id: message_def.id, structure: [] };
+            for (const struct of message_def.structure) {
+                streamer_proto[message_name].structure.push(struct.type);
+            }
+        }
+        const streamer_proto_str = JSON.stringify(streamer_proto);
         const streamer_buffer = constructMessage(DataProtocol.FromStreamer.Protocol, streamer_proto_str);
         player_peer.data_channel.send(streamer_buffer);
 
-        const player_proto_str = JSON.stringify({ Direction: 1, ...DataProtocol.FromStreamer });
+        const player_proto = {
+            Direction: 1,
+        };
+        for (const [message_name, message_def] of Object.entries(DataProtocol.FromStreamer)) {
+            streamer_proto[message_name] = { id: message_def.id, structure: [] };
+            for (const struct of message_def.structure) {
+                streamer_proto[message_name].structure.push(struct.type);
+            }
+        }
+        const player_proto_str = JSON.stringify(player_proto);
         const player_buffer = constructMessage(DataProtocol.FromStreamer.Protocol, player_proto_str);
         player_peer.data_channel.send(player_buffer);
     }
@@ -186,8 +203,8 @@ function constructMessage(message_def: any, ...args): ArrayBuffer {
 
     data_size += 1; // message type
     // fields
-    message_def.structure.forEach((type_str: string) => {
-        switch (type_str) {
+    message_def.structure.forEach((param: any) => {
+        switch (param.type) {
             case "uint8": data_size += 1; break;
             case "uint16": data_size += 2; break;
             case "int16": data_size += 2; break;
@@ -217,8 +234,8 @@ function constructMessage(message_def: any, ...args): ArrayBuffer {
 
     data.setUint8(data_size, message_def.id);
     data_size += 1;
-    message_def.structure.forEach((type_str: string) => {
-        switch (type_str) {
+    message_def.structure.forEach((param: any) => {
+        switch (param.type) {
             case "uint8":
                 data.setUint8(data_size, args[arg_index] as number);
                 data_size += 1;
@@ -264,7 +281,76 @@ function constructMessage(message_def: any, ...args): ArrayBuffer {
     return data.buffer;
 }
 
+function deconstructMessage(message: Uint8Array) {
+    const data = new DataView(message.buffer);
+    let data_offset = 0;
+
+    // read the message type
+    const message_type = data.getUint8(data_offset);
+    data_offset += 1;
+
+    // get the message definition
+    const message_def = (() => {
+        for (const def of Object.values(DataProtocol.ToStreamer)) {
+            if (def.id == message_type) {
+                return def;
+            }
+        }
+        return null;
+    })();
+
+    if (!message_def) {
+        console.log(`Unknown message from player: ${message_type}`);
+        return null;
+    }
+
+    const result_message = {};
+    message_def.structure.forEach((param: any) => {
+        let value: any;
+        switch (param.type) {
+            case "uint8":
+                value = data.getUint8(data_offset);
+                data_offset += 1;
+                break;
+            case "uint16":
+                value = data.getUint16(data_offset);
+                data_offset += 2;
+                break;
+            case "int16":
+                value = data.getInt16(data_offset);
+                data_offset += 2;
+                break;
+            case "float":
+                value = data.getFloat32(data_offset);
+                data_offset += 4;
+                break;
+            case "double":
+                value = data.getFloat64(data_offset);
+                data_offset += 8;
+                break;
+            case "string": {
+                    const str_len = data.getUint16(data_offset);
+                    data_offset += 2;
+                    const text_decoder = new TextDecoder('utf-16');
+                    value = text_decoder.decode(data.buffer.slice(data_offset, data_offset + str_len));
+                    data_offset += str_len;
+                }
+                break;
+            case "only_string": {
+                    const text_decoder = new TextDecoder('utf-16');
+                    value = text_decoder.decode(data.buffer.slice(1));
+                }
+                break;
+        }
+        result_message[param.name] = value;
+    });
+
+    return { type: message_type, message: result_message };
+}
+
 function handleDataChannelMessage(player_id: string, message: Uint8Array) {
+    const result = deconstructMessage(message);
+    console.log(`Got message: ${JSON.stringify(result)}`);
 }
 
 function startStreaming() {
@@ -295,7 +381,7 @@ function startStreaming() {
     );
 
     protocol.addListener(Messages.iceCandidate.typeName, (msg: BaseMessage) =>
-                         handleIceMessage(msg as Messages.iceCandidate)
+        handleIceMessage(msg as Messages.iceCandidate)
     );
 
     transport.on('close', () => {
