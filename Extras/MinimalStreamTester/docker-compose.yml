@@ -19,7 +19,7 @@ services:
 
   streamer:
     image: pixelstreamingunofficial/ps-minimal-streamer-linux
-    command: -PixelStreamingURL=ws://signalling:8888 -nothreadtimeout
+    command: -PixelStreamingURL=ws://signalling:8888 -nothreadtimeout -PixelStreamingEncoderCodec=vp8
     networks:
       - testing
     healthcheck:
