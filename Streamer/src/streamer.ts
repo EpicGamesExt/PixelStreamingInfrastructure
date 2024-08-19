@@ -8,6 +8,40 @@ import {
 } from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
 import { DataProtocol } from './protocol';
 
+interface PixelStreamingSettings {
+    AllowPixelStreamingCommands: boolean;
+    DisableLatencyTest: boolean
+};
+
+interface EncoderSettings {
+    TargetBitrate: number;
+    MaxBitrate: number;
+    MinQP: number;
+    MaxQP: number;
+    RateControl: "ConstQP" | "VBR" | "CBR";
+    FillerData: number;
+    MultiPass: "DISABLED" | "QUARTER" | "FULL";
+};
+
+interface WebRTCSettings {
+    DegradationPref: "MAINTAIN_FRAMERATE" | "MAINTAIN_RESOLUTION";
+    FPS: number;
+    MinBitrate: number;
+    MaxBitrate: number;
+    LowQP: number;
+    HighQP: number;
+};
+
+interface ConfigOptions {
+};
+
+interface Settings {
+    PixelStreaming: PixelStreamingSettings;
+    Encoder: EncoderSettings;
+    WebRTC: WebRTCSettings;
+    ConfigOptions: ConfigOptions;
+};
+
 export interface PlayerPeer {
     id: string;
     peer_connection: RTCPeerConnection;
@@ -18,6 +52,7 @@ const protocol_version = "1.0.0";
 
 export class Streamer {
     id: string;
+    settings: Settings;
     protocol: SignallingProtocol;
     transport: ITransport;
     player_map: Map<string, PlayerPeer>;
@@ -29,6 +64,32 @@ export class Streamer {
         this.player_map = new Map<string, PlayerPeer>();
         this.transport = new WebSocketTransport();
         this.protocol = new SignallingProtocol(this.transport);
+
+        // just some default settings. (most of these wont make a difference but the frontend expects them)
+        this.settings = {
+            PixelStreaming: {
+                AllowPixelStreamingCommands: false,
+                DisableLatencyTest: false
+            },
+            Encoder: {
+                TargetBitrate: -1,
+                MaxBitrate: 20000000,
+                MinQP: 0,
+                MaxQP: 51,
+                RateControl: "CBR",
+                FillerData: 0,
+                MultiPass: "FULL"
+            },
+            WebRTC: {
+                DegradationPref: "MAINTAIN_FRAMERATE",
+                FPS: 60,
+                MinBitrate: 100000,
+                MaxBitrate: 100000000,
+                LowQP: 25,
+                HighQP: 37
+            },
+            ConfigOptions: {}
+        }
 
         this.protocol.addListener(Messages.config.typeName, (msg: BaseMessage) =>
             this.handleConfigMessage(msg as Messages.config)
@@ -62,6 +123,9 @@ export class Streamer {
     onEndpointConfirmed: () => void;
     onPlayerConnected: (player: PlayerPeer) => void;
     onPlayerDisconnected: (player_id: string) => void;
+    onDataChannelOpened: (player_id: string) => void;
+    onDataChannelClosed: (player_id: string) => void;
+    onDataChannelMessage: (player_id: string, message: object) => void;
 
     startStreaming(signallingURL: string, stream: MediaStream) {
         this.local_stream = stream;
@@ -94,8 +158,29 @@ export class Streamer {
                 }
             };
 
-            this.local_stream.getTracks().forEach((track) => {
-                peer_connection.addTrack(track, this.local_stream);
+            this.local_stream.getTracks().forEach((track: MediaStreamTrack) => {
+                if (track.kind == "video") {
+                    if (this.settings.WebRTC.DegradationPref == "MAINTAIN_FRAMERATE") {
+                        track.contentHint = "motion";
+                    } else if (this.settings.WebRTC.DegradationPref == "MAINTAIN_RESOLUTION") {
+                        track.contentHint = "detail";
+                    }
+                    const tranceiver_options: RTCRtpTransceiverInit = {
+                        streams: [ this.local_stream ],
+                        direction: "sendonly",
+                        sendEncodings: [
+                            {
+                                maxBitrate: this.settings.WebRTC.MaxBitrate,
+                                maxFramerate: this.settings.WebRTC.FPS,
+                                priority: "high",
+                                rid: "base",
+                            }
+                        ],
+                    };
+                    peer_connection.addTransceiver(track, tranceiver_options);
+                } else {
+                    peer_connection.addTrack(track, this.local_stream);
+                }
             });
 
             const data_channel = peer_connection.createDataChannel("datachannel", { ordered: true, negotiated: false });
@@ -103,8 +188,14 @@ export class Streamer {
             data_channel.onopen = () => {
                 this.sendDataProtocol(player_id);
                 this.sendInitialSettings(player_id);
+                if (this.onDataChannelOpened) {
+                    this.onDataChannelOpened(player_id);
+                }
             };
             data_channel.onclose = () => {
+                if (this.onDataChannelClosed) {
+                    this.onDataChannelClosed(player_id);
+                }
             };
             data_channel.onmessage = (e: MessageEvent) => {
                 const message = new Uint8Array(e.data)
@@ -186,39 +277,9 @@ export class Streamer {
     }
 
     sendInitialSettings(player_id: string) {
-        const temp_settings = {
-            PixelStreaming:
-                {
-                AllowPixelStreamingCommands: false,
-                DisableLatencyTest: false
-            },
-            Encoder:
-                {
-                TargetBitrate: -1,
-                MaxBitrate: 20000000,
-                MinQP: 5,
-                MaxQP: 23,
-                RateControl: "CBR",
-                FillerData: 0,
-                MultiPass: "FULL"
-            },
-            WebRTC:
-                {
-                DegradationPref: "MAINTAIN_FRAMERATE",
-                FPS: 60,
-                MinBitrate: 400000,
-                MaxBitrate: 678000000,
-                LowQP: 25,
-                HighQP: 37
-            },
-            ConfigOptions:
-                {}
-        }
-
         const player_peer = this.player_map[player_id];
         if (player_peer) {
-            const settings_str = JSON.stringify(temp_settings);
-            console.log(settings_str);
+            const settings_str = JSON.stringify(this.settings);
             const settings_buffer = this.constructMessage(DataProtocol.FromStreamer.InitialSettings, settings_str);
             player_peer.data_channel.send(settings_buffer);
         }
@@ -332,7 +393,7 @@ export class Streamer {
         })();
 
         if (!message_def) {
-            console.log(`Unknown message from player: ${message_type}`);
+            console.log(`Unable to deconstruct message. Unknown message type: ${message_type}`);
             return null;
         }
 
@@ -382,7 +443,9 @@ export class Streamer {
 
     handleDataChannelMessage(player_id: string, message: Uint8Array) {
         const result = this.deconstructMessage(message);
-        console.log(`Got message: ${JSON.stringify(result)}`);
+        if (this.onDataChannelMessage) {
+            this.onDataChannelMessage(player_id, result);
+        }
     }
 }
 

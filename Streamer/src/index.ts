@@ -33,6 +33,9 @@ document.body.onload = function() {
         const stream = maybeCaptureStream(playback_element);
         if (stream) {
             streamer = new Streamer('MockStreamer');
+            streamer.onDataChannelMessage = function(player_id: string, message: object) {
+                console.log(`Data channel msg: (${player_id}) => ${JSON.stringify(message)}`);
+            };
             streamer.transport.on('close', () => {
                 if (playback_element) {
                     playback_element.pause();
@@ -40,7 +43,7 @@ document.body.onload = function() {
             });
             streamer.onEndpointConfirmed = function() {
                 playback_element.play();
-            }
+            };
             streamer.startStreaming(`ws://${window.location.hostname}:8888`, stream);
         }
     }
