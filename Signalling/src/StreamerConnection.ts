@@ -121,7 +121,7 @@ export class StreamerConnection extends EventEmitter implements IStreamer, LogUt
     }
 
     private onTransportClose(): void {
-        Logger.debug('StreamerConnection transport close.');
+        Logger.info(`Streamer '${this.streamerId}' - websocket disconnected.`);
         this.emit('disconnect');
     }
 
