@@ -42,10 +42,14 @@ interface Settings {
     ConfigOptions: ConfigOptions;
 };
 
-export interface PlayerPeer {
+export class PlayerPeer {
     id: string;
     peer_connection: RTCPeerConnection;
     data_channel: RTCDataChannel;
+    stats_timer?: any;
+
+    last_qp_sum?: number;
+    last_stats_time?: number;
 };
 
 const protocol_version = "1.0.0";
@@ -147,7 +151,7 @@ export class Streamer {
         }
     }
 
-    async handlePlayerConnectedMessage(msg: Messages.playerConnected) {
+    handlePlayerConnectedMessage(msg: Messages.playerConnected) {
         if (this.local_stream) {
             const player_id = msg.playerId;
             const peer_connection = new RTCPeerConnection(this.peer_connection_options);
@@ -202,15 +206,43 @@ export class Streamer {
                 this.handleDataChannelMessage(player_id, message);
             }
 
-            this.player_map[player_id] = {
-                player_id: player_id,
+            const new_player: PlayerPeer = {
+                id: player_id,
                 peer_connection: peer_connection,
                 data_channel: data_channel
             };
 
-            const offer = await peer_connection.createOffer();
-            await peer_connection.setLocalDescription(offer);
-            this.protocol.sendMessage(MessageHelpers.createMessage(Messages.offer, { playerId: msg.playerId, sdp: offer.sdp }));
+            peer_connection.createOffer().then((offer) => {
+                peer_connection.setLocalDescription(offer).then(() => {
+                    this.protocol.sendMessage(MessageHelpers.createMessage(Messages.offer, { playerId: msg.playerId, sdp: offer.sdp }));
+                });
+            });
+
+            // report qp stat over time
+            new_player.stats_timer = setInterval(() => {
+                peer_connection.getStats().then((stats) => {
+                    let qp_sum: number;
+                    let fps: number;
+                    stats.forEach((report) => {
+                        if (report.type == 'outbound-rtp' && report.mediaType == 'video') {
+                            qp_sum = report.qpSum;
+                            fps = report.framesPerSecond;
+                        }
+                    });
+                    const now_time = Date.now();
+                    if (new_player.last_stats_time) {
+                        const delta_millis = now_time - new_player.last_stats_time;
+                        const qp_delta = (qp_sum - new_player.last_qp_sum) * (delta_millis / 1000);
+                        const qp_avg = qp_delta / fps;
+
+                        new_player.data_channel.send(this.constructMessage(DataProtocol.FromStreamer.VideoEncoderAvgQP, qp_avg));
+                    }
+                    new_player.last_qp_sum = qp_sum;
+                    new_player.last_stats_time = now_time;
+                });
+            }, 1000);
+
+            this.player_map[player_id] = new_player; 
 
             if (this.onPlayerConnected) {
                 this.onPlayerConnected(this.player_map[player_id]);
@@ -221,6 +253,10 @@ export class Streamer {
 
     handlePlayerDisconnectedMessage(msg: Messages.playerDisconnected) {
         const player_id = msg.playerId;
+        const player_peer = this.player_map[player_id];
+        if (player_peer && player_peer.stats_timer) {
+            clearInterval(player_peer.stats_timer);
+        }
         delete this.player_map[player_id];
         if (this.onPlayerDisconnected) {
             this.onPlayerDisconnected(player_id);
@@ -312,7 +348,7 @@ export class Streamer {
                 break;
                 case "only_string": {
                     // string takes up the full message
-                    const str_val = args[arg_index] as string;
+                    const str_val = JSON.stringify(args[arg_index]);
                     data_size += 2 * str_val.length;
                 }
                 break;
