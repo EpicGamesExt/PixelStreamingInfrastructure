@@ -348,7 +348,8 @@ export class Streamer {
                 break;
                 case "only_string": {
                     // string takes up the full message
-                    const str_val = JSON.stringify(args[arg_index]);
+                    const val = args[arg_index];
+                    const str_val = typeof val == 'string' ? val : JSON.stringify(val);
                     data_size += 2 * str_val.length;
                 }
                 break;
