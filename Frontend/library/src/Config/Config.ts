@@ -48,6 +48,7 @@ const isFlagId = (id: string): id is FlagsIds =>
  */
 export class NumericParameters {
     static AFKTimeoutSecs = 'AFKTimeout' as const;
+    static AFKCountdownSecs = 'AFKCountdown' as const;
     static MinQP = 'MinQP' as const;
     static MaxQP = 'MaxQP' as const;
     static WebRTCFPS = 'WebRTCFPS' as const;
@@ -476,6 +477,19 @@ export class Config {
                 useUrlParams
             )
         );
+
+        this.numericParameters.set(
+            NumericParameters.AFKCountdownSecs,
+            new SettingNumber(
+                NumericParameters.AFKCountdownSecs,
+                'AFK countdown',
+                'The time (in seconds) for a user to respond before the stream is ended after an AFK timeout.',
+                10 /*min*/,
+                180 /*max*/,
+                10 /*value*/,
+                useUrlParams
+            )
+        )
 
         this.numericParameters.set(
             NumericParameters.MaxReconnectAttempts,
