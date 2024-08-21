@@ -12,7 +12,6 @@ import {
 
 export class AFKController {
     // time out logic details
-    closeTimeout = 10;
     active = false;
     countdownActive = false;
     warnTimer: ReturnType<typeof setTimeout> = undefined;
@@ -118,7 +117,9 @@ export class AFKController {
         );
 
         // update our countDown timer and overlay contents
-        this.countDown = this.closeTimeout;
+        this.countDown = this.config.getNumericSettingValue(
+            NumericParameters.AFKCountdownSecs
+        );
         this.countdownActive = true;
         this.pixelStreaming.dispatchEvent(
             new AfkWarningUpdateEvent({ countDown: this.countDown })
