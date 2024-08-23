@@ -7,6 +7,7 @@ import {
     BaseMessage
 } from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
 import { DataProtocol } from './protocol';
+import { EventEmitter } from 'events';
 
 interface PixelStreamingSettings {
     AllowPixelStreamingCommands: boolean;
@@ -54,7 +55,7 @@ export class PlayerPeer {
 
 const protocol_version = "1.0.0";
 
-export class Streamer {
+export class Streamer extends EventEmitter {
     id: string;
     settings: Settings;
     protocol: SignallingProtocol;
@@ -64,6 +65,7 @@ export class Streamer {
     peer_connection_options: Messages.peerConnectionOptions;
 
     constructor(streamerId: string) {
+        super();
         this.id = streamerId;
         this.player_map = new Map<string, PlayerPeer>();
         this.transport = new WebSocketTransport();
@@ -124,13 +126,6 @@ export class Streamer {
         );
     }
 
-    onEndpointConfirmed: () => void;
-    onPlayerConnected: (player: PlayerPeer) => void;
-    onPlayerDisconnected: (player_id: string) => void;
-    onDataChannelOpened: (player_id: string) => void;
-    onDataChannelClosed: (player_id: string) => void;
-    onDataChannelMessage: (player_id: string, message: object) => void;
-
     startStreaming(signallingURL: string, stream: MediaStream) {
         this.local_stream = stream;
         this.transport.connect(signallingURL);
@@ -145,10 +140,9 @@ export class Streamer {
         this.protocol.sendMessage(endpointMessage);
     }
 
-    handleEndpointIdConfirmMessage(_msg: Messages.endpointIdConfirm) {
-        if (this.onEndpointConfirmed) {
-            this.onEndpointConfirmed();
-        }
+    handleEndpointIdConfirmMessage(msg: Messages.endpointIdConfirm) {
+        this.id = msg.committedId;
+        this.emit('endpoint_id_confirmed');
     }
 
     handlePlayerConnectedMessage(msg: Messages.playerConnected) {
@@ -192,14 +186,10 @@ export class Streamer {
             data_channel.onopen = () => {
                 this.sendDataProtocol(player_id);
                 this.sendInitialSettings(player_id);
-                if (this.onDataChannelOpened) {
-                    this.onDataChannelOpened(player_id);
-                }
+                this.emit('data_channel_opened', player_id);
             };
             data_channel.onclose = () => {
-                if (this.onDataChannelClosed) {
-                    this.onDataChannelClosed(player_id);
-                }
+                this.emit('data_channel_closed', player_id);
             };
             data_channel.onmessage = (e: MessageEvent) => {
                 const message = new Uint8Array(e.data)
@@ -243,10 +233,7 @@ export class Streamer {
             }, 1000);
 
             this.player_map[player_id] = new_player; 
-
-            if (this.onPlayerConnected) {
-                this.onPlayerConnected(this.player_map[player_id]);
-            }
+            this.emit('player_connected', new_player);
         }
 
     }
@@ -258,9 +245,7 @@ export class Streamer {
             clearInterval(player_peer.stats_timer);
         }
         delete this.player_map[player_id];
-        if (this.onPlayerDisconnected) {
-            this.onPlayerDisconnected(player_id);
-        }
+        this.emit('player_disconnected', player_id);
     }
 
     handleAnswerMessage(msg: Messages.answer) {
@@ -480,9 +465,7 @@ export class Streamer {
 
     handleDataChannelMessage(player_id: string, message: Uint8Array) {
         const result = this.deconstructMessage(message);
-        if (this.onDataChannelMessage) {
-            this.onDataChannelMessage(player_id, result);
-        }
+        this.emit('data_channel_message', player_id, result);
     }
 }
 

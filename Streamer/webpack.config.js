@@ -11,6 +11,7 @@ module.exports = {
             {
                 test: /\.ts?$/,
                 use: 'ts-loader',
+                include: path.resolve(__dirname, 'src'),
                 exclude: /node_modules/,
             },
             {
@@ -26,12 +27,6 @@ module.exports = {
     output: {
         filename: 'bundle.js',
         path: path.resolve(__dirname, 'dist'),
-        library: 'Testing',
-        libraryTarget: 'var',
-        libraryExport: 'default',
-        libraryTarget: 'umd',
-        publicPath: '/dist2/',
-        umdNamedDefine: true,
     },
     plugins: [
         new HtmlWebpackPlugin({ title: 'our project', template: 'src/index.html' }),

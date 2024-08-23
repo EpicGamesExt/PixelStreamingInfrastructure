@@ -22,29 +22,30 @@ function maybeCaptureStream(element: HTMLCaptureableMediaElement): MediaStream |
 
 
 declare global {
-    interface Window { startStreaming(): void; }
+    interface Window {
+        startStreaming(): void;
+        streamer?: Streamer;
+    }
 }
 
-let streamer = null;
-
 document.body.onload = function() {
+    window.streamer = new Streamer('MockStreamer');
     window.startStreaming = function() {
         const playback_element = document.getElementById("source_video") as HTMLCaptureableMediaElement;
         const stream = maybeCaptureStream(playback_element);
         if (stream) {
-            streamer = new Streamer('MockStreamer');
-            streamer.onDataChannelMessage = function(player_id: string, message: object) {
+            window.streamer.on('data_channel_message', (player_id: string, message: object) => {
                 console.log(`Data channel msg: (${player_id}) => ${JSON.stringify(message)}`);
-            };
-            streamer.transport.on('close', () => {
+            });
+            window.streamer.transport.on('close', () => {
                 if (playback_element) {
                     playback_element.pause();
                 }
             });
-            streamer.onEndpointConfirmed = function() {
+            window.streamer.on('endpoint_id_confirmed', () => {
                 playback_element.play();
-            };
-            streamer.startStreaming(`ws://${window.location.hostname}:8888`, stream);
+            });
+            window.streamer.startStreaming(`ws://${window.location.hostname}:8888`, stream);
         }
     }
 }

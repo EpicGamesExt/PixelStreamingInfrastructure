@@ -123,6 +123,7 @@ export class SignallingServer {
         this.streamerRegistry.add(newStreamer);
         newStreamer.transport.on('close', () => {
             this.streamerRegistry.remove(newStreamer);
+            Logger.info(`Streamer %s (%s) disconnected.`, newStreamer.streamerId, request.socket.remoteAddress);
         });
 
         // because peer connection options is a general field with all optional fields
@@ -142,6 +143,7 @@ export class SignallingServer {
         this.playerRegistry.add(newPlayer);
         newPlayer.transport.on('close', () => {
             this.playerRegistry.remove(newPlayer);
+            Logger.info(`Player %s (%s) disconnected.`, newPlayer.playerId, request.socket.remoteAddress);
         });
 
         // because peer connection options is a general field with all optional fields
@@ -162,6 +164,7 @@ export class SignallingServer {
         newSFU.transport.on('close', () => {
             this.streamerRegistry.remove(newSFU);
             this.playerRegistry.remove(newSFU);
+            Logger.info(`SFU %s (%s) disconnected.`, newSFU.streamerId, request.socket.remoteAddress);
         });
 
         // because peer connection options is a general field with all optional fields
