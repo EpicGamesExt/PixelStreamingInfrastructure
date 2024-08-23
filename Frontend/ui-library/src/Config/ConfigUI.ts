@@ -200,6 +200,10 @@ export class ConfigUI {
         );
         this.addSettingNumeric(
             psSettingsSection,
+            this.numericParametersUi.get(NumericParameters.AFKCountdownSecs)
+        );
+        this.addSettingNumeric(
+            psSettingsSection,
             this.numericParametersUi.get(NumericParameters.MaxReconnectAttempts)
         );
         this.addSettingNumeric(
