@@ -7,27 +7,27 @@ import {SettingBase} from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.5';
  * that represents this setting.
  */
 export class SettingUIBase {
-  _setting: SettingBase;
-  _rootElement: HTMLElement;
+    _setting: SettingBase;
+    _rootElement: HTMLElement;
 
-  constructor(setting: SettingBase) {
-    this._setting = setting;
-  }
-
-  /**
-   * @returns The setting component.
-   */
-  public get setting(): SettingBase {
-    return this._setting;
-  }
-
-  /**
-   * @returns Return or creates a HTML element that represents this setting in the DOM.
-   */
-  public get rootElement(): HTMLElement {
-    if (!this._rootElement) {
-      this._rootElement = document.createElement('div');
+    constructor(setting: SettingBase) {
+        this._setting = setting;
     }
-    return this._rootElement;
-  }
+
+    /**
+     * @returns The setting component.
+     */
+    public get setting(): SettingBase {
+        return this._setting;
+    }
+
+    /**
+     * @returns Return or creates a HTML element that represents this setting in the DOM.
+     */
+    public get rootElement(): HTMLElement {
+        if (!this._rootElement) {
+            this._rootElement = document.createElement('div');
+        }
+        return this._rootElement;
+    }
 }
