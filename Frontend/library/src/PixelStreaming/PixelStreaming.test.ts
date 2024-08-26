@@ -50,12 +50,11 @@ describe('PixelStreaming', () => {
     };
 
     const triggerWebSocketOpen = () => webSocketTriggerFunctions.triggerOnOpen?.();
-    const triggerSignallingMessage =
-        (message: BaseMessage) => {
-            webSocketTriggerFunctions.triggerOnMessage?.(message);
-        } const triggerConfigMessage = () =>
-            triggerSignallingMessage(
-                MessageHelpers.createMessage(Messages.config, {peerConnectionOptions: {}}));
+    const triggerSignallingMessage = (message: BaseMessage) => {
+        webSocketTriggerFunctions.triggerOnMessage?.(message);
+    };
+    const triggerConfigMessage = () =>
+        triggerSignallingMessage(MessageHelpers.createMessage(Messages.config, {peerConnectionOptions: {}}));
     const triggerStreamerListMessage = (streamerIdList: string[]) =>
         triggerSignallingMessage(MessageHelpers.createMessage(Messages.streamerList, {ids: streamerIdList}));
     const triggerSdpOfferMessage = () =>
