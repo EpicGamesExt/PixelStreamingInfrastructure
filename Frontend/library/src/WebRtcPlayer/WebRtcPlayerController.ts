@@ -353,15 +353,14 @@ export class WebRtcPlayerController {
             MessageDirection.FromStreamer,
             'LatencyTest',
             (data: ArrayBuffer) => this.handleLatencyTestResult(data));
-        this.streamMessageController
-            .registerMessageHandler(
-                MessageDirection.FromStreamer,
-                'DataChannelLatencyTest',
-                (data: ArrayBuffer) => this.handleDataChannelLatencyTestResponse(data)) this
-            .streamMessageController.registerMessageHandler(
-                MessageDirection.FromStreamer,
-                'InitialSettings',
-                (data: ArrayBuffer) => this.handleInitialSettings(data));
+        this.streamMessageController.registerMessageHandler(
+            MessageDirection.FromStreamer,
+            'DataChannelLatencyTest',
+            (data: ArrayBuffer) => this.handleDataChannelLatencyTestResponse(data));
+        this.streamMessageController.registerMessageHandler(
+            MessageDirection.FromStreamer,
+            'InitialSettings',
+            (data: ArrayBuffer) => this.handleInitialSettings(data));
         this.streamMessageController.registerMessageHandler(
             MessageDirection.FromStreamer,
             'FileExtension',
@@ -867,9 +866,8 @@ export class WebRtcPlayerController {
         this.pixelStreaming.dispatchEvent(new PlayStreamEvent());
 
         if (this.streamController.audioElement.srcObject) {
-            const startMuted =
-                this.config.isFlagEnabled(Flags.StartVideoMuted) this.streamController.audioElement.muted =
-                    startMuted;
+            const startMuted = this.config.isFlagEnabled(Flags.StartVideoMuted);
+            this.streamController.audioElement.muted = startMuted;
 
             if (startMuted) {
                 this.playVideo();
@@ -1692,9 +1690,10 @@ export class WebRtcPlayerController {
             this.gamePadController = this.inputClassesFactory.registerGamePad();
             this.gamePadController.onGamepadConnected = () => {
                 this.streamMessageController.toStreamerHandlers.get('GamepadConnected')();
-            } this.gamePadController.onGamepadDisconnected = (controllerIdx: number) => {
+            };
+            this.gamePadController.onGamepadDisconnected = (controllerIdx: number) => {
                 this.streamMessageController.toStreamerHandlers.get('GamepadDisconnected')([controllerIdx]);
-            }
+            };
         }
     }
 

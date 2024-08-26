@@ -170,7 +170,8 @@ export class AggregatedStats {
         RemoteCandidate.id = stat.id;
         RemoteCandidate.candidateType = stat.candidateType;
         RemoteCandidate.relayProtocol = stat.relayProtocol;
-        RemoteCandidate.transportId = stat.transportId this.remoteCandidates.push(RemoteCandidate);
+        RemoteCandidate.transportId = stat.transportId;
+        this.remoteCandidates.push(RemoteCandidate);
     }
 
     /**
