@@ -2,6 +2,40 @@ import { test as base, expect as baseExpect, Page } from '@playwright/test';
 import { Streamer } from '../../src/streamer';
 import { PixelStreaming } from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.5';
 
+export function attachToConsoleEvents(page: Page, callback: (...args: any[]) => void) {
+    page.on('console', async msg => {
+        const values: any[] = [];
+        for (const arg of msg.args())
+            values.push(await arg.jsonValue());
+        callback(...values);
+    });
+}
+
+export function setupEventCapture(streamerPage: Page) {
+    return streamerPage.evaluate(() => {
+        window.data_messages = {};
+        window.data_message_listener = (player_id, message) => {
+            if (window.data_messages[player_id] == undefined) {
+                window.data_messages[player_id] = [];
+            }
+            window.data_messages[player_id].push({ type: message.type, ...message.message });
+        };
+        window.streamer.on('data_channel_message', window.data_message_listener);
+    });
+}
+
+export function teardownEventCapture(streamerPage: Page) {
+    return streamerPage.evaluate(() => {
+        window.streamer.off('data_channel_message', window.data_message_listener);
+    });
+}
+
+export function getCapturedEvents(streamerPage: Page): Promise<Record<string, DataChannelEvent[]>> {
+    return streamerPage.evaluate(() => {
+        return window.data_messages;
+    });
+}
+
 type PSTestFixtures = {
     streamerPage: Page;
     streamerId: string;
@@ -12,6 +46,8 @@ declare global {
     interface Window {
         pixelStreaming: PixelStreaming;
         streamer: Streamer;
+        data_messages: Record<string,DataChannelEvent[]>;
+        data_message_listener(player_id: number, message: any): void;
     }
 }
 
