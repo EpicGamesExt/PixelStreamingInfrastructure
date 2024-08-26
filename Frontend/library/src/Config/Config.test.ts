@@ -1,6 +1,16 @@
 import {mockRTCRtpReceiver, unmockRTCRtpReceiver} from '../__test__/mockRTCRtpReceiver';
 
-import {Config, Flags, FlagsKeys, NumericParameters, NumericParametersKeys, OptionParameters, OptionParametersKeys, TextParameters, TextParametersKeys} from './Config';
+import {
+    Config,
+    Flags,
+    FlagsKeys,
+    NumericParameters,
+    NumericParametersKeys,
+    OptionParameters,
+    OptionParametersKeys,
+    TextParameters,
+    TextParametersKeys
+} from './Config';
 
 const allFlags = Object.keys(Flags).map((key) => Flags[key as FlagsKeys]);
 const allNumericParameters =

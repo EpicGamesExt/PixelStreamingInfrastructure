@@ -1,6 +1,23 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
-import {Config, Flags, FlagsIds, Logger, NumericParameters, NumericParametersIds, OptionParameters, OptionParametersIds, SettingBase, SettingFlag, SettingNumber, SettingOption, SettingsChangedEvent, SettingText, TextParameters, TextParametersIds} from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.5';
+import {
+    Config,
+    Flags,
+    FlagsIds,
+    Logger,
+    NumericParameters,
+    NumericParametersIds,
+    OptionParameters,
+    OptionParametersIds,
+    SettingBase,
+    SettingFlag,
+    SettingNumber,
+    SettingOption,
+    SettingsChangedEvent,
+    SettingText,
+    TextParameters,
+    TextParametersIds
+} from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.5';
 
 import {SettingUIFlag} from './SettingUIFlag';
 import {SettingUINumber} from './SettingUINumber';

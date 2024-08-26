@@ -5,7 +5,10 @@ import {SettingFlag} from '../Config/SettingFlag';
 import {SettingNumber} from '../Config/SettingNumber';
 import {SettingOption} from '../Config/SettingOption';
 import {SettingText} from '../Config/SettingText';
-import {DataChannelLatencyTestResponse, DataChannelLatencyTestResult} from '../DataChannel/DataChannelLatencyTestResults';
+import {
+    DataChannelLatencyTestResponse,
+    DataChannelLatencyTestResult
+} from '../DataChannel/DataChannelLatencyTestResults';
 import {LatencyTestResults} from '../DataChannel/LatencyTestResults';
 import {AggregatedStats} from '../PeerConnectionController/AggregatedStats';
 import {InitialSettings} from '../pixelstreamingfrontend';

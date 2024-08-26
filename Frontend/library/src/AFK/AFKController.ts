@@ -4,7 +4,12 @@ import {Logger} from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
 
 import {Config, Flags, NumericParameters} from '../Config/Config';
 import {PixelStreaming} from '../PixelStreaming/PixelStreaming';
-import {AfkTimedOutEvent, AfkWarningActivateEvent, AfkWarningDeactivateEvent, AfkWarningUpdateEvent} from '../Util/EventEmitter';
+import {
+    AfkTimedOutEvent,
+    AfkWarningActivateEvent,
+    AfkWarningDeactivateEvent,
+    AfkWarningUpdateEvent
+} from '../Util/EventEmitter';
 
 export class AFKController {
     // time out logic details

@@ -3,14 +3,42 @@
 import {Logger} from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
 
 import {Config, Flags, NumericParameters, OptionParameters} from '../Config/Config';
-import {DataChannelLatencyTestConfig, DataChannelLatencyTestController} from '../DataChannel/DataChannelLatencyTestController';
-import {DataChannelLatencyTestResponse, DataChannelLatencyTestResult} from '../DataChannel/DataChannelLatencyTestResults';
+import {
+    DataChannelLatencyTestConfig,
+    DataChannelLatencyTestController
+} from '../DataChannel/DataChannelLatencyTestController';
+import {
+    DataChannelLatencyTestResponse,
+    DataChannelLatencyTestResult
+} from '../DataChannel/DataChannelLatencyTestResults';
 import {InitialSettings} from '../DataChannel/InitialSettings';
 import {LatencyTestResults} from '../DataChannel/LatencyTestResults';
 import {AggregatedStats} from '../PeerConnectionController/AggregatedStats';
 import {MessageDirection} from '../UeInstanceMessage/StreamMessageController';
 import {OnScreenKeyboard} from '../UI/OnScreenKeyboard';
-import {DataChannelLatencyTestResponseEvent, DataChannelLatencyTestResultEvent, EventEmitter, InitialSettingsEvent, LatencyTestResultEvent, PixelStreamingEvent, PlayerCountEvent, StatsReceivedEvent, StreamLoadingEvent, StreamPreConnectEvent, StreamPreDisconnectEvent, StreamReconnectEvent, VideoEncoderAvgQPEvent, VideoInitializedEvent, WebRtcAutoConnectEvent, WebRtcConnectedEvent, WebRtcConnectingEvent, WebRtcDisconnectedEvent, WebRtcFailedEvent, WebRtcSdpEvent, WebRtcTCPRelayDetectedEvent} from '../Util/EventEmitter';
+import {
+    DataChannelLatencyTestResponseEvent,
+    DataChannelLatencyTestResultEvent,
+    EventEmitter,
+    InitialSettingsEvent,
+    LatencyTestResultEvent,
+    PixelStreamingEvent,
+    PlayerCountEvent,
+    StatsReceivedEvent,
+    StreamLoadingEvent,
+    StreamPreConnectEvent,
+    StreamPreDisconnectEvent,
+    StreamReconnectEvent,
+    VideoEncoderAvgQPEvent,
+    VideoInitializedEvent,
+    WebRtcAutoConnectEvent,
+    WebRtcConnectedEvent,
+    WebRtcConnectingEvent,
+    WebRtcDisconnectedEvent,
+    WebRtcFailedEvent,
+    WebRtcSdpEvent,
+    WebRtcTCPRelayDetectedEvent
+} from '../Util/EventEmitter';
 import {IURLSearchParams} from '../Util/IURLSearchParams';
 import {RTCUtils} from '../Util/RTCUtils';
 import {WebRtcPlayerController} from '../WebRtcPlayer/WebRtcPlayerController';

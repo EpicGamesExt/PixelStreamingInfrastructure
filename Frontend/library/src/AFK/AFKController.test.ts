@@ -1,7 +1,12 @@
 import {mockRTCRtpReceiver, unmockRTCRtpReceiver} from '../__test__/mockRTCRtpReceiver';
 import {Config, Flags, NumericParameters} from '../Config/Config';
 import {PixelStreaming} from '../PixelStreaming/PixelStreaming';
-import {AfkTimedOutEvent, AfkWarningActivateEvent, AfkWarningDeactivateEvent, AfkWarningUpdateEvent} from '../Util/EventEmitter';
+import {
+    AfkTimedOutEvent,
+    AfkWarningActivateEvent,
+    AfkWarningDeactivateEvent,
+    AfkWarningUpdateEvent
+} from '../Util/EventEmitter';
 
 import {AFKController} from './AFKController';
 

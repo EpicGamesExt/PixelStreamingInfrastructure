@@ -2,7 +2,14 @@
 
 import {Logger} from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
 
-import {DataChannelLatencyTestRecord, DataChannelLatencyTestRequest, DataChannelLatencyTestResponse, DataChannelLatencyTestResult, DataChannelLatencyTestSeq, DataChannelLatencyTestTimestamp} from './DataChannelLatencyTestResults';
+import {
+    DataChannelLatencyTestRecord,
+    DataChannelLatencyTestRequest,
+    DataChannelLatencyTestResponse,
+    DataChannelLatencyTestResult,
+    DataChannelLatencyTestSeq,
+    DataChannelLatencyTestTimestamp
+} from './DataChannelLatencyTestResults';
 
 export type DataChannelLatencyTestConfig = {
     // test duration in milliseconds

@@ -1,7 +1,14 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
-import {AggregatedStats, CandidatePairStats, Logger, PixelStreaming} from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.5';
-import {PixelStreamingSettings} from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.5/types/DataChannel/InitialSettings';
+import {
+    AggregatedStats,
+    CandidatePairStats,
+    Logger,
+    PixelStreaming
+} from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.5';
+import {
+    PixelStreamingSettings
+} from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.5/types/DataChannel/InitialSettings';
 
 import {MathUtils} from '../Util/MathUtils';
 

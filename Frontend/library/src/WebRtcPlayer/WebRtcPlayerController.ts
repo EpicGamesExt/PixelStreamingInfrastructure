@@ -1,13 +1,33 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
-import {BaseMessage, ITransport, Logger, MessageHelpers, Messages, SignallingProtocol, WebSocketTransport} from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
+import {
+    BaseMessage,
+    ITransport,
+    Logger,
+    MessageHelpers,
+    Messages,
+    SignallingProtocol,
+    WebSocketTransport
+} from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
 
 import {AFKController} from '../AFK/AFKController';
-import {Config, ControlSchemeType, Flags, NumericParameters, OptionParameters, TextParameters} from '../Config/Config';
+import {
+    Config,
+    ControlSchemeType,
+    Flags,
+    NumericParameters,
+    OptionParameters,
+    TextParameters
+} from '../Config/Config';
 import {DataChannelController} from '../DataChannel/DataChannelController';
-import {DataChannelLatencyTestRequest, DataChannelLatencyTestResponse} from '../DataChannel/DataChannelLatencyTestResults';
+import {
+    DataChannelLatencyTestRequest,
+    DataChannelLatencyTestResponse
+} from '../DataChannel/DataChannelLatencyTestResults';
 import {DataChannelSender} from '../DataChannel/DataChannelSender';
-import {InitialSettings,} from '../DataChannel/InitialSettings';
+import {
+    InitialSettings,
+} from '../DataChannel/InitialSettings';
 import {LatencyTestResults} from '../DataChannel/LatencyTestResults';
 import {FreezeFrameController} from '../FreezeFrame/FreezeFrameController';
 import {GamePadController} from '../Inputs/GamepadController';
@@ -23,7 +43,18 @@ import {SendMessageController} from '../UeInstanceMessage/SendMessageController'
 import {MessageDirection, StreamMessageController} from '../UeInstanceMessage/StreamMessageController';
 import {ToStreamerMessagesController} from '../UeInstanceMessage/ToStreamerMessagesController';
 import {CoordinateConverter, UnquantizedDenormalizedUnsignedCoord} from '../Util/CoordinateConverter';
-import {DataChannelCloseEvent, DataChannelErrorEvent, DataChannelOpenEvent, HideFreezeFrameEvent, LoadFreezeFrameEvent, PlayStreamErrorEvent, PlayStreamEvent, PlayStreamRejectedEvent, StreamerIDChangedMessageEvent, StreamerListMessageEvent} from '../Util/EventEmitter';
+import {
+    DataChannelCloseEvent,
+    DataChannelErrorEvent,
+    DataChannelOpenEvent,
+    HideFreezeFrameEvent,
+    LoadFreezeFrameEvent,
+    PlayStreamErrorEvent,
+    PlayStreamEvent,
+    PlayStreamRejectedEvent,
+    StreamerIDChangedMessageEvent,
+    StreamerListMessageEvent
+} from '../Util/EventEmitter';
 import {FileTemplate, FileUtil} from '../Util/FileUtil';
 import {IURLSearchParams} from '../Util/IURLSearchParams';
 import {StreamController} from '../VideoPlayer/StreamController';

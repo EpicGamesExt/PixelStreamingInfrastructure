@@ -1,12 +1,30 @@
 import {BaseMessage, MessageHelpers, Messages} from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
 
 import {mockHTMLMediaElement, mockMediaStream, unmockMediaStream} from '../__test__/mockMediaStream';
-import {mockRTCPeerConnection, MockRTCPeerConnectionSpyFunctions, MockRTCPeerConnectionTriggerFunctions, unmockRTCPeerConnection} from '../__test__/mockRTCPeerConnection';
+import {
+    mockRTCPeerConnection,
+    MockRTCPeerConnectionSpyFunctions,
+    MockRTCPeerConnectionTriggerFunctions,
+    unmockRTCPeerConnection
+} from '../__test__/mockRTCPeerConnection';
 import {mockRTCRtpReceiver, unmockRTCRtpReceiver} from '../__test__/mockRTCRtpReceiver';
-import {mockWebSocket, MockWebSocketSpyFunctions, MockWebSocketTriggerFunctions, unmockWebSocket} from '../__test__/mockWebSocket';
-import {Config, NumericParameters,} from '../Config/Config';
+import {
+    mockWebSocket,
+    MockWebSocketSpyFunctions,
+    MockWebSocketTriggerFunctions,
+    unmockWebSocket
+} from '../__test__/mockWebSocket';
+import {
+    Config,
+    NumericParameters,
+} from '../Config/Config';
 import {InitialSettings} from '../DataChannel/InitialSettings';
-import {SettingsChangedEvent, StreamerListMessageEvent, WebRtcConnectedEvent, WebRtcSdpEvent} from '../Util/EventEmitter';
+import {
+    SettingsChangedEvent,
+    StreamerListMessageEvent,
+    WebRtcConnectedEvent,
+    WebRtcSdpEvent
+} from '../Util/EventEmitter';
 
 import {PixelStreaming} from './PixelStreaming';
 

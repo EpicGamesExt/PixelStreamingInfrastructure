@@ -133,7 +133,7 @@ IndentWrappedFunctionNames: false
 InsertBraces:    false
 InsertTrailingCommas: None
 JavaScriptQuotes: Single
-JavaScriptWrapImports: false
+JavaScriptWrapImports: true
 KeepEmptyLinesAtTheStartOfBlocks: false
 LambdaBodyIndentation: Signature
 MacroBlockBegin: ''

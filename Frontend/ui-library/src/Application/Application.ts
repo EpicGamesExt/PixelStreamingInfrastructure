@@ -1,7 +1,17 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
-import {AggregatedStats, Flags, InitialSettings, LatencyTestResults, Logger, Messages, PixelStreaming} from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.5';
-import {DataChannelLatencyTestResult} from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.5/types/DataChannel/DataChannelLatencyTestResults';
+import {
+    AggregatedStats,
+    Flags,
+    InitialSettings,
+    LatencyTestResults,
+    Logger,
+    Messages,
+    PixelStreaming
+} from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.5';
+import {
+    DataChannelLatencyTestResult
+} from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.5/types/DataChannel/DataChannelLatencyTestResults';
 
 import {ConfigUI, LightMode} from '../Config/ConfigUI';
 import {ActionOverlay} from '../Overlay/ActionOverlay';
@@ -18,7 +28,12 @@ import {FullScreenIconBase, FullScreenIconExternal} from '../UI/FullscreenIcon';
 import {LabelledButton} from '../UI/LabelledButton';
 import {SettingsPanel} from '../UI/SettingsPanel';
 import {StatsPanel} from '../UI/StatsPanel';
-import {isPanelEnabled, PanelConfiguration, UIElementConfig, UIElementCreationMode} from '../UI/UIConfigurationTypes'
+import {
+    isPanelEnabled,
+    PanelConfiguration,
+    UIElementConfig,
+    UIElementCreationMode
+} from '../UI/UIConfigurationTypes'
 import {VideoQpIndicator} from '../UI/VideoQpIndicator';
 
 
