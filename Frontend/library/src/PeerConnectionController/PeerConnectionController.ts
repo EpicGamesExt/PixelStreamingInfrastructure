@@ -81,9 +81,7 @@ export class PeerConnectionController {
                     this.peerConnection?.setLocalDescription(offer);
                     this.onSendWebRTCOffer(offer);
                 })
-                .catch(() => {
-                    this.showTextOverlaySetupFailure();
-                });
+                .catch(() => { this.showTextOverlaySetupFailure(); });
         });
     }
 
@@ -119,12 +117,8 @@ export class PeerConnectionController {
                         Answer.sdp = this.mungeSDP(Answer.sdp, useMic);
                         return this.peerConnection?.setLocalDescription(Answer);
                     })
-                    .then(() => {
-                        this.onSendWebRTCAnswer(this.peerConnection?.currentLocalDescription);
-                    })
-                    .catch(() => {
-                        Logger.Error(Logger.GetStackTrace(), 'createAnswer() failed');
-                    });
+                    .then(() => { this.onSendWebRTCAnswer(this.peerConnection?.currentLocalDescription); })
+                    .catch(() => { Logger.Error(Logger.GetStackTrace(), 'createAnswer() failed'); });
             });
         });
     }
@@ -146,9 +140,7 @@ export class PeerConnectionController {
      * Generate Aggregated Stats and then fire a onVideo Stats event
      */
     generateStats() {
-        const statsHandler = (StatsData: RTCStatsReport) => {
-            this.aggregatedStats.processStats(StatsData);
-        };
+        const statsHandler = (StatsData: RTCStatsReport) => { this.aggregatedStats.processStats(StatsData); };
 
         const audioPromise = this.peerConnection?.getStats(this.audioTrack).then(statsHandler);
         const videoPromise = this.peerConnection?.getStats(this.videoTrack).then(statsHandler);
@@ -373,7 +365,7 @@ export class PeerConnectionController {
             }
         }
         if (!hasVideoReceiver) {
-            this.peerConnection?.addTransceiver('video', {direction: 'recvonly'});
+            this.peerConnection?.addTransceiver('video', { direction: 'recvonly' });
         }
 
         if (RTCRtpReceiver.getCapabilities && this.preferredCodec != '') {
@@ -429,7 +421,7 @@ export class PeerConnectionController {
         // Setup a transceiver for sending mic audio to UE and receiving audio from UE
         if (!useMic) {
             if (!hasAudioReceiver) {
-                this.peerConnection?.addTransceiver('audio', {direction: 'recvonly'});
+                this.peerConnection?.addTransceiver('audio', { direction: 'recvonly' });
             }
         } else {
             // set the audio options based on mic usage
@@ -445,7 +437,7 @@ export class PeerConnectionController {
             }
 
             // set the media send options
-            const mediaSendOptions: MediaStreamConstraints = {video: false, audio: audioOptions};
+            const mediaSendOptions: MediaStreamConstraints = { video: false, audio: audioOptions };
 
             // Note using mic on android chrome requires SSL or chrome://flags/
             // "unsafely-treat-insecure-origin-as-secure"
@@ -465,13 +457,13 @@ export class PeerConnectionController {
                 } else {
                     for (const track of stream.getTracks()) {
                         if (track.kind && track.kind == 'audio') {
-                            this.peerConnection?.addTransceiver(track, {direction: 'sendrecv'});
+                            this.peerConnection?.addTransceiver(track, { direction: 'sendrecv' });
                         }
                     }
                 }
             } else {
                 if (!hasAudioReceiver) {
-                    this.peerConnection?.addTransceiver('audio', {direction: 'recvonly'});
+                    this.peerConnection?.addTransceiver('audio', { direction: 'recvonly' });
                 }
             }
         }
@@ -527,7 +519,7 @@ export class PeerConnectionController {
         // discard the session information as we only want media related info
         sections.shift();
         sections.forEach((mediaSection) => {
-            const {codecs} = parseRtpParameters(mediaSection);
+            const { codecs } = parseRtpParameters(mediaSection);
             // Filter only for VPX / H26X / AV1
             const matcher = /(VP\d|H26\d|AV1).*/;
             codecs.forEach((c) => {
@@ -537,7 +529,7 @@ export class PeerConnectionController {
                 if (match !== null) {
                     if (c.name == 'VP9') {
                         // UE answers don't specify profile but we know we want profile 0
-                        c.parameters = {'profile-id': '0'};
+                        c.parameters = { 'profile-id': '0' };
                     }
                     const codecStr: string = c.name + ' ' +
                         Object.keys(c.parameters || {}).map((p) => p + '=' + c.parameters[p]).join(';');

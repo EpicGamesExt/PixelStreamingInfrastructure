@@ -28,9 +28,8 @@ export class AFKController {
         this.config = config;
         this.pixelStreaming = pixelStreaming;
         this.onDismissAfk = onDismissAfk;
-        this.onAFKTimedOutCallback = () => {
-            console.log('AFK timed out, did you want to override this callback?');
-        };
+        this.onAFKTimedOutCallback =
+            () => { console.log('AFK timed out, did you want to override this callback?'); };
     }
 
     /**
@@ -96,12 +95,12 @@ export class AFKController {
 
         // instantiate a new overlay
         this.pixelStreaming.dispatchEvent(
-            new AfkWarningActivateEvent({countDown: this.countDown, dismissAfk: this.onDismissAfk}));
+            new AfkWarningActivateEvent({ countDown: this.countDown, dismissAfk: this.onDismissAfk }));
 
         // update our countDown timer and overlay contents
         this.countDown = this.config.getNumericSettingValue(NumericParameters.AFKCountdownSecs);
         this.countdownActive = true;
-        this.pixelStreaming.dispatchEvent(new AfkWarningUpdateEvent({countDown: this.countDown}));
+        this.pixelStreaming.dispatchEvent(new AfkWarningUpdateEvent({ countDown: this.countDown }));
 
         // if we are in locked mouse exit pointerlock
         if (!this.config.isFlagEnabled(Flags.HoveringMouseMode)) {
@@ -123,7 +122,7 @@ export class AFKController {
                 // switch off the afk feature as stream has closed
                 this.stopAfkWarningTimer();
             } else {
-                this.pixelStreaming.dispatchEvent(new AfkWarningUpdateEvent({countDown: this.countDown}));
+                this.pixelStreaming.dispatchEvent(new AfkWarningUpdateEvent({ countDown: this.countDown }));
             }
         }, 1000);
     }

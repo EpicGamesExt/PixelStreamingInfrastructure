@@ -60,10 +60,8 @@ export class WebXRController {
             navigator
                 .xr
                 /* Request immersive-vr session without any optional features. */
-                .requestSession('immersive-vr', {optionalFeatures: []})
-                .then((session: XRSession) => {
-                    this.onXrSessionStarted(session);
-                });
+                .requestSession('immersive-vr', { optionalFeatures: [] })
+                .then((session: XRSession) => { this.onXrSessionStarted(session); });
         } else {
             this.xrSession.end();
         }
@@ -80,7 +78,7 @@ export class WebXRController {
             return;
         }
         const canvas = document.createElement('canvas');
-        this.gl = canvas.getContext('webgl2', {xrCompatible: true});
+        this.gl = canvas.getContext('webgl2', { xrCompatible: true });
 
         // Set our clear color
         this.gl.clearColor(0.0, 0.0, 0.0, 1);
@@ -247,9 +245,7 @@ export class WebXRController {
         Logger.Log(Logger.GetStackTrace(), 'XR Session started');
 
         this.xrSession = session;
-        this.xrSession.addEventListener('end', () => {
-            this.onXrSessionEnded();
-        });
+        this.xrSession.addEventListener('end', () => { this.onXrSessionEnded(); });
 
         // Initialization
         this.initGL();
@@ -260,7 +256,7 @@ export class WebXRController {
             this.xrRefSpace = refSpace;
 
             // Set up our base layer (i.e. a projection layer that fills the entire XR viewport).
-            this.xrSession.updateRenderState({baseLayer: new XRWebGLLayer(this.xrSession, this.gl)});
+            this.xrSession.updateRenderState({ baseLayer: new XRWebGLLayer(this.xrSession, this.gl) });
 
             // Update target framerate to 90 fps if 90 fps is supported in this XR device
             if (this.xrSession.supportedFrameRates) {
@@ -480,7 +476,7 @@ export class WebXRController {
         this.xrSession.requestAnimationFrame(
             (time: DOMHighResTimeStamp, frame: XRFrame) => this.onXrFrame(time, frame));
 
-        this.onFrame.dispatchEvent(new XrFrameEvent({time, frame}));
+        this.onFrame.dispatchEvent(new XrFrameEvent({ time, frame }));
     }
 
     private updateViews() {
@@ -520,9 +516,7 @@ export class WebXRController {
         if (navigator.xr) {
             return navigator.xr.isSessionSupported(mode);
         } else {
-            return new Promise<boolean>(() => {
-                return false;
-            });
+            return new Promise<boolean>(() => { return false; });
         }
     }
 }

@@ -252,7 +252,7 @@ export class ConfigUI {
         }
     }
 
-    onSettingsChanged({data: {id, target, type}}: SettingsChangedEvent) {
+    onSettingsChanged({ data: { id, target, type } }: SettingsChangedEvent) {
         if (type === 'flag') {
             const _id = id as FlagsIds;
             const _target = target as SettingFlag;

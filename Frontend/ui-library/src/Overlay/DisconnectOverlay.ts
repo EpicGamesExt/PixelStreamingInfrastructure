@@ -37,8 +37,6 @@ export class DisconnectOverlay extends ActionOverlay {
         super(parentElem, DisconnectOverlay.createRootElement(), DisconnectOverlay.createContentElement());
 
         // add the new event listener
-        this.rootElement.addEventListener('click', () => {
-            this.activate();
-        });
+        this.rootElement.addEventListener('click', () => { this.activate(); });
     }
 }

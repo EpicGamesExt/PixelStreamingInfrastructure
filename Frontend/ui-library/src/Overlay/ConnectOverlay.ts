@@ -35,8 +35,6 @@ export class ConnectOverlay extends ActionOverlay {
         super(parentElem, ConnectOverlay.createRootElement(), ConnectOverlay.createContentElement());
 
         // add the new event listener
-        this.rootElement.addEventListener('click', () => {
-            this.activate();
-        });
+        this.rootElement.addEventListener('click', () => { this.activate(); });
     }
 }

@@ -192,7 +192,7 @@ export class AggregatedStats {
                         (this.inboundVideoStats.timestamp - this.lastVideoStats.timestamp);
                     this.inboundVideoStats.bitrate = Math.floor(this.inboundVideoStats.bitrate);
                 }
-                this.lastVideoStats = {...this.inboundVideoStats};
+                this.lastVideoStats = {...this.inboundVideoStats };
                 break;
             case 'audio':
                 // Need to convert to unknown first to remove an error around
@@ -206,7 +206,7 @@ export class AggregatedStats {
                         (this.inboundAudioStats.timestamp - this.lastAudioStats.timestamp);
                     this.inboundAudioStats.bitrate = Math.floor(this.inboundAudioStats.bitrate);
                 }
-                this.lastAudioStats = {...this.inboundAudioStats};
+                this.lastAudioStats = {...this.inboundAudioStats };
                 break;
             default:
                 Logger.Log(Logger.GetStackTrace(), 'Kind is not handled');

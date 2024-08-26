@@ -29,7 +29,8 @@ export class XRGamepadController {
     static deepCopyGamepad(gamepad: Gamepad): Gamepad {
         return JSON.parse(JSON.stringify({
             buttons: gamepad.buttons.map(
-                (b) => JSON.parse(JSON.stringify({pressed: b.pressed, touched: b.touched, value: b.value}))),
+                (b) =>
+                    JSON.parse(JSON.stringify({ pressed: b.pressed, touched: b.touched, value: b.value }))),
             axes: gamepad.axes
         }));
     }
@@ -91,7 +92,11 @@ export class XRGamepadController {
 
             // Handle controller buttons and axes
             if (this.controllers[handedness] === undefined) {
-                this.controllers[handedness] = {prevState: undefined, currentState: undefined, id: undefined};
+                this.controllers[handedness] = {
+                    prevState: undefined,
+                    currentState: undefined,
+                    id: undefined
+                };
                 this.controllers[handedness].prevState = XRGamepadController.deepCopyGamepad(source.gamepad);
             }
 

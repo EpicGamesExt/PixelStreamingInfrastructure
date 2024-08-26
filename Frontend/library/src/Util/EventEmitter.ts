@@ -574,7 +574,7 @@ export class EventEmitter extends EventTarget {
      * @param type event name
      * @param listener event handler function
      */
-    public addEventListener<T extends PixelStreamingEvent['type'], E extends PixelStreamingEvent&{type: T}>(
+    public addEventListener<T extends PixelStreamingEvent['type'], E extends PixelStreamingEvent&{ type: T }>(
         type: T,
         listener: (e: Event&E) => void) {
         super.addEventListener(type, listener);
@@ -586,7 +586,7 @@ export class EventEmitter extends EventTarget {
      * @param listener event handler function
      */
     public removeEventListener<T extends PixelStreamingEvent['type'], E extends PixelStreamingEvent&
-                               {type: T}>(type: T, listener: (e: Event&E) => void) {
+                               { type: T }>(type: T, listener: (e: Event&E) => void) {
         super.removeEventListener(type, listener);
     }
 }

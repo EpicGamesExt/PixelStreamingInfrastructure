@@ -7,11 +7,6 @@ export const mockRTCRtpReceiverImpl = {
 } as any as typeof global.RTCRtpReceiver;
 
 const originalRTCRtpReceiver = global.RTCRtpReceiver;
-export const mockRTCRtpReceiver =
-    () => {
-        global.RTCRtpReceiver = mockRTCRtpReceiverImpl;
-    }
+export const mockRTCRtpReceiver = () => { global.RTCRtpReceiver = mockRTCRtpReceiverImpl;}
 
-export const unmockRTCRtpReceiver = () => {
-    global.RTCRtpReceiver = originalRTCRtpReceiver;
-}
+export const unmockRTCRtpReceiver = () => { global.RTCRtpReceiver = originalRTCRtpReceiver;}

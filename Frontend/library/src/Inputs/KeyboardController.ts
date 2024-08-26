@@ -199,7 +199,7 @@ export class KeyboardController {
         // Backspace is not considered a keypress in JavaScript but we need it
         // to be so characters may be deleted in a UE text entry field.
         if (keyCode === SpecialKeyCodes.backSpace) {
-            document.dispatchEvent(new KeyboardEvent('keypress', {charCode: SpecialKeyCodes.backSpace}));
+            document.dispatchEvent(new KeyboardEvent('keypress', { charCode: SpecialKeyCodes.backSpace }));
         }
 
         if (this.config.isFlagEnabled(Flags.SuppressBrowserKeys) && this.isKeyCodeBrowserKey(keyCode)) {
@@ -256,13 +256,13 @@ export class KeyboardController {
                 // normally triggered
                 this.handleOnKeyDown(new KeyboardEvent(
                     'keydown',
-                    {keyCode: char.toUpperCase().charCodeAt(0), charCode: char.charCodeAt(0)}));
+                    { keyCode: char.toUpperCase().charCodeAt(0), charCode: char.charCodeAt(0) }));
                 this.handleOnKeyPress(new KeyboardEvent(
                     'keypress',
-                    {keyCode: char.toUpperCase().charCodeAt(0), charCode: char.charCodeAt(0)}));
+                    { keyCode: char.toUpperCase().charCodeAt(0), charCode: char.charCodeAt(0) }));
                 this.handleOnKeyUp(new KeyboardEvent(
                     'keyup',
-                    {keyCode: char.toUpperCase().charCodeAt(0), charCode: char.charCodeAt(0)}));
+                    { keyCode: char.toUpperCase().charCodeAt(0), charCode: char.charCodeAt(0) }));
             });
         }
     }

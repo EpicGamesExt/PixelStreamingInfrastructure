@@ -23,15 +23,12 @@ export class CoordinateConverter {
      */
     constructor(videoElementProvider: VideoPlayer) {
         this.videoElementProvider = videoElementProvider;
-        this.normalizeAndQuantizeUnsignedFunc = () => {
-            throw new Error('Normalize and quantize unsigned, method not implemented.');
-        };
-        this.normalizeAndQuantizeSignedFunc = () => {
-            throw new Error('Normalize and unquantize signed, method not implemented.');
-        };
-        this.denormalizeAndUnquantizeUnsignedFunc = () => {
-            throw new Error('Denormalize and unquantize unsigned, method not implemented.');
-        };
+        this.normalizeAndQuantizeUnsignedFunc =
+            () => { throw new Error('Normalize and quantize unsigned, method not implemented.'); };
+        this.normalizeAndQuantizeSignedFunc =
+            () => { throw new Error('Normalize and unquantize signed, method not implemented.'); };
+        this.denormalizeAndUnquantizeUnsignedFunc =
+            () => { throw new Error('Denormalize and unquantize unsigned, method not implemented.'); };
     }
 
     /**

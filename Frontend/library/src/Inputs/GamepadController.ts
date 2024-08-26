@@ -55,7 +55,7 @@ export class GamePadController {
         if (navigator.getGamepads) {
             for (const gamepad of navigator.getGamepads()) {
                 if (gamepad) {
-                    this.gamePadConnectHandler(new GamepadEvent('gamepadconnected', {gamepad}));
+                    this.gamePadConnectHandler(new GamepadEvent('gamepadconnected', { gamepad }));
                 }
             }
         }
@@ -84,7 +84,7 @@ export class GamePadController {
         Logger.Log(Logger.GetStackTrace(), 'Gamepad connect handler', 6);
         const gamepad = gamePadEvent.gamepad;
 
-        const temp: Controller = {currentState: gamepad, prevState: gamepad, id: undefined};
+        const temp: Controller = { currentState: gamepad, prevState: gamepad, id: undefined };
 
         this.controllers.push(temp);
         this.controllers[gamepad.index].currentState = gamepad;

@@ -121,14 +121,13 @@ export class WebRtcPlayerController {
         this.responseController = new ResponseController();
         this.file = new FileTemplate();
 
-        this.sdpConstraints = {offerToReceiveAudio: true, offerToReceiveVideo: true};
+        this.sdpConstraints = { offerToReceiveAudio: true, offerToReceiveVideo: true };
 
         // set up the afk logic class and connect up its method for closing the signaling server
         this.afkController =
             new AFKController(this.config, this.pixelStreaming, this.onAfkTriggered.bind(this));
-        this.afkController.onAFKTimedOutCallback = () => {
-            this.closeSignalingServer('You have been disconnected due to inactivity.', false);
-        };
+        this.afkController.onAFKTimedOutCallback =
+            () => { this.closeSignalingServer('You have been disconnected due to inactivity.', false); };
 
         this.freezeFrameController = new FreezeFrameController(this.pixelStreaming.videoElementParent);
 
@@ -138,16 +137,14 @@ export class WebRtcPlayerController {
         // When in match viewport resolution mode, when the browser viewport is resized we send a resize
         // command back to UE.
         this.videoPlayer.onMatchViewportResolutionCallback = (width: number, height: number) => {
-            const descriptor = {'Resolution.Width': width, 'Resolution.Height': height};
+            const descriptor = { 'Resolution.Width': width, 'Resolution.Height': height };
 
             this.streamMessageController.toStreamerHandlers.get('Command')([JSON.stringify(descriptor)]);
         };
 
         // Every time video player is resized in browser we need to reinitialize the mouse coordinate
         // conversion and freeze frame sizing logic.
-        this.videoPlayer.onResizePlayerCallback = () => {
-            this.setUpMouseAndFreezeFrame();
-        };
+        this.videoPlayer.onResizePlayerCallback = () => { this.setUpMouseAndFreezeFrame(); };
 
         this.streamController = new StreamController(this.videoPlayer);
 
@@ -275,7 +272,7 @@ export class WebRtcPlayerController {
             this.peerConnectionController.peerConnection.close();
             this.peerConnectionController.createPeerConnection(this.peerConfig, this.preferredCodec);
             this.subscribedStream = streamerid;
-            const message = MessageHelpers.createMessage(Messages.subscribe, {streamerId: streamerid});
+            const message = MessageHelpers.createMessage(Messages.subscribe, { streamerId: streamerid });
             this.protocol.sendMessage(message);
         });
 
@@ -334,9 +331,7 @@ export class WebRtcPlayerController {
         this.streamMessageController.registerMessageHandler(
             MessageDirection.FromStreamer,
             'Command',
-            (data: ArrayBuffer) => {
-                this.onCommand(data);
-            });
+            (data: ArrayBuffer) => { this.onCommand(data); });
         this.streamMessageController.registerMessageHandler(
             MessageDirection.FromStreamer,
             'FreezeFrame',
@@ -782,9 +777,9 @@ export class WebRtcPlayerController {
             Logger.Log(Logger.GetStackTrace(), 'showing freeze frame');
             this.freezeFrameController.showFreezeFrame();
         }
-        setTimeout(() => {
-            this.videoPlayer.setVideoEnabled(false);
-        }, this.freezeFrameController.freezeFrameDelay);
+        setTimeout(
+            () => { this.videoPlayer.setVideoEnabled(false); },
+            this.freezeFrameController.freezeFrameDelay);
     }
 
     /**
@@ -847,7 +842,7 @@ export class WebRtcPlayerController {
         if (!this.videoPlayer.getVideoElement()) {
             const message =
                 'Could not play video stream because the video player was not initialized correctly.';
-            this.pixelStreaming.dispatchEvent(new PlayStreamErrorEvent({message}));
+            this.pixelStreaming.dispatchEvent(new PlayStreamErrorEvent({ message }));
             Logger.Error(Logger.GetStackTrace(), message);
 
             // close the connection
@@ -873,16 +868,14 @@ export class WebRtcPlayerController {
                 this.playVideo();
             } else {
                 this.streamController.audioElement.play()
-                    .then(() => {
-                        this.playVideo();
-                    })
+                    .then(() => { this.playVideo(); })
                     .catch((onRejectedReason) => {
                         Logger.Log(Logger.GetStackTrace(), onRejectedReason);
                         Logger.Log(
                             Logger.GetStackTrace(),
                             'Browser does not support autoplaying video without interaction - to resolve this we are going to show the play button overlay.');
                         this.pixelStreaming.dispatchEvent(
-                            new PlayStreamRejectedEvent({reason: onRejectedReason}));
+                            new PlayStreamRejectedEvent({ reason: onRejectedReason }));
                     });
             }
         } else {
@@ -906,7 +899,7 @@ export class WebRtcPlayerController {
             Logger.Log(
                 Logger.GetStackTrace(),
                 'Browser does not support autoplaying video without interaction - to resolve this we are going to show the play button overlay.');
-            this.pixelStreaming.dispatchEvent(new PlayStreamRejectedEvent({reason: onRejectedReason}));
+            this.pixelStreaming.dispatchEvent(new PlayStreamRejectedEvent({ reason: onRejectedReason }));
         });
     }
 
@@ -1113,7 +1106,7 @@ export class WebRtcPlayerController {
 
         // dispatch this event finally
         this.pixelStreaming.dispatchEvent(
-            new StreamerListMessageEvent({messageStreamerList, autoSelectedStreamerId, wantedStreamerId}));
+            new StreamerListMessageEvent({ messageStreamerList, autoSelectedStreamerId, wantedStreamerId }));
     }
 
     handleStreamerIDChangedMessage(streamerIDChangedMessage: Messages.streamerIdChanged) {
@@ -1148,7 +1141,7 @@ export class WebRtcPlayerController {
         this.subscribedStream = streamerIDChangedMessage.newID;
 
         // notify any listeners
-        this.pixelStreaming.dispatchEvent(new StreamerIDChangedMessageEvent({newID}));
+        this.pixelStreaming.dispatchEvent(new StreamerIDChangedMessageEvent({ newID }));
     }
 
     /**
@@ -1158,7 +1151,7 @@ export class WebRtcPlayerController {
     handleWebRtcAnswer(Answer: Messages.answer) {
         Logger.Log(Logger.GetStackTrace(), `Got answer sdp ${Answer.sdp}`, 6);
 
-        const sdpAnswer: RTCSessionDescriptionInit = {sdp: Answer.sdp, type: 'answer'};
+        const sdpAnswer: RTCSessionDescriptionInit = { sdp: Answer.sdp, type: 'answer' };
 
         this.peerConnectionController.receiveAnswer(sdpAnswer);
         this.handlePostWebrtcNegotiation();
@@ -1177,7 +1170,7 @@ export class WebRtcPlayerController {
             this.peerConnectionController.preferredCodec = '';
         }
 
-        const sdpOffer: RTCSessionDescriptionInit = {sdp: Offer.sdp, type: 'offer'};
+        const sdpOffer: RTCSessionDescriptionInit = { sdp: Offer.sdp, type: 'offer' };
 
         this.peerConnectionController.receiveOffer(sdpOffer, this.config);
         this.handlePostWebrtcNegotiation();
@@ -1189,7 +1182,7 @@ export class WebRtcPlayerController {
      */
     handleWebRtcSFUPeerDatachannels(DataChannels: Messages.peerDataChannels) {
         const SendOptions:
-            RTCDataChannelInit = {ordered: true, negotiated: true, id: DataChannels.sendStreamId};
+            RTCDataChannelInit = { ordered: true, negotiated: true, id: DataChannels.sendStreamId };
 
         const unidirectional = DataChannels.sendStreamId != DataChannels.recvStreamId;
 
@@ -1200,7 +1193,7 @@ export class WebRtcPlayerController {
 
         if (unidirectional) {
             const RecvOptions:
-                RTCDataChannelInit = {ordered: true, negotiated: true, id: DataChannels.recvStreamId};
+                RTCDataChannelInit = { ordered: true, negotiated: true, id: DataChannels.recvStreamId };
 
             this.recvDataChannelController.createDataChannel(
                 this.peerConnectionController.peerConnection,
@@ -1254,7 +1247,7 @@ export class WebRtcPlayerController {
         Logger.Log(Logger.GetStackTrace(), 'OnIceCandidate', 6);
         if (iceEvent.candidate && iceEvent.candidate.candidate) {
             this.protocol.sendMessage(
-                MessageHelpers.createMessage(Messages.iceCandidate, {candidate: iceEvent.candidate}));
+                MessageHelpers.createMessage(Messages.iceCandidate, { candidate: iceEvent.candidate }));
         }
     }
 
@@ -1359,7 +1352,7 @@ export class WebRtcPlayerController {
         this.latencyStartTime = Date.now();
 
         this.streamMessageController.toStreamerHandlers.get('LatencyTest')(
-            [JSON.stringify({StartTime: this.latencyStartTime})]);
+            [JSON.stringify({ StartTime: this.latencyStartTime })]);
     }
 
     /**
@@ -1384,7 +1377,7 @@ export class WebRtcPlayerController {
 
         if (minQP != null) {
             this.streamMessageController.toStreamerHandlers.get('Command')(
-                [JSON.stringify({'Encoder.MinQP': minQP})]);
+                [JSON.stringify({ 'Encoder.MinQP': minQP })]);
         }
     }
 
@@ -1402,7 +1395,7 @@ export class WebRtcPlayerController {
 
         if (maxQP != null) {
             this.streamMessageController.toStreamerHandlers.get('Command')(
-                [JSON.stringify({'Encoder.MaxQP': maxQP})]);
+                [JSON.stringify({ 'Encoder.MaxQP': maxQP })]);
         }
     }
 
@@ -1416,7 +1409,7 @@ export class WebRtcPlayerController {
         Logger.Log(Logger.GetStackTrace(), `WebRTC Min Bitrate=${minBitrate}`, 6);
         if (minBitrate != null) {
             this.streamMessageController.toStreamerHandlers.get('Command')(
-                [JSON.stringify({'WebRTC.MinBitrate': minBitrate})]);
+                [JSON.stringify({ 'WebRTC.MinBitrate': minBitrate })]);
         }
     }
 
@@ -1430,7 +1423,7 @@ export class WebRtcPlayerController {
         Logger.Log(Logger.GetStackTrace(), `WebRTC Max Bitrate=${maxBitrate}`, 6);
         if (maxBitrate != null) {
             this.streamMessageController.toStreamerHandlers.get('Command')(
-                [JSON.stringify({'WebRTC.MaxBitrate': maxBitrate})]);
+                [JSON.stringify({ 'WebRTC.MaxBitrate': maxBitrate })]);
         }
     }
 
@@ -1444,11 +1437,11 @@ export class WebRtcPlayerController {
         Logger.Log(Logger.GetStackTrace(), `WebRTC FPS=${fps}`, 6);
         if (fps != null) {
             this.streamMessageController.toStreamerHandlers.get('Command')(
-                [JSON.stringify({'WebRTC.Fps': fps})]);
+                [JSON.stringify({ 'WebRTC.Fps': fps })]);
 
             /* TODO: Remove when UE 4.27 unsupported. */
             this.streamMessageController.toStreamerHandlers.get('Command')(
-                [JSON.stringify({'WebRTC.MaxFps': fps})]);
+                [JSON.stringify({ 'WebRTC.MaxFps': fps })]);
         }
     }
 
@@ -1458,7 +1451,7 @@ export class WebRtcPlayerController {
     sendShowFps(): void {
         Logger.Log(Logger.GetStackTrace(), '----   Sending show stat to UE   ----', 6);
 
-        this.streamMessageController.toStreamerHandlers.get('Command')([JSON.stringify({'stat.fps': ''})]);
+        this.streamMessageController.toStreamerHandlers.get('Command')([JSON.stringify({ 'stat.fps': '' })]);
     }
 
     /**
@@ -1688,9 +1681,8 @@ export class WebRtcPlayerController {
         this.gamePadController?.unregisterGamePadEvents();
         if (isEnabled) {
             this.gamePadController = this.inputClassesFactory.registerGamePad();
-            this.gamePadController.onGamepadConnected = () => {
-                this.streamMessageController.toStreamerHandlers.get('GamepadConnected')();
-            };
+            this.gamePadController.onGamepadConnected =
+                () => { this.streamMessageController.toStreamerHandlers.get('GamepadConnected')(); };
             this.gamePadController.onGamepadDisconnected = (controllerIdx: number) => {
                 this.streamMessageController.toStreamerHandlers.get('GamepadDisconnected')([controllerIdx]);
             };
@@ -1699,11 +1691,11 @@ export class WebRtcPlayerController {
 
     registerDataChannelEventEmitters(dataChannel: DataChannelController) {
         dataChannel.onOpen = (label, event) =>
-            this.pixelStreaming.dispatchEvent(new DataChannelOpenEvent({label, event}));
+            this.pixelStreaming.dispatchEvent(new DataChannelOpenEvent({ label, event }));
         dataChannel.onClose = (label, event) =>
-            this.pixelStreaming.dispatchEvent(new DataChannelCloseEvent({label, event}));
+            this.pixelStreaming.dispatchEvent(new DataChannelCloseEvent({ label, event }));
         dataChannel.onError = (label, event) =>
-            this.pixelStreaming.dispatchEvent(new DataChannelErrorEvent({label, event}));
+            this.pixelStreaming.dispatchEvent(new DataChannelErrorEvent({ label, event }));
     }
 
     public registerMessageHandler(

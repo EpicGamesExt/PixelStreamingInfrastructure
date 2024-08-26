@@ -97,7 +97,7 @@ export class DataChannelLatencyTest {
         downloadButton.classList.add('streamTools-button');
         downloadButton.classList.add('btn-flat');
         downloadButton.onclick = () => {
-            const file = new Blob([result.exportLatencyAsCSV()], {type: 'text/plain'});
+            const file = new Blob([result.exportLatencyAsCSV()], { type: 'text/plain' });
             const a = document.createElement('a');
             const url = URL.createObjectURL(file);
             a.href = url;

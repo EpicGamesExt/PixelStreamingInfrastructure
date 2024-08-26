@@ -53,10 +53,10 @@ export class PixelStreamingApplicationStyle {
             '--color10': '#2e0052',
             '--color11': 'rgba(65,0,139,1)'
         },
-        '.noselect': {userSelect: 'none'},
-        '#playerUI': {width: '100%', height: '100%', position: 'relative'},
+        '.noselect': { userSelect: 'none' },
+        '#playerUI': { width: '100%', height: '100%', position: 'relative' },
         '#videoElementParent':
-            {width: '100%', height: '100%', position: 'absolute', backgroundColor: 'var(--color1)'},
+            { width: '100%', height: '100%', position: 'absolute', backgroundColor: 'var(--color1)' },
         '#uiFeatures': {
             width: '100%',
             height: '100%',
@@ -82,9 +82,9 @@ export class PixelStreamingApplicationStyle {
             left: '125%',
             zIndex: '20'
         },
-        '.UiTool:hover .tooltiptext': {visibility: 'visible', backgroundColor: 'var(--color7)'},
+        '.UiTool:hover .tooltiptext': { visibility: 'visible', backgroundColor: 'var(--color7)' },
         '#connection .tooltiptext':
-            {top: '125%', transform: 'translateX(-25%)', left: '0', zIndex: '20', padding: '5px 10px'},
+            { top: '125%', transform: 'translateX(-25%)', left: '0', zIndex: '20', padding: '5px 10px' },
         '#connection': {
             position: 'absolute',
             bottom: '8%',
@@ -105,14 +105,14 @@ export class PixelStreamingApplicationStyle {
             width: 'max-content',
             fallbacks:
                 [
-                    {width: 'max-content'},
-                    {border: '3px solid var(--color3)'},
-                    {padding: '5px 10px'},
-                    {zIndex: '20'},
-                    {left: '0'},
-                    {transform: 'translateX(-50%)'},
-                    {top: '125%'},
-                    {display: 'block'}
+                    { width: 'max-content' },
+                    { border: '3px solid var(--color3)' },
+                    { padding: '5px 10px' },
+                    { zIndex: '20' },
+                    { left: '0' },
+                    { transform: 'translateX(-50%)' },
+                    { top: '125%' },
+                    { display: 'block' }
                 ]
         },
         '#controls': {
@@ -131,10 +131,10 @@ export class PixelStreamingApplicationStyle {
             lineHeight: '1.75rem',
             padding: '0.5rem'
         },
-        '#controls #additionalinfo': {textAlign: 'center', fontFamily: '\'Montserrat\', sans-serif'},
-        '#fullscreen-btn': {padding: '0.6rem !important'},
-        '#minimizeIcon': {display: 'none'},
-        '#settingsBtn, #statsBtn': {cursor: 'pointer'},
+        '#controls #additionalinfo': { textAlign: 'center', fontFamily: '\'Montserrat\', sans-serif' },
+        '#fullscreen-btn': { padding: '0.6rem !important' },
+        '#minimizeIcon': { display: 'none' },
+        '#settingsBtn, #statsBtn': { cursor: 'pointer' },
         '#uiFeatures button': {
             backgroundColor: 'var(--color7)',
             border: '1px solid var(--color7)',
@@ -171,16 +171,16 @@ export class PixelStreamingApplicationStyle {
             cursor: 'pointer',
             textAlign: 'center'
         },
-        '.btn-flat:hover': {backgroundColor: 'var(--color3)', transition: 'ease 0.3s'},
+        '.btn-flat:hover': { backgroundColor: 'var(--color3)', transition: 'ease 0.3s' },
         '.btn-flat:disabled': {
             background: 'var(--color7)',
             borderColor: 'var(--color3)',
             color: 'var(--color3)',
             cursor: 'default'
         },
-        '.btn-flat:active': {backgroundColor: 'transparent'},
-        '.btn-flat:focus': {outline: 'none'},
-        '#uiFeatures img': {width: '100%', height: '100%'},
+        '.btn-flat:active': { backgroundColor: 'transparent' },
+        '.btn-flat:focus': { outline: 'none' },
+        '#uiFeatures img': { width: '100%', height: '100%' },
         '.panel-wrap': {
             position: 'absolute',
             top: '0',
@@ -196,8 +196,8 @@ export class PixelStreamingApplicationStyle {
             overflowX: 'hidden',
             backgroundColor: 'var(--color0)'
         },
-        '.panel-wrap-visible': {transform: 'translateX(0%)'},
-        '.panel': {overflowY: 'auto', padding: '1em'},
+        '.panel-wrap-visible': { transform: 'translateX(0%)' },
+        '.panel': { overflowY: 'auto', padding: '1em' },
         '#settingsHeading, #statsHeading': {
             display: 'inline-block',
             fontSize: '2em',
@@ -217,17 +217,17 @@ export class PixelStreamingApplicationStyle {
             float: 'right'
         },
         '#settingsClose:after, #statsClose:after':
-            {paddingLeft: '0.5rem', display: 'inline-block', content: '"\\00d7"'},
-        '#settingsClose:hover, #statsClose:hover': {color: 'var(--color3)', transition: 'ease 0.3s'},
-        '#settingsContent, #statsContent': {marginLeft: '2rem', marginRight: '2rem'},
+            { paddingLeft: '0.5rem', display: 'inline-block', content: '"\\00d7"' },
+        '#settingsClose:hover, #statsClose:hover': { color: 'var(--color3)', transition: 'ease 0.3s' },
+        '#settingsContent, #statsContent': { marginLeft: '2rem', marginRight: '2rem' },
         '.setting': {
             display: 'flex',
             flexDirection: 'row',
             justifyContent: 'space-between',
             padding: '0.15rem 10px 0.15rem 10px'
         },
-        '.settings-text': {color: 'var(--color2)', verticalAlign: 'middle', fontWeight: 'normal'},
-        '.settings-option': {width: '100%', textOverflow: 'ellipsis', whiteSpace: 'nowrap'},
+        '.settings-text': { color: 'var(--color2)', verticalAlign: 'middle', fontWeight: 'normal' },
+        '.settings-option': { width: '100%', textOverflow: 'ellipsis', whiteSpace: 'nowrap' },
         '#connectOverlay, #playOverlay, #infoOverlay, #errorOverlay, #afkOverlay, #disconnectOverlay': {
             zIndex: '30',
             position: 'absolute',
@@ -241,25 +241,25 @@ export class PixelStreamingApplicationStyle {
             textTransform: 'uppercase'
         },
         '.clickableState':
-            {alignItems: 'center', justifyContent: 'center', display: 'flex', cursor: 'pointer'},
-        '.textDisplayState': {display: 'flex'},
-        '.hiddenState': {display: 'none'},
-        '#playButton, #connectButton': {display: 'inline-block', height: 'auto', zIndex: '30'},
-        'img#playButton': {maxWidth: '241px', width: '10%'},
-        '#uiInteraction': {position: 'fixed'},
-        '#UIInteractionButtonBoundary': {padding: '2px'},
-        '#UIInteractionButton': {cursor: 'pointer'},
-        '#hiddenInput': {position: 'absolute', left: '-10%', width: '0px', opacity: '0'},
-        '#editTextButton': {position: 'absolute', height: '40px', width: '40px'},
-        '.btn-overlay': {verticalAlign: 'middle', display: 'inline-block'},
-        '.tgl-switch': {verticalAlign: 'middle', display: 'inline-block'},
-        '.tgl-switch .tgl': {display: 'none'},
+            { alignItems: 'center', justifyContent: 'center', display: 'flex', cursor: 'pointer' },
+        '.textDisplayState': { display: 'flex' },
+        '.hiddenState': { display: 'none' },
+        '#playButton, #connectButton': { display: 'inline-block', height: 'auto', zIndex: '30' },
+        'img#playButton': { maxWidth: '241px', width: '10%' },
+        '#uiInteraction': { position: 'fixed' },
+        '#UIInteractionButtonBoundary': { padding: '2px' },
+        '#UIInteractionButton': { cursor: 'pointer' },
+        '#hiddenInput': { position: 'absolute', left: '-10%', width: '0px', opacity: '0' },
+        '#editTextButton': { position: 'absolute', height: '40px', width: '40px' },
+        '.btn-overlay': { verticalAlign: 'middle', display: 'inline-block' },
+        '.tgl-switch': { verticalAlign: 'middle', display: 'inline-block' },
+        '.tgl-switch .tgl': { display: 'none' },
         '.tgl, .tgl:after, .tgl:before, .tgl *, .tgl *:after, .tgl *:before, .tgl+.tgl-slider':
-            {'-webkit-box-sizing': 'border-box', boxSizing: 'border-box'},
+            { '-webkit-box-sizing': 'border-box', boxSizing: 'border-box' },
         '.tgl::-moz-selection, .tgl:after::-moz-selection, .tgl:before::-moz-selection, .tgl *::-moz-selection, .tgl *:after::-moz-selection, .tgl *:before::-moz-selection, .tgl+.tgl-slider::-moz-selection':
-            {background: 'none'},
+            { background: 'none' },
         '.tgl::selection, .tgl:after::selection, .tgl:before::selection, .tgl *::selection, .tgl *:after::selection, .tgl *:before::selection, .tgl+.tgl-slider::selection':
-            {background: 'none'},
+            { background: 'none' },
         '.tgl-slider': {},
         '.tgl+.tgl-slider': {
             outline: '0',
@@ -271,9 +271,9 @@ export class PixelStreamingApplicationStyle {
             userSelect: 'none'
         },
         '.tgl+.tgl-slider:after, .tgl+.tgl-slider:before':
-            {position: 'relative', display: 'block', content: '""', width: '50%', height: '100%'},
-        '.tgl+.tgl-slider:after': {left: '0'},
-        '.tgl+.tgl-slider:before': {display: 'none'},
+            { position: 'relative', display: 'block', content: '""', width: '50%', height: '100%' },
+        '.tgl+.tgl-slider:after': { left: '0' },
+        '.tgl+.tgl-slider:before': { display: 'none' },
         '.tgl-flat+.tgl-slider': {
             padding: '2px',
             '-webkit-transition': 'all .2s ease',
@@ -289,9 +289,9 @@ export class PixelStreamingApplicationStyle {
             content: '""',
             borderRadius: '1em'
         },
-        '.tgl-flat:checked+.tgl-slider': {border: '3px solid var(--color3)'},
-        '.tgl-flat:checked+.tgl-slider:after': {left: '50%', background: 'var(--color3)'},
-        '.btn-apply': {display: 'block !important', marginLeft: 'auto', marginRight: 'auto', width: '40%'},
+        '.tgl-flat:checked+.tgl-slider': { border: '3px solid var(--color3)' },
+        '.tgl-flat:checked+.tgl-slider:after': { left: '50%', background: 'var(--color3)' },
+        '.btn-apply': { display: 'block !important', marginLeft: 'auto', marginRight: 'auto', width: '40%' },
         '.form-control': {
             backgroundColor: 'var(--color7)',
             border: '2px solid var(--color7)',
@@ -300,7 +300,7 @@ export class PixelStreamingApplicationStyle {
             textAlign: 'right',
             fontFamily: 'inherit'
         },
-        '.form-control:hover': {borderColor: 'var(--color7)'},
+        '.form-control:hover': { borderColor: 'var(--color7)' },
         '.form-group': {
             paddingTop: '4px',
             display: 'grid',
@@ -309,7 +309,7 @@ export class PixelStreamingApplicationStyle {
             paddingRight: '10px',
             paddingLeft: '10px'
         },
-        '.form-group label': {verticalAlign: 'middle', fontWeight: 'normal'},
+        '.form-group label': { verticalAlign: 'middle', fontWeight: 'normal' },
         '.settingsContainer': {
             display: 'flex',
             flexDirection: 'column',
@@ -326,7 +326,7 @@ export class PixelStreamingApplicationStyle {
             flexDirection: 'row',
             alignItems: 'baseline'
         },
-        '.collapse': {paddingLeft: '5%'},
+        '.collapse': { paddingLeft: '5%' },
         '#streamTools': {
             borderBottomRightRadius: '5px',
             borderBottomLeftRadius: '5px',
@@ -338,7 +338,7 @@ export class PixelStreamingApplicationStyle {
             border: '4px solid var(--colour8)',
             borderTopWidth: '0px'
         },
-        '.settingsHeader': {fontStyle: 'italic'},
+        '.settingsHeader': { fontStyle: 'italic' },
         '#streamToolsHeader': {
             display: 'flex',
             flexDirection: 'row',
@@ -352,10 +352,10 @@ export class PixelStreamingApplicationStyle {
             fontWeight: 'lighter',
             color: 'var(--color7)'
         },
-        '.streamTools-shown>#streamToolsSettings, .streamTools-shown>#streamToolsStats': {display: 'block'},
-        '#streamToolsToggle': {width: '100%'},
-        '#qualityStatus': {fontSize: '37px', paddingRight: '4px'},
-        '.svgIcon': {fill: 'var(--color2)'}
+        '.streamTools-shown>#streamToolsSettings, .streamTools-shown>#streamToolsStats': { display: 'block' },
+        '#streamToolsToggle': { width: '100%' },
+        '#qualityStatus': { fontSize: '37px', paddingRight: '4px' },
+        '.svgIcon': { fill: 'var(--color2)' }
     };
 
     customStyles?: Partial<Styles>;
@@ -368,7 +368,7 @@ export class PixelStreamingApplicationStyle {
         darkModePalette?: ColorPalette;
         jssInsertionPoint?: string | HTMLElement;
     }) {
-        const {customStyles, lightModePalette, darkModePalette, jssInsertionPoint} = options ?? {};
+        const { customStyles, lightModePalette, darkModePalette, jssInsertionPoint } = options ?? {};
         // One time setup with default plugins and settings.
         const jssOptions = {
             // JSS has many interesting plugins we may wish to turn on
@@ -390,7 +390,7 @@ export class PixelStreamingApplicationStyle {
         // const {pixelStreamingClasses} = jss.createStyleSheet(styles).attach();
 
         // attach generated style sheet to page
-        jss.createStyleSheet({'@global': {...this.defaultStyles, ...this.customStyles}}).attach();
+        jss.createStyleSheet({ '@global': {...this.defaultStyles, ...this.customStyles } }).attach();
     }
 
     applyPalette(palette: ColorPalette) {

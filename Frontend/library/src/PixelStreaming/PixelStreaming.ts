@@ -147,13 +147,13 @@ export class PixelStreaming {
                 }
             });
 
-        this.config._addOnSettingChangedListener(Flags.AFKDetection, (isAFKEnabled: boolean) => {
-            this._webRtcController.setAfkEnabled(isAFKEnabled);
-        });
+        this.config._addOnSettingChangedListener(
+            Flags.AFKDetection,
+            (isAFKEnabled: boolean) => { this._webRtcController.setAfkEnabled(isAFKEnabled); });
 
-        this.config._addOnSettingChangedListener(Flags.MatchViewportResolution, () => {
-            this._webRtcController.videoPlayer.updateVideoStreamSize();
-        });
+        this.config._addOnSettingChangedListener(
+            Flags.MatchViewportResolution,
+            () => { this._webRtcController.videoPlayer.updateVideoStreamSize(); });
 
         this.config._addOnSettingChangedListener(Flags.HoveringMouseMode, (isHoveringMouse: boolean) => {
             this.config.setFlagLabel(
@@ -163,21 +163,21 @@ export class PixelStreaming {
         });
 
         // user input
-        this.config._addOnSettingChangedListener(Flags.KeyboardInput, (isEnabled: boolean) => {
-            this._webRtcController.setKeyboardInputEnabled(isEnabled);
-        });
+        this.config._addOnSettingChangedListener(
+            Flags.KeyboardInput,
+            (isEnabled: boolean) => { this._webRtcController.setKeyboardInputEnabled(isEnabled); });
 
-        this.config._addOnSettingChangedListener(Flags.MouseInput, (isEnabled: boolean) => {
-            this._webRtcController.setMouseInputEnabled(isEnabled);
-        });
+        this.config._addOnSettingChangedListener(
+            Flags.MouseInput,
+            (isEnabled: boolean) => { this._webRtcController.setMouseInputEnabled(isEnabled); });
 
-        this.config._addOnSettingChangedListener(Flags.TouchInput, (isEnabled: boolean) => {
-            this._webRtcController.setTouchInputEnabled(isEnabled);
-        });
+        this.config._addOnSettingChangedListener(
+            Flags.TouchInput,
+            (isEnabled: boolean) => { this._webRtcController.setTouchInputEnabled(isEnabled); });
 
-        this.config._addOnSettingChangedListener(Flags.GamepadInput, (isEnabled: boolean) => {
-            this._webRtcController.setGamePadInputEnabled(isEnabled);
-        });
+        this.config._addOnSettingChangedListener(
+            Flags.GamepadInput,
+            (isEnabled: boolean) => { this._webRtcController.setGamePadInputEnabled(isEnabled); });
 
         // encoder settings
         this.config._addOnNumericSettingChangedListener(NumericParameters.MinQP, (newValue: number) => {
@@ -383,7 +383,7 @@ export class PixelStreaming {
      */
     _onDisconnect(eventString: string, allowClickToReconnect: boolean) {
         this._eventEmitter.dispatchEvent(new WebRtcDisconnectedEvent(
-            {eventString: eventString, allowClickToReconnect: allowClickToReconnect}));
+            { eventString: eventString, allowClickToReconnect: allowClickToReconnect }));
     }
 
     /**
@@ -420,11 +420,11 @@ export class PixelStreaming {
      * @param latency - latency test results object
      */
     _onLatencyTestResult(latencyTimings: LatencyTestResults) {
-        this._eventEmitter.dispatchEvent(new LatencyTestResultEvent({latencyTimings}));
+        this._eventEmitter.dispatchEvent(new LatencyTestResultEvent({ latencyTimings }));
     }
 
     _onDataChannelLatencyTestResponse(response: DataChannelLatencyTestResponse) {
-        this._eventEmitter.dispatchEvent(new DataChannelLatencyTestResponseEvent({response}));
+        this._eventEmitter.dispatchEvent(new DataChannelLatencyTestResponseEvent({ response }));
     }
 
     /**
@@ -441,7 +441,7 @@ export class PixelStreaming {
             this._inputController,
             this._webRtcController.videoAvgQp);
 
-        this._eventEmitter.dispatchEvent(new StatsReceivedEvent({aggregatedStats: videoStats}));
+        this._eventEmitter.dispatchEvent(new StatsReceivedEvent({ aggregatedStats: videoStats }));
     }
 
     /**
@@ -449,7 +449,7 @@ export class PixelStreaming {
      * @param QP - the quality number of the stream
      */
     _onVideoEncoderAvgQP(QP: number) {
-        this._eventEmitter.dispatchEvent(new VideoEncoderAvgQPEvent({avgQP: QP}));
+        this._eventEmitter.dispatchEvent(new VideoEncoderAvgQPEvent({ avgQP: QP }));
     }
 
     /**
@@ -457,7 +457,7 @@ export class PixelStreaming {
      * @param settings - initial UE app settings
      */
     _onInitialSettings(settings: InitialSettings) {
-        this._eventEmitter.dispatchEvent(new InitialSettingsEvent({settings}));
+        this._eventEmitter.dispatchEvent(new InitialSettingsEvent({ settings }));
         if (settings.PixelStreamingSettings) {
             this.allowConsoleCommands = settings.PixelStreamingSettings.AllowPixelStreamingCommands ?? false;
             if (this.allowConsoleCommands === false) {
@@ -517,7 +517,7 @@ export class PixelStreaming {
     }
 
     _onPlayerCount(playerCount: number) {
-        this._eventEmitter.dispatchEvent(new PlayerCountEvent({count: playerCount}));
+        this._eventEmitter.dispatchEvent(new PlayerCountEvent({ count: playerCount }));
     }
 
     // Sets up to emit the webrtc tcp relay detect event
@@ -568,10 +568,10 @@ export class PixelStreaming {
             this._dataChannelLatencyTestController = new DataChannelLatencyTestController(
                 this._webRtcController.sendDataChannelLatencyTest.bind(this._webRtcController),
                 (result: DataChannelLatencyTestResult) => {
-                    this._eventEmitter.dispatchEvent(new DataChannelLatencyTestResultEvent({result}))});
-            this.addEventListener('dataChannelLatencyTestResponse', ({data: {response}}) => {
-                this._dataChannelLatencyTestController.receive(response);
-            })
+                    this._eventEmitter.dispatchEvent(new DataChannelLatencyTestResultEvent({ result })) });
+            this.addEventListener(
+                'dataChannelLatencyTestResponse',
+                ({ data: { response } }) => { this._dataChannelLatencyTestController.receive(response); })
         }
         return this._dataChannelLatencyTestController.start(config);
     }
@@ -675,7 +675,7 @@ export class PixelStreaming {
      * @param type event name
      * @param listener event handler function
      */
-    public addEventListener<T extends PixelStreamingEvent['type'], E extends PixelStreamingEvent&{type: T}>(
+    public addEventListener<T extends PixelStreamingEvent['type'], E extends PixelStreamingEvent&{ type: T }>(
         type: T,
         listener: (e: Event&E) => void) {
         this._eventEmitter.addEventListener(type, listener);
@@ -687,7 +687,7 @@ export class PixelStreaming {
      * @param listener event handler function
      */
     public removeEventListener<T extends PixelStreamingEvent['type'], E extends PixelStreamingEvent&
-                               {type: T}>(type: T, listener: (e: Event&E) => void) {
+                               { type: T }>(type: T, listener: (e: Event&E) => void) {
         this._eventEmitter.removeEventListener(type, listener);
     }
 

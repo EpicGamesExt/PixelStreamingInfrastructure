@@ -52,9 +52,7 @@ export class TouchController implements ITouchController {
         Logger.Log(Logger.GetStackTrace(), 'Touch Events Registered', 6);
 
         // is this strictly necessary?
-        const preventOnTouchMove = (event: TouchEvent) => {
-            event.preventDefault();
-        };
+        const preventOnTouchMove = (event: TouchEvent) => { event.preventDefault(); };
         document.addEventListener('touchmove', preventOnTouchMove);
         this.touchEventListenerTracker.addUnregisterCallback(
             () => document.removeEventListener('touchmove', preventOnTouchMove));

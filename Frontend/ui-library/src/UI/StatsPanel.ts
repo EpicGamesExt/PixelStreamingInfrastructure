@@ -146,12 +146,10 @@ export class StatsPanel {
 
     public onVideoInitialized(stream: PixelStreaming): void {
         // starting a latency check
-        this.latencyTest.latencyTestButton.onclick = () => {
-            stream.requestLatencyTest();
-        };
+        this.latencyTest.latencyTestButton.onclick = () => { stream.requestLatencyTest(); };
         this.dataChannelLatencyTest.latencyTestButton.onclick = () => {
             const started = stream.requestDataChannelLatencyTest(
-                {duration: 1000, rps: 10, requestSize: 200, responseSize: 200});
+                { duration: 1000, rps: 10, requestSize: 200, responseSize: 200 });
             if (started) {
                 this.dataChannelLatencyTest.handleTestStart();
             }
@@ -206,7 +204,7 @@ export class StatsPanel {
      */
     public handleStats(stats: AggregatedStats) {
         // format numbering based on the browser language
-        const numberFormat = new Intl.NumberFormat(window.navigator.language, {maximumFractionDigits: 0});
+        const numberFormat = new Intl.NumberFormat(window.navigator.language, { maximumFractionDigits: 0 });
 
         // Inbound data
         const inboundData = MathUtils.formatBytes(stats.inboundVideoStats.bytesReceived, 2);

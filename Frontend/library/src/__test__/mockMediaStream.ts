@@ -140,7 +140,7 @@ export const unmockMediaStream =
     }
 
 export const mockHTMLMediaElement = (options: {ableToPlay: boolean, readyState?: number }) => {
-    const {ableToPlay, readyState} = options;
+    const { ableToPlay, readyState } = options;
     jest.spyOn(HTMLMediaElement.prototype, 'play').mockReturnValue(mockHTMLMediaElementPlay(ableToPlay));
     if (readyState !== undefined) {
         jest.spyOn(HTMLMediaElement.prototype, 'readyState', 'get').mockReturnValue(readyState);

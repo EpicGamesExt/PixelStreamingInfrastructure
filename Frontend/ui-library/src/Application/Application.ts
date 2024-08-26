@@ -144,9 +144,10 @@ export class Application {
 
         this.setColorMode(this.configUI.isCustomFlagEnabled(LightMode));
 
-        this.stream.config._addOnSettingChangedListener(Flags.HideUI, (isEnabled: boolean) => {
-            this._uiFeatureElement.style.visibility = isEnabled ? 'hidden' : 'visible';
-        });
+        this.stream.config._addOnSettingChangedListener(
+            Flags.HideUI,
+            (isEnabled:
+                 boolean) => { this._uiFeatureElement.style.visibility = isEnabled ? 'hidden' : 'visible'; });
 
         if (this.stream.config.isFlagEnabled(Flags.HideUI)) {
             this._uiFeatureElement.style.visibility = 'hidden';
@@ -179,7 +180,7 @@ export class Application {
         // so if we are on IPhone and user has not specified explicitly configured UI config for fullscreen
         // button then we should disable this button as it doesn't work.
         if (this._options.fullScreenControlsConfig === undefined && /iPhone/.test(navigator.userAgent)) {
-            this._options.fullScreenControlsConfig = {creationMode: UIElementCreationMode.Disable};
+            this._options.fullScreenControlsConfig = { creationMode: UIElementCreationMode.Disable };
         }
 
         const controlsUIConfig: ControlsUIConfiguration = {
@@ -243,21 +244,15 @@ export class Application {
         if (this.settingsPanel) {
             // Add button for toggle fps
             const showFPSButton = new LabelledButton('Show FPS', 'Toggle');
-            showFPSButton.addOnClickListener(() => {
-                this.stream.requestShowFps();
-            });
+            showFPSButton.addOnClickListener(() => { this.stream.requestShowFps(); });
 
             // Add button for restart stream
             const restartStreamButton = new LabelledButton('Restart Stream', 'Restart');
-            restartStreamButton.addOnClickListener(() => {
-                this.stream.reconnect();
-            });
+            restartStreamButton.addOnClickListener(() => { this.stream.reconnect(); });
 
             // Add button for request keyframe
             const requestKeyframeButton = new LabelledButton('Request keyframe', 'Request');
-            requestKeyframeButton.addOnClickListener(() => {
-                this.stream.requestIframe();
-            });
+            requestKeyframeButton.addOnClickListener(() => { this.stream.requestIframe(); });
 
             const commandsSectionElem =
                 this.configUI.buildSectionWithHeading(this.settingsPanel.settingsContentElement, 'Commands');
@@ -285,14 +280,15 @@ export class Application {
     registerCallbacks() {
         this.stream.addEventListener(
             'afkWarningActivate',
-            ({data: {countDown, dismissAfk}}) => this.showAfkOverlay(countDown, dismissAfk));
+            ({ data: { countDown, dismissAfk } }) => this.showAfkOverlay(countDown, dismissAfk));
         this.stream.addEventListener(
             'afkWarningUpdate',
-            ({data: {countDown}}) => this.afkOverlay.updateCountdown(countDown));
+            ({ data: { countDown } }) => this.afkOverlay.updateCountdown(countDown));
         this.stream.addEventListener('afkWarningDeactivate', () => this.afkOverlay.hide());
         this.stream.addEventListener('afkTimedOut', () => this.afkOverlay.hide());
-        this.stream.addEventListener('videoEncoderAvgQP', ({data:
-                                                                {avgQP}}) => this.onVideoEncoderAvgQP(avgQP));
+        this.stream.addEventListener(
+            'videoEncoderAvgQP',
+            ({ data: { avgQP } }) => this.onVideoEncoderAvgQP(avgQP));
         this.stream.addEventListener('webRtcSdp', () => this.onWebRtcSdp());
         this.stream.addEventListener('webRtcAutoConnect', () => this.onWebRtcAutoConnect());
         this.stream.addEventListener('webRtcConnecting', () => this.onWebRtcConnecting());
@@ -300,37 +296,38 @@ export class Application {
         this.stream.addEventListener('webRtcFailed', () => this.onWebRtcFailed());
         this.stream.addEventListener(
             'webRtcDisconnected',
-            ({data: {eventString, allowClickToReconnect}}) =>
+            ({ data: { eventString, allowClickToReconnect } }) =>
                 this.onDisconnect(eventString, allowClickToReconnect));
         this.stream.addEventListener('videoInitialized', () => this.onVideoInitialized());
         this.stream.addEventListener('streamLoading', () => this.onStreamLoading());
-        this.stream.addEventListener('playStreamError', ({data:
-                                                              {message}}) => this.onPlayStreamError(message));
+        this.stream.addEventListener(
+            'playStreamError',
+            ({ data: { message } }) => this.onPlayStreamError(message));
         this.stream.addEventListener('playStream', () => this.onPlayStream());
         this.stream.addEventListener(
             'playStreamRejected',
-            ({data: {reason}}) => this.onPlayStreamRejected(reason));
+            ({ data: { reason } }) => this.onPlayStreamRejected(reason));
         this.stream.addEventListener(
             'loadFreezeFrame',
-            ({data: {shouldShowPlayOverlay}}) => this.onLoadFreezeFrame(shouldShowPlayOverlay));
+            ({ data: { shouldShowPlayOverlay } }) => this.onLoadFreezeFrame(shouldShowPlayOverlay));
         this.stream.addEventListener(
             'statsReceived',
-            ({data: {aggregatedStats}}) => this.onStatsReceived(aggregatedStats));
+            ({ data: { aggregatedStats } }) => this.onStatsReceived(aggregatedStats));
         this.stream.addEventListener(
             'latencyTestResult',
-            ({data: {latencyTimings}}) => this.onLatencyTestResults(latencyTimings));
+            ({ data: { latencyTimings } }) => this.onLatencyTestResults(latencyTimings));
         this.stream.addEventListener(
             'dataChannelLatencyTestResult',
-            ({data: {result}}) => this.onDataChannelLatencyTestResults(result));
+            ({ data: { result } }) => this.onDataChannelLatencyTestResults(result));
         this.stream.addEventListener(
             'streamerListMessage',
-            ({data: {messageStreamerList, autoSelectedStreamerId, wantedStreamerId}}) =>
+            ({ data: { messageStreamerList, autoSelectedStreamerId, wantedStreamerId } }) =>
                 this.handleStreamerListMessage(
                     messageStreamerList,
                     autoSelectedStreamerId,
                     wantedStreamerId));
         this.stream.addEventListener('settingsChanged', (event) => this.configUI.onSettingsChanged(event));
-        this.stream.addEventListener('playerCount', ({data: {count}}) => this.onPlayerCount(count));
+        this.stream.addEventListener('playerCount', ({ data: { count } }) => this.onPlayerCount(count));
         this.stream.addEventListener(
             'webRtcTCPRelayDetected',
             () => Logger.Warning(

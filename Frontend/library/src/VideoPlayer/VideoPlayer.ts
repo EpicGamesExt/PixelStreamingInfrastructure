@@ -61,9 +61,7 @@ export class VideoPlayer {
             }
         };
 
-        this.videoElement.onloadedmetadata = () => {
-            this.onVideoInitialized();
-        };
+        this.videoElement.onloadedmetadata = () => { this.onVideoInitialized(); };
 
         // set resize events to the windows if it is resized or its orientation is changed
         window.addEventListener('resize', () => this.resizePlayerStyle(), true);
@@ -146,9 +144,7 @@ export class VideoPlayer {
      */
     onOrientationChange() {
         clearTimeout(this.orientationChangeTimeout);
-        this.orientationChangeTimeout = window.setTimeout(() => {
-            this.resizePlayerStyle();
-        }, 500);
+        this.orientationChangeTimeout = window.setTimeout(() => { this.resizePlayerStyle(); }, 500);
     }
 
     /**

@@ -60,7 +60,7 @@ export class MockWebSocketImpl extends WebSocket {
     close(code?: number|undefined, reason?: string|undefined): void {
         super.close(code, reason);
         this._readyState = this.CLOSED;
-        this.triggerOnClose({code, reason});
+        this.triggerOnClose({ code, reason });
     }
 
     send(data: string|Blob|ArrayBufferView|ArrayBufferLike): void {
@@ -80,7 +80,7 @@ export class MockWebSocketImpl extends WebSocket {
     }
 
     triggerOnClose(closeReason?: CloseEventInit) {
-        const reason = closeReason ?? {code: 1, reason: 'mock reason'};
+        const reason = closeReason ?? { code: 1, reason: 'mock reason' };
         const event = new CloseEvent('close', reason);
         this.onclose?.(event);
         spyFunctions.closeSpy?.(event);
@@ -92,14 +92,14 @@ export class MockWebSocketImpl extends WebSocket {
 
     triggerOnMessage(message: BaseMessage) {
         const data = JSON.stringify(message);
-        const event = new MessageEvent('message', {data});
+        const event = new MessageEvent('message', { data });
         this.onmessage?.(event);
         spyFunctions.messageSpy?.(event);
     }
 
     triggerOnMessageBinary(message?: Blob) {
-        const data = message ?? new Blob([JSON.stringify({type: 'test'})], {type: 'application/json'});
-        const event = new MessageEvent('messagebinary', {data});
+        const data = message ?? new Blob([JSON.stringify({ type: 'test' })], { type: 'application/json' });
+        const event = new MessageEvent('messagebinary', { data });
         this.onmessagebinary?.(event);
         spyFunctions.messageBinarySpy?.(event);
     }

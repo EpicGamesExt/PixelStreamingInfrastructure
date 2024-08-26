@@ -16,7 +16,7 @@ describe('AFKController', () => {
     beforeEach(() => {
         mockRTCRtpReceiver();
         jest.useFakeTimers();
-        mockPixelStreaming = {dispatchEvent: jest.fn()} as any as PixelStreaming;
+        mockPixelStreaming = { dispatchEvent: jest.fn() } as any as PixelStreaming;
     });
 
     afterEach(() => {
@@ -25,7 +25,7 @@ describe('AFKController', () => {
     });
 
     it('should not activate AFK timer if it has been disabled from settings', () => {
-        const config = new Config({initialSettings: {[Flags.AFKDetection]: false}});
+        const config = new Config({ initialSettings: { [Flags.AFKDetection]: false } });
         const onDismissAfk = jest.fn();
         const afkController = new AFKController(config, mockPixelStreaming, onDismissAfk);
 
@@ -42,7 +42,7 @@ describe('AFKController', () => {
 
            const config = new Config({
                initialSettings:
-                   {[Flags.AFKDetection]: true, [NumericParameters.AFKTimeoutSecs]: timeoutSeconds}
+                   { [Flags.AFKDetection]: true, [NumericParameters.AFKTimeoutSecs]: timeoutSeconds }
            });
            const onDismissAfk = jest.fn();
            const afkController = new AFKController(config, mockPixelStreaming, onDismissAfk);
@@ -58,7 +58,7 @@ describe('AFKController', () => {
            jest.advanceTimersByTime(1000);
            expect(mockPixelStreaming.dispatchEvent)
                .toHaveBeenCalledWith(
-                   new AfkWarningActivateEvent({countDown: 0, dismissAfk: expect.anything()}));
+                   new AfkWarningActivateEvent({ countDown: 0, dismissAfk: expect.anything() }));
            expect(mockPixelStreaming.dispatchEvent).toHaveBeenCalledWith(new AfkWarningUpdateEvent({
                countDown: 10,
            }));
@@ -99,7 +99,8 @@ describe('AFKController', () => {
         const timeoutSeconds = 100;
 
         const config = new Config({
-            initialSettings: {[Flags.AFKDetection]: true, [NumericParameters.AFKTimeoutSecs]: timeoutSeconds}
+            initialSettings:
+                { [Flags.AFKDetection]: true, [NumericParameters.AFKTimeoutSecs]: timeoutSeconds }
         });
         const onDismissAfk = jest.fn();
         const afkController = new AFKController(config, mockPixelStreaming, onDismissAfk);
@@ -126,14 +127,16 @@ describe('AFKController', () => {
         // advance 1 more second to trigger AFK warning
         jest.advanceTimersByTime(1000);
         expect(mockPixelStreaming.dispatchEvent)
-            .toHaveBeenCalledWith(new AfkWarningActivateEvent({countDown: 0, dismissAfk: expect.anything()}));
+            .toHaveBeenCalledWith(
+                new AfkWarningActivateEvent({ countDown: 0, dismissAfk: expect.anything() }));
     });
 
     it('should dismiss AFK warning countdown if onAfkClick is called', () => {
         const timeoutSeconds = 100;
 
         const config = new Config({
-            initialSettings: {[Flags.AFKDetection]: true, [NumericParameters.AFKTimeoutSecs]: timeoutSeconds}
+            initialSettings:
+                { [Flags.AFKDetection]: true, [NumericParameters.AFKTimeoutSecs]: timeoutSeconds }
         });
         const onDismissAfk = jest.fn();
         const afkController = new AFKController(config, mockPixelStreaming, onDismissAfk);
@@ -143,7 +146,8 @@ describe('AFKController', () => {
         // Advance to AFK event:
         jest.advanceTimersByTime(timeoutSeconds * 1000);
         expect(mockPixelStreaming.dispatchEvent)
-            .toHaveBeenCalledWith(new AfkWarningActivateEvent({countDown: 0, dismissAfk: expect.anything()}));
+            .toHaveBeenCalledWith(
+                new AfkWarningActivateEvent({ countDown: 0, dismissAfk: expect.anything() }));
         expect(mockPixelStreaming.dispatchEvent).toHaveBeenCalledWith(new AfkWarningUpdateEvent({
             countDown: 10,
         }));

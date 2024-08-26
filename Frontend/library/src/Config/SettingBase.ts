@@ -20,7 +20,7 @@ export class SettingBase {
         defaultSettingValue: unknown,
         // eslint-disable-next-line @typescript-eslint/no-empty-function
         defaultOnChangeListener: (changedValue: unknown, setting: SettingBase) => void = () => {
-            /* Do nothing, to be overridden. */}) {
+            /* Do nothing, to be overridden. */ }) {
         this.parseURLParams();
 
         this.onChange = defaultOnChangeListener;

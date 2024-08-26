@@ -22,9 +22,7 @@ const allOptionParameters =
 const allParameters = [...allFlags, ...allNumericParameters, ...allTextParameters, ...allOptionParameters];
 
 describe('Config', () => {
-    beforeEach(() => {
-        mockRTCRtpReceiver();
-    });
+    beforeEach(() => { mockRTCRtpReceiver(); });
 
     afterEach(() => {
         unmockRTCRtpReceiver();
@@ -45,7 +43,7 @@ describe('Config', () => {
             [TextParameters.SignallingServerUrl]: 'url'
         };
 
-        const config = new Config({initialSettings});
+        const config = new Config({ initialSettings });
 
         expect(config.isFlagEnabled(Flags.AutoPlayVideo)).toEqual(initialSettings[Flags.AutoPlayVideo]);
         expect(config.getNumericSettingValue(NumericParameters.WebRTCMaxBitrate))
@@ -112,7 +110,7 @@ describe('Config', () => {
     });
 
     it('should persist config changes to window.location URL when updateURLParams() is called', () => {
-        const config = new Config({useUrlParams: true});
+        const config = new Config({ useUrlParams: true });
 
         const preferredCodecs = ['c1', 'c2', 'c3'];
         config.setOptionSettingOptions(OptionParameters.PreferredCodec, preferredCodecs);
@@ -154,7 +152,7 @@ describe('Config', () => {
             '',
             'http://localhost/?AutoPlayVideo=false&WebRTCMaxBitrate=43210&ss=signalling-url-from-url-param');
 
-        const config = new Config({useUrlParams: true});
+        const config = new Config({ useUrlParams: true });
 
         expect(config.isFlagEnabled(Flags.AutoPlayVideo)).toEqual(false);
         expect(config.getNumericSettingValue(NumericParameters.WebRTCMaxBitrate)).toEqual(43210);

@@ -38,8 +38,6 @@ export class PlayOverlay extends ActionOverlay {
         super(parentElem, PlayOverlay.createRootElement(), PlayOverlay.createContentElement());
 
         // add the new event listener
-        this.rootElement.addEventListener('click', () => {
-            this.activate();
-        });
+        this.rootElement.addEventListener('click', () => { this.activate(); });
     }
 }

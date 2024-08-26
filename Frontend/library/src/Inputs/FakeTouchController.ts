@@ -38,9 +38,9 @@ export class FakeTouchController implements ITouchController {
         const ontouchstart = (ev: TouchEvent) => this.onTouchStart(ev);
         const ontouchend = (ev: TouchEvent) => this.onTouchEnd(ev);
         const ontouchmove = (ev: TouchEvent) => this.onTouchMove(ev);
-        document.addEventListener('touchstart', ontouchstart, {passive: false});
-        document.addEventListener('touchend', ontouchend, {passive: false});
-        document.addEventListener('touchmove', ontouchmove, {passive: false});
+        document.addEventListener('touchstart', ontouchstart, { passive: false });
+        document.addEventListener('touchend', ontouchend, { passive: false });
+        document.addEventListener('touchmove', ontouchmove, { passive: false });
         this.touchEventListenerTracker.addUnregisterCallback(
             () => document.removeEventListener('touchstart', ontouchstart));
         this.touchEventListenerTracker.addUnregisterCallback(

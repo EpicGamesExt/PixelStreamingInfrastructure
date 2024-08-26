@@ -20,9 +20,7 @@ export class LockedMouseEvents implements IMouseEvents {
     videoElementProvider: VideoPlayer;
     mouseController: MouseController;
     activeKeysProvider: ActiveKeys;
-    updateMouseMovePositionEvent = (mouseEvent: MouseEvent) => {
-        this.updateMouseMovePosition(mouseEvent);
-    };
+    updateMouseMovePositionEvent = (mouseEvent: MouseEvent) => { this.updateMouseMovePosition(mouseEvent); };
 
     // Utility for keeping track of event handlers and to unregister them.
     private mouseEventListenerTracker = new EventListenerTracker();
@@ -79,13 +77,9 @@ export class LockedMouseEvents implements IMouseEvents {
             const setKeys = new Set(activeKeys);
             const newKeysIterable: Array<number> = [];
 
-            setKeys.forEach((setKey: number) => {
-                newKeysIterable[setKey];
-            });
+            setKeys.forEach((setKey: number) => { newKeysIterable[setKey]; });
 
-            newKeysIterable.forEach((uniqueKeycode) => {
-                toStreamerHandlers.get('KeyUp')([uniqueKeycode]);
-            });
+            newKeysIterable.forEach((uniqueKeycode) => { toStreamerHandlers.get('KeyUp')([uniqueKeycode]); });
             // Reset the active keys back to nothing
             activeKeys = [];
         }

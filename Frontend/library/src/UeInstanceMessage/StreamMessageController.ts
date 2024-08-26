@@ -29,22 +29,22 @@ export class StreamMessageController {
         /*
          * Control Messages. Range = 0..49.
          */
-        this.toStreamerMessages.set('IFrameRequest', {id: 0, structure: []});
-        this.toStreamerMessages.set('RequestQualityControl', {id: 1, structure: []});
-        this.toStreamerMessages.set('FpsRequest', {id: 2, structure: []});
-        this.toStreamerMessages.set('AverageBitrateRequest', {id: 3, structure: []});
-        this.toStreamerMessages.set('StartStreaming', {id: 4, structure: []});
-        this.toStreamerMessages.set('StopStreaming', {id: 5, structure: []});
-        this.toStreamerMessages.set('LatencyTest', {id: 6, structure: ['string']});
-        this.toStreamerMessages.set('RequestInitialSettings', {id: 7, structure: []});
-        this.toStreamerMessages.set('TestEcho', {id: 8, structure: []});
-        this.toStreamerMessages.set('DataChannelLatencyTest', {id: 9, structure: []});
+        this.toStreamerMessages.set('IFrameRequest', { id: 0, structure: [] });
+        this.toStreamerMessages.set('RequestQualityControl', { id: 1, structure: [] });
+        this.toStreamerMessages.set('FpsRequest', { id: 2, structure: [] });
+        this.toStreamerMessages.set('AverageBitrateRequest', { id: 3, structure: [] });
+        this.toStreamerMessages.set('StartStreaming', { id: 4, structure: [] });
+        this.toStreamerMessages.set('StopStreaming', { id: 5, structure: [] });
+        this.toStreamerMessages.set('LatencyTest', { id: 6, structure: ['string'] });
+        this.toStreamerMessages.set('RequestInitialSettings', { id: 7, structure: [] });
+        this.toStreamerMessages.set('TestEcho', { id: 8, structure: [] });
+        this.toStreamerMessages.set('DataChannelLatencyTest', { id: 9, structure: [] });
         /*
          * Input Messages. Range = 50..89.
          */
         // Generic Input Messages. Range = 50..59.
-        this.toStreamerMessages.set('UIInteraction', {id: 50, structure: ['string']});
-        this.toStreamerMessages.set('Command', {id: 51, structure: ['string']});
+        this.toStreamerMessages.set('UIInteraction', { id: 50, structure: ['string'] });
+        this.toStreamerMessages.set('Command', { id: 51, structure: ['string'] });
         // Keyboard Input Message. Range = 60..69.
         this.toStreamerMessages.set('KeyDown', {
             id: 60,
@@ -62,8 +62,8 @@ export class StreamMessageController {
             structure: ['uint16']
         });
         // Mouse Input Messages. Range = 70..79.
-        this.toStreamerMessages.set('MouseEnter', {id: 70, structure: []});
-        this.toStreamerMessages.set('MouseLeave', {id: 71, structure: []});
+        this.toStreamerMessages.set('MouseEnter', { id: 70, structure: [] });
+        this.toStreamerMessages.set('MouseLeave', { id: 71, structure: [] });
         this.toStreamerMessages.set('MouseDown', {
             id: 72,
             //              button     x         y
@@ -106,7 +106,7 @@ export class StreamMessageController {
             structure: ['uint8', 'uint16', 'uint16', 'uint8', 'uint8', 'uint8']
         });
         // Gamepad Input Messages. Range = 90..99
-        this.toStreamerMessages.set('GamepadConnected', {id: 93, structure: []});
+        this.toStreamerMessages.set('GamepadConnected', { id: 93, structure: [] });
         this.toStreamerMessages.set('GamepadButtonPressed', {
             id: 90,
             //         ctrlerId   button  isRepeat

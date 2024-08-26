@@ -135,7 +135,7 @@ export class Config {
     // ------------ Settings -----------------
 
     constructor(config: ConfigParams = {}) {
-        const {initialSettings, useUrlParams} = config;
+        const { initialSettings, useUrlParams } = config;
         this._useUrlParams = !!useUrlParams;
         this.populateDefaultSettings(this._useUrlParams, initialSettings);
     }
@@ -827,7 +827,7 @@ export class Config {
             const flag = this.flags.get(key);
             if (flag) {
                 flag.onChangeEmit = (newValue: boolean) => eventEmitter.dispatchEvent(
-                    new SettingsChangedEvent({id: flag.id, type: 'flag', value: newValue, target: flag}));
+                    new SettingsChangedEvent({ id: flag.id, type: 'flag', value: newValue, target: flag }));
             }
         }
         for (const key of this.numericParameters.keys()) {
@@ -835,14 +835,14 @@ export class Config {
             if (number) {
                 number.onChangeEmit = (newValue: number) =>
                     eventEmitter.dispatchEvent(new SettingsChangedEvent(
-                        {id: number.id, type: 'number', value: newValue, target: number}));
+                        { id: number.id, type: 'number', value: newValue, target: number }));
             }
         }
         for (const key of this.textParameters.keys()) {
             const text = this.textParameters.get(key);
             if (text) {
                 text.onChangeEmit = (newValue: string) => eventEmitter.dispatchEvent(
-                    new SettingsChangedEvent({id: text.id, type: 'text', value: newValue, target: text}));
+                    new SettingsChangedEvent({ id: text.id, type: 'text', value: newValue, target: text }));
             }
         }
         for (const key of this.optionParameters.keys()) {
@@ -850,7 +850,7 @@ export class Config {
             if (option) {
                 option.onChangeEmit = (newValue: string) =>
                     eventEmitter.dispatchEvent(new SettingsChangedEvent(
-                        {id: option.id, type: 'option', value: newValue, target: option}));
+                        { id: option.id, type: 'option', value: newValue, target: option }));
             }
         }
     }

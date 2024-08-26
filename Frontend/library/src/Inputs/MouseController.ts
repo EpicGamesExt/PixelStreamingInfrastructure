@@ -66,9 +66,7 @@ export class MouseController {
 
         // minor hack to alleviate ios not supporting pointerlock
         if (videoElementParent.requestPointerLock) {
-            const onclick = () => {
-                videoElementParent.requestPointerLock();
-            };
+            const onclick = () => { videoElementParent.requestPointerLock(); };
             videoElementParent.addEventListener('click', onclick);
             this.mouseEventListenerTracker.addUnregisterCallback(
                 () => videoElementParent.removeEventListener('click', onclick));
