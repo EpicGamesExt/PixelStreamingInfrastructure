@@ -394,42 +394,7 @@ export class PeerConnectionController {
                 this.peerConnection?.addTransceiver('video', { direction: 'recvonly' });
             }
         } else {
-            // set the media send options
-            const mediaSendOptions: MediaStreamConstraints = {
-                video: true,
-            };
-
-            // Note using webcam on android chrome requires SSL or chrome://flags/ "unsafely-treat-insecure-origin-as-secure"
-            const stream = await navigator.mediaDevices.getUserMedia(
-                mediaSendOptions
-            );
-
-            if (stream) {
-                if (hasVideoReceiver) {
-                    for (const transceiver of this.peerConnection?.getTransceivers() ?? []) {
-                        if (RTCUtils.canTransceiverReceiveVideo(transceiver)) {
-                            for (const track of stream.getTracks()) {
-                                if (track.kind && track.kind == 'video') {
-                                    transceiver.sender.replaceTrack(track);
-                                    transceiver.direction = 'sendrecv';
-                                }
-                            }
-                        }
-                    }
-                } else {
-                    for (const track of stream.getTracks()) {
-                        if (track.kind && track.kind == 'video') {
-                            this.peerConnection?.addTransceiver(track, {
-                                direction: 'sendrecv'
-                            });
-                        }
-                    }
-                }
-            } else {
-                if(!hasVideoReceiver) {
-                    this.peerConnection?.addTransceiver('video', { direction: 'recvonly' });
-                }
-            }
+            await this.setupVideoSender(hasVideoReceiver);
         }
 
         if (RTCRtpReceiver.getCapabilities && this.preferredCodec != '') {
@@ -500,53 +465,98 @@ export class PeerConnectionController {
                 });
             }
         } else {
-            // set the audio options based on mic usage
-            const audioOptions = {
-                autoGainControl: false,
-                channelCount: 1,
-                echoCancellation: false,
-                latency: 0,
-                noiseSuppression: false,
-                sampleRate: 48000,
-                sampleSize: 16,
-                volume: 1.0
-            };
+            await this.setupAudioSender(hasAudioReceiver);
+        }
+    }
+    
+    async setupVideoSender(hasVideoReceiver: boolean) {
+        // set the media send options
+        const mediaSendOptions: MediaStreamConstraints = {
+            video: true,
+        };
 
-            // set the media send options
-            const mediaSendOptions: MediaStreamConstraints = {
-                video: false,
-                audio: audioOptions
-            };
+        // Note using webcam on android chrome requires SSL or chrome://flags/ "unsafely-treat-insecure-origin-as-secure"
+        const stream = await navigator.mediaDevices.getUserMedia(
+            mediaSendOptions
+        );
 
-            // Note using mic on android chrome requires SSL or chrome://flags/ "unsafely-treat-insecure-origin-as-secure"
-            const stream = await navigator.mediaDevices.getUserMedia(mediaSendOptions);
-            if (stream) {
-                if (hasAudioReceiver) {
-                    for (const transceiver of this.peerConnection?.getTransceivers() ?? []) {
-                        if (RTCUtils.canTransceiverReceiveAudio(transceiver)) {
-                            for (const track of stream.getTracks()) {
-                                if (track.kind && track.kind == 'audio') {
-                                    transceiver.sender.replaceTrack(track);
-                                    transceiver.direction = 'sendrecv';
-                                }
+        if (stream) {
+            if (hasVideoReceiver) {
+                for (const transceiver of this.peerConnection?.getTransceivers() ?? []) {
+                    if (RTCUtils.canTransceiverReceiveVideo(transceiver)) {
+                        for (const track of stream.getTracks()) {
+                            if (track.kind && track.kind == 'video') {
+                                transceiver.sender.replaceTrack(track);
+                                transceiver.direction = 'sendrecv';
                             }
-                        }
-                    }
-                } else {
-                    for (const track of stream.getTracks()) {
-                        if (track.kind && track.kind == 'audio') {
-                            this.peerConnection?.addTransceiver(track, {
-                                direction: 'sendrecv'
-                            });
                         }
                     }
                 }
             } else {
-                if (!hasAudioReceiver) {
-                    this.peerConnection?.addTransceiver('audio', {
-                        direction: 'recvonly'
-                    });
+                for (const track of stream.getTracks()) {
+                    if (track.kind && track.kind == 'video') {
+                        this.peerConnection?.addTransceiver(track, {
+                            direction: 'sendrecv'
+                        });
+                    }
                 }
+            }
+        } else {
+            if(!hasVideoReceiver) {
+                this.peerConnection?.addTransceiver('video', { direction: 'recvonly' });
+            }
+        }
+    }
+
+    async setupAudioSender(hasAudioReceiver: boolean) {
+        // set the audio options based on mic usage
+        const audioOptions = {
+            autoGainControl: false,
+            channelCount: 1,
+            echoCancellation: false,
+            latency: 0,
+            noiseSuppression: false,
+            sampleRate: 48000,
+            sampleSize: 16,
+            volume: 1.0
+        }
+
+        // set the media send options
+        const mediaSendOptions: MediaStreamConstraints = {
+            video: false,
+            audio: audioOptions
+        };
+
+        // Note using mic on android chrome requires SSL or chrome://flags/ "unsafely-treat-insecure-origin-as-secure"
+        const stream = await navigator.mediaDevices.getUserMedia(
+            mediaSendOptions
+        );
+        if (stream) {
+            if (hasAudioReceiver) {
+                for (const transceiver of this.peerConnection?.getTransceivers() ?? []) {
+                    if (RTCUtils.canTransceiverReceiveAudio(transceiver)) {
+                        for (const track of stream.getTracks()) {
+                            if (track.kind && track.kind == 'audio') {
+                                transceiver.sender.replaceTrack(track);
+                                transceiver.direction = 'sendrecv';
+                            }
+                        }
+                    }
+                }
+            } else {
+                for (const track of stream.getTracks()) {
+                    if (track.kind && track.kind == 'audio') {
+                        this.peerConnection?.addTransceiver(track, {
+                            direction: 'sendrecv'
+                        });
+                    }
+                }
+            }
+        } else {
+            if(!hasAudioReceiver) {
+                this.peerConnection?.addTransceiver('audio', {
+                    direction: 'recvonly'
+                });
             }
         }
     }
