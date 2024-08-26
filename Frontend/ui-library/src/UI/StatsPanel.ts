@@ -138,7 +138,8 @@ export class StatsPanel {
     public onDisconnect(): void {
         this.latencyTest.latencyTestButton.onclick = () => {
             // do nothing
-        } this.dataChannelLatencyTest.latencyTestButton.onclick = () => {
+        };
+        this.dataChannelLatencyTest.latencyTestButton.onclick = () => {
             // do nothing
         }
     }

@@ -319,17 +319,16 @@ export class Application {
         this.stream.addEventListener(
             'latencyTestResult',
             ({data: {latencyTimings}}) => this.onLatencyTestResults(latencyTimings));
-        this.stream
-            .addEventListener(
-                'dataChannelLatencyTestResult',
-                ({data: {result}}) => this.onDataChannelLatencyTestResults(result)) this.stream
-            .addEventListener(
-                'streamerListMessage',
-                ({data: {messageStreamerList, autoSelectedStreamerId, wantedStreamerId}}) =>
-                    this.handleStreamerListMessage(
-                        messageStreamerList,
-                        autoSelectedStreamerId,
-                        wantedStreamerId));
+        this.stream.addEventListener(
+            'dataChannelLatencyTestResult',
+            ({data: {result}}) => this.onDataChannelLatencyTestResults(result));
+        this.stream.addEventListener(
+            'streamerListMessage',
+            ({data: {messageStreamerList, autoSelectedStreamerId, wantedStreamerId}}) =>
+                this.handleStreamerListMessage(
+                    messageStreamerList,
+                    autoSelectedStreamerId,
+                    wantedStreamerId));
         this.stream.addEventListener('settingsChanged', (event) => this.configUI.onSettingsChanged(event));
         this.stream.addEventListener('playerCount', ({data: {count}}) => this.onPlayerCount(count));
         this.stream.addEventListener(

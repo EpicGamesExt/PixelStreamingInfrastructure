@@ -108,7 +108,8 @@ export class DataChannelLatencyTest {
                 document.body.removeChild(a);
                 window.URL.revokeObjectURL(url);
             }, 0);
-        } this.latencyTestResultsElement.appendChild(downloadButton);
+        };
+        this.latencyTestResultsElement.appendChild(downloadButton);
     }
 
     public handleTestStart() {
