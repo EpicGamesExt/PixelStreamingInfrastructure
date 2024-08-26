@@ -15,9 +15,10 @@ Any user interaction with the player panel resets the AFK timer. This includes m
 To use the AFK system, set the following properties in the [`Config`](https://github.com/EpicGames/PixelStreamingInfrastructure/blob/master/Frontend/library/src/Config/Config.ts) object passed used to create a [`PixelStreaming`](https://github.com/EpicGames/PixelStreamingInfrastructure/blob/master/Frontend/library/src/PixelStreaming/PixelStreaming.tx) stream.
 
 | Property | Default | Description |
-|    ---   | --- |
+|    ---   |   ---   |     ---     |
 | `Flags.AFKDetection` | `false` | Determines whether the AFK system should check for user interactions. |
 | `NumericParameters.AFKTimeoutSecs` | `120` | Sets the maximum time interval, in seconds, that the user can remain away from keyboard before seeing a warning overlay in the player widget. |
+| `NumericParameters.AFKCountdown` | `10` | Sets the duration of the countdown, in seconds, before the stream is terminated if a user does not respond in time. |
 
 For example, to activate AFK Detection and set it to kick in after five minutes, you would do the following in your implementation:
 
@@ -25,10 +26,10 @@ For example, to activate AFK Detection and set it to kick in after five minutes,
 const config = new Config({ useUrlParams: true });
 config.setFlagEnabled(Flags.AFKDetection, true);
 config.setNumericSetting(NumericParameters.AFKTimeoutSecs, 300);
+config.setNumericSetting(NumericParameters.AFKCountdown, 60);
 
 const stream = new PixelStreaming(config);
 ```
 
 **_Tip:_**
-If you want to customize the content of the overlay, you can replace the [`AFKOverlay`](https://github.com/EpicGames/PixelStreamingInfrastructure/blob/master/Frontend/ui-library/src/Overlay/AFKOverlay.ts) class. You must then also extend the [`Application`](https://github.com/EpicGames/PixelStreamingInfrastructure/blob/master/Frontend/ui-library/src/Application/Application.ts) class in order to use the new overlay.
-
+If you want to customize the content of the overlay, you can replace the [`AFKOverlay`](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/master/Frontend/ui-library/src/Overlay/AFKOverlay.ts) class. You must then also extend the [`Application`](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/master/Frontend/ui-library/src/Application/Application.ts) class in order to use the new overlay.
