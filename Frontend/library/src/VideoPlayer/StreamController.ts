@@ -39,17 +39,25 @@ export class StreamController {
         const videoElement = this.videoElementProvider.getVideoElement();
 
         if (rtcTrackEvent.track) {
-            Logger.Log(Logger.GetStackTrace(),
-                'Got track - ' + rtcTrackEvent.track.kind + ' id=' + rtcTrackEvent.track.id +
-                ' readyState=' + rtcTrackEvent.track.readyState,
-                6);
+            Logger.Log(
+                Logger.GetStackTrace(),
+                'Got track - ' +
+                    rtcTrackEvent.track.kind +
+                    ' id=' +
+                    rtcTrackEvent.track.id +
+                    ' readyState=' +
+                    rtcTrackEvent.track.readyState,
+                6
+            );
         }
 
         if (rtcTrackEvent.track.kind == 'audio') {
             this.CreateAudioTrack(rtcTrackEvent.streams[0]);
             return;
-        } else if (rtcTrackEvent.track.kind == 'video' &&
-            videoElement.srcObject !== rtcTrackEvent.streams[0]) {
+        } else if (
+            rtcTrackEvent.track.kind == 'video' &&
+            videoElement.srcObject !== rtcTrackEvent.streams[0]
+        ) {
             videoElement.srcObject = rtcTrackEvent.streams[0];
             Logger.Log(Logger.GetStackTrace(), 'Set video source from video track ontrack.');
             return;

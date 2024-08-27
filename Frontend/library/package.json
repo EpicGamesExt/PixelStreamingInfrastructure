@@ -16,11 +16,13 @@
         "spellcheck": "cspell \"{README.md,.github/*.md,src/**/*.ts}\""
     },
     "devDependencies": {
+        "@eslint/js": "^9.9.1",
+        "@stylistic/eslint-plugin-js": "^2.6.4",
         "@types/jest": "27.5.1",
         "@types/webxr": "^0.5.1",
         "@typescript-eslint/eslint-plugin": "^6.21.0",
         "cspell": "^4.1.0",
-        "eslint": "^8.11.0",
+        "eslint": "^8.57.0",
         "jest": "^27.5.1",
         "jest-environment-jsdom": "27.5.1",
         "prettier": "2.8.3",
@@ -32,8 +34,8 @@
         "webpack-cli": "^5.0.1"
     },
     "dependencies": {
-        "sdp": "^3.1.0",
-        "@epicgames-ps/lib-pixelstreamingcommon-ue5.5": "^0.0.14"
+        "@epicgames-ps/lib-pixelstreamingcommon-ue5.5": "^0.0.14",
+        "sdp": "^3.1.0"
     },
     "repository": {
         "type": "git",
@@ -45,4 +47,3 @@
         "access": "public"
     }
 }
-

@@ -34,15 +34,17 @@ export class PeerConnectionController {
         // Set the ICE transport to relay if TURN enabled
         if (this.config.isFlagEnabled(Flags.ForceTURN)) {
             options.iceTransportPolicy = 'relay';
-            Logger.Log(Logger.GetStackTrace(),
-                'Forcing TURN usage by setting ICE Transport Policy in peer connection config.');
+            Logger.Log(
+                Logger.GetStackTrace(),
+                'Forcing TURN usage by setting ICE Transport Policy in peer connection config.'
+            );
         }
 
         // build a new peer connection with the options
         this.peerConnection = new RTCPeerConnection(options);
         this.peerConnection.onsignalingstatechange = (ev: Event) => this.handleSignalStateChange(ev);
-        this.peerConnection.oniceconnectionstatechange = (ev: Event) => this.handleIceConnectionStateChange(
-            ev);
+        this.peerConnection.oniceconnectionstatechange = (ev: Event) =>
+            this.handleIceConnectionStateChange(ev);
         this.peerConnection.onicegatheringstatechange = (ev: Event) => this.handleIceGatheringStateChange(ev);
         this.peerConnection.ontrack = (ev: RTCTrackEvent) => this.handleOnTrack(ev);
         this.peerConnection.onicecandidate = (ev: RTCPeerConnectionIceEvent) => this.handleIceCandidate(ev);
@@ -66,21 +68,26 @@ export class PeerConnectionController {
             useMic = false;
             Logger.Error(
                 Logger.GetStackTrace(),
-                'Microphone access in the browser will not work if you are not on HTTPS or localhost. Disabling mic access.');
+                'Microphone access in the browser will not work if you are not on HTTPS or localhost. Disabling mic access.'
+            );
             Logger.Error(
                 Logger.GetStackTrace(),
-                'For testing you can enable HTTP microphone access Chrome by visiting chrome://flags/ and enabling \'unsafely-treat-insecure-origin-as-secure\'');
+                "For testing you can enable HTTP microphone access Chrome by visiting chrome://flags/ and enabling 'unsafely-treat-insecure-origin-as-secure'"
+            );
         }
 
         this.setupTransceiversAsync(useMic).finally(() => {
-            this.peerConnection?.createOffer(offerOptions)
+            this.peerConnection
+                ?.createOffer(offerOptions)
                 .then((offer: RTCSessionDescriptionInit) => {
                     this.showTextOverlayConnecting();
                     offer.sdp = this.mungeSDP(offer.sdp, useMic);
                     this.peerConnection?.setLocalDescription(offer);
                     this.onSendWebRTCOffer(offer);
                 })
-                .catch(() => { this.showTextOverlaySetupFailure(); });
+                .catch(() => {
+                    this.showTextOverlaySetupFailure();
+                });
         });
     }
 
@@ -91,32 +98,41 @@ export class PeerConnectionController {
         Logger.Log(Logger.GetStackTrace(), 'Receive Offer', 6);
 
         this.peerConnection?.setRemoteDescription(offer).then(() => {
-            const isLocalhostConnection = location.hostname === 'localhost' ||
-                location.hostname === '127.0.0.1';
+            const isLocalhostConnection =
+                location.hostname === 'localhost' || location.hostname === '127.0.0.1';
             const isHttpsConnection = location.protocol === 'https:';
             let useMic = config.isFlagEnabled(Flags.UseMic);
             if (useMic && !(isLocalhostConnection || isHttpsConnection)) {
                 useMic = false;
                 Logger.Error(
                     Logger.GetStackTrace(),
-                    'Microphone access in the browser will not work if you are not on HTTPS or localhost. Disabling mic access.');
+                    'Microphone access in the browser will not work if you are not on HTTPS or localhost. Disabling mic access.'
+                );
                 Logger.Error(
                     Logger.GetStackTrace(),
-                    'For testing you can enable HTTP microphone access Chrome by visiting chrome://flags/ and enabling \'unsafely-treat-insecure-origin-as-secure\'');
+                    "For testing you can enable HTTP microphone access Chrome by visiting chrome://flags/ and enabling 'unsafely-treat-insecure-origin-as-secure'"
+                );
             }
 
             // Add our list of preferred codecs, in order of preference
-            this.config.setOptionSettingOptions(OptionParameters.PreferredCodec,
-                this.fuzzyIntersectUEAndBrowserCodecs(offer));
+            this.config.setOptionSettingOptions(
+                OptionParameters.PreferredCodec,
+                this.fuzzyIntersectUEAndBrowserCodecs(offer)
+            );
 
             this.setupTransceiversAsync(useMic).finally(() => {
-                this.peerConnection?.createAnswer()
+                this.peerConnection
+                    ?.createAnswer()
                     .then((Answer: RTCSessionDescriptionInit) => {
                         Answer.sdp = this.mungeSDP(Answer.sdp, useMic);
                         return this.peerConnection?.setLocalDescription(Answer);
                     })
-                    .then(() => { this.onSendWebRTCAnswer(this.peerConnection?.currentLocalDescription); })
-                    .catch(() => { Logger.Error(Logger.GetStackTrace(), 'createAnswer() failed'); });
+                    .then(() => {
+                        this.onSendWebRTCAnswer(this.peerConnection?.currentLocalDescription);
+                    })
+                    .catch(() => {
+                        Logger.Error(Logger.GetStackTrace(), 'createAnswer() failed');
+                    });
             });
         });
     }
@@ -129,15 +145,19 @@ export class PeerConnectionController {
         this.peerConnection?.setRemoteDescription(answer);
 
         // Add our list of preferred codecs, in order of preference
-        this.config.setOptionSettingOptions(OptionParameters.PreferredCodec,
-            this.fuzzyIntersectUEAndBrowserCodecs(answer));
+        this.config.setOptionSettingOptions(
+            OptionParameters.PreferredCodec,
+            this.fuzzyIntersectUEAndBrowserCodecs(answer)
+        );
     }
 
     /**
      * Generate Aggregated Stats and then fire a onVideo Stats event
      */
     generateStats() {
-        const statsHandler = (StatsData: RTCStatsReport) => { this.aggregatedStats.processStats(StatsData); };
+        const statsHandler = (StatsData: RTCStatsReport) => {
+            this.aggregatedStats.processStats(StatsData);
+        };
 
         const audioPromise = this.peerConnection?.getStats(this.audioTrack).then(statsHandler);
         const videoPromise = this.peerConnection?.getStats(this.videoTrack).then(statsHandler);
@@ -148,7 +168,8 @@ export class PeerConnectionController {
             if (this.updateCodecSelection && !!this.aggregatedStats.inboundVideoStats.codecId) {
                 this.config.setOptionSettingValue(
                     OptionParameters.PreferredCodec,
-                    this.aggregatedStats.codecs.get(this.aggregatedStats.inboundVideoStats.codecId));
+                    this.aggregatedStats.codecs.get(this.aggregatedStats.inboundVideoStats.codecId)
+                );
             }
         });
     }
@@ -170,8 +191,10 @@ export class PeerConnectionController {
      * @returns A modified Session Descriptor
      */
     mungeSDP(sdp: string, useMic: boolean) {
-        let mungedSDP = sdp.replace(/(a=fmtp:\d+ .*level-asymmetry-allowed=.*)\r\n/gm,
-            '$1;x-google-start-bitrate=10000;x-google-max-bitrate=100000\r\n');
+        let mungedSDP = sdp.replace(
+            /(a=fmtp:\d+ .*level-asymmetry-allowed=.*)\r\n/gm,
+            '$1;x-google-start-bitrate=10000;x-google-max-bitrate=100000\r\n'
+        );
 
         // set max bitrate to highest bitrate Opus supports
         let audioSDP = 'maxaveragebitrate=510000;';
@@ -204,9 +227,11 @@ export class PeerConnectionController {
         if (this.config.isFlagEnabled(Flags.ForceTURN)) {
             // check if no relay address is found, if so, we are assuming it means no TURN server
             if (iceCandidate.candidate.indexOf('relay') < 0) {
-                Logger.Info(Logger.GetStackTrace(),
+                Logger.Info(
+                    Logger.GetStackTrace(),
                     `Dropping candidate because it was not TURN relay. | Type= ${iceCandidate.type} | Protocol= ${iceCandidate.protocol} | Address=${iceCandidate.address} | Port=${iceCandidate.port} |`,
-                    6);
+                    6
+                );
                 return;
             }
         }
@@ -318,8 +343,9 @@ export class PeerConnectionController {
         // We want to build an array of all supported codecs on both sides
         const allSupportedCodecs: Array<string> = new Array<string>();
         const allUECodecs: string[] = this.parseAvailableCodecs(sdp);
-        const allBrowserCodecs:
-            string[] = this.config.getSettingOption(OptionParameters.PreferredCodec).options;
+        const allBrowserCodecs: string[] = this.config.getSettingOption(
+            OptionParameters.PreferredCodec
+        ).options;
         for (const ueCodec of allUECodecs) {
             // Check if browser codecs directly matches UE codec (with parameters and everything)
             if (allBrowserCodecs.includes(ueCodec)) {
@@ -351,8 +377,12 @@ export class PeerConnectionController {
         // Setup a transceiver for receiving video (if we need to)
         let hasVideoReceiver = false;
         for (const transceiver of this.peerConnection?.getTransceivers() ?? []) {
-            if (transceiver && transceiver.receiver && transceiver.receiver.track &&
-                transceiver.receiver.track.kind === 'video') {
+            if (
+                transceiver &&
+                transceiver.receiver &&
+                transceiver.receiver.track &&
+                transceiver.receiver.track.kind === 'video'
+            ) {
                 hasVideoReceiver = true;
                 break;
             }
@@ -363,15 +393,20 @@ export class PeerConnectionController {
 
         if (RTCRtpReceiver.getCapabilities && this.preferredCodec != '') {
             for (const transceiver of this.peerConnection?.getTransceivers() ?? []) {
-                if (transceiver && transceiver.receiver && transceiver.receiver.track &&
-                    transceiver.receiver.track.kind === 'video' && transceiver.setCodecPreferences) {
+                if (
+                    transceiver &&
+                    transceiver.receiver &&
+                    transceiver.receiver.track &&
+                    transceiver.receiver.track.kind === 'video' &&
+                    transceiver.setCodecPreferences
+                ) {
                     // Get our preferred codec from the codecs options drop down
                     const preferredRTPCodec = this.preferredCodec.split(' ');
                     const preferredRTCRtpCodecCapability: RTCRtpCodecCapability = {
                         mimeType: 'video/' + preferredRTPCodec[0] /* Name */,
-                        clockRate: 90000, /* All current video formats in browsers have 90khz clock rate */
+                        clockRate: 90000 /* All current video formats in browsers have 90khz clock rate */,
                         sdpFmtpLine: preferredRTPCodec[1] ? preferredRTPCodec[1] : ''
-                    }
+                    };
 
                     // Populate a list of codecs we will support with our preferred one in the first position
                     const ourSupportedCodecs: Array<RTCRtpCodecCapability> = [preferredRTCRtpCodecCapability];
@@ -382,11 +417,14 @@ export class PeerConnectionController {
                             // Don't add our preferred codec again, but add everything else
                             if (browserSupportedCodec.mimeType != preferredRTCRtpCodecCapability.mimeType) {
                                 ourSupportedCodecs.push(browserSupportedCodec);
-                            } else if (browserSupportedCodec?.sdpFmtpLine !=
-                                preferredRTCRtpCodecCapability?.sdpFmtpLine) {
+                            } else if (
+                                browserSupportedCodec?.sdpFmtpLine !=
+                                preferredRTCRtpCodecCapability?.sdpFmtpLine
+                            ) {
                                 ourSupportedCodecs.push(browserSupportedCodec);
                             }
-                        });
+                        }
+                    );
 
                     for (const codec of ourSupportedCodecs) {
                         if (codec?.sdpFmtpLine === undefined || codec.sdpFmtpLine === '') {
@@ -403,8 +441,12 @@ export class PeerConnectionController {
 
         let hasAudioReceiver = false;
         for (const transceiver of this.peerConnection?.getTransceivers() ?? []) {
-            if (transceiver && transceiver.receiver && transceiver.receiver.track &&
-                transceiver.receiver.track.kind === 'audio') {
+            if (
+                transceiver &&
+                transceiver.receiver &&
+                transceiver.receiver.track &&
+                transceiver.receiver.track.kind === 'audio'
+            ) {
                 hasAudioReceiver = true;
                 break;
             }
@@ -426,7 +468,7 @@ export class PeerConnectionController {
                 sampleRate: 48000,
                 sampleSize: 16,
                 volume: 1.0
-            }
+            };
 
             // set the media send options
             const mediaSendOptions: MediaStreamConstraints = { video: false, audio: audioOptions };
@@ -515,16 +557,24 @@ export class PeerConnectionController {
             // Filter only for VPX / H26X / AV1
             const matcher = /(VP\d|H26\d|AV1).*/;
             codecs.forEach((c) => {
-                const str = c.name + ' ' +
-                    Object.keys(c.parameters || {}).map((p) => p + '=' + c.parameters[p]).join(';');
+                const str =
+                    c.name +
+                    ' ' +
+                    Object.keys(c.parameters || {})
+                        .map((p) => p + '=' + c.parameters[p])
+                        .join(';');
                 const match = matcher.exec(str);
                 if (match !== null) {
                     if (c.name == 'VP9') {
                         // UE answers don't specify profile but we know we want profile 0
                         c.parameters = { 'profile-id': '0' };
                     }
-                    const codecStr: string = c.name + ' ' +
-                        Object.keys(c.parameters || {}).map((p) => p + '=' + c.parameters[p]).join(';');
+                    const codecStr: string =
+                        c.name +
+                        ' ' +
+                        Object.keys(c.parameters || {})
+                            .map((p) => p + '=' + c.parameters[p])
+                            .join(';');
                     ueSupportedCodecs.push(codecStr);
                 }
             });

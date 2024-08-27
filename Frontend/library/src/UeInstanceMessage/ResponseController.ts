@@ -31,7 +31,8 @@ export class ResponseController {
         const responses = new TextDecoder('utf-16').decode(message.slice(1));
 
         Logger.Log(Logger.GetStackTrace(), responses, 6);
-        this.responseEventListeners.forEach(
-            (listener: (response: string) => void) => { listener(responses); });
+        this.responseEventListeners.forEach((listener: (response: string) => void) => {
+            listener(responses);
+        });
     }
 }

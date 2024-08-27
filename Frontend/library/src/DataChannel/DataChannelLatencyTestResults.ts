@@ -4,7 +4,6 @@
  * Data Channel Latency Test types
  */
 
-
 /**
  * Unix epoch
  */
@@ -19,24 +18,28 @@ export type DataChannelLatencyTestSeq = number;
  * Request sent to Streamer
  */
 export type DataChannelLatencyTestRequest = {
-    Seq: DataChannelLatencyTestSeq; FillResponseSize: number; Filler: string;
-}
+    Seq: DataChannelLatencyTestSeq;
+    FillResponseSize: number;
+    Filler: string;
+};
 
 /**
  * Response from the Streamer
  */
 export type DataChannelLatencyTestResponse = {
-    Seq: DataChannelLatencyTestSeq; Filler: string; ReceivedTimestamp: DataChannelLatencyTestTimestamp;
+    Seq: DataChannelLatencyTestSeq;
+    Filler: string;
+    ReceivedTimestamp: DataChannelLatencyTestTimestamp;
     SentTimestamp: DataChannelLatencyTestTimestamp;
-}
+};
 
 export type DataChannelLatencyTestResult = {
-    records: Map<DataChannelLatencyTestSeq, DataChannelLatencyTestRecord>
-    dataChannelRtt: number,
-    playerToStreamerTime: number,
-    streamerToPlayerTime: number,
-    exportLatencyAsCSV: () => string
-}
+    records: Map<DataChannelLatencyTestSeq, DataChannelLatencyTestRecord>;
+    dataChannelRtt: number;
+    playerToStreamerTime: number;
+    streamerToPlayerTime: number;
+    exportLatencyAsCSV: () => string;
+};
 
 export class DataChannelLatencyTestRecord {
     seq: DataChannelLatencyTestSeq;

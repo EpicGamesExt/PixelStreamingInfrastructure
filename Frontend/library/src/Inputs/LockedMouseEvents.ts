@@ -20,7 +20,9 @@ export class LockedMouseEvents implements IMouseEvents {
     videoElementProvider: VideoPlayer;
     mouseController: MouseController;
     activeKeysProvider: ActiveKeys;
-    updateMouseMovePositionEvent = (mouseEvent: MouseEvent) => { this.updateMouseMovePosition(mouseEvent); };
+    updateMouseMovePositionEvent = (mouseEvent: MouseEvent) => {
+        this.updateMouseMovePosition(mouseEvent);
+    };
 
     // Utility for keeping track of event handlers and to unregister them.
     private mouseEventListenerTracker = new EventListenerTracker();
@@ -31,9 +33,11 @@ export class LockedMouseEvents implements IMouseEvents {
      * @param activeKeysProvider - Active keys provider instance
      * @param playerStyleAttributesProvider - Player style attributes instance
      */
-    constructor(videoElementProvider: VideoPlayer,
+    constructor(
+        videoElementProvider: VideoPlayer,
         mouseController: MouseController,
-        activeKeysProvider: ActiveKeys) {
+        activeKeysProvider: ActiveKeys
+    ) {
         this.videoElementProvider = videoElementProvider;
         this.mouseController = mouseController;
         this.activeKeysProvider = activeKeysProvider;
@@ -57,12 +61,15 @@ export class LockedMouseEvents implements IMouseEvents {
         const videoElementParent = this.videoElementProvider.getVideoParentElement();
         const toStreamerHandlers = this.mouseController.toStreamerMessagesProvider.toStreamerHandlers;
 
-        if (document.pointerLockElement === videoElementParent ||
-            document.mozPointerLockElement === videoElementParent) {
+        if (
+            document.pointerLockElement === videoElementParent ||
+            document.mozPointerLockElement === videoElementParent
+        ) {
             Logger.Log(Logger.GetStackTrace(), 'Pointer locked', 6);
             document.addEventListener('mousemove', this.updateMouseMovePositionEvent, false);
-            this.mouseEventListenerTracker.addUnregisterCallback(
-                () => document.removeEventListener('mousemove', this.updateMouseMovePositionEvent, false));
+            this.mouseEventListenerTracker.addUnregisterCallback(() =>
+                document.removeEventListener('mousemove', this.updateMouseMovePositionEvent, false)
+            );
         } else {
             Logger.Log(Logger.GetStackTrace(), 'The pointer lock status is now unlocked', 6);
             // !a new arrow function must not be used here as it will be counted as a new function that cannot
@@ -76,9 +83,13 @@ export class LockedMouseEvents implements IMouseEvents {
             const setKeys = new Set(activeKeys);
             const newKeysIterable: Array<number> = [];
 
-            setKeys.forEach((setKey: number) => { newKeysIterable[setKey]; });
+            setKeys.forEach((setKey: number) => {
+                newKeysIterable[setKey];
+            });
 
-            newKeysIterable.forEach((uniqueKeycode) => { toStreamerHandlers.get('KeyUp')([uniqueKeycode]); });
+            newKeysIterable.forEach((uniqueKeycode) => {
+                toStreamerHandlers.get('KeyUp')([uniqueKeycode]);
+            });
             // Reset the active keys back to nothing
             activeKeys = [];
         }
@@ -115,7 +126,8 @@ export class LockedMouseEvents implements IMouseEvents {
         this.coord = this.mouseController.coordinateConverter.normalizeAndQuantizeUnsigned(this.x, this.y);
         const delta = this.mouseController.coordinateConverter.normalizeAndQuantizeSigned(
             mouseEvent.movementX,
-            mouseEvent.movementY);
+            mouseEvent.movementY
+        );
         toStreamerHandlers.get('MouseMove')([this.coord.x, this.coord.y, delta.x, delta.y]);
     }
 

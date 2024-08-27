@@ -14,8 +14,10 @@ export class SendMessageController {
      * @param dataChannelSender - Data channel instance
      * @param toStreamerMessagesMapProvider - Stream Messages instance
      */
-    constructor(dataChannelSender: DataChannelSender,
-        toStreamerMessagesMapProvider: StreamMessageController) {
+    constructor(
+        dataChannelSender: DataChannelSender,
+        toStreamerMessagesMapProvider: StreamMessageController
+    ) {
         this.dataChannelSender = dataChannelSender;
         this.toStreamerMessagesMapProvider = toStreamerMessagesMapProvider;
     }
@@ -36,12 +38,14 @@ export class SendMessageController {
         if (messageFormat === undefined) {
             Logger.Error(
                 Logger.GetStackTrace(),
-                `Attempted to send a message to the streamer with message type: ${messageType}, but the frontend hasn't been configured to send such a message. Check you've added the message type in your cpp`);
+                `Attempted to send a message to the streamer with message type: ${messageType}, but the frontend hasn't been configured to send such a message. Check you've added the message type in your cpp`
+            );
             return;
         }
 
         if (messageFormat.structure && messageData && messageFormat.structure.length !== messageData.length) {
-            Logger.Error(Logger.GetStackTrace(),
+            Logger.Error(
+                Logger.GetStackTrace(),
                 `Provided message data doesn't match expected layout. Expected [ ${messageFormat.structure
                     .map((element: string) => {
                         switch (element) {
@@ -55,7 +59,10 @@ export class SendMessageController {
                                 return 'string';
                         }
                     })
-                    .toString()} ] but received [ ${messageData.map((element: number | string) => typeof element).toString()} ]`);
+                    .toString()} ] but received [ ${messageData
+                    .map((element: number | string) => typeof element)
+                    .toString()} ]`
+            );
             return;
         }
 
@@ -138,8 +145,12 @@ export class SendMessageController {
         });
 
         if (!this.dataChannelSender.canSend()) {
-            Logger.Info(Logger.GetStackTrace(),
-                `Data channel cannot send yet, skipping sending message: ${messageType} - ${new Uint8Array(data.buffer)}`);
+            Logger.Info(
+                Logger.GetStackTrace(),
+                `Data channel cannot send yet, skipping sending message: ${messageType} - ${new Uint8Array(
+                    data.buffer
+                )}`
+            );
             return;
         }
 

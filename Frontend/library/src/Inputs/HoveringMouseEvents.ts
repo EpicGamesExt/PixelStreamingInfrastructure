@@ -36,10 +36,12 @@ export class HoveringMouseEvents implements IMouseEvents {
         Logger.Log(Logger.GetStackTrace(), 'MouseMove', 6);
         const coord = this.mouseController.coordinateConverter.normalizeAndQuantizeUnsigned(
             mouseEvent.offsetX,
-            mouseEvent.offsetY);
+            mouseEvent.offsetY
+        );
         const delta = this.mouseController.coordinateConverter.normalizeAndQuantizeSigned(
             mouseEvent.movementX,
-            mouseEvent.movementY);
+            mouseEvent.movementY
+        );
         const toStreamerHandlers = this.mouseController.toStreamerMessagesProvider.toStreamerHandlers;
         toStreamerHandlers.get('MouseMove')([coord.x, coord.y, delta.x, delta.y]);
         mouseEvent.preventDefault();
@@ -56,7 +58,8 @@ export class HoveringMouseEvents implements IMouseEvents {
         Logger.Log(Logger.GetStackTrace(), 'onMouse Down', 6);
         const coord = this.mouseController.coordinateConverter.normalizeAndQuantizeUnsigned(
             mouseEvent.offsetX,
-            mouseEvent.offsetY);
+            mouseEvent.offsetY
+        );
         const toStreamerHandlers = this.mouseController.toStreamerMessagesProvider.toStreamerHandlers;
         toStreamerHandlers.get('MouseDown')([mouseEvent.button, coord.x, coord.y]);
         mouseEvent.preventDefault();
@@ -73,7 +76,8 @@ export class HoveringMouseEvents implements IMouseEvents {
         Logger.Log(Logger.GetStackTrace(), 'onMouse Up', 6);
         const coord = this.mouseController.coordinateConverter.normalizeAndQuantizeUnsigned(
             mouseEvent.offsetX,
-            mouseEvent.offsetY);
+            mouseEvent.offsetY
+        );
         const toStreamerHandlers = this.mouseController.toStreamerMessagesProvider.toStreamerHandlers;
         toStreamerHandlers.get('MouseUp')([mouseEvent.button, coord.x, coord.y]);
         mouseEvent.preventDefault();
@@ -100,7 +104,8 @@ export class HoveringMouseEvents implements IMouseEvents {
         }
         const coord = this.mouseController.coordinateConverter.normalizeAndQuantizeUnsigned(
             wheelEvent.offsetX,
-            wheelEvent.offsetY);
+            wheelEvent.offsetY
+        );
         const toStreamerHandlers = this.mouseController.toStreamerMessagesProvider.toStreamerHandlers;
         toStreamerHandlers.get('MouseWheel')([wheelEvent.wheelDelta, coord.x, coord.y]);
         wheelEvent.preventDefault();
@@ -116,7 +121,8 @@ export class HoveringMouseEvents implements IMouseEvents {
         }
         const coord = this.mouseController.coordinateConverter.normalizeAndQuantizeUnsigned(
             mouseEvent.offsetX,
-            mouseEvent.offsetY);
+            mouseEvent.offsetY
+        );
         const toStreamerHandlers = this.mouseController.toStreamerMessagesProvider.toStreamerHandlers;
         toStreamerHandlers.get('MouseDouble')([mouseEvent.button, coord.x, coord.y]);
     }

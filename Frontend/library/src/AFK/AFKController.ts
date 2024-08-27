@@ -49,8 +49,10 @@ export class AFKController {
      * Start the warning timer if a timeout is set greater that 0 seconds
      */
     startAfkWarningTimer() {
-        if (this.config.getNumericSettingValue(NumericParameters.AFKTimeoutSecs) > 0 &&
-            this.config.isFlagEnabled(Flags.AFKDetection)) {
+        if (
+            this.config.getNumericSettingValue(NumericParameters.AFKTimeoutSecs) > 0 &&
+            this.config.isFlagEnabled(Flags.AFKDetection)
+        ) {
             this.active = true;
         } else {
             this.active = false;
@@ -83,7 +85,8 @@ export class AFKController {
             clearTimeout(this.warnTimer);
             this.warnTimer = setTimeout(
                 () => this.activateAfkEvent(),
-                this.config.getNumericSettingValue(NumericParameters.AFKTimeoutSecs) * 1000);
+                this.config.getNumericSettingValue(NumericParameters.AFKTimeoutSecs) * 1000
+            );
         }
     }
 
@@ -96,7 +99,8 @@ export class AFKController {
 
         // instantiate a new overlay
         this.pixelStreaming.dispatchEvent(
-            new AfkWarningActivateEvent({ countDown: this.countDown, dismissAfk: this.onDismissAfk }));
+            new AfkWarningActivateEvent({ countDown: this.countDown, dismissAfk: this.onDismissAfk })
+        );
 
         // update our countDown timer and overlay contents
         this.countDown = this.config.getNumericSettingValue(NumericParameters.AFKCountdownSecs);

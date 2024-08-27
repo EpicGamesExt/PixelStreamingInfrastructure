@@ -13,7 +13,8 @@ export class SettingNumber<CustomIds extends string = NumericParametersIds> exte
     id: NumericParametersIds | CustomIds;
     onChangeEmit: (changedValue: number) => void;
 
-    constructor(id: NumericParametersIds | CustomIds,
+    constructor(
+        id: NumericParametersIds | CustomIds,
         label: string,
         description: string,
         min: number,
@@ -23,7 +24,8 @@ export class SettingNumber<CustomIds extends string = NumericParametersIds> exte
         // eslint-disable-next-line @typescript-eslint/no-empty-function
         defaultOnChangeListener: (changedValue: unknown, setting: SettingBase) => void = () => {
             /* Do nothing, to be overridden. */
-}) {
+        }
+    ) {
         super(id, label, description, defaultNumber, defaultOnChangeListener);
 
         this._min = min;

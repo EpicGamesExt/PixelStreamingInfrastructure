@@ -48,7 +48,8 @@ export class VideoPlayer {
         };
         this.onMatchViewportResolutionCallback = () => {
             console.log(
-                'Resolution changed and match viewport resolution is turned on, did you forget to override this function?');
+                'Resolution changed and match viewport resolution is turned on, did you forget to override this function?'
+            );
         };
 
         // set play for video (and audio)
@@ -61,7 +62,9 @@ export class VideoPlayer {
             }
         };
 
-        this.videoElement.onloadedmetadata = () => { this.onVideoInitialized(); };
+        this.videoElement.onloadedmetadata = () => {
+            this.onVideoInitialized();
+        };
 
         // set resize events to the windows if it is resized or its orientation is changed
         window.addEventListener('resize', () => this.resizePlayerStyle(), true);
@@ -93,14 +96,14 @@ export class VideoPlayer {
      * @returns - whether the video element is playing.
      */
     isVideoReady(): boolean {
-        return (this.videoElement.readyState !== undefined && this.videoElement.readyState > 0);
+        return this.videoElement.readyState !== undefined && this.videoElement.readyState > 0;
     }
 
     /**
      * @returns True if the video element has a valid video source (srcObject).
      */
     hasVideoSource(): boolean {
-        return (this.videoElement.srcObject !== undefined && this.videoElement.srcObject !== null);
+        return this.videoElement.srcObject !== undefined && this.videoElement.srcObject !== null;
     }
 
     /**
@@ -144,7 +147,9 @@ export class VideoPlayer {
      */
     onOrientationChange() {
         clearTimeout(this.orientationChangeTimeout);
-        this.orientationChangeTimeout = window.setTimeout(() => { this.resizePlayerStyle(); }, 500);
+        this.orientationChangeTimeout = window.setTimeout(() => {
+            this.resizePlayerStyle();
+        }, 500);
     }
 
     /**
@@ -181,9 +186,18 @@ export class VideoPlayer {
         const styleHeight = '100%';
         const styleTop = 0;
         const styleLeft = 0;
-        videoElementParent.setAttribute('style',
-            'top: ' + styleTop + 'px; left: ' + styleLeft + 'px; width: ' +
-            styleWidth + '; height: ' + styleHeight + '; cursor: default;');
+        videoElementParent.setAttribute(
+            'style',
+            'top: ' +
+                styleTop +
+                'px; left: ' +
+                styleLeft +
+                'px; width: ' +
+                styleWidth +
+                '; height: ' +
+                styleHeight +
+                '; cursor: default;'
+        );
     }
 
     updateVideoStreamSize() {
@@ -198,8 +212,10 @@ export class VideoPlayer {
                 return;
             }
 
-            this.onMatchViewportResolutionCallback(videoElementParent.clientWidth,
-                videoElementParent.clientHeight);
+            this.onMatchViewportResolutionCallback(
+                videoElementParent.clientWidth,
+                videoElementParent.clientHeight
+            );
 
             this.lastTimeResized = new Date().getTime();
         } else {

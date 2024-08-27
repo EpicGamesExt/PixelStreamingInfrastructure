@@ -4,7 +4,7 @@ import { Logger } from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
 
 import { XRGamepadController } from '../Inputs/XRGamepadController';
 import { Flags } from '../pixelstreamingfrontend';
-import { XrFrameEvent } from '../Util/EventEmitter'
+import { XrFrameEvent } from '../Util/EventEmitter';
 import { WebRtcPlayerController } from '../WebRtcPlayer/WebRtcPlayerController';
 
 export class WebXRController {
@@ -57,11 +57,12 @@ export class WebXRController {
                 return;
             }
 
-            navigator
-                .xr
+            navigator.xr
                 /* Request immersive-vr session without any optional features. */
                 .requestSession('immersive-vr', { optionalFeatures: [] })
-                .then((session: XRSession) => { this.onXrSessionStarted(session); });
+                .then((session: XRSession) => {
+                    this.onXrSessionStarted(session);
+                });
         } else {
             this.xrSession.end();
         }
@@ -156,7 +157,8 @@ export class WebXRController {
 
         if (this.prevVideoHeight != videoHeight || this.prevVideoWidth != videoWidth) {
             // Do full update of texture if dimensions do not match
-            this.gl.texImage2D(this.gl.TEXTURE_2D,
+            this.gl.texImage2D(
+                this.gl.TEXTURE_2D,
                 0,
                 this.gl.RGBA,
                 videoWidth,
@@ -164,10 +166,12 @@ export class WebXRController {
                 0,
                 this.gl.RGBA,
                 this.gl.UNSIGNED_BYTE,
-                this.webRtcController.videoPlayer.getVideoElement());
+                this.webRtcController.videoPlayer.getVideoElement()
+            );
         } else {
             // If dimensions match just update the sub region
-            this.gl.texSubImage2D(this.gl.TEXTURE_2D,
+            this.gl.texSubImage2D(
+                this.gl.TEXTURE_2D,
                 0,
                 0,
                 0,
@@ -175,7 +179,8 @@ export class WebXRController {
                 videoHeight,
                 this.gl.RGBA,
                 this.gl.UNSIGNED_BYTE,
-                this.webRtcController.videoPlayer.getVideoElement());
+                this.webRtcController.videoPlayer.getVideoElement()
+            );
         }
 
         // Update prev video width/height
@@ -221,9 +226,11 @@ export class WebXRController {
             this.gl.enableVertexAttribArray(this.texcoordLocation);
 
             // The texture coordinates to apply for rectangle we are drawing
-            this.gl.bufferData(this.gl.ARRAY_BUFFER,
+            this.gl.bufferData(
+                this.gl.ARRAY_BUFFER,
                 new Float32Array([0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0]),
-                this.gl.STATIC_DRAW);
+                this.gl.STATIC_DRAW
+            );
 
             // Tell texture coordinate attribute of the vertex shader how to get data out of the bound buffer
             // (the texcoordBuffer)
@@ -242,7 +249,9 @@ export class WebXRController {
         Logger.Log(Logger.GetStackTrace(), 'XR Session started');
 
         this.xrSession = session;
-        this.xrSession.addEventListener('end', () => { this.onXrSessionEnded(); });
+        this.xrSession.addEventListener('end', () => {
+            this.onXrSessionEnded();
+        });
 
         // Initialization
         this.initGL();
@@ -272,13 +281,17 @@ export class WebXRController {
     }
 
     areArraysEqual(a: Float32Array, b: Float32Array): boolean {
-        return a.length === b.length &&
-            a.every((element, index) => Math.abs(element - b[index]) <= this.EPSILON);
+        return (
+            a.length === b.length && a.every((element, index) => Math.abs(element - b[index]) <= this.EPSILON)
+        );
     }
 
     arePointsEqual(a: DOMPointReadOnly, b: DOMPointReadOnly): boolean {
-        return Math.abs(a.x - b.x) >= this.EPSILON && Math.abs(a.y - b.y) >= this.EPSILON &&
-            Math.abs(a.z - b.z) >= this.EPSILON;
+        return (
+            Math.abs(a.x - b.x) >= this.EPSILON &&
+            Math.abs(a.y - b.y) >= this.EPSILON &&
+            Math.abs(a.z - b.z) >= this.EPSILON
+        );
     }
 
     sendXRDataToUE() {
@@ -291,8 +304,11 @@ export class WebXRController {
         // the `XREyeViews` is a much larger message and changes infrequently (e.g. only when user changes
         // headset IPD). Therefore, we only need to send it once on startup and then any time it changes. The
         // rest of the time we can send the `XRHMDTransform` message.
-        let shouldSendEyeViews = this.lastSentLeftEyeProj == null || this.lastSentRightEyeProj == null ||
-            this.lastSentRelativeLeftEyePos == null || this.lastSentRelativeRightEyePos == null;
+        let shouldSendEyeViews =
+            this.lastSentLeftEyeProj == null ||
+            this.lastSentRightEyeProj == null ||
+            this.lastSentRelativeLeftEyePos == null ||
+            this.lastSentRelativeRightEyePos == null;
 
         const leftEyeTrans = this.leftView.transform.matrix;
         const leftEyeProj = this.leftView.projectionMatrix;
@@ -311,21 +327,30 @@ export class WebXRController {
             this.leftView.transform.position.x - this.xrViewerPose.transform.position.x,
             this.leftView.transform.position.y - this.xrViewerPose.transform.position.y,
             this.leftView.transform.position.z - this.xrViewerPose.transform.position.z,
-            1.0);
+            1.0
+        );
 
         const rightEyeRelativePos = new DOMPointReadOnly(
             this.leftView.transform.position.x - this.xrViewerPose.transform.position.x,
             this.leftView.transform.position.y - this.xrViewerPose.transform.position.y,
             this.leftView.transform.position.z - this.xrViewerPose.transform.position.z,
-            1.0);
+            1.0
+        );
 
         // Check if relative eye pos has changed (e.g IPD changed)
-        if (!shouldSendEyeViews && this.lastSentRelativeLeftEyePos != null &&
-            this.lastSentRelativeRightEyePos != null) {
-            const leftEyePosUnchanged = this.arePointsEqual(leftEyeRelativePos,
-                this.lastSentRelativeLeftEyePos);
-            const rightEyePosUnchanged = this.arePointsEqual(rightEyeRelativePos,
-                this.lastSentRelativeRightEyePos);
+        if (
+            !shouldSendEyeViews &&
+            this.lastSentRelativeLeftEyePos != null &&
+            this.lastSentRelativeRightEyePos != null
+        ) {
+            const leftEyePosUnchanged = this.arePointsEqual(
+                leftEyeRelativePos,
+                this.lastSentRelativeLeftEyePos
+            );
+            const rightEyePosUnchanged = this.arePointsEqual(
+                rightEyeRelativePos,
+                this.lastSentRelativeRightEyePos
+            );
             shouldSendEyeViews = leftEyePosUnchanged == false || rightEyePosUnchanged == false;
             // Note: We are not checking if EyeView rotation changes (as far as I know no HMD supports
             // changing this value at runtime).
@@ -444,7 +469,7 @@ export class WebXRController {
                 hmdTrans[3],
                 hmdTrans[7],
                 hmdTrans[11],
-                hmdTrans[15],
+                hmdTrans[15]
             ]);
         }
     }
@@ -467,11 +492,13 @@ export class WebXRController {
                 (source: XRInputSource, _index: number, _array: XRInputSource[]) => {
                     this.xrGamepadController.updateStatus(source, frame, this.xrRefSpace);
                 },
-                this);
+                this
+            );
         }
 
-        this.xrSession.requestAnimationFrame(
-            (time: DOMHighResTimeStamp, frame: XRFrame) => this.onXrFrame(time, frame));
+        this.xrSession.requestAnimationFrame((time: DOMHighResTimeStamp, frame: XRFrame) =>
+            this.onXrFrame(time, frame)
+        );
 
         this.onFrame.dispatchEvent(new XrFrameEvent({ time, frame }));
     }
@@ -513,7 +540,9 @@ export class WebXRController {
         if (navigator.xr) {
             return navigator.xr.isSessionSupported(mode);
         } else {
-            return new Promise<boolean>(() => { return false; });
+            return new Promise<boolean>(() => {
+                return false;
+            });
         }
     }
 }

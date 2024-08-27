@@ -29,25 +29,29 @@ export class MockMediaStreamImpl implements MediaStream {
     removeTrack(track: MediaStreamTrack): void {
         throw new Error('Method not implemented.');
     }
-    addEventListener<K extends keyof MediaStreamEventMap>(type: K,
-        listener: (this: MediaStream,
-            ev: MediaStreamEventMap[K]) => any,
-        options?: boolean | AddEventListenerOptions |
-            undefined): void;
-    addEventListener(type: string,
+    addEventListener<K extends keyof MediaStreamEventMap>(
+        type: K,
+        listener: (this: MediaStream, ev: MediaStreamEventMap[K]) => any,
+        options?: boolean | AddEventListenerOptions | undefined
+    ): void;
+    addEventListener(
+        type: string,
         listener: EventListenerOrEventListenerObject,
-        options?: boolean | AddEventListenerOptions | undefined): void;
+        options?: boolean | AddEventListenerOptions | undefined
+    ): void;
     addEventListener(type: unknown, listener: unknown, options?: unknown): void {
         throw new Error('Method not implemented.');
     }
-    removeEventListener<K extends keyof MediaStreamEventMap>(type: K,
-        listener: (this: MediaStream,
-            ev: MediaStreamEventMap[K]) => any,
-        options?: boolean | EventListenerOptions |
-            undefined): void;
-    removeEventListener(type: string,
+    removeEventListener<K extends keyof MediaStreamEventMap>(
+        type: K,
+        listener: (this: MediaStream, ev: MediaStreamEventMap[K]) => any,
+        options?: boolean | EventListenerOptions | undefined
+    ): void;
+    removeEventListener(
+        type: string,
         listener: EventListenerOrEventListenerObject,
-        options?: boolean | EventListenerOptions | undefined): void;
+        options?: boolean | EventListenerOptions | undefined
+    ): void;
     removeEventListener(type: unknown, listener: unknown, options?: unknown): void {
         throw new Error('Method not implemented.');
     }
@@ -94,20 +98,26 @@ export class MockMediaStreamTrackImpl implements MediaStreamTrack {
     addEventListener<K extends keyof MediaStreamTrackEventMap>(
         type: K,
         listener: (this: MediaStreamTrack, ev: MediaStreamTrackEventMap[K]) => any,
-        options?: boolean | AddEventListenerOptions | undefined): void;
-    addEventListener(type: string,
+        options?: boolean | AddEventListenerOptions | undefined
+    ): void;
+    addEventListener(
+        type: string,
         listener: EventListenerOrEventListenerObject,
-        options?: boolean | AddEventListenerOptions | undefined): void;
+        options?: boolean | AddEventListenerOptions | undefined
+    ): void;
     addEventListener(type: unknown, listener: unknown, options?: unknown): void {
         throw new Error('Method not implemented.');
     }
     removeEventListener<K extends keyof MediaStreamTrackEventMap>(
         type: K,
         listener: (this: MediaStreamTrack, ev: MediaStreamTrackEventMap[K]) => any,
-        options?: boolean | EventListenerOptions | undefined): void;
-    removeEventListener(type: string,
+        options?: boolean | EventListenerOptions | undefined
+    ): void;
+    removeEventListener(
+        type: string,
         listener: EventListenerOrEventListenerObject,
-        options?: boolean | EventListenerOptions | undefined): void;
+        options?: boolean | EventListenerOptions | undefined
+    ): void;
     removeEventListener(type: unknown, listener: unknown, options?: unknown): void {
         throw new Error('Method not implemented.');
     }
@@ -125,22 +135,20 @@ const mockHTMLMediaElementPlay = (ableToPlay: boolean) => {
 
 const originalMediaStream = global.MediaStream;
 const originalMediaStreamTrack = global.MediaStreamTrack;
-export const mockMediaStream =
-    () => {
-        global.MediaStream = MockMediaStreamImpl;
-        global.MediaStreamTrack = MockMediaStreamTrackImpl;
-    }
+export const mockMediaStream = () => {
+    global.MediaStream = MockMediaStreamImpl;
+    global.MediaStreamTrack = MockMediaStreamTrackImpl;
+};
 
-export const unmockMediaStream =
-    () => {
-        global.MediaStream = originalMediaStream;
-        global.MediaStreamTrack = originalMediaStreamTrack;
-    }
+export const unmockMediaStream = () => {
+    global.MediaStream = originalMediaStream;
+    global.MediaStreamTrack = originalMediaStreamTrack;
+};
 
-export const mockHTMLMediaElement = (options: { ableToPlay: boolean, readyState?: number }) => {
+export const mockHTMLMediaElement = (options: { ableToPlay: boolean; readyState?: number }) => {
     const { ableToPlay, readyState } = options;
     jest.spyOn(HTMLMediaElement.prototype, 'play').mockReturnValue(mockHTMLMediaElementPlay(ableToPlay));
     if (readyState !== undefined) {
         jest.spyOn(HTMLMediaElement.prototype, 'readyState', 'get').mockReturnValue(readyState);
     }
-}
+};

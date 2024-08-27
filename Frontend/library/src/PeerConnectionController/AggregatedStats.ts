@@ -120,7 +120,7 @@ export class AggregatedStats {
      */
     handleCandidatePair(stat: CandidatePairStats) {
         // Add the candidate pair to the candidate pair array
-        this.candidatePairs.push(stat)
+        this.candidatePairs.push(stat);
     }
 
     /**
@@ -187,9 +187,8 @@ export class AggregatedStats {
                 this.inboundVideoStats = stat as unknown as InboundVideoStats;
 
                 if (this.lastVideoStats != undefined) {
-                    this.inboundVideoStats.bitrate = (8 *
-                        (this.inboundVideoStats.bytesReceived -
-                            this.lastVideoStats.bytesReceived)) /
+                    this.inboundVideoStats.bitrate =
+                        (8 * (this.inboundVideoStats.bytesReceived - this.lastVideoStats.bytesReceived)) /
                         (this.inboundVideoStats.timestamp - this.lastVideoStats.timestamp);
                     this.inboundVideoStats.bitrate = Math.floor(this.inboundVideoStats.bitrate);
                 }
@@ -202,9 +201,8 @@ export class AggregatedStats {
                 this.inboundAudioStats = stat as unknown as InboundAudioStats;
 
                 if (this.lastAudioStats != undefined) {
-                    this.inboundAudioStats.bitrate = (8 *
-                        (this.inboundAudioStats.bytesReceived -
-                            this.lastAudioStats.bytesReceived)) /
+                    this.inboundAudioStats.bitrate =
+                        (8 * (this.inboundAudioStats.bytesReceived - this.lastAudioStats.bytesReceived)) /
                         (this.inboundAudioStats.timestamp - this.lastAudioStats.timestamp);
                     this.inboundAudioStats.bitrate = Math.floor(this.inboundAudioStats.bitrate);
                 }
@@ -256,22 +254,24 @@ export class AggregatedStats {
         this.transportStats = stat;
     }
 
-
     handleCodec(stat: CodecStats) {
         const codecId = stat.id;
-        const codecType = `${stat.mimeType.replace('video/', '').replace('audio/', '')}${stat.sdpFmtpLine ? ` ${stat.sdpFmtpLine}` : ''}`;
+        const codecType = `${stat.mimeType.replace('video/', '').replace('audio/', '')}${
+            stat.sdpFmtpLine ? ` ${stat.sdpFmtpLine}` : ''
+        }`;
         this.codecs.set(codecId, codecType);
     }
 
-    handleSessionStatistics(videoStartTime: number,
+    handleSessionStatistics(
+        videoStartTime: number,
         inputController: boolean | null,
-        videoEncoderAvgQP: number) {
+        videoEncoderAvgQP: number
+    ) {
         const deltaTime = Date.now() - videoStartTime;
         this.sessionStats.runTime = new Date(deltaTime).toISOString().substr(11, 8).toString();
 
-        const controlsStreamInput = inputController === null ? 'Not sent yet' :
-            inputController ? 'true' :
-                'false';
+        const controlsStreamInput =
+            inputController === null ? 'Not sent yet' : inputController ? 'true' : 'false';
         this.sessionStats.controlsStreamInput = controlsStreamInput;
 
         this.sessionStats.videoEncoderAvgQP = videoEncoderAvgQP;
@@ -295,7 +295,8 @@ export class AggregatedStats {
             // Return the candidate pair that matches the transport candidate pair id
             return this.candidatePairs.find(
                 (candidatePair) => candidatePair.id === this.transportStats.selectedCandidatePairId,
-                null);
+                null
+            );
         }
 
         // Fall back to the selected candidate pair

@@ -4,15 +4,23 @@ export class RTCUtils {
     }
 
     static canTransceiverReceiveVideo(transceiver: RTCRtpTransceiver | undefined): boolean {
-        return !!transceiver &&
+        return (
+            !!transceiver &&
             (transceiver.direction === 'sendrecv' || transceiver.direction === 'recvonly') &&
-            transceiver.receiver && transceiver.receiver.track && transceiver.receiver.track.kind === 'video';
+            transceiver.receiver &&
+            transceiver.receiver.track &&
+            transceiver.receiver.track.kind === 'video'
+        );
     }
 
     static canTransceiverSendVideo(transceiver: RTCRtpTransceiver | undefined): boolean {
-        return !!transceiver &&
+        return (
+            !!transceiver &&
             (transceiver.direction === 'sendrecv' || transceiver.direction === 'sendonly') &&
-            transceiver.sender && transceiver.sender.track && transceiver.sender.track.kind === 'video';
+            transceiver.sender &&
+            transceiver.sender.track &&
+            transceiver.sender.track.kind === 'video'
+        );
     }
 
     static isAudioTransceiver(transceiver: RTCRtpTransceiver | undefined): boolean {
@@ -20,14 +28,22 @@ export class RTCUtils {
     }
 
     static canTransceiverReceiveAudio(transceiver: RTCRtpTransceiver | undefined): boolean {
-        return !!transceiver &&
+        return (
+            !!transceiver &&
             (transceiver.direction === 'sendrecv' || transceiver.direction === 'recvonly') &&
-            transceiver.receiver && transceiver.receiver.track && transceiver.receiver.track.kind === 'audio';
+            transceiver.receiver &&
+            transceiver.receiver.track &&
+            transceiver.receiver.track.kind === 'audio'
+        );
     }
 
     static canTransceiverSendAudio(transceiver: RTCRtpTransceiver | undefined): boolean {
-        return !!transceiver &&
+        return (
+            !!transceiver &&
             (transceiver.direction === 'sendrecv' || transceiver.direction === 'sendonly') &&
-            transceiver.sender && transceiver.sender.track && transceiver.sender.track.kind === 'audio';
+            transceiver.sender &&
+            transceiver.sender.track &&
+            transceiver.sender.track.kind === 'audio'
+        );
     }
 }

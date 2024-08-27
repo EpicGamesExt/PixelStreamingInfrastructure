@@ -38,7 +38,7 @@ export class AfkWarningUpdateEvent extends Event {
     readonly type: 'afkWarningUpdate';
     readonly data: {
         /** How many seconds until the session is disconnected */
-        countDown: number
+        countDown: number;
     };
     constructor(data: AfkWarningUpdateEvent['data']) {
         super('afkWarningUpdate');
@@ -73,7 +73,7 @@ export class VideoEncoderAvgQPEvent extends Event {
     readonly type: 'videoEncoderAvgQP';
     readonly data: {
         /** Average video quality value */
-        avgQP: number
+        avgQP: number;
     };
     constructor(data: VideoEncoderAvgQPEvent['data']) {
         super('videoEncoderAvgQP');
@@ -160,7 +160,7 @@ export class DataChannelOpenEvent extends Event {
         /** Data channel label. One of 'datachannel', 'send-datachannel', 'recv-datachannel' */
         label: string;
         /** RTCDataChannel onOpen event */
-        event: Event
+        event: Event;
     };
     constructor(data: DataChannelOpenEvent['data']) {
         super('dataChannelOpen');
@@ -177,7 +177,7 @@ export class DataChannelCloseEvent extends Event {
         /** Data channel label. One of 'datachannel', 'send-datachannel', 'recv-datachannel' */
         label: string;
         /** RTCDataChannel onClose event */
-        event: Event
+        event: Event;
     };
     constructor(data: DataChannelCloseEvent['data']) {
         super('dataChannelClose');
@@ -194,7 +194,7 @@ export class DataChannelErrorEvent extends Event {
         /** Data channel label. One of 'datachannel', 'send-datachannel', 'recv-datachannel' */
         label: string;
         /** RTCDataChannel onError event */
-        event: Event
+        event: Event;
     };
     constructor(data: DataChannelErrorEvent['data']) {
         super('dataChannelError');
@@ -259,7 +259,7 @@ export class PlayStreamErrorEvent extends Event {
     readonly type: 'playStreamError';
     readonly data: {
         /** Error message */
-        message: string
+        message: string;
     };
     constructor(data: PlayStreamErrorEvent['data']) {
         super('playStreamError');
@@ -285,7 +285,7 @@ export class PlayStreamRejectedEvent extends Event {
     readonly type: 'playStreamRejected';
     readonly data: {
         /** Rejection reason */
-        reason: unknown
+        reason: unknown;
     };
     constructor(data: PlayStreamRejectedEvent['data']) {
         super('playStreamRejected');
@@ -330,7 +330,7 @@ export class StatsReceivedEvent extends Event {
     readonly type: 'statsReceived';
     readonly data: {
         /** Statistics object */
-        aggregatedStats: AggregatedStats
+        aggregatedStats: AggregatedStats;
     };
     constructor(data: StatsReceivedEvent['data']) {
         super('statsReceived');
@@ -382,7 +382,7 @@ export class LatencyTestResultEvent extends Event {
     readonly type: 'latencyTestResult';
     readonly data: {
         /** Latency test result object */
-        latencyTimings: LatencyTestResults
+        latencyTimings: LatencyTestResults;
     };
     constructor(data: LatencyTestResultEvent['data']) {
         super('latencyTestResult');
@@ -398,7 +398,7 @@ export class DataChannelLatencyTestResponseEvent extends Event {
     readonly type: 'dataChannelLatencyTestResponse';
     readonly data: {
         /** Latency test result object */
-        response: DataChannelLatencyTestResponse
+        response: DataChannelLatencyTestResponse;
     };
     constructor(data: DataChannelLatencyTestResponseEvent['data']) {
         super('dataChannelLatencyTestResponse');
@@ -413,7 +413,7 @@ export class DataChannelLatencyTestResultEvent extends Event {
     readonly type: 'dataChannelLatencyTestResult';
     readonly data: {
         /** Latency test result object */
-        result: DataChannelLatencyTestResult
+        result: DataChannelLatencyTestResult;
     };
     constructor(data: DataChannelLatencyTestResultEvent['data']) {
         super('dataChannelLatencyTestResult');
@@ -428,7 +428,7 @@ export class InitialSettingsEvent extends Event {
     readonly type: 'initialSettings';
     readonly data: {
         /** Initial settings from UE */
-        settings: InitialSettings
+        settings: InitialSettings;
     };
     constructor(data: InitialSettingsEvent['data']) {
         super('initialSettings');
@@ -436,42 +436,43 @@ export class InitialSettingsEvent extends Event {
     }
 }
 
-export type SettingsData = | {
-    /** Flag id */
-    id: FlagsIds;
-    type: 'flag';
-    /** Flag value */
-    value: boolean;
-    /** SettingFlag object */
-    target: SettingFlag;
-}
+export type SettingsData =
     | {
-        /** Numeric setting id */
-        id: NumericParametersIds;
-        type: 'number';
-        /** Numeric setting value */
-        value: number;
-        /** SettingNumber object */
-        target: SettingNumber;
-    }
+          /** Flag id */
+          id: FlagsIds;
+          type: 'flag';
+          /** Flag value */
+          value: boolean;
+          /** SettingFlag object */
+          target: SettingFlag;
+      }
     | {
-        /** Text setting id */
-        id: TextParametersIds;
-        type: 'text';
-        /** Text setting value */
-        value: string;
-        /** SettingText object */
-        target: SettingText;
-    }
+          /** Numeric setting id */
+          id: NumericParametersIds;
+          type: 'number';
+          /** Numeric setting value */
+          value: number;
+          /** SettingNumber object */
+          target: SettingNumber;
+      }
     | {
-        /** Option setting id */
-        id: OptionParametersIds;
-        type: 'option';
-        /** Option setting selected value */
-        value: string;
-        /** SettingOption object */
-        target: SettingOption;
-    };
+          /** Text setting id */
+          id: TextParametersIds;
+          type: 'text';
+          /** Text setting value */
+          value: string;
+          /** SettingText object */
+          target: SettingText;
+      }
+    | {
+          /** Option setting id */
+          id: OptionParametersIds;
+          type: 'option';
+          /** Option setting selected value */
+          value: string;
+          /** SettingOption object */
+          target: SettingOption;
+      };
 
 /**
  * An event that is emitted when PixelStreaming settings change.
@@ -517,7 +518,7 @@ export type XrFrameData = {
  */
 export class XrFrameEvent extends Event {
     readonly type: 'xrFrame';
-    readonly data: XrFrameData
+    readonly data: XrFrameData;
     constructor(data: XrFrameEvent['data']) {
         super('xrFrame');
         this.data = data;
@@ -531,7 +532,7 @@ export class PlayerCountEvent extends Event {
     readonly type: 'playerCount';
     readonly data: {
         /** count object */
-        count: number
+        count: number;
     };
     constructor(data: PlayerCountEvent['data']) {
         super('playerCount');
@@ -549,15 +550,44 @@ export class WebRtcTCPRelayDetectedEvent extends Event {
     }
 }
 
-export type PixelStreamingEvent = | AfkWarningActivateEvent | AfkWarningUpdateEvent | AfkWarningDeactivateEvent |
-    AfkTimedOutEvent | VideoEncoderAvgQPEvent | WebRtcSdpEvent | WebRtcAutoConnectEvent | WebRtcConnectingEvent |
-    WebRtcConnectedEvent | WebRtcFailedEvent | WebRtcDisconnectedEvent | DataChannelOpenEvent | DataChannelCloseEvent |
-    DataChannelErrorEvent | VideoInitializedEvent | StreamLoadingEvent | StreamPreConnectEvent | StreamReconnectEvent |
-    StreamPreDisconnectEvent | PlayStreamErrorEvent | PlayStreamEvent | PlayStreamRejectedEvent |
-    LoadFreezeFrameEvent | HideFreezeFrameEvent | StatsReceivedEvent | StreamerListMessageEvent |
-    StreamerIDChangedMessageEvent | LatencyTestResultEvent | DataChannelLatencyTestResponseEvent |
-    DataChannelLatencyTestResultEvent | InitialSettingsEvent | SettingsChangedEvent | XrSessionStartedEvent |
-    XrSessionEndedEvent | XrFrameEvent | PlayerCountEvent | WebRtcTCPRelayDetectedEvent;
+export type PixelStreamingEvent =
+    | AfkWarningActivateEvent
+    | AfkWarningUpdateEvent
+    | AfkWarningDeactivateEvent
+    | AfkTimedOutEvent
+    | VideoEncoderAvgQPEvent
+    | WebRtcSdpEvent
+    | WebRtcAutoConnectEvent
+    | WebRtcConnectingEvent
+    | WebRtcConnectedEvent
+    | WebRtcFailedEvent
+    | WebRtcDisconnectedEvent
+    | DataChannelOpenEvent
+    | DataChannelCloseEvent
+    | DataChannelErrorEvent
+    | VideoInitializedEvent
+    | StreamLoadingEvent
+    | StreamPreConnectEvent
+    | StreamReconnectEvent
+    | StreamPreDisconnectEvent
+    | PlayStreamErrorEvent
+    | PlayStreamEvent
+    | PlayStreamRejectedEvent
+    | LoadFreezeFrameEvent
+    | HideFreezeFrameEvent
+    | StatsReceivedEvent
+    | StreamerListMessageEvent
+    | StreamerIDChangedMessageEvent
+    | LatencyTestResultEvent
+    | DataChannelLatencyTestResponseEvent
+    | DataChannelLatencyTestResultEvent
+    | InitialSettingsEvent
+    | SettingsChangedEvent
+    | XrSessionStartedEvent
+    | XrSessionEndedEvent
+    | XrFrameEvent
+    | PlayerCountEvent
+    | WebRtcTCPRelayDetectedEvent;
 
 export class EventEmitter extends EventTarget {
     /**
@@ -574,9 +604,10 @@ export class EventEmitter extends EventTarget {
      * @param type event name
      * @param listener event handler function
      */
-    public addEventListener<T extends PixelStreamingEvent['type'], E extends PixelStreamingEvent & { type: T }>(
-        type: T,
-        listener: (e: Event & E) => void) {
+    public addEventListener<
+        T extends PixelStreamingEvent['type'],
+        E extends PixelStreamingEvent & { type: T }
+    >(type: T, listener: (e: Event & E) => void) {
         super.addEventListener(type, listener);
     }
 
@@ -585,8 +616,10 @@ export class EventEmitter extends EventTarget {
      * @param type event name
      * @param listener event handler function
      */
-    public removeEventListener<T extends PixelStreamingEvent['type'], E extends PixelStreamingEvent &
-    { type: T }>(type: T, listener: (e: Event & E) => void) {
+    public removeEventListener<
+        T extends PixelStreamingEvent['type'],
+        E extends PixelStreamingEvent & { type: T }
+    >(type: T, listener: (e: Event & E) => void) {
         super.removeEventListener(type, listener);
     }
 }

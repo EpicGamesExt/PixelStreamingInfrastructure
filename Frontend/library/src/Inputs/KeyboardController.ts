@@ -139,9 +139,11 @@ export class KeyboardController {
      * @param config The applications configuration. We're interested in the suppress browser keys option
      * @param activeKeysProvider Active keys provider class object
      */
-    constructor(toStreamerMessagesProvider: StreamMessageController,
+    constructor(
+        toStreamerMessagesProvider: StreamMessageController,
         config: Config,
-        activeKeysProvider: ActiveKeys) {
+        activeKeysProvider: ActiveKeys
+    ) {
         this.toStreamerMessagesProvider = toStreamerMessagesProvider;
         this.config = config;
         this.activeKeysProvider = activeKeysProvider;
@@ -163,14 +165,18 @@ export class KeyboardController {
         // This has been deprecated as at Jun 13 2021
         document.addEventListener('keypress', keyPressHandler);
 
-        this.keyboardEventListenerTracker.addUnregisterCallback(
-            () => document.removeEventListener('compositionend', compositionEndHandler));
-        this.keyboardEventListenerTracker.addUnregisterCallback(
-            () => document.removeEventListener('keydown', keyDownHandler));
-        this.keyboardEventListenerTracker.addUnregisterCallback(
-            () => document.removeEventListener('keyup', keyUpHandler));
-        this.keyboardEventListenerTracker.addUnregisterCallback(
-            () => document.removeEventListener('keypress', keyPressHandler));
+        this.keyboardEventListenerTracker.addUnregisterCallback(() =>
+            document.removeEventListener('compositionend', compositionEndHandler)
+        );
+        this.keyboardEventListenerTracker.addUnregisterCallback(() =>
+            document.removeEventListener('keydown', keyDownHandler)
+        );
+        this.keyboardEventListenerTracker.addUnregisterCallback(() =>
+            document.removeEventListener('keyup', keyUpHandler)
+        );
+        this.keyboardEventListenerTracker.addUnregisterCallback(() =>
+            document.removeEventListener('keypress', keyPressHandler)
+        );
     }
 
     /**
@@ -231,8 +237,10 @@ export class KeyboardController {
      */
     handleOnKeyPress(keyboard: KeyboardEvent) {
         if (!('charCode' in keyboard)) {
-            Logger.Warning(Logger.GetStackTrace(),
-                'KeyboardEvent.charCode is deprecated in this browser, cannot send key press.');
+            Logger.Warning(
+                Logger.GetStackTrace(),
+                'KeyboardEvent.charCode is deprecated in this browser, cannot send key press.'
+            );
             return;
         }
 
@@ -252,15 +260,24 @@ export class KeyboardController {
             compositionEvent.data.split('').forEach((char) => {
                 // This keydown, keypress, keyup flow is required to mimic the way characters are
                 // normally triggered
-                this.handleOnKeyDown(new KeyboardEvent(
-                    'keydown',
-                    { keyCode: char.toUpperCase().charCodeAt(0), charCode: char.charCodeAt(0) }));
-                this.handleOnKeyPress(new KeyboardEvent(
-                    'keypress',
-                    { keyCode: char.toUpperCase().charCodeAt(0), charCode: char.charCodeAt(0) }));
-                this.handleOnKeyUp(new KeyboardEvent(
-                    'keyup',
-                    { keyCode: char.toUpperCase().charCodeAt(0), charCode: char.charCodeAt(0) }));
+                this.handleOnKeyDown(
+                    new KeyboardEvent('keydown', {
+                        keyCode: char.toUpperCase().charCodeAt(0),
+                        charCode: char.charCodeAt(0)
+                    })
+                );
+                this.handleOnKeyPress(
+                    new KeyboardEvent('keypress', {
+                        keyCode: char.toUpperCase().charCodeAt(0),
+                        charCode: char.charCodeAt(0)
+                    })
+                );
+                this.handleOnKeyUp(
+                    new KeyboardEvent('keyup', {
+                        keyCode: char.toUpperCase().charCodeAt(0),
+                        charCode: char.charCodeAt(0)
+                    })
+                );
             });
         }
     }
@@ -283,7 +300,8 @@ export class KeyboardController {
             } else {
                 Logger.Warning(
                     Logger.GetStackTrace(),
-                    `Keyboard code of ${event.code} is not supported in our mapping, ignoring this key.`);
+                    `Keyboard code of ${event.code} is not supported in our mapping, ignoring this key.`
+                );
                 return null;
             }
         }
@@ -292,8 +310,10 @@ export class KeyboardController {
 
         if (keyboardEvent.keyCode === SpecialKeyCodes.shift && keyboardEvent.code === 'ShiftRight') {
             return SpecialKeyCodes.rightShift;
-        } else if (keyboardEvent.keyCode === SpecialKeyCodes.control &&
-            keyboardEvent.code === 'ControlRight') {
+        } else if (
+            keyboardEvent.keyCode === SpecialKeyCodes.control &&
+            keyboardEvent.code === 'ControlRight'
+        ) {
             return SpecialKeyCodes.rightControl;
         } else if (keyboardEvent.keyCode === SpecialKeyCodes.alt && keyboardEvent.code === 'AltRight') {
             return SpecialKeyCodes.rightAlt;

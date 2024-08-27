@@ -11,7 +11,8 @@ export class SettingText<CustomIds extends string = TextParametersIds> extends S
     onChangeEmit: (changedValue: string) => void;
     useUrlParams: boolean;
 
-    constructor(id: TextParametersIds | CustomIds,
+    constructor(
+        id: TextParametersIds | CustomIds,
         label: string,
         description: string,
         defaultTextValue: string,
@@ -19,7 +20,8 @@ export class SettingText<CustomIds extends string = TextParametersIds> extends S
         // eslint-disable-next-line @typescript-eslint/no-empty-function
         defaultOnChangeListener: (changedValue: unknown, setting: SettingBase) => void = () => {
             /* Do nothing, to be overridden. */
-}) {
+        }
+    ) {
         super(id, label, description, defaultTextValue, defaultOnChangeListener);
 
         if (!useUrlParams || !this.hasURLParam(this.id)) {

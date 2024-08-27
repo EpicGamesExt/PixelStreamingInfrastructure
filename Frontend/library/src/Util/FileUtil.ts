@@ -61,7 +61,7 @@ export class FileUtil {
         // Extract the total size of the file (across all chunks)
         file.size = Math.ceil(
             new DataView(view.slice(1, 5).buffer).getInt32(0, true) /
-            16379 /* The maximum number of payload bits per message*/
+                16379 /* The maximum number of payload bits per message*/
         );
 
         // Get the file part of the payload
@@ -82,7 +82,8 @@ export class FileUtil {
             Logger.Log(
                 Logger.GetStackTrace(),
                 `Average transfer bitrate: ${transferBitrate}kb/s over ${transferDuration / 1000} seconds`,
-                6);
+                6
+            );
 
             // File reconstruction
             /**
@@ -100,8 +101,10 @@ export class FileUtil {
             a.remove();
         } else if (file.data.length > file.size) {
             file.receiving = false;
-            Logger.Error(Logger.GetStackTrace(),
-                `Received bigger file than advertised: ${file.data.length}/${file.size}`);
+            Logger.Error(
+                Logger.GetStackTrace(),
+                `Received bigger file than advertised: ${file.data.length}/${file.size}`
+            );
         }
     }
 }

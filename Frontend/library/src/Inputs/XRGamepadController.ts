@@ -27,11 +27,14 @@ export class XRGamepadController {
      * @returns a new gamepad object, populated with the original gamepads values
      */
     static deepCopyGamepad(gamepad: Gamepad): Gamepad {
-        return JSON.parse(JSON.stringify({
-            buttons: gamepad.buttons.map((b) => JSON.parse(JSON.stringify(
-                { pressed: b.pressed, touched: b.touched, value: b.value }))),
-            axes: gamepad.axes
-        }));
+        return JSON.parse(
+            JSON.stringify({
+                buttons: gamepad.buttons.map((b) =>
+                    JSON.parse(JSON.stringify({ pressed: b.pressed, touched: b.touched, value: b.value }))
+                ),
+                axes: gamepad.axes
+            })
+        );
     }
 
     updateStatus(source: XRInputSource, frame: XRFrame, refSpace: XRReferenceSpace) {
@@ -112,21 +115,34 @@ export class XRGamepadController {
                 if (currButton.pressed) {
                     // press
                     const isRepeat = prevButton.pressed ? 1 : 0;
-                    this.toStreamerMessagesProvider.toStreamerHandlers.get('XRButtonPressed')(
-                        [handedness, i, isRepeat, currButton.value]);
+                    this.toStreamerMessagesProvider.toStreamerHandlers.get('XRButtonPressed')([
+                        handedness,
+                        i,
+                        isRepeat,
+                        currButton.value
+                    ]);
                 } else if (prevButton.pressed) {
-                    this.toStreamerMessagesProvider.toStreamerHandlers.get('XRButtonReleased')(
-                        [handedness, i, 0]);
+                    this.toStreamerMessagesProvider.toStreamerHandlers.get('XRButtonReleased')([
+                        handedness,
+                        i,
+                        0
+                    ]);
                 }
 
                 if (currButton.touched) {
                     // touched
                     const isRepeat = prevButton.touched ? 1 : 0;
-                    this.toStreamerMessagesProvider.toStreamerHandlers.get('XRButtonTouched')(
-                        [handedness, i, isRepeat]);
+                    this.toStreamerMessagesProvider.toStreamerHandlers.get('XRButtonTouched')([
+                        handedness,
+                        i,
+                        isRepeat
+                    ]);
                 } else if (prevButton.touched) {
-                    this.toStreamerMessagesProvider.toStreamerHandlers.get('XRButtonTouchReleased')(
-                        [handedness, i, 0]);
+                    this.toStreamerMessagesProvider.toStreamerHandlers.get('XRButtonTouchReleased')([
+                        handedness,
+                        i,
+                        0
+                    ]);
                 }
             }
 
@@ -136,8 +152,11 @@ export class XRGamepadController {
                 const prevAxisValue = prevState.axes[i];
                 // Only send axis update if there is a change
                 if (curAxisValue != prevAxisValue) {
-                    this.toStreamerMessagesProvider.toStreamerHandlers.get('XRAnalog')(
-                        [handedness, i, curAxisValue]);
+                    this.toStreamerMessagesProvider.toStreamerHandlers.get('XRAnalog')([
+                        handedness,
+                        i,
+                        curAxisValue
+                    ]);
                 }
             }
 

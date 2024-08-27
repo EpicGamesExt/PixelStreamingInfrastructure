@@ -29,9 +29,11 @@ export class TouchController implements ITouchController {
      * @param videoElementProvider - Video Player instance
      * @param coordinateConverter - A coordinate converter instance
      */
-    constructor(toStreamerMessagesProvider: StreamMessageController,
+    constructor(
+        toStreamerMessagesProvider: StreamMessageController,
         videoElementProvider: VideoPlayer,
-        coordinateConverter: CoordinateConverter) {
+        coordinateConverter: CoordinateConverter
+    ) {
         this.toStreamerMessagesProvider = toStreamerMessagesProvider;
         this.videoElementProvider = videoElementProvider;
         this.coordinateConverter = coordinateConverter;
@@ -42,19 +44,25 @@ export class TouchController implements ITouchController {
         this.videoElementParent.addEventListener('touchstart', ontouchstart);
         this.videoElementParent.addEventListener('touchend', ontouchend);
         this.videoElementParent.addEventListener('touchmove', ontouchmove);
-        this.touchEventListenerTracker.addUnregisterCallback(
-            () => this.videoElementParent.removeEventListener('touchstart', ontouchstart));
-        this.touchEventListenerTracker.addUnregisterCallback(
-            () => this.videoElementParent.removeEventListener('touchend', ontouchend));
-        this.touchEventListenerTracker.addUnregisterCallback(
-            () => this.videoElementParent.removeEventListener('touchmove', ontouchmove));
+        this.touchEventListenerTracker.addUnregisterCallback(() =>
+            this.videoElementParent.removeEventListener('touchstart', ontouchstart)
+        );
+        this.touchEventListenerTracker.addUnregisterCallback(() =>
+            this.videoElementParent.removeEventListener('touchend', ontouchend)
+        );
+        this.touchEventListenerTracker.addUnregisterCallback(() =>
+            this.videoElementParent.removeEventListener('touchmove', ontouchmove)
+        );
         Logger.Log(Logger.GetStackTrace(), 'Touch Events Registered', 6);
 
         // is this strictly necessary?
-        const preventOnTouchMove = (event: TouchEvent) => { event.preventDefault(); };
+        const preventOnTouchMove = (event: TouchEvent) => {
+            event.preventDefault();
+        };
         document.addEventListener('touchmove', preventOnTouchMove);
-        this.touchEventListenerTracker.addUnregisterCallback(
-            () => document.removeEventListener('touchmove', preventOnTouchMove));
+        this.touchEventListenerTracker.addUnregisterCallback(() =>
+            document.removeEventListener('touchmove', preventOnTouchMove)
+        );
     }
 
     /**
@@ -84,7 +92,7 @@ export class TouchController implements ITouchController {
         this.fingers.push(this.fingerIds.get(touch.identifier));
         // Sort array back into descending order. This means if finger '1' were to lift after finger '0', we
         // would ensure that 0 will be the first index to pop
-        this.fingers.sort(function(a, b) {
+        this.fingers.sort(function (a, b) {
             return b - a;
         });
         this.fingerIds.delete(touch.identifier);
@@ -145,7 +153,7 @@ export class TouchController implements ITouchController {
         const toStreamerHandlers = this.toStreamerMessagesProvider.toStreamerHandlers;
 
         for (let t = 0; t < touches.length; t++) {
-            const numTouches = 1;  // the number of touches to be sent this message
+            const numTouches = 1; // the number of touches to be sent this message
             const touch = touches[t];
             const x = touch.clientX - offset.left;
             const y = touch.clientY - offset.top;

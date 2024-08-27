@@ -12,7 +12,8 @@ export class SettingOption<CustomIds extends string = OptionParametersIds> exten
     onChangeEmit: (changedValue: string) => void;
     _options: Array<string>;
 
-    constructor(id: OptionParametersIds | CustomIds,
+    constructor(
+        id: OptionParametersIds | CustomIds,
         label: string,
         description: string,
         defaultTextValue: string,
@@ -21,12 +22,14 @@ export class SettingOption<CustomIds extends string = OptionParametersIds> exten
         // eslint-disable-next-line @typescript-eslint/no-empty-function
         defaultOnChangeListener: (changedValue: unknown, setting: SettingBase) => void = () => {
             /* Do nothing, to be overridden. */
-}) {
+        }
+    ) {
         super(id, label, description, defaultTextValue, defaultOnChangeListener);
 
         this.options = options;
-        const stringToMatch: string = this.hasURLParam(this.id) ? this.getURLParam(this.id) :
-            defaultTextValue;
+        const stringToMatch: string = this.hasURLParam(this.id)
+            ? this.getURLParam(this.id)
+            : defaultTextValue;
         this.selected = stringToMatch;
         this.useUrlParams = useUrlParams;
     }

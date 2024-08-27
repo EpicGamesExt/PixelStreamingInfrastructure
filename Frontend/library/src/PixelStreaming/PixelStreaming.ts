@@ -44,7 +44,6 @@ import { RTCUtils } from '../Util/RTCUtils';
 import { WebRtcPlayerController } from '../WebRtcPlayer/WebRtcPlayerController';
 import { WebXRController } from '../WebXR/WebXRController';
 
-
 export interface PixelStreamingOverrides {
     /**
      * The DOM element where Pixel Streaming video and user input event handlers are attached to.
@@ -104,14 +103,10 @@ export class PixelStreaming {
 
         // Onscreen keyboard
         this.onScreenKeyboardHelper = new OnScreenKeyboard(this.videoElementParent);
-        this.onScreenKeyboardHelper
-            .unquantizeAndDenormalizeUnsigned = (x: number,
-                y: number) => this._webRtcController
-                    .requestUnquantizedAndDenormalizeUnsigned(
-                        x,
-                        y);
-        this._activateOnScreenKeyboard = (command: any) => this.onScreenKeyboardHelper.showOnScreenKeyboard(
-            command);
+        this.onScreenKeyboardHelper.unquantizeAndDenormalizeUnsigned = (x: number, y: number) =>
+            this._webRtcController.requestUnquantizedAndDenormalizeUnsigned(x, y);
+        this._activateOnScreenKeyboard = (command: any) =>
+            this.onScreenKeyboardHelper.showOnScreenKeyboard(command);
 
         this._webXrController = new WebXRController(this._webRtcController);
 
@@ -147,38 +142,41 @@ export class PixelStreaming {
                 if (wantsQualityController === true && !this._webRtcController.isQualityController) {
                     this._webRtcController.sendRequestQualityControlOwnership();
                 }
-            });
+            }
+        );
 
-        this.config._addOnSettingChangedListener(
-            Flags.AFKDetection,
-            (isAFKEnabled: boolean) => { this._webRtcController.setAfkEnabled(isAFKEnabled); });
+        this.config._addOnSettingChangedListener(Flags.AFKDetection, (isAFKEnabled: boolean) => {
+            this._webRtcController.setAfkEnabled(isAFKEnabled);
+        });
 
-        this.config._addOnSettingChangedListener(
-            Flags.MatchViewportResolution,
-            () => { this._webRtcController.videoPlayer.updateVideoStreamSize(); });
+        this.config._addOnSettingChangedListener(Flags.MatchViewportResolution, () => {
+            this._webRtcController.videoPlayer.updateVideoStreamSize();
+        });
 
         this.config._addOnSettingChangedListener(Flags.HoveringMouseMode, (isHoveringMouse: boolean) => {
-            this.config.setFlagLabel(Flags.HoveringMouseMode,
-                `Control Scheme: ${isHoveringMouse ? 'Hovering' : 'Locked'} Mouse`);
+            this.config.setFlagLabel(
+                Flags.HoveringMouseMode,
+                `Control Scheme: ${isHoveringMouse ? 'Hovering' : 'Locked'} Mouse`
+            );
             this._webRtcController.setMouseInputEnabled(this.config.isFlagEnabled(Flags.MouseInput));
         });
 
         // user input
-        this.config._addOnSettingChangedListener(
-            Flags.KeyboardInput,
-            (isEnabled: boolean) => { this._webRtcController.setKeyboardInputEnabled(isEnabled); });
+        this.config._addOnSettingChangedListener(Flags.KeyboardInput, (isEnabled: boolean) => {
+            this._webRtcController.setKeyboardInputEnabled(isEnabled);
+        });
 
-        this.config._addOnSettingChangedListener(
-            Flags.MouseInput,
-            (isEnabled: boolean) => { this._webRtcController.setMouseInputEnabled(isEnabled); });
+        this.config._addOnSettingChangedListener(Flags.MouseInput, (isEnabled: boolean) => {
+            this._webRtcController.setMouseInputEnabled(isEnabled);
+        });
 
-        this.config._addOnSettingChangedListener(
-            Flags.TouchInput,
-            (isEnabled: boolean) => { this._webRtcController.setTouchInputEnabled(isEnabled); });
+        this.config._addOnSettingChangedListener(Flags.TouchInput, (isEnabled: boolean) => {
+            this._webRtcController.setTouchInputEnabled(isEnabled);
+        });
 
-        this.config._addOnSettingChangedListener(
-            Flags.GamepadInput,
-            (isEnabled: boolean) => { this._webRtcController.setGamePadInputEnabled(isEnabled); });
+        this.config._addOnSettingChangedListener(Flags.GamepadInput, (isEnabled: boolean) => {
+            this._webRtcController.setGamePadInputEnabled(isEnabled);
+        });
 
         // encoder settings
         this.config._addOnNumericSettingChangedListener(NumericParameters.MinQP, (newValue: number) => {
@@ -200,7 +198,8 @@ export class PixelStreaming {
                 Logger.Log(Logger.GetStackTrace(), '--------  Sending web rtc settings  --------', 7);
                 this._webRtcController.sendWebRTCMinBitrate(newValue * 1000 /* kbps to bps */);
                 Logger.Log(Logger.GetStackTrace(), '-------------------------------------------', 7);
-            });
+            }
+        );
 
         this.config._addOnNumericSettingChangedListener(
             NumericParameters.WebRTCMaxBitrate,
@@ -208,7 +207,8 @@ export class PixelStreaming {
                 Logger.Log(Logger.GetStackTrace(), '--------  Sending web rtc settings  --------', 7);
                 this._webRtcController.sendWebRTCMaxBitrate(newValue * 1000 /* kbps to bps */);
                 Logger.Log(Logger.GetStackTrace(), '-------------------------------------------', 7);
-            });
+            }
+        );
 
         this.config._addOnNumericSettingChangedListener(NumericParameters.WebRTCFPS, (newValue: number) => {
             Logger.Log(Logger.GetStackTrace(), '--------  Sending web rtc settings  --------', 7);
@@ -222,7 +222,8 @@ export class PixelStreaming {
                 if (this._webRtcController) {
                     this._webRtcController.setPreferredCodec(newValue);
                 }
-            });
+            }
+        );
 
         this.config._registerOnChangeEvents(this._eventEmitter);
     }
@@ -253,7 +254,8 @@ export class PixelStreaming {
         this._webRtcController = webRtcPlayerController;
 
         this._webRtcController.setPreferredCodec(
-            this.config.getSettingOption(OptionParameters.PreferredCodec).selected);
+            this.config.getSettingOption(OptionParameters.PreferredCodec).selected
+        );
         this._webRtcController.resizePlayerStyle();
 
         // connect if auto connect flag is enabled
@@ -330,7 +332,8 @@ export class PixelStreaming {
         // If we prefer not to force a reconnection, just warn the user that this operation didn't happen
         Logger.Warning(
             Logger.GetStackTrace(),
-            'Trying to unmute mic, but PixelStreaming was initialized with no microphone track. Call with forceEnable == true to re-connect with a mic track.');
+            'Trying to unmute mic, but PixelStreaming was initialized with no microphone track. Call with forceEnable == true to re-connect with a mic track.'
+        );
     }
 
     public muteMicrophone(): void {
@@ -342,12 +345,12 @@ export class PixelStreaming {
         // If there wasn't a mic track, just let user know there's nothing to mute
         Logger.Info(
             Logger.GetStackTrace(),
-            'Trying to mute mic, but PixelStreaming has no microphone track, so sending sound is already disabled.');
+            'Trying to mute mic, but PixelStreaming has no microphone track, so sending sound is already disabled.'
+        );
     }
 
     private setMicrophoneMuted(mute: boolean): void {
-        for (const transceiver
-            of this._webRtcController?.peerConnectionController?.peerConnection?.getTransceivers() ??
+        for (const transceiver of this._webRtcController?.peerConnectionController?.peerConnection?.getTransceivers() ??
             []) {
             if (RTCUtils.canTransceiverSendAudio(transceiver)) {
                 transceiver.sender.track.enabled = !mute;
@@ -383,8 +386,12 @@ export class PixelStreaming {
      * @param allowClickToReconnect - true if we want to allow the user to retry the connection with a click
      */
     _onDisconnect(eventString: string, allowClickToReconnect: boolean) {
-        this._eventEmitter.dispatchEvent(new WebRtcDisconnectedEvent(
-            { eventString: eventString, allowClickToReconnect: allowClickToReconnect }));
+        this._eventEmitter.dispatchEvent(
+            new WebRtcDisconnectedEvent({
+                eventString: eventString,
+                allowClickToReconnect: allowClickToReconnect
+            })
+        );
     }
 
     /**
@@ -437,9 +444,11 @@ export class PixelStreaming {
         if (!this._videoStartTime || this._videoStartTime === undefined) {
             this._videoStartTime = Date.now();
         }
-        videoStats.handleSessionStatistics(this._videoStartTime,
+        videoStats.handleSessionStatistics(
+            this._videoStartTime,
             this._inputController,
-            this._webRtcController.videoAvgQp);
+            this._webRtcController.videoAvgQp
+        );
 
         this._eventEmitter.dispatchEvent(new StatsReceivedEvent({ aggregatedStats: videoStats }));
     }
@@ -463,7 +472,8 @@ export class PixelStreaming {
             if (this.allowConsoleCommands === false) {
                 Logger.Info(
                     Logger.GetStackTrace(),
-                    '-AllowPixelStreamingCommands=false, sending arbitrary console commands from browser to UE is disabled.');
+                    '-AllowPixelStreamingCommands=false, sending arbitrary console commands from browser to UE is disabled.'
+                );
             }
         }
 
@@ -471,37 +481,41 @@ export class PixelStreaming {
         const urlParams = new IURLSearchParams(window.location.search);
         Logger.Info(Logger.GetStackTrace(), `using URL parameters ${useUrlParams}`);
         if (settings.EncoderSettings) {
-            this.config.setNumericSetting(NumericParameters.MinQP,
+            this.config.setNumericSetting(
+                NumericParameters.MinQP,
                 // If a setting is set in the URL, make sure we respect that value
                 // as opposed to what the application sends us
-                (useUrlParams && urlParams.has(NumericParameters.MinQP)) ?
-                    Number.parseFloat(urlParams.get(NumericParameters.MinQP)) :
-                    settings.EncoderSettings.MinQP);
+                useUrlParams && urlParams.has(NumericParameters.MinQP)
+                    ? Number.parseFloat(urlParams.get(NumericParameters.MinQP))
+                    : settings.EncoderSettings.MinQP
+            );
 
-
-            this.config.setNumericSetting(NumericParameters.MaxQP,
-                (useUrlParams && urlParams.has(NumericParameters.MaxQP)) ?
-                    Number.parseFloat(urlParams.get(NumericParameters.MaxQP)) :
-                    settings.EncoderSettings.MaxQP);
+            this.config.setNumericSetting(
+                NumericParameters.MaxQP,
+                useUrlParams && urlParams.has(NumericParameters.MaxQP)
+                    ? Number.parseFloat(urlParams.get(NumericParameters.MaxQP))
+                    : settings.EncoderSettings.MaxQP
+            );
         }
         if (settings.WebRTCSettings) {
             this.config.setNumericSetting(
                 NumericParameters.WebRTCMinBitrate,
-                (useUrlParams && urlParams.has(NumericParameters.WebRTCMinBitrate)) ?
-                    Number.parseFloat(urlParams.get(NumericParameters.WebRTCMinBitrate)) :
-                    (settings.WebRTCSettings.MinBitrate / 1000) /* bps to kbps */
+                useUrlParams && urlParams.has(NumericParameters.WebRTCMinBitrate)
+                    ? Number.parseFloat(urlParams.get(NumericParameters.WebRTCMinBitrate))
+                    : settings.WebRTCSettings.MinBitrate / 1000 /* bps to kbps */
             );
             this.config.setNumericSetting(
                 NumericParameters.WebRTCMaxBitrate,
-                (useUrlParams && urlParams.has(NumericParameters.WebRTCMaxBitrate)) ?
-                    Number.parseFloat(urlParams.get(NumericParameters.WebRTCMaxBitrate)) :
-                    (settings.WebRTCSettings.MaxBitrate / 1000) /* bps to kbps */
-
+                useUrlParams && urlParams.has(NumericParameters.WebRTCMaxBitrate)
+                    ? Number.parseFloat(urlParams.get(NumericParameters.WebRTCMaxBitrate))
+                    : settings.WebRTCSettings.MaxBitrate / 1000 /* bps to kbps */
             );
-            this.config.setNumericSetting(NumericParameters.WebRTCFPS,
-                (useUrlParams && urlParams.has(NumericParameters.WebRTCFPS)) ?
-                    Number.parseFloat(urlParams.get(NumericParameters.WebRTCFPS)) :
-                    settings.WebRTCSettings.FPS);
+            this.config.setNumericSetting(
+                NumericParameters.WebRTCFPS,
+                useUrlParams && urlParams.has(NumericParameters.WebRTCFPS)
+                    ? Number.parseFloat(urlParams.get(NumericParameters.WebRTCFPS))
+                    : settings.WebRTCSettings.FPS
+            );
         }
     }
 
@@ -527,11 +541,15 @@ export class PixelStreaming {
             // Get the local candidate assigned to the active candidate pair
             const localCandidate = statsReceivedEvent.data.aggregatedStats.localCandidates.find(
                 (candidate) => candidate.id == activeCandidatePair.localCandidateId,
-                null)
+                null
+            );
 
             // Check if the local candidate is not null, candidate type is relay and the relay protocol is tcp
-            if (localCandidate != null && localCandidate.candidateType == 'relay' &&
-                localCandidate.relayProtocol == 'tcp') {
+            if (
+                localCandidate != null &&
+                localCandidate.candidateType == 'relay' &&
+                localCandidate.relayProtocol == 'tcp'
+            ) {
                 // Send the web rtc tcp relay detected event
                 this._eventEmitter.dispatchEvent(new WebRtcTCPRelayDetectedEvent());
             }
@@ -565,11 +583,12 @@ export class PixelStreaming {
             this._dataChannelLatencyTestController = new DataChannelLatencyTestController(
                 this._webRtcController.sendDataChannelLatencyTest.bind(this._webRtcController),
                 (result: DataChannelLatencyTestResult) => {
-                    this._eventEmitter.dispatchEvent(new DataChannelLatencyTestResultEvent({ result }))
-                });
-            this.addEventListener(
-                'dataChannelLatencyTestResponse',
-                ({ data: { response } }) => { this._dataChannelLatencyTestController.receive(response); })
+                    this._eventEmitter.dispatchEvent(new DataChannelLatencyTestResultEvent({ result }));
+                }
+            );
+            this.addEventListener('dataChannelLatencyTestResponse', ({ data: { response } }) => {
+                this._dataChannelLatencyTestController.receive(response);
+            });
         }
         return this._dataChannelLatencyTestController.start(config);
     }
@@ -673,9 +692,10 @@ export class PixelStreaming {
      * @param type event name
      * @param listener event handler function
      */
-    public addEventListener<T extends PixelStreamingEvent['type'], E extends PixelStreamingEvent & { type: T }>(
-        type: T,
-        listener: (e: Event & E) => void) {
+    public addEventListener<
+        T extends PixelStreamingEvent['type'],
+        E extends PixelStreamingEvent & { type: T }
+    >(type: T, listener: (e: Event & E) => void) {
         this._eventEmitter.addEventListener(type, listener);
     }
 
@@ -684,8 +704,10 @@ export class PixelStreaming {
      * @param type event name
      * @param listener event handler function
      */
-    public removeEventListener<T extends PixelStreamingEvent['type'], E extends PixelStreamingEvent &
-    { type: T }>(type: T, listener: (e: Event & E) => void) {
+    public removeEventListener<
+        T extends PixelStreamingEvent['type'],
+        E extends PixelStreamingEvent & { type: T }
+    >(type: T, listener: (e: Event & E) => void) {
         this._eventEmitter.removeEventListener(type, listener);
     }
 
@@ -720,11 +742,13 @@ export class PixelStreaming {
         return this._webXrController;
     }
 
-    public registerMessageHandler(name: string,
+    public registerMessageHandler(
+        name: string,
         direction: MessageDirection,
-        handler?: (data: ArrayBuffer | Array<number | string>) => void) {
+        handler?: (data: ArrayBuffer | Array<number | string>) => void
+    ) {
         if (direction === MessageDirection.FromStreamer && typeof handler === 'undefined') {
-            Logger.Warning(Logger.GetStackTrace(), `Unable to register an undefined handler for ${name}`)
+            Logger.Warning(Logger.GetStackTrace(), `Unable to register an undefined handler for ${name}`);
             return;
         }
 
@@ -732,13 +756,15 @@ export class PixelStreaming {
             this._webRtcController.streamMessageController.registerMessageHandler(
                 direction,
                 name,
-                (data: Array<number | string>) => this._webRtcController.sendMessageController
-                    .sendMessageToStreamer(name, data));
+                (data: Array<number | string>) =>
+                    this._webRtcController.sendMessageController.sendMessageToStreamer(name, data)
+            );
         } else {
             this._webRtcController.streamMessageController.registerMessageHandler(
                 direction,
                 name,
-                (data: ArrayBuffer) => handler(data));
+                (data: ArrayBuffer) => handler(data)
+            );
         }
     }
 

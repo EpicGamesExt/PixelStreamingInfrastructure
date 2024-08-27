@@ -84,9 +84,11 @@ export class FreezeFrameController {
         else {
             this.jpeg = jpegBytes;
             this.receiving = true;
-            Logger.Log(Logger.GetStackTrace(),
+            Logger.Log(
+                Logger.GetStackTrace(),
                 `received first chunk of freeze frame: ${this.jpeg.length}/${this.size}`,
-                6);
+                6
+            );
         }
 
         // Finished receiving freeze frame, we can show it now
@@ -98,8 +100,10 @@ export class FreezeFrameController {
         }
         // We received more data than the freeze frame payload message indicate (this is an error)
         else if (this.jpeg.length > this.size) {
-            Logger.Error(Logger.GetStackTrace(),
-                `received bigger freeze frame than advertised: ${this.jpeg.length}/${this.size}`);
+            Logger.Error(
+                Logger.GetStackTrace(),
+                `received bigger freeze frame than advertised: ${this.jpeg.length}/${this.size}`
+            );
             this.jpeg = undefined;
             this.receiving = false;
         }
