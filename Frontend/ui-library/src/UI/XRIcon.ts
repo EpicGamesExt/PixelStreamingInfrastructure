@@ -34,28 +34,19 @@ export class XRIcon {
 
     public get xrIcon(): SVGElement {
         if (!this._xrIcon) {
-            this._xrIcon = document.createElementNS(
-                'http://www.w3.org/2000/svg',
-                'svg'
-            );
+            this._xrIcon = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
             this._xrIcon.setAttributeNS(null, 'id', 'xrIcon');
             this._xrIcon.setAttributeNS(null, 'x', '0px');
             this._xrIcon.setAttributeNS(null, 'y', '0px');
             this._xrIcon.setAttributeNS(null, 'viewBox', '0 0 100 100');
 
             // create svg group for the paths
-            const svgGroup = document.createElementNS(
-                'http://www.w3.org/2000/svg',
-                'g'
-            );
+            const svgGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
             svgGroup.classList.add('svgIcon');
             this._xrIcon.appendChild(svgGroup);
 
             // create paths for the icon itself, the path of the xr headset
-            const path = document.createElementNS(
-                'http://www.w3.org/2000/svg',
-                'path'
-            );
+            const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
 
             path.setAttributeNS(
                 null,

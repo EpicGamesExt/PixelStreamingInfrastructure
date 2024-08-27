@@ -24,28 +24,25 @@ import { SettingsPanel } from '../UI/SettingsPanel';
 import { StatsPanel } from '../UI/StatsPanel';
 import { VideoQpIndicator } from '../UI/VideoQpIndicator';
 import { ConfigUI, LightMode } from '../Config/ConfigUI';
-import { 
-    UIElementCreationMode, 
-    PanelConfiguration, 
+import {
+    UIElementCreationMode,
+    PanelConfiguration,
     isPanelEnabled,
     UIElementConfig
-} from '../UI/UIConfigurationTypes'
+} from '../UI/UIConfigurationTypes';
 import { FullScreenIconBase, FullScreenIconExternal } from '../UI/FullscreenIcon';
-import {
-    DataChannelLatencyTestResult
-} from "@epicgames-ps/lib-pixelstreamingfrontend-ue5.5/types/DataChannel/DataChannelLatencyTestResults";
+import { DataChannelLatencyTestResult } from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.5/types/DataChannel/DataChannelLatencyTestResults';
 
-
-/** 
+/**
  * Configuration of the internal video QP indicator element.
  * By default, one will be made, but if needed this can be disabled.
- * 
- * Note: For custom UI elements to react to the QP being changed, use a PixelStreaming 
+ *
+ * Note: For custom UI elements to react to the QP being changed, use a PixelStreaming
  * object's addEventListener('videoEncoderAvgQP', ...) or removeEventListener(...).
  */
 export type VideoQPIndicatorConfig = {
-    disableIndicator?: boolean
-}
+    disableIndicator?: boolean;
+};
 
 /**
  * UI Options can be provided when creating an Application, to configure it's internal
@@ -55,22 +52,22 @@ export interface UIOptions {
     stream: PixelStreaming;
     onColorModeChanged?: (isLightMode: boolean) => void;
     /** By default, a settings panel and associate visibility toggle button will be made.
-      * If needed, this behaviour can be configured. */
+     * If needed, this behaviour can be configured. */
     settingsPanelConfig?: PanelConfiguration;
     /** By default, a stats panel and associate visibility toggle button will be made.
-      * If needed, this behaviour can be configured. */
+     * If needed, this behaviour can be configured. */
     statsPanelConfig?: PanelConfiguration;
     /** If needed, the full screen button can be external or disabled. */
-    fullScreenControlsConfig? : UIElementConfig,
+    fullScreenControlsConfig?: UIElementConfig;
     /** If needed, XR button can be external or disabled. */
-    xrControlsConfig? : UIElementConfig,
+    xrControlsConfig?: UIElementConfig;
     /** Configuration of the video QP indicator. */
-    videoQpIndicatorConfig? : VideoQPIndicatorConfig
+    videoQpIndicatorConfig?: VideoQPIndicatorConfig;
 }
 
 /**
  * An Application is a combination of UI elements to display and manage a WebRTC Pixel Streaming
- * connection. It includes features for controlling a stream with mouse and keyboard, 
+ * connection. It includes features for controlling a stream with mouse and keyboard,
  * managing connection endpoints, as well as displaying stats and other information about it.
  */
 export class Application {
@@ -96,16 +93,16 @@ export class Application {
 
     configUI: ConfigUI;
 
-    onColorModeChanged: UIOptions["onColorModeChanged"];
+    onColorModeChanged: UIOptions['onColorModeChanged'];
 
-    protected _options : UIOptions;
+    protected _options: UIOptions;
 
     /**
      * @param options - Initialization options
      */
     constructor(options: UIOptions) {
         this._options = options;
-        
+
         this.stream = options.stream;
         this.onColorModeChanged = options.onColorModeChanged;
         this.configUI = new ConfigUI(this.stream.config);
@@ -117,14 +114,14 @@ export class Application {
             this.statsPanel = new StatsPanel();
             this.uiFeaturesElement.appendChild(this.statsPanel.rootElement);
         }
-        
+
         if (isPanelEnabled(options.settingsPanelConfig)) {
             // Add settings panel
             this.settingsPanel = new SettingsPanel();
             this.uiFeaturesElement.appendChild(this.settingsPanel.rootElement);
             this.configureSettings();
         }
-        
+
         if (!options.videoQpIndicatorConfig || !options.videoQpIndicatorConfig.disableIndicator) {
             // Add the video stream QP indicator
             this.videoQpIndicator = new VideoQpIndicator();
@@ -139,38 +136,23 @@ export class Application {
 
         this.setColorMode(this.configUI.isCustomFlagEnabled(LightMode));
 
-        this.stream.config._addOnSettingChangedListener(
-            Flags.HideUI,
-            (isEnabled: boolean) => {
-                this._uiFeatureElement.style.visibility = isEnabled ? "hidden" : "visible";
-            }
-        );
+        this.stream.config._addOnSettingChangedListener(Flags.HideUI, (isEnabled: boolean) => {
+            this._uiFeatureElement.style.visibility = isEnabled ? 'hidden' : 'visible';
+        });
 
         if (this.stream.config.isFlagEnabled(Flags.HideUI)) {
-            this._uiFeatureElement.style.visibility = "hidden";
+            this._uiFeatureElement.style.visibility = 'hidden';
         }
     }
 
     public createOverlays(): void {
         // build all of the overlays
-        this.disconnectOverlay = new DisconnectOverlay(
-            this.stream.videoElementParent
-        );
-        this.connectOverlay = new ConnectOverlay(
-            this.stream.videoElementParent
-        );
-        this.playOverlay = new PlayOverlay(
-            this.stream.videoElementParent
-        );
-        this.infoOverlay = new InfoOverlay(
-            this.stream.videoElementParent
-        );
-        this.errorOverlay = new ErrorOverlay(
-            this.stream.videoElementParent
-        );
-        this.afkOverlay = new AFKOverlay(
-            this.stream.videoElementParent
-        );
+        this.disconnectOverlay = new DisconnectOverlay(this.stream.videoElementParent);
+        this.connectOverlay = new ConnectOverlay(this.stream.videoElementParent);
+        this.playOverlay = new PlayOverlay(this.stream.videoElementParent);
+        this.infoOverlay = new InfoOverlay(this.stream.videoElementParent);
+        this.errorOverlay = new ErrorOverlay(this.stream.videoElementParent);
+        this.afkOverlay = new AFKOverlay(this.stream.videoElementParent);
 
         this.disconnectOverlay.onAction(() => this.stream.reconnect());
 
@@ -185,16 +167,15 @@ export class Application {
      * Set up button click functions and button functionality
      */
     public createButtons() {
-
         // IPhone does not support fullscreen API as at 28th July 2024 (see: https://caniuse.com/fullscreen) so if
         // we are on IPhone and user has not specified explicitly configured UI config for
         // fullscreen button then we should disable this button as it doesn't work.
-        if(this._options.fullScreenControlsConfig === undefined && /iPhone/.test(navigator.userAgent)) {
+        if (this._options.fullScreenControlsConfig === undefined && /iPhone/.test(navigator.userAgent)) {
             this._options.fullScreenControlsConfig = { creationMode: UIElementCreationMode.Disable };
         }
 
-        const controlsUIConfig : ControlsUIConfiguration = {
-            statsButtonType : this._options.statsPanelConfig
+        const controlsUIConfig: ControlsUIConfiguration = {
+            statsButtonType: this._options.statsPanelConfig
                 ? this._options.statsPanelConfig.visibilityButtonConfig
                 : undefined,
             settingsButtonType: this._options.settingsPanelConfig
@@ -202,47 +183,47 @@ export class Application {
                 : undefined,
             fullscreenButtonType: this._options.fullScreenControlsConfig,
             xrIconType: this._options.xrControlsConfig
-        }
+        };
 
         // Setup controls
         const controls = new Controls(controlsUIConfig);
         this.uiFeaturesElement.appendChild(controls.rootElement);
 
         // When we fullscreen we want this element to be the root
-        const fullScreenButton : FullScreenIconBase | undefined = 
+        const fullScreenButton: FullScreenIconBase | undefined =
             // Depending on if we're creating an internal button, or using an external one
-            (!!this._options.fullScreenControlsConfig 
-                && this._options.fullScreenControlsConfig.creationMode === UIElementCreationMode.UseCustomElement)
-            // Either create a fullscreen class based on the external button
-            ? new FullScreenIconExternal(this._options.fullScreenControlsConfig.customElement)
-            // Or use the one created by the Controls initializer earlier
-            : controls.fullscreenIcon;
+            !!this._options.fullScreenControlsConfig &&
+            this._options.fullScreenControlsConfig.creationMode === UIElementCreationMode.UseCustomElement
+                ? // Either create a fullscreen class based on the external button
+                  new FullScreenIconExternal(this._options.fullScreenControlsConfig.customElement)
+                : // Or use the one created by the Controls initializer earlier
+                  controls.fullscreenIcon;
         if (fullScreenButton) {
-            fullScreenButton.fullscreenElement = /iPad|iPhone|iPod/.test(navigator.userAgent) ? this.stream.videoElementParent.getElementsByTagName("video")[0] : this.rootElement;
+            fullScreenButton.fullscreenElement = /iPad|iPhone|iPod/.test(navigator.userAgent)
+                ? this.stream.videoElementParent.getElementsByTagName('video')[0]
+                : this.rootElement;
         }
 
         // Add settings button to controls
-        const settingsButton : HTMLElement | undefined = 
-            controls.settingsIcon ? controls.settingsIcon.rootElement : 
-            this._options.settingsPanelConfig.visibilityButtonConfig.customElement;
-        if (settingsButton) settingsButton.onclick = () =>
-            this.settingsClicked();
-        if (this.settingsPanel) this.settingsPanel.settingsCloseButton.onclick = () =>
-            this.settingsClicked();
+        const settingsButton: HTMLElement | undefined = controls.settingsIcon
+            ? controls.settingsIcon.rootElement
+            : this._options.settingsPanelConfig.visibilityButtonConfig.customElement;
+        if (settingsButton) settingsButton.onclick = () => this.settingsClicked();
+        if (this.settingsPanel) this.settingsPanel.settingsCloseButton.onclick = () => this.settingsClicked();
 
         // Add WebXR button to controls
-        const xrButton : HTMLElement | undefined = 
-            controls.xrIcon ? controls.xrIcon.rootElement : 
-            this._options.xrControlsConfig.creationMode === UIElementCreationMode.UseCustomElement ?
-            this._options.xrControlsConfig.customElement : undefined;
-        if (xrButton) xrButton.onclick = () =>
-            this.stream.toggleXR();
+        const xrButton: HTMLElement | undefined = controls.xrIcon
+            ? controls.xrIcon.rootElement
+            : this._options.xrControlsConfig.creationMode === UIElementCreationMode.UseCustomElement
+              ? this._options.xrControlsConfig.customElement
+              : undefined;
+        if (xrButton) xrButton.onclick = () => this.stream.toggleXR();
 
         // setup the stats/info button
-        const statsButton : HTMLElement | undefined = 
-            controls.statsIcon ? controls.statsIcon.rootElement : 
-            this._options.statsPanelConfig.visibilityButtonConfig.customElement;
-        if (statsButton) statsButton.onclick = () => this.statsClicked()
+        const statsButton: HTMLElement | undefined = controls.statsIcon
+            ? controls.statsIcon.rootElement
+            : this._options.statsPanelConfig.visibilityButtonConfig.customElement;
+        if (statsButton) statsButton.onclick = () => this.statsClicked();
 
         if (this.statsPanel) {
             this.statsPanel.statsCloseButton.onclick = () => this.statsClicked();
@@ -257,19 +238,13 @@ export class Application {
             });
 
             // Add button for restart stream
-            const restartStreamButton = new LabelledButton(
-                'Restart Stream',
-                'Restart'
-            );
+            const restartStreamButton = new LabelledButton('Restart Stream', 'Restart');
             restartStreamButton.addOnClickListener(() => {
                 this.stream.reconnect();
             });
 
             // Add button for request keyframe
-            const requestKeyframeButton = new LabelledButton(
-                'Request keyframe',
-                'Request'
-            );
+            const requestKeyframeButton = new LabelledButton('Request keyframe', 'Request');
             requestKeyframeButton.addOnClickListener(() => {
                 this.stream.requestIframe();
             });
@@ -289,122 +264,72 @@ export class Application {
      */
     configureSettings(): void {
         // This builds all the settings sections and flags under this `settingsContent` element.
-        this.configUI.populateSettingsElement(
-            this.settingsPanel.settingsContentElement
-        );
+        this.configUI.populateSettingsElement(this.settingsPanel.settingsContentElement);
 
-        this.configUI.addCustomFlagOnSettingChangedListener(
-            LightMode,
-            (isLightMode: boolean) => {
-                this.configUI.setCustomFlagLabel(
-                    LightMode,
-                    `Color Scheme: ${isLightMode ? 'Light' : 'Dark'} Mode`
-                );
-                this.setColorMode(isLightMode);
-            }
-        );
+        this.configUI.addCustomFlagOnSettingChangedListener(LightMode, (isLightMode: boolean) => {
+            this.configUI.setCustomFlagLabel(
+                LightMode,
+                `Color Scheme: ${isLightMode ? 'Light' : 'Dark'} Mode`
+            );
+            this.setColorMode(isLightMode);
+        });
     }
 
     registerCallbacks() {
-        this.stream.addEventListener(
-            'afkWarningActivate',
-            ({ data: { countDown, dismissAfk } }) =>
-                this.showAfkOverlay(countDown, dismissAfk)
+        this.stream.addEventListener('afkWarningActivate', ({ data: { countDown, dismissAfk } }) =>
+            this.showAfkOverlay(countDown, dismissAfk)
         );
-        this.stream.addEventListener(
-            'afkWarningUpdate',
-            ({ data: { countDown } }) =>
-                this.afkOverlay.updateCountdown(countDown)
+        this.stream.addEventListener('afkWarningUpdate', ({ data: { countDown } }) =>
+            this.afkOverlay.updateCountdown(countDown)
         );
-        this.stream.addEventListener(
-            'afkWarningDeactivate',
-            () => this.afkOverlay.hide()
+        this.stream.addEventListener('afkWarningDeactivate', () => this.afkOverlay.hide());
+        this.stream.addEventListener('afkTimedOut', () => this.afkOverlay.hide());
+        this.stream.addEventListener('videoEncoderAvgQP', ({ data: { avgQP } }) =>
+            this.onVideoEncoderAvgQP(avgQP)
         );
-        this.stream.addEventListener('afkTimedOut', () =>
-            this.afkOverlay.hide()
-        );
-        this.stream.addEventListener(
-            'videoEncoderAvgQP',
-            ({ data: { avgQP } }) => this.onVideoEncoderAvgQP(avgQP)
-        );
-        this.stream.addEventListener('webRtcSdp', () =>
-            this.onWebRtcSdp()
-        );
-        this.stream.addEventListener('webRtcAutoConnect', () =>
-            this.onWebRtcAutoConnect()
-        );
-        this.stream.addEventListener('webRtcConnecting', () =>
-            this.onWebRtcConnecting()
-        );
-        this.stream.addEventListener('webRtcConnected', () =>
-            this.onWebRtcConnected()
-        );
-        this.stream.addEventListener('webRtcFailed', () =>
-            this.onWebRtcFailed()
-        );
+        this.stream.addEventListener('webRtcSdp', () => this.onWebRtcSdp());
+        this.stream.addEventListener('webRtcAutoConnect', () => this.onWebRtcAutoConnect());
+        this.stream.addEventListener('webRtcConnecting', () => this.onWebRtcConnecting());
+        this.stream.addEventListener('webRtcConnected', () => this.onWebRtcConnected());
+        this.stream.addEventListener('webRtcFailed', () => this.onWebRtcFailed());
         this.stream.addEventListener(
             'webRtcDisconnected',
             ({ data: { eventString, allowClickToReconnect } }) =>
                 this.onDisconnect(eventString, allowClickToReconnect)
         );
-        this.stream.addEventListener('videoInitialized', () =>
-            this.onVideoInitialized()
+        this.stream.addEventListener('videoInitialized', () => this.onVideoInitialized());
+        this.stream.addEventListener('streamLoading', () => this.onStreamLoading());
+        this.stream.addEventListener('playStreamError', ({ data: { message } }) =>
+            this.onPlayStreamError(message)
         );
-        this.stream.addEventListener('streamLoading', () =>
-            this.onStreamLoading()
+        this.stream.addEventListener('playStream', () => this.onPlayStream());
+        this.stream.addEventListener('playStreamRejected', ({ data: { reason } }) =>
+            this.onPlayStreamRejected(reason)
         );
-        this.stream.addEventListener(
-            'playStreamError',
-            ({ data: { message } }) => this.onPlayStreamError(message)
+        this.stream.addEventListener('loadFreezeFrame', ({ data: { shouldShowPlayOverlay } }) =>
+            this.onLoadFreezeFrame(shouldShowPlayOverlay)
         );
-        this.stream.addEventListener('playStream', () =>
-            this.onPlayStream()
+        this.stream.addEventListener('statsReceived', ({ data: { aggregatedStats } }) =>
+            this.onStatsReceived(aggregatedStats)
         );
-        this.stream.addEventListener(
-            'playStreamRejected',
-            ({ data: { reason } }) => this.onPlayStreamRejected(reason)
+        this.stream.addEventListener('latencyTestResult', ({ data: { latencyTimings } }) =>
+            this.onLatencyTestResults(latencyTimings)
         );
-        this.stream.addEventListener(
-            'loadFreezeFrame',
-            ({ data: { shouldShowPlayOverlay } }) =>
-                this.onLoadFreezeFrame(shouldShowPlayOverlay)
+        this.stream.addEventListener('dataChannelLatencyTestResult', ({ data: { result } }) =>
+            this.onDataChannelLatencyTestResults(result)
         );
-        this.stream.addEventListener(
-            'statsReceived',
-            ({ data: { aggregatedStats } }) =>
-                this.onStatsReceived(aggregatedStats)
-        );
-        this.stream.addEventListener(
-            'latencyTestResult',
-            ({ data: { latencyTimings } }) =>
-                this.onLatencyTestResults(latencyTimings)
-        );
-        this.stream.addEventListener(
-            'dataChannelLatencyTestResult',
-            ({data: { result } }) =>
-                this.onDataChannelLatencyTestResults(result)
-        )
         this.stream.addEventListener(
             'streamerListMessage',
             ({ data: { messageStreamerList, autoSelectedStreamerId, wantedStreamerId } }) =>
                 this.handleStreamerListMessage(messageStreamerList, autoSelectedStreamerId, wantedStreamerId)
         );
-        this.stream.addEventListener(
-            'settingsChanged',
-            (event) => this.configUI.onSettingsChanged(event)
-        );
-        this.stream.addEventListener(
-            'playerCount', 
-            ({ data: { count }}) => 
-                this.onPlayerCount(count)
-        );
-        this.stream.addEventListener(
-            'webRtcTCPRelayDetected', 
-            () => 
-                Logger.Warning(
-                    Logger.GetStackTrace(),
-                    `Stream quailty degraded due to network enviroment, stream is relayed over TCP.`
-               )
+        this.stream.addEventListener('settingsChanged', (event) => this.configUI.onSettingsChanged(event));
+        this.stream.addEventListener('playerCount', ({ data: { count } }) => this.onPlayerCount(count));
+        this.stream.addEventListener('webRtcTCPRelayDetected', () =>
+            Logger.Warning(
+                Logger.GetStackTrace(),
+                `Stream quailty degraded due to network enviroment, stream is relayed over TCP.`
+            )
         );
     }
 
@@ -416,9 +341,7 @@ export class Application {
             this._rootElement = document.createElement('div');
             this._rootElement.id = 'playerUI';
             this._rootElement.classList.add('noselect');
-            this._rootElement.appendChild(
-                this.stream.videoElementParent
-            );
+            this._rootElement.appendChild(this.stream.videoElementParent);
             this._rootElement.appendChild(this.uiFeaturesElement);
         }
         return this._rootElement;
@@ -696,7 +619,11 @@ export class Application {
         this.statsPanel?.handlePlayerCount(playerCount);
     }
 
-    handleStreamerListMessage(messageStreamingList: Messages.streamerList, autoSelectedStreamerId: string, wantedStreamerId: string) {
+    handleStreamerListMessage(
+        messageStreamingList: Messages.streamerList,
+        autoSelectedStreamerId: string,
+        wantedStreamerId: string
+    ) {
         const waitForStreamer = this.stream.config.isFlagEnabled(Flags.WaitForStreamer);
         const isReconnecting = this.stream.isReconnecting();
         let message: string = null;

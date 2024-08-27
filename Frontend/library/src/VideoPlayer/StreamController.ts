@@ -26,11 +26,7 @@ export class StreamController {
      * @param rtcTrackEvent - RTC Track Event
      */
     handleOnTrack(rtcTrackEvent: RTCTrackEvent) {
-        Logger.Log(
-            Logger.GetStackTrace(),
-            'handleOnTrack ' + JSON.stringify(rtcTrackEvent.streams),
-            6
-        );
+        Logger.Log(Logger.GetStackTrace(), 'handleOnTrack ' + JSON.stringify(rtcTrackEvent.streams), 6);
         // Do not add the track if the ID is `probator` as this is special track created by mediasoup for bitrate probing.
         // Refer to https://github.com/EpicGamesExt/PixelStreamingInfrastructure/pull/86 for more details.
         if (rtcTrackEvent.streams.length < 1 || rtcTrackEvent.streams[0].id == 'probator') {
@@ -60,10 +56,7 @@ export class StreamController {
             videoElement.srcObject !== rtcTrackEvent.streams[0]
         ) {
             videoElement.srcObject = rtcTrackEvent.streams[0];
-            Logger.Log(
-                Logger.GetStackTrace(),
-                'Set video source from video track ontrack.'
-            );
+            Logger.Log(Logger.GetStackTrace(), 'Set video source from video track ontrack.');
             return;
         }
     }
@@ -80,16 +73,10 @@ export class StreamController {
             return;
         }
         // video element has some other media stream that is not associated with this audio track
-        else if (
-            videoElement.srcObject &&
-            videoElement.srcObject !== audioMediaStream
-        ) {
+        else if (videoElement.srcObject && videoElement.srcObject !== audioMediaStream) {
             // create a new audio element
             this.audioElement.srcObject = audioMediaStream;
-            Logger.Log(
-                Logger.GetStackTrace(),
-                'Created new audio element to play separate audio stream.'
-            );
+            Logger.Log(Logger.GetStackTrace(), 'Created new audio element to play separate audio stream.');
         }
     }
 }

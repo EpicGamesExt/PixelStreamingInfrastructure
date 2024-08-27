@@ -155,24 +155,24 @@ export class KeyboardController {
         const keyUpHandler = (ev: KeyboardEvent) => this.handleOnKeyUp(ev);
         const keyPressHandler = (ev: KeyboardEvent) => this.handleOnKeyPress(ev);
 
-        document.addEventListener("compositionend", compositionEndHandler);
-        document.addEventListener("keydown", keyDownHandler);
-        document.addEventListener("keyup", keyUpHandler);
+        document.addEventListener('compositionend', compositionEndHandler);
+        document.addEventListener('keydown', keyDownHandler);
+        document.addEventListener('keyup', keyUpHandler);
 
         //This has been deprecated as at Jun 13 2021
-        document.addEventListener("keypress", keyPressHandler);
+        document.addEventListener('keypress', keyPressHandler);
 
-        this.keyboardEventListenerTracker.addUnregisterCallback(
-            () => document.removeEventListener("compositionend", compositionEndHandler)
+        this.keyboardEventListenerTracker.addUnregisterCallback(() =>
+            document.removeEventListener('compositionend', compositionEndHandler)
         );
-        this.keyboardEventListenerTracker.addUnregisterCallback(
-            () => document.removeEventListener("keydown", keyDownHandler)
+        this.keyboardEventListenerTracker.addUnregisterCallback(() =>
+            document.removeEventListener('keydown', keyDownHandler)
         );
-        this.keyboardEventListenerTracker.addUnregisterCallback(
-            () => document.removeEventListener("keyup", keyUpHandler)
+        this.keyboardEventListenerTracker.addUnregisterCallback(() =>
+            document.removeEventListener('keyup', keyUpHandler)
         );
-        this.keyboardEventListenerTracker.addUnregisterCallback(
-            () => document.removeEventListener("keypress", keyPressHandler)
+        this.keyboardEventListenerTracker.addUnregisterCallback(() =>
+            document.removeEventListener('keypress', keyPressHandler)
         );
     }
 
@@ -193,17 +193,9 @@ export class KeyboardController {
             return;
         }
 
-        Logger.Log(
-            Logger.GetStackTrace(),
-            `key down ${keyCode}, repeat = ${keyboardEvent.repeat}`,
-            6
-        );
-        const toStreamerHandlers =
-            this.toStreamerMessagesProvider.toStreamerHandlers;
-        toStreamerHandlers.get('KeyDown')([
-            this.getKeycode(keyboardEvent),
-            keyboardEvent.repeat ? 1 : 0
-        ]);
+        Logger.Log(Logger.GetStackTrace(), `key down ${keyCode}, repeat = ${keyboardEvent.repeat}`, 6);
+        const toStreamerHandlers = this.toStreamerMessagesProvider.toStreamerHandlers;
+        toStreamerHandlers.get('KeyDown')([this.getKeycode(keyboardEvent), keyboardEvent.repeat ? 1 : 0]);
         const activeKeys = this.activeKeysProvider.getActiveKeys();
         activeKeys.push(keyCode);
         // Backspace is not considered a keypress in JavaScript but we need it
@@ -216,10 +208,7 @@ export class KeyboardController {
             );
         }
 
-        if (
-            this.config.isFlagEnabled(Flags.SuppressBrowserKeys) &&
-            this.isKeyCodeBrowserKey(keyCode)
-        ) {
+        if (this.config.isFlagEnabled(Flags.SuppressBrowserKeys) && this.isKeyCodeBrowserKey(keyCode)) {
             keyboardEvent.preventDefault();
         }
     }
@@ -235,14 +224,10 @@ export class KeyboardController {
         }
 
         Logger.Log(Logger.GetStackTrace(), `key up ${keyCode}`, 6);
-        const toStreamerHandlers =
-            this.toStreamerMessagesProvider.toStreamerHandlers;
-        toStreamerHandlers.get('KeyUp')([ keyCode ]);
+        const toStreamerHandlers = this.toStreamerMessagesProvider.toStreamerHandlers;
+        toStreamerHandlers.get('KeyUp')([keyCode]);
 
-        if (
-            this.config.isFlagEnabled(Flags.SuppressBrowserKeys) &&
-            this.isKeyCodeBrowserKey(keyCode)
-        ) {
+        if (this.config.isFlagEnabled(Flags.SuppressBrowserKeys) && this.isKeyCodeBrowserKey(keyCode)) {
             keyboardEvent.preventDefault();
         }
     }
@@ -263,8 +248,7 @@ export class KeyboardController {
         const charCode = keyboard.charCode;
         Logger.Log(Logger.GetStackTrace(), `key press ${charCode}`, 6);
 
-        const toStreamerHandlers =
-            this.toStreamerMessagesProvider.toStreamerHandlers;
+        const toStreamerHandlers = this.toStreamerMessagesProvider.toStreamerHandlers;
         toStreamerHandlers.get('KeyPress')([charCode]);
     }
 
@@ -275,7 +259,7 @@ export class KeyboardController {
     handleOnCompositionEnd(compositionEvent: CompositionEvent) {
         if (compositionEvent.data && compositionEvent.data.length) {
             compositionEvent.data.split('').forEach((char) => {
-                // This keydown, keypress, keyup flow is required to mimic the way characters are 
+                // This keydown, keypress, keyup flow is required to mimic the way characters are
                 // normally triggered
                 this.handleOnKeyDown(
                     new KeyboardEvent('keydown', {
@@ -323,20 +307,14 @@ export class KeyboardController {
 
         // If we made it here KeyboardEvent.keyCode is still supported so we can safely use it.
 
-        if (
-            keyboardEvent.keyCode === SpecialKeyCodes.shift &&
-            keyboardEvent.code === 'ShiftRight'
-        ) {
+        if (keyboardEvent.keyCode === SpecialKeyCodes.shift && keyboardEvent.code === 'ShiftRight') {
             return SpecialKeyCodes.rightShift;
         } else if (
             keyboardEvent.keyCode === SpecialKeyCodes.control &&
             keyboardEvent.code === 'ControlRight'
         ) {
             return SpecialKeyCodes.rightControl;
-        } else if (
-            keyboardEvent.keyCode === SpecialKeyCodes.alt &&
-            keyboardEvent.code === 'AltRight'
-        ) {
+        } else if (keyboardEvent.keyCode === SpecialKeyCodes.alt && keyboardEvent.code === 'AltRight') {
             return SpecialKeyCodes.rightAlt;
         } else {
             return keyboardEvent.keyCode;

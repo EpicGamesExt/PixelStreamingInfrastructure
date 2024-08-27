@@ -85,10 +85,7 @@ export class OnScreenKeyboard {
             // Show the 'edit text' button.
             this.editTextButton.style.display = 'default';
             // Place the 'edit text' button near the UE input widget.
-            const pos = this.unquantizeAndDenormalizeUnsigned(
-                command.x,
-                command.y
-            );
+            const pos = this.unquantizeAndDenormalizeUnsigned(command.x, command.y);
             this.editTextButton.style.top = pos.y.toString() + 'px';
             this.editTextButton.style.left = (pos.x - 40).toString() + 'px';
         } else {

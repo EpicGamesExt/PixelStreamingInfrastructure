@@ -16,11 +16,7 @@ export class ActionOverlay extends OverlayBase {
      * @param rootElement - the root element that is the overlay
      * @param contentElement - an element that contains text for the action overlay
      */
-    public constructor(
-        rootDiv: HTMLElement,
-        rootElement: HTMLElement,
-        contentElement: HTMLElement
-    ) {
+    public constructor(rootDiv: HTMLElement, rootElement: HTMLElement, contentElement: HTMLElement) {
         super(rootDiv, rootElement, contentElement);
         this.onActionCallback = () => {
             /* do nothing */ Logger.Info(

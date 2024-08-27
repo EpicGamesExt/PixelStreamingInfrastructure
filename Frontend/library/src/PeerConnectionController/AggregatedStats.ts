@@ -1,10 +1,6 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
-import {
-    InboundRTPStats,
-    InboundVideoStats,
-    InboundAudioStats
-} from './InboundRTPStats';
+import { InboundRTPStats, InboundVideoStats, InboundAudioStats } from './InboundRTPStats';
 import { InboundTrackStats } from './InboundTrackStats';
 import { DataChannelStats } from './DataChannelStats';
 import { CandidateStat } from './CandidateStat';
@@ -122,10 +118,8 @@ export class AggregatedStats {
      * @param stat - the stats coming in from ice candidates
      */
     handleCandidatePair(stat: CandidatePairStats) {
-
         // Add the candidate pair to the candidate pair array
-        this.candidatePairs.push(stat)
-
+        this.candidatePairs.push(stat);
     }
 
     /**
@@ -135,8 +129,7 @@ export class AggregatedStats {
     handleDataChannel(stat: DataChannelStats) {
         this.DataChannelStats.bytesReceived = stat.bytesReceived;
         this.DataChannelStats.bytesSent = stat.bytesSent;
-        this.DataChannelStats.dataChannelIdentifier =
-            stat.dataChannelIdentifier;
+        this.DataChannelStats.dataChannelIdentifier = stat.dataChannelIdentifier;
         this.DataChannelStats.id = stat.id;
         this.DataChannelStats.label = stat.label;
         this.DataChannelStats.messagesReceived = stat.messagesReceived;
@@ -176,7 +169,7 @@ export class AggregatedStats {
         RemoteCandidate.id = stat.id;
         RemoteCandidate.candidateType = stat.candidateType;
         RemoteCandidate.relayProtocol = stat.relayProtocol;
-        RemoteCandidate.transportId = stat.transportId
+        RemoteCandidate.transportId = stat.transportId;
         this.remoteCandidates.push(RemoteCandidate);
     }
 
@@ -194,14 +187,9 @@ export class AggregatedStats {
 
                 if (this.lastVideoStats != undefined) {
                     this.inboundVideoStats.bitrate =
-                        (8 *
-                            (this.inboundVideoStats.bytesReceived -
-                                this.lastVideoStats.bytesReceived)) /
-                        (this.inboundVideoStats.timestamp -
-                            this.lastVideoStats.timestamp);
-                    this.inboundVideoStats.bitrate = Math.floor(
-                        this.inboundVideoStats.bitrate
-                    );
+                        (8 * (this.inboundVideoStats.bytesReceived - this.lastVideoStats.bytesReceived)) /
+                        (this.inboundVideoStats.timestamp - this.lastVideoStats.timestamp);
+                    this.inboundVideoStats.bitrate = Math.floor(this.inboundVideoStats.bitrate);
                 }
                 this.lastVideoStats = { ...this.inboundVideoStats };
                 break;
@@ -213,14 +201,9 @@ export class AggregatedStats {
 
                 if (this.lastAudioStats != undefined) {
                     this.inboundAudioStats.bitrate =
-                        (8 *
-                            (this.inboundAudioStats.bytesReceived -
-                                this.lastAudioStats.bytesReceived)) /
-                        (this.inboundAudioStats.timestamp -
-                            this.lastAudioStats.timestamp);
-                    this.inboundAudioStats.bitrate = Math.floor(
-                        this.inboundAudioStats.bitrate
-                    );
+                        (8 * (this.inboundAudioStats.bytesReceived - this.lastAudioStats.bytesReceived)) /
+                        (this.inboundAudioStats.timestamp - this.lastAudioStats.timestamp);
+                    this.inboundAudioStats.bitrate = Math.floor(this.inboundAudioStats.bitrate);
                 }
                 this.lastAudioStats = { ...this.inboundAudioStats };
                 break;
@@ -258,10 +241,7 @@ export class AggregatedStats {
      */
     handleTrack(stat: InboundTrackStats) {
         // we only want to extract stats from the video track
-        if (
-            stat.type === 'track' &&
-            (stat.trackIdentifier === 'video_label' || stat.kind === 'video')
-        ) {
+        if (stat.type === 'track' && (stat.trackIdentifier === 'video_label' || stat.kind === 'video')) {
             this.inboundVideoStats.framesDropped = stat.framesDropped;
             this.inboundVideoStats.framesReceived = stat.framesReceived;
             this.inboundVideoStats.frameHeight = stat.frameHeight;
@@ -269,16 +249,13 @@ export class AggregatedStats {
         }
     }
 
-    handleTransport(stat: RTCTransportStats){
+    handleTransport(stat: RTCTransportStats) {
         this.transportStats = stat;
     }
 
-
     handleCodec(stat: CodecStats) {
         const codecId = stat.id;
-        const codecType = `${stat.mimeType
-            .replace('video/', '')
-            .replace('audio/', '')}${
+        const codecType = `${stat.mimeType.replace('video/', '').replace('audio/', '')}${
             stat.sdpFmtpLine ? ` ${stat.sdpFmtpLine}` : ''
         }`;
         this.codecs.set(codecId, codecType);
@@ -290,17 +267,10 @@ export class AggregatedStats {
         videoEncoderAvgQP: number
     ) {
         const deltaTime = Date.now() - videoStartTime;
-        this.sessionStats.runTime = new Date(deltaTime)
-            .toISOString()
-            .substr(11, 8)
-            .toString();
+        this.sessionStats.runTime = new Date(deltaTime).toISOString().substr(11, 8).toString();
 
         const controlsStreamInput =
-            inputController === null
-                ? 'Not sent yet'
-                : inputController
-                ? 'true'
-                : 'false';
+            inputController === null ? 'Not sent yet' : inputController ? 'true' : 'false';
         this.sessionStats.controlsStreamInput = controlsStreamInput;
 
         this.sessionStats.videoEncoderAvgQP = videoEncoderAvgQP;
@@ -319,14 +289,16 @@ export class AggregatedStats {
      * @returns The candidate pair that is currently receiving data
      */
     public getActiveCandidatePair(): CandidatePairStats | null {
-        
         // Check if the RTCTransport stat is not undefined
-        if (this.transportStats){
+        if (this.transportStats) {
             // Return the candidate pair that matches the transport candidate pair id
-            return this.candidatePairs.find((candidatePair) => candidatePair.id === this.transportStats.selectedCandidatePairId, null);
+            return this.candidatePairs.find(
+                (candidatePair) => candidatePair.id === this.transportStats.selectedCandidatePairId,
+                null
+            );
         }
-        
+
         // Fall back to the selected candidate pair
         return this.candidatePairs.find((candidatePair) => candidatePair.selected, null);
-    }  
+    }
 }

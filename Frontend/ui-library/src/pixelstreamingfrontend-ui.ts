@@ -19,4 +19,4 @@ export { SettingUIFlag } from './Config/SettingUIFlag';
 export { SettingUINumber } from './Config/SettingUINumber';
 export { SettingUIOption } from './Config/SettingUIOption';
 export { SettingUIText } from './Config/SettingUIText';
-export { PanelConfiguration, UIElementConfig, UIElementCreationMode } from './UI/UIConfigurationTypes'
+export { PanelConfiguration, UIElementConfig, UIElementCreationMode } from './UI/UIConfigurationTypes';

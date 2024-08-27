@@ -64,22 +64,11 @@ export class VideoQpIndicator {
      */
     public get qualityStatus(): SVGElement {
         if (!this._qualityStatus) {
-            this._qualityStatus = document.createElementNS(
-                'http://www.w3.org/2000/svg',
-                'svg'
-            );
-            this._qualityStatus.setAttributeNS(
-                null,
-                'id',
-                'connectionStrength'
-            );
+            this._qualityStatus = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+            this._qualityStatus.setAttributeNS(null, 'id', 'connectionStrength');
             this._qualityStatus.setAttributeNS(null, 'x', '0px');
             this._qualityStatus.setAttributeNS(null, 'y', '0px');
-            this._qualityStatus.setAttributeNS(
-                null,
-                'viewBox',
-                '0 0 494.45 494.45'
-            );
+            this._qualityStatus.setAttributeNS(null, 'viewBox', '0 0 494.45 494.45');
 
             // build wifi icon
             this.qualityStatus.appendChild(this.dot);
@@ -95,10 +84,7 @@ export class VideoQpIndicator {
      */
     public get dot(): SVGElement {
         if (!this._dot) {
-            this._dot = document.createElementNS(
-                'http://www.w3.org/2000/svg',
-                'circle'
-            );
+            this._dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
             this._dot.setAttributeNS(null, 'id', 'dot');
             this._dot.setAttributeNS(null, 'cx', '247.125');
             this._dot.setAttributeNS(null, 'cy', '398.925');
@@ -112,10 +98,7 @@ export class VideoQpIndicator {
      */
     public get outer(): SVGElement {
         if (!this._outer) {
-            this._outer = document.createElementNS(
-                'http://www.w3.org/2000/svg',
-                'path'
-            );
+            this._outer = document.createElementNS('http://www.w3.org/2000/svg', 'path');
             this._outer.setAttributeNS(null, 'id', 'outer');
             this._outer.setAttributeNS(
                 null,
@@ -131,10 +114,7 @@ export class VideoQpIndicator {
      */
     public get middle(): SVGElement {
         if (!this._middle) {
-            this._middle = document.createElementNS(
-                'http://www.w3.org/2000/svg',
-                'path'
-            );
+            this._middle = document.createElementNS('http://www.w3.org/2000/svg', 'path');
             this._middle.setAttributeNS(null, 'id', 'middle');
             this._middle.setAttributeNS(
                 null,
@@ -150,10 +130,7 @@ export class VideoQpIndicator {
      */
     public get inner(): SVGElement {
         if (!this._inner) {
-            this._inner = document.createElementNS(
-                'http://www.w3.org/2000/svg',
-                'path'
-            );
+            this._inner = document.createElementNS('http://www.w3.org/2000/svg', 'path');
             this._inner.setAttributeNS(null, 'id', 'inner');
             this._inner.setAttributeNS(
                 null,
@@ -173,9 +150,7 @@ export class VideoQpIndicator {
         let opacity = 1;
         const tickID = setInterval(() => {
             opacity -= 0.1;
-            this.qualityText.style.opacity = String(
-                Math.abs((opacity - 0.5) * 2)
-            );
+            this.qualityText.style.opacity = String(Math.abs((opacity - 0.5) * 2));
             if (opacity <= 0.1) {
                 if (--iteration == 0) {
                     clearInterval(tickID);

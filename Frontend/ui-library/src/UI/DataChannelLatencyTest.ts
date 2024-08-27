@@ -1,9 +1,7 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 import { Logger } from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.5';
-import {
-    DataChannelLatencyTestResult
-} from "@epicgames-ps/lib-pixelstreamingfrontend-ue5.5/types/DataChannel/DataChannelLatencyTestResults";
+import { DataChannelLatencyTestResult } from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.5/types/DataChannel/DataChannelLatencyTestResults';
 
 /**
  * DataChannel Latency test UI elements and results handling.
@@ -70,11 +68,7 @@ export class DataChannelLatencyTest {
      * @param result - The latency test results.
      */
     public handleTestResult(result: DataChannelLatencyTestResult) {
-        Logger.Log(
-            Logger.GetStackTrace(),
-            JSON.stringify(result),
-            6
-        );
+        Logger.Log(Logger.GetStackTrace(), JSON.stringify(result), 6);
         /**
          * Check we have results, NaN would mean that UE version we talk to doesn't support our test
          */
@@ -83,10 +77,7 @@ export class DataChannelLatencyTest {
             return;
         }
         let latencyStatsInnerHTML = '';
-        latencyStatsInnerHTML +=
-            '<div>Data channel RTT (ms): ' +
-            result.dataChannelRtt +
-            '</div>';
+        latencyStatsInnerHTML += '<div>Data channel RTT (ms): ' + result.dataChannelRtt + '</div>';
         /**
          * Separate path time discovery works only when UE and Player clocks have been synchronized.
          */
@@ -94,9 +85,7 @@ export class DataChannelLatencyTest {
             latencyStatsInnerHTML +=
                 '<div>Player to Streamer path (ms): ' + result.playerToStreamerTime + '</div>';
             latencyStatsInnerHTML +=
-                '<div>Streamer to Player path (ms): ' +
-                result.streamerToPlayerTime +
-                '</div>';
+                '<div>Streamer to Player path (ms): ' + result.streamerToPlayerTime + '</div>';
         }
         this.latencyTestResultsElement.innerHTML = latencyStatsInnerHTML;
         //setup button to download the detailed results
@@ -106,24 +95,22 @@ export class DataChannelLatencyTest {
         downloadButton.classList.add('streamTools-button');
         downloadButton.classList.add('btn-flat');
         downloadButton.onclick = () => {
-            const file = new Blob([result.exportLatencyAsCSV()], {type: 'text/plain'});
-            const a = document.createElement("a");
+            const file = new Blob([result.exportLatencyAsCSV()], { type: 'text/plain' });
+            const a = document.createElement('a');
             const url = URL.createObjectURL(file);
             a.href = url;
-            a.download = "data_channel_latency_test_results.csv";
+            a.download = 'data_channel_latency_test_results.csv';
             document.body.appendChild(a);
             a.click();
-            setTimeout(function() {
+            setTimeout(function () {
                 document.body.removeChild(a);
                 window.URL.revokeObjectURL(url);
             }, 0);
-        }
+        };
         this.latencyTestResultsElement.appendChild(downloadButton);
     }
 
     public handleTestStart() {
-        this.latencyTestResultsElement.innerHTML =
-            '<div>Test in progress</div>';
+        this.latencyTestResultsElement.innerHTML = '<div>Test in progress</div>';
     }
-
 }

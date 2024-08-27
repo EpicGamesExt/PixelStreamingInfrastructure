@@ -20,16 +20,10 @@ export class FileUtil {
             file.size = 0;
             file.data = [];
             file.timestampStart = new Date().getTime();
-            Logger.Log(
-                Logger.GetStackTrace(),
-                'Received first chunk of file',
-                6
-            );
+            Logger.Log(Logger.GetStackTrace(), 'Received first chunk of file', 6);
         }
 
-        const extensionAsString = new TextDecoder('utf-16').decode(
-            view.slice(1)
-        );
+        const extensionAsString = new TextDecoder('utf-16').decode(view.slice(1));
         Logger.Log(Logger.GetStackTrace(), extensionAsString, 6);
         file.extension = extensionAsString;
     }
@@ -48,11 +42,7 @@ export class FileUtil {
             file.size = 0;
             file.data = [];
             file.timestampStart = new Date().getTime();
-            Logger.Log(
-                Logger.GetStackTrace(),
-                'Received first chunk of file',
-                6
-            );
+            Logger.Log(Logger.GetStackTrace(), 'Received first chunk of file', 6);
         }
 
         const mimeAsString = new TextDecoder('utf-16').decode(view.slice(1));
@@ -81,25 +71,17 @@ export class FileUtil {
         file.data.push(fileBytes);
 
         // Uncomment for debug
-        Logger.Log(
-            Logger.GetStackTrace(),
-            `Received file chunk: ${file.data.length}/${file.size}`,
-            6
-        );
+        Logger.Log(Logger.GetStackTrace(), `Received file chunk: ${file.data.length}/${file.size}`, 6);
 
         if (file.data.length === file.size) {
             file.receiving = false;
             file.valid = true;
             Logger.Log(Logger.GetStackTrace(), 'Received complete file', 6);
             const transferDuration = new Date().getTime() - file.timestampStart;
-            const transferBitrate = Math.round(
-                (file.size * 16 * 1024) / transferDuration
-            );
+            const transferBitrate = Math.round((file.size * 16 * 1024) / transferDuration);
             Logger.Log(
                 Logger.GetStackTrace(),
-                `Average transfer bitrate: ${transferBitrate}kb/s over ${
-                    transferDuration / 1000
-                } seconds`,
+                `Average transfer bitrate: ${transferBitrate}kb/s over ${transferDuration / 1000} seconds`,
                 6
             );
 

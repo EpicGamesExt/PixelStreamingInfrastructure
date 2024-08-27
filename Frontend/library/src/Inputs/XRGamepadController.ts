@@ -41,11 +41,7 @@ export class XRGamepadController {
         );
     }
 
-    updateStatus(
-        source: XRInputSource,
-        frame: XRFrame,
-        refSpace: XRReferenceSpace
-    ) {
+    updateStatus(source: XRInputSource, frame: XRFrame, refSpace: XRReferenceSpace) {
         if (source.gamepad) {
             const gamepadPose = frame.getPose(source.gripSpace, refSpace);
             if (!gamepadPose) {
@@ -59,9 +55,7 @@ export class XRGamepadController {
                 system = 2;
             }
             // TODO (william.belcher): Add other profiles (Quest, Microsoft Mixed Reality, etc)
-            this.toStreamerMessagesProvider.toStreamerHandlers.get('XRSystem')([
-                system
-            ]);
+            this.toStreamerMessagesProvider.toStreamerHandlers.get('XRSystem')([system]);
 
             // Default: AnyHand (2)
             let handedness = 2;
@@ -95,7 +89,7 @@ export class XRGamepadController {
                 this.controllers[handedness] = {
                     prevState: undefined,
                     currentState: undefined,
-					id: undefined
+                    id: undefined
                 };
                 this.controllers[handedness].prevState = XRGamepadController.deepCopyGamepad(source.gamepad);
             }
@@ -113,18 +107,34 @@ export class XRGamepadController {
                 if (currButton.pressed) {
                     // press
                     const isRepeat = prevButton.pressed ? 1 : 0;
-                    this.toStreamerMessagesProvider.toStreamerHandlers.get('XRButtonPressed')([handedness, i, isRepeat, currButton.value]);
+                    this.toStreamerMessagesProvider.toStreamerHandlers.get('XRButtonPressed')([
+                        handedness,
+                        i,
+                        isRepeat,
+                        currButton.value
+                    ]);
                 } else if (prevButton.pressed) {
-                    this.toStreamerMessagesProvider.toStreamerHandlers.get('XRButtonReleased')([handedness, i, 0]);
+                    this.toStreamerMessagesProvider.toStreamerHandlers.get('XRButtonReleased')([
+                        handedness,
+                        i,
+                        0
+                    ]);
                 }
 
                 if (currButton.touched) {
                     // touched
                     const isRepeat = prevButton.touched ? 1 : 0;
-                    this.toStreamerMessagesProvider.toStreamerHandlers.get('XRButtonTouched')([handedness, i, isRepeat]);
-                }
-                else if (prevButton.touched) {
-                    this.toStreamerMessagesProvider.toStreamerHandlers.get('XRButtonTouchReleased')([handedness, i, 0]);
+                    this.toStreamerMessagesProvider.toStreamerHandlers.get('XRButtonTouched')([
+                        handedness,
+                        i,
+                        isRepeat
+                    ]);
+                } else if (prevButton.touched) {
+                    this.toStreamerMessagesProvider.toStreamerHandlers.get('XRButtonTouchReleased')([
+                        handedness,
+                        i,
+                        0
+                    ]);
                 }
             }
 
@@ -133,8 +143,12 @@ export class XRGamepadController {
                 const curAxisValue = currState.axes[i];
                 const prevAxisValue = prevState.axes[i];
                 // Only send axis update if there is a change
-                if(curAxisValue != prevAxisValue) {
-                    this.toStreamerMessagesProvider.toStreamerHandlers.get('XRAnalog')([handedness, i, curAxisValue]);
+                if (curAxisValue != prevAxisValue) {
+                    this.toStreamerMessagesProvider.toStreamerHandlers.get('XRAnalog')([
+                        handedness,
+                        i,
+                        curAxisValue
+                    ]);
                 }
             }
 

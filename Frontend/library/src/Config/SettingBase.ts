@@ -18,8 +18,10 @@ export class SettingBase {
         label: string,
         description: string,
         defaultSettingValue: unknown,
-		// eslint-disable-next-line @typescript-eslint/no-empty-function
-		defaultOnChangeListener: (changedValue: unknown, setting: SettingBase) => void = () => { /* Do nothing, to be overridden. */ }
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
+        defaultOnChangeListener: (changedValue: unknown, setting: SettingBase) => void = () => {
+            /* Do nothing, to be overridden. */
+        }
     ) {
         this.parseURLParams();
 
@@ -89,9 +91,7 @@ export class SettingBase {
             window.history.replaceState(
                 {},
                 '',
-                urlParams.toString() !== ''
-                    ? `${location.pathname}?${urlParams}`
-                    : `${location.pathname}`
+                urlParams.toString() !== '' ? `${location.pathname}?${urlParams}` : `${location.pathname}`
             );
         }
     }

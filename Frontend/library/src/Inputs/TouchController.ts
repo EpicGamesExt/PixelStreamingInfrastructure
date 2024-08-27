@@ -35,23 +35,20 @@ export class TouchController implements ITouchController {
         this.videoElementProvider = videoElementProvider;
         this.coordinateConverter = coordinateConverter;
         this.videoElementParent = videoElementProvider.getVideoElement();
-        const ontouchstart = (ev: TouchEvent) =>
-            this.onTouchStart(ev);
-        const ontouchend = (ev: TouchEvent) =>
-            this.onTouchEnd(ev);
-        const ontouchmove = (ev: TouchEvent) =>
-            this.onTouchMove(ev);
+        const ontouchstart = (ev: TouchEvent) => this.onTouchStart(ev);
+        const ontouchend = (ev: TouchEvent) => this.onTouchEnd(ev);
+        const ontouchmove = (ev: TouchEvent) => this.onTouchMove(ev);
         this.videoElementParent.addEventListener('touchstart', ontouchstart);
         this.videoElementParent.addEventListener('touchend', ontouchend);
         this.videoElementParent.addEventListener('touchmove', ontouchmove);
-        this.touchEventListenerTracker.addUnregisterCallback(
-            () => this.videoElementParent.removeEventListener('touchstart', ontouchstart)
+        this.touchEventListenerTracker.addUnregisterCallback(() =>
+            this.videoElementParent.removeEventListener('touchstart', ontouchstart)
         );
-        this.touchEventListenerTracker.addUnregisterCallback(
-            () => this.videoElementParent.removeEventListener('touchend', ontouchend)
+        this.touchEventListenerTracker.addUnregisterCallback(() =>
+            this.videoElementParent.removeEventListener('touchend', ontouchend)
         );
-        this.touchEventListenerTracker.addUnregisterCallback(
-            () => this.videoElementParent.removeEventListener('touchmove', ontouchmove)
+        this.touchEventListenerTracker.addUnregisterCallback(() =>
+            this.videoElementParent.removeEventListener('touchmove', ontouchmove)
         );
         Logger.Log(Logger.GetStackTrace(), 'Touch Events Registered', 6);
 
@@ -60,8 +57,8 @@ export class TouchController implements ITouchController {
             event.preventDefault();
         };
         document.addEventListener('touchmove', preventOnTouchMove);
-        this.touchEventListenerTracker.addUnregisterCallback(
-            () => document.removeEventListener('touchmove', preventOnTouchMove)
+        this.touchEventListenerTracker.addUnregisterCallback(() =>
+            document.removeEventListener('touchmove', preventOnTouchMove)
         );
     }
 
@@ -79,11 +76,7 @@ export class TouchController implements ITouchController {
     rememberTouch(touch: Touch) {
         const finger = this.fingers.pop();
         if (finger === undefined) {
-            Logger.Log(
-                Logger.GetStackTrace(),
-                'exhausted touch identifiers',
-                6
-            );
+            Logger.Log(Logger.GetStackTrace(), 'exhausted touch identifiers', 6);
         }
         this.fingerIds.set(touch.identifier, finger);
     }
@@ -153,24 +146,16 @@ export class TouchController implements ITouchController {
             return;
         }
         const offset = this.videoElementProvider.getVideoParentElement().getBoundingClientRect();
-        const toStreamerHandlers =
-            this.toStreamerMessagesProvider.toStreamerHandlers;
+        const toStreamerHandlers = this.toStreamerMessagesProvider.toStreamerHandlers;
 
         for (let t = 0; t < touches.length; t++) {
             const numTouches = 1; // the number of touches to be sent this message
             const touch = touches[t];
             const x = touch.clientX - offset.left;
             const y = touch.clientY - offset.top;
-            Logger.Log(
-                Logger.GetStackTrace(),
-                `F${this.fingerIds.get(touch.identifier)}=(${x}, ${y})`,
-                6
-            );
+            Logger.Log(Logger.GetStackTrace(), `F${this.fingerIds.get(touch.identifier)}=(${x}, ${y})`, 6);
 
-            const coord = this.coordinateConverter.normalizeAndQuantizeUnsigned(
-                x,
-                y
-            );
+            const coord = this.coordinateConverter.normalizeAndQuantizeUnsigned(x, y);
             switch (type) {
                 case 'TouchStart':
                     toStreamerHandlers.get('TouchStart')([

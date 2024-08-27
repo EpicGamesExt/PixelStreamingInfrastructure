@@ -31,8 +31,7 @@ export class SendMessageController {
             messageData = [];
         }
 
-        const toStreamerMessages =
-            this.toStreamerMessagesMapProvider.toStreamerMessages;
+        const toStreamerMessages = this.toStreamerMessagesMapProvider.toStreamerMessages;
         const messageFormat = toStreamerMessages.get(messageType);
         if (messageFormat === undefined) {
             Logger.Error(
@@ -42,21 +41,23 @@ export class SendMessageController {
             return;
         }
 
-        if(messageFormat.structure && messageData && messageFormat.structure.length !== messageData.length) {
+        if (messageFormat.structure && messageData && messageFormat.structure.length !== messageData.length) {
             Logger.Error(
                 Logger.GetStackTrace(),
-                `Provided message data doesn't match expected layout. Expected [ ${messageFormat.structure.map((element: string) => {
-                    switch (element) {
-                        case 'uint8':
-                        case 'uint16':
-                        case 'int16':
-                        case 'float':
-                        case 'double':
-                            return 'number';
-                        case 'string':
-                            return 'string';
-                    }
-                }).toString() } ] but received [ ${messageData.map((element: number | string) => typeof element).toString()} ]`
+                `Provided message data doesn't match expected layout. Expected [ ${messageFormat.structure
+                    .map((element: string) => {
+                        switch (element) {
+                            case 'uint8':
+                            case 'uint16':
+                            case 'int16':
+                            case 'float':
+                            case 'double':
+                                return 'number';
+                            case 'string':
+                                return 'string';
+                        }
+                    })
+                    .toString()} ] but received [ ${messageData.map((element: number | string) => typeof element).toString()} ]`
             );
             return;
         }

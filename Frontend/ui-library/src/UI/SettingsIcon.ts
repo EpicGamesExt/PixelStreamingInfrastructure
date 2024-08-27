@@ -34,32 +34,19 @@ export class SettingsIcon {
 
     public get settingsIcon(): SVGElement {
         if (!this._settingsIcon) {
-            this._settingsIcon = document.createElementNS(
-                'http://www.w3.org/2000/svg',
-                'svg'
-            );
+            this._settingsIcon = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
             this._settingsIcon.setAttributeNS(null, 'id', 'settingsIcon');
             this._settingsIcon.setAttributeNS(null, 'x', '0px');
             this._settingsIcon.setAttributeNS(null, 'y', '0px');
-            this._settingsIcon.setAttributeNS(
-                null,
-                'viewBox',
-                '0 0 478.703 478.703'
-            );
+            this._settingsIcon.setAttributeNS(null, 'viewBox', '0 0 478.703 478.703');
 
             // create svg group for the paths
-            const svgGroup = document.createElementNS(
-                'http://www.w3.org/2000/svg',
-                'g'
-            );
+            const svgGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
             svgGroup.classList.add('svgIcon');
             this._settingsIcon.appendChild(svgGroup);
 
             // create paths for the icon itself, the inner and out path of a cog
-            const path1 = document.createElementNS(
-                'http://www.w3.org/2000/svg',
-                'path'
-            );
+            const path1 = document.createElementNS('http://www.w3.org/2000/svg', 'path');
             path1.setAttributeNS(
                 null,
                 'd',
@@ -86,10 +73,7 @@ export class SettingsIcon {
 			c7.8,13.1,13.6,27.2,17.4,41.9c1.3,5.2,5.6,9.1,10.8,9.9l42,7.1c1.3,0.2,2.2,1.3,2.2,2.6v42.1H451.9z'
             );
 
-            const path2 = document.createElementNS(
-                'http://www.w3.org/2000/svg',
-                'path'
-            );
+            const path2 = document.createElementNS('http://www.w3.org/2000/svg', 'path');
             path2.setAttributeNS(
                 null,
                 'd',

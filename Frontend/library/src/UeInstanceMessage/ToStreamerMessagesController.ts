@@ -16,9 +16,7 @@ export class ToStreamerMessagesController {
      * Send Request to Take Quality Control to the UE Instance
      */
     SendRequestQualityControl() {
-        this.sendMessageController.sendMessageToStreamer(
-            'RequestQualityControl'
-        );
+        this.sendMessageController.sendMessageToStreamer('RequestQualityControl');
     }
 
     /**
@@ -32,9 +30,7 @@ export class ToStreamerMessagesController {
      * Send Average Bitrate Request to the UE Instance
      */
     SendAverageBitrateRequest() {
-        this.sendMessageController.sendMessageToStreamer(
-            'AverageBitrateRequest'
-        );
+        this.sendMessageController.sendMessageToStreamer('AverageBitrateRequest');
     }
 
     /**
@@ -55,8 +51,6 @@ export class ToStreamerMessagesController {
      * Send a Request Initial Settings to the UE Instance
      */
     SendRequestInitialSettings() {
-        this.sendMessageController.sendMessageToStreamer(
-            'RequestInitialSettings'
-        );
+        this.sendMessageController.sendMessageToStreamer('RequestInitialSettings');
     }
 }
