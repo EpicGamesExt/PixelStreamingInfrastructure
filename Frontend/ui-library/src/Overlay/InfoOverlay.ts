@@ -30,10 +30,6 @@ export class InfoOverlay extends TextOverlay {
      * @param parentElem - the parent element this overlay will be inserted into.
      */
     public constructor(parentElem: HTMLElement) {
-        super(
-            parentElem,
-            InfoOverlay.createRootElement(),
-            InfoOverlay.createContentElement()
-        );
+        super(parentElem, InfoOverlay.createRootElement(), InfoOverlay.createContentElement());
     }
 }

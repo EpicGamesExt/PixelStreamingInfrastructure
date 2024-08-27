@@ -12,18 +12,9 @@ export class CoordinateConverter {
     videoElement: HTMLVideoElement;
     ratio: number;
 
-    normalizeAndQuantizeUnsignedFunc: (
-        x: number,
-        y: number
-    ) => NormalizedQuantizedUnsignedCoord;
-    normalizeAndQuantizeSignedFunc: (
-        x: number,
-        y: number
-    ) => NormalizedQuantizedSignedCoord;
-    denormalizeAndUnquantizeUnsignedFunc: (
-        x: number,
-        y: number
-    ) => UnquantizedDenormalizedUnsignedCoord;
+    normalizeAndQuantizeUnsignedFunc: (x: number, y: number) => NormalizedQuantizedUnsignedCoord;
+    normalizeAndQuantizeSignedFunc: (x: number, y: number) => NormalizedQuantizedSignedCoord;
+    denormalizeAndUnquantizeUnsignedFunc: (x: number, y: number) => UnquantizedDenormalizedUnsignedCoord;
 
     /**
      * @param videoElementProvider - the div element that the video player will be injected into
@@ -31,19 +22,13 @@ export class CoordinateConverter {
     constructor(videoElementProvider: VideoPlayer) {
         this.videoElementProvider = videoElementProvider;
         this.normalizeAndQuantizeUnsignedFunc = () => {
-            throw new Error(
-                'Normalize and quantize unsigned, method not implemented.'
-            );
+            throw new Error('Normalize and quantize unsigned, method not implemented.');
         };
         this.normalizeAndQuantizeSignedFunc = () => {
-            throw new Error(
-                'Normalize and unquantize signed, method not implemented.'
-            );
+            throw new Error('Normalize and unquantize signed, method not implemented.');
         };
         this.denormalizeAndUnquantizeUnsignedFunc = () => {
-            throw new Error(
-                'Denormalize and unquantize unsigned, method not implemented.'
-            );
+            throw new Error('Denormalize and unquantize unsigned, method not implemented.');
         };
     }
 
@@ -52,10 +37,7 @@ export class CoordinateConverter {
      * @param x - x axis point
      * @param y - y axis point
      */
-    normalizeAndQuantizeUnsigned(
-        x: number,
-        y: number
-    ): NormalizedQuantizedUnsignedCoord {
+    normalizeAndQuantizeUnsigned(x: number, y: number): NormalizedQuantizedUnsignedCoord {
         return this.normalizeAndQuantizeUnsignedFunc(x, y);
     }
 
@@ -64,10 +46,7 @@ export class CoordinateConverter {
      * @param x - x axis point
      * @param y - y axis point
      */
-    unquantizeAndDenormalizeUnsigned(
-        x: number,
-        y: number
-    ): UnquantizedDenormalizedUnsignedCoord {
+    unquantizeAndDenormalizeUnsigned(x: number, y: number): UnquantizedDenormalizedUnsignedCoord {
         return this.denormalizeAndUnquantizeUnsignedFunc(x, y);
     }
 
@@ -76,10 +55,7 @@ export class CoordinateConverter {
      * @param x - x axis point
      * @param y - y axis point
      */
-    normalizeAndQuantizeSigned(
-        x: number,
-        y: number
-    ): NormalizedQuantizedSignedCoord {
+    normalizeAndQuantizeSigned(x: number, y: number): NormalizedQuantizedSignedCoord {
         return this.normalizeAndQuantizeSignedFunc(x, y);
     }
 
@@ -87,8 +63,7 @@ export class CoordinateConverter {
      * set up the Normalize And Quantize methods based on the aspect ratio and the video player ratio
      */
     setupNormalizeAndQuantize() {
-        this.videoElementParent =
-            this.videoElementProvider.getVideoParentElement();
+        this.videoElementParent = this.videoElementProvider.getVideoParentElement();
         this.videoElement = this.videoElementProvider.getVideoElement();
 
         if (this.videoElementParent && this.videoElement) {
@@ -105,16 +80,12 @@ export class CoordinateConverter {
                     6
                 );
                 this.ratio = playerAspectRatio / videoAspectRatio;
-                this.normalizeAndQuantizeUnsignedFunc = (
-                    x: number,
-                    y: number
-                ) => this.normalizeAndQuantizeUnsignedPlayerBigger(x, y);
+                this.normalizeAndQuantizeUnsignedFunc = (x: number, y: number) =>
+                    this.normalizeAndQuantizeUnsignedPlayerBigger(x, y);
                 this.normalizeAndQuantizeSignedFunc = (x: number, y: number) =>
                     this.normalizeAndQuantizeSignedPlayerBigger(x, y);
-                this.denormalizeAndUnquantizeUnsignedFunc = (
-                    x: number,
-                    y: number
-                ) => this.denormalizeAndUnquantizeUnsignedPlayerBigger(x, y);
+                this.denormalizeAndUnquantizeUnsignedFunc = (x: number, y: number) =>
+                    this.denormalizeAndUnquantizeUnsignedPlayerBigger(x, y);
             } else {
                 Logger.Log(
                     Logger.GetStackTrace(),
@@ -122,16 +93,12 @@ export class CoordinateConverter {
                     6
                 );
                 this.ratio = videoAspectRatio / playerAspectRatio;
-                this.normalizeAndQuantizeUnsignedFunc = (
-                    x: number,
-                    y: number
-                ) => this.normalizeAndQuantizeUnsignedPlayerSmaller(x, y);
+                this.normalizeAndQuantizeUnsignedFunc = (x: number, y: number) =>
+                    this.normalizeAndQuantizeUnsignedPlayerSmaller(x, y);
                 this.normalizeAndQuantizeSignedFunc = (x: number, y: number) =>
                     this.normalizeAndQuantizeSignedPlayerSmaller(x, y);
-                this.denormalizeAndUnquantizeUnsignedFunc = (
-                    x: number,
-                    y: number
-                ) => this.denormalizeAndUnquantizeUnsignedPlayerSmaller(x, y);
+                this.denormalizeAndUnquantizeUnsignedFunc = (x: number, y: number) =>
+                    this.denormalizeAndUnquantizeUnsignedPlayerSmaller(x, y);
             }
         }
     }
@@ -141,26 +108,13 @@ export class CoordinateConverter {
      * @param x - x axis point
      * @param y - y axis point
      */
-    normalizeAndQuantizeUnsignedPlayerBigger(
-        x: number,
-        y: number
-    ): NormalizedQuantizedUnsignedCoord {
+    normalizeAndQuantizeUnsignedPlayerBigger(x: number, y: number): NormalizedQuantizedUnsignedCoord {
         const normalizedX = x / this.videoElementParent.clientWidth;
-        const normalizedY =
-            this.ratio * (y / this.videoElementParent.clientHeight - 0.5) + 0.5;
-        if (
-            normalizedX < 0.0 ||
-            normalizedX > 1.0 ||
-            normalizedY < 0.0 ||
-            normalizedY > 1.0
-        ) {
+        const normalizedY = this.ratio * (y / this.videoElementParent.clientHeight - 0.5) + 0.5;
+        if (normalizedX < 0.0 || normalizedX > 1.0 || normalizedY < 0.0 || normalizedY > 1.0) {
             return new NormalizedQuantizedUnsignedCoord(false, 65535, 65535);
         } else {
-            return new NormalizedQuantizedUnsignedCoord(
-                true,
-                normalizedX * 65536,
-                normalizedY * 65536
-            );
+            return new NormalizedQuantizedUnsignedCoord(true, normalizedX * 65536, normalizedY * 65536);
         }
     }
 
@@ -185,12 +139,8 @@ export class CoordinateConverter {
      */
     normalizeAndQuantizeSignedPlayerBigger(x: number, y: number) {
         const normalizedX = x / (0.5 * this.videoElementParent.clientWidth);
-        const normalizedY =
-            (this.ratio * y) / (0.5 * this.videoElementParent.clientHeight);
-        return new NormalizedQuantizedSignedCoord(
-            normalizedX * 32767,
-            normalizedY * 32767
-        );
+        const normalizedY = (this.ratio * y) / (0.5 * this.videoElementParent.clientHeight);
+        return new NormalizedQuantizedSignedCoord(normalizedX * 32767, normalizedY * 32767);
     }
 
     /**
@@ -199,22 +149,12 @@ export class CoordinateConverter {
      * @param y - y axis point
      */
     normalizeAndQuantizeUnsignedPlayerSmaller(x: number, y: number) {
-        const normalizedX =
-            this.ratio * (x / this.videoElementParent.clientWidth - 0.5) + 0.5;
+        const normalizedX = this.ratio * (x / this.videoElementParent.clientWidth - 0.5) + 0.5;
         const normalizedY = y / this.videoElementParent.clientHeight;
-        if (
-            normalizedX < 0.0 ||
-            normalizedX > 1.0 ||
-            normalizedY < 0.0 ||
-            normalizedY > 1.0
-        ) {
+        if (normalizedX < 0.0 || normalizedX > 1.0 || normalizedY < 0.0 || normalizedY > 1.0) {
             return new NormalizedQuantizedUnsignedCoord(false, 65535, 65535);
         } else {
-            return new NormalizedQuantizedUnsignedCoord(
-                true,
-                normalizedX * 65536,
-                normalizedY * 65536
-            );
+            return new NormalizedQuantizedUnsignedCoord(true, normalizedX * 65536, normalizedY * 65536);
         }
     }
 
@@ -238,13 +178,9 @@ export class CoordinateConverter {
      * @param y - y axis point
      */
     normalizeAndQuantizeSignedPlayerSmaller(x: number, y: number) {
-        const normalizedX =
-            (this.ratio * x) / (0.5 * this.videoElementParent.clientWidth);
+        const normalizedX = (this.ratio * x) / (0.5 * this.videoElementParent.clientWidth);
         const normalizedY = y / (0.5 * this.videoElementParent.clientHeight);
-        return new NormalizedQuantizedSignedCoord(
-            normalizedX * 32767,
-            normalizedY * 32767
-        );
+        return new NormalizedQuantizedSignedCoord(normalizedX * 32767, normalizedY * 32767);
     }
 }
 

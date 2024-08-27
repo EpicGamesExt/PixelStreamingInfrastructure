@@ -94,11 +94,7 @@ export class FreezeFrameController {
         if (this.jpeg.length === this.size) {
             this.receiving = false;
             this.valid = true;
-            Logger.Log(
-                Logger.GetStackTrace(),
-                `received complete freeze frame ${this.size}`,
-                6
-            );
+            Logger.Log(Logger.GetStackTrace(), `received complete freeze frame ${this.size}`, 6);
             this.updateFreezeFrameAndShow(this.jpeg, onLoadCallBack);
         }
         // We received more data than the freeze frame payload message indicate (this is an error)

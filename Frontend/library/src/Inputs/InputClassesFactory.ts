@@ -85,10 +85,7 @@ export class InputClassesFactory {
      * register touch events
      * @param fakeMouseTouch - the faked mouse touch event
      */
-    registerTouch(
-        fakeMouseTouch: boolean,
-        videoElementParentClientRect: DOMRect
-    ) {
+    registerTouch(fakeMouseTouch: boolean, videoElementParentClientRect: DOMRect) {
         Logger.Log(Logger.GetStackTrace(), 'Registering Touch', 6);
         if (fakeMouseTouch) {
             const fakeTouchController = new FakeTouchController(
@@ -96,9 +93,7 @@ export class InputClassesFactory {
                 this.videoElementProvider,
                 this.coordinateConverter
             );
-            fakeTouchController.setVideoElementParentClientRect(
-                videoElementParentClientRect
-            );
+            fakeTouchController.setVideoElementParentClientRect(videoElementParentClientRect);
             return fakeTouchController;
         } else {
             return new TouchController(
@@ -114,9 +109,7 @@ export class InputClassesFactory {
      */
     registerGamePad() {
         Logger.Log(Logger.GetStackTrace(), 'Register Game Pad', 7);
-        const gamePadController = new GamePadController(
-            this.toStreamerMessagesProvider
-        );
+        const gamePadController = new GamePadController(this.toStreamerMessagesProvider);
         return gamePadController;
     }
 }

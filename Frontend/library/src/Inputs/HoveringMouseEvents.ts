@@ -33,24 +33,16 @@ export class HoveringMouseEvents implements IMouseEvents {
             return;
         }
         Logger.Log(Logger.GetStackTrace(), 'MouseMove', 6);
-        const coord =
-            this.mouseController.coordinateConverter.normalizeAndQuantizeUnsigned(
-                mouseEvent.offsetX,
-                mouseEvent.offsetY
-            );
-        const delta =
-            this.mouseController.coordinateConverter.normalizeAndQuantizeSigned(
-                mouseEvent.movementX,
-                mouseEvent.movementY
-            );
-        const toStreamerHandlers =
-            this.mouseController.toStreamerMessagesProvider.toStreamerHandlers;
-        toStreamerHandlers.get('MouseMove')([
-            coord.x,
-            coord.y,
-            delta.x,
-            delta.y
-        ]);
+        const coord = this.mouseController.coordinateConverter.normalizeAndQuantizeUnsigned(
+            mouseEvent.offsetX,
+            mouseEvent.offsetY
+        );
+        const delta = this.mouseController.coordinateConverter.normalizeAndQuantizeSigned(
+            mouseEvent.movementX,
+            mouseEvent.movementY
+        );
+        const toStreamerHandlers = this.mouseController.toStreamerMessagesProvider.toStreamerHandlers;
+        toStreamerHandlers.get('MouseMove')([coord.x, coord.y, delta.x, delta.y]);
         mouseEvent.preventDefault();
     }
 
@@ -63,18 +55,12 @@ export class HoveringMouseEvents implements IMouseEvents {
             return;
         }
         Logger.Log(Logger.GetStackTrace(), 'onMouse Down', 6);
-        const coord =
-            this.mouseController.coordinateConverter.normalizeAndQuantizeUnsigned(
-                mouseEvent.offsetX,
-                mouseEvent.offsetY
-            );
-        const toStreamerHandlers =
-            this.mouseController.toStreamerMessagesProvider.toStreamerHandlers;
-        toStreamerHandlers.get('MouseDown')([
-            mouseEvent.button,
-            coord.x,
-            coord.y
-        ]);
+        const coord = this.mouseController.coordinateConverter.normalizeAndQuantizeUnsigned(
+            mouseEvent.offsetX,
+            mouseEvent.offsetY
+        );
+        const toStreamerHandlers = this.mouseController.toStreamerMessagesProvider.toStreamerHandlers;
+        toStreamerHandlers.get('MouseDown')([mouseEvent.button, coord.x, coord.y]);
         mouseEvent.preventDefault();
     }
 
@@ -87,18 +73,12 @@ export class HoveringMouseEvents implements IMouseEvents {
             return;
         }
         Logger.Log(Logger.GetStackTrace(), 'onMouse Up', 6);
-        const coord =
-            this.mouseController.coordinateConverter.normalizeAndQuantizeUnsigned(
-                mouseEvent.offsetX,
-                mouseEvent.offsetY
-            );
-        const toStreamerHandlers =
-            this.mouseController.toStreamerMessagesProvider.toStreamerHandlers;
-        toStreamerHandlers.get('MouseUp')([
-            mouseEvent.button,
-            coord.x,
-            coord.y
-        ]);
+        const coord = this.mouseController.coordinateConverter.normalizeAndQuantizeUnsigned(
+            mouseEvent.offsetX,
+            mouseEvent.offsetY
+        );
+        const toStreamerHandlers = this.mouseController.toStreamerMessagesProvider.toStreamerHandlers;
+        toStreamerHandlers.get('MouseUp')([mouseEvent.button, coord.x, coord.y]);
         mouseEvent.preventDefault();
     }
 
@@ -121,18 +101,12 @@ export class HoveringMouseEvents implements IMouseEvents {
         if (!this.mouseController.videoElementProvider.isVideoReady()) {
             return;
         }
-        const coord =
-            this.mouseController.coordinateConverter.normalizeAndQuantizeUnsigned(
-                wheelEvent.offsetX,
-                wheelEvent.offsetY
-            );
-        const toStreamerHandlers =
-            this.mouseController.toStreamerMessagesProvider.toStreamerHandlers;
-        toStreamerHandlers.get('MouseWheel')([
-            wheelEvent.wheelDelta,
-            coord.x,
-            coord.y
-        ]);
+        const coord = this.mouseController.coordinateConverter.normalizeAndQuantizeUnsigned(
+            wheelEvent.offsetX,
+            wheelEvent.offsetY
+        );
+        const toStreamerHandlers = this.mouseController.toStreamerMessagesProvider.toStreamerHandlers;
+        toStreamerHandlers.get('MouseWheel')([wheelEvent.wheelDelta, coord.x, coord.y]);
         wheelEvent.preventDefault();
     }
 
@@ -144,18 +118,12 @@ export class HoveringMouseEvents implements IMouseEvents {
         if (!this.mouseController.videoElementProvider.isVideoReady()) {
             return;
         }
-        const coord =
-            this.mouseController.coordinateConverter.normalizeAndQuantizeUnsigned(
-                mouseEvent.offsetX,
-                mouseEvent.offsetY
-            );
-        const toStreamerHandlers =
-            this.mouseController.toStreamerMessagesProvider.toStreamerHandlers;
-        toStreamerHandlers.get('MouseDouble')([
-            mouseEvent.button,
-            coord.x,
-            coord.y
-        ]);
+        const coord = this.mouseController.coordinateConverter.normalizeAndQuantizeUnsigned(
+            mouseEvent.offsetX,
+            mouseEvent.offsetY
+        );
+        const toStreamerHandlers = this.mouseController.toStreamerMessagesProvider.toStreamerHandlers;
+        toStreamerHandlers.get('MouseDouble')([mouseEvent.button, coord.x, coord.y]);
     }
 
     /**
@@ -167,11 +135,7 @@ export class HoveringMouseEvents implements IMouseEvents {
             return;
         }
         Logger.Log(Logger.GetStackTrace(), 'onMouse press', 6);
-        this.mouseController.pressMouseButtons(
-            mouseEvent.buttons,
-            mouseEvent.offsetX,
-            mouseEvent.offsetY
-        );
+        this.mouseController.pressMouseButtons(mouseEvent.buttons, mouseEvent.offsetX, mouseEvent.offsetY);
     }
 
     /**
@@ -183,10 +147,6 @@ export class HoveringMouseEvents implements IMouseEvents {
             return;
         }
         Logger.Log(Logger.GetStackTrace(), 'onMouse release', 6);
-        this.mouseController.releaseMouseButtons(
-            mouseEvent.buttons,
-            mouseEvent.offsetX,
-            mouseEvent.offsetY
-        );
+        this.mouseController.releaseMouseButtons(mouseEvent.buttons, mouseEvent.offsetX, mouseEvent.offsetY);
     }
 }

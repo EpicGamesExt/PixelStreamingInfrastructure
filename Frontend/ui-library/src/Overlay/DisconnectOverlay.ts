@@ -33,11 +33,7 @@ export class DisconnectOverlay extends ActionOverlay {
      * @param parentElem - the parent element this overlay will be inserted into.
      */
     public constructor(parentElem: HTMLElement) {
-        super(
-            parentElem,
-            DisconnectOverlay.createRootElement(),
-            DisconnectOverlay.createContentElement()
-        );
+        super(parentElem, DisconnectOverlay.createRootElement(), DisconnectOverlay.createContentElement());
 
         // add the new event listener
         this.rootElement.addEventListener('click', () => {

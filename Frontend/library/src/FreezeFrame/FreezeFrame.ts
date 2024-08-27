@@ -53,9 +53,7 @@ export class FreezeFrame {
      * @param jpeg - the freeze frame image as a byte array data
      */
     updateImageElementSource(jpeg: Uint8Array) {
-        const base64 = btoa(
-            jpeg.reduce((data, byte) => data + String.fromCharCode(byte), '')
-        );
+        const base64 = btoa(jpeg.reduce((data, byte) => data + String.fromCharCode(byte), ''));
         this.imageElement.src = 'data:image/jpeg;base64,' + base64;
     }
 
@@ -77,28 +75,18 @@ export class FreezeFrame {
             let displayHeight = 0;
             let displayTop = 0;
             let displayLeft = 0;
-            const parentAspectRatio =
-                this.rootDiv.clientWidth / this.rootDiv.clientHeight;
-            const videoAspectRatio =
-                this.freezeFrameWidth / this.freezeFrameHeight;
+            const parentAspectRatio = this.rootDiv.clientWidth / this.rootDiv.clientHeight;
+            const videoAspectRatio = this.freezeFrameWidth / this.freezeFrameHeight;
             if (parentAspectRatio < videoAspectRatio) {
                 displayWidth = this.rootDiv.clientWidth;
-                displayHeight = Math.floor(
-                    this.rootDiv.clientWidth / videoAspectRatio
-                );
-                displayTop = Math.floor(
-                    (this.rootDiv.clientHeight - displayHeight) * 0.5
-                );
+                displayHeight = Math.floor(this.rootDiv.clientWidth / videoAspectRatio);
+                displayTop = Math.floor((this.rootDiv.clientHeight - displayHeight) * 0.5);
                 displayLeft = 0;
             } else {
-                displayWidth = Math.floor(
-                    this.rootDiv.clientHeight * videoAspectRatio
-                );
+                displayWidth = Math.floor(this.rootDiv.clientHeight * videoAspectRatio);
                 displayHeight = this.rootDiv.clientHeight;
                 displayTop = 0;
-                displayLeft = Math.floor(
-                    (this.rootDiv.clientWidth - displayWidth) * 0.5
-                );
+                displayLeft = Math.floor((this.rootDiv.clientWidth - displayWidth) * 0.5);
             }
             this.rootElement.style.width = this.rootDiv.offsetWidth + 'px';
             this.rootElement.style.height = this.rootDiv.offsetHeight + 'px';

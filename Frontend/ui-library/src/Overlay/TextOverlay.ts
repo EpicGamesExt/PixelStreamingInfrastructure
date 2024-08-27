@@ -12,11 +12,7 @@ export class TextOverlay extends OverlayBase {
      * @param rootElement - the root element that is the overlay
      * @param textElement - an element that contains text for the action overlay
      */
-    public constructor(
-        rootDiv: HTMLElement,
-        rootElement: HTMLElement,
-        textElement: HTMLElement
-    ) {
+    public constructor(rootDiv: HTMLElement, rootElement: HTMLElement, textElement: HTMLElement) {
         super(rootDiv, rootElement, textElement);
     }
 

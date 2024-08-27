@@ -39,15 +39,10 @@ export class LockedMouseEvents implements IMouseEvents {
         this.videoElementProvider = videoElementProvider;
         this.mouseController = mouseController;
         this.activeKeysProvider = activeKeysProvider;
-        const videoElementParent =
-            this.videoElementProvider.getVideoParentElement();
+        const videoElementParent = this.videoElementProvider.getVideoParentElement();
         this.x = videoElementParent.getBoundingClientRect().width / 2;
         this.y = videoElementParent.getBoundingClientRect().height / 2;
-        this.coord =
-            this.mouseController.coordinateConverter.normalizeAndQuantizeUnsigned(
-                this.x,
-                this.y
-            );
+        this.coord = this.mouseController.coordinateConverter.normalizeAndQuantizeUnsigned(this.x, this.y);
     }
 
     /**
@@ -61,40 +56,22 @@ export class LockedMouseEvents implements IMouseEvents {
      * Handle when the locked state Changed
      */
     lockStateChange() {
-        const videoElementParent =
-            this.videoElementProvider.getVideoParentElement();
-        const toStreamerHandlers =
-            this.mouseController.toStreamerMessagesProvider.toStreamerHandlers;
+        const videoElementParent = this.videoElementProvider.getVideoParentElement();
+        const toStreamerHandlers = this.mouseController.toStreamerMessagesProvider.toStreamerHandlers;
 
         if (
             document.pointerLockElement === videoElementParent ||
             document.mozPointerLockElement === videoElementParent
         ) {
             Logger.Log(Logger.GetStackTrace(), 'Pointer locked', 6);
-            document.addEventListener(
-                'mousemove',
-                this.updateMouseMovePositionEvent,
-                false
-            );
-            this.mouseEventListenerTracker.addUnregisterCallback(
-                () => document.removeEventListener(
-                    'mousemove',
-                    this.updateMouseMovePositionEvent,
-                    false
-                )
+            document.addEventListener('mousemove', this.updateMouseMovePositionEvent, false);
+            this.mouseEventListenerTracker.addUnregisterCallback(() =>
+                document.removeEventListener('mousemove', this.updateMouseMovePositionEvent, false)
             );
         } else {
-            Logger.Log(
-                Logger.GetStackTrace(),
-                'The pointer lock status is now unlocked',
-                6
-            );
+            Logger.Log(Logger.GetStackTrace(), 'The pointer lock status is now unlocked', 6);
             // !a new arrow function must not be used here as it will be counted as a new function that cannot be removed
-            document.removeEventListener(
-                'mousemove',
-                this.updateMouseMovePositionEvent,
-                false
-            );
+            document.removeEventListener('mousemove', this.updateMouseMovePositionEvent, false);
 
             // If mouse loses focus, send a key up for all of the currently held-down keys
             // This is necessary as when the mouse loses focus, the windows stops listening for events and as such
@@ -123,12 +100,9 @@ export class LockedMouseEvents implements IMouseEvents {
         if (!this.videoElementProvider.isVideoReady()) {
             return;
         }
-        const toStreamerHandlers =
-            this.mouseController.toStreamerMessagesProvider.toStreamerHandlers;
-        const styleWidth =
-            this.videoElementProvider.getVideoParentElement().clientWidth;
-        const styleHeight =
-            this.videoElementProvider.getVideoParentElement().clientHeight;
+        const toStreamerHandlers = this.mouseController.toStreamerMessagesProvider.toStreamerHandlers;
+        const styleWidth = this.videoElementProvider.getVideoParentElement().clientWidth;
+        const styleHeight = this.videoElementProvider.getVideoParentElement().clientHeight;
 
         this.x += mouseEvent.movementX;
         this.y += mouseEvent.movementY;
@@ -146,22 +120,12 @@ export class LockedMouseEvents implements IMouseEvents {
             this.y = styleHeight - this.y;
         }
 
-        this.coord =
-            this.mouseController.coordinateConverter.normalizeAndQuantizeUnsigned(
-                this.x,
-                this.y
-            );
-        const delta =
-            this.mouseController.coordinateConverter.normalizeAndQuantizeSigned(
-                mouseEvent.movementX,
-                mouseEvent.movementY
-            );
-        toStreamerHandlers.get('MouseMove')([
-            this.coord.x,
-            this.coord.y,
-            delta.x,
-            delta.y
-        ]);
+        this.coord = this.mouseController.coordinateConverter.normalizeAndQuantizeUnsigned(this.x, this.y);
+        const delta = this.mouseController.coordinateConverter.normalizeAndQuantizeSigned(
+            mouseEvent.movementX,
+            mouseEvent.movementY
+        );
+        toStreamerHandlers.get('MouseMove')([this.coord.x, this.coord.y, delta.x, delta.y]);
     }
 
     /**
@@ -173,8 +137,7 @@ export class LockedMouseEvents implements IMouseEvents {
             return;
         }
 
-        const toStreamerHandlers =
-            this.mouseController.toStreamerMessagesProvider.toStreamerHandlers;
+        const toStreamerHandlers = this.mouseController.toStreamerMessagesProvider.toStreamerHandlers;
         toStreamerHandlers.get('MouseDown')([
             mouseEvent.button,
             // We use the store value of this.coord as opposed to the mouseEvent.x/y as the mouseEvent location
@@ -192,8 +155,7 @@ export class LockedMouseEvents implements IMouseEvents {
         if (!this.videoElementProvider.isVideoReady()) {
             return;
         }
-        const toStreamerHandlers =
-            this.mouseController.toStreamerMessagesProvider.toStreamerHandlers;
+        const toStreamerHandlers = this.mouseController.toStreamerMessagesProvider.toStreamerHandlers;
         toStreamerHandlers.get('MouseUp')([
             mouseEvent.button,
             // We use the store value of this.coord as opposed to the mouseEvent.x/y as the mouseEvent location
@@ -211,8 +173,7 @@ export class LockedMouseEvents implements IMouseEvents {
         if (!this.videoElementProvider.isVideoReady()) {
             return;
         }
-        const toStreamerHandlers =
-            this.mouseController.toStreamerMessagesProvider.toStreamerHandlers;
+        const toStreamerHandlers = this.mouseController.toStreamerMessagesProvider.toStreamerHandlers;
         toStreamerHandlers.get('MouseWheel')([
             wheelEvent.wheelDelta,
             // We use the store value of this.coord as opposed to the mouseEvent.x/y as the mouseEvent location
@@ -230,8 +191,7 @@ export class LockedMouseEvents implements IMouseEvents {
         if (!this.videoElementProvider.isVideoReady()) {
             return;
         }
-        const toStreamerHandlers =
-            this.mouseController.toStreamerMessagesProvider.toStreamerHandlers;
+        const toStreamerHandlers = this.mouseController.toStreamerMessagesProvider.toStreamerHandlers;
         toStreamerHandlers.get('MouseDouble')([
             mouseEvent.button,
             // We use the store value of this.coord as opposed to the mouseEvent.x/y as the mouseEvent location
@@ -249,11 +209,7 @@ export class LockedMouseEvents implements IMouseEvents {
         if (!this.videoElementProvider.isVideoReady()) {
             return;
         }
-        this.mouseController.pressMouseButtons(
-            mouseEvent.buttons,
-            this.x,
-            this.y
-        );
+        this.mouseController.pressMouseButtons(mouseEvent.buttons, this.x, this.y);
     }
 
     /**
@@ -264,11 +220,7 @@ export class LockedMouseEvents implements IMouseEvents {
         if (!this.videoElementProvider.isVideoReady()) {
             return;
         }
-        this.mouseController.releaseMouseButtons(
-            mouseEvent.buttons,
-            this.x,
-            this.y
-        );
+        this.mouseController.releaseMouseButtons(mouseEvent.buttons, this.x, this.y);
     }
 }
 

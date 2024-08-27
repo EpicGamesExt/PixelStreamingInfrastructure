@@ -6,9 +6,7 @@ import { SettingBase } from './SettingBase';
 /**
  * A boolean flag setting object with a text label.
  */
-export class SettingFlag<
-    CustomIds extends string = FlagsIds
-> extends SettingBase {
+export class SettingFlag<CustomIds extends string = FlagsIds> extends SettingBase {
     id: FlagsIds | CustomIds;
     onChangeEmit: (changedValue: boolean) => void;
 
@@ -18,8 +16,10 @@ export class SettingFlag<
         description: string,
         defaultFlagValue: boolean,
         useUrlParams: boolean,
-		// eslint-disable-next-line @typescript-eslint/no-empty-function
-		defaultOnChangeListener: (changedValue: unknown, setting: SettingBase) => void = () => { /* Do nothing, to be overridden. */ }
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
+        defaultOnChangeListener: (changedValue: unknown, setting: SettingBase) => void = () => {
+            /* Do nothing, to be overridden. */
+        }
     ) {
         super(id, label, description, defaultFlagValue, defaultOnChangeListener);
 

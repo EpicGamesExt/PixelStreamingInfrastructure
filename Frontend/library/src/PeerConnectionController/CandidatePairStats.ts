@@ -20,5 +20,5 @@ export class CandidatePairStats {
     timestamp: number;
     transportId: string;
     type: string;
-    writable: boolean;  
+    writable: boolean;
 }

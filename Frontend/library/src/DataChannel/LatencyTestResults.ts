@@ -48,10 +48,7 @@ export class LatencyTestResults {
      * Process the encoder times and set them
      */
     processFields() {
-        if (
-            this.EncodeMs == null &&
-            (this.PreEncodeTimeMs != null || this.PostEncodeTimeMs != null)
-        ) {
+        if (this.EncodeMs == null && (this.PreEncodeTimeMs != null || this.PostEncodeTimeMs != null)) {
             Logger.Log(
                 Logger.GetStackTrace(),
                 `Setting Encode Ms \n ${this.PostEncodeTimeMs} \n ${this.PreEncodeTimeMs}`,
@@ -69,8 +66,7 @@ export class LatencyTestResults {
                 `Setting CaptureToSendMs Ms \n ${this.PostCaptureTimeMs} \n ${this.PreCaptureTimeMs}`,
                 6
             );
-            this.CaptureToSendMs =
-                this.PostCaptureTimeMs - this.PreCaptureTimeMs;
+            this.CaptureToSendMs = this.PostCaptureTimeMs - this.PreCaptureTimeMs;
         }
     }
 }

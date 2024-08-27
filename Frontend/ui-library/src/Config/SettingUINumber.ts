@@ -1,18 +1,13 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
-import type {
-    NumericParametersIds,
-    SettingNumber
-} from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.5';
+import type { NumericParametersIds, SettingNumber } from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.5';
 import { Logger } from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.5';
 import { SettingUIBase } from './SettingUIBase';
 
 /**
  * A number spinner with a text label beside it.
  */
-export class SettingUINumber<
-    CustomIds extends string = NumericParametersIds
-> extends SettingUIBase {
+export class SettingUINumber<CustomIds extends string = NumericParametersIds> extends SettingUIBase {
     _spinner: HTMLInputElement;
 
     /* This element contains a text node that reflects the setting's text label. */

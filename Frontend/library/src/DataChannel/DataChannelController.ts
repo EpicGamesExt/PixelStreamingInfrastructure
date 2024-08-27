@@ -39,10 +39,7 @@ export class DataChannelController {
             this.datachannelOptions.ordered = true;
         }
 
-        this.dataChannel = this.peerConnection.createDataChannel(
-            this.label,
-            this.datachannelOptions
-        );
+        this.dataChannel = this.peerConnection.createDataChannel(this.label, this.datachannelOptions);
         this.setupDataChannel();
     }
 
@@ -51,8 +48,7 @@ export class DataChannelController {
         this.dataChannel.binaryType = 'arraybuffer';
         this.dataChannel.onopen = (ev: Event) => this.handleOnOpen(ev);
         this.dataChannel.onclose = (ev: Event) => this.handleOnClose(ev);
-        this.dataChannel.onmessage = (ev: MessageEvent) =>
-            this.handleOnMessage(ev);
+        this.dataChannel.onmessage = (ev: MessageEvent) => this.handleOnMessage(ev);
         this.dataChannel.onerror = (ev: MessageEvent) => this.handleOnError(ev);
     }
 
@@ -60,11 +56,7 @@ export class DataChannelController {
      * Handles when the Data Channel is opened
      */
     handleOnOpen(ev: Event) {
-        Logger.Log(
-            Logger.GetStackTrace(),
-            `Data Channel (${this.label}) opened.`,
-            7
-        );
+        Logger.Log(Logger.GetStackTrace(), `Data Channel (${this.label}) opened.`, 7);
         this.onOpen(this.dataChannel?.label, ev);
     }
 
@@ -72,11 +64,7 @@ export class DataChannelController {
      * Handles when the Data Channel is closed
      */
     handleOnClose(ev: Event) {
-        Logger.Log(
-            Logger.GetStackTrace(),
-            `Data Channel (${this.label}) closed.`,
-            7
-        );
+        Logger.Log(Logger.GetStackTrace(), `Data Channel (${this.label}) closed.`, 7);
         this.onClose(this.dataChannel?.label, ev);
     }
 
@@ -86,11 +74,7 @@ export class DataChannelController {
      */
     handleOnMessage(event: MessageEvent) {
         // Higher log level to prevent log spam with messages received
-        Logger.Log(
-            Logger.GetStackTrace(),
-            `Data Channel (${this.label}) message: ${event}`,
-            8
-        );
+        Logger.Log(Logger.GetStackTrace(), `Data Channel (${this.label}) message: ${event}`, 8);
     }
 
     /**
@@ -98,11 +82,7 @@ export class DataChannelController {
      * @param event - Error Event
      */
     handleOnError(event: MessageEvent) {
-        Logger.Log(
-            Logger.GetStackTrace(),
-            `Data Channel (${this.label}) error: ${event}`,
-            7
-        );
+        Logger.Log(Logger.GetStackTrace(), `Data Channel (${this.label}) error: ${event}`, 7);
         this.onError(this.dataChannel?.label, event);
     }
 

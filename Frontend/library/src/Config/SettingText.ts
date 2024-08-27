@@ -6,9 +6,7 @@ import { SettingBase } from './SettingBase';
 /**
  * A text setting object with a text label.
  */
-export class SettingText<
-    CustomIds extends string = TextParametersIds
-> extends SettingBase {
+export class SettingText<CustomIds extends string = TextParametersIds> extends SettingBase {
     id: TextParametersIds | CustomIds;
     onChangeEmit: (changedValue: string) => void;
     useUrlParams: boolean;
@@ -19,8 +17,10 @@ export class SettingText<
         description: string,
         defaultTextValue: string,
         useUrlParams: boolean,
-		// eslint-disable-next-line @typescript-eslint/no-empty-function
-		defaultOnChangeListener: (changedValue: unknown, setting: SettingBase) => void = () => { /* Do nothing, to be overridden. */ }
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
+        defaultOnChangeListener: (changedValue: unknown, setting: SettingBase) => void = () => {
+            /* Do nothing, to be overridden. */
+        }
     ) {
         super(id, label, description, defaultTextValue, defaultOnChangeListener);
 

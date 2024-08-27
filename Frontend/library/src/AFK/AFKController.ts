@@ -23,18 +23,12 @@ export class AFKController {
 
     onAFKTimedOutCallback: () => void;
 
-    constructor(
-        config: Config,
-        pixelStreaming: PixelStreaming,
-        onDismissAfk: () => void
-    ) {
+    constructor(config: Config, pixelStreaming: PixelStreaming, onDismissAfk: () => void) {
         this.config = config;
         this.pixelStreaming = pixelStreaming;
         this.onDismissAfk = onDismissAfk;
         this.onAFKTimedOutCallback = () => {
-            console.log(
-                'AFK timed out, did you want to override this callback?'
-            );
+            console.log('AFK timed out, did you want to override this callback?');
         };
     }
 
@@ -46,9 +40,7 @@ export class AFKController {
 
         if (this.active || this.countdownActive) {
             this.startAfkWarningTimer();
-            this.pixelStreaming.dispatchEvent(
-                new AfkWarningDeactivateEvent()
-            );
+            this.pixelStreaming.dispatchEvent(new AfkWarningDeactivateEvent());
         }
     }
 
@@ -57,9 +49,7 @@ export class AFKController {
      */
     startAfkWarningTimer() {
         if (
-            this.config.getNumericSettingValue(
-                NumericParameters.AFKTimeoutSecs
-            ) > 0 &&
+            this.config.getNumericSettingValue(NumericParameters.AFKTimeoutSecs) > 0 &&
             this.config.isFlagEnabled(Flags.AFKDetection)
         ) {
             this.active = true;
@@ -94,9 +84,7 @@ export class AFKController {
             clearTimeout(this.warnTimer);
             this.warnTimer = setTimeout(
                 () => this.activateAfkEvent(),
-                this.config.getNumericSettingValue(
-                    NumericParameters.AFKTimeoutSecs
-                ) * 1000
+                this.config.getNumericSettingValue(NumericParameters.AFKTimeoutSecs) * 1000
             );
         }
     }
@@ -117,13 +105,9 @@ export class AFKController {
         );
 
         // update our countDown timer and overlay contents
-        this.countDown = this.config.getNumericSettingValue(
-            NumericParameters.AFKCountdownSecs
-        );
+        this.countDown = this.config.getNumericSettingValue(NumericParameters.AFKCountdownSecs);
         this.countdownActive = true;
-        this.pixelStreaming.dispatchEvent(
-            new AfkWarningUpdateEvent({ countDown: this.countDown })
-        );
+        this.pixelStreaming.dispatchEvent(new AfkWarningUpdateEvent({ countDown: this.countDown }));
 
         // if we are in locked mouse exit pointerlock
         if (!this.config.isFlagEnabled(Flags.HoveringMouseMode)) {
@@ -138,21 +122,14 @@ export class AFKController {
             this.countDown--;
             if (this.countDown == 0) {
                 // The user failed to click so hide the overlay and disconnect them.
-                this.pixelStreaming.dispatchEvent(
-                    new AfkTimedOutEvent()
-                );
+                this.pixelStreaming.dispatchEvent(new AfkTimedOutEvent());
                 this.onAFKTimedOutCallback();
-                Logger.Log(
-                    Logger.GetStackTrace(),
-                    'You have been disconnected due to inactivity'
-                );
+                Logger.Log(Logger.GetStackTrace(), 'You have been disconnected due to inactivity');
 
                 // switch off the afk feature as stream has closed
                 this.stopAfkWarningTimer();
             } else {
-                this.pixelStreaming.dispatchEvent(
-                    new AfkWarningUpdateEvent({ countDown: this.countDown })
-                );
+                this.pixelStreaming.dispatchEvent(new AfkWarningUpdateEvent({ countDown: this.countDown }));
             }
         }, 1000);
     }

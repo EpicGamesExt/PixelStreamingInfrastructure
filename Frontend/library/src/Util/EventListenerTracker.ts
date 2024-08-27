@@ -11,7 +11,7 @@ export class EventListenerTracker {
 
     /**
      * Add a new callback that is executed when unregisterAll is called.
-     * @param callback 
+     * @param callback
      */
     addUnregisterCallback(callback: UnregisterFunction) {
         this.unregisterCallbacks.push(callback);
