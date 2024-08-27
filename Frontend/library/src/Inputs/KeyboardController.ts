@@ -139,10 +139,9 @@ export class KeyboardController {
      * @param config The applications configuration. We're interested in the suppress browser keys option
      * @param activeKeysProvider Active keys provider class object
      */
-    constructor(
-        toStreamerMessagesProvider: StreamMessageController,
-        config: Config,
-        activeKeysProvider: ActiveKeys) {
+    constructor(toStreamerMessagesProvider: StreamMessageController,
+                config: Config,
+                activeKeysProvider: ActiveKeys) {
         this.toStreamerMessagesProvider = toStreamerMessagesProvider;
         this.config = config;
         this.activeKeysProvider = activeKeysProvider;
@@ -232,9 +231,8 @@ export class KeyboardController {
      */
     handleOnKeyPress(keyboard: KeyboardEvent) {
         if (!('charCode' in keyboard)) {
-            Logger.Warning(
-                Logger.GetStackTrace(),
-                'KeyboardEvent.charCode is deprecated in this browser, cannot send key press.');
+            Logger.Warning(Logger.GetStackTrace(),
+                           'KeyboardEvent.charCode is deprecated in this browser, cannot send key press.');
             return;
         }
 
@@ -294,8 +292,8 @@ export class KeyboardController {
 
         if (keyboardEvent.keyCode === SpecialKeyCodes.shift && keyboardEvent.code === 'ShiftRight') {
             return SpecialKeyCodes.rightShift;
-        } else if (
-            keyboardEvent.keyCode === SpecialKeyCodes.control && keyboardEvent.code === 'ControlRight') {
+        } else if (keyboardEvent.keyCode === SpecialKeyCodes.control &&
+                   keyboardEvent.code === 'ControlRight') {
             return SpecialKeyCodes.rightControl;
         } else if (keyboardEvent.keyCode === SpecialKeyCodes.alt && keyboardEvent.code === 'AltRight') {
             return SpecialKeyCodes.rightAlt;

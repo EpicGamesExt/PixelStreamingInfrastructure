@@ -26,10 +26,9 @@ export class DataChannelController {
      * @param label - Label of the Data Channel
      * @param datachannelOptions - Optional RTC DataChannel options
      */
-    createDataChannel(
-        peerConnection: RTCPeerConnection,
-        label: string,
-        datachannelOptions?: RTCDataChannelInit) {
+    createDataChannel(peerConnection: RTCPeerConnection,
+                      label: string,
+                      datachannelOptions?: RTCDataChannelInit) {
         this.peerConnection = peerConnection;
         this.label = label;
         this.datachannelOptions = datachannelOptions;

@@ -100,9 +100,8 @@ export class FileUtil {
             a.remove();
         } else if (file.data.length > file.size) {
             file.receiving = false;
-            Logger.Error(
-                Logger.GetStackTrace(),
-                `Received bigger file than advertised: ${file.data.length}/${file.size}`);
+            Logger.Error(Logger.GetStackTrace(),
+                         `Received bigger file than advertised: ${file.data.length}/${file.size}`);
         }
     }
 }

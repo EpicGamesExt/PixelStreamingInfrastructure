@@ -152,10 +152,9 @@ export class StreamMessageController {
      * @param messageType - the type of the message
      * @param messageHandler - the function or method to be executed when this handler is called
      */
-    registerMessageHandler(
-        messageDirection: MessageDirection,
-        messageType: string,
-        messageHandler: (messageData?: unknown|undefined) => void) {
+    registerMessageHandler(messageDirection: MessageDirection,
+                           messageType: string,
+                           messageHandler: (messageData?: unknown|undefined) => void) {
         switch (messageDirection) {
             case MessageDirection.ToStreamer:
                 this.toStreamerHandlers.set(messageType, messageHandler);

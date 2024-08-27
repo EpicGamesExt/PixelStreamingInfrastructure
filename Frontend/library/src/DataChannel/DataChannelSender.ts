@@ -18,9 +18,8 @@ export class DataChannelSender {
     }
 
     canSend(): boolean {
-        return (
-            this.dataChannelProvider.getDataChannelInstance().dataChannel !== undefined &&
-            this.dataChannelProvider.getDataChannelInstance().dataChannel.readyState == 'open');
+        return (this.dataChannelProvider.getDataChannelInstance().dataChannel !== undefined &&
+                this.dataChannelProvider.getDataChannelInstance().dataChannel.readyState == 'open');
     }
 
     /**

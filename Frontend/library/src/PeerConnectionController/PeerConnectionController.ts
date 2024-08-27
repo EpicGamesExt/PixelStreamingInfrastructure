@@ -34,16 +34,15 @@ export class PeerConnectionController {
         // Set the ICE transport to relay if TURN enabled
         if (this.config.isFlagEnabled(Flags.ForceTURN)) {
             options.iceTransportPolicy = 'relay';
-            Logger.Log(
-                Logger.GetStackTrace(),
-                'Forcing TURN usage by setting ICE Transport Policy in peer connection config.');
+            Logger.Log(Logger.GetStackTrace(),
+                       'Forcing TURN usage by setting ICE Transport Policy in peer connection config.');
         }
 
         // build a new peer connection with the options
         this.peerConnection = new RTCPeerConnection(options);
         this.peerConnection.onsignalingstatechange = (ev: Event) => this.handleSignalStateChange(ev);
-        this.peerConnection.oniceconnectionstatechange = (ev: Event) =>
-            this.handleIceConnectionStateChange(ev);
+        this.peerConnection.oniceconnectionstatechange = (ev: Event) => this.handleIceConnectionStateChange(
+            ev);
         this.peerConnection.onicegatheringstatechange = (ev: Event) => this.handleIceGatheringStateChange(ev);
         this.peerConnection.ontrack = (ev: RTCTrackEvent) => this.handleOnTrack(ev);
         this.peerConnection.onicecandidate = (ev: RTCPeerConnectionIceEvent) => this.handleIceCandidate(ev);
@@ -92,8 +91,8 @@ export class PeerConnectionController {
         Logger.Log(Logger.GetStackTrace(), 'Receive Offer', 6);
 
         this.peerConnection?.setRemoteDescription(offer).then(() => {
-            const isLocalhostConnection =
-                location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+            const isLocalhostConnection = location.hostname === 'localhost' ||
+                location.hostname === '127.0.0.1';
             const isHttpsConnection = location.protocol === 'https:';
             let useMic = config.isFlagEnabled(Flags.UseMic);
             if (useMic && !(isLocalhostConnection || isHttpsConnection)) {
@@ -107,9 +106,8 @@ export class PeerConnectionController {
             }
 
             // Add our list of preferred codecs, in order of preference
-            this.config.setOptionSettingOptions(
-                OptionParameters.PreferredCodec,
-                this.fuzzyIntersectUEAndBrowserCodecs(offer));
+            this.config.setOptionSettingOptions(OptionParameters.PreferredCodec,
+                                                this.fuzzyIntersectUEAndBrowserCodecs(offer));
 
             this.setupTransceiversAsync(useMic).finally(() => {
                 this.peerConnection?.createAnswer()
@@ -131,9 +129,8 @@ export class PeerConnectionController {
         this.peerConnection?.setRemoteDescription(answer);
 
         // Add our list of preferred codecs, in order of preference
-        this.config.setOptionSettingOptions(
-            OptionParameters.PreferredCodec,
-            this.fuzzyIntersectUEAndBrowserCodecs(answer));
+        this.config.setOptionSettingOptions(OptionParameters.PreferredCodec,
+                                            this.fuzzyIntersectUEAndBrowserCodecs(answer));
     }
 
     /**
@@ -173,9 +170,8 @@ export class PeerConnectionController {
      * @returns A modified Session Descriptor
      */
     mungeSDP(sdp: string, useMic: boolean) {
-        let mungedSDP = sdp.replace(
-            /(a=fmtp:\d+ .*level-asymmetry-allowed=.*)\r\n/gm,
-            '$1;x-google-start-bitrate=10000;x-google-max-bitrate=100000\r\n');
+        let mungedSDP = sdp.replace(/(a=fmtp:\d+ .*level-asymmetry-allowed=.*)\r\n/gm,
+                                    '$1;x-google-start-bitrate=10000;x-google-max-bitrate=100000\r\n');
 
         // set max bitrate to highest bitrate Opus supports
         let audioSDP = 'maxaveragebitrate=510000;';
@@ -208,12 +204,11 @@ export class PeerConnectionController {
         if (this.config.isFlagEnabled(Flags.ForceTURN)) {
             // check if no relay address is found, if so, we are assuming it means no TURN server
             if (iceCandidate.candidate.indexOf('relay') < 0) {
-                Logger.Info(
-                    Logger.GetStackTrace(),
-                    `Dropping candidate because it was not TURN relay. | Type= ${
-                        iceCandidate.type} | Protocol= ${iceCandidate.protocol} | Address=${
-                        iceCandidate.address} | Port=${iceCandidate.port} |`,
-                    6);
+                Logger.Info(Logger.GetStackTrace(),
+                            `Dropping candidate because it was not TURN relay. | Type= ${
+                                iceCandidate.type} | Protocol= ${iceCandidate.protocol} | Address=${
+                                iceCandidate.address} | Port=${iceCandidate.port} |`,
+                            6);
                 return;
             }
         }
@@ -325,8 +320,8 @@ export class PeerConnectionController {
         // We want to build an array of all supported codecs on both sides
         const allSupportedCodecs: Array<string> = new Array<string>();
         const allUECodecs: string[] = this.parseAvailableCodecs(sdp);
-        const allBrowserCodecs: string[] =
-            this.config.getSettingOption(OptionParameters.PreferredCodec).options;
+        const allBrowserCodecs:
+            string[] = this.config.getSettingOption(OptionParameters.PreferredCodec).options;
         for (const ueCodec of allUECodecs) {
             // Check if browser codecs directly matches UE codec (with parameters and everything)
             if (allBrowserCodecs.includes(ueCodec)) {
@@ -389,9 +384,8 @@ export class PeerConnectionController {
                             // Don't add our preferred codec again, but add everything else
                             if (browserSupportedCodec.mimeType != preferredRTCRtpCodecCapability.mimeType) {
                                 ourSupportedCodecs.push(browserSupportedCodec);
-                            } else if (
-                                browserSupportedCodec?.sdpFmtpLine !=
-                                preferredRTCRtpCodecCapability?.sdpFmtpLine) {
+                            } else if (browserSupportedCodec?.sdpFmtpLine !=
+                                       preferredRTCRtpCodecCapability?.sdpFmtpLine) {
                                 ourSupportedCodecs.push(browserSupportedCodec);
                             }
                         });

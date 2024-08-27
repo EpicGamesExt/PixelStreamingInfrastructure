@@ -254,8 +254,9 @@ export class Application {
             const requestKeyframeButton = new LabelledButton('Request keyframe', 'Request');
             requestKeyframeButton.addOnClickListener(() => { this.stream.requestIframe(); });
 
-            const commandsSectionElem =
-                this.configUI.buildSectionWithHeading(this.settingsPanel.settingsContentElement, 'Commands');
+            const commandsSectionElem = this.configUI.buildSectionWithHeading(
+                this.settingsPanel.settingsContentElement,
+                'Commands');
             commandsSectionElem.appendChild(showFPSButton.rootElement);
             commandsSectionElem.appendChild(requestKeyframeButton.rootElement);
             commandsSectionElem.appendChild(restartStreamButton.rootElement);
@@ -270,9 +271,8 @@ export class Application {
         this.configUI.populateSettingsElement(this.settingsPanel.settingsContentElement);
 
         this.configUI.addCustomFlagOnSettingChangedListener(LightMode, (isLightMode: boolean) => {
-            this.configUI.setCustomFlagLabel(
-                LightMode,
-                `Color Scheme: ${isLightMode ? 'Light' : 'Dark'} Mode`);
+            this.configUI.setCustomFlagLabel(LightMode,
+                                             `Color Scheme: ${isLightMode ? 'Light' : 'Dark'} Mode`);
             this.setColorMode(isLightMode);
         });
     }
@@ -281,14 +281,12 @@ export class Application {
         this.stream.addEventListener(
             'afkWarningActivate',
             ({ data: { countDown, dismissAfk } }) => this.showAfkOverlay(countDown, dismissAfk));
-        this.stream.addEventListener(
-            'afkWarningUpdate',
-            ({ data: { countDown } }) => this.afkOverlay.updateCountdown(countDown));
+        this.stream.addEventListener('afkWarningUpdate',
+                                     ({ data: { countDown } }) => this.afkOverlay.updateCountdown(countDown));
         this.stream.addEventListener('afkWarningDeactivate', () => this.afkOverlay.hide());
         this.stream.addEventListener('afkTimedOut', () => this.afkOverlay.hide());
-        this.stream.addEventListener(
-            'videoEncoderAvgQP',
-            ({ data: { avgQP } }) => this.onVideoEncoderAvgQP(avgQP));
+        this.stream.addEventListener('videoEncoderAvgQP',
+                                     ({ data: { avgQP } }) => this.onVideoEncoderAvgQP(avgQP));
         this.stream.addEventListener('webRtcSdp', () => this.onWebRtcSdp());
         this.stream.addEventListener('webRtcAutoConnect', () => this.onWebRtcAutoConnect());
         this.stream.addEventListener('webRtcConnecting', () => this.onWebRtcConnecting());
@@ -296,17 +294,15 @@ export class Application {
         this.stream.addEventListener('webRtcFailed', () => this.onWebRtcFailed());
         this.stream.addEventListener(
             'webRtcDisconnected',
-            ({ data: { eventString, allowClickToReconnect } }) =>
-                this.onDisconnect(eventString, allowClickToReconnect));
+            ({ data: { eventString, allowClickToReconnect } }) => this.onDisconnect(eventString,
+                                                                                    allowClickToReconnect));
         this.stream.addEventListener('videoInitialized', () => this.onVideoInitialized());
         this.stream.addEventListener('streamLoading', () => this.onStreamLoading());
-        this.stream.addEventListener(
-            'playStreamError',
-            ({ data: { message } }) => this.onPlayStreamError(message));
+        this.stream.addEventListener('playStreamError',
+                                     ({ data: { message } }) => this.onPlayStreamError(message));
         this.stream.addEventListener('playStream', () => this.onPlayStream());
-        this.stream.addEventListener(
-            'playStreamRejected',
-            ({ data: { reason } }) => this.onPlayStreamRejected(reason));
+        this.stream.addEventListener('playStreamRejected',
+                                     ({ data: { reason } }) => this.onPlayStreamRejected(reason));
         this.stream.addEventListener(
             'loadFreezeFrame',
             ({ data: { shouldShowPlayOverlay } }) => this.onLoadFreezeFrame(shouldShowPlayOverlay));
@@ -316,16 +312,15 @@ export class Application {
         this.stream.addEventListener(
             'latencyTestResult',
             ({ data: { latencyTimings } }) => this.onLatencyTestResults(latencyTimings));
-        this.stream.addEventListener(
-            'dataChannelLatencyTestResult',
-            ({ data: { result } }) => this.onDataChannelLatencyTestResults(result));
+        this.stream.addEventListener('dataChannelLatencyTestResult',
+                                     ({ data: { result } }) => this.onDataChannelLatencyTestResults(result));
         this.stream.addEventListener(
             'streamerListMessage',
-            ({ data: { messageStreamerList, autoSelectedStreamerId, wantedStreamerId } }) =>
-                this.handleStreamerListMessage(
-                    messageStreamerList,
-                    autoSelectedStreamerId,
-                    wantedStreamerId));
+            ({
+                data: { messageStreamerList, autoSelectedStreamerId, wantedStreamerId }
+            }) => this.handleStreamerListMessage(messageStreamerList,
+                                                 autoSelectedStreamerId,
+                                                 wantedStreamerId));
         this.stream.addEventListener('settingsChanged', (event) => this.configUI.onSettingsChanged(event));
         this.stream.addEventListener('playerCount', ({ data: { count } }) => this.onPlayerCount(count));
         this.stream.addEventListener(
@@ -623,10 +618,9 @@ export class Application {
         this.statsPanel?.handlePlayerCount(playerCount);
     }
 
-    handleStreamerListMessage(
-        messageStreamingList: Messages.streamerList,
-        autoSelectedStreamerId: string,
-        wantedStreamerId: string) {
+    handleStreamerListMessage(messageStreamingList: Messages.streamerList,
+                              autoSelectedStreamerId: string,
+                              wantedStreamerId: string) {
         const waitForStreamer = this.stream.config.isFlagEnabled(Flags.WaitForStreamer);
         const isReconnecting = this.stream.isReconnecting();
         let message: string = null;
@@ -638,8 +632,8 @@ export class Application {
                     message = `Waiting for ${wantedStreamerId} to become available.`;
                     allowRestart = false;
                 } else {
-                    message =
-                        `Gave up waiting for ${wantedStreamerId} to become available. Click to try again`;
+                    message = `Gave up waiting for ${
+                        wantedStreamerId} to become available. Click to try again`;
                     if (messageStreamingList.ids.length > 0) {
                         message += ` or select a streamer from the settings menu.`;
                     }

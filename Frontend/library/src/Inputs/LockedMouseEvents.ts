@@ -31,10 +31,9 @@ export class LockedMouseEvents implements IMouseEvents {
      * @param activeKeysProvider - Active keys provider instance
      * @param playerStyleAttributesProvider - Player style attributes instance
      */
-    constructor(
-        videoElementProvider: VideoPlayer,
-        mouseController: MouseController,
-        activeKeysProvider: ActiveKeys) {
+    constructor(videoElementProvider: VideoPlayer,
+                mouseController: MouseController,
+                activeKeysProvider: ActiveKeys) {
         this.videoElementProvider = videoElementProvider;
         this.mouseController = mouseController;
         this.activeKeysProvider = activeKeysProvider;

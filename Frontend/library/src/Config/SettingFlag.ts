@@ -10,15 +10,14 @@ export class SettingFlag<CustomIds extends string = FlagsIds> extends SettingBas
     id: FlagsIds|CustomIds;
     onChangeEmit: (changedValue: boolean) => void;
 
-    constructor(
-        id: FlagsIds|CustomIds,
-        label: string,
-        description: string,
-        defaultFlagValue: boolean,
-        useUrlParams: boolean,
-        // eslint-disable-next-line @typescript-eslint/no-empty-function
-        defaultOnChangeListener: (changedValue: unknown, setting: SettingBase) => void = () => {
-            /* Do nothing, to be overridden. */ }) {
+    constructor(id: FlagsIds|CustomIds,
+                label: string,
+                description: string,
+                defaultFlagValue: boolean,
+                useUrlParams: boolean,
+                // eslint-disable-next-line @typescript-eslint/no-empty-function
+                defaultOnChangeListener: (changedValue: unknown, setting: SettingBase) => void = () => {
+                    /* Do nothing, to be overridden. */ }) {
         super(id, label, description, defaultFlagValue, defaultOnChangeListener);
 
         if (!useUrlParams || !this.hasURLParam(this.id)) {

@@ -46,15 +46,14 @@ export class DataChannelLatencyTestController {
         }
         this.startTime = Date.now();
         this.records.clear();
-        this.interval = setInterval(
-            (() => {
-                if (Date.now() - this.startTime >= config.duration) {
-                    this.stop();
-                } else {
-                    this.sendRequest(config.requestSize, config.responseSize);
-                }
-            }).bind(this),
-            Math.floor(1000 / config.rps));
+        this.interval = setInterval((() => {
+                                        if (Date.now() - this.startTime >= config.duration) {
+                                            this.stop();
+                                        } else {
+                                            this.sendRequest(config.requestSize, config.responseSize);
+                                        }
+                                    }).bind(this),
+                                    Math.floor(1000 / config.rps));
         return true;
     }
 

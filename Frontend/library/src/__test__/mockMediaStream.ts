@@ -29,25 +29,25 @@ export class MockMediaStreamImpl implements MediaStream {
     removeTrack(track: MediaStreamTrack): void {
         throw new Error('Method not implemented.');
     }
-    addEventListener<K extends keyof MediaStreamEventMap>(
-        type: K,
-        listener: (this: MediaStream, ev: MediaStreamEventMap[K]) => any,
-        options?: boolean|AddEventListenerOptions|undefined): void;
-    addEventListener(
-        type: string,
-        listener: EventListenerOrEventListenerObject,
-        options?: boolean|AddEventListenerOptions|undefined): void;
+    addEventListener<K extends keyof MediaStreamEventMap>(type: K,
+                                                          listener: (this: MediaStream,
+                                                                     ev: MediaStreamEventMap[K]) => any,
+                                                          options?: boolean|AddEventListenerOptions|
+                                                          undefined): void;
+    addEventListener(type: string,
+                     listener: EventListenerOrEventListenerObject,
+                     options?: boolean|AddEventListenerOptions|undefined): void;
     addEventListener(type: unknown, listener: unknown, options?: unknown): void {
         throw new Error('Method not implemented.');
     }
-    removeEventListener<K extends keyof MediaStreamEventMap>(
-        type: K,
-        listener: (this: MediaStream, ev: MediaStreamEventMap[K]) => any,
-        options?: boolean|EventListenerOptions|undefined): void;
-    removeEventListener(
-        type: string,
-        listener: EventListenerOrEventListenerObject,
-        options?: boolean|EventListenerOptions|undefined): void;
+    removeEventListener<K extends keyof MediaStreamEventMap>(type: K,
+                                                             listener: (this: MediaStream,
+                                                                        ev: MediaStreamEventMap[K]) => any,
+                                                             options?: boolean|EventListenerOptions|
+                                                             undefined): void;
+    removeEventListener(type: string,
+                        listener: EventListenerOrEventListenerObject,
+                        options?: boolean|EventListenerOptions|undefined): void;
     removeEventListener(type: unknown, listener: unknown, options?: unknown): void {
         throw new Error('Method not implemented.');
     }
@@ -95,10 +95,9 @@ export class MockMediaStreamTrackImpl implements MediaStreamTrack {
         type: K,
         listener: (this: MediaStreamTrack, ev: MediaStreamTrackEventMap[K]) => any,
         options?: boolean|AddEventListenerOptions|undefined): void;
-    addEventListener(
-        type: string,
-        listener: EventListenerOrEventListenerObject,
-        options?: boolean|AddEventListenerOptions|undefined): void;
+    addEventListener(type: string,
+                     listener: EventListenerOrEventListenerObject,
+                     options?: boolean|AddEventListenerOptions|undefined): void;
     addEventListener(type: unknown, listener: unknown, options?: unknown): void {
         throw new Error('Method not implemented.');
     }
@@ -106,10 +105,9 @@ export class MockMediaStreamTrackImpl implements MediaStreamTrack {
         type: K,
         listener: (this: MediaStreamTrack, ev: MediaStreamTrackEventMap[K]) => any,
         options?: boolean|EventListenerOptions|undefined): void;
-    removeEventListener(
-        type: string,
-        listener: EventListenerOrEventListenerObject,
-        options?: boolean|EventListenerOptions|undefined): void;
+    removeEventListener(type: string,
+                        listener: EventListenerOrEventListenerObject,
+                        options?: boolean|EventListenerOptions|undefined): void;
     removeEventListener(type: unknown, listener: unknown, options?: unknown): void {
         throw new Error('Method not implemented.');
     }

@@ -31,11 +31,10 @@ export class MouseController {
      * @param videoElementProvider - Video Player instance
      * @param normalizeAndQuantize - A normalize and quantize instance
      */
-    constructor(
-        toStreamerMessagesProvider: StreamMessageController,
-        videoElementProvider: VideoPlayer,
-        coordinateConverter: CoordinateConverter,
-        activeKeysProvider: ActiveKeys) {
+    constructor(toStreamerMessagesProvider: StreamMessageController,
+                videoElementProvider: VideoPlayer,
+                coordinateConverter: CoordinateConverter,
+                activeKeysProvider: ActiveKeys) {
         this.toStreamerMessagesProvider = toStreamerMessagesProvider;
         this.coordinateConverter = coordinateConverter;
         this.videoElementProvider = videoElementProvider;
@@ -57,11 +56,12 @@ export class MouseController {
      */
     registerLockedMouseEvents(mouseController: MouseController) {
         const videoElementParent = this.videoElementProvider.getVideoParentElement() as HTMLDivElement;
-        const lockedMouseEvents: IMouseEvents =
-            new LockedMouseEvents(this.videoElementProvider, mouseController, this.activeKeysProvider);
+        const lockedMouseEvents: IMouseEvents = new LockedMouseEvents(this.videoElementProvider,
+                                                                      mouseController,
+                                                                      this.activeKeysProvider);
 
-        videoElementParent.requestPointerLock =
-            videoElementParent.requestPointerLock || videoElementParent.mozRequestPointerLock;
+        videoElementParent.requestPointerLock = videoElementParent.requestPointerLock ||
+            videoElementParent.mozRequestPointerLock;
         document.exitPointerLock = document.exitPointerLock || document.mozExitPointerLock;
 
         // minor hack to alleviate ios not supporting pointerlock
@@ -115,8 +115,8 @@ export class MouseController {
         const videoElementParent = this.videoElementProvider.getVideoParentElement() as HTMLDivElement;
         const hoveringMouseEvents = new HoveringMouseEvents(mouseController);
 
-        const onmousemove = (mouseEvent: MouseEvent) =>
-            hoveringMouseEvents.updateMouseMovePosition(mouseEvent);
+        const onmousemove = (mouseEvent: MouseEvent) => hoveringMouseEvents.updateMouseMovePosition(
+            mouseEvent);
         const onmousedown = (mouseEvent: MouseEvent) => hoveringMouseEvents.handleMouseDown(mouseEvent);
         const onmouseup = (mouseEvent: MouseEvent) => hoveringMouseEvents.handleMouseUp(mouseEvent);
         const oncontextmenu = (mouseEvent: MouseEvent) => hoveringMouseEvents.handleContextMenu(mouseEvent);

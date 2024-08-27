@@ -161,8 +161,8 @@ export class StatsPanel {
             this.latencyTest.latencyTestButton.disabled = true;
             this.latencyTest.latencyTestButton.title = 'Disabled by -PixelStreamingDisableLatencyTester=true';
             this.dataChannelLatencyTest.latencyTestButton.disabled = true;
-            this.dataChannelLatencyTest.latencyTestButton.title =
-                'Disabled by -PixelStreamingDisableLatencyTester=true';
+            this.dataChannelLatencyTest.latencyTestButton
+                .title = 'Disabled by -PixelStreamingDisableLatencyTester=true';
             Logger.Info(
                 Logger.GetStackTrace(),
                 '-PixelStreamingDisableLatencyTester=true, requesting latency report from the the browser to UE is disabled.');
@@ -218,17 +218,15 @@ export class StatsPanel {
 
         // Bitrate
         if (stats.inboundVideoStats.bitrate) {
-            this.addOrUpdateStat(
-                'VideoBitrateStat',
-                'Video Bitrate (kbps)',
-                stats.inboundVideoStats.bitrate.toString());
+            this.addOrUpdateStat('VideoBitrateStat',
+                                 'Video Bitrate (kbps)',
+                                 stats.inboundVideoStats.bitrate.toString());
         }
 
         if (stats.inboundAudioStats.bitrate) {
-            this.addOrUpdateStat(
-                'AudioBitrateStat',
-                'Audio Bitrate (kbps)',
-                stats.inboundAudioStats.bitrate.toString());
+            this.addOrUpdateStat('AudioBitrateStat',
+                                 'Audio Bitrate (kbps)',
+                                 stats.inboundAudioStats.bitrate.toString());
         }
 
         // Video resolution
@@ -248,32 +246,28 @@ export class StatsPanel {
 
         // Framerate
         if (stats.inboundVideoStats.framesPerSecond) {
-            this.addOrUpdateStat(
-                'FramerateStat',
-                'Framerate',
-                stats.inboundVideoStats.framesPerSecond.toString());
+            this.addOrUpdateStat('FramerateStat',
+                                 'Framerate',
+                                 stats.inboundVideoStats.framesPerSecond.toString());
         }
 
         // Frames dropped
-        this.addOrUpdateStat(
-            'FramesDroppedStat',
-            'Frames dropped',
-            stats.inboundVideoStats.framesDropped?.toString());
+        this.addOrUpdateStat('FramesDroppedStat',
+                             'Frames dropped',
+                             stats.inboundVideoStats.framesDropped?.toString());
 
         if (stats.inboundVideoStats.codecId) {
-            this.addOrUpdateStat(
-                'VideoCodecStat',
-                'Video codec',
-                // Split the codec to remove the Fmtp line
-                stats.codecs.get(stats.inboundVideoStats.codecId)?.split(' ')[0] ?? '');
+            this.addOrUpdateStat('VideoCodecStat',
+                                 'Video codec',
+                                 // Split the codec to remove the Fmtp line
+                                 stats.codecs.get(stats.inboundVideoStats.codecId)?.split(' ')[0] ?? '');
         }
 
         if (stats.inboundAudioStats.codecId) {
-            this.addOrUpdateStat(
-                'AudioCodecStat',
-                'Audio codec',
-                // Split the codec to remove the Fmtp line
-                stats.codecs.get(stats.inboundAudioStats.codecId)?.split(' ')[0] ?? '');
+            this.addOrUpdateStat('AudioCodecStat',
+                                 'Audio codec',
+                                 // Split the codec to remove the Fmtp line
+                                 stats.codecs.get(stats.inboundAudioStats.codecId)?.split(' ')[0] ?? '');
         }
 
         // Store the active candidate pair return a new Candidate pair stat if getActiveCandidate is null
@@ -289,25 +283,22 @@ export class StatsPanel {
 
         this.addOrUpdateStat('DurationStat', 'Duration', stats.sessionStats.runTime);
 
-        this.addOrUpdateStat(
-            'ControlsInputStat',
-            'Controls stream input',
-            stats.sessionStats.controlsStreamInput);
+        this.addOrUpdateStat('ControlsInputStat',
+                             'Controls stream input',
+                             stats.sessionStats.controlsStreamInput);
 
         // QP
-        this.addOrUpdateStat(
-            'QPStat',
-            'Video quantization parameter',
-            stats.sessionStats.videoEncoderAvgQP.toString());
+        this.addOrUpdateStat('QPStat',
+                             'Video quantization parameter',
+                             stats.sessionStats.videoEncoderAvgQP.toString());
 
         // todo:
         // statsText += `<div>Browser receive to composite (ms):
         // ${stats.inboundVideoStats.receiveToCompositeMs}</div>`;
 
-        Logger.Log(
-            Logger.GetStackTrace(),
-            `--------- Stats ---------\n ${JSON.stringify(stats)}\n------------------------`,
-            6);
+        Logger.Log(Logger.GetStackTrace(),
+                   `--------- Stats ---------\n ${JSON.stringify(stats)}\n------------------------`,
+                   6);
     }
 
     /**

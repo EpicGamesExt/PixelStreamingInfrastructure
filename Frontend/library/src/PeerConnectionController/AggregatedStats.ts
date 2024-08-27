@@ -187,8 +187,9 @@ export class AggregatedStats {
                 this.inboundVideoStats = stat as unknown as InboundVideoStats;
 
                 if (this.lastVideoStats != undefined) {
-                    this.inboundVideoStats.bitrate =
-                        (8 * (this.inboundVideoStats.bytesReceived - this.lastVideoStats.bytesReceived)) /
+                    this.inboundVideoStats.bitrate = (8 *
+                                                      (this.inboundVideoStats.bytesReceived -
+                                                       this.lastVideoStats.bytesReceived)) /
                         (this.inboundVideoStats.timestamp - this.lastVideoStats.timestamp);
                     this.inboundVideoStats.bitrate = Math.floor(this.inboundVideoStats.bitrate);
                 }
@@ -201,8 +202,9 @@ export class AggregatedStats {
                 this.inboundAudioStats = stat as unknown as InboundAudioStats;
 
                 if (this.lastAudioStats != undefined) {
-                    this.inboundAudioStats.bitrate =
-                        (8 * (this.inboundAudioStats.bytesReceived - this.lastAudioStats.bytesReceived)) /
+                    this.inboundAudioStats.bitrate = (8 *
+                                                      (this.inboundAudioStats.bytesReceived -
+                                                       this.lastAudioStats.bytesReceived)) /
                         (this.inboundAudioStats.timestamp - this.lastAudioStats.timestamp);
                     this.inboundAudioStats.bitrate = Math.floor(this.inboundAudioStats.bitrate);
                 }
@@ -262,10 +264,9 @@ export class AggregatedStats {
         this.codecs.set(codecId, codecType);
     }
 
-    handleSessionStatistics(
-        videoStartTime: number,
-        inputController: boolean|null,
-        videoEncoderAvgQP: number) {
+    handleSessionStatistics(videoStartTime: number,
+                            inputController: boolean|null,
+                            videoEncoderAvgQP: number) {
         const deltaTime = Date.now() - videoStartTime;
         this.sessionStats.runTime = new Date(deltaTime).toISOString().substr(11, 8).toString();
 

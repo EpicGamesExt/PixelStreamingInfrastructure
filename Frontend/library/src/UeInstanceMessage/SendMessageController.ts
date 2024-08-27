@@ -14,9 +14,8 @@ export class SendMessageController {
      * @param dataChannelSender - Data channel instance
      * @param toStreamerMessagesMapProvider - Stream Messages instance
      */
-    constructor(
-        dataChannelSender: DataChannelSender,
-        toStreamerMessagesMapProvider: StreamMessageController) {
+    constructor(dataChannelSender: DataChannelSender,
+                toStreamerMessagesMapProvider: StreamMessageController) {
         this.dataChannelSender = dataChannelSender;
         this.toStreamerMessagesMapProvider = toStreamerMessagesMapProvider;
     }
@@ -43,24 +42,23 @@ export class SendMessageController {
         }
 
         if (messageFormat.structure && messageData && messageFormat.structure.length !== messageData.length) {
-            Logger.Error(
-                Logger.GetStackTrace(),
-                `Provided message data doesn't match expected layout. Expected [ ${
-                    messageFormat.structure
-                        .map((element: string) => {
-                            switch (element) {
-                                case 'uint8':
-                                case 'uint16':
-                                case 'int16':
-                                case 'float':
-                                case 'double':
-                                    return 'number';
-                                case 'string':
-                                    return 'string';
-                            }
-                        })
-                        .toString()} ] but received [ ${
-                    messageData.map((element: number|string) => typeof element).toString()} ]`);
+            Logger.Error(Logger.GetStackTrace(),
+                         `Provided message data doesn't match expected layout. Expected [ ${
+                             messageFormat.structure
+                                 .map((element: string) => {
+                                     switch (element) {
+                                         case 'uint8':
+                                         case 'uint16':
+                                         case 'int16':
+                                         case 'float':
+                                         case 'double':
+                                             return 'number';
+                                         case 'string':
+                                             return 'string';
+                                     }
+                                 })
+                                 .toString()} ] but received [ ${
+                             messageData.map((element: number|string) => typeof element).toString()} ]`);
             return;
         }
 
@@ -143,10 +141,9 @@ export class SendMessageController {
         });
 
         if (!this.dataChannelSender.canSend()) {
-            Logger.Info(
-                Logger.GetStackTrace(),
-                `Data channel cannot send yet, skipping sending message: ${messageType} - ${
-                    new Uint8Array(data.buffer)}`);
+            Logger.Info(Logger.GetStackTrace(),
+                        `Data channel cannot send yet, skipping sending message: ${messageType} - ${
+                            new Uint8Array(data.buffer)}`);
             return;
         }
 

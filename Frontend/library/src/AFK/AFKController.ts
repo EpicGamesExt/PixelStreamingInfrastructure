@@ -28,8 +28,9 @@ export class AFKController {
         this.config = config;
         this.pixelStreaming = pixelStreaming;
         this.onDismissAfk = onDismissAfk;
-        this.onAFKTimedOutCallback =
-            () => { console.log('AFK timed out, did you want to override this callback?'); };
+        this.onAFKTimedOutCallback = () => {
+            console.log('AFK timed out, did you want to override this callback?');
+        };
     }
 
     /**

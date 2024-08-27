@@ -29,10 +29,9 @@ export class TouchController implements ITouchController {
      * @param videoElementProvider - Video Player instance
      * @param coordinateConverter - A coordinate converter instance
      */
-    constructor(
-        toStreamerMessagesProvider: StreamMessageController,
-        videoElementProvider: VideoPlayer,
-        coordinateConverter: CoordinateConverter) {
+    constructor(toStreamerMessagesProvider: StreamMessageController,
+                videoElementProvider: VideoPlayer,
+                coordinateConverter: CoordinateConverter) {
         this.toStreamerMessagesProvider = toStreamerMessagesProvider;
         this.videoElementProvider = videoElementProvider;
         this.coordinateConverter = coordinateConverter;

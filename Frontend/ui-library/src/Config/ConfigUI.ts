@@ -54,19 +54,18 @@ export class ConfigUI {
      * Create custom UI settings that are not provided by the Pixel Streaming library.
      */
     createCustomUISettings(useUrlParams: boolean) {
-        this.customFlags.set(
-            LightMode,
-            new SettingFlag<FlagsIdsExtended>(
-                LightMode,
-                'Color Scheme: Dark Mode',
-                'Page styling will be either light or dark',
-                false /*if want to use system pref: (window.matchMedia &&
-                         window.matchMedia('(prefers-color-scheme: light)').matches)*/
-                ,
-                useUrlParams,
-                (isLightMode: boolean, setting: SettingBase) => {
-                    setting.label = `Color Scheme: ${isLightMode ? 'Light' : 'Dark'} Mode`;
-                }));
+        this.customFlags.set(LightMode,
+                             new SettingFlag<FlagsIdsExtended>(
+                                 LightMode,
+                                 'Color Scheme: Dark Mode',
+                                 'Page styling will be either light or dark',
+                                 false /*if want to use system pref: (window.matchMedia &&
+                                          window.matchMedia('(prefers-color-scheme: light)').matches)*/
+                                 ,
+                                 useUrlParams,
+                                 (isLightMode: boolean, setting: SettingBase) => {
+                                     setting.label = `Color Scheme: ${isLightMode ? 'Light' : 'Dark'} Mode`;
+                                 }));
     }
 
     /**
@@ -136,18 +135,14 @@ export class ConfigUI {
         this.addSettingFlag(psSettingsSection, this.flagsUi.get(Flags.SuppressBrowserKeys));
         this.addSettingFlag(psSettingsSection, this.flagsUi.get(Flags.AFKDetection));
         this.addSettingFlag(psSettingsSection, this.flagsUi.get(Flags.WaitForStreamer));
-        this.addSettingNumeric(
-            psSettingsSection,
-            this.numericParametersUi.get(NumericParameters.AFKTimeoutSecs));
-        this.addSettingNumeric(
-            psSettingsSection,
-            this.numericParametersUi.get(NumericParameters.AFKCountdownSecs));
-        this.addSettingNumeric(
-            psSettingsSection,
-            this.numericParametersUi.get(NumericParameters.MaxReconnectAttempts));
-        this.addSettingNumeric(
-            psSettingsSection,
-            this.numericParametersUi.get(NumericParameters.StreamerAutoJoinInterval));
+        this.addSettingNumeric(psSettingsSection,
+                               this.numericParametersUi.get(NumericParameters.AFKTimeoutSecs));
+        this.addSettingNumeric(psSettingsSection,
+                               this.numericParametersUi.get(NumericParameters.AFKCountdownSecs));
+        this.addSettingNumeric(psSettingsSection,
+                               this.numericParametersUi.get(NumericParameters.MaxReconnectAttempts));
+        this.addSettingNumeric(psSettingsSection,
+                               this.numericParametersUi.get(NumericParameters.StreamerAutoJoinInterval));
 
         /* Setup all view/ui related settings under this section */
         const viewSettingsSection = this.buildSectionWithHeading(settingsElem, 'UI');
@@ -177,9 +172,8 @@ export class ConfigUI {
         this.addSettingNumeric(encoderSettingsSection, this.numericParametersUi.get(NumericParameters.MaxQP));
 
         const preferredCodecOption = this.optionParametersUi.get(OptionParameters.PreferredCodec);
-        this.addSettingOption(
-            encoderSettingsSection,
-            this.optionParametersUi.get(OptionParameters.PreferredCodec));
+        this.addSettingOption(encoderSettingsSection,
+                              this.optionParametersUi.get(OptionParameters.PreferredCodec));
         if (preferredCodecOption && [
                 ...preferredCodecOption.selector.options
             ].map((o) => o.value).includes('Only available on Chrome')) {
@@ -189,15 +183,12 @@ export class ConfigUI {
         /* Setup all webrtc related settings under this section */
         const webrtcSettingsSection = this.buildSectionWithHeading(settingsElem, 'WebRTC');
 
-        this.addSettingNumeric(
-            webrtcSettingsSection,
-            this.numericParametersUi.get(NumericParameters.WebRTCFPS));
-        this.addSettingNumeric(
-            webrtcSettingsSection,
-            this.numericParametersUi.get(NumericParameters.WebRTCMinBitrate));
-        this.addSettingNumeric(
-            webrtcSettingsSection,
-            this.numericParametersUi.get(NumericParameters.WebRTCMaxBitrate));
+        this.addSettingNumeric(webrtcSettingsSection,
+                               this.numericParametersUi.get(NumericParameters.WebRTCFPS));
+        this.addSettingNumeric(webrtcSettingsSection,
+                               this.numericParametersUi.get(NumericParameters.WebRTCMinBitrate));
+        this.addSettingNumeric(webrtcSettingsSection,
+                               this.numericParametersUi.get(NumericParameters.WebRTCMaxBitrate));
     }
 
     /**
@@ -315,8 +306,8 @@ export class ConfigUI {
      * @param id - The id of the flag.
      * @param onChangeListener - The callback to fire when the value changes.
      */
-    addCustomFlagOnSettingChangedListener(id: ExtraFlags, onChangeListener: (newFlagValue: boolean) => void):
-        void {
+    addCustomFlagOnSettingChangedListener(id: ExtraFlags,
+                                          onChangeListener: (newFlagValue: boolean) => void): void {
         if (this.customFlags.has(id)) {
             this.customFlags.get(id).onChange = onChangeListener;
         }

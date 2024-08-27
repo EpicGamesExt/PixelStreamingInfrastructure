@@ -104,22 +104,24 @@ export class PixelStreaming {
 
         // Onscreen keyboard
         this.onScreenKeyboardHelper = new OnScreenKeyboard(this.videoElementParent);
-        this.onScreenKeyboardHelper.unquantizeAndDenormalizeUnsigned = (x: number, y: number) =>
-            this._webRtcController.requestUnquantizedAndDenormalizeUnsigned(x, y);
-        this._activateOnScreenKeyboard = (command: any) =>
-            this.onScreenKeyboardHelper.showOnScreenKeyboard(command);
+        this.onScreenKeyboardHelper
+            .unquantizeAndDenormalizeUnsigned = (x: number,
+                                                 y: number) => this._webRtcController
+                                                                   .requestUnquantizedAndDenormalizeUnsigned(
+                                                                       x,
+                                                                       y);
+        this._activateOnScreenKeyboard = (command: any) => this.onScreenKeyboardHelper.showOnScreenKeyboard(
+            command);
 
         this._webXrController = new WebXRController(this._webRtcController);
 
-        this._setupWebRtcTCPRelayDetection =
-            this._setupWebRtcTCPRelayDetection
-                .bind(this)
+        this._setupWebRtcTCPRelayDetection = this._setupWebRtcTCPRelayDetection.bind(this);
 
-            // Add event listener for the webRtcConnected event
-            this._eventEmitter.addEventListener('webRtcConnected', (_: WebRtcConnectedEvent) => {
-                // Bind to the stats received event
-                this._eventEmitter.addEventListener('statsReceived', this._setupWebRtcTCPRelayDetection);
-            });
+        // Add event listener for the webRtcConnected event
+        this._eventEmitter.addEventListener('webRtcConnected', (_: WebRtcConnectedEvent) => {
+            // Bind to the stats received event
+            this._eventEmitter.addEventListener('statsReceived', this._setupWebRtcTCPRelayDetection);
+        });
     }
 
     /**
@@ -156,9 +158,8 @@ export class PixelStreaming {
             () => { this._webRtcController.videoPlayer.updateVideoStreamSize(); });
 
         this.config._addOnSettingChangedListener(Flags.HoveringMouseMode, (isHoveringMouse: boolean) => {
-            this.config.setFlagLabel(
-                Flags.HoveringMouseMode,
-                `Control Scheme: ${isHoveringMouse ? 'Hovering' : 'Locked'} Mouse`);
+            this.config.setFlagLabel(Flags.HoveringMouseMode,
+                                     `Control Scheme: ${isHoveringMouse ? 'Hovering' : 'Locked'} Mouse`);
             this._webRtcController.setMouseInputEnabled(this.config.isFlagEnabled(Flags.MouseInput));
         });
 
@@ -436,10 +437,9 @@ export class PixelStreaming {
         if (!this._videoStartTime || this._videoStartTime === undefined) {
             this._videoStartTime = Date.now();
         }
-        videoStats.handleSessionStatistics(
-            this._videoStartTime,
-            this._inputController,
-            this._webRtcController.videoAvgQp);
+        videoStats.handleSessionStatistics(this._videoStartTime,
+                                           this._inputController,
+                                           this._webRtcController.videoAvgQp);
 
         this._eventEmitter.dispatchEvent(new StatsReceivedEvent({ aggregatedStats: videoStats }));
     }
@@ -471,20 +471,18 @@ export class PixelStreaming {
         const urlParams = new IURLSearchParams(window.location.search);
         Logger.Info(Logger.GetStackTrace(), `using URL parameters ${useUrlParams}`);
         if (settings.EncoderSettings) {
-            this.config.setNumericSetting(
-                NumericParameters.MinQP,
-                // If a setting is set in the URL, make sure we respect that value as opposed to what the
-                // application sends us
-                (useUrlParams && urlParams.has(NumericParameters.MinQP)) ?
-                    Number.parseFloat(urlParams.get(NumericParameters.MinQP)) :
-                    settings.EncoderSettings.MinQP);
+            this.config.setNumericSetting(NumericParameters.MinQP,
+                                          // If a setting is set in the URL, make sure we respect that value
+                                          // as opposed to what the application sends us
+                                          (useUrlParams && urlParams.has(NumericParameters.MinQP)) ?
+                                              Number.parseFloat(urlParams.get(NumericParameters.MinQP)) :
+                                              settings.EncoderSettings.MinQP);
 
 
-            this.config.setNumericSetting(
-                NumericParameters.MaxQP,
-                (useUrlParams && urlParams.has(NumericParameters.MaxQP)) ?
-                    Number.parseFloat(urlParams.get(NumericParameters.MaxQP)) :
-                    settings.EncoderSettings.MaxQP);
+            this.config.setNumericSetting(NumericParameters.MaxQP,
+                                          (useUrlParams && urlParams.has(NumericParameters.MaxQP)) ?
+                                              Number.parseFloat(urlParams.get(NumericParameters.MaxQP)) :
+                                              settings.EncoderSettings.MaxQP);
         }
         if (settings.WebRTCSettings) {
             this.config.setNumericSetting(
@@ -500,11 +498,10 @@ export class PixelStreaming {
                     (settings.WebRTCSettings.MaxBitrate / 1000) /* bps to kbps */
 
             );
-            this.config.setNumericSetting(
-                NumericParameters.WebRTCFPS,
-                (useUrlParams && urlParams.has(NumericParameters.WebRTCFPS)) ?
-                    Number.parseFloat(urlParams.get(NumericParameters.WebRTCFPS)) :
-                    settings.WebRTCSettings.FPS);
+            this.config.setNumericSetting(NumericParameters.WebRTCFPS,
+                                          (useUrlParams && urlParams.has(NumericParameters.WebRTCFPS)) ?
+                                              Number.parseFloat(urlParams.get(NumericParameters.WebRTCFPS)) :
+                                              settings.WebRTCSettings.FPS);
         }
     }
 
@@ -722,10 +719,9 @@ export class PixelStreaming {
         return this._webXrController;
     }
 
-    public registerMessageHandler(
-        name: string,
-        direction: MessageDirection,
-        handler?: (data: ArrayBuffer|Array<number|string>) => void) {
+    public registerMessageHandler(name: string,
+                                  direction: MessageDirection,
+                                  handler?: (data: ArrayBuffer|Array<number|string>) => void) {
         if (direction === MessageDirection.FromStreamer && typeof handler === 'undefined') {
             Logger.Warning(Logger.GetStackTrace(), `Unable to register an undefined handler for ${name}`)
             return;
@@ -735,8 +731,8 @@ export class PixelStreaming {
             this._webRtcController.streamMessageController.registerMessageHandler(
                 direction,
                 name,
-                (data: Array<number|string>) =>
-                    this._webRtcController.sendMessageController.sendMessageToStreamer(name, data));
+                (data: Array<number|string>) => this._webRtcController.sendMessageController
+                                                    .sendMessageToStreamer(name, data));
         } else {
             this._webRtcController.streamMessageController.registerMessageHandler(
                 direction,

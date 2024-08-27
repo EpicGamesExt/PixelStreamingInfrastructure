@@ -132,8 +132,8 @@ export class GamePadController {
         for (const controller of this.controllers) {
             // If we haven't received an id (possible if using an older version of UE), return to original
             // functionality
-            const controllerIndex =
-                (controller.id === undefined) ? this.controllers.indexOf(controller) : controller.id;
+            const controllerIndex = (controller.id === undefined) ? this.controllers.indexOf(controller) :
+                                                                    controller.id;
             const currentState = controller.currentState;
             for (let i = 0; i < controller.currentState.buttons.length; i++) {
                 const currentButton = controller.currentState.buttons[i];
@@ -184,7 +184,7 @@ export class GamePadController {
                     i + 2,
                     y
                 ]);  // Vertical axes, offset by two (1 to match UEs axes convention and then another 1 for
-                     // the vertical axes)
+                // the vertical axes)
             }
             this.controllers[controllerIndex].prevState = currentState;
         }

@@ -181,10 +181,9 @@ export class VideoPlayer {
         const styleHeight = '100%';
         const styleTop = 0;
         const styleLeft = 0;
-        videoElementParent.setAttribute(
-            'style',
-            'top: ' + styleTop + 'px; left: ' + styleLeft + 'px; width: ' + styleWidth +
-                '; height: ' + styleHeight + '; cursor: default;');
+        videoElementParent.setAttribute('style',
+                                        'top: ' + styleTop + 'px; left: ' + styleLeft + 'px; width: ' +
+                                            styleWidth + '; height: ' + styleHeight + '; cursor: default;');
     }
 
     updateVideoStreamSize() {
@@ -199,9 +198,8 @@ export class VideoPlayer {
                 return;
             }
 
-            this.onMatchViewportResolutionCallback(
-                videoElementParent.clientWidth,
-                videoElementParent.clientHeight);
+            this.onMatchViewportResolutionCallback(videoElementParent.clientWidth,
+                                                   videoElementParent.clientHeight);
 
             this.lastTimeResized = new Date().getTime();
         } else {

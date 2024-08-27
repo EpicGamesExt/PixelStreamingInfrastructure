@@ -50,18 +50,21 @@ describe('PixelStreaming', () => {
     };
 
     const triggerWebSocketOpen = () => webSocketTriggerFunctions.triggerOnOpen?.();
-    const triggerSignallingMessage =
-        (message: BaseMessage) => { webSocketTriggerFunctions.triggerOnMessage?.(message); };
+    const triggerSignallingMessage = (message: BaseMessage) => {
+        webSocketTriggerFunctions.triggerOnMessage?.(message);
+    };
     const triggerConfigMessage = () => triggerSignallingMessage(
         MessageHelpers.createMessage(Messages.config, { peerConnectionOptions: {} }));
     const triggerStreamerListMessage = (streamerIdList: string[]) => triggerSignallingMessage(
         MessageHelpers.createMessage(Messages.streamerList, { ids: streamerIdList }));
-    const triggerSdpOfferMessage = () =>
-        triggerSignallingMessage(MessageHelpers.createMessage(Messages.offer, { sdp }));
+    const triggerSdpOfferMessage = () => triggerSignallingMessage(
+        MessageHelpers.createMessage(Messages.offer, { sdp }));
     const triggerIceCandidateMessage = () => triggerSignallingMessage(
         MessageHelpers.createMessage(Messages.iceCandidate, { candidate: iceCandidate }));
-    const triggerIceConnectionState = (state: RTCIceConnectionState) =>
-        rtcPeerConnectionTriggerFunctions.triggerIceConnectionStateChange?.(state);
+    const triggerIceConnectionState = (state:
+                                           RTCIceConnectionState) => rtcPeerConnectionTriggerFunctions
+                                                                         .triggerIceConnectionStateChange?.(
+                                                                             state);
     const triggerAddTrack = () => {
         const stream = new MediaStream();
         const track = new MediaStreamTrack();
@@ -74,18 +77,19 @@ describe('PixelStreaming', () => {
         channel.onopen?.(new Event('open'));
         return { channel };
     };
-    const establishMockedPixelStreamingConnection =
-        (streamerIds = streamerIdList, iceConnectionState: RTCIceConnectionState = 'connected') => {
-            triggerWebSocketOpen();
-            triggerConfigMessage();
-            triggerStreamerListMessage(streamerIds);
-            triggerSdpOfferMessage();
-            triggerIceCandidateMessage();
-            triggerIceConnectionState(iceConnectionState);
-            const { stream, track } = triggerAddTrack();
-            const { channel } = triggerOpenDataChannel();
-            return { channel, stream, track };
-        };
+    const establishMockedPixelStreamingConnection = (streamerIds = streamerIdList,
+                                                     iceConnectionState:
+                                                         RTCIceConnectionState = 'connected') => {
+        triggerWebSocketOpen();
+        triggerConfigMessage();
+        triggerStreamerListMessage(streamerIds);
+        triggerSdpOfferMessage();
+        triggerIceCandidateMessage();
+        triggerIceConnectionState(iceConnectionState);
+        const { stream, track } = triggerAddTrack();
+        const { channel } = triggerOpenDataChannel();
+        return { channel, stream, track };
+    };
 
     beforeEach(() => {
         mockRTCRtpReceiver();
@@ -117,8 +121,8 @@ describe('PixelStreaming', () => {
 
         expect(settingsChangedSpy).toHaveBeenCalledWith(new SettingsChangedEvent({
             id: NumericParameters.WebRTCMaxBitrate,
-            target: config.getNumericSettings().find(
-                (setting) => setting.id === NumericParameters.WebRTCMaxBitrate)!,
+            target: config.getNumericSettings().find((setting) => setting.id ===
+                                                         NumericParameters.WebRTCMaxBitrate)!,
             type: 'number',
             value: 123,
         }));

@@ -84,10 +84,10 @@ export class DataChannelLatencyTest {
          * Separate path time discovery works only when UE and Player clocks have been synchronized.
          */
         if (result.playerToStreamerTime >= 0 && result.streamerToPlayerTime >= 0) {
-            latencyStatsInnerHTML +=
-                '<div>Player to Streamer path (ms): ' + result.playerToStreamerTime + '</div>';
-            latencyStatsInnerHTML +=
-                '<div>Streamer to Player path (ms): ' + result.streamerToPlayerTime + '</div>';
+            latencyStatsInnerHTML += '<div>Player to Streamer path (ms): ' + result.playerToStreamerTime +
+                '</div>';
+            latencyStatsInnerHTML += '<div>Streamer to Player path (ms): ' + result.streamerToPlayerTime +
+                '</div>';
         }
         this.latencyTestResultsElement.innerHTML = latencyStatsInnerHTML;
         // setup button to download the detailed results

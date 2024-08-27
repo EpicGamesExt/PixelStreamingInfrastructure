@@ -75,10 +75,9 @@ export class SettingUINumber<CustomIds extends string = NumericParametersIds> ex
                 const parsedValue = Number.parseFloat(inputElem.value);
 
                 if (Number.isNaN(parsedValue)) {
-                    Logger.Warning(
-                        Logger.GetStackTrace(),
-                        `Could not parse value change into a valid number - value was ${
-                            inputElem.value}, resetting value to ${this.setting.min}`);
+                    Logger.Warning(Logger.GetStackTrace(),
+                                   `Could not parse value change into a valid number - value was ${
+                                       inputElem.value}, resetting value to ${this.setting.min}`);
                     if (this.setting.number !== this.setting.min) {
                         this.setting.number = this.setting.min;
                     }

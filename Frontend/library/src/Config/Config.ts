@@ -39,8 +39,8 @@ export class Flags {
 export type FlagsKeys = Exclude<keyof typeof Flags, 'prototype'>;
 export type FlagsIds = typeof Flags[FlagsKeys];
 
-const isFlagId = (id: string): id is FlagsIds =>
-    Object.getOwnPropertyNames(Flags).some((name: FlagsKeys) => Flags[name] === id);
+const isFlagId = (id: string):
+    id is FlagsIds => Object.getOwnPropertyNames(Flags).some((name: FlagsKeys) => Flags[name] === id);
 
 /**
  * A collection of numeric parameters that are core to all Pixel Streaming experiences.
@@ -61,9 +61,9 @@ export class NumericParameters {
 export type NumericParametersKeys = Exclude<keyof typeof NumericParameters, 'prototype'>;
 export type NumericParametersIds = typeof NumericParameters[NumericParametersKeys];
 
-const isNumericId = (id: string): id is NumericParametersIds =>
-    Object.getOwnPropertyNames(NumericParameters)
-        .some((name: NumericParametersKeys) => NumericParameters[name] === id);
+const isNumericId = (id: string):
+    id is NumericParametersIds => Object.getOwnPropertyNames(NumericParameters)
+                                      .some((name: NumericParametersKeys) => NumericParameters[name] === id);
 
 /**
  * A collection of textual parameters that are core to all Pixel Streaming experiences.
@@ -76,9 +76,9 @@ export class TextParameters {
 export type TextParametersKeys = Exclude<keyof typeof TextParameters, 'prototype'>;
 export type TextParametersIds = typeof TextParameters[TextParametersKeys];
 
-const isTextId = (id: string): id is TextParametersIds =>
-    Object.getOwnPropertyNames(TextParameters)
-        .some((name: TextParametersKeys) => TextParameters[name] === id);
+const isTextId = (id: string):
+    id is TextParametersIds => Object.getOwnPropertyNames(TextParameters)
+                                   .some((name: TextParametersKeys) => TextParameters[name] === id);
 
 /**
  * A collection of enum based parameters that are core to all Pixel Streaming experiences.
@@ -92,9 +92,9 @@ export class OptionParameters {
 export type OptionParametersKeys = Exclude<keyof typeof OptionParameters, 'prototype'>;
 export type OptionParametersIds = typeof OptionParameters[OptionParametersKeys];
 
-const isOptionId = (id: string): id is OptionParametersIds =>
-    Object.getOwnPropertyNames(OptionParameters)
-        .some((name: OptionParametersKeys) => OptionParameters[name] === id);
+const isOptionId = (id: string):
+    id is OptionParametersIds => Object.getOwnPropertyNames(OptionParameters)
+                                     .some((name: OptionParametersKeys) => OptionParameters[name] === id);
 
 /**
  * Utility types for inferring data type based on setting ID
@@ -247,25 +247,23 @@ export class Config {
 
         this.flags.set(
             Flags.UseMic,
-            new SettingFlag(
-                Flags.UseMic,
-                'Use microphone',
-                'Make browser request microphone access and open an input audio track.',
-                settings && Object.prototype.hasOwnProperty.call(settings, Flags.UseMic) ?
-                    settings[Flags.UseMic] :
-                    false,
-                useUrlParams));
+            new SettingFlag(Flags.UseMic,
+                            'Use microphone',
+                            'Make browser request microphone access and open an input audio track.',
+                            settings && Object.prototype.hasOwnProperty.call(settings, Flags.UseMic) ?
+                                settings[Flags.UseMic] :
+                                false,
+                            useUrlParams));
 
-        this.flags.set(
-            Flags.StartVideoMuted,
-            new SettingFlag(
-                Flags.StartVideoMuted,
-                'Start video muted',
-                'Video will start muted if true.',
-                settings && Object.prototype.hasOwnProperty.call(settings, Flags.StartVideoMuted) ?
-                    settings[Flags.StartVideoMuted] :
-                    false,
-                useUrlParams));
+        this.flags.set(Flags.StartVideoMuted,
+                       new SettingFlag(
+                           Flags.StartVideoMuted,
+                           'Start video muted',
+                           'Video will start muted if true.',
+                           settings && Object.prototype.hasOwnProperty.call(settings, Flags.StartVideoMuted) ?
+                               settings[Flags.StartVideoMuted] :
+                               false,
+                           useUrlParams));
 
         this.flags.set(
             Flags.SuppressBrowserKeys,
@@ -291,36 +289,33 @@ export class Config {
 
         this.flags.set(
             Flags.ForceMonoAudio,
-            new SettingFlag(
-                Flags.ForceMonoAudio,
-                'Force mono audio',
-                'Force browser to request mono audio in the SDP',
-                settings && Object.prototype.hasOwnProperty.call(settings, Flags.ForceMonoAudio) ?
-                    settings[Flags.ForceMonoAudio] :
-                    false,
-                useUrlParams));
+            new SettingFlag(Flags.ForceMonoAudio,
+                            'Force mono audio',
+                            'Force browser to request mono audio in the SDP',
+                            settings && Object.prototype.hasOwnProperty.call(settings, Flags.ForceMonoAudio) ?
+                                settings[Flags.ForceMonoAudio] :
+                                false,
+                            useUrlParams));
 
         this.flags.set(
             Flags.ForceTURN,
-            new SettingFlag(
-                Flags.ForceTURN,
-                'Force TURN',
-                'Only generate TURN/Relayed ICE candidates.',
-                settings && Object.prototype.hasOwnProperty.call(settings, Flags.ForceTURN) ?
-                    settings[Flags.ForceTURN] :
-                    false,
-                useUrlParams));
+            new SettingFlag(Flags.ForceTURN,
+                            'Force TURN',
+                            'Only generate TURN/Relayed ICE candidates.',
+                            settings && Object.prototype.hasOwnProperty.call(settings, Flags.ForceTURN) ?
+                                settings[Flags.ForceTURN] :
+                                false,
+                            useUrlParams));
 
         this.flags.set(
             Flags.AFKDetection,
-            new SettingFlag(
-                Flags.AFKDetection,
-                'AFK if idle',
-                'Timeout the experience if user is AFK for a period.',
-                settings && Object.prototype.hasOwnProperty.call(settings, Flags.AFKDetection) ?
-                    settings[Flags.AFKDetection] :
-                    false,
-                useUrlParams));
+            new SettingFlag(Flags.AFKDetection,
+                            'AFK if idle',
+                            'Timeout the experience if user is AFK for a period.',
+                            settings && Object.prototype.hasOwnProperty.call(settings, Flags.AFKDetection) ?
+                                settings[Flags.AFKDetection] :
+                                false,
+                            useUrlParams));
 
         this.flags.set(
             Flags.MatchViewportResolution,
@@ -360,47 +355,43 @@ export class Config {
 
         this.flags.set(
             Flags.KeyboardInput,
-            new SettingFlag(
-                Flags.KeyboardInput,
-                'Keyboard input',
-                'If enabled, send keyboard events to streamer',
-                settings && Object.prototype.hasOwnProperty.call(settings, Flags.KeyboardInput) ?
-                    settings[Flags.KeyboardInput] :
-                    true,
-                useUrlParams));
+            new SettingFlag(Flags.KeyboardInput,
+                            'Keyboard input',
+                            'If enabled, send keyboard events to streamer',
+                            settings && Object.prototype.hasOwnProperty.call(settings, Flags.KeyboardInput) ?
+                                settings[Flags.KeyboardInput] :
+                                true,
+                            useUrlParams));
 
         this.flags.set(
             Flags.MouseInput,
-            new SettingFlag(
-                Flags.MouseInput,
-                'Mouse input',
-                'If enabled, send mouse events to streamer',
-                settings && Object.prototype.hasOwnProperty.call(settings, Flags.MouseInput) ?
-                    settings[Flags.MouseInput] :
-                    true,
-                useUrlParams));
+            new SettingFlag(Flags.MouseInput,
+                            'Mouse input',
+                            'If enabled, send mouse events to streamer',
+                            settings && Object.prototype.hasOwnProperty.call(settings, Flags.MouseInput) ?
+                                settings[Flags.MouseInput] :
+                                true,
+                            useUrlParams));
 
         this.flags.set(
             Flags.TouchInput,
-            new SettingFlag(
-                Flags.TouchInput,
-                'Touch input',
-                'If enabled, send touch events to streamer',
-                settings && Object.prototype.hasOwnProperty.call(settings, Flags.TouchInput) ?
-                    settings[Flags.TouchInput] :
-                    true,
-                useUrlParams));
+            new SettingFlag(Flags.TouchInput,
+                            'Touch input',
+                            'If enabled, send touch events to streamer',
+                            settings && Object.prototype.hasOwnProperty.call(settings, Flags.TouchInput) ?
+                                settings[Flags.TouchInput] :
+                                true,
+                            useUrlParams));
 
         this.flags.set(
             Flags.GamepadInput,
-            new SettingFlag(
-                Flags.GamepadInput,
-                'Gamepad input',
-                'If enabled, send gamepad events to streamer',
-                settings && Object.prototype.hasOwnProperty.call(settings, Flags.GamepadInput) ?
-                    settings[Flags.GamepadInput] :
-                    true,
-                useUrlParams));
+            new SettingFlag(Flags.GamepadInput,
+                            'Gamepad input',
+                            'If enabled, send gamepad events to streamer',
+                            settings && Object.prototype.hasOwnProperty.call(settings, Flags.GamepadInput) ?
+                                settings[Flags.GamepadInput] :
+                                true,
+                            useUrlParams));
 
         this.flags.set(
             Flags.XRControllerInput,
@@ -413,27 +404,25 @@ export class Config {
                     true,
                 useUrlParams));
 
-        this.flags.set(
-            Flags.WaitForStreamer,
-            new SettingFlag(
-                Flags.WaitForStreamer,
-                'Wait for streamer',
-                'Will continue trying to connect to the first streamer available.',
-                settings && Object.prototype.hasOwnProperty.call(settings, Flags.WaitForStreamer) ?
-                    settings[Flags.WaitForStreamer] :
-                    true,
-                useUrlParams));
+        this.flags.set(Flags.WaitForStreamer,
+                       new SettingFlag(
+                           Flags.WaitForStreamer,
+                           'Wait for streamer',
+                           'Will continue trying to connect to the first streamer available.',
+                           settings && Object.prototype.hasOwnProperty.call(settings, Flags.WaitForStreamer) ?
+                               settings[Flags.WaitForStreamer] :
+                               true,
+                           useUrlParams));
 
         this.flags.set(
             Flags.HideUI,
-            new SettingFlag(
-                Flags.HideUI,
-                'Hide the UI overlay',
-                'Will hide all UI overlay details',
-                settings && Object.prototype.hasOwnProperty.call(settings, Flags.HideUI) ?
-                    settings[Flags.HideUI] :
-                    false,
-                useUrlParams));
+            new SettingFlag(Flags.HideUI,
+                            'Hide the UI overlay',
+                            'Will hide all UI overlay details',
+                            settings && Object.prototype.hasOwnProperty.call(settings, Flags.HideUI) ?
+                                settings[Flags.HideUI] :
+                                false,
+                            useUrlParams));
 
         /**
          * Numeric parameters
@@ -465,21 +454,19 @@ export class Config {
                     useUrlParams))
 
                 this.numericParameters
-            .set(
-                NumericParameters.MaxReconnectAttempts,
-                new SettingNumber(
-                    NumericParameters.MaxReconnectAttempts,
-                    'Max Reconnects',
-                    'Maximum number of reconnects the application will attempt when a streamer disconnects.',
-                    0 /*min*/,
-                    999 /*max*/,
-                    settings &&
-                            Object.prototype.hasOwnProperty.call(
-                                settings,
-                                NumericParameters.MaxReconnectAttempts) ?
-                        settings[NumericParameters.MaxReconnectAttempts] :
-                        3, /*value*/
-                    useUrlParams));
+            .set(NumericParameters.MaxReconnectAttempts,
+                 new SettingNumber(
+                     NumericParameters.MaxReconnectAttempts,
+                     'Max Reconnects',
+                     'Maximum number of reconnects the application will attempt when a streamer disconnects.',
+                     0 /*min*/,
+                     999 /*max*/,
+                     settings &&
+                             Object.prototype.hasOwnProperty.call(settings,
+                                                                  NumericParameters.MaxReconnectAttempts) ?
+                         settings[NumericParameters.MaxReconnectAttempts] :
+                         3, /*value*/
+                     useUrlParams));
 
         this.numericParameters.set(
             NumericParameters.MinQP,
@@ -557,9 +544,8 @@ export class Config {
                 500 /*min*/,
                 900000 /*max*/,
                 settings &&
-                        Object.prototype.hasOwnProperty.call(
-                            settings,
-                            NumericParameters.StreamerAutoJoinInterval) ?
+                        Object.prototype.hasOwnProperty.call(settings,
+                                                             NumericParameters.StreamerAutoJoinInterval) ?
                     settings[NumericParameters.StreamerAutoJoinInterval] :
                     3000, /*value*/
                 useUrlParams));
@@ -570,17 +556,15 @@ export class Config {
      * @param id The id of the flag.
      * @param onChangedListener The callback to fire when the numeric value changes.
      */
-    _addOnNumericSettingChangedListener(
-        id: NumericParametersIds,
-        onChangedListener: (newValue: number) => void): void {
+    _addOnNumericSettingChangedListener(id: NumericParametersIds,
+                                        onChangedListener: (newValue: number) => void): void {
         if (this.numericParameters.has(id)) {
             this.numericParameters.get(id).addOnChangedListener(onChangedListener);
         }
     }
 
-    _addOnOptionSettingChangedListener(
-        id: OptionParametersIds,
-        onChangedListener: (newValue: string) => void): void {
+    _addOnOptionSettingChangedListener(id: OptionParametersIds,
+                                       onChangedListener: (newValue: string) => void): void {
         if (this.optionParameters.has(id)) {
             this.optionParameters.get(id).addOnChangedListener(onChangedListener);
         }
@@ -639,8 +623,8 @@ export class Config {
      * @param id The id of the flag.
      * @param onChangeListener The callback to fire when the value changes.
      */
-    _addOnTextSettingChangedListener(id: TextParametersIds, onChangeListener: (newTextValue: string) => void):
-        void {
+    _addOnTextSettingChangedListener(id: TextParametersIds,
+                                     onChangeListener: (newTextValue: string) => void): void {
         if (this.textParameters.has(id)) {
             this.textParameters.get(id).onChange = onChangeListener;
         }
@@ -671,9 +655,8 @@ export class Config {
      */
     setFlagEnabled(id: FlagsIds, flagEnabled: boolean) {
         if (!this.flags.has(id)) {
-            Logger.Warning(
-                Logger.GetStackTrace(),
-                `Cannot toggle flag called ${id} - it does not exist in the Config.flags map.`);
+            Logger.Warning(Logger.GetStackTrace(),
+                           `Cannot toggle flag called ${id} - it does not exist in the Config.flags map.`);
         } else {
             this.flags.get(id).flag = flagEnabled;
         }
@@ -701,10 +684,9 @@ export class Config {
      */
     setOptionSettingOptions(id: OptionParametersIds, settingOptions: Array<string>) {
         if (!this.optionParameters.has(id)) {
-            Logger.Warning(
-                Logger.GetStackTrace(),
-                `Cannot set text setting called ${
-                    id} - it does not exist in the Config.optionParameters map.`);
+            Logger.Warning(Logger.GetStackTrace(),
+                           `Cannot set text setting called ${
+                               id} - it does not exist in the Config.optionParameters map.`);
         } else {
             this.optionParameters.get(id).options = settingOptions;
         }
@@ -833,8 +815,8 @@ export class Config {
         for (const key of this.numericParameters.keys()) {
             const number = this.numericParameters.get(key);
             if (number) {
-                number.onChangeEmit = (newValue: number) =>
-                    eventEmitter.dispatchEvent(new SettingsChangedEvent(
+                number.onChangeEmit = (newValue: number) => eventEmitter.dispatchEvent(
+                    new SettingsChangedEvent(
                         { id: number.id, type: 'number', value: newValue, target: number }));
             }
         }
@@ -848,8 +830,8 @@ export class Config {
         for (const key of this.optionParameters.keys()) {
             const option = this.optionParameters.get(key);
             if (option) {
-                option.onChangeEmit = (newValue: string) =>
-                    eventEmitter.dispatchEvent(new SettingsChangedEvent(
+                option.onChangeEmit = (newValue: string) => eventEmitter.dispatchEvent(
+                    new SettingsChangedEvent(
                         { id: option.id, type: 'option', value: newValue, target: option }));
             }
         }

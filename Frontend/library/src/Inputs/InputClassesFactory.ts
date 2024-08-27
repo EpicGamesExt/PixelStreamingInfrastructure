@@ -27,10 +27,9 @@ export class InputClassesFactory {
      * @param videoElementProvider - Video Player instance
      * @param coordinateConverter - A coordinateConverter instance
      */
-    constructor(
-        toStreamerMessagesProvider: StreamMessageController,
-        videoElementProvider: VideoPlayer,
-        coordinateConverter: CoordinateConverter) {
+    constructor(toStreamerMessagesProvider: StreamMessageController,
+                videoElementProvider: VideoPlayer,
+                coordinateConverter: CoordinateConverter) {
         this.toStreamerMessagesProvider = toStreamerMessagesProvider;
         this.videoElementProvider = videoElementProvider;
         this.coordinateConverter = coordinateConverter;
@@ -41,8 +40,9 @@ export class InputClassesFactory {
      */
     registerKeyBoard(config: Config) {
         Logger.Log(Logger.GetStackTrace(), 'Register Keyboard Events', 7);
-        const keyboardController =
-            new KeyboardController(this.toStreamerMessagesProvider, config, this.activeKeys);
+        const keyboardController = new KeyboardController(this.toStreamerMessagesProvider,
+                                                          config,
+                                                          this.activeKeys);
         keyboardController.registerKeyBoardEvents();
         return keyboardController;
     }
@@ -53,11 +53,10 @@ export class InputClassesFactory {
      */
     registerMouse(controlScheme: ControlSchemeType) {
         Logger.Log(Logger.GetStackTrace(), 'Register Mouse Events', 7);
-        const mouseController = new MouseController(
-            this.toStreamerMessagesProvider,
-            this.videoElementProvider,
-            this.coordinateConverter,
-            this.activeKeys);
+        const mouseController = new MouseController(this.toStreamerMessagesProvider,
+                                                    this.videoElementProvider,
+                                                    this.coordinateConverter,
+                                                    this.activeKeys);
 
         switch (controlScheme) {
             case ControlSchemeType.LockedMouse:
@@ -67,9 +66,8 @@ export class InputClassesFactory {
                 mouseController.registerHoveringMouseEvents(mouseController);
                 break;
             default:
-                Logger.Info(
-                    Logger.GetStackTrace(),
-                    'unknown Control Scheme Type Defaulting to Locked Mouse Events');
+                Logger.Info(Logger.GetStackTrace(),
+                            'unknown Control Scheme Type Defaulting to Locked Mouse Events');
                 mouseController.registerLockedMouseEvents(mouseController);
                 break;
         }
@@ -84,17 +82,15 @@ export class InputClassesFactory {
     registerTouch(fakeMouseTouch: boolean, videoElementParentClientRect: DOMRect) {
         Logger.Log(Logger.GetStackTrace(), 'Registering Touch', 6);
         if (fakeMouseTouch) {
-            const fakeTouchController = new FakeTouchController(
-                this.toStreamerMessagesProvider,
-                this.videoElementProvider,
-                this.coordinateConverter);
+            const fakeTouchController = new FakeTouchController(this.toStreamerMessagesProvider,
+                                                                this.videoElementProvider,
+                                                                this.coordinateConverter);
             fakeTouchController.setVideoElementParentClientRect(videoElementParentClientRect);
             return fakeTouchController;
         } else {
-            return new TouchController(
-                this.toStreamerMessagesProvider,
-                this.videoElementProvider,
-                this.coordinateConverter);
+            return new TouchController(this.toStreamerMessagesProvider,
+                                       this.videoElementProvider,
+                                       this.coordinateConverter);
         }
     }
 

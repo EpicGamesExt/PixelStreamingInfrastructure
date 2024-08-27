@@ -156,28 +156,26 @@ export class WebXRController {
 
         if (this.prevVideoHeight != videoHeight || this.prevVideoWidth != videoWidth) {
             // Do full update of texture if dimensions do not match
-            this.gl.texImage2D(
-                this.gl.TEXTURE_2D,
-                0,
-                this.gl.RGBA,
-                videoWidth,
-                videoHeight,
-                0,
-                this.gl.RGBA,
-                this.gl.UNSIGNED_BYTE,
-                this.webRtcController.videoPlayer.getVideoElement());
+            this.gl.texImage2D(this.gl.TEXTURE_2D,
+                               0,
+                               this.gl.RGBA,
+                               videoWidth,
+                               videoHeight,
+                               0,
+                               this.gl.RGBA,
+                               this.gl.UNSIGNED_BYTE,
+                               this.webRtcController.videoPlayer.getVideoElement());
         } else {
             // If dimensions match just update the sub region
-            this.gl.texSubImage2D(
-                this.gl.TEXTURE_2D,
-                0,
-                0,
-                0,
-                videoWidth,
-                videoHeight,
-                this.gl.RGBA,
-                this.gl.UNSIGNED_BYTE,
-                this.webRtcController.videoPlayer.getVideoElement());
+            this.gl.texSubImage2D(this.gl.TEXTURE_2D,
+                                  0,
+                                  0,
+                                  0,
+                                  videoWidth,
+                                  videoHeight,
+                                  this.gl.RGBA,
+                                  this.gl.UNSIGNED_BYTE,
+                                  this.webRtcController.videoPlayer.getVideoElement());
         }
 
         // Update prev video width/height
@@ -223,10 +221,9 @@ export class WebXRController {
             this.gl.enableVertexAttribArray(this.texcoordLocation);
 
             // The texture coordinates to apply for rectangle we are drawing
-            this.gl.bufferData(
-                this.gl.ARRAY_BUFFER,
-                new Float32Array([0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0]),
-                this.gl.STATIC_DRAW);
+            this.gl.bufferData(this.gl.ARRAY_BUFFER,
+                               new Float32Array([0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0]),
+                               this.gl.STATIC_DRAW);
 
             // Tell texture coordinate attribute of the vertex shader how to get data out of the bound buffer
             // (the texcoordBuffer)
@@ -325,10 +322,10 @@ export class WebXRController {
         // Check if relative eye pos has changed (e.g IPD changed)
         if (!shouldSendEyeViews && this.lastSentRelativeLeftEyePos != null &&
             this.lastSentRelativeRightEyePos != null) {
-            const leftEyePosUnchanged =
-                this.arePointsEqual(leftEyeRelativePos, this.lastSentRelativeLeftEyePos);
-            const rightEyePosUnchanged =
-                this.arePointsEqual(rightEyeRelativePos, this.lastSentRelativeRightEyePos);
+            const leftEyePosUnchanged = this.arePointsEqual(leftEyeRelativePos,
+                                                            this.lastSentRelativeLeftEyePos);
+            const rightEyePosUnchanged = this.arePointsEqual(rightEyeRelativePos,
+                                                             this.lastSentRelativeRightEyePos);
             shouldSendEyeViews = leftEyePosUnchanged == false || rightEyePosUnchanged == false;
             // Note: We are not checking if EyeView rotation changes (as far as I know no HMD supports
             // changing this value at runtime).
