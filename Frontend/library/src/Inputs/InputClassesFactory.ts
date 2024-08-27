@@ -1,17 +1,17 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
-import {Logger} from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
+import { Logger } from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
 
-import {Config, ControlSchemeType} from '../Config/Config';
-import {StreamMessageController} from '../UeInstanceMessage/StreamMessageController';
-import {CoordinateConverter} from '../Util/CoordinateConverter';
-import {VideoPlayer} from '../VideoPlayer/VideoPlayer';
+import { Config, ControlSchemeType } from '../Config/Config';
+import { StreamMessageController } from '../UeInstanceMessage/StreamMessageController';
+import { CoordinateConverter } from '../Util/CoordinateConverter';
+import { VideoPlayer } from '../VideoPlayer/VideoPlayer';
 
-import {FakeTouchController} from './FakeTouchController';
-import {GamePadController} from './GamepadController';
-import {KeyboardController} from './KeyboardController';
-import {MouseController} from './MouseController';
-import {TouchController} from './TouchController';
+import { FakeTouchController } from './FakeTouchController';
+import { GamePadController } from './GamepadController';
+import { KeyboardController } from './KeyboardController';
+import { MouseController } from './MouseController';
+import { TouchController } from './TouchController';
 
 /**
  * Class for making and setting up input class types
@@ -28,8 +28,8 @@ export class InputClassesFactory {
      * @param coordinateConverter - A coordinateConverter instance
      */
     constructor(toStreamerMessagesProvider: StreamMessageController,
-                videoElementProvider: VideoPlayer,
-                coordinateConverter: CoordinateConverter) {
+        videoElementProvider: VideoPlayer,
+        coordinateConverter: CoordinateConverter) {
         this.toStreamerMessagesProvider = toStreamerMessagesProvider;
         this.videoElementProvider = videoElementProvider;
         this.coordinateConverter = coordinateConverter;
@@ -41,8 +41,8 @@ export class InputClassesFactory {
     registerKeyBoard(config: Config) {
         Logger.Log(Logger.GetStackTrace(), 'Register Keyboard Events', 7);
         const keyboardController = new KeyboardController(this.toStreamerMessagesProvider,
-                                                          config,
-                                                          this.activeKeys);
+            config,
+            this.activeKeys);
         keyboardController.registerKeyBoardEvents();
         return keyboardController;
     }
@@ -54,9 +54,9 @@ export class InputClassesFactory {
     registerMouse(controlScheme: ControlSchemeType) {
         Logger.Log(Logger.GetStackTrace(), 'Register Mouse Events', 7);
         const mouseController = new MouseController(this.toStreamerMessagesProvider,
-                                                    this.videoElementProvider,
-                                                    this.coordinateConverter,
-                                                    this.activeKeys);
+            this.videoElementProvider,
+            this.coordinateConverter,
+            this.activeKeys);
 
         switch (controlScheme) {
             case ControlSchemeType.LockedMouse:
@@ -67,7 +67,7 @@ export class InputClassesFactory {
                 break;
             default:
                 Logger.Info(Logger.GetStackTrace(),
-                            'unknown Control Scheme Type Defaulting to Locked Mouse Events');
+                    'unknown Control Scheme Type Defaulting to Locked Mouse Events');
                 mouseController.registerLockedMouseEvents(mouseController);
                 break;
         }
@@ -83,14 +83,14 @@ export class InputClassesFactory {
         Logger.Log(Logger.GetStackTrace(), 'Registering Touch', 6);
         if (fakeMouseTouch) {
             const fakeTouchController = new FakeTouchController(this.toStreamerMessagesProvider,
-                                                                this.videoElementProvider,
-                                                                this.coordinateConverter);
+                this.videoElementProvider,
+                this.coordinateConverter);
             fakeTouchController.setVideoElementParentClientRect(videoElementParentClientRect);
             return fakeTouchController;
         } else {
             return new TouchController(this.toStreamerMessagesProvider,
-                                       this.videoElementProvider,
-                                       this.coordinateConverter);
+                this.videoElementProvider,
+                this.coordinateConverter);
         }
     }
 

@@ -1,10 +1,10 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
-import {Logger} from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
+import { Logger } from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
 
-import {DataChannelSender} from '../DataChannel/DataChannelSender';
+import { DataChannelSender } from '../DataChannel/DataChannelSender';
 
-import {StreamMessageController} from './StreamMessageController';
+import { StreamMessageController } from './StreamMessageController';
 
 export class SendMessageController {
     toStreamerMessagesMapProvider: StreamMessageController;
@@ -15,7 +15,7 @@ export class SendMessageController {
      * @param toStreamerMessagesMapProvider - Stream Messages instance
      */
     constructor(dataChannelSender: DataChannelSender,
-                toStreamerMessagesMapProvider: StreamMessageController) {
+        toStreamerMessagesMapProvider: StreamMessageController) {
         this.dataChannelSender = dataChannelSender;
         this.toStreamerMessagesMapProvider = toStreamerMessagesMapProvider;
     }
@@ -26,7 +26,7 @@ export class SendMessageController {
      * @param messageData - the message data we are sending over the data channel
      * @returns - nil
      */
-    sendMessageToStreamer(messageType: string, messageData?: Array<number|string>) {
+    sendMessageToStreamer(messageType: string, messageData?: Array<number | string>) {
         if (messageData === undefined) {
             messageData = [];
         }
@@ -36,36 +36,33 @@ export class SendMessageController {
         if (messageFormat === undefined) {
             Logger.Error(
                 Logger.GetStackTrace(),
-                `Attempted to send a message to the streamer with message type: ${
-                    messageType}, but the frontend hasn't been configured to send such a message. Check you've added the message type in your cpp`);
+                `Attempted to send a message to the streamer with message type: ${messageType}, but the frontend hasn't been configured to send such a message. Check you've added the message type in your cpp`);
             return;
         }
 
         if (messageFormat.structure && messageData && messageFormat.structure.length !== messageData.length) {
             Logger.Error(Logger.GetStackTrace(),
-                         `Provided message data doesn't match expected layout. Expected [ ${
-                             messageFormat.structure
-                                 .map((element: string) => {
-                                     switch (element) {
-                                         case 'uint8':
-                                         case 'uint16':
-                                         case 'int16':
-                                         case 'float':
-                                         case 'double':
-                                             return 'number';
-                                         case 'string':
-                                             return 'string';
-                                     }
-                                 })
-                                 .toString()} ] but received [ ${
-                             messageData.map((element: number|string) => typeof element).toString()} ]`);
+                `Provided message data doesn't match expected layout. Expected [ ${messageFormat.structure
+                    .map((element: string) => {
+                        switch (element) {
+                            case 'uint8':
+                            case 'uint16':
+                            case 'int16':
+                            case 'float':
+                            case 'double':
+                                return 'number';
+                            case 'string':
+                                return 'string';
+                        }
+                    })
+                    .toString()} ] but received [ ${messageData.map((element: number | string) => typeof element).toString()} ]`);
             return;
         }
 
         let byteLength = 0;
         const textEncoder = new TextEncoder();
         // One loop to calculate the length in bytes of all of the provided data
-        messageData.forEach((element: number|string, idx: number) => {
+        messageData.forEach((element: number | string, idx: number) => {
             const type = messageFormat.structure[idx];
             switch (type) {
                 case 'uint8':
@@ -101,7 +98,7 @@ export class SendMessageController {
         data.setUint8(0, messageFormat.id);
         let byteOffset = 1;
 
-        messageData.forEach((element: number|string, idx: number) => {
+        messageData.forEach((element: number | string, idx: number) => {
             const type = messageFormat.structure[idx];
             switch (type) {
                 case 'uint8':
@@ -142,8 +139,7 @@ export class SendMessageController {
 
         if (!this.dataChannelSender.canSend()) {
             Logger.Info(Logger.GetStackTrace(),
-                        `Data channel cannot send yet, skipping sending message: ${messageType} - ${
-                            new Uint8Array(data.buffer)}`);
+                `Data channel cannot send yet, skipping sending message: ${messageType} - ${new Uint8Array(data.buffer)}`);
             return;
         }
 

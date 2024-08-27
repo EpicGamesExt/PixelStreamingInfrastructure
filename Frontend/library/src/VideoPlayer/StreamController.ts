@@ -1,10 +1,10 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
-import {Logger} from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
+import { Logger } from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
 
-import {MouseController} from '../Inputs/MouseController';
+import { MouseController } from '../Inputs/MouseController';
 
-import {VideoPlayer} from './VideoPlayer';
+import { VideoPlayer } from './VideoPlayer';
 
 /**
  * Video Player Controller handles the creation of the video HTML element and all handlers
@@ -40,16 +40,16 @@ export class StreamController {
 
         if (rtcTrackEvent.track) {
             Logger.Log(Logger.GetStackTrace(),
-                       'Got track - ' + rtcTrackEvent.track.kind + ' id=' + rtcTrackEvent.track.id +
-                           ' readyState=' + rtcTrackEvent.track.readyState,
-                       6);
+                'Got track - ' + rtcTrackEvent.track.kind + ' id=' + rtcTrackEvent.track.id +
+                ' readyState=' + rtcTrackEvent.track.readyState,
+                6);
         }
 
         if (rtcTrackEvent.track.kind == 'audio') {
             this.CreateAudioTrack(rtcTrackEvent.streams[0]);
             return;
         } else if (rtcTrackEvent.track.kind == 'video' &&
-                   videoElement.srcObject !== rtcTrackEvent.streams[0]) {
+            videoElement.srcObject !== rtcTrackEvent.streams[0]) {
             videoElement.srcObject = rtcTrackEvent.streams[0];
             Logger.Log(Logger.GetStackTrace(), 'Set video source from video track ontrack.');
             return;

@@ -1,6 +1,6 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
-import {Logger} from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
+import { Logger } from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
 
 /**
  * Utility function for populate file information from byte buffers.
@@ -101,7 +101,7 @@ export class FileUtil {
         } else if (file.data.length > file.size) {
             file.receiving = false;
             Logger.Error(Logger.GetStackTrace(),
-                         `Received bigger file than advertised: ${file.data.length}/${file.size}`);
+                `Received bigger file than advertised: ${file.data.length}/${file.size}`);
         }
     }
 }

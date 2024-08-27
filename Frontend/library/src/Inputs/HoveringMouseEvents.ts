@@ -1,9 +1,9 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
-import {Logger} from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
+import { Logger } from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
 
-import {IMouseEvents} from './IMouseEvents';
-import {MouseController} from './MouseController';
+import { IMouseEvents } from './IMouseEvents';
+import { MouseController } from './MouseController';
 
 /**
  * Video Player mouse Hover handler

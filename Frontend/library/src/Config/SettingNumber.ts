@@ -1,7 +1,7 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
-import type {NumericParametersIds} from './Config';
-import {SettingBase} from './SettingBase';
+import type { NumericParametersIds } from './Config';
+import { SettingBase } from './SettingBase';
 
 /**
  * A number setting object with a text label. Min and max limit the range of allowed values.
@@ -10,19 +10,20 @@ export class SettingNumber<CustomIds extends string = NumericParametersIds> exte
     _min: number;
     _max: number;
 
-    id: NumericParametersIds|CustomIds;
+    id: NumericParametersIds | CustomIds;
     onChangeEmit: (changedValue: number) => void;
 
-    constructor(id: NumericParametersIds|CustomIds,
-                label: string,
-                description: string,
-                min: number,
-                max: number,
-                defaultNumber: number,
-                useUrlParams: boolean,
-                // eslint-disable-next-line @typescript-eslint/no-empty-function
-                defaultOnChangeListener: (changedValue: unknown, setting: SettingBase) => void = () => {
-                    /* Do nothing, to be overridden. */ }) {
+    constructor(id: NumericParametersIds | CustomIds,
+        label: string,
+        description: string,
+        min: number,
+        max: number,
+        defaultNumber: number,
+        useUrlParams: boolean,
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
+        defaultOnChangeListener: (changedValue: unknown, setting: SettingBase) => void = () => {
+            /* Do nothing, to be overridden. */
+}) {
         super(id, label, description, defaultNumber, defaultOnChangeListener);
 
         this._min = min;

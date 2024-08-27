@@ -1,8 +1,8 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
-import {StreamMessageController} from '../UeInstanceMessage/StreamMessageController';
+import { StreamMessageController } from '../UeInstanceMessage/StreamMessageController';
 
-import {Controller} from './GamepadTypes';
+import { Controller } from './GamepadTypes';
 
 /**
  * The class that handles the functionality of XR gamepads and controllers.
@@ -29,7 +29,7 @@ export class XRGamepadController {
     static deepCopyGamepad(gamepad: Gamepad): Gamepad {
         return JSON.parse(JSON.stringify({
             buttons: gamepad.buttons.map((b) => JSON.parse(JSON.stringify(
-                                             { pressed: b.pressed, touched: b.touched, value: b.value }))),
+                { pressed: b.pressed, touched: b.touched, value: b.value }))),
             axes: gamepad.axes
         }));
     }

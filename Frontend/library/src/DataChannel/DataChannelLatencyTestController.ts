@@ -1,6 +1,6 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
-import {Logger} from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
+import { Logger } from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
 
 import {
     DataChannelLatencyTestRecord,
@@ -47,13 +47,13 @@ export class DataChannelLatencyTestController {
         this.startTime = Date.now();
         this.records.clear();
         this.interval = setInterval((() => {
-                                        if (Date.now() - this.startTime >= config.duration) {
-                                            this.stop();
-                                        } else {
-                                            this.sendRequest(config.requestSize, config.responseSize);
-                                        }
-                                    }).bind(this),
-                                    Math.floor(1000 / config.rps));
+            if (Date.now() - this.startTime >= config.duration) {
+                this.stop();
+            } else {
+                this.sendRequest(config.requestSize, config.responseSize);
+            }
+        }).bind(this),
+            Math.floor(1000 / config.rps));
         return true;
     }
 
@@ -69,35 +69,35 @@ export class DataChannelLatencyTestController {
         const resultRecords = new Map(this.records);
         return {
             records: resultRecords,
-                dataChannelRtt: Math.ceil(
-                    Array.from(this.records.values())
-                        .reduce(
-                            (acc, next) => {
-                                return acc + (next.playerReceivedTimestamp - next.playerSentTimestamp);
-                            },
-                            0) /
-                    this.records.size),
-                playerToStreamerTime: Math.ceil(
-                    Array.from(this.records.values())
-                        .reduce(
-                            (acc, next) => {
-                                return acc + (next.streamerReceivedTimestamp - next.playerSentTimestamp);
-                            },
-                            0) /
-                    this.records.size),
-                streamerToPlayerTime: Math.ceil(Array.from(this.records.values()).reduce((acc, next) => {
-                    return acc + (next.playerReceivedTimestamp - next.streamerSentTimestamp);
-                }, 0) / this.records.size), exportLatencyAsCSV: () => {
-                    let csv = 'Timestamp;RTT;PlayerToStreamer;StreamerToPlayer;\n';
-                    resultRecords.forEach((record) => {
-                        csv += record.playerSentTimestamp + ';';
-                        csv += (record.playerReceivedTimestamp - record.playerSentTimestamp) + ';';
-                        csv += (record.streamerReceivedTimestamp - record.playerSentTimestamp) + ';';
-                        csv += (record.playerReceivedTimestamp - record.streamerSentTimestamp) + ';';
-                        csv += '\n';
-                    })
-                    return csv;
-                }
+            dataChannelRtt: Math.ceil(
+                Array.from(this.records.values())
+                    .reduce(
+                        (acc, next) => {
+                            return acc + (next.playerReceivedTimestamp - next.playerSentTimestamp);
+                        },
+                        0) /
+                this.records.size),
+            playerToStreamerTime: Math.ceil(
+                Array.from(this.records.values())
+                    .reduce(
+                        (acc, next) => {
+                            return acc + (next.streamerReceivedTimestamp - next.playerSentTimestamp);
+                        },
+                        0) /
+                this.records.size),
+            streamerToPlayerTime: Math.ceil(Array.from(this.records.values()).reduce((acc, next) => {
+                return acc + (next.playerReceivedTimestamp - next.streamerSentTimestamp);
+            }, 0) / this.records.size), exportLatencyAsCSV: () => {
+                let csv = 'Timestamp;RTT;PlayerToStreamer;StreamerToPlayer;\n';
+                resultRecords.forEach((record) => {
+                    csv += record.playerSentTimestamp + ';';
+                    csv += (record.playerReceivedTimestamp - record.playerSentTimestamp) + ';';
+                    csv += (record.streamerReceivedTimestamp - record.playerSentTimestamp) + ';';
+                    csv += (record.playerReceivedTimestamp - record.streamerSentTimestamp) + ';';
+                    csv += '\n';
+                })
+                return csv;
+            }
         }
     }
 
@@ -129,7 +129,7 @@ export class DataChannelLatencyTestController {
     createRequest(requestSize: number, responseSize: number): DataChannelLatencyTestRequest {
         return {
             Seq: this.seq++, FillResponseSize: responseSize,
-                Filler: requestSize ? 'A'.repeat(requestSize) : ''
+            Filler: requestSize ? 'A'.repeat(requestSize) : ''
         }
     }
 }

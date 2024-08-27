@@ -1,8 +1,8 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
-import {Logger} from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
+import { Logger } from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
 
-import {Config, Flags, NumericParameters, OptionParameters} from '../Config/Config';
+import { Config, Flags, NumericParameters, OptionParameters } from '../Config/Config';
 import {
     DataChannelLatencyTestConfig,
     DataChannelLatencyTestController
@@ -11,11 +11,11 @@ import {
     DataChannelLatencyTestResponse,
     DataChannelLatencyTestResult
 } from '../DataChannel/DataChannelLatencyTestResults';
-import {InitialSettings} from '../DataChannel/InitialSettings';
-import {LatencyTestResults} from '../DataChannel/LatencyTestResults';
-import {AggregatedStats} from '../PeerConnectionController/AggregatedStats';
-import {MessageDirection} from '../UeInstanceMessage/StreamMessageController';
-import {OnScreenKeyboard} from '../UI/OnScreenKeyboard';
+import { InitialSettings } from '../DataChannel/InitialSettings';
+import { LatencyTestResults } from '../DataChannel/LatencyTestResults';
+import { AggregatedStats } from '../PeerConnectionController/AggregatedStats';
+import { MessageDirection } from '../UeInstanceMessage/StreamMessageController';
+import { OnScreenKeyboard } from '../UI/OnScreenKeyboard';
 import {
     DataChannelLatencyTestResponseEvent,
     DataChannelLatencyTestResultEvent,
@@ -39,10 +39,10 @@ import {
     WebRtcSdpEvent,
     WebRtcTCPRelayDetectedEvent
 } from '../Util/EventEmitter';
-import {IURLSearchParams} from '../Util/IURLSearchParams';
-import {RTCUtils} from '../Util/RTCUtils';
-import {WebRtcPlayerController} from '../WebRtcPlayer/WebRtcPlayerController';
-import {WebXRController} from '../WebXR/WebXRController';
+import { IURLSearchParams } from '../Util/IURLSearchParams';
+import { RTCUtils } from '../Util/RTCUtils';
+import { WebRtcPlayerController } from '../WebRtcPlayer/WebRtcPlayerController';
+import { WebXRController } from '../WebXR/WebXRController';
 
 
 export interface PixelStreamingOverrides {
@@ -106,10 +106,10 @@ export class PixelStreaming {
         this.onScreenKeyboardHelper = new OnScreenKeyboard(this.videoElementParent);
         this.onScreenKeyboardHelper
             .unquantizeAndDenormalizeUnsigned = (x: number,
-                                                 y: number) => this._webRtcController
-                                                                   .requestUnquantizedAndDenormalizeUnsigned(
-                                                                       x,
-                                                                       y);
+                y: number) => this._webRtcController
+                    .requestUnquantizedAndDenormalizeUnsigned(
+                        x,
+                        y);
         this._activateOnScreenKeyboard = (command: any) => this.onScreenKeyboardHelper.showOnScreenKeyboard(
             command);
 
@@ -159,7 +159,7 @@ export class PixelStreaming {
 
         this.config._addOnSettingChangedListener(Flags.HoveringMouseMode, (isHoveringMouse: boolean) => {
             this.config.setFlagLabel(Flags.HoveringMouseMode,
-                                     `Control Scheme: ${isHoveringMouse ? 'Hovering' : 'Locked'} Mouse`);
+                `Control Scheme: ${isHoveringMouse ? 'Hovering' : 'Locked'} Mouse`);
             this._webRtcController.setMouseInputEnabled(this.config.isFlagEnabled(Flags.MouseInput));
         });
 
@@ -347,8 +347,8 @@ export class PixelStreaming {
 
     private setMicrophoneMuted(mute: boolean): void {
         for (const transceiver
-                 of this._webRtcController?.peerConnectionController?.peerConnection?.getTransceivers() ??
-             []) {
+            of this._webRtcController?.peerConnectionController?.peerConnection?.getTransceivers() ??
+            []) {
             if (RTCUtils.canTransceiverSendAudio(transceiver)) {
                 transceiver.sender.track.enabled = !mute;
             }
@@ -438,8 +438,8 @@ export class PixelStreaming {
             this._videoStartTime = Date.now();
         }
         videoStats.handleSessionStatistics(this._videoStartTime,
-                                           this._inputController,
-                                           this._webRtcController.videoAvgQp);
+            this._inputController,
+            this._webRtcController.videoAvgQp);
 
         this._eventEmitter.dispatchEvent(new StatsReceivedEvent({ aggregatedStats: videoStats }));
     }
@@ -472,17 +472,17 @@ export class PixelStreaming {
         Logger.Info(Logger.GetStackTrace(), `using URL parameters ${useUrlParams}`);
         if (settings.EncoderSettings) {
             this.config.setNumericSetting(NumericParameters.MinQP,
-                                          // If a setting is set in the URL, make sure we respect that value
-                                          // as opposed to what the application sends us
-                                          (useUrlParams && urlParams.has(NumericParameters.MinQP)) ?
-                                              Number.parseFloat(urlParams.get(NumericParameters.MinQP)) :
-                                              settings.EncoderSettings.MinQP);
+                // If a setting is set in the URL, make sure we respect that value
+                // as opposed to what the application sends us
+                (useUrlParams && urlParams.has(NumericParameters.MinQP)) ?
+                    Number.parseFloat(urlParams.get(NumericParameters.MinQP)) :
+                    settings.EncoderSettings.MinQP);
 
 
             this.config.setNumericSetting(NumericParameters.MaxQP,
-                                          (useUrlParams && urlParams.has(NumericParameters.MaxQP)) ?
-                                              Number.parseFloat(urlParams.get(NumericParameters.MaxQP)) :
-                                              settings.EncoderSettings.MaxQP);
+                (useUrlParams && urlParams.has(NumericParameters.MaxQP)) ?
+                    Number.parseFloat(urlParams.get(NumericParameters.MaxQP)) :
+                    settings.EncoderSettings.MaxQP);
         }
         if (settings.WebRTCSettings) {
             this.config.setNumericSetting(
@@ -499,9 +499,9 @@ export class PixelStreaming {
 
             );
             this.config.setNumericSetting(NumericParameters.WebRTCFPS,
-                                          (useUrlParams && urlParams.has(NumericParameters.WebRTCFPS)) ?
-                                              Number.parseFloat(urlParams.get(NumericParameters.WebRTCFPS)) :
-                                              settings.WebRTCSettings.FPS);
+                (useUrlParams && urlParams.has(NumericParameters.WebRTCFPS)) ?
+                    Number.parseFloat(urlParams.get(NumericParameters.WebRTCFPS)) :
+                    settings.WebRTCSettings.FPS);
         }
     }
 
@@ -565,7 +565,8 @@ export class PixelStreaming {
             this._dataChannelLatencyTestController = new DataChannelLatencyTestController(
                 this._webRtcController.sendDataChannelLatencyTest.bind(this._webRtcController),
                 (result: DataChannelLatencyTestResult) => {
-                    this._eventEmitter.dispatchEvent(new DataChannelLatencyTestResultEvent({ result })) });
+                    this._eventEmitter.dispatchEvent(new DataChannelLatencyTestResultEvent({ result }))
+                });
             this.addEventListener(
                 'dataChannelLatencyTestResponse',
                 ({ data: { response } }) => { this._dataChannelLatencyTestController.receive(response); })
@@ -604,7 +605,7 @@ export class PixelStreaming {
      * and any serializable plain JSON objects with no recurrence can be sent.
      * @returns true if succeeded, false if rejected
      */
-    public emitUIInteraction(descriptor: object|string) {
+    public emitUIInteraction(descriptor: object | string) {
         if (!this._webRtcController.videoPlayer.isVideoReady()) {
             return false;
         }
@@ -672,9 +673,9 @@ export class PixelStreaming {
      * @param type event name
      * @param listener event handler function
      */
-    public addEventListener<T extends PixelStreamingEvent['type'], E extends PixelStreamingEvent&{ type: T }>(
+    public addEventListener<T extends PixelStreamingEvent['type'], E extends PixelStreamingEvent & { type: T }>(
         type: T,
-        listener: (e: Event&E) => void) {
+        listener: (e: Event & E) => void) {
         this._eventEmitter.addEventListener(type, listener);
     }
 
@@ -683,8 +684,8 @@ export class PixelStreaming {
      * @param type event name
      * @param listener event handler function
      */
-    public removeEventListener<T extends PixelStreamingEvent['type'], E extends PixelStreamingEvent&
-                               { type: T }>(type: T, listener: (e: Event&E) => void) {
+    public removeEventListener<T extends PixelStreamingEvent['type'], E extends PixelStreamingEvent &
+    { type: T }>(type: T, listener: (e: Event & E) => void) {
         this._eventEmitter.removeEventListener(type, listener);
     }
 
@@ -720,8 +721,8 @@ export class PixelStreaming {
     }
 
     public registerMessageHandler(name: string,
-                                  direction: MessageDirection,
-                                  handler?: (data: ArrayBuffer|Array<number|string>) => void) {
+        direction: MessageDirection,
+        handler?: (data: ArrayBuffer | Array<number | string>) => void) {
         if (direction === MessageDirection.FromStreamer && typeof handler === 'undefined') {
             Logger.Warning(Logger.GetStackTrace(), `Unable to register an undefined handler for ${name}`)
             return;
@@ -731,8 +732,8 @@ export class PixelStreaming {
             this._webRtcController.streamMessageController.registerMessageHandler(
                 direction,
                 name,
-                (data: Array<number|string>) => this._webRtcController.sendMessageController
-                                                    .sendMessageToStreamer(name, data));
+                (data: Array<number | string>) => this._webRtcController.sendMessageController
+                    .sendMessageToStreamer(name, data));
         } else {
             this._webRtcController.streamMessageController.registerMessageHandler(
                 direction,

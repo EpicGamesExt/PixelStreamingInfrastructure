@@ -1,22 +1,22 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
-import {Logger} from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
+import { Logger } from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
 
-import {CandidatePairStats} from './CandidatePairStats';
-import {CandidateStat} from './CandidateStat';
-import {CodecStats} from './CodecStats';
-import {DataChannelStats} from './DataChannelStats';
-import {InboundAudioStats, InboundRTPStats, InboundVideoStats} from './InboundRTPStats';
-import {InboundTrackStats} from './InboundTrackStats';
-import {OutBoundRTPStats, OutBoundVideoStats} from './OutBoundRTPStats';
-import {SessionStats} from './SessionStats';
-import {StreamStats} from './StreamStats';
+import { CandidatePairStats } from './CandidatePairStats';
+import { CandidateStat } from './CandidateStat';
+import { CodecStats } from './CodecStats';
+import { DataChannelStats } from './DataChannelStats';
+import { InboundAudioStats, InboundRTPStats, InboundVideoStats } from './InboundRTPStats';
+import { InboundTrackStats } from './InboundTrackStats';
+import { OutBoundRTPStats, OutBoundVideoStats } from './OutBoundRTPStats';
+import { SessionStats } from './SessionStats';
+import { StreamStats } from './StreamStats';
 
 /**
  * The Aggregated Stats that is generated from the RTC Stats Report
  */
 
-type RTCStatsTypePS = RTCStatsType|'stream'|'media-playout'|'track';
+type RTCStatsTypePS = RTCStatsType | 'stream' | 'media-playout' | 'track';
 export class AggregatedStats {
     inboundVideoStats: InboundVideoStats;
     inboundAudioStats: InboundAudioStats;
@@ -188,12 +188,12 @@ export class AggregatedStats {
 
                 if (this.lastVideoStats != undefined) {
                     this.inboundVideoStats.bitrate = (8 *
-                                                      (this.inboundVideoStats.bytesReceived -
-                                                       this.lastVideoStats.bytesReceived)) /
+                        (this.inboundVideoStats.bytesReceived -
+                            this.lastVideoStats.bytesReceived)) /
                         (this.inboundVideoStats.timestamp - this.lastVideoStats.timestamp);
                     this.inboundVideoStats.bitrate = Math.floor(this.inboundVideoStats.bitrate);
                 }
-                this.lastVideoStats = {...this.inboundVideoStats };
+                this.lastVideoStats = { ...this.inboundVideoStats };
                 break;
             case 'audio':
                 // Need to convert to unknown first to remove an error around
@@ -203,12 +203,12 @@ export class AggregatedStats {
 
                 if (this.lastAudioStats != undefined) {
                     this.inboundAudioStats.bitrate = (8 *
-                                                      (this.inboundAudioStats.bytesReceived -
-                                                       this.lastAudioStats.bytesReceived)) /
+                        (this.inboundAudioStats.bytesReceived -
+                            this.lastAudioStats.bytesReceived)) /
                         (this.inboundAudioStats.timestamp - this.lastAudioStats.timestamp);
                     this.inboundAudioStats.bitrate = Math.floor(this.inboundAudioStats.bitrate);
                 }
-                this.lastAudioStats = {...this.inboundAudioStats };
+                this.lastAudioStats = { ...this.inboundAudioStats };
                 break;
             default:
                 Logger.Log(Logger.GetStackTrace(), 'Kind is not handled');
@@ -259,20 +259,19 @@ export class AggregatedStats {
 
     handleCodec(stat: CodecStats) {
         const codecId = stat.id;
-        const codecType = `${stat.mimeType.replace('video/', '').replace('audio/', '')}${
-            stat.sdpFmtpLine ? ` ${stat.sdpFmtpLine}` : ''}`;
+        const codecType = `${stat.mimeType.replace('video/', '').replace('audio/', '')}${stat.sdpFmtpLine ? ` ${stat.sdpFmtpLine}` : ''}`;
         this.codecs.set(codecId, codecType);
     }
 
     handleSessionStatistics(videoStartTime: number,
-                            inputController: boolean|null,
-                            videoEncoderAvgQP: number) {
+        inputController: boolean | null,
+        videoEncoderAvgQP: number) {
         const deltaTime = Date.now() - videoStartTime;
         this.sessionStats.runTime = new Date(deltaTime).toISOString().substr(11, 8).toString();
 
         const controlsStreamInput = inputController === null ? 'Not sent yet' :
-            inputController                                  ? 'true' :
-                                                               'false';
+            inputController ? 'true' :
+                'false';
         this.sessionStats.controlsStreamInput = controlsStreamInput;
 
         this.sessionStats.videoEncoderAvgQP = videoEncoderAvgQP;
@@ -290,7 +289,7 @@ export class AggregatedStats {
      * Helper function to return the active candidate pair
      * @returns The candidate pair that is currently receiving data
      */
-    public getActiveCandidatePair(): CandidatePairStats|null {
+    public getActiveCandidatePair(): CandidatePairStats | null {
         // Check if the RTCTransport stat is not undefined
         if (this.transportStats) {
             // Return the candidate pair that matches the transport candidate pair id

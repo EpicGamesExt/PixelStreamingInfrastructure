@@ -1,6 +1,6 @@
-import {mockRTCRtpReceiver, unmockRTCRtpReceiver} from '../__test__/mockRTCRtpReceiver';
-import {Config, Flags, NumericParameters} from '../Config/Config';
-import {PixelStreaming} from '../PixelStreaming/PixelStreaming';
+import { mockRTCRtpReceiver, unmockRTCRtpReceiver } from '../__test__/mockRTCRtpReceiver';
+import { Config, Flags, NumericParameters } from '../Config/Config';
+import { PixelStreaming } from '../PixelStreaming/PixelStreaming';
 import {
     AfkTimedOutEvent,
     AfkWarningActivateEvent,
@@ -8,7 +8,7 @@ import {
     AfkWarningUpdateEvent
 } from '../Util/EventEmitter';
 
-import {AFKController} from './AFKController';
+import { AFKController } from './AFKController';
 
 describe('AFKController', () => {
     let mockPixelStreaming: PixelStreaming;
@@ -37,63 +37,63 @@ describe('AFKController', () => {
     });
 
     it('should activate AFK timer and trigger it after specified delay if it has been enabled from settings',
-       () => {
-           const timeoutSeconds = 100;
+        () => {
+            const timeoutSeconds = 100;
 
-           const config = new Config({
-               initialSettings:
-                   { [Flags.AFKDetection]: true, [NumericParameters.AFKTimeoutSecs]: timeoutSeconds }
-           });
-           const onDismissAfk = jest.fn();
-           const afkController = new AFKController(config, mockPixelStreaming, onDismissAfk);
+            const config = new Config({
+                initialSettings:
+                    { [Flags.AFKDetection]: true, [NumericParameters.AFKTimeoutSecs]: timeoutSeconds }
+            });
+            const onDismissAfk = jest.fn();
+            const afkController = new AFKController(config, mockPixelStreaming, onDismissAfk);
 
-           afkController.startAfkWarningTimer();
-           expect(afkController.active).toBe(true);
+            afkController.startAfkWarningTimer();
+            expect(afkController.active).toBe(true);
 
-           // Advance to 1 second before AFK event:
-           jest.advanceTimersByTime((timeoutSeconds - 1) * 1000);
-           expect(mockPixelStreaming.dispatchEvent).not.toHaveBeenCalled();
+            // Advance to 1 second before AFK event:
+            jest.advanceTimersByTime((timeoutSeconds - 1) * 1000);
+            expect(mockPixelStreaming.dispatchEvent).not.toHaveBeenCalled();
 
-           // advance 1 more second to trigger AFK warning
-           jest.advanceTimersByTime(1000);
-           expect(mockPixelStreaming.dispatchEvent)
-               .toHaveBeenCalledWith(
-                   new AfkWarningActivateEvent({ countDown: 0, dismissAfk: expect.anything() }));
-           expect(mockPixelStreaming.dispatchEvent).toHaveBeenCalledWith(new AfkWarningUpdateEvent({
-               countDown: 10,
-           }));
+            // advance 1 more second to trigger AFK warning
+            jest.advanceTimersByTime(1000);
+            expect(mockPixelStreaming.dispatchEvent)
+                .toHaveBeenCalledWith(
+                    new AfkWarningActivateEvent({ countDown: 0, dismissAfk: expect.anything() }));
+            expect(mockPixelStreaming.dispatchEvent).toHaveBeenCalledWith(new AfkWarningUpdateEvent({
+                countDown: 10,
+            }));
 
-           // advance 10 more seconds to trigger AFK countdown updates and eventually timeout
-           jest.advanceTimersByTime(10 * 1000);
-           expect(mockPixelStreaming.dispatchEvent).toHaveBeenCalledWith(new AfkWarningUpdateEvent({
-               countDown: 9,
-           }));
-           expect(mockPixelStreaming.dispatchEvent).toHaveBeenCalledWith(new AfkWarningUpdateEvent({
-               countDown: 8,
-           }));
-           expect(mockPixelStreaming.dispatchEvent).toHaveBeenCalledWith(new AfkWarningUpdateEvent({
-               countDown: 7,
-           }));
-           expect(mockPixelStreaming.dispatchEvent).toHaveBeenCalledWith(new AfkWarningUpdateEvent({
-               countDown: 6,
-           }));
-           expect(mockPixelStreaming.dispatchEvent).toHaveBeenCalledWith(new AfkWarningUpdateEvent({
-               countDown: 5,
-           }));
-           expect(mockPixelStreaming.dispatchEvent).toHaveBeenCalledWith(new AfkWarningUpdateEvent({
-               countDown: 4,
-           }));
-           expect(mockPixelStreaming.dispatchEvent).toHaveBeenCalledWith(new AfkWarningUpdateEvent({
-               countDown: 3,
-           }));
-           expect(mockPixelStreaming.dispatchEvent).toHaveBeenCalledWith(new AfkWarningUpdateEvent({
-               countDown: 2,
-           }));
-           expect(mockPixelStreaming.dispatchEvent).toHaveBeenCalledWith(new AfkWarningUpdateEvent({
-               countDown: 1,
-           }));
-           expect(mockPixelStreaming.dispatchEvent).toHaveBeenCalledWith(new AfkTimedOutEvent());
-       });
+            // advance 10 more seconds to trigger AFK countdown updates and eventually timeout
+            jest.advanceTimersByTime(10 * 1000);
+            expect(mockPixelStreaming.dispatchEvent).toHaveBeenCalledWith(new AfkWarningUpdateEvent({
+                countDown: 9,
+            }));
+            expect(mockPixelStreaming.dispatchEvent).toHaveBeenCalledWith(new AfkWarningUpdateEvent({
+                countDown: 8,
+            }));
+            expect(mockPixelStreaming.dispatchEvent).toHaveBeenCalledWith(new AfkWarningUpdateEvent({
+                countDown: 7,
+            }));
+            expect(mockPixelStreaming.dispatchEvent).toHaveBeenCalledWith(new AfkWarningUpdateEvent({
+                countDown: 6,
+            }));
+            expect(mockPixelStreaming.dispatchEvent).toHaveBeenCalledWith(new AfkWarningUpdateEvent({
+                countDown: 5,
+            }));
+            expect(mockPixelStreaming.dispatchEvent).toHaveBeenCalledWith(new AfkWarningUpdateEvent({
+                countDown: 4,
+            }));
+            expect(mockPixelStreaming.dispatchEvent).toHaveBeenCalledWith(new AfkWarningUpdateEvent({
+                countDown: 3,
+            }));
+            expect(mockPixelStreaming.dispatchEvent).toHaveBeenCalledWith(new AfkWarningUpdateEvent({
+                countDown: 2,
+            }));
+            expect(mockPixelStreaming.dispatchEvent).toHaveBeenCalledWith(new AfkWarningUpdateEvent({
+                countDown: 1,
+            }));
+            expect(mockPixelStreaming.dispatchEvent).toHaveBeenCalledWith(new AfkTimedOutEvent());
+        });
 
     it('should postpone AFK activation each time resetAfkWarningTimer is called', () => {
         const timeoutSeconds = 100;

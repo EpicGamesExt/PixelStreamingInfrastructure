@@ -9,7 +9,7 @@ export class CandidateStat {
     id: string;
     label: string;
     port: number;
-    protocol: 'tcp'|'udp';
-    relayProtocol: 'tcp'|'udp'|'tls';
+    protocol: 'tcp' | 'udp';
+    relayProtocol: 'tcp' | 'udp' | 'tls';
     transportId: string;
 }

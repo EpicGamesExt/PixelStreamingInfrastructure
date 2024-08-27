@@ -1,6 +1,6 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
-import {Logger} from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
+import { Logger } from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
 
 /**
  * Handles the Sending and Receiving of messages to the UE Instance via the Data Channel
@@ -27,8 +27,8 @@ export class DataChannelController {
      * @param datachannelOptions - Optional RTC DataChannel options
      */
     createDataChannel(peerConnection: RTCPeerConnection,
-                      label: string,
-                      datachannelOptions?: RTCDataChannelInit) {
+        label: string,
+        datachannelOptions?: RTCDataChannelInit) {
         this.peerConnection = peerConnection;
         this.label = label;
         this.datachannelOptions = datachannelOptions;

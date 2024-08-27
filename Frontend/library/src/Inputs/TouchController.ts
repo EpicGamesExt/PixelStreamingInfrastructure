@@ -1,13 +1,13 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
-import {Logger} from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
+import { Logger } from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
 
-import {StreamMessageController} from '../UeInstanceMessage/StreamMessageController';
-import {CoordinateConverter} from '../Util/CoordinateConverter';
-import {EventListenerTracker} from '../Util/EventListenerTracker';
-import {VideoPlayer} from '../VideoPlayer/VideoPlayer';
+import { StreamMessageController } from '../UeInstanceMessage/StreamMessageController';
+import { CoordinateConverter } from '../Util/CoordinateConverter';
+import { EventListenerTracker } from '../Util/EventListenerTracker';
+import { VideoPlayer } from '../VideoPlayer/VideoPlayer';
 
-import {ITouchController} from './ITouchController';
+import { ITouchController } from './ITouchController';
 
 /**
  * Handles the Touch input Events
@@ -30,8 +30,8 @@ export class TouchController implements ITouchController {
      * @param coordinateConverter - A coordinate converter instance
      */
     constructor(toStreamerMessagesProvider: StreamMessageController,
-                videoElementProvider: VideoPlayer,
-                coordinateConverter: CoordinateConverter) {
+        videoElementProvider: VideoPlayer,
+        coordinateConverter: CoordinateConverter) {
         this.toStreamerMessagesProvider = toStreamerMessagesProvider;
         this.videoElementProvider = videoElementProvider;
         this.coordinateConverter = coordinateConverter;

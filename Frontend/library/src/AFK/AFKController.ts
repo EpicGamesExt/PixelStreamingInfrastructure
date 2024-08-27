@@ -1,9 +1,9 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
-import {Logger} from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
+import { Logger } from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
 
-import {Config, Flags, NumericParameters} from '../Config/Config';
-import {PixelStreaming} from '../PixelStreaming/PixelStreaming';
+import { Config, Flags, NumericParameters } from '../Config/Config';
+import { PixelStreaming } from '../PixelStreaming/PixelStreaming';
 import {
     AfkTimedOutEvent,
     AfkWarningActivateEvent,

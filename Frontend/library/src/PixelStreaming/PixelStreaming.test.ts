@@ -1,13 +1,13 @@
-import {BaseMessage, MessageHelpers, Messages} from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
+import { BaseMessage, MessageHelpers, Messages } from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
 
-import {mockHTMLMediaElement, mockMediaStream, unmockMediaStream} from '../__test__/mockMediaStream';
+import { mockHTMLMediaElement, mockMediaStream, unmockMediaStream } from '../__test__/mockMediaStream';
 import {
     mockRTCPeerConnection,
     MockRTCPeerConnectionSpyFunctions,
     MockRTCPeerConnectionTriggerFunctions,
     unmockRTCPeerConnection
 } from '../__test__/mockRTCPeerConnection';
-import {mockRTCRtpReceiver, unmockRTCRtpReceiver} from '../__test__/mockRTCRtpReceiver';
+import { mockRTCRtpReceiver, unmockRTCRtpReceiver } from '../__test__/mockRTCRtpReceiver';
 import {
     mockWebSocket,
     MockWebSocketSpyFunctions,
@@ -18,7 +18,7 @@ import {
     Config,
     NumericParameters,
 } from '../Config/Config';
-import {InitialSettings} from '../DataChannel/InitialSettings';
+import { InitialSettings } from '../DataChannel/InitialSettings';
 import {
     SettingsChangedEvent,
     StreamerListMessageEvent,
@@ -26,7 +26,7 @@ import {
     WebRtcSdpEvent
 } from '../Util/EventEmitter';
 
-import {PixelStreaming} from './PixelStreaming';
+import { PixelStreaming } from './PixelStreaming';
 
 const flushPromises = () => new Promise(jest.requireActual('timers').setImmediate);
 
@@ -62,9 +62,9 @@ describe('PixelStreaming', () => {
     const triggerIceCandidateMessage = () => triggerSignallingMessage(
         MessageHelpers.createMessage(Messages.iceCandidate, { candidate: iceCandidate }));
     const triggerIceConnectionState = (state:
-                                           RTCIceConnectionState) => rtcPeerConnectionTriggerFunctions
-                                                                         .triggerIceConnectionStateChange?.(
-                                                                             state);
+        RTCIceConnectionState) => rtcPeerConnectionTriggerFunctions
+            .triggerIceConnectionStateChange?.(
+                state);
     const triggerAddTrack = () => {
         const stream = new MediaStream();
         const track = new MediaStreamTrack();
@@ -78,8 +78,8 @@ describe('PixelStreaming', () => {
         return { channel };
     };
     const establishMockedPixelStreamingConnection = (streamerIds = streamerIdList,
-                                                     iceConnectionState:
-                                                         RTCIceConnectionState = 'connected') => {
+        iceConnectionState:
+            RTCIceConnectionState = 'connected') => {
         triggerWebSocketOpen();
         triggerConfigMessage();
         triggerStreamerListMessage(streamerIds);
@@ -122,7 +122,7 @@ describe('PixelStreaming', () => {
         expect(settingsChangedSpy).toHaveBeenCalledWith(new SettingsChangedEvent({
             id: NumericParameters.WebRTCMaxBitrate,
             target: config.getNumericSettings().find((setting) => setting.id ===
-                                                         NumericParameters.WebRTCMaxBitrate)!,
+                NumericParameters.WebRTCMaxBitrate)!,
             type: 'number',
             value: 123,
         }));
@@ -168,43 +168,43 @@ describe('PixelStreaming', () => {
     });
 
     it('should connect immediately to signalling server if reconnect is called and connection is not up',
-       () => {
-           const config = new Config({ initialSettings: { ss: mockSignallingUrl } });
-           const pixelStreaming = new PixelStreaming(config);
+        () => {
+            const config = new Config({ initialSettings: { ss: mockSignallingUrl } });
+            const pixelStreaming = new PixelStreaming(config);
 
-           expect(webSocketSpyFunctions.constructorSpy).not.toHaveBeenCalled();
+            expect(webSocketSpyFunctions.constructorSpy).not.toHaveBeenCalled();
 
-           pixelStreaming.reconnect();
+            pixelStreaming.reconnect();
 
-           expect(webSocketSpyFunctions.closeSpy).not.toHaveBeenCalled();
-           expect(webSocketSpyFunctions.constructorSpy).toHaveBeenCalledWith(mockSignallingUrl);
-       });
+            expect(webSocketSpyFunctions.closeSpy).not.toHaveBeenCalled();
+            expect(webSocketSpyFunctions.constructorSpy).toHaveBeenCalledWith(mockSignallingUrl);
+        });
 
     it('should disconnect and reconnect to signalling server if reconnect is called and connection is up',
-       () => {
-           // We explicitly set the max reconnect attempts to 0 to stop the auto-reconnect flow as that is
-           // tested separate
-           const config = new Config(
-               { initialSettings: { ss: mockSignallingUrl, AutoConnect: true, MaxReconnectAttempts: 0 } });
-           const autoconnectedSpy = jest.fn();
-           const pixelStreaming = new PixelStreaming(config);
-           pixelStreaming.addEventListener('webRtcAutoConnect', autoconnectedSpy);
+        () => {
+            // We explicitly set the max reconnect attempts to 0 to stop the auto-reconnect flow as that is
+            // tested separate
+            const config = new Config(
+                { initialSettings: { ss: mockSignallingUrl, AutoConnect: true, MaxReconnectAttempts: 0 } });
+            const autoconnectedSpy = jest.fn();
+            const pixelStreaming = new PixelStreaming(config);
+            pixelStreaming.addEventListener('webRtcAutoConnect', autoconnectedSpy);
 
-           expect(webSocketSpyFunctions.constructorSpy).toHaveBeenCalledWith(mockSignallingUrl);
-           expect(webSocketSpyFunctions.constructorSpy).toHaveBeenCalledTimes(1);
-           expect(webSocketSpyFunctions.closeSpy).not.toHaveBeenCalled();
+            expect(webSocketSpyFunctions.constructorSpy).toHaveBeenCalledWith(mockSignallingUrl);
+            expect(webSocketSpyFunctions.constructorSpy).toHaveBeenCalledTimes(1);
+            expect(webSocketSpyFunctions.closeSpy).not.toHaveBeenCalled();
 
-           pixelStreaming.reconnect();
+            pixelStreaming.reconnect();
 
-           expect(webSocketSpyFunctions.closeSpy).toHaveBeenCalled();
+            expect(webSocketSpyFunctions.closeSpy).toHaveBeenCalled();
 
-           // delayed reconnect after 3 seconds
-           jest.advanceTimersByTime(3000);
+            // delayed reconnect after 3 seconds
+            jest.advanceTimersByTime(3000);
 
-           expect(webSocketSpyFunctions.constructorSpy).toHaveBeenCalledWith(mockSignallingUrl);
-           expect(webSocketSpyFunctions.constructorSpy).toHaveBeenCalledTimes(2);
-           expect(autoconnectedSpy).toHaveBeenCalled();
-       });
+            expect(webSocketSpyFunctions.constructorSpy).toHaveBeenCalledWith(mockSignallingUrl);
+            expect(webSocketSpyFunctions.constructorSpy).toHaveBeenCalledTimes(2);
+            expect(autoconnectedSpy).toHaveBeenCalled();
+        });
 
     it('should automatically reconnect and request streamer list N times on websocket close', () => {
         const config = new Config(
@@ -535,33 +535,33 @@ describe('PixelStreaming', () => {
     });
 
     it('should call user-provided callback if receiving a data channel Response message from the streamer',
-       () => {
-           mockHTMLMediaElement({ ableToPlay: true, readyState: 2 });
+        () => {
+            mockHTMLMediaElement({ ableToPlay: true, readyState: 2 });
 
-           const config = new Config({ initialSettings: { ss: mockSignallingUrl } });
-           const responseListenerSpy = jest.fn();
-           const pixelStreaming = new PixelStreaming(config);
-           pixelStreaming.addResponseEventListener('responseListener', responseListenerSpy);
-           pixelStreaming.connect();
+            const config = new Config({ initialSettings: { ss: mockSignallingUrl } });
+            const responseListenerSpy = jest.fn();
+            const pixelStreaming = new PixelStreaming(config);
+            pixelStreaming.addResponseEventListener('responseListener', responseListenerSpy);
+            pixelStreaming.connect();
 
-           const { channel } = establishMockedPixelStreamingConnection();
+            const { channel } = establishMockedPixelStreamingConnection();
 
-           pixelStreaming.play();
+            pixelStreaming.play();
 
-           expect(responseListenerSpy).not.toHaveBeenCalled();
+            expect(responseListenerSpy).not.toHaveBeenCalled();
 
-           const testMessageContents = JSON.stringify({ test: 'mock-data' });
-           const data = new DataView(new ArrayBuffer(1 + 2 * testMessageContents.length));
-           data.setUint8(0, 1);  // type 1 == Response
-           let byteIdx = 1;
-           for (let i = 0; i < testMessageContents.length; i++) {
-               data.setUint16(byteIdx, testMessageContents.charCodeAt(i), true);
-               byteIdx += 2;
-           }
-           channel.dispatchEvent(new MessageEvent('message', { data: data.buffer }));
+            const testMessageContents = JSON.stringify({ test: 'mock-data' });
+            const data = new DataView(new ArrayBuffer(1 + 2 * testMessageContents.length));
+            data.setUint8(0, 1);  // type 1 == Response
+            let byteIdx = 1;
+            for (let i = 0; i < testMessageContents.length; i++) {
+                data.setUint16(byteIdx, testMessageContents.charCodeAt(i), true);
+                byteIdx += 2;
+            }
+            channel.dispatchEvent(new MessageEvent('message', { data: data.buffer }));
 
-           expect(responseListenerSpy).toHaveBeenCalledWith(testMessageContents);
-       });
+            expect(responseListenerSpy).toHaveBeenCalledWith(testMessageContents);
+        });
 
     it('should emit StreamConnectEvent when streamer connects', () => {
         const config = new Config({ initialSettings: { ss: mockSignallingUrl } });

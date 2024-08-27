@@ -1,8 +1,8 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
-import {Logger} from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
+import { Logger } from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
 
-import {FreezeFrame} from './FreezeFrame';
+import { FreezeFrame } from './FreezeFrame';
 
 /**
  * A class for controlling freeze frame functionality
@@ -85,8 +85,8 @@ export class FreezeFrameController {
             this.jpeg = jpegBytes;
             this.receiving = true;
             Logger.Log(Logger.GetStackTrace(),
-                       `received first chunk of freeze frame: ${this.jpeg.length}/${this.size}`,
-                       6);
+                `received first chunk of freeze frame: ${this.jpeg.length}/${this.size}`,
+                6);
         }
 
         // Finished receiving freeze frame, we can show it now
@@ -99,7 +99,7 @@ export class FreezeFrameController {
         // We received more data than the freeze frame payload message indicate (this is an error)
         else if (this.jpeg.length > this.size) {
             Logger.Error(Logger.GetStackTrace(),
-                         `received bigger freeze frame than advertised: ${this.jpeg.length}/${this.size}`);
+                `received bigger freeze frame than advertised: ${this.jpeg.length}/${this.size}`);
             this.jpeg = undefined;
             this.receiving = false;
         }

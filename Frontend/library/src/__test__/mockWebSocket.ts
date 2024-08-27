@@ -1,22 +1,22 @@
-import {BaseMessage} from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
+import { BaseMessage } from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
 
 export interface MockWebSocketSpyFunctions {
-    constructorSpy: null|((url: string) => void);
-    openSpy: null|((event: Event) => void);
-    errorSpy: null|((event: Event) => void);
-    closeSpy: null|((event: CloseEvent) => void);
-    messageSpy: null|((event: MessageEvent) => void);
-    messageBinarySpy: null|((event: MessageEvent) => void);
-    sendSpy: null|((data: string|Blob|ArrayBufferView|ArrayBufferLike) => void);
+    constructorSpy: null | ((url: string) => void);
+    openSpy: null | ((event: Event) => void);
+    errorSpy: null | ((event: Event) => void);
+    closeSpy: null | ((event: CloseEvent) => void);
+    messageSpy: null | ((event: MessageEvent) => void);
+    messageBinarySpy: null | ((event: MessageEvent) => void);
+    sendSpy: null | ((data: string | Blob | ArrayBufferView | ArrayBufferLike) => void);
 }
 
 export interface MockWebSocketTriggerFunctions {
-    triggerOnOpen: null|(() => void);
-    triggerOnError: null|(() => void);
-    triggerOnClose: null|((closeReason?: CloseEventInit) => void);
-    triggerOnMessage: null|((message?: BaseMessage) => void);
-    triggerOnMessageBinary: null|((message?: Blob) => void);
-    triggerRemoteClose: null|((code?: number, reason?: string) => void);
+    triggerOnOpen: null | (() => void);
+    triggerOnError: null | (() => void);
+    triggerOnClose: null | ((closeReason?: CloseEventInit) => void);
+    triggerOnMessage: null | ((message?: BaseMessage) => void);
+    triggerOnMessageBinary: null | ((message?: Blob) => void);
+    triggerRemoteClose: null | ((code?: number, reason?: string) => void);
 }
 
 const spyFunctions: MockWebSocketSpyFunctions = {
@@ -41,7 +41,7 @@ const triggerFunctions: MockWebSocketTriggerFunctions = {
 export class MockWebSocketImpl extends WebSocket {
     _readyState: number;
 
-    constructor(url: string|URL, protocols?: string|string[]) {
+    constructor(url: string | URL, protocols?: string | string[]) {
         super(url, protocols);
         this._readyState = this.OPEN;
         spyFunctions.constructorSpy?.(this.url);
@@ -57,13 +57,13 @@ export class MockWebSocketImpl extends WebSocket {
         return this._readyState;
     }
 
-    close(code?: number|undefined, reason?: string|undefined): void {
+    close(code?: number | undefined, reason?: string | undefined): void {
         super.close(code, reason);
         this._readyState = this.CLOSED;
         this.triggerOnClose({ code, reason });
     }
 
-    send(data: string|Blob|ArrayBufferView|ArrayBufferLike): void {
+    send(data: string | Blob | ArrayBufferView | ArrayBufferLike): void {
         spyFunctions.sendSpy?.(data);
     }
 

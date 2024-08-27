@@ -6,5 +6,5 @@
 export interface Controller {
     currentState: Gamepad;
     prevState: Gamepad;
-    id: number|undefined;
+    id: number | undefined;
 }

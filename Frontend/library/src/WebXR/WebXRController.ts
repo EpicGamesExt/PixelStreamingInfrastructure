@@ -1,11 +1,11 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
-import {Logger} from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
+import { Logger } from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
 
-import {XRGamepadController} from '../Inputs/XRGamepadController';
-import {Flags} from '../pixelstreamingfrontend';
-import {XrFrameEvent} from '../Util/EventEmitter'
-import {WebRtcPlayerController} from '../WebRtcPlayer/WebRtcPlayerController';
+import { XRGamepadController } from '../Inputs/XRGamepadController';
+import { Flags } from '../pixelstreamingfrontend';
+import { XrFrameEvent } from '../Util/EventEmitter'
+import { WebRtcPlayerController } from '../WebRtcPlayer/WebRtcPlayerController';
 
 export class WebXRController {
     private xrSession: XRSession;
@@ -157,25 +157,25 @@ export class WebXRController {
         if (this.prevVideoHeight != videoHeight || this.prevVideoWidth != videoWidth) {
             // Do full update of texture if dimensions do not match
             this.gl.texImage2D(this.gl.TEXTURE_2D,
-                               0,
-                               this.gl.RGBA,
-                               videoWidth,
-                               videoHeight,
-                               0,
-                               this.gl.RGBA,
-                               this.gl.UNSIGNED_BYTE,
-                               this.webRtcController.videoPlayer.getVideoElement());
+                0,
+                this.gl.RGBA,
+                videoWidth,
+                videoHeight,
+                0,
+                this.gl.RGBA,
+                this.gl.UNSIGNED_BYTE,
+                this.webRtcController.videoPlayer.getVideoElement());
         } else {
             // If dimensions match just update the sub region
             this.gl.texSubImage2D(this.gl.TEXTURE_2D,
-                                  0,
-                                  0,
-                                  0,
-                                  videoWidth,
-                                  videoHeight,
-                                  this.gl.RGBA,
-                                  this.gl.UNSIGNED_BYTE,
-                                  this.webRtcController.videoPlayer.getVideoElement());
+                0,
+                0,
+                0,
+                videoWidth,
+                videoHeight,
+                this.gl.RGBA,
+                this.gl.UNSIGNED_BYTE,
+                this.webRtcController.videoPlayer.getVideoElement());
         }
 
         // Update prev video width/height
@@ -222,8 +222,8 @@ export class WebXRController {
 
             // The texture coordinates to apply for rectangle we are drawing
             this.gl.bufferData(this.gl.ARRAY_BUFFER,
-                               new Float32Array([0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0]),
-                               this.gl.STATIC_DRAW);
+                new Float32Array([0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0]),
+                this.gl.STATIC_DRAW);
 
             // Tell texture coordinate attribute of the vertex shader how to get data out of the bound buffer
             // (the texcoordBuffer)
@@ -323,9 +323,9 @@ export class WebXRController {
         if (!shouldSendEyeViews && this.lastSentRelativeLeftEyePos != null &&
             this.lastSentRelativeRightEyePos != null) {
             const leftEyePosUnchanged = this.arePointsEqual(leftEyeRelativePos,
-                                                            this.lastSentRelativeLeftEyePos);
+                this.lastSentRelativeLeftEyePos);
             const rightEyePosUnchanged = this.arePointsEqual(rightEyeRelativePos,
-                                                             this.lastSentRelativeRightEyePos);
+                this.lastSentRelativeRightEyePos);
             shouldSendEyeViews = leftEyePosUnchanged == false || rightEyePosUnchanged == false;
             // Note: We are not checking if EyeView rotation changes (as far as I know no HMD supports
             // changing this value at runtime).

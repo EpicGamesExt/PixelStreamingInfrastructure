@@ -1,12 +1,12 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
-import {Logger} from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
-import {parseRtpParameters, splitSections} from 'sdp';
+import { Logger } from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
+import { parseRtpParameters, splitSections } from 'sdp';
 
-import {Config, Flags, OptionParameters} from '../Config/Config';
-import {RTCUtils} from '../Util/RTCUtils';
+import { Config, Flags, OptionParameters } from '../Config/Config';
+import { RTCUtils } from '../Util/RTCUtils';
 
-import {AggregatedStats} from './AggregatedStats';
+import { AggregatedStats } from './AggregatedStats';
 
 /**
  * Handles the Peer Connection
@@ -35,7 +35,7 @@ export class PeerConnectionController {
         if (this.config.isFlagEnabled(Flags.ForceTURN)) {
             options.iceTransportPolicy = 'relay';
             Logger.Log(Logger.GetStackTrace(),
-                       'Forcing TURN usage by setting ICE Transport Policy in peer connection config.');
+                'Forcing TURN usage by setting ICE Transport Policy in peer connection config.');
         }
 
         // build a new peer connection with the options
@@ -107,7 +107,7 @@ export class PeerConnectionController {
 
             // Add our list of preferred codecs, in order of preference
             this.config.setOptionSettingOptions(OptionParameters.PreferredCodec,
-                                                this.fuzzyIntersectUEAndBrowserCodecs(offer));
+                this.fuzzyIntersectUEAndBrowserCodecs(offer));
 
             this.setupTransceiversAsync(useMic).finally(() => {
                 this.peerConnection?.createAnswer()
@@ -130,7 +130,7 @@ export class PeerConnectionController {
 
         // Add our list of preferred codecs, in order of preference
         this.config.setOptionSettingOptions(OptionParameters.PreferredCodec,
-                                            this.fuzzyIntersectUEAndBrowserCodecs(answer));
+            this.fuzzyIntersectUEAndBrowserCodecs(answer));
     }
 
     /**
@@ -171,7 +171,7 @@ export class PeerConnectionController {
      */
     mungeSDP(sdp: string, useMic: boolean) {
         let mungedSDP = sdp.replace(/(a=fmtp:\d+ .*level-asymmetry-allowed=.*)\r\n/gm,
-                                    '$1;x-google-start-bitrate=10000;x-google-max-bitrate=100000\r\n');
+            '$1;x-google-start-bitrate=10000;x-google-max-bitrate=100000\r\n');
 
         // set max bitrate to highest bitrate Opus supports
         let audioSDP = 'maxaveragebitrate=510000;';
@@ -205,10 +205,8 @@ export class PeerConnectionController {
             // check if no relay address is found, if so, we are assuming it means no TURN server
             if (iceCandidate.candidate.indexOf('relay') < 0) {
                 Logger.Info(Logger.GetStackTrace(),
-                            `Dropping candidate because it was not TURN relay. | Type= ${
-                                iceCandidate.type} | Protocol= ${iceCandidate.protocol} | Address=${
-                                iceCandidate.address} | Port=${iceCandidate.port} |`,
-                            6);
+                    `Dropping candidate because it was not TURN relay. | Type= ${iceCandidate.type} | Protocol= ${iceCandidate.protocol} | Address=${iceCandidate.address} | Port=${iceCandidate.port} |`,
+                    6);
                 return;
             }
         }
@@ -385,7 +383,7 @@ export class PeerConnectionController {
                             if (browserSupportedCodec.mimeType != preferredRTCRtpCodecCapability.mimeType) {
                                 ourSupportedCodecs.push(browserSupportedCodec);
                             } else if (browserSupportedCodec?.sdpFmtpLine !=
-                                       preferredRTCRtpCodecCapability?.sdpFmtpLine) {
+                                preferredRTCRtpCodecCapability?.sdpFmtpLine) {
                                 ourSupportedCodecs.push(browserSupportedCodec);
                             }
                         });

@@ -1,8 +1,8 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
-import {Logger} from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
+import { Logger } from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
 
-import {Config, Flags} from '../Config/Config';
+import { Config, Flags } from '../Config/Config';
 
 /**
  * Extra types for the HTMLElement
@@ -182,8 +182,8 @@ export class VideoPlayer {
         const styleTop = 0;
         const styleLeft = 0;
         videoElementParent.setAttribute('style',
-                                        'top: ' + styleTop + 'px; left: ' + styleLeft + 'px; width: ' +
-                                            styleWidth + '; height: ' + styleHeight + '; cursor: default;');
+            'top: ' + styleTop + 'px; left: ' + styleLeft + 'px; width: ' +
+            styleWidth + '; height: ' + styleHeight + '; cursor: default;');
     }
 
     updateVideoStreamSize() {
@@ -199,7 +199,7 @@ export class VideoPlayer {
             }
 
             this.onMatchViewportResolutionCallback(videoElementParent.clientWidth,
-                                                   videoElementParent.clientHeight);
+                videoElementParent.clientHeight);
 
             this.lastTimeResized = new Date().getTime();
         } else {

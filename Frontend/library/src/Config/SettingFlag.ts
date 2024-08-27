@@ -1,23 +1,24 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
-import type {FlagsIds} from './Config';
-import {SettingBase} from './SettingBase';
+import type { FlagsIds } from './Config';
+import { SettingBase } from './SettingBase';
 
 /**
  * A boolean flag setting object with a text label.
  */
 export class SettingFlag<CustomIds extends string = FlagsIds> extends SettingBase {
-    id: FlagsIds|CustomIds;
+    id: FlagsIds | CustomIds;
     onChangeEmit: (changedValue: boolean) => void;
 
-    constructor(id: FlagsIds|CustomIds,
-                label: string,
-                description: string,
-                defaultFlagValue: boolean,
-                useUrlParams: boolean,
-                // eslint-disable-next-line @typescript-eslint/no-empty-function
-                defaultOnChangeListener: (changedValue: unknown, setting: SettingBase) => void = () => {
-                    /* Do nothing, to be overridden. */ }) {
+    constructor(id: FlagsIds | CustomIds,
+        label: string,
+        description: string,
+        defaultFlagValue: boolean,
+        useUrlParams: boolean,
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
+        defaultOnChangeListener: (changedValue: unknown, setting: SettingBase) => void = () => {
+            /* Do nothing, to be overridden. */
+}) {
         super(id, label, description, defaultFlagValue, defaultOnChangeListener);
 
         if (!useUrlParams || !this.hasURLParam(this.id)) {

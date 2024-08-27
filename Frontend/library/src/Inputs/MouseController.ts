@@ -1,18 +1,18 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
-import {Logger} from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
+import { Logger } from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
 
-import {StreamMessageController} from '../UeInstanceMessage/StreamMessageController';
-import {CoordinateConverter} from '../Util/CoordinateConverter';
-import {VideoPlayer} from '../VideoPlayer/VideoPlayer';
+import { StreamMessageController } from '../UeInstanceMessage/StreamMessageController';
+import { CoordinateConverter } from '../Util/CoordinateConverter';
+import { VideoPlayer } from '../VideoPlayer/VideoPlayer';
 
-import {HoveringMouseEvents} from './HoveringMouseEvents';
-import {IMouseEvents} from './IMouseEvents';
-import {LockedMouseEvents} from './LockedMouseEvents';
-import {MouseButton, MouseButtonsMask} from './MouseButtons';
+import { HoveringMouseEvents } from './HoveringMouseEvents';
+import { IMouseEvents } from './IMouseEvents';
+import { LockedMouseEvents } from './LockedMouseEvents';
+import { MouseButton, MouseButtonsMask } from './MouseButtons';
 
-import type {ActiveKeys} from './InputClassesFactory';
-import {EventListenerTracker} from '../Util/EventListenerTracker';
+import type { ActiveKeys } from './InputClassesFactory';
+import { EventListenerTracker } from '../Util/EventListenerTracker';
 
 /**
  * Handles the Mouse Inputs for the document
@@ -32,9 +32,9 @@ export class MouseController {
      * @param normalizeAndQuantize - A normalize and quantize instance
      */
     constructor(toStreamerMessagesProvider: StreamMessageController,
-                videoElementProvider: VideoPlayer,
-                coordinateConverter: CoordinateConverter,
-                activeKeysProvider: ActiveKeys) {
+        videoElementProvider: VideoPlayer,
+        coordinateConverter: CoordinateConverter,
+        activeKeysProvider: ActiveKeys) {
         this.toStreamerMessagesProvider = toStreamerMessagesProvider;
         this.coordinateConverter = coordinateConverter;
         this.videoElementProvider = videoElementProvider;
@@ -57,8 +57,8 @@ export class MouseController {
     registerLockedMouseEvents(mouseController: MouseController) {
         const videoElementParent = this.videoElementProvider.getVideoParentElement() as HTMLDivElement;
         const lockedMouseEvents: IMouseEvents = new LockedMouseEvents(this.videoElementProvider,
-                                                                      mouseController,
-                                                                      this.activeKeysProvider);
+            mouseController,
+            this.activeKeysProvider);
 
         videoElementParent.requestPointerLock = videoElementParent.requestPointerLock ||
             videoElementParent.mozRequestPointerLock;
@@ -101,7 +101,7 @@ export class MouseController {
         this.mouseEventListenerTracker.addUnregisterCallback(() => {
             if (document.exitPointerLock &&
                 (document.pointerLockElement === videoElementParent ||
-                 document.mozPointerLockElement === videoElementParent)) {
+                    document.mozPointerLockElement === videoElementParent)) {
                 document.exitPointerLock();
             }
         });

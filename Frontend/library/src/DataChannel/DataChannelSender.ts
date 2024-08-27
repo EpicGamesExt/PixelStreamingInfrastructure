@@ -1,8 +1,8 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
-import {Logger} from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
+import { Logger } from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
 
-import {DataChannelController} from './DataChannelController';
+import { DataChannelController } from './DataChannelController';
 
 /**
  * A class for sending data channel messages
@@ -19,7 +19,7 @@ export class DataChannelSender {
 
     canSend(): boolean {
         return (this.dataChannelProvider.getDataChannelInstance().dataChannel !== undefined &&
-                this.dataChannelProvider.getDataChannelInstance().dataChannel.readyState == 'open');
+            this.dataChannelProvider.getDataChannelInstance().dataChannel.readyState == 'open');
     }
 
     /**

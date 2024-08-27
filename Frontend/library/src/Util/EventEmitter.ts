@@ -1,17 +1,17 @@
-import {Messages} from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
+import { Messages } from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
 
-import {FlagsIds, NumericParametersIds, OptionParametersIds, TextParametersIds} from '../Config/Config';
-import {SettingFlag} from '../Config/SettingFlag';
-import {SettingNumber} from '../Config/SettingNumber';
-import {SettingOption} from '../Config/SettingOption';
-import {SettingText} from '../Config/SettingText';
+import { FlagsIds, NumericParametersIds, OptionParametersIds, TextParametersIds } from '../Config/Config';
+import { SettingFlag } from '../Config/SettingFlag';
+import { SettingNumber } from '../Config/SettingNumber';
+import { SettingOption } from '../Config/SettingOption';
+import { SettingText } from '../Config/SettingText';
 import {
     DataChannelLatencyTestResponse,
     DataChannelLatencyTestResult
 } from '../DataChannel/DataChannelLatencyTestResults';
-import {LatencyTestResults} from '../DataChannel/LatencyTestResults';
-import {AggregatedStats} from '../PeerConnectionController/AggregatedStats';
-import {InitialSettings} from '../pixelstreamingfrontend';
+import { LatencyTestResults } from '../DataChannel/LatencyTestResults';
+import { AggregatedStats } from '../PeerConnectionController/AggregatedStats';
+import { InitialSettings } from '../pixelstreamingfrontend';
 
 /**
  * An event that is emitted when AFK disconnect is about to happen.
@@ -436,7 +436,7 @@ export class InitialSettingsEvent extends Event {
     }
 }
 
-export type SettingsData =|{
+export type SettingsData = | {
     /** Flag id */
     id: FlagsIds;
     type: 'flag';
@@ -445,33 +445,33 @@ export type SettingsData =|{
     /** SettingFlag object */
     target: SettingFlag;
 }
-|{
-    /** Numeric setting id */
-    id: NumericParametersIds;
-    type: 'number';
-    /** Numeric setting value */
-    value: number;
-    /** SettingNumber object */
-    target: SettingNumber;
-}
-|{
-    /** Text setting id */
-    id: TextParametersIds;
-    type: 'text';
-    /** Text setting value */
-    value: string;
-    /** SettingText object */
-    target: SettingText;
-}
-|{
-    /** Option setting id */
-    id: OptionParametersIds;
-    type: 'option';
-    /** Option setting selected value */
-    value: string;
-    /** SettingOption object */
-    target: SettingOption;
-};
+    | {
+        /** Numeric setting id */
+        id: NumericParametersIds;
+        type: 'number';
+        /** Numeric setting value */
+        value: number;
+        /** SettingNumber object */
+        target: SettingNumber;
+    }
+    | {
+        /** Text setting id */
+        id: TextParametersIds;
+        type: 'text';
+        /** Text setting value */
+        value: string;
+        /** SettingText object */
+        target: SettingText;
+    }
+    | {
+        /** Option setting id */
+        id: OptionParametersIds;
+        type: 'option';
+        /** Option setting selected value */
+        value: string;
+        /** SettingOption object */
+        target: SettingOption;
+    };
 
 /**
  * An event that is emitted when PixelStreaming settings change.
@@ -549,15 +549,15 @@ export class WebRtcTCPRelayDetectedEvent extends Event {
     }
 }
 
-export type PixelStreamingEvent =|AfkWarningActivateEvent|AfkWarningUpdateEvent|AfkWarningDeactivateEvent|
-    AfkTimedOutEvent|VideoEncoderAvgQPEvent|WebRtcSdpEvent|WebRtcAutoConnectEvent|WebRtcConnectingEvent|
-    WebRtcConnectedEvent|WebRtcFailedEvent|WebRtcDisconnectedEvent|DataChannelOpenEvent|DataChannelCloseEvent|
-    DataChannelErrorEvent|VideoInitializedEvent|StreamLoadingEvent|StreamPreConnectEvent|StreamReconnectEvent|
-    StreamPreDisconnectEvent|PlayStreamErrorEvent|PlayStreamEvent|PlayStreamRejectedEvent|
-    LoadFreezeFrameEvent|HideFreezeFrameEvent|StatsReceivedEvent|StreamerListMessageEvent|
-    StreamerIDChangedMessageEvent|LatencyTestResultEvent|DataChannelLatencyTestResponseEvent|
-    DataChannelLatencyTestResultEvent|InitialSettingsEvent|SettingsChangedEvent|XrSessionStartedEvent|
-    XrSessionEndedEvent|XrFrameEvent|PlayerCountEvent|WebRtcTCPRelayDetectedEvent;
+export type PixelStreamingEvent = | AfkWarningActivateEvent | AfkWarningUpdateEvent | AfkWarningDeactivateEvent |
+    AfkTimedOutEvent | VideoEncoderAvgQPEvent | WebRtcSdpEvent | WebRtcAutoConnectEvent | WebRtcConnectingEvent |
+    WebRtcConnectedEvent | WebRtcFailedEvent | WebRtcDisconnectedEvent | DataChannelOpenEvent | DataChannelCloseEvent |
+    DataChannelErrorEvent | VideoInitializedEvent | StreamLoadingEvent | StreamPreConnectEvent | StreamReconnectEvent |
+    StreamPreDisconnectEvent | PlayStreamErrorEvent | PlayStreamEvent | PlayStreamRejectedEvent |
+    LoadFreezeFrameEvent | HideFreezeFrameEvent | StatsReceivedEvent | StreamerListMessageEvent |
+    StreamerIDChangedMessageEvent | LatencyTestResultEvent | DataChannelLatencyTestResponseEvent |
+    DataChannelLatencyTestResultEvent | InitialSettingsEvent | SettingsChangedEvent | XrSessionStartedEvent |
+    XrSessionEndedEvent | XrFrameEvent | PlayerCountEvent | WebRtcTCPRelayDetectedEvent;
 
 export class EventEmitter extends EventTarget {
     /**
@@ -574,9 +574,9 @@ export class EventEmitter extends EventTarget {
      * @param type event name
      * @param listener event handler function
      */
-    public addEventListener<T extends PixelStreamingEvent['type'], E extends PixelStreamingEvent&{ type: T }>(
+    public addEventListener<T extends PixelStreamingEvent['type'], E extends PixelStreamingEvent & { type: T }>(
         type: T,
-        listener: (e: Event&E) => void) {
+        listener: (e: Event & E) => void) {
         super.addEventListener(type, listener);
     }
 
@@ -585,8 +585,8 @@ export class EventEmitter extends EventTarget {
      * @param type event name
      * @param listener event handler function
      */
-    public removeEventListener<T extends PixelStreamingEvent['type'], E extends PixelStreamingEvent&
-                               { type: T }>(type: T, listener: (e: Event&E) => void) {
+    public removeEventListener<T extends PixelStreamingEvent['type'], E extends PixelStreamingEvent &
+    { type: T }>(type: T, listener: (e: Event & E) => void) {
         super.removeEventListener(type, listener);
     }
 }

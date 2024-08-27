@@ -16,7 +16,7 @@ export class IURLSearchParams {
         return name.toLowerCase() in this._urlParams;
     }
 
-    public get(name: string): string|null {
+    public get(name: string): string | null {
         if (this.has(name)) {
             return this._urlParams[name.toLowerCase()];
         }

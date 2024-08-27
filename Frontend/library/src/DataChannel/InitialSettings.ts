@@ -40,16 +40,16 @@ export class EncoderSettings {
     MaxBitrate?: number;
     MinQP?: number;
     MaxQP?: number;
-    RateControl?: 'CBR'|'VBR'|'ConstQP';
+    RateControl?: 'CBR' | 'VBR' | 'ConstQP';
     FillerData?: boolean;
-    MultiPass?: 'DISABLED'|'QUARTER'|'FULL';
+    MultiPass?: 'DISABLED' | 'QUARTER' | 'FULL';
 }
 
 /**
  * A class for handling web rtc stats
  */
 export class WebRTCSettings {
-    DegradationPref?: 'BALANCED'|'MAINTAIN_FRAMERATE'|'MAINTAIN_RESOLUTION';
+    DegradationPref?: 'BALANCED' | 'MAINTAIN_FRAMERATE' | 'MAINTAIN_RESOLUTION';
     MinBitrate?: number;
     MaxBitrate?: number;
     LowQP?: number;

@@ -1,11 +1,11 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
-import {Logger} from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
+import { Logger } from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
 
-import {StreamMessageController} from '../UeInstanceMessage/StreamMessageController';
-import {EventListenerTracker} from '../Util/EventListenerTracker';
+import { StreamMessageController } from '../UeInstanceMessage/StreamMessageController';
+import { EventListenerTracker } from '../Util/EventListenerTracker';
 
-import {Controller} from './GamepadTypes';
+import { Controller } from './GamepadTypes';
 
 /**
  * The class that handles the functionality of gamepads and controllers
@@ -25,8 +25,8 @@ export class GamePadController {
         this.toStreamerMessagesProvider = toStreamerMessagesProvider;
 
         this.requestAnimationFrame = (window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame ||
-                                      window.requestAnimationFrame)
-                                         .bind(window);
+            window.requestAnimationFrame)
+            .bind(window);
         const browserWindow = window as Window;
 
         const onBeforeUnload = (ev: Event) => this.onBeforeUnload(ev);
@@ -112,8 +112,8 @@ export class GamePadController {
      */
     scanGamePads() {
         const gamepads = navigator.getGamepads ? navigator.getGamepads() :
-            navigator.webkitGetGamepads        ? navigator.webkitGetGamepads() :
-                                                 [];
+            navigator.webkitGetGamepads ? navigator.webkitGetGamepads() :
+                [];
         for (let i = 0; i < gamepads.length; i++) {
             if (gamepads[i] && gamepads[i].index in this.controllers) {
                 this.controllers[gamepads[i].index].currentState = gamepads[i];
@@ -133,7 +133,7 @@ export class GamePadController {
             // If we haven't received an id (possible if using an older version of UE), return to original
             // functionality
             const controllerIndex = (controller.id === undefined) ? this.controllers.indexOf(controller) :
-                                                                    controller.id;
+                controller.id;
             const currentState = controller.currentState;
             for (let i = 0; i < controller.currentState.buttons.length; i++) {
                 const currentButton = controller.currentState.buttons[i];
@@ -177,8 +177,8 @@ export class GamePadController {
                 // offset as such
                 toStreamerHandlers.get('GamepadAnalog')(
                     [controllerIndex,
-                     i + 1,
-                     x]);  // Horizontal axes, only offset by 1
+                        i + 1,
+                        x]);  // Horizontal axes, only offset by 1
                 toStreamerHandlers.get('GamepadAnalog')([
                     controllerIndex,
                     i + 2,

@@ -1,20 +1,20 @@
 export interface MockRTCPeerConnectionSpyFunctions {
-    constructorSpy: null|((config: RTCConfiguration) => void);
-    closeSpy: null|(() => void);
-    setRemoteDescriptionSpy: null|((description: RTCSessionDescriptionInit) => void);
-    setLocalDescriptionSpy: null|((description: RTCLocalSessionDescriptionInit) => void);
-    createAnswerSpy: null|(() => void);
-    addTransceiverSpy: null|
-        ((trackOrKind: string|MediaStreamTrack, init?: RTCRtpTransceiverInit|undefined) => void);
-    addIceCandidateSpy: null|((candidate: RTCIceCandidateInit) => void);
-    sendDataSpy: null|((data: ArrayBuffer) => void);
+    constructorSpy: null | ((config: RTCConfiguration) => void);
+    closeSpy: null | (() => void);
+    setRemoteDescriptionSpy: null | ((description: RTCSessionDescriptionInit) => void);
+    setLocalDescriptionSpy: null | ((description: RTCLocalSessionDescriptionInit) => void);
+    createAnswerSpy: null | (() => void);
+    addTransceiverSpy: null |
+    ((trackOrKind: string | MediaStreamTrack, init?: RTCRtpTransceiverInit | undefined) => void);
+    addIceCandidateSpy: null | ((candidate: RTCIceCandidateInit) => void);
+    sendDataSpy: null | ((data: ArrayBuffer) => void);
 }
 
 export interface MockRTCPeerConnectionTriggerFunctions {
-    triggerIceConnectionStateChange: null|((state: RTCIceConnectionState) => void);
-    triggerOnTrack: null|((data: RTCTrackEventInit) => void);
-    triggerOnIceCandidate: null|((data: RTCPeerConnectionIceEventInit) => void);
-    triggerOnDataChannel: null|((data: RTCDataChannelEventInit) => void);
+    triggerIceConnectionStateChange: null | ((state: RTCIceConnectionState) => void);
+    triggerOnTrack: null | ((data: RTCTrackEventInit) => void);
+    triggerOnIceCandidate: null | ((data: RTCPeerConnectionIceEventInit) => void);
+    triggerOnDataChannel: null | ((data: RTCDataChannelEventInit) => void);
 }
 
 const spyFunctions: MockRTCPeerConnectionSpyFunctions = {
@@ -36,17 +36,17 @@ const triggerFunctions: MockRTCPeerConnectionTriggerFunctions = {
 };
 
 export class MockRTCPeerConnectionImpl implements RTCPeerConnection {
-    canTrickleIceCandidates: boolean|null;
+    canTrickleIceCandidates: boolean | null;
     connectionState: RTCPeerConnectionState;
-    currentLocalDescription: RTCSessionDescription|null;
-    currentRemoteDescription: RTCSessionDescription|null;
+    currentLocalDescription: RTCSessionDescription | null;
+    currentRemoteDescription: RTCSessionDescription | null;
     iceConnectionState: RTCIceConnectionState;
     iceGatheringState: RTCIceGatheringState;
-    localDescription: RTCSessionDescription|null;
-    pendingLocalDescription: RTCSessionDescription|null;
-    pendingRemoteDescription: RTCSessionDescription|null;
-    remoteDescription: RTCSessionDescription|null;
-    sctp: RTCSctpTransport|null;
+    localDescription: RTCSessionDescription | null;
+    pendingLocalDescription: RTCSessionDescription | null;
+    pendingRemoteDescription: RTCSessionDescription | null;
+    remoteDescription: RTCSessionDescription | null;
+    sctp: RTCSctpTransport | null;
     signalingState: RTCSignalingState;
     _dataChannels: RTCDataChannel[] = [];
 
@@ -60,19 +60,19 @@ export class MockRTCPeerConnectionImpl implements RTCPeerConnection {
         triggerFunctions.triggerOnDataChannel = this.triggerOnDataChannel.bind(this);
     }
 
-    onconnectionstatechange: ((this: RTCPeerConnection, ev: Event) => any)|null;
-    ondatachannel: ((this: RTCPeerConnection, ev: RTCDataChannelEvent) => any)|null;
-    onicecandidate: ((this: RTCPeerConnection, ev: RTCPeerConnectionIceEvent) => any)|null;
-    onicecandidateerror: ((this: RTCPeerConnection, ev: Event) => any)|null;
-    oniceconnectionstatechange: ((this: RTCPeerConnection, ev: Event) => any)|null;
-    onicegatheringstatechange: ((this: RTCPeerConnection, ev: Event) => any)|null;
-    onnegotiationneeded: ((this: RTCPeerConnection, ev: Event) => any)|null;
-    onsignalingstatechange: ((this: RTCPeerConnection, ev: Event) => any)|null;
-    ontrack: ((this: RTCPeerConnection, ev: RTCTrackEvent) => any)|null;
-    addIceCandidate(candidate?: RTCIceCandidateInit|undefined): Promise<void>;
+    onconnectionstatechange: ((this: RTCPeerConnection, ev: Event) => any) | null;
+    ondatachannel: ((this: RTCPeerConnection, ev: RTCDataChannelEvent) => any) | null;
+    onicecandidate: ((this: RTCPeerConnection, ev: RTCPeerConnectionIceEvent) => any) | null;
+    onicecandidateerror: ((this: RTCPeerConnection, ev: Event) => any) | null;
+    oniceconnectionstatechange: ((this: RTCPeerConnection, ev: Event) => any) | null;
+    onicegatheringstatechange: ((this: RTCPeerConnection, ev: Event) => any) | null;
+    onnegotiationneeded: ((this: RTCPeerConnection, ev: Event) => any) | null;
+    onsignalingstatechange: ((this: RTCPeerConnection, ev: Event) => any) | null;
+    ontrack: ((this: RTCPeerConnection, ev: RTCTrackEvent) => any) | null;
+    addIceCandidate(candidate?: RTCIceCandidateInit | undefined): Promise<void>;
     addIceCandidate(candidate: RTCIceCandidateInit,
-                    successCallback: VoidFunction,
-                    failureCallback: RTCPeerConnectionErrorCallback): Promise<void>;
+        successCallback: VoidFunction,
+        failureCallback: RTCPeerConnectionErrorCallback): Promise<void>;
     addIceCandidate(candidate?: unknown, successCallback?: unknown, failureCallback?: unknown):
         Promise<void> {
         if (this.iceConnectionState !== 'connected' && this.iceConnectionState !== 'completed') {
@@ -85,16 +85,16 @@ export class MockRTCPeerConnectionImpl implements RTCPeerConnection {
     addTrack(track: MediaStreamTrack, ...streams: MediaStream[]): RTCRtpSender {
         throw new Error('Method not implemented.');
     }
-    addTransceiver(trackOrKind: string|MediaStreamTrack,
-                   init?: RTCRtpTransceiverInit|undefined): RTCRtpTransceiver {
+    addTransceiver(trackOrKind: string | MediaStreamTrack,
+        init?: RTCRtpTransceiverInit | undefined): RTCRtpTransceiver {
         spyFunctions.addTransceiverSpy?.(trackOrKind, init);
         return {} as RTCRtpTransceiver;
     }
-    createAnswer(options?: RTCAnswerOptions|undefined): Promise<RTCSessionDescriptionInit>;
+    createAnswer(options?: RTCAnswerOptions | undefined): Promise<RTCSessionDescriptionInit>;
     createAnswer(successCallback: RTCSessionDescriptionCallback,
-                 failureCallback: RTCPeerConnectionErrorCallback): Promise<void>;
+        failureCallback: RTCPeerConnectionErrorCallback): Promise<void>;
     createAnswer(successCallback?: unknown,
-                 failureCallback?: unknown): Promise<void>|Promise<RTCSessionDescriptionInit> {
+        failureCallback?: unknown): Promise<void> | Promise<RTCSessionDescriptionInit> {
         spyFunctions.createAnswerSpy?.();
         const res: RTCSessionDescriptionInit = {
             type: 'answer',
@@ -103,17 +103,17 @@ export class MockRTCPeerConnectionImpl implements RTCPeerConnection {
         };
         return Promise.resolve(res);
     }
-    createDataChannel(label: string, dataChannelDict?: RTCDataChannelInit|undefined): RTCDataChannel {
+    createDataChannel(label: string, dataChannelDict?: RTCDataChannelInit | undefined): RTCDataChannel {
         const dataChannel = new RTCDataChannel();
         this._dataChannels.push(dataChannel);
         return dataChannel;
     }
-    createOffer(options?: RTCOfferOptions|undefined): Promise<RTCSessionDescriptionInit>;
+    createOffer(options?: RTCOfferOptions | undefined): Promise<RTCSessionDescriptionInit>;
     createOffer(successCallback: RTCSessionDescriptionCallback,
-                failureCallback: RTCPeerConnectionErrorCallback,
-                options?: RTCOfferOptions|undefined): Promise<void>;
+        failureCallback: RTCPeerConnectionErrorCallback,
+        options?: RTCOfferOptions | undefined): Promise<void>;
     createOffer(successCallback?: unknown, failureCallback?: unknown, options?: unknown):
-        Promise<void>|Promise<RTCSessionDescriptionInit> {
+        Promise<void> | Promise<RTCSessionDescriptionInit> {
         throw new Error('Method not implemented.');
     }
     getConfiguration(): RTCConfiguration {
@@ -125,7 +125,7 @@ export class MockRTCPeerConnectionImpl implements RTCPeerConnection {
     getSenders(): RTCRtpSender[] {
         throw new Error('Method not implemented.');
     }
-    getStats(selector?: MediaStreamTrack|null|undefined): Promise<RTCStatsReport> {
+    getStats(selector?: MediaStreamTrack | null | undefined): Promise<RTCStatsReport> {
         const stats = {
             forEach: function(callbackfn: (value: any) => void): void {
                 callbackfn({
@@ -149,13 +149,13 @@ export class MockRTCPeerConnectionImpl implements RTCPeerConnection {
     restartIce(): void {
         throw new Error('Method not implemented.');
     }
-    setConfiguration(configuration?: RTCConfiguration|undefined): void {
+    setConfiguration(configuration?: RTCConfiguration | undefined): void {
         throw new Error('Method not implemented.');
     }
-    setLocalDescription(description?: RTCLocalSessionDescriptionInit|undefined): Promise<void>;
+    setLocalDescription(description?: RTCLocalSessionDescriptionInit | undefined): Promise<void>;
     setLocalDescription(description: RTCLocalSessionDescriptionInit,
-                        successCallback: VoidFunction,
-                        failureCallback: RTCPeerConnectionErrorCallback): Promise<void>;
+        successCallback: VoidFunction,
+        failureCallback: RTCPeerConnectionErrorCallback): Promise<void>;
     setLocalDescription(description?: unknown, successCallback?: unknown, failureCallback?: unknown):
         Promise<void> {
         spyFunctions.setLocalDescriptionSpy?.(description as RTCLocalSessionDescriptionInit);
@@ -163,8 +163,8 @@ export class MockRTCPeerConnectionImpl implements RTCPeerConnection {
     }
     setRemoteDescription(description: RTCSessionDescriptionInit): Promise<void>;
     setRemoteDescription(description: RTCSessionDescriptionInit,
-                         successCallback: VoidFunction,
-                         failureCallback: RTCPeerConnectionErrorCallback): Promise<void>;
+        successCallback: VoidFunction,
+        failureCallback: RTCPeerConnectionErrorCallback): Promise<void>;
     setRemoteDescription(description: unknown, successCallback?: unknown, failureCallback?: unknown):
         Promise<void> {
         spyFunctions.setRemoteDescriptionSpy?.(description as RTCSessionDescriptionInit);
@@ -173,20 +173,20 @@ export class MockRTCPeerConnectionImpl implements RTCPeerConnection {
     addEventListener<K extends keyof RTCPeerConnectionEventMap>(
         type: K,
         listener: (this: RTCPeerConnection, ev: RTCPeerConnectionEventMap[K]) => any,
-        options?: boolean|AddEventListenerOptions|undefined): void;
+        options?: boolean | AddEventListenerOptions | undefined): void;
     addEventListener(type: string,
-                     listener: EventListenerOrEventListenerObject,
-                     options?: boolean|AddEventListenerOptions|undefined): void;
+        listener: EventListenerOrEventListenerObject,
+        options?: boolean | AddEventListenerOptions | undefined): void;
     addEventListener(type: unknown, listener: unknown, options?: unknown): void {
         throw new Error('Method not implemented.');
     }
     removeEventListener<K extends keyof RTCPeerConnectionEventMap>(
         type: K,
         listener: (this: RTCPeerConnection, ev: RTCPeerConnectionEventMap[K]) => any,
-        options?: boolean|EventListenerOptions|undefined): void;
+        options?: boolean | EventListenerOptions | undefined): void;
     removeEventListener(type: string,
-                        listener: EventListenerOrEventListenerObject,
-                        options?: boolean|EventListenerOptions|undefined): void;
+        listener: EventListenerOrEventListenerObject,
+        options?: boolean | EventListenerOptions | undefined): void;
     removeEventListener(type: unknown, listener: unknown, options?: unknown): void {
         throw new Error('Method not implemented.');
     }
@@ -230,20 +230,20 @@ export class MockRTCPeerConnectionImpl implements RTCPeerConnection {
 }
 
 export class MockRTCIceCandidateImpl implements RTCIceCandidate {
-    address: string|null;
+    address: string | null;
     candidate: string;
-    component: RTCIceComponent|null;
-    foundation: string|null;
-    port: number|null;
-    priority: number|null;
-    protocol: RTCIceProtocol|null;
-    relatedAddress: string|null;
-    relatedPort: number|null;
-    sdpMLineIndex: number|null;
-    sdpMid: string|null;
-    tcpType: RTCIceTcpCandidateType|null;
-    type: RTCIceCandidateType|null;
-    usernameFragment: string|null;
+    component: RTCIceComponent | null;
+    foundation: string | null;
+    port: number | null;
+    priority: number | null;
+    protocol: RTCIceProtocol | null;
+    relatedAddress: string | null;
+    relatedPort: number | null;
+    sdpMLineIndex: number | null;
+    sdpMid: string | null;
+    tcpType: RTCIceTcpCandidateType | null;
+    type: RTCIceCandidateType | null;
+    usernameFragment: string | null;
 
     constructor(options?: RTCIceCandidateInit) {
         this.candidate = options?.candidate || '';
@@ -261,10 +261,10 @@ export class MockRTCDataChannelImpl implements RTCDataChannel {
     binaryType: BinaryType;
     bufferedAmount: number;
     bufferedAmountLowThreshold: number;
-    id: number|null;
+    id: number | null;
     label: string;
-    maxPacketLifeTime: number|null;
-    maxRetransmits: number|null;
+    maxPacketLifeTime: number | null;
+    maxRetransmits: number | null;
     negotiated: boolean;
     ordered: boolean;
     protocol: string;
@@ -274,12 +274,12 @@ export class MockRTCDataChannelImpl implements RTCDataChannel {
         this.readyState = 'open';
     }
 
-    onbufferedamountlow: ((this: RTCDataChannel, ev: Event) => any)|null;
-    onclose: ((this: RTCDataChannel, ev: Event) => any)|null;
-    onclosing: ((this: RTCDataChannel, ev: Event) => any)|null;
-    onerror: ((this: RTCDataChannel, ev: Event) => any)|null;
-    onmessage: ((this: RTCDataChannel, ev: MessageEvent<any>) => any)|null;
-    onopen: ((this: RTCDataChannel, ev: Event) => any)|null;
+    onbufferedamountlow: ((this: RTCDataChannel, ev: Event) => any) | null;
+    onclose: ((this: RTCDataChannel, ev: Event) => any) | null;
+    onclosing: ((this: RTCDataChannel, ev: Event) => any) | null;
+    onerror: ((this: RTCDataChannel, ev: Event) => any) | null;
+    onmessage: ((this: RTCDataChannel, ev: MessageEvent<any>) => any) | null;
+    onopen: ((this: RTCDataChannel, ev: Event) => any) | null;
     close(): void {
         this.onclose?.(new Event('close'));
     }
@@ -291,23 +291,23 @@ export class MockRTCDataChannelImpl implements RTCDataChannel {
         spyFunctions.sendDataSpy?.(data as ArrayBuffer);
     }
     addEventListener<K extends keyof RTCDataChannelEventMap>(type: K,
-                                                             listener: (this: RTCDataChannel,
-                                                                        ev: RTCDataChannelEventMap[K]) => any,
-                                                             options?: boolean|AddEventListenerOptions|
-                                                             undefined): void;
+        listener: (this: RTCDataChannel,
+            ev: RTCDataChannelEventMap[K]) => any,
+        options?: boolean | AddEventListenerOptions |
+            undefined): void;
     addEventListener(type: string,
-                     listener: EventListenerOrEventListenerObject,
-                     options?: boolean|AddEventListenerOptions|undefined): void;
+        listener: EventListenerOrEventListenerObject,
+        options?: boolean | AddEventListenerOptions | undefined): void;
     addEventListener(type: unknown, listener: unknown, options?: unknown): void {
         throw new Error('Method not implemented.');
     }
     removeEventListener<K extends keyof RTCDataChannelEventMap>(
         type: K,
         listener: (this: RTCDataChannel, ev: RTCDataChannelEventMap[K]) => any,
-        options?: boolean|EventListenerOptions|undefined): void;
+        options?: boolean | EventListenerOptions | undefined): void;
     removeEventListener(type: string,
-                        listener: EventListenerOrEventListenerObject,
-                        options?: boolean|EventListenerOptions|undefined): void;
+        listener: EventListenerOrEventListenerObject,
+        options?: boolean | EventListenerOptions | undefined): void;
     removeEventListener(type: unknown, listener: unknown, options?: unknown): void {
         throw new Error('Method not implemented.');
     }
@@ -348,21 +348,21 @@ const originalRTCDataChannelEvent = global.RTCDataChannelEvent;
 const originalRTCTrackEvent = global.RTCTrackEvent;
 export const mockRTCPeerConnection = ():
     [MockRTCPeerConnectionSpyFunctions, MockRTCPeerConnectionTriggerFunctions] => {
-        spyFunctions.constructorSpy = jest.fn();
-        spyFunctions.closeSpy = jest.fn();
-        spyFunctions.setRemoteDescriptionSpy = jest.fn();
-        spyFunctions.setLocalDescriptionSpy = jest.fn();
-        spyFunctions.createAnswerSpy = jest.fn();
-        spyFunctions.addTransceiverSpy = jest.fn();
-        spyFunctions.addIceCandidateSpy = jest.fn();
-        spyFunctions.sendDataSpy = jest.fn();
-        global.RTCPeerConnection = MockRTCPeerConnectionImpl;
-        global.RTCIceCandidate = MockRTCIceCandidateImpl;
-        global.RTCDataChannel = MockRTCDataChannelImpl;
-        global.RTCDataChannelEvent = MockRTCDataChannelEventImpl;
-        global.RTCTrackEvent = MockRTCTrackEventImpl;
-        return [spyFunctions, triggerFunctions];
-    };
+    spyFunctions.constructorSpy = jest.fn();
+    spyFunctions.closeSpy = jest.fn();
+    spyFunctions.setRemoteDescriptionSpy = jest.fn();
+    spyFunctions.setLocalDescriptionSpy = jest.fn();
+    spyFunctions.createAnswerSpy = jest.fn();
+    spyFunctions.addTransceiverSpy = jest.fn();
+    spyFunctions.addIceCandidateSpy = jest.fn();
+    spyFunctions.sendDataSpy = jest.fn();
+    global.RTCPeerConnection = MockRTCPeerConnectionImpl;
+    global.RTCIceCandidate = MockRTCIceCandidateImpl;
+    global.RTCDataChannel = MockRTCDataChannelImpl;
+    global.RTCDataChannelEvent = MockRTCDataChannelEventImpl;
+    global.RTCTrackEvent = MockRTCTrackEventImpl;
+    return [spyFunctions, triggerFunctions];
+};
 
 export const unmockRTCPeerConnection = () => {
     global.RTCPeerConnection = originalRTCPeerConnection;

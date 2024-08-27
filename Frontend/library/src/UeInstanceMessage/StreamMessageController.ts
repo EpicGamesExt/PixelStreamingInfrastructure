@@ -1,6 +1,6 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
-import {Logger} from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
+import { Logger } from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
 
 export class ToStreamerMessage {
     id: number;
@@ -8,8 +8,8 @@ export class ToStreamerMessage {
 }
 
 export class StreamMessageController {
-    toStreamerHandlers: Map<string, (messageData?: Array<number|string>|undefined) => void>;
-    fromStreamerHandlers: Map<string, (messageType: string, messageData?: ArrayBuffer|undefined) => void>;
+    toStreamerHandlers: Map<string, (messageData?: Array<number | string> | undefined) => void>;
+    fromStreamerHandlers: Map<string, (messageType: string, messageData?: ArrayBuffer | undefined) => void>;
     //                        Type      Format
     toStreamerMessages: Map<string, ToStreamerMessage>;
     //                         ID      Type
@@ -153,8 +153,8 @@ export class StreamMessageController {
      * @param messageHandler - the function or method to be executed when this handler is called
      */
     registerMessageHandler(messageDirection: MessageDirection,
-                           messageType: string,
-                           messageHandler: (messageData?: unknown|undefined) => void) {
+        messageType: string,
+        messageHandler: (messageData?: unknown | undefined) => void) {
         switch (messageDirection) {
             case MessageDirection.ToStreamer:
                 this.toStreamerHandlers.set(messageType, messageHandler);

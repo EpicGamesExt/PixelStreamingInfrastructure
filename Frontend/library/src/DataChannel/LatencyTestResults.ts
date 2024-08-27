@@ -1,6 +1,6 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
-import {Logger} from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
+import { Logger } from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
 /**
  * Latency Test Results Data
  */
@@ -50,16 +50,16 @@ export class LatencyTestResults {
     processFields() {
         if (this.EncodeMs == null && (this.PreEncodeTimeMs != null || this.PostEncodeTimeMs != null)) {
             Logger.Log(Logger.GetStackTrace(),
-                       `Setting Encode Ms \n ${this.PostEncodeTimeMs} \n ${this.PreEncodeTimeMs}`,
-                       6);
+                `Setting Encode Ms \n ${this.PostEncodeTimeMs} \n ${this.PreEncodeTimeMs}`,
+                6);
             this.EncodeMs = this.PostEncodeTimeMs - this.PreEncodeTimeMs;
         }
 
         if (this.CaptureToSendMs == null &&
             (this.PreCaptureTimeMs != null || this.PostCaptureTimeMs != null)) {
             Logger.Log(Logger.GetStackTrace(),
-                       `Setting CaptureToSendMs Ms \n ${this.PostCaptureTimeMs} \n ${this.PreCaptureTimeMs}`,
-                       6);
+                `Setting CaptureToSendMs Ms \n ${this.PostCaptureTimeMs} \n ${this.PreCaptureTimeMs}`,
+                6);
             this.CaptureToSendMs = this.PostCaptureTimeMs - this.PreCaptureTimeMs;
         }
     }

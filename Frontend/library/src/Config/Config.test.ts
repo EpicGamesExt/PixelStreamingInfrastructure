@@ -1,4 +1,4 @@
-import {mockRTCRtpReceiver, unmockRTCRtpReceiver} from '../__test__/mockRTCRtpReceiver';
+import { mockRTCRtpReceiver, unmockRTCRtpReceiver } from '../__test__/mockRTCRtpReceiver';
 
 import {
     Config,
@@ -14,10 +14,10 @@ import {
 
 const allFlags = Object.keys(Flags).map((key) => Flags[key as FlagsKeys]);
 const allNumericParameters = Object.keys(NumericParameters)
-                                 .map((key) => NumericParameters[key as NumericParametersKeys]);
+    .map((key) => NumericParameters[key as NumericParametersKeys]);
 const allTextParameters = Object.keys(TextParameters).map((key) => TextParameters[key as TextParametersKeys]);
 const allOptionParameters = Object.keys(OptionParameters)
-                                .map((key) => OptionParameters[key as OptionParametersKeys]);
+    .map((key) => OptionParameters[key as OptionParametersKeys]);
 
 const allParameters = [...allFlags, ...allNumericParameters, ...allTextParameters, ...allOptionParameters];
 
@@ -91,11 +91,11 @@ describe('Config', () => {
 
         config.setFlagEnabled(Flags.AutoPlayVideo, changedSettings[Flags.AutoPlayVideo]);
         config.setNumericSetting(NumericParameters.WebRTCMaxBitrate,
-                                 changedSettings[NumericParameters.WebRTCMaxBitrate]);
+            changedSettings[NumericParameters.WebRTCMaxBitrate]);
         config.setTextSetting(TextParameters.SignallingServerUrl,
-                              changedSettings[TextParameters.SignallingServerUrl]);
+            changedSettings[TextParameters.SignallingServerUrl]);
         config.setOptionSettingValue(OptionParameters.PreferredCodec,
-                                     changedSettings[OptionParameters.PreferredCodec]);
+            changedSettings[OptionParameters.PreferredCodec]);
 
         expect(config.isFlagEnabled(Flags.AutoPlayVideo)).toEqual(changedSettings[Flags.AutoPlayVideo]);
         expect(config.getNumericSettingValue(NumericParameters.WebRTCMaxBitrate))

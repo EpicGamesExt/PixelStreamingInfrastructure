@@ -1,6 +1,6 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
-import {UnquantizedDenormalizedUnsignedCoord} from '../Util/CoordinateConverter';
+import { UnquantizedDenormalizedUnsignedCoord } from '../Util/CoordinateConverter';
 
 /**
  * Class for handling on screen keyboard usage

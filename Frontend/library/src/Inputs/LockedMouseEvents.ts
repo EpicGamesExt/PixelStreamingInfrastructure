@@ -1,14 +1,14 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
-import {Logger} from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
+import { Logger } from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
 
-import {NormalizedQuantizedUnsignedCoord} from '../Util/CoordinateConverter';
-import {EventListenerTracker} from '../Util/EventListenerTracker';
-import {VideoPlayer} from '../VideoPlayer/VideoPlayer';
+import { NormalizedQuantizedUnsignedCoord } from '../Util/CoordinateConverter';
+import { EventListenerTracker } from '../Util/EventListenerTracker';
+import { VideoPlayer } from '../VideoPlayer/VideoPlayer';
 
-import {IMouseEvents} from './IMouseEvents';
-import {ActiveKeys} from './InputClassesFactory';
-import {MouseController} from './MouseController';
+import { IMouseEvents } from './IMouseEvents';
+import { ActiveKeys } from './InputClassesFactory';
+import { MouseController } from './MouseController';
 
 /**
  * Handle the mouse locked events
@@ -32,8 +32,8 @@ export class LockedMouseEvents implements IMouseEvents {
      * @param playerStyleAttributesProvider - Player style attributes instance
      */
     constructor(videoElementProvider: VideoPlayer,
-                mouseController: MouseController,
-                activeKeysProvider: ActiveKeys) {
+        mouseController: MouseController,
+        activeKeysProvider: ActiveKeys) {
         this.videoElementProvider = videoElementProvider;
         this.mouseController = mouseController;
         this.activeKeysProvider = activeKeysProvider;
