@@ -31,7 +31,6 @@ export function delay(time: number) {
   });
 }
 
-
 export async function waitForVideo(page: Page) {
     await page.evaluate(()=> {
         return new Promise((resolve) => {
@@ -54,4 +53,61 @@ export async function sendSignallingMessage(page: Page, message: any) {
         pixelStreaming.signallingProtocol.sendMessage(message);
     }, message);
 }
+
+export function attachToConsoleEvents(page: Page, callback: (...args: any[]) => void) {
+    page.on('console', async msg => {
+        const values: any[] = [];
+        for (const arg of msg.args())
+            values.push(await arg.jsonValue());
+        callback(...values);
+    });
+}
+
+interface BoxSize {
+    width: number;
+    height: number;
+};
+
+interface Coord {
+    x: number;
+    y: number;
+};
+
+export class CoordConverter {
+    player_size: BoxSize;
+    video_size: BoxSize;
+    ratio: number;
+    player_is_larger: boolean;
+
+    constructor(player_size: BoxSize, video_size: BoxSize) {
+        this.player_size = player_size;
+        this.video_size = video_size;
+        const player_aspect_ratio = this.player_size.height / this.player_size.width;
+        const video_aspect_ratio = this.video_size.height / this.video_size.width;
+        this.player_is_larger = player_aspect_ratio > video_aspect_ratio;
+        if (this.player_is_larger) {
+            this.ratio = player_aspect_ratio / video_aspect_ratio;
+        } else {
+            this.ratio = video_aspect_ratio / player_aspect_ratio;
+        }
+    }
+
+    public toVideoCoords(x: number, y: number): Coord {
+        if (this.player_is_larger) {
+            const normalizedX = x / (0.5 * this.player_size.width);
+            const normalizedY = (this.ratio * y) / (0.5 * this.player_size.height);
+            return {
+                x: Math.trunc(normalizedX * 32767),
+                y: Math.trunc(normalizedY * 32767)
+            };
+        } else {
+            const normalizedX = (this.ratio * x) / (0.5 * this.player_size.width);
+            const normalizedY = y / (0.5 * this.player_size.height);
+            return {
+                x: Math.trunc(normalizedX * 32767),
+                y: Math.trunc(normalizedY * 32767)
+            };
+        }
+    }
+};
 
