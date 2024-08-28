@@ -447,7 +447,7 @@ export class Streamer extends EventEmitter {
                     const str_len = data.getUint16(data_offset, true);
                     data_offset += 2;
                     const text_decoder = new TextDecoder('utf-16');
-                    value = text_decoder.decode(data.buffer.slice(data_offset, data_offset + str_len));
+                    value = text_decoder.decode(data.buffer.slice(data_offset, data_offset + (str_len * 2)));
                     data_offset += str_len;
                 }
                 break;
