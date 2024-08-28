@@ -34,7 +34,7 @@ export function delay(time: number) {
 export async function waitForVideo(page: Page) {
     await page.evaluate(()=> {
         return new Promise((resolve) => {
-            pixelStreaming.addEventListener('playStream', (event) => {
+            window.pixelStreaming.addEventListener('playStream', (event) => {
                 return resolve(event);
             });
         });
@@ -43,14 +43,14 @@ export async function waitForVideo(page: Page) {
 
 export async function getStreamStats(page: Page) {
     const stats = await page.evaluate(() => {
-        return pixelStreaming._webRtcController.peerConnectionController.aggregatedStats;
+        return window.pixelStreaming.webRtcController.peerConnectionController.aggregatedStats;
     });
     return stats;
 }
 
 export async function sendSignallingMessage(page: Page, message: any) {
     await page.evaluate((message)=> {
-        pixelStreaming.signallingProtocol.sendMessage(message);
+        window.pixelStreaming.signallingProtocol.sendMessage(message);
     }, message);
 }
 
@@ -63,12 +63,12 @@ export function attachToConsoleEvents(page: Page, callback: (...args: any[]) => 
     });
 }
 
-interface BoxSize {
+export interface BoxSize {
     width: number;
     height: number;
 };
 
-interface Coord {
+export interface Coord {
     x: number;
     y: number;
 };

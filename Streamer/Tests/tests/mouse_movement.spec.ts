@@ -3,14 +3,14 @@ import { expect } from './matchers';
 import {
     PSMouseEventTypes,
     DataChannelEvent,
-    getEventsFor
+    getEventsFor,
 } from './extras';
 import * as helpers from './helpers';
 
 // just quickly test that the default stream is working
-test('Test default stream.', {
-    tag: ['@basic'],
-}, async ({ page, streamerPage, streamerId }) => {
+test('Test locked mouse movement', {
+    tag: ['@mouse'],
+}, async ({ page, streamerPage, streamerId, browserName }) => {
 
     helpers.attachToConsoleEvents(streamerPage, (...args: any[]) => {
         console.log("Streamer: ", ...args);
@@ -20,13 +20,15 @@ test('Test default stream.', {
         console.log("Player: ", ...args);
     });
 
-    await page.goto(`/?StreamerId=${streamerId}`);
+    await page.goto(`/?StreamerId=${streamerId}&HoveringMouse=false`);
     await page.getByText('Click to start').click();
 
     // let the stream run for a short duration
     await helpers.waitForVideo(page);
 
     const player_box = await page.locator('#videoElementParent').boundingBox();
+    expect(player_box).not.toBeNull();
+
     if (player_box) {
         const video_size = await page.evaluate(()=>{
             let video_elem = document.getElementById('streamingVideo') as HTMLVideoElement;
@@ -41,23 +43,29 @@ test('Test default stream.', {
             { x: -200, y: 0 },
             { x: 0, y: -200 },
         ];
+        
+        // where the pointer anchors in locked mode changes by browser
+        const anchor: helpers.Coord = (() => {
+            if (browserName == 'firefox') {
+                return { x: player_box.x + player_box.width / 2, y: player_box.y + player_box.height / 2 };
+            } else {
+                return { x: player_box.x, y: player_box.y };
+            }
+        })();
 
         // click on stream to activate pointer lock
-        let x = player_box.x + player_box.width / 2;
-        let y = player_box.y + player_box.height / 2;
-        await page.mouse.click(x, y);               // click the center of the video
+        await page.mouse.click(anchor.x, anchor.y);               // click the center of the video
 
         // perform the actions
         const events = await getEventsFor(streamerPage, async () => {
             for (const movement of movements) {
-                await page.mouse.move(x + movement.x, y + movement.y);
+                await page.mouse.move(anchor.x + movement.x, anchor.y + movement.y);
                 const translated = coord_converter.toVideoCoords(movement.x, movement.y);
                 expected_actions.push({ type: PSMouseEventTypes.Move, delta_x: translated.x, delta_y: translated.y });
             }
         });
 
         // check we got the expected events
-        // const events = await getCapturedEvents(streamerPage);
         const first_player_id = Object.keys(events)[0];
         const single_player_events = events[first_player_id];
         expect(single_player_events).toContainActions(expected_actions);
