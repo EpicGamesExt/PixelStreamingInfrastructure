@@ -7,18 +7,18 @@ import {
 } from './extras';
 import * as helpers from './helpers';
 
-// just quickly test that the default stream is working
 test('Test locked mouse movement', {
     tag: ['@mouse'],
 }, async ({ page, streamerPage, streamerId, browserName }) => {
 
-    helpers.attachToConsoleEvents(streamerPage, (...args: any[]) => {
-        console.log("Streamer: ", ...args);
-    });
-
-    helpers.attachToConsoleEvents(page, (...args: any[]) => {
-        console.log("Player: ", ...args);
-    });
+    // helps debugging
+    // helpers.attachToConsoleEvents(streamerPage, (...args: any[]) => {
+    //     console.log("Streamer: ", ...args);
+    // });
+    //
+    // helpers.attachToConsoleEvents(page, (...args: any[]) => {
+    //     console.log("Player: ", ...args);
+    // });
 
     await page.goto(`/?StreamerId=${streamerId}&HoveringMouse=false`);
     await page.getByText('Click to start').click();
@@ -54,13 +54,13 @@ test('Test locked mouse movement', {
         })();
 
         // click on stream to activate pointer lock
-        await page.mouse.click(anchor.x, anchor.y);               // click the center of the video
+        await page.mouse.click(anchor.x, anchor.y);
 
         // perform the actions
         const events = await getEventsFor(streamerPage, async () => {
             for (const movement of movements) {
                 await page.mouse.move(anchor.x + movement.x, anchor.y + movement.y);
-                const translated = coord_converter.toVideoCoords(movement.x, movement.y);
+                const translated = coord_converter.normalizeQuantizeSigned(movement.x, movement.y);
                 expected_actions.push({ type: PSMouseEventTypes.Move, delta_x: translated.x, delta_y: translated.y });
             }
         });

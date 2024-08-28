@@ -92,7 +92,7 @@ export class CoordConverter {
         }
     }
 
-    public toVideoCoords(x: number, y: number): Coord {
+    public normalizeQuantizeSigned(x: number, y: number): Coord {
         if (this.player_is_larger) {
             const normalizedX = x / (0.5 * this.player_size.width);
             const normalizedY = (this.ratio * y) / (0.5 * this.player_size.height);
@@ -106,6 +106,23 @@ export class CoordConverter {
             return {
                 x: Math.trunc(normalizedX * 32767),
                 y: Math.trunc(normalizedY * 32767)
+            };
+        }
+    }
+    public normalizeQuantizeUnsigned(x: number, y: number): Coord {
+        if (this.player_is_larger) {
+            const normalizedX = x / this.player_size.width;
+            const normalizedY = this.ratio * (y / this.player_size.height - 0.5) + 0.5;
+            return {
+                x: Math.trunc(normalizedX * 65536),
+                y: Math.trunc(normalizedY * 65536)
+            };
+        } else {
+            const normalizedX = this.ratio * (x / this.player_size.width - 0.5) + 0.5;
+            const normalizedY = y / this.player_size.height;
+            return {
+                x: Math.trunc(normalizedX * 65536),
+                y: Math.trunc(normalizedY * 65536)
             };
         }
     }
