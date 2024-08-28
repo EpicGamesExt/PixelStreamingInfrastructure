@@ -58,7 +58,7 @@ async function onIdentify(msg) {
   signalServer.send(JSON.stringify({type: 'listStreamers'}));
 }
 
-async function onStreamerOffer(sdp) {
+async function onStreamerOffer(msg) {
   console.log("Got offer from streamer");
 
   if (streamer != null) {
@@ -68,7 +68,7 @@ async function onStreamerOffer(sdp) {
 
   const transport = await createWebRtcTransport("Streamer");
   const sdpEndpoint = mediasoupSdp.createSdpEndpoint(transport, mediasoupRouter.rtpCapabilities);
-  const producers = await sdpEndpoint.processOffer(sdp);
+  const producers = await sdpEndpoint.processOffer(msg.sdp, msg.scalabilityMode ? msg.scalabilityMode : "L1T1");
   const sdpAnswer = sdpEndpoint.createAnswer();
   const answer = { type: "answer", sdp: sdpAnswer };
 
@@ -271,7 +271,7 @@ async function onSignallingMessage(message) {
   const msg = JSON.parse(message);
 
   if (msg.type == 'offer') {
-    onStreamerOffer(msg.sdp);
+    onStreamerOffer(msg);
   }
   else if (msg.type == 'answer') {
     onPeerAnswer(msg.playerId, msg.sdp);

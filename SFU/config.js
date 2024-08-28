@@ -23,6 +23,9 @@ const config = {
   // Delay between list requests when looking for a specifc streamer.
   retrySubscribeDelaySecs: 10,
 
+  // Enable SVC support
+  enableSVC: true,
+
   mediasoup: {
     worker: {
       rtcMinPort: 40000,
@@ -55,11 +58,7 @@ const config = {
           kind: 'video',
           mimeType: 'video/VP8',
           clockRate: 90000,
-          parameters: {
-            "packetization-mode": 1,
-            "profile-level-id": "42e01f",
-            "level-asymmetry-allowed": 1
-          }
+          parameters: {}
         },
         {
           kind: "video",
@@ -85,6 +84,28 @@ const config = {
       initialAvailableOutgoingBitrate: 100_000_000,
     },
   },
+}
+
+if(config.enableSVC)
+{
+  config.mediasoup.router.mediaCodecs.push(
+  {
+    kind: 'video',
+    mimeType: 'video/VP9',
+    clockRate: 90000,
+    parameters: {
+      "profile-id": 0
+    }
+  });
+  config.mediasoup.router.mediaCodecs.push(
+  {
+    kind: 'video',
+    mimeType: 'video/VP9',
+    clockRate: 90000,
+    parameters: {
+      "profile-id": 2
+    }
+  });
 }
 
 function getLocalListenIps() {
