@@ -104,8 +104,8 @@ export const DataProtocol = {
             structure: [
                 { name: "x", type: "uint16" },
                 { name: "y", type: "uint16" },
-                { name: "delta_x", type: "uint16" },
-                { name: "delta_y", type: "uint16" }
+                { name: "delta_x", type: "int16" },
+                { name: "delta_y", type: "int16" }
             ]
         },
         MouseWheel: {

@@ -428,23 +428,23 @@ export class Streamer extends EventEmitter {
                 data_offset += 1;
                 break;
                 case "uint16":
-                    value = data.getUint16(data_offset);
+                    value = data.getUint16(data_offset, true);
                 data_offset += 2;
                 break;
                 case "int16":
-                    value = data.getInt16(data_offset);
+                    value = data.getInt16(data_offset, true);
                 data_offset += 2;
                 break;
                 case "float":
-                    value = data.getFloat32(data_offset);
+                    value = data.getFloat32(data_offset, true);
                 data_offset += 4;
                 break;
                 case "double":
-                    value = data.getFloat64(data_offset);
+                    value = data.getFloat64(data_offset, true);
                 data_offset += 8;
                 break;
                 case "string": {
-                    const str_len = data.getUint16(data_offset);
+                    const str_len = data.getUint16(data_offset, true);
                     data_offset += 2;
                     const text_decoder = new TextDecoder('utf-16');
                     value = text_decoder.decode(data.buffer.slice(data_offset, data_offset + str_len));

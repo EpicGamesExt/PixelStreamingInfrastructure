@@ -134,7 +134,7 @@ export const expect = baseExpect.extend({
                 return `expected is empty.`;
             }
             if (!pass) {
-                return `Could not find ${JSON.stringify(expected[action_index])} in ${JSON.stringify(received)}`;
+                return `Could not find action ${action_index} : ${JSON.stringify(expected[action_index])} in ${JSON.stringify(received)}`;
             }
             return '';
         };
