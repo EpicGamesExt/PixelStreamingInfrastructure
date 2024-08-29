@@ -72,7 +72,7 @@ export const DataProtocol = {
         KeyPress: {
             id: 62,
             structure: [
-                { name: "char_code", type: "uint16" }
+                { name: "key_code", type: "uint16" }
             ]
         },
         MouseEnter: {

@@ -18,6 +18,8 @@ export enum PSEventTypes {
     MouseMove = DataProtocol.ToStreamer.MouseMove.id,
     MouseWheel = DataProtocol.ToStreamer.MouseWheel.id,
     MouseDouble = DataProtocol.ToStreamer.MouseDouble.id,
+    MouseEnter = DataProtocol.ToStreamer.MouseEnter.id,
+    MouseLeave = DataProtocol.ToStreamer.MouseLeave.id,
     KeyDown = DataProtocol.ToStreamer.KeyDown.id,
     KeyUp = DataProtocol.ToStreamer.KeyUp.id,
     KeyPress = DataProtocol.ToStreamer.KeyPress.id,
@@ -27,9 +29,9 @@ export enum PSEventTypes {
 // mouse input events captured by the streamer
 export interface DataChannelMouseInput {
     type: number;
-    button: number;
-    x: number;
-    y: number;
+    button?: number;
+    x?: number;
+    y?: number;
     delta_x?: number;
     delta_y?: number;
 };
@@ -37,8 +39,7 @@ export interface DataChannelMouseInput {
 // keyboard input events captured by the streamer
 export interface DataChannelKeyboardInput {
     type: number;
-    key_code?: number;
-    char_code?: number;
+    key_code: number;
 };
 
 export interface DataChannelCommandInput {

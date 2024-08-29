@@ -33,7 +33,7 @@ test('Test keyboard events', {
             for (let c = start_code; c <= end_code; c++) {
                 await page.keyboard.press(String.fromCharCode(c));
                 expected_actions.push({ type: PSEventTypes.KeyDown, key_code: c });
-                expected_actions.push({ type: PSEventTypes.KeyPress, char_code: c });
+                expected_actions.push({ type: PSEventTypes.KeyPress, key_code: c });
                 expected_actions.push({ type: PSEventTypes.KeyUp, key_code: c });
             }
         });
