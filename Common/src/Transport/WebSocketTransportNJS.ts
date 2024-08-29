@@ -64,9 +64,9 @@ export class WebSocketTransportNJS extends EventEmitter implements ITransport {
      * @returns True if the transport is connected.
      */
     isConnected(): boolean {
-        return !!this.webSocket && this.webSocket.readyState != WebSocket.CLOSED
+        return !!this.webSocket && this.webSocket.readyState != WebSocket.CLOSED;
     }
-    
+
     /**
      * Handles what happens when a message is received
      * @param event - Message Received
@@ -117,10 +117,10 @@ export class WebSocketTransportNJS extends EventEmitter implements ITransport {
 
     private setupSocketHandlers(): void {
         if (this.webSocket) {
-            this.webSocket.addEventListener("open", this.handleOnOpen.bind(this));
-            this.webSocket.addEventListener("error", this.handleOnError.bind(this));
-            this.webSocket.addEventListener("close", this.handleOnClose.bind(this));
-            this.webSocket.addEventListener("message", this.handleOnMessage.bind(this));
+            this.webSocket.addEventListener('open', this.handleOnOpen.bind(this));
+            this.webSocket.addEventListener('error', this.handleOnError.bind(this));
+            this.webSocket.addEventListener('close', this.handleOnClose.bind(this));
+            this.webSocket.addEventListener('message', this.handleOnMessage.bind(this));
         }
     }
 }
