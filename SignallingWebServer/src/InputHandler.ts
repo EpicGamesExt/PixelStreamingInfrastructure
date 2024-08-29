@@ -2,23 +2,23 @@ import { SignallingServer } from '@epicgames-ps/lib-pixelstreamingsignalling-ue5
 import { IProgramOptions, beautify } from './Utils';
 
 interface IHandlerFunc {
-    desc: string,
-    func: (options: IProgramOptions, signallingServer: SignallingServer) => void,
+    desc: string;
+    func: (options: IProgramOptions, signallingServer: SignallingServer) => void;
 }
 
 export function initInputHandler(options: IProgramOptions, signallingServer: SignallingServer) {
     const stdin = process.stdin;
 
-    stdin.setRawMode( true );
+    stdin.setRawMode(true);
     stdin.resume();
     stdin.setEncoding('utf8');
 
     const handlers: Record<string, IHandlerFunc> = {
-        'c': { desc: 'Print configuration.', func: printConfig },
-        'i': { desc: 'Print current server info.', func: printServerInfo },
-        's': { desc: 'Print list of connected streamers.', func: printStreamerList },
-        'p': { desc: 'Print list of connected players.', func: printPlayerList },
-    }
+        c: { desc: 'Print configuration.', func: printConfig },
+        i: { desc: 'Print current server info.', func: printServerInfo },
+        s: { desc: 'Print list of connected streamers.', func: printStreamerList },
+        p: { desc: 'Print list of connected players.', func: printPlayerList }
+    };
 
     // on any data into stdin
     stdin.on('data', (keyBuffer) => {
@@ -52,9 +52,13 @@ function printServerInfo(_options: IProgramOptions, _signallingServer: Signallin
 }
 
 function printStreamerList(_options: IProgramOptions, signallingServer: SignallingServer) {
-    process.stdout.write(`Streamer Ids: ${JSON.stringify(signallingServer.streamerRegistry.streamers.map(streamer => streamer.streamerId))}\n`);
+    process.stdout.write(
+        `Streamer Ids: ${JSON.stringify(signallingServer.streamerRegistry.streamers.map((streamer) => streamer.streamerId))}\n`
+    );
 }
 
 function printPlayerList(_options: IProgramOptions, signallingServer: SignallingServer) {
-    process.stdout.write(`Player Ids: ${JSON.stringify(signallingServer.playerRegistry.listPlayers().map(player => player.playerId))}\n`);
+    process.stdout.write(
+        `Player Ids: ${JSON.stringify(signallingServer.playerRegistry.listPlayers().map((player) => player.playerId))}\n`
+    );
 }
