@@ -11,19 +11,8 @@ test('Test keyboard events', {
     tag: ['@keyboard'],
 }, async ({ page, streamerPage, streamerId }) => {
 
-    // helps debugging
-    helpers.attachToConsoleEvents(streamerPage, (...args: any[]) => {
-        console.log("Streamer: ", ...args);
-    });
-
-    helpers.attachToConsoleEvents(page, (...args: any[]) => {
-        console.log("Player: ", ...args);
-    });
-
-    await page.goto(`/?StreamerId=${streamerId}`);
+    await page.goto(`/?StreamerId=${streamerId}&MatchViewportRes=true`);
     await page.getByText('Click to start').click();
-
-    // let the stream run for a short duration
     await helpers.waitForVideo(page);
 
     const player_box = await page.locator('#videoElementParent').boundingBox();

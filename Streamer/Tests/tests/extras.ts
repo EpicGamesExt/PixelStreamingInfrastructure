@@ -21,6 +21,7 @@ export enum PSEventTypes {
     KeyDown = DataProtocol.ToStreamer.KeyDown.id,
     KeyUp = DataProtocol.ToStreamer.KeyUp.id,
     KeyPress = DataProtocol.ToStreamer.KeyPress.id,
+    Command = DataProtocol.ToStreamer.Command.id,
 };
 
 // mouse input events captured by the streamer
@@ -40,8 +41,13 @@ export interface DataChannelKeyboardInput {
     char_code?: number;
 };
 
+export interface DataChannelCommandInput {
+    type: number;
+    command: string;
+};
+
 // a generic type for inputs captured by the streamer
-export type DataChannelEvent = DataChannelMouseInput | DataChannelKeyboardInput;
+export type DataChannelEvent = DataChannelMouseInput | DataChannelKeyboardInput | DataChannelCommandInput;
 
 // sets up the streamer page to capture data channel messages
 export function setupEventCapture(streamerPage: Page) {
