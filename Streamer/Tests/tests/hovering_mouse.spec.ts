@@ -1,7 +1,7 @@
 import { test } from './fixtures';
 import { expect } from './matchers';
 import {
-    PSMouseEventTypes,
+    PSEventTypes,
     DataChannelEvent,
     getEventsFor,
 } from './extras';
@@ -54,7 +54,7 @@ test('Test hovering mouse movement', {
             for (const movement of movements) {
                 await page.mouse.move(movement.x, movement.y);
                 const translated = coord_converter.normalizeQuantizeUnsigned(movement.x, movement.y);
-                expected_actions.push({ type: PSMouseEventTypes.Move, x: translated.x, y: translated.y });
+                expected_actions.push({ type: PSEventTypes.MouseMove, x: translated.x, y: translated.y });
             }
         });
 

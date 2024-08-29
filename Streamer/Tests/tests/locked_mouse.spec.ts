@@ -1,7 +1,7 @@
 import { test } from './fixtures';
 import { expect } from './matchers';
 import {
-    PSMouseEventTypes,
+    PSEventTypes,
     DataChannelEvent,
     getEventsFor,
 } from './extras';
@@ -61,7 +61,7 @@ test('Test locked mouse movement', {
             for (const movement of movements) {
                 await page.mouse.move(anchor.x + movement.x, anchor.y + movement.y);
                 const translated = coord_converter.normalizeQuantizeSigned(movement.x, movement.y);
-                expected_actions.push({ type: PSMouseEventTypes.Move, delta_x: translated.x, delta_y: translated.y });
+                expected_actions.push({ type: PSEventTypes.MouseMove, delta_x: translated.x, delta_y: translated.y });
             }
         });
 

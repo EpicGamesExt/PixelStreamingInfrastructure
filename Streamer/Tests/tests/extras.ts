@@ -12,12 +12,15 @@ declare global {
     }
 }
 
-export enum PSMouseEventTypes {
-    Down = DataProtocol.ToStreamer.MouseDown.id,
-    Up = DataProtocol.ToStreamer.MouseUp.id,
-    Move = DataProtocol.ToStreamer.MouseMove.id,
-    Wheel = DataProtocol.ToStreamer.MouseWheel.id,
-    Double = DataProtocol.ToStreamer.MouseDouble.id,
+export enum PSEventTypes {
+    MouseDown = DataProtocol.ToStreamer.MouseDown.id,
+    MouseUp = DataProtocol.ToStreamer.MouseUp.id,
+    MouseMove = DataProtocol.ToStreamer.MouseMove.id,
+    MouseWheel = DataProtocol.ToStreamer.MouseWheel.id,
+    MouseDouble = DataProtocol.ToStreamer.MouseDouble.id,
+    KeyDown = DataProtocol.ToStreamer.KeyDown.id,
+    KeyUp = DataProtocol.ToStreamer.KeyUp.id,
+    KeyPress = DataProtocol.ToStreamer.KeyPress.id,
 };
 
 // mouse input events captured by the streamer
@@ -33,6 +36,8 @@ export interface DataChannelMouseInput {
 // keyboard input events captured by the streamer
 export interface DataChannelKeyboardInput {
     type: number;
+    key_code?: number;
+    char_code?: number;
 };
 
 // a generic type for inputs captured by the streamer
