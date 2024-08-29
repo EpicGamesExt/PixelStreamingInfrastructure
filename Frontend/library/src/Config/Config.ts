@@ -277,9 +277,9 @@ export class Config {
                 Flags.UseCamera,
                 'Use webcam',
                 'Make browser request webcam access and open a input video track.',
-                settings && Object.prototype.hasOwnProperty.call(settings, Flags.UseCamera) ?
-                    settings[Flags.UseCamera] :
-                    false,
+                settings && Object.prototype.hasOwnProperty.call(settings, Flags.UseCamera)
+                    ? settings[Flags.UseCamera]
+                    : false,
                 useUrlParams
             )
         );

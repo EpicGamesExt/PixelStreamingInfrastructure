@@ -355,28 +355,28 @@ export class PixelStreaming {
         }
     }
 
-    /** 
+    /**
      * Will unmute the video track which is sent to Unreal Engine.
      * By default, will only unmute an existing video track.
-     * 
+     *
      * @param forceEnable Can be used for cases when this object wasn't initialized with a video track.
      * If this parameter is true, the connection will be restarted with a camera.
      * Warning: this takes some time, as a full renegotiation and reconnection will happen.
      */
-    public unmuteCamera(forceEnable = false) : void {
+    public unmuteCamera(forceEnable = false): void {
         // If there's an existing video track, we just set muted state
         if (this.config.isFlagEnabled('UseCamera')) {
             this.setCameraMuted(false);
             return;
         }
-        
+
         // If there's no pre-existing video track, and caller is ok with full reset, we enable and reset
         if (forceEnable) {
-            this.config.setFlagEnabled("UseCamera", true);
+            this.config.setFlagEnabled('UseCamera', true);
             this.reconnect();
             return;
         }
-          
+
         // If we prefer not to force a reconnection, just warn the user that this operation didn't happen
         Logger.Warning(
             Logger.GetStackTrace(),
@@ -384,7 +384,7 @@ export class PixelStreaming {
         );
     }
 
-    public muteCamera() : void {
+    public muteCamera(): void {
         if (this.config.isFlagEnabled('UseCamera')) {
             this.setCameraMuted(true);
             return;
@@ -397,9 +397,9 @@ export class PixelStreaming {
         );
     }
 
-    private setCameraMuted(mute: boolean) : void
-    {
-        for (const transceiver of this._webRtcController?.peerConnectionController?.peerConnection?.getTransceivers() ?? []) {
+    private setCameraMuted(mute: boolean): void {
+        for (const transceiver of this._webRtcController?.peerConnectionController?.peerConnection?.getTransceivers() ??
+            []) {
             if (RTCUtils.canTransceiverSendVideo(transceiver)) {
                 transceiver.sender.track.enabled = !mute;
             }

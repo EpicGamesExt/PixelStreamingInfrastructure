@@ -390,7 +390,7 @@ export class PeerConnectionController {
 
         // Setup a transceiver for sending webcam video to UE and receiving video from UE
         if (!useCamera) {
-            if(!hasVideoReceiver) {
+            if (!hasVideoReceiver) {
                 this.peerConnection?.addTransceiver('video', { direction: 'recvonly' });
             }
         } else {
@@ -468,17 +468,15 @@ export class PeerConnectionController {
             await this.setupAudioSender(hasAudioReceiver);
         }
     }
-    
+
     async setupVideoSender(hasVideoReceiver: boolean) {
         // set the media send options
         const mediaSendOptions: MediaStreamConstraints = {
-            video: true,
+            video: true
         };
 
         // Note using webcam on android chrome requires SSL or chrome://flags/ "unsafely-treat-insecure-origin-as-secure"
-        const stream = await navigator.mediaDevices.getUserMedia(
-            mediaSendOptions
-        );
+        const stream = await navigator.mediaDevices.getUserMedia(mediaSendOptions);
 
         if (stream) {
             if (hasVideoReceiver) {
@@ -502,7 +500,7 @@ export class PeerConnectionController {
                 }
             }
         } else {
-            if(!hasVideoReceiver) {
+            if (!hasVideoReceiver) {
                 this.peerConnection?.addTransceiver('video', { direction: 'recvonly' });
             }
         }
@@ -519,7 +517,7 @@ export class PeerConnectionController {
             sampleRate: 48000,
             sampleSize: 16,
             volume: 1.0
-        }
+        };
 
         // set the media send options
         const mediaSendOptions: MediaStreamConstraints = {
@@ -528,9 +526,7 @@ export class PeerConnectionController {
         };
 
         // Note using mic on android chrome requires SSL or chrome://flags/ "unsafely-treat-insecure-origin-as-secure"
-        const stream = await navigator.mediaDevices.getUserMedia(
-            mediaSendOptions
-        );
+        const stream = await navigator.mediaDevices.getUserMedia(mediaSendOptions);
         if (stream) {
             if (hasAudioReceiver) {
                 for (const transceiver of this.peerConnection?.getTransceivers() ?? []) {
@@ -553,7 +549,7 @@ export class PeerConnectionController {
                 }
             }
         } else {
-            if(!hasAudioReceiver) {
+            if (!hasAudioReceiver) {
                 this.peerConnection?.addTransceiver('audio', {
                     direction: 'recvonly'
                 });
