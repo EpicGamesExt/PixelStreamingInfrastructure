@@ -6,9 +6,9 @@ const pjson = require('../../package.json');
 /* eslint-disable @typescript-eslint/no-unsafe-call,
                   @typescript-eslint/no-unsafe-member-access */
 
-export default function(signallingServer: SignallingServer) {
+export default function (signallingServer: SignallingServer) {
     const operations = {
-        GET,
+        GET
     };
 
     function GET(req: any, res: any, _next: any) {
@@ -19,39 +19,39 @@ export default function(signallingServer: SignallingServer) {
             streamer_count: signallingServer.streamerRegistry.count(),
             player_count: signallingServer.playerRegistry.count(),
             // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-            version: pjson.version,
+            version: pjson.version
         });
     }
 
     GET.apiDoc = {
-        summary: "Returns the current status of the server.",
-        operationId: "getConfig",
+        summary: 'Returns the current status of the server.',
+        operationId: 'getConfig',
         responses: {
             200: {
-                description: "The current status of the server.",
+                description: 'The current status of the server.',
                 content: {
-                    "application/json": {
-                       schema: {
-                            type: "object",
+                    'application/json': {
+                        schema: {
+                            type: 'object',
                             properties: {
-                                "uptime": {
-                                    type: "number"
+                                uptime: {
+                                    type: 'number'
                                 },
-                                "streamer_count": {
-                                    type: "number"
+                                streamer_count: {
+                                    type: 'number'
                                 },
-                                "player_count": {
-                                    type: "number"
+                                player_count: {
+                                    type: 'number'
                                 },
-                                "version": {
-                                    type: "string"
-                                },
-                            },
-                        },
-                    },
-                },
-            },
-        },
+                                version: {
+                                    type: 'string'
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     };
 
     return operations;

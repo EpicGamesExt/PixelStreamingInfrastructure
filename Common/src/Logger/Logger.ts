@@ -43,7 +43,7 @@ export class Logger {
             return;
         }
 
-        this.CommonLog("Log", null, message);
+        this.CommonLog('Log', null, message);
     }
 
     /**
@@ -57,7 +57,7 @@ export class Logger {
             return;
         }
 
-        this.CommonLog("Info", null, message);
+        this.CommonLog('Info', null, message);
     }
 
     /**
@@ -66,7 +66,7 @@ export class Logger {
      * @param message - the message to be logged
      */
     static Error(stack: string, message: string) {
-        this.CommonLog("Error", stack, message);
+        this.CommonLog('Error', stack, message);
     }
 
     /**
@@ -75,7 +75,7 @@ export class Logger {
      * @param message - the message to be logged
      */
     static Warning(stack: string, message: string) {
-        this.CommonLog("Warning", null, message);
+        this.CommonLog('Warning', null, message);
     }
 
     /**

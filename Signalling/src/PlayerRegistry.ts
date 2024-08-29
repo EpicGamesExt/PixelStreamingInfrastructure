@@ -21,10 +21,10 @@ export interface IPlayer extends IMessageLogger {
  * Used by the API to describe the current state of the player.
  */
 export interface IPlayerInfo {
-    playerId: string,
-    type: string,
-    subscribedTo: string | undefined,
-    remoteAddress: string | undefined,
+    playerId: string;
+    type: string;
+    subscribedTo: string | undefined;
+    remoteAddress: string | undefined;
 }
 
 /**

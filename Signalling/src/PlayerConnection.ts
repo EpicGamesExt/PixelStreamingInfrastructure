@@ -1,10 +1,12 @@
 import WebSocket from 'ws';
-import { ITransport,
-         WebSocketTransportNJS,
-         SignallingProtocol,
-         MessageHelpers,
-         Messages,
-         BaseMessage } from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
+import {
+    ITransport,
+    WebSocketTransportNJS,
+    SignallingProtocol,
+    MessageHelpers,
+    Messages,
+    BaseMessage
+} from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
 import { IPlayer, IPlayerInfo } from './PlayerRegistry';
 import { IStreamer } from './StreamerRegistry';
 import { Logger } from './Logger';
@@ -15,7 +17,7 @@ import { SignallingServer } from './SignallingServer';
  * A connection between the signalling server and a player connection.
  * This is where messages expected to be handled by the player come in
  * and where messages are sent to the player.
- * 
+ *
  * Interesting internals:
  * playerId: The unique id string of this player.
  * transport: The ITransport where transport events can be subscribed to
@@ -66,7 +68,9 @@ export class PlayerConnection implements IPlayer, LogUtils.IMessageLogger {
      * Returns an identifier that is displayed in logs.
      * @returns A string describing this connection.
      */
-    getReadableIdentifier(): string { return this.playerId; }
+    getReadableIdentifier(): string {
+        return this.playerId;
+    }
 
     /**
      * Sends a signalling message to the player.
@@ -86,15 +90,24 @@ export class PlayerConnection implements IPlayer, LogUtils.IMessageLogger {
             playerId: this.playerId,
             type: 'Player',
             subscribedTo: this.subscribedStreamer?.streamerId,
-            remoteAddress: this.remoteAddress,
+            remoteAddress: this.remoteAddress
         };
     }
 
     private registerMessageHandlers(): void {
         /* eslint-disable @typescript-eslint/unbound-method */
-        this.protocol.on(Messages.subscribe.typeName, LogUtils.createHandlerListener(this, this.onSubscribeMessage));
-        this.protocol.on(Messages.unsubscribe.typeName, LogUtils.createHandlerListener(this, this.onUnsubscribeMessage));
-        this.protocol.on(Messages.listStreamers.typeName, LogUtils.createHandlerListener(this, this.onListStreamers));
+        this.protocol.on(
+            Messages.subscribe.typeName,
+            LogUtils.createHandlerListener(this, this.onSubscribeMessage)
+        );
+        this.protocol.on(
+            Messages.unsubscribe.typeName,
+            LogUtils.createHandlerListener(this, this.onUnsubscribeMessage)
+        );
+        this.protocol.on(
+            Messages.listStreamers.typeName,
+            LogUtils.createHandlerListener(this, this.onListStreamers)
+        );
         /* eslint-enable @typescript-eslint/unbound-method */
 
         this.protocol.on(Messages.offer.typeName, this.sendToStreamer.bind(this));
@@ -107,7 +120,9 @@ export class PlayerConnection implements IPlayer, LogUtils.IMessageLogger {
 
     private sendToStreamer(message: BaseMessage): void {
         if (!this.subscribedStreamer) {
-            Logger.warn(`Player ${this.playerId} tried to send to a streamer but they're not subscribed to any.`);
+            Logger.warn(
+                `Player ${this.playerId} tried to send to a streamer but they're not subscribed to any.`
+            );
             const streamerId = this.server.streamerRegistry.getFirstStreamerId();
             if (!streamerId) {
                 Logger.error('There are no streamers to force a subscription. Disconnecting.');
@@ -127,12 +142,16 @@ export class PlayerConnection implements IPlayer, LogUtils.IMessageLogger {
     private subscribe(streamerId: string) {
         const streamer = this.server.streamerRegistry.find(streamerId);
         if (!streamer) {
-            Logger.error(`subscribe: Player ${this.playerId} tried to subscribe to a non-existent streamer ${streamerId}`);
+            Logger.error(
+                `subscribe: Player ${this.playerId} tried to subscribe to a non-existent streamer ${streamerId}`
+            );
             return;
         }
 
         if (this.subscribedStreamer) {
-            Logger.warn(`subscribe: Player ${this.playerId} is resubscribing to a streamer but is already subscribed to ${this.subscribedStreamer.streamerId}`);
+            Logger.warn(
+                `subscribe: Player ${this.playerId} is resubscribing to a streamer but is already subscribed to ${this.subscribedStreamer.streamerId}`
+            );
             this.unsubscribe();
         }
 
@@ -140,9 +159,11 @@ export class PlayerConnection implements IPlayer, LogUtils.IMessageLogger {
         this.subscribedStreamer.on('id_changed', this.streamerIdChangeListener);
         this.subscribedStreamer.on('disconnect', this.streamerDisconnectedListener);
 
-        const connectedMessage = MessageHelpers.createMessage(Messages.playerConnected, { playerId: this.playerId,
-                                                                                          dataChannel: true,
-                                                                                          sfu: false });
+        const connectedMessage = MessageHelpers.createMessage(Messages.playerConnected, {
+            playerId: this.playerId,
+            dataChannel: true,
+            sfu: false
+        });
         this.sendToStreamer(connectedMessage);
     }
 
@@ -151,7 +172,9 @@ export class PlayerConnection implements IPlayer, LogUtils.IMessageLogger {
             return;
         }
 
-        const disconnectedMessage = MessageHelpers.createMessage(Messages.playerDisconnected, { playerId: this.playerId });
+        const disconnectedMessage = MessageHelpers.createMessage(Messages.playerDisconnected, {
+            playerId: this.playerId
+        });
         this.sendToStreamer(disconnectedMessage);
 
         this.subscribedStreamer.off('id_changed', this.streamerIdChangeListener);
@@ -186,7 +209,9 @@ export class PlayerConnection implements IPlayer, LogUtils.IMessageLogger {
     }
 
     private onListStreamers(_message: Messages.listStreamers): void {
-        const listMessage = MessageHelpers.createMessage(Messages.streamerList, { ids: this.server.streamerRegistry.streamers.map(streamer => streamer.streamerId) });
+        const listMessage = MessageHelpers.createMessage(Messages.streamerList, {
+            ids: this.server.streamerRegistry.streamers.map((streamer) => streamer.streamerId)
+        });
         this.sendMessage(listMessage);
     }
 
