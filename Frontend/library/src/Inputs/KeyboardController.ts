@@ -236,20 +236,15 @@ export class KeyboardController {
      * Handles when a key is press
      * @param keyboard - Keyboard Event
      */
-    handleOnKeyPress(keyboard: KeyboardEvent) {
-        if (!('charCode' in keyboard)) {
-            Logger.Warning(
-                Logger.GetStackTrace(),
-                'KeyboardEvent.charCode is deprecated in this browser, cannot send key press.'
-            );
+    handleOnKeyPress(keyboardEvent: KeyboardEvent) {
+        const keyCode = this.getKeycode(keyboardEvent);
+        if (!keyCode) {
             return;
         }
 
-        const charCode = keyboard.charCode;
-        Logger.Log(Logger.GetStackTrace(), `key press ${charCode}`, 6);
-
+        Logger.Log(Logger.GetStackTrace(), `key press ${keyCode}`, 6);
         const toStreamerHandlers = this.toStreamerMessagesProvider.toStreamerHandlers;
-        toStreamerHandlers.get('KeyPress')([charCode]);
+        toStreamerHandlers.get('KeyPress')([keyCode]);
     }
 
     /**
