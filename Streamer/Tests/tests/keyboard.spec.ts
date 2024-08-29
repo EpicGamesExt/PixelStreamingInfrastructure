@@ -30,7 +30,7 @@ test('Test keyboard events', {
         const events = await getEventsFor(streamerPage, async () => {
             const start_code = 'A'.charCodeAt(0);
             const end_code = 'Z'.charCodeAt(0);
-            for (let c = start_code; c < end_code; c++) {
+            for (let c = start_code; c <= end_code; c++) {
                 await page.keyboard.press(String.fromCharCode(c));
                 expected_actions.push({ type: PSEventTypes.KeyDown, key_code: c });
                 expected_actions.push({ type: PSEventTypes.KeyPress, char_code: c });
