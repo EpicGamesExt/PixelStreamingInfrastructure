@@ -70,9 +70,7 @@ export class InputClassesFactory {
                 mouseController.registerHoveringMouseEvents(mouseController);
                 break;
             default:
-                Logger.Info(
-                    'unknown Control Scheme Type Defaulting to Locked Mouse Events'
-                );
+                Logger.Info('unknown Control Scheme Type Defaulting to Locked Mouse Events');
                 mouseController.registerLockedMouseEvents(mouseController);
                 break;
         }

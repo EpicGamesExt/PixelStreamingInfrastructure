@@ -32,9 +32,7 @@ export class PeerConnectionController {
         // Set the ICE transport to relay if TURN enabled
         if (this.config.isFlagEnabled(Flags.ForceTURN)) {
             options.iceTransportPolicy = 'relay';
-            Logger.Info(
-                'Forcing TURN usage by setting ICE Transport Policy in peer connection config.'
-            );
+            Logger.Info('Forcing TURN usage by setting ICE Transport Policy in peer connection config.');
         }
 
         // build a new peer connection with the options
@@ -221,7 +219,7 @@ export class PeerConnectionController {
             // check if no relay address is found, if so, we are assuming it means no TURN server
             if (iceCandidate.candidate.indexOf('relay') < 0) {
                 Logger.Info(
-                    `Dropping candidate because it was not TURN relay. | Type= ${iceCandidate.type} | Protocol= ${iceCandidate.protocol} | Address=${iceCandidate.address} | Port=${iceCandidate.port} |`,
+                    `Dropping candidate because it was not TURN relay. | Type= ${iceCandidate.type} | Protocol= ${iceCandidate.protocol} | Address=${iceCandidate.address} | Port=${iceCandidate.port} |`
                 );
                 return;
             }

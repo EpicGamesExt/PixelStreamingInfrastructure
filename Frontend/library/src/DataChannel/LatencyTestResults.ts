@@ -49,9 +49,7 @@ export class LatencyTestResults {
      */
     processFields() {
         if (this.EncodeMs == null && (this.PreEncodeTimeMs != null || this.PostEncodeTimeMs != null)) {
-            Logger.Info(
-                `Setting Encode Ms \n ${this.PostEncodeTimeMs} \n ${this.PreEncodeTimeMs}`,
-            );
+            Logger.Info(`Setting Encode Ms \n ${this.PostEncodeTimeMs} \n ${this.PreEncodeTimeMs}`);
             this.EncodeMs = this.PostEncodeTimeMs - this.PreEncodeTimeMs;
         }
 
@@ -60,7 +58,7 @@ export class LatencyTestResults {
             (this.PreCaptureTimeMs != null || this.PostCaptureTimeMs != null)
         ) {
             Logger.Info(
-                `Setting CaptureToSendMs Ms \n ${this.PostCaptureTimeMs} \n ${this.PreCaptureTimeMs}`,
+                `Setting CaptureToSendMs Ms \n ${this.PostCaptureTimeMs} \n ${this.PreCaptureTimeMs}`
             );
             this.CaptureToSendMs = this.PostCaptureTimeMs - this.PreCaptureTimeMs;
         }

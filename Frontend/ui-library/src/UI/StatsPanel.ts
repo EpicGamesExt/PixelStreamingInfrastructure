@@ -315,9 +315,7 @@ export class StatsPanel {
         // todo:
         //statsText += `<div>Browser receive to composite (ms): ${stats.inboundVideoStats.receiveToCompositeMs}</div>`;
 
-        Logger.Info(
-            `--------- Stats ---------\n ${JSON.stringify(stats)}\n------------------------`,
-        );
+        Logger.Info(`--------- Stats ---------\n ${JSON.stringify(stats)}\n------------------------`);
     }
 
     /**

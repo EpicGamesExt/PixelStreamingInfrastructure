@@ -656,9 +656,7 @@ export class WebRtcPlayerController {
             const protocolString = new TextDecoder('utf-16').decode(message.slice(1));
             const protocolJSON = JSON.parse(protocolString);
             if (!Object.prototype.hasOwnProperty.call(protocolJSON, 'Direction')) {
-                Logger.Error(
-                    'Malformed protocol received. Ensure the protocol message contains a direction'
-                );
+                Logger.Error('Malformed protocol received. Ensure the protocol message contains a direction');
             }
             const direction = protocolJSON.Direction;
             delete protocolJSON.Direction;
@@ -900,9 +898,7 @@ export class WebRtcPlayerController {
         }
 
         if (!this.videoPlayer.hasVideoSource()) {
-            Logger.Warning(
-                'Cannot play stream, the video element has no srcObject to play.'
-            );
+            Logger.Warning('Cannot play stream, the video element has no srcObject to play.');
             return;
         }
 
@@ -1340,9 +1336,7 @@ export class WebRtcPlayerController {
      * @param iceEvent - RTC Peer ConnectionIceEvent) {
      */
     handleDataChannel(datachannelEvent: RTCDataChannelEvent) {
-        Logger.Info(
-            'Data channel created for us by browser as we are a receiving peer.',
-        );
+        Logger.Info('Data channel created for us by browser as we are a receiving peer.');
         this.sendrecvDataChannelController.dataChannel = datachannelEvent.channel;
         // Data channel was created for us, so we just need to setup its callbacks and array type
         this.sendrecvDataChannelController.setupDataChannel();
@@ -1714,9 +1708,7 @@ export class WebRtcPlayerController {
         const view = new Uint8Array(message);
         Logger.Info('DataChannelReceiveMessageType.QualityControlOwnership');
         this.isQualityController = new Boolean(view[1]).valueOf();
-        Logger.Info(
-            `Received quality controller message, will control quality: ${this.isQualityController}`
-        );
+        Logger.Info(`Received quality controller message, will control quality: ${this.isQualityController}`);
         this.pixelStreaming._onQualityControlOwnership(this.isQualityController);
     }
 
@@ -1815,9 +1807,7 @@ export class WebRtcPlayerController {
         handler?: (data: ArrayBuffer | Array<number | string>) => void
     ) {
         if (direction === MessageDirection.FromStreamer && typeof handler === 'undefined') {
-            Logger.Warning(
-                `Unable to register handler for ${name} as no handler was passed`
-            );
+            Logger.Warning(`Unable to register handler for ${name} as no handler was passed`);
         }
 
         this.streamMessageController.registerMessageHandler(

@@ -731,9 +731,7 @@ export class Config {
      */
     setFlagEnabled(id: FlagsIds, flagEnabled: boolean) {
         if (!this.flags.has(id)) {
-            Logger.Warning(
-                `Cannot toggle flag called ${id} - it does not exist in the Config.flags map.`
-            );
+            Logger.Warning(`Cannot toggle flag called ${id} - it does not exist in the Config.flags map.`);
         } else {
             this.flags.get(id).flag = flagEnabled;
         }

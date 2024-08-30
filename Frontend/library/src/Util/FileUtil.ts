@@ -80,7 +80,7 @@ export class FileUtil {
             const transferDuration = new Date().getTime() - file.timestampStart;
             const transferBitrate = Math.round((file.size * 16 * 1024) / transferDuration);
             Logger.Info(
-                `Average transfer bitrate: ${transferBitrate}kb/s over ${transferDuration / 1000} seconds`,
+                `Average transfer bitrate: ${transferBitrate}kb/s over ${transferDuration / 1000} seconds`
             );
 
             // File reconstruction
@@ -98,9 +98,7 @@ export class FileUtil {
             a.remove();
         } else if (file.data.length > file.size) {
             file.receiving = false;
-            Logger.Error(
-                `Received bigger file than advertised: ${file.data.length}/${file.size}`
-            );
+            Logger.Error(`Received bigger file than advertised: ${file.data.length}/${file.size}`);
         }
     }
 }

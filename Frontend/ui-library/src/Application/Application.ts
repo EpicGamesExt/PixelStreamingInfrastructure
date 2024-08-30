@@ -326,9 +326,7 @@ export class Application {
         this.stream.addEventListener('settingsChanged', (event) => this.configUI.onSettingsChanged(event));
         this.stream.addEventListener('playerCount', ({ data: { count } }) => this.onPlayerCount(count));
         this.stream.addEventListener('webRtcTCPRelayDetected', () =>
-            Logger.Warning(
-                `Stream quailty degraded due to network enviroment, stream is relayed over TCP.`
-            )
+            Logger.Warning(`Stream quailty degraded due to network enviroment, stream is relayed over TCP.`)
         );
     }
 
