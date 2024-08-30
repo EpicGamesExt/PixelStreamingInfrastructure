@@ -11,37 +11,34 @@ import { EventEmitter } from 'events';
 
 interface PixelStreamingSettings {
     AllowPixelStreamingCommands: boolean;
-    DisableLatencyTest: boolean
-};
+    DisableLatencyTest: boolean;
+}
 
 interface EncoderSettings {
     TargetBitrate: number;
     MaxBitrate: number;
     MinQP: number;
     MaxQP: number;
-    RateControl: "ConstQP" | "VBR" | "CBR";
+    RateControl: 'ConstQP' | 'VBR' | 'CBR';
     FillerData: number;
-    MultiPass: "DISABLED" | "QUARTER" | "FULL";
-};
+    MultiPass: 'DISABLED' | 'QUARTER' | 'FULL';
+}
 
 interface WebRTCSettings {
-    DegradationPref: "MAINTAIN_FRAMERATE" | "MAINTAIN_RESOLUTION";
+    DegradationPref: 'MAINTAIN_FRAMERATE' | 'MAINTAIN_RESOLUTION';
     FPS: number;
     MinBitrate: number;
     MaxBitrate: number;
     LowQP: number;
     HighQP: number;
-};
-
-interface ConfigOptions {
-};
+}
 
 interface Settings {
     PixelStreaming: PixelStreamingSettings;
     Encoder: EncoderSettings;
     WebRTC: WebRTCSettings;
-    ConfigOptions: ConfigOptions;
-};
+    ConfigOptions: object;
+}
 
 export class PlayerPeer {
     id: string;
@@ -51,9 +48,9 @@ export class PlayerPeer {
 
     last_qp_sum?: number;
     last_stats_time?: number;
-};
+}
 
-const protocol_version = "1.0.0";
+const protocol_version = '1.0.0';
 
 export class Streamer extends EventEmitter {
     id: string;
@@ -82,12 +79,12 @@ export class Streamer extends EventEmitter {
                 MaxBitrate: 20000000,
                 MinQP: 0,
                 MaxQP: 51,
-                RateControl: "CBR",
+                RateControl: 'CBR',
                 FillerData: 0,
-                MultiPass: "FULL"
+                MultiPass: 'FULL'
             },
             WebRTC: {
-                DegradationPref: "MAINTAIN_FRAMERATE",
+                DegradationPref: 'MAINTAIN_FRAMERATE',
                 FPS: 60,
                 MinBitrate: 100000,
                 MaxBitrate: 100000000,
@@ -95,7 +92,7 @@ export class Streamer extends EventEmitter {
                 HighQP: 37
             },
             ConfigOptions: {}
-        }
+        };
 
         this.protocol.addListener(Messages.config.typeName, (msg: BaseMessage) =>
             this.handleConfigMessage(msg as Messages.config)
@@ -136,7 +133,10 @@ export class Streamer extends EventEmitter {
     }
 
     handleIdentifyMessage(_msg: Messages.identify) {
-        const endpointMessage = MessageHelpers.createMessage(Messages.endpointId, { id: this.id, protocolVersion: protocol_version });
+        const endpointMessage = MessageHelpers.createMessage(Messages.endpointId, {
+            id: this.id,
+            protocolVersion: protocol_version
+        });
         this.protocol.sendMessage(endpointMessage);
     }
 
@@ -152,28 +152,33 @@ export class Streamer extends EventEmitter {
 
             peer_connection.onicecandidate = (event) => {
                 if (event.candidate) {
-                    this.protocol.sendMessage(MessageHelpers.createMessage(Messages.iceCandidate, { playerId: player_id, candidate: event.candidate }));
+                    this.protocol.sendMessage(
+                        MessageHelpers.createMessage(Messages.iceCandidate, {
+                            playerId: player_id,
+                            candidate: event.candidate
+                        })
+                    );
                 }
             };
 
             this.local_stream.getTracks().forEach((track: MediaStreamTrack) => {
-                if (track.kind == "video") {
-                    if (this.settings.WebRTC.DegradationPref == "MAINTAIN_FRAMERATE") {
-                        track.contentHint = "motion";
-                    } else if (this.settings.WebRTC.DegradationPref == "MAINTAIN_RESOLUTION") {
-                        track.contentHint = "detail";
+                if (track.kind == 'video') {
+                    if (this.settings.WebRTC.DegradationPref == 'MAINTAIN_FRAMERATE') {
+                        track.contentHint = 'motion';
+                    } else if (this.settings.WebRTC.DegradationPref == 'MAINTAIN_RESOLUTION') {
+                        track.contentHint = 'detail';
                     }
                     const tranceiver_options: RTCRtpTransceiverInit = {
-                        streams: [ this.local_stream ],
-                        direction: "sendonly",
+                        streams: [this.local_stream],
+                        direction: 'sendonly',
                         sendEncodings: [
                             {
                                 maxBitrate: this.settings.WebRTC.MaxBitrate,
                                 maxFramerate: this.settings.WebRTC.FPS,
-                                priority: "high",
-                                rid: "base",
+                                priority: 'high',
+                                rid: 'base'
                             }
-                        ],
+                        ]
                     };
                     peer_connection.addTransceiver(track, tranceiver_options);
                 } else {
@@ -181,8 +186,11 @@ export class Streamer extends EventEmitter {
                 }
             });
 
-            const data_channel = peer_connection.createDataChannel("datachannel", { ordered: true, negotiated: false });
-            data_channel.binaryType = "arraybuffer";
+            const data_channel = peer_connection.createDataChannel('datachannel', {
+                ordered: true,
+                negotiated: false
+            });
+            data_channel.binaryType = 'arraybuffer';
             data_channel.onopen = () => {
                 this.sendDataProtocol(player_id);
                 this.sendInitialSettings(player_id);
@@ -192,9 +200,9 @@ export class Streamer extends EventEmitter {
                 this.emit('data_channel_closed', player_id);
             };
             data_channel.onmessage = (e: MessageEvent) => {
-                const message = new Uint8Array(e.data)
+                const message = new Uint8Array(e.data as ArrayBuffer);
                 this.handleDataChannelMessage(player_id, message);
-            }
+            };
 
             const new_player: PlayerPeer = {
                 id: player_id,
@@ -202,40 +210,57 @@ export class Streamer extends EventEmitter {
                 data_channel: data_channel
             };
 
-            peer_connection.createOffer().then((offer) => {
-                peer_connection.setLocalDescription(offer).then(() => {
-                    this.protocol.sendMessage(MessageHelpers.createMessage(Messages.offer, { playerId: msg.playerId, sdp: offer.sdp }));
-                });
-            });
+            peer_connection
+                .createOffer()
+                .then((offer) => {
+                    peer_connection
+                        .setLocalDescription(offer)
+                        .then(() => {
+                            this.protocol.sendMessage(
+                                MessageHelpers.createMessage(Messages.offer, {
+                                    playerId: msg.playerId,
+                                    sdp: offer.sdp
+                                })
+                            );
+                        })
+                        .catch(() => {});
+                })
+                .catch(() => {});
 
             // report qp stat over time
             new_player.stats_timer = setInterval(() => {
-                peer_connection.getStats().then((stats) => {
-                    let qp_sum: number;
-                    let fps: number;
-                    stats.forEach((report) => {
-                        if (report.type == 'outbound-rtp' && report.mediaType == 'video') {
-                            qp_sum = report.qpSum;
-                            fps = report.framesPerSecond;
-                        }
-                    });
-                    const now_time = Date.now();
-                    if (new_player.last_stats_time) {
-                        const delta_millis = now_time - new_player.last_stats_time;
-                        const qp_delta = (qp_sum - new_player.last_qp_sum) * (delta_millis / 1000);
-                        const qp_avg = qp_delta / fps;
+                peer_connection
+                    .getStats()
+                    .then((stats: RTCStatsReport) => {
+                        let qp_sum: number;
+                        let fps: number;
+                        stats.forEach((report) => {
+                            /* eslint-disable @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment */
+                            if (report.type == 'outbound-rtp' && report.mediaType == 'video') {
+                                qp_sum = report.qpSum;
+                                fps = report.framesPerSecond;
+                            }
+                            /* eslint-enable @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment */
+                        });
+                        const now_time = Date.now();
+                        if (new_player.last_stats_time) {
+                            const delta_millis = now_time - new_player.last_stats_time;
+                            const qp_delta = (qp_sum - new_player.last_qp_sum) * (delta_millis / 1000);
+                            const qp_avg = qp_delta / fps;
 
-                        new_player.data_channel.send(this.constructMessage(DataProtocol.FromStreamer.VideoEncoderAvgQP, qp_avg));
-                    }
-                    new_player.last_qp_sum = qp_sum;
-                    new_player.last_stats_time = now_time;
-                });
+                            new_player.data_channel.send(
+                                this.constructMessage(DataProtocol.FromStreamer.VideoEncoderAvgQP, qp_avg)
+                            );
+                        }
+                        new_player.last_qp_sum = qp_sum;
+                        new_player.last_stats_time = now_time;
+                    })
+                    .catch(() => {});
             }, 1000);
 
-            this.player_map[player_id] = new_player; 
+            this.player_map[player_id] = new_player;
             this.emit('player_connected', new_player);
         }
-
     }
 
     handlePlayerDisconnectedMessage(msg: Messages.playerDisconnected) {
@@ -270,7 +295,7 @@ export class Streamer extends EventEmitter {
         const player_peer = this.player_map[player_id];
         if (player_peer) {
             const streamer_proto = {
-                Direction: 0,
+                Direction: 0
             };
             for (const [message_name, message_def] of Object.entries(DataProtocol.ToStreamer)) {
                 streamer_proto[message_name] = { id: message_def.id, structure: [] };
@@ -279,11 +304,14 @@ export class Streamer extends EventEmitter {
                 }
             }
             const streamer_proto_str = JSON.stringify(streamer_proto);
-            const streamer_buffer = this.constructMessage(DataProtocol.FromStreamer.Protocol, streamer_proto_str);
+            const streamer_buffer = this.constructMessage(
+                DataProtocol.FromStreamer.Protocol,
+                streamer_proto_str
+            );
             player_peer.data_channel.send(streamer_buffer);
 
             const player_proto = {
-                Direction: 1,
+                Direction: 1
             };
             for (const [message_name, message_def] of Object.entries(DataProtocol.FromStreamer)) {
                 streamer_proto[message_name] = { id: message_def.id, structure: [] };
@@ -301,7 +329,10 @@ export class Streamer extends EventEmitter {
         const player_peer = this.player_map[player_id];
         if (player_peer) {
             const settings_str = JSON.stringify(this.settings);
-            const settings_buffer = this.constructMessage(DataProtocol.FromStreamer.InitialSettings, settings_str);
+            const settings_buffer = this.constructMessage(
+                DataProtocol.FromStreamer.InitialSettings,
+                settings_str
+            );
             player_peer.data_channel.send(settings_buffer);
         }
     }
@@ -311,7 +342,9 @@ export class Streamer extends EventEmitter {
         let arg_index = 0;
 
         if (message_def.structure.length != args.length) {
-            console.log(`Incorrect number of parameters given to constructMessage. Got ${args.length}, expected ${message_def.structure.length}`);
+            console.log(
+                `Incorrect number of parameters given to constructMessage. Got ${args.length}, expected ${message_def.structure.length}`
+            );
             return null;
         }
 
@@ -319,25 +352,37 @@ export class Streamer extends EventEmitter {
         // fields
         message_def.structure.forEach((param: any) => {
             switch (param.type) {
-                case "uint8": data_size += 1; break;
-                case "uint16": data_size += 2; break;
-                case "int16": data_size += 2; break;
-                case "float": data_size += 4; break;
-                case "double": data_size += 8; break;
-                case "string": {
-                    // size prepended string
-                    const str_val = args[arg_index] as string;
+                case 'uint8':
+                    data_size += 1;
+                    break;
+                case 'uint16':
                     data_size += 2;
-                    data_size += 2 * str_val.length;
-                }
-                break;
-                case "only_string": {
-                    // string takes up the full message
-                    const val = args[arg_index];
-                    const str_val = typeof val == 'string' ? val : JSON.stringify(val);
-                    data_size += 2 * str_val.length;
-                }
-                break;
+                    break;
+                case 'int16':
+                    data_size += 2;
+                    break;
+                case 'float':
+                    data_size += 4;
+                    break;
+                case 'double':
+                    data_size += 8;
+                    break;
+                case 'string':
+                    {
+                        // size prepended string
+                        const str_val = args[arg_index] as string;
+                        data_size += 2;
+                        data_size += 2 * str_val.length;
+                    }
+                    break;
+                case 'only_string':
+                    {
+                        // string takes up the full message
+                        const val = args[arg_index];
+                        const str_val = typeof val == 'string' ? val : JSON.stringify(val);
+                        data_size += 2 * str_val.length;
+                    }
+                    break;
             }
             arg_index += 1;
         });
@@ -351,44 +396,46 @@ export class Streamer extends EventEmitter {
         data_size += 1;
         message_def.structure.forEach((param: any) => {
             switch (param.type) {
-                case "uint8":
+                case 'uint8':
                     data.setUint8(data_size, args[arg_index] as number);
-                data_size += 1;
-                break;
-                case "uint16":
+                    data_size += 1;
+                    break;
+                case 'uint16':
                     data.setUint16(data_size, args[arg_index] as number, true);
-                data_size += 2;
-                break;
-                case "int16":
-                    data.setInt16(data_size, args[arg_index] as number, true);
-                data_size += 2;
-                break;
-                case "float":
-                    data.setFloat32(data_size, args[arg_index] as number, true);
-                data_size += 4;
-                break;
-                case "double":
-                    data.setFloat64(data_size, args[arg_index] as number, true);
-                data_size += 8;
-                break;
-                case "string": {
-                    const str_val = args[arg_index] as string;
-                    data.setUint16(data_size, str_val.length, true);
                     data_size += 2;
-                    for (let i = 0; i < str_val.length; ++i) {
-                        data.setUint16(data_size, str_val.charCodeAt(i), true);
+                    break;
+                case 'int16':
+                    data.setInt16(data_size, args[arg_index] as number, true);
+                    data_size += 2;
+                    break;
+                case 'float':
+                    data.setFloat32(data_size, args[arg_index] as number, true);
+                    data_size += 4;
+                    break;
+                case 'double':
+                    data.setFloat64(data_size, args[arg_index] as number, true);
+                    data_size += 8;
+                    break;
+                case 'string':
+                    {
+                        const str_val = args[arg_index] as string;
+                        data.setUint16(data_size, str_val.length, true);
                         data_size += 2;
+                        for (let i = 0; i < str_val.length; ++i) {
+                            data.setUint16(data_size, str_val.charCodeAt(i), true);
+                            data_size += 2;
+                        }
                     }
-                }
-                break;
-                case "only_string": {
-                    const str_val = args[arg_index] as string;
-                    for (let i = 0; i < str_val.length; ++i) {
-                        data.setUint16(data_size, str_val.charCodeAt(i), true);
-                        data_size += 2;
+                    break;
+                case 'only_string':
+                    {
+                        const str_val = args[arg_index] as string;
+                        for (let i = 0; i < str_val.length; ++i) {
+                            data.setUint16(data_size, str_val.charCodeAt(i), true);
+                            data_size += 2;
+                        }
                     }
-                }
-                break;
+                    break;
             }
             arg_index += 1;
         });
@@ -423,39 +470,43 @@ export class Streamer extends EventEmitter {
         message_def.structure.forEach((param: any) => {
             let value: any;
             switch (param.type) {
-                case "uint8":
+                case 'uint8':
                     value = data.getUint8(data_offset);
-                data_offset += 1;
-                break;
-                case "uint16":
+                    data_offset += 1;
+                    break;
+                case 'uint16':
                     value = data.getUint16(data_offset, true);
-                data_offset += 2;
-                break;
-                case "int16":
-                    value = data.getInt16(data_offset, true);
-                data_offset += 2;
-                break;
-                case "float":
-                    value = data.getFloat32(data_offset, true);
-                data_offset += 4;
-                break;
-                case "double":
-                    value = data.getFloat64(data_offset, true);
-                data_offset += 8;
-                break;
-                case "string": {
-                    const str_len = data.getUint16(data_offset, true);
                     data_offset += 2;
-                    const text_decoder = new TextDecoder('utf-16');
-                    value = text_decoder.decode(data.buffer.slice(data_offset, data_offset + (str_len * 2)));
-                    data_offset += str_len;
-                }
-                break;
-                case "only_string": {
-                    const text_decoder = new TextDecoder('utf-16');
-                    value = text_decoder.decode(data.buffer.slice(1));
-                }
-                break;
+                    break;
+                case 'int16':
+                    value = data.getInt16(data_offset, true);
+                    data_offset += 2;
+                    break;
+                case 'float':
+                    value = data.getFloat32(data_offset, true);
+                    data_offset += 4;
+                    break;
+                case 'double':
+                    value = data.getFloat64(data_offset, true);
+                    data_offset += 8;
+                    break;
+                case 'string':
+                    {
+                        const str_len = data.getUint16(data_offset, true);
+                        data_offset += 2;
+                        const text_decoder = new TextDecoder('utf-16');
+                        value = text_decoder.decode(
+                            data.buffer.slice(data_offset, data_offset + str_len * 2)
+                        );
+                        data_offset += str_len;
+                    }
+                    break;
+                case 'only_string':
+                    {
+                        const text_decoder = new TextDecoder('utf-16');
+                        value = text_decoder.decode(data.buffer.slice(1));
+                    }
+                    break;
             }
             result_message[param.name] = value;
         });
@@ -468,4 +519,3 @@ export class Streamer extends EventEmitter {
         this.emit('data_channel_message', player_id, result);
     }
 }
-

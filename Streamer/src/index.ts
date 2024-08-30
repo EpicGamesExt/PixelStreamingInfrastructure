@@ -13,13 +13,11 @@ function maybeCaptureStream(element: HTMLCaptureableMediaElement): MediaStream |
             return element.captureStream();
         } else if (element.mozCaptureStream) {
             return element.mozCaptureStream();
-        }
-        else {
+        } else {
             return null;
         }
     }
 }
-
 
 declare global {
     interface Window {
@@ -28,10 +26,10 @@ declare global {
     }
 }
 
-document.body.onload = function() {
+document.body.onload = function () {
     window.streamer = new Streamer('MockStreamer');
-    window.startStreaming = function() {
-        const playback_element = document.getElementById("source_video") as HTMLCaptureableMediaElement;
+    window.startStreaming = function () {
+        const playback_element = document.getElementById('source_video') as HTMLCaptureableMediaElement;
         const stream = maybeCaptureStream(playback_element);
         if (stream) {
             window.streamer.on('data_channel_message', (player_id: string, message: object) => {
@@ -43,10 +41,9 @@ document.body.onload = function() {
                 }
             });
             window.streamer.on('endpoint_id_confirmed', () => {
-                playback_element.play();
+                playback_element.play().catch(() => {});
             });
             window.streamer.startStreaming(`ws://${window.location.hostname}:8888`, stream);
         }
-    }
-}
-
+    };
+};
