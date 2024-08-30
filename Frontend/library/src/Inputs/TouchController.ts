@@ -50,7 +50,7 @@ export class TouchController implements ITouchController {
         this.touchEventListenerTracker.addUnregisterCallback(() =>
             this.videoElementParent.removeEventListener('touchmove', ontouchmove)
         );
-        Logger.Log(Logger.GetStackTrace(), 'Touch Events Registered', 6);
+        Logger.Info('Touch Events Registered');
 
         // is this strictly necessary?
         const preventOnTouchMove = (event: TouchEvent) => {
@@ -76,7 +76,7 @@ export class TouchController implements ITouchController {
     rememberTouch(touch: Touch) {
         const finger = this.fingers.pop();
         if (finger === undefined) {
-            Logger.Log(Logger.GetStackTrace(), 'exhausted touch identifiers', 6);
+            Logger.Info('exhausted touch identifiers');
         }
         this.fingerIds.set(touch.identifier, finger);
     }
@@ -105,7 +105,7 @@ export class TouchController implements ITouchController {
         for (let t = 0; t < touchEvent.changedTouches.length; t++) {
             this.rememberTouch(touchEvent.changedTouches[t]);
         }
-        Logger.Log(Logger.GetStackTrace(), 'touch start', 6);
+        Logger.Info('touch start');
 
         this.emitTouchData('TouchStart', touchEvent.changedTouches);
         touchEvent.preventDefault();
@@ -119,7 +119,7 @@ export class TouchController implements ITouchController {
         if (!this.videoElementProvider.isVideoReady()) {
             return;
         }
-        Logger.Log(Logger.GetStackTrace(), 'touch end', 6);
+        Logger.Info('touch end');
         this.emitTouchData('TouchEnd', touchEvent.changedTouches);
         // Re-cycle unique identifiers previously assigned to each touch.
         for (let t = 0; t < touchEvent.changedTouches.length; t++) {
@@ -136,7 +136,7 @@ export class TouchController implements ITouchController {
         if (!this.videoElementProvider.isVideoReady()) {
             return;
         }
-        Logger.Log(Logger.GetStackTrace(), 'touch move', 6);
+        Logger.Info('touch move');
         this.emitTouchData('TouchMove', touchEvent.touches);
         touchEvent.preventDefault();
     }
@@ -153,7 +153,7 @@ export class TouchController implements ITouchController {
             const touch = touches[t];
             const x = touch.clientX - offset.left;
             const y = touch.clientY - offset.top;
-            Logger.Log(Logger.GetStackTrace(), `F${this.fingerIds.get(touch.identifier)}=(${x}, ${y})`, 6);
+            Logger.Info(`F${this.fingerIds.get(touch.identifier)}=(${x}, ${y})`);
 
             const coord = this.coordinateConverter.normalizeAndQuantizeUnsigned(x, y);
             switch (type) {

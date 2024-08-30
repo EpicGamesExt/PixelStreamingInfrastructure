@@ -97,8 +97,8 @@ export class AggregatedStats {
                     this.handleStream(stat);
                     break;
                 default:
-                    Logger.Error(Logger.GetStackTrace(), 'unhandled Stat Type');
-                    Logger.Log(Logger.GetStackTrace(), stat);
+                    Logger.Error('unhandled Stat Type');
+                    Logger.Info(stat);
                     break;
             }
         });
@@ -208,7 +208,7 @@ export class AggregatedStats {
                 this.lastAudioStats = { ...this.inboundAudioStats };
                 break;
             default:
-                Logger.Log(Logger.GetStackTrace(), 'Kind is not handled');
+                Logger.Info('Kind is not handled');
                 break;
         }
     }

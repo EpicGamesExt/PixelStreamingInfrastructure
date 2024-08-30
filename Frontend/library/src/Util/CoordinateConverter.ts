@@ -74,10 +74,8 @@ export class CoordinateConverter {
             const playerAspectRatio = playerHeight / playerWidth;
             const videoAspectRatio = videoHeight / videoWidth;
             if (playerAspectRatio > videoAspectRatio) {
-                Logger.Log(
-                    Logger.GetStackTrace(),
+                Logger.Info(
                     'Setup Normalize and Quantize for playerAspectRatio > videoAspectRatio',
-                    6
                 );
                 this.ratio = playerAspectRatio / videoAspectRatio;
                 this.normalizeAndQuantizeUnsignedFunc = (x: number, y: number) =>
@@ -87,10 +85,8 @@ export class CoordinateConverter {
                 this.denormalizeAndUnquantizeUnsignedFunc = (x: number, y: number) =>
                     this.denormalizeAndUnquantizeUnsignedPlayerBigger(x, y);
             } else {
-                Logger.Log(
-                    Logger.GetStackTrace(),
+                Logger.Info(
                     'Setup Normalize and Quantize for playerAspectRatio <= videoAspectRatio',
-                    6
                 );
                 this.ratio = videoAspectRatio / playerAspectRatio;
                 this.normalizeAndQuantizeUnsignedFunc = (x: number, y: number) =>

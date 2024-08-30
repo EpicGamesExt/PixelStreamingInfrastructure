@@ -32,7 +32,7 @@ export class HoveringMouseEvents implements IMouseEvents {
         if (!this.mouseController.videoElementProvider.isVideoReady()) {
             return;
         }
-        Logger.Log(Logger.GetStackTrace(), 'MouseMove', 6);
+        Logger.Info('MouseMove');
         const coord = this.mouseController.coordinateConverter.normalizeAndQuantizeUnsigned(
             mouseEvent.offsetX,
             mouseEvent.offsetY
@@ -54,7 +54,7 @@ export class HoveringMouseEvents implements IMouseEvents {
         if (!this.mouseController.videoElementProvider.isVideoReady()) {
             return;
         }
-        Logger.Log(Logger.GetStackTrace(), 'onMouse Down', 6);
+        Logger.Info('onMouse Down');
         const coord = this.mouseController.coordinateConverter.normalizeAndQuantizeUnsigned(
             mouseEvent.offsetX,
             mouseEvent.offsetY
@@ -72,7 +72,7 @@ export class HoveringMouseEvents implements IMouseEvents {
         if (!this.mouseController.videoElementProvider.isVideoReady()) {
             return;
         }
-        Logger.Log(Logger.GetStackTrace(), 'onMouse Up', 6);
+        Logger.Info('onMouse Up');
         const coord = this.mouseController.coordinateConverter.normalizeAndQuantizeUnsigned(
             mouseEvent.offsetX,
             mouseEvent.offsetY
@@ -134,7 +134,7 @@ export class HoveringMouseEvents implements IMouseEvents {
         if (!this.mouseController.videoElementProvider.isVideoReady()) {
             return;
         }
-        Logger.Log(Logger.GetStackTrace(), 'onMouse press', 6);
+        Logger.Info('onMouse press');
         this.mouseController.pressMouseButtons(mouseEvent.buttons, mouseEvent.offsetX, mouseEvent.offsetY);
     }
 
@@ -146,7 +146,7 @@ export class HoveringMouseEvents implements IMouseEvents {
         if (!this.mouseController.videoElementProvider.isVideoReady()) {
             return;
         }
-        Logger.Log(Logger.GetStackTrace(), 'onMouse release', 6);
+        Logger.Info('onMouse release');
         this.mouseController.releaseMouseButtons(mouseEvent.buttons, mouseEvent.offsetX, mouseEvent.offsetY);
     }
 }

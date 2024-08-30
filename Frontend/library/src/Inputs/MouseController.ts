@@ -175,7 +175,7 @@ export class MouseController {
             if (!this.videoElementProvider.isVideoReady()) {
                 return;
             }
-            Logger.Log(Logger.GetStackTrace(), 'Mouse Entered', 6);
+            Logger.Info('Mouse Entered');
             this.sendMouseEnter();
             this.pressMouseButtons(event.buttons, event.x, event.y);
         };
@@ -185,7 +185,7 @@ export class MouseController {
             if (!this.videoElementProvider.isVideoReady()) {
                 return;
             }
-            Logger.Log(Logger.GetStackTrace(), 'Mouse Left', 6);
+            Logger.Info('Mouse Left');
             this.sendMouseLeave();
             this.releaseMouseButtons(event.buttons, event.x, event.y);
         };
@@ -285,7 +285,7 @@ export class MouseController {
         if (!this.videoElementProvider.isVideoReady()) {
             return;
         }
-        Logger.Log(Logger.GetStackTrace(), `mouse button ${button} down at (${X}, ${Y})`, 6);
+        Logger.Info(`mouse button ${button} down at (${X}, ${Y})`);
         const toStreamerHandlers = this.toStreamerMessagesProvider.toStreamerHandlers;
         toStreamerHandlers.get('MouseDown')([button, X, Y]);
     }
@@ -300,7 +300,7 @@ export class MouseController {
         if (!this.videoElementProvider.isVideoReady()) {
             return;
         }
-        Logger.Log(Logger.GetStackTrace(), `mouse button ${button} up at (${X}, ${Y})`, 6);
+        Logger.Info(`mouse button ${button} up at (${X}, ${Y})`);
         const coord = this.coordinateConverter.normalizeAndQuantizeUnsigned(X, Y);
         const toStreamerHandlers = this.toStreamerMessagesProvider.toStreamerHandlers;
         toStreamerHandlers.get('MouseUp')([button, coord.x, coord.y]);
