@@ -42,7 +42,7 @@ export class WebSocketTransport extends EventEmitter implements ITransport {
      * @returns If there is a connection
      */
     connect(connectionURL: string): boolean {
-        Logger.Log(Logger.GetStackTrace(), connectionURL, 6);
+        Logger.Info(connectionURL);
         try {
             this.webSocket = new WebSocket(connectionURL);
             this.webSocket.onopen = (_: Event) => this.handleOnOpen();
@@ -52,7 +52,7 @@ export class WebSocketTransport extends EventEmitter implements ITransport {
             this.webSocket.onmessagebinary = (event: MessageEvent<Blob>) => this.handleOnMessageBinary(event);
             return true;
         } catch (error) {
-            Logger.Error(Logger.GetStackTrace(), error as string);
+            Logger.Error(error as string);
             return false;
         }
     }
@@ -99,10 +99,7 @@ export class WebSocketTransport extends EventEmitter implements ITransport {
                 this.handleOnMessage(constructedMessage);
             })
             .catch((error: Error) => {
-                Logger.Error(
-                    Logger.GetStackTrace(),
-                    `Failed to parse binary blob from websocket, reason: ${error.message}`
-                );
+                Logger.Error(`Failed to parse binary blob from websocket, reason: ${error.message}`);
             });
     }
 
@@ -117,26 +114,16 @@ export class WebSocketTransport extends EventEmitter implements ITransport {
             return;
         }
 
-        Logger.Log(
-            Logger.GetStackTrace(),
-            'received => \n' + JSON.stringify(JSON.parse(event.data as string), undefined, 4),
-            6
-        );
+        Logger.Info('received => \n' + JSON.stringify(JSON.parse(event.data as string), undefined, 4));
 
         let parsedMessage: BaseMessage;
         try {
             parsedMessage = JSON.parse(event.data as string) as BaseMessage;
         } catch (e: unknown) {
             if (e instanceof Error) {
-                Logger.Error(
-                    Logger.GetStackTrace(),
-                    `Error parsing message string ${event.data}.\n${e.message}`
-                );
+                Logger.Error(`Error parsing message string ${event.data}.\n${e.message}`);
             } else {
-                Logger.Error(
-                    Logger.GetStackTrace(),
-                    `Unknown error while parsing message data in handleOnMessage`
-                );
+                Logger.Error(`Unknown error while parsing message data in handleOnMessage`);
             }
             return;
         }
@@ -150,7 +137,7 @@ export class WebSocketTransport extends EventEmitter implements ITransport {
      * Handles when the Websocket is opened
      */
     handleOnOpen(): void {
-        Logger.Log(Logger.GetStackTrace(), 'Connected to the signalling server via WebSocket', 6);
+        Logger.Info('Connected to the signalling server via WebSocket');
         this.emit('open');
     }
 
@@ -167,8 +154,7 @@ export class WebSocketTransport extends EventEmitter implements ITransport {
      * @param event - Close Event
      */
     handleOnClose(event: CloseEvent): void {
-        Logger.Log(
-            Logger.GetStackTrace(),
+        Logger.Info(
             'Disconnected to the signalling server via WebSocket: ' +
                 JSON.stringify(event.code) +
                 ' - ' +
