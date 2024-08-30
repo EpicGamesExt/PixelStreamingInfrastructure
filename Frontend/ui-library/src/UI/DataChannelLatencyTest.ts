@@ -68,7 +68,7 @@ export class DataChannelLatencyTest {
      * @param result - The latency test results.
      */
     public handleTestResult(result: DataChannelLatencyTestResult) {
-        Logger.Log(Logger.GetStackTrace(), JSON.stringify(result), 6);
+        Logger.Info(JSON.stringify(result));
         /**
          * Check we have results, NaN would mean that UE version we talk to doesn't support our test
          */

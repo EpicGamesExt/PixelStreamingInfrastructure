@@ -68,7 +68,7 @@ export class LatencyTest {
      * @param latencyTimings - The latency test results.
      */
     public handleTestResult(latencyTimings: LatencyTestResults) {
-        Logger.Log(Logger.GetStackTrace(), JSON.stringify(latencyTimings), 6);
+        Logger.Info(JSON.stringify(latencyTimings));
         let latencyStatsInnerHTML = '';
         latencyStatsInnerHTML += '<div>Net latency RTT (ms): ' + latencyTimings.networkLatency + '</div>';
         latencyStatsInnerHTML += '<div>UE Encode (ms): ' + latencyTimings.EncodeMs + '</div>';

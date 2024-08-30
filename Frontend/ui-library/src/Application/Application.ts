@@ -327,7 +327,6 @@ export class Application {
         this.stream.addEventListener('playerCount', ({ data: { count } }) => this.onPlayerCount(count));
         this.stream.addEventListener('webRtcTCPRelayDetected', () =>
             Logger.Warning(
-                Logger.GetStackTrace(),
                 `Stream quailty degraded due to network enviroment, stream is relayed over TCP.`
             )
         );
@@ -560,7 +559,7 @@ export class Application {
 
     onLoadFreezeFrame(shouldShowPlayOverlay: boolean) {
         if (shouldShowPlayOverlay === true) {
-            Logger.Log(Logger.GetStackTrace(), 'showing play overlay');
+            Logger.Info('showing play overlay');
             this.showPlayOverlay();
         }
     }

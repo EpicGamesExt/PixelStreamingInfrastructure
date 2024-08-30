@@ -20,7 +20,6 @@ export class ActionOverlay extends OverlayBase {
         super(rootDiv, rootElement, contentElement);
         this.onActionCallback = () => {
             /* do nothing */ Logger.Info(
-                Logger.GetStackTrace(),
                 'Did you forget to set the onAction callback in your overlay?'
             );
         };

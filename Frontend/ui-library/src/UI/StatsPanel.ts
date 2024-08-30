@@ -162,7 +162,6 @@ export class StatsPanel {
             this.dataChannelLatencyTest.latencyTestButton.title =
                 'Disabled by -PixelStreamingDisableLatencyTester=true';
             Logger.Info(
-                Logger.GetStackTrace(),
                 '-PixelStreamingDisableLatencyTester=true, requesting latency report from the the browser to UE is disabled.'
             );
         }
@@ -316,10 +315,8 @@ export class StatsPanel {
         // todo:
         //statsText += `<div>Browser receive to composite (ms): ${stats.inboundVideoStats.receiveToCompositeMs}</div>`;
 
-        Logger.Log(
-            Logger.GetStackTrace(),
+        Logger.Info(
             `--------- Stats ---------\n ${JSON.stringify(stats)}\n------------------------`,
-            6
         );
     }
 
