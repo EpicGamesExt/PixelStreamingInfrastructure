@@ -42,29 +42,29 @@ interface Settings {
 
 export class PlayerPeer {
     id: string;
-    peer_connection: RTCPeerConnection;
-    data_channel: RTCDataChannel;
-    stats_timer?: any;
+    peerConnection: RTCPeerConnection;
+    dataChannel: RTCDataChannel;
+    statsTimer?: any;
 
-    last_qp_sum?: number;
-    last_stats_time?: number;
+    lastQpSum?: number;
+    lastStatsTime?: number;
 }
 
-const protocol_version = '1.0.0';
+const protocolVersion = '1.0.0';
 
 export class Streamer extends EventEmitter {
     id: string;
     settings: Settings;
     protocol: SignallingProtocol;
     transport: ITransport;
-    player_map: Map<string, PlayerPeer>;
-    local_stream: MediaStream;
-    peer_connection_options: Messages.peerConnectionOptions;
+    playerMap: Map<string, PlayerPeer>;
+    localStream: MediaStream;
+    peerConnectionOptions: Messages.peerConnectionOptions;
 
     constructor(streamerId: string) {
         super();
         this.id = streamerId;
-        this.player_map = new Map<string, PlayerPeer>();
+        this.playerMap = new Map<string, PlayerPeer>();
         this.transport = new WebSocketTransport();
         this.protocol = new SignallingProtocol(this.transport);
 
@@ -124,18 +124,18 @@ export class Streamer extends EventEmitter {
     }
 
     startStreaming(signallingURL: string, stream: MediaStream) {
-        this.local_stream = stream;
+        this.localStream = stream;
         this.transport.connect(signallingURL);
     }
 
     handleConfigMessage(msg: Messages.config) {
-        this.peer_connection_options = msg.peerConnectionOptions;
+        this.peerConnectionOptions = msg.peerConnectionOptions;
     }
 
     handleIdentifyMessage(_msg: Messages.identify) {
         const endpointMessage = MessageHelpers.createMessage(Messages.endpointId, {
             id: this.id,
-            protocolVersion: protocol_version
+            protocolVersion: protocolVersion
         });
         this.protocol.sendMessage(endpointMessage);
     }
@@ -146,30 +146,30 @@ export class Streamer extends EventEmitter {
     }
 
     handlePlayerConnectedMessage(msg: Messages.playerConnected) {
-        if (this.local_stream) {
-            const player_id = msg.playerId;
-            const peer_connection = new RTCPeerConnection(this.peer_connection_options);
+        if (this.localStream) {
+            const playerId = msg.playerId;
+            const peerConnection = new RTCPeerConnection(this.peerConnectionOptions);
 
-            peer_connection.onicecandidate = (event) => {
+            peerConnection.onicecandidate = (event) => {
                 if (event.candidate) {
                     this.protocol.sendMessage(
                         MessageHelpers.createMessage(Messages.iceCandidate, {
-                            playerId: player_id,
+                            playerId: playerId,
                             candidate: event.candidate
                         })
                     );
                 }
             };
 
-            this.local_stream.getTracks().forEach((track: MediaStreamTrack) => {
+            this.localStream.getTracks().forEach((track: MediaStreamTrack) => {
                 if (track.kind == 'video') {
                     if (this.settings.WebRTC.DegradationPref == 'MAINTAIN_FRAMERATE') {
                         track.contentHint = 'motion';
                     } else if (this.settings.WebRTC.DegradationPref == 'MAINTAIN_RESOLUTION') {
                         track.contentHint = 'detail';
                     }
-                    const tranceiver_options: RTCRtpTransceiverInit = {
-                        streams: [this.local_stream],
+                    const tranceiverOptions: RTCRtpTransceiverInit = {
+                        streams: [this.localStream],
                         direction: 'sendonly',
                         sendEncodings: [
                             {
@@ -180,40 +180,40 @@ export class Streamer extends EventEmitter {
                             }
                         ]
                     };
-                    peer_connection.addTransceiver(track, tranceiver_options);
+                    peerConnection.addTransceiver(track, tranceiverOptions);
                 } else {
-                    peer_connection.addTrack(track, this.local_stream);
+                    peerConnection.addTrack(track, this.localStream);
                 }
             });
 
-            const data_channel = peer_connection.createDataChannel('datachannel', {
+            const dataChannel = peerConnection.createDataChannel('datachannel', {
                 ordered: true,
                 negotiated: false
             });
-            data_channel.binaryType = 'arraybuffer';
-            data_channel.onopen = () => {
-                this.sendDataProtocol(player_id);
-                this.sendInitialSettings(player_id);
-                this.emit('data_channel_opened', player_id);
+            dataChannel.binaryType = 'arraybuffer';
+            dataChannel.onopen = () => {
+                this.sendDataProtocol(playerId);
+                this.sendInitialSettings(playerId);
+                this.emit('data_channel_opened', playerId);
             };
-            data_channel.onclose = () => {
-                this.emit('data_channel_closed', player_id);
+            dataChannel.onclose = () => {
+                this.emit('data_channel_closed', playerId);
             };
-            data_channel.onmessage = (e: MessageEvent) => {
+            dataChannel.onmessage = (e: MessageEvent) => {
                 const message = new Uint8Array(e.data as ArrayBuffer);
-                this.handleDataChannelMessage(player_id, message);
+                this.handleDataChannelMessage(playerId, message);
             };
 
-            const new_player: PlayerPeer = {
-                id: player_id,
-                peer_connection: peer_connection,
-                data_channel: data_channel
+            const newPlayer: PlayerPeer = {
+                id: playerId,
+                peerConnection: peerConnection,
+                dataChannel: dataChannel
             };
 
-            peer_connection
+            peerConnection
                 .createOffer()
                 .then((offer) => {
-                    peer_connection
+                    peerConnection
                         .setLocalDescription(offer)
                         .then(() => {
                             this.protocol.sendMessage(
@@ -228,216 +228,216 @@ export class Streamer extends EventEmitter {
                 .catch(() => {});
 
             // report qp stat over time
-            new_player.stats_timer = setInterval(() => {
-                peer_connection
+            newPlayer.statsTimer = setInterval(() => {
+                peerConnection
                     .getStats()
                     .then((stats: RTCStatsReport) => {
-                        let qp_sum: number;
+                        let qpSum: number;
                         let fps: number;
                         stats.forEach((report) => {
                             /* eslint-disable @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment */
                             if (report.type == 'outbound-rtp' && report.mediaType == 'video') {
-                                qp_sum = report.qpSum;
+                                qpSum = report.qpSum;
                                 fps = report.framesPerSecond;
                             }
                             /* eslint-enable @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment */
                         });
-                        const now_time = Date.now();
-                        if (new_player.last_stats_time) {
-                            const delta_millis = now_time - new_player.last_stats_time;
-                            const qp_delta = (qp_sum - new_player.last_qp_sum) * (delta_millis / 1000);
-                            const qp_avg = qp_delta / fps;
+                        const nowTime = Date.now();
+                        if (newPlayer.lastStatsTime) {
+                            const deltaMillis = nowTime - newPlayer.lastStatsTime;
+                            const qpDelta = (qpSum - newPlayer.lastQpSum) * (deltaMillis / 1000);
+                            const qpAvg = qpDelta / fps;
 
-                            new_player.data_channel.send(
-                                this.constructMessage(DataProtocol.FromStreamer.VideoEncoderAvgQP, qp_avg)
+                            newPlayer.dataChannel.send(
+                                this.constructMessage(DataProtocol.FromStreamer.VideoEncoderAvgQP, qpAvg)
                             );
                         }
-                        new_player.last_qp_sum = qp_sum;
-                        new_player.last_stats_time = now_time;
+                        newPlayer.lastQpSum = qpSum;
+                        newPlayer.lastStatsTime = nowTime;
                     })
                     .catch(() => {});
             }, 1000);
 
-            this.player_map[player_id] = new_player;
-            this.emit('player_connected', new_player);
+            this.playerMap[playerId] = newPlayer;
+            this.emit('player_connected', newPlayer);
         }
     }
 
     handlePlayerDisconnectedMessage(msg: Messages.playerDisconnected) {
-        const player_id = msg.playerId;
-        const player_peer = this.player_map[player_id];
-        if (player_peer && player_peer.stats_timer) {
-            clearInterval(player_peer.stats_timer);
+        const playerId = msg.playerId;
+        const playerPeer = this.playerMap[playerId];
+        if (playerPeer && playerPeer.statsTimer) {
+            clearInterval(playerPeer.statsTimer);
         }
-        delete this.player_map[player_id];
-        this.emit('player_disconnected', player_id);
+        delete this.playerMap[playerId];
+        this.emit('player_disconnected', playerId);
     }
 
     handleAnswerMessage(msg: Messages.answer) {
-        const player_id = msg.playerId;
-        if (player_id && this.player_map[player_id]) {
-            const player_peer = this.player_map[player_id];
+        const playerId = msg.playerId;
+        if (playerId && this.playerMap[playerId]) {
+            const playerPeer = this.playerMap[playerId];
             const answer = new RTCSessionDescription({ type: 'answer', sdp: msg.sdp });
-            player_peer.peer_connection.setRemoteDescription(answer);
+            playerPeer.peerConnection.setRemoteDescription(answer);
         }
     }
 
     handleIceMessage(msg: Messages.iceCandidate) {
-        const player_id = msg.playerId;
-        if (player_id && this.player_map[player_id]) {
-            const player_peer = this.player_map[player_id];
+        const playerId = msg.playerId;
+        if (playerId && this.playerMap[playerId]) {
+            const playerPeer = this.playerMap[playerId];
             const candidate = new RTCIceCandidate(msg.candidate);
-            player_peer.peer_connection.addIceCandidate(candidate);
+            playerPeer.peerConnection.addIceCandidate(candidate);
         }
     }
 
-    sendDataProtocol(player_id: string) {
-        const player_peer = this.player_map[player_id];
-        if (player_peer) {
-            const streamer_proto = {
+    sendDataProtocol(playerId: string) {
+        const playerPeer = this.playerMap[playerId];
+        if (playerPeer) {
+            const streamerProto = {
                 Direction: 0
             };
-            for (const [message_name, message_def] of Object.entries(DataProtocol.ToStreamer)) {
-                streamer_proto[message_name] = { id: message_def.id, structure: [] };
-                for (const struct of message_def.structure) {
-                    streamer_proto[message_name].structure.push(struct.type);
+            for (const [messageName, messageDef] of Object.entries(DataProtocol.ToStreamer)) {
+                streamerProto[messageName] = { id: messageDef.id, structure: [] };
+                for (const struct of messageDef.structure) {
+                    streamerProto[messageName].structure.push(struct.type);
                 }
             }
-            const streamer_proto_str = JSON.stringify(streamer_proto);
-            const streamer_buffer = this.constructMessage(
+            const streamerProtoStr = JSON.stringify(streamerProto);
+            const streamerBuffer = this.constructMessage(
                 DataProtocol.FromStreamer.Protocol,
-                streamer_proto_str
+                streamerProtoStr
             );
-            player_peer.data_channel.send(streamer_buffer);
+            playerPeer.dataChannel.send(streamerBuffer);
 
-            const player_proto = {
+            const playerProto = {
                 Direction: 1
             };
-            for (const [message_name, message_def] of Object.entries(DataProtocol.FromStreamer)) {
-                streamer_proto[message_name] = { id: message_def.id, structure: [] };
-                for (const struct of message_def.structure) {
-                    streamer_proto[message_name].structure.push(struct.type);
+            for (const [messageName, messageDef] of Object.entries(DataProtocol.FromStreamer)) {
+                streamerProto[messageName] = { id: messageDef.id, structure: [] };
+                for (const struct of messageDef.structure) {
+                    streamerProto[messageName].structure.push(struct.type);
                 }
             }
-            const player_proto_str = JSON.stringify(player_proto);
-            const player_buffer = this.constructMessage(DataProtocol.FromStreamer.Protocol, player_proto_str);
-            player_peer.data_channel.send(player_buffer);
+            const playerProtoStr = JSON.stringify(playerProto);
+            const playerBuffer = this.constructMessage(DataProtocol.FromStreamer.Protocol, playerProtoStr);
+            playerPeer.dataChannel.send(playerBuffer);
         }
     }
 
-    sendInitialSettings(player_id: string) {
-        const player_peer = this.player_map[player_id];
-        if (player_peer) {
-            const settings_str = JSON.stringify(this.settings);
-            const settings_buffer = this.constructMessage(
+    sendInitialSettings(playerId: string) {
+        const playerPeer = this.playerMap[playerId];
+        if (playerPeer) {
+            const settingsStr = JSON.stringify(this.settings);
+            const settingsBuffer = this.constructMessage(
                 DataProtocol.FromStreamer.InitialSettings,
-                settings_str
+                settingsStr
             );
-            player_peer.data_channel.send(settings_buffer);
+            playerPeer.dataChannel.send(settingsBuffer);
         }
     }
 
-    constructMessage(message_def: any, ...args: any[]): ArrayBuffer {
-        let data_size = 0;
-        let arg_index = 0;
+    constructMessage(messageDef: any, ...args: any[]): ArrayBuffer {
+        let dataSize = 0;
+        let argIndex = 0;
 
-        if (message_def.structure.length != args.length) {
+        if (messageDef.structure.length != args.length) {
             console.log(
-                `Incorrect number of parameters given to constructMessage. Got ${args.length}, expected ${message_def.structure.length}`
+                `Incorrect number of parameters given to constructMessage. Got ${args.length}, expected ${messageDef.structure.length}`
             );
             return null;
         }
 
-        data_size += 1; // message type
+        dataSize += 1; // message type
         // fields
-        message_def.structure.forEach((param: any) => {
+        messageDef.structure.forEach((param: any) => {
             switch (param.type) {
                 case 'uint8':
-                    data_size += 1;
+                    dataSize += 1;
                     break;
                 case 'uint16':
-                    data_size += 2;
+                    dataSize += 2;
                     break;
                 case 'int16':
-                    data_size += 2;
+                    dataSize += 2;
                     break;
                 case 'float':
-                    data_size += 4;
+                    dataSize += 4;
                     break;
                 case 'double':
-                    data_size += 8;
+                    dataSize += 8;
                     break;
                 case 'string':
                     {
                         // size prepended string
-                        const str_val = args[arg_index] as string;
-                        data_size += 2;
-                        data_size += 2 * str_val.length;
+                        const strVal = args[argIndex] as string;
+                        dataSize += 2;
+                        dataSize += 2 * strVal.length;
                     }
                     break;
                 case 'only_string':
                     {
                         // string takes up the full message
-                        const val = args[arg_index];
-                        const str_val = typeof val == 'string' ? val : JSON.stringify(val);
-                        data_size += 2 * str_val.length;
+                        const val = args[argIndex];
+                        const strVal = typeof val == 'string' ? val : JSON.stringify(val);
+                        dataSize += 2 * strVal.length;
                     }
                     break;
             }
-            arg_index += 1;
+            argIndex += 1;
         });
 
-        const data = new DataView(new ArrayBuffer(data_size));
+        const data = new DataView(new ArrayBuffer(dataSize));
 
-        data_size = 0;
-        arg_index = 0;
+        dataSize = 0;
+        argIndex = 0;
 
-        data.setUint8(data_size, message_def.id);
-        data_size += 1;
-        message_def.structure.forEach((param: any) => {
+        data.setUint8(dataSize, messageDef.id);
+        dataSize += 1;
+        messageDef.structure.forEach((param: any) => {
             switch (param.type) {
                 case 'uint8':
-                    data.setUint8(data_size, args[arg_index] as number);
-                    data_size += 1;
+                    data.setUint8(dataSize, args[argIndex] as number);
+                    dataSize += 1;
                     break;
                 case 'uint16':
-                    data.setUint16(data_size, args[arg_index] as number, true);
-                    data_size += 2;
+                    data.setUint16(dataSize, args[argIndex] as number, true);
+                    dataSize += 2;
                     break;
                 case 'int16':
-                    data.setInt16(data_size, args[arg_index] as number, true);
-                    data_size += 2;
+                    data.setInt16(dataSize, args[argIndex] as number, true);
+                    dataSize += 2;
                     break;
                 case 'float':
-                    data.setFloat32(data_size, args[arg_index] as number, true);
-                    data_size += 4;
+                    data.setFloat32(dataSize, args[argIndex] as number, true);
+                    dataSize += 4;
                     break;
                 case 'double':
-                    data.setFloat64(data_size, args[arg_index] as number, true);
-                    data_size += 8;
+                    data.setFloat64(dataSize, args[argIndex] as number, true);
+                    dataSize += 8;
                     break;
                 case 'string':
                     {
-                        const str_val = args[arg_index] as string;
-                        data.setUint16(data_size, str_val.length, true);
-                        data_size += 2;
-                        for (let i = 0; i < str_val.length; ++i) {
-                            data.setUint16(data_size, str_val.charCodeAt(i), true);
-                            data_size += 2;
+                        const strVal = args[argIndex] as string;
+                        data.setUint16(dataSize, strVal.length, true);
+                        dataSize += 2;
+                        for (let i = 0; i < strVal.length; ++i) {
+                            data.setUint16(dataSize, strVal.charCodeAt(i), true);
+                            dataSize += 2;
                         }
                     }
                     break;
                 case 'only_string':
                     {
-                        const str_val = args[arg_index] as string;
-                        for (let i = 0; i < str_val.length; ++i) {
-                            data.setUint16(data_size, str_val.charCodeAt(i), true);
-                            data_size += 2;
+                        const strVal = args[argIndex] as string;
+                        for (let i = 0; i < strVal.length; ++i) {
+                            data.setUint16(dataSize, strVal.charCodeAt(i), true);
+                            dataSize += 2;
                         }
                     }
                     break;
             }
-            arg_index += 1;
+            argIndex += 1;
         });
 
         return data.buffer;
@@ -445,77 +445,75 @@ export class Streamer extends EventEmitter {
 
     deconstructMessage(message: Uint8Array) {
         const data = new DataView(message.buffer);
-        let data_offset = 0;
+        let dataOffset = 0;
 
         // read the message type
-        const message_type = data.getUint8(data_offset);
-        data_offset += 1;
+        const messageType = data.getUint8(dataOffset);
+        dataOffset += 1;
 
         // get the message definition
-        const message_def = (() => {
+        const messageDef = (() => {
             for (const def of Object.values(DataProtocol.ToStreamer)) {
-                if (def.id == message_type) {
+                if (def.id == messageType) {
                     return def;
                 }
             }
             return null;
         })();
 
-        if (!message_def) {
-            console.log(`Unable to deconstruct message. Unknown message type: ${message_type}`);
+        if (!messageDef) {
+            console.log(`Unable to deconstruct message. Unknown message type: ${messageType}`);
             return null;
         }
 
-        const result_message = {};
-        message_def.structure.forEach((param: any) => {
+        const resultMessage = {};
+        messageDef.structure.forEach((param: any) => {
             let value: any;
             switch (param.type) {
                 case 'uint8':
-                    value = data.getUint8(data_offset);
-                    data_offset += 1;
+                    value = data.getUint8(dataOffset);
+                    dataOffset += 1;
                     break;
                 case 'uint16':
-                    value = data.getUint16(data_offset, true);
-                    data_offset += 2;
+                    value = data.getUint16(dataOffset, true);
+                    dataOffset += 2;
                     break;
                 case 'int16':
-                    value = data.getInt16(data_offset, true);
-                    data_offset += 2;
+                    value = data.getInt16(dataOffset, true);
+                    dataOffset += 2;
                     break;
                 case 'float':
-                    value = data.getFloat32(data_offset, true);
-                    data_offset += 4;
+                    value = data.getFloat32(dataOffset, true);
+                    dataOffset += 4;
                     break;
                 case 'double':
-                    value = data.getFloat64(data_offset, true);
-                    data_offset += 8;
+                    value = data.getFloat64(dataOffset, true);
+                    dataOffset += 8;
                     break;
                 case 'string':
                     {
-                        const str_len = data.getUint16(data_offset, true);
-                        data_offset += 2;
-                        const text_decoder = new TextDecoder('utf-16');
-                        value = text_decoder.decode(
-                            data.buffer.slice(data_offset, data_offset + str_len * 2)
-                        );
-                        data_offset += str_len;
+                        const strLen = data.getUint16(dataOffset, true);
+                        dataOffset += 2;
+                        const textDecoder = new TextDecoder('utf-16');
+                        value = textDecoder.decode(data.buffer.slice(dataOffset, dataOffset + strLen * 2));
+                        dataOffset += strLen;
                     }
                     break;
                 case 'only_string':
                     {
-                        const text_decoder = new TextDecoder('utf-16');
-                        value = text_decoder.decode(data.buffer.slice(1));
+                        const textDecoder = new TextDecoder('utf-16');
+                        value = textDecoder.decode(data.buffer.slice(1));
                     }
                     break;
             }
-            result_message[param.name] = value;
+            resultMessage[param.name] = value;
         });
 
-        return { type: message_type, message: result_message };
+        return { type: messageType, message: resultMessage };
     }
 
-    handleDataChannelMessage(player_id: string, message: Uint8Array) {
+    handleDataChannelMessage(playerId: string, message: Uint8Array) {
         const result = this.deconstructMessage(message);
-        this.emit('data_channel_message', player_id, result);
+        this.emit('data_channel_message', playerId, result);
     }
 }
