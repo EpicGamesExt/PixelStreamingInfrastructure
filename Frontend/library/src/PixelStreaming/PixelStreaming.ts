@@ -377,7 +377,6 @@ export class PixelStreaming {
 
         // If we prefer not to force a reconnection, just warn the user that this operation didn't happen
         Logger.Warning(
-            Logger.GetStackTrace(),
             'Trying to unmute video, but PixelStreaming was initialized with no video track. Call with forceEnable == true to re-connect with a video track.'
         );
     }
@@ -390,7 +389,6 @@ export class PixelStreaming {
 
         // If there wasn't a mic track, just let user know there's nothing to mute
         Logger.Info(
-            Logger.GetStackTrace(),
             'Trying to mute camera, but PixelStreaming has no video track, so sending video is already disabled.'
         );
     }
