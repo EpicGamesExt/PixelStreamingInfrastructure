@@ -52,7 +52,7 @@ export class WebXRController {
     public xrClicked() {
         if (!this.xrSession) {
             if (!navigator.xr) {
-                Logger.Error(Logger.GetStackTrace(), 'This browser does not support XR.');
+                Logger.Error('This browser does not support XR.');
                 return;
             }
 
@@ -68,7 +68,7 @@ export class WebXRController {
     }
 
     onXrSessionEnded() {
-        Logger.Log(Logger.GetStackTrace(), 'XR Session ended');
+        Logger.Info('XR Session ended');
         this.xrSession = null;
         this.onSessionEnded.dispatchEvent(new Event('xrSessionEnded'));
     }
@@ -253,7 +253,7 @@ export class WebXRController {
     }
 
     onXrSessionStarted(session: XRSession) {
-        Logger.Log(Logger.GetStackTrace(), 'XR Session started');
+        Logger.Info('XR Session started');
 
         this.xrSession = session;
         this.xrSession.addEventListener('end', () => {
@@ -482,7 +482,7 @@ export class WebXRController {
 
     static isSessionSupported(mode: XRSessionMode): Promise<boolean> {
         if (location.protocol !== 'https:') {
-            Logger.Info(null, 'WebXR requires https, if you want WebXR use https.');
+            Logger.Info('WebXR requires https, if you want WebXR use https.');
         }
 
         if (navigator.xr) {

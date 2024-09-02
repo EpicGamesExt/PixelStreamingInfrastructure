@@ -32,10 +32,7 @@ export class PeerConnectionController {
         // Set the ICE transport to relay if TURN enabled
         if (this.config.isFlagEnabled(Flags.ForceTURN)) {
             options.iceTransportPolicy = 'relay';
-            Logger.Log(
-                Logger.GetStackTrace(),
-                'Forcing TURN usage by setting ICE Transport Policy in peer connection config.'
-            );
+            Logger.Info('Forcing TURN usage by setting ICE Transport Policy in peer connection config.');
         }
 
         // build a new peer connection with the options
@@ -57,7 +54,7 @@ export class PeerConnectionController {
      * @param offerOptions - RTC Offer Options
      */
     async createOffer(offerOptions: RTCOfferOptions, config: Config) {
-        Logger.Log(Logger.GetStackTrace(), 'Create Offer', 6);
+        Logger.Info('Create Offer');
 
         const isLocalhostConnection = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
         const isHttpsConnection = location.protocol === 'https:';
@@ -65,11 +62,9 @@ export class PeerConnectionController {
         if (useMic && !(isLocalhostConnection || isHttpsConnection)) {
             useMic = false;
             Logger.Error(
-                Logger.GetStackTrace(),
                 'Microphone access in the browser will not work if you are not on HTTPS or localhost. Disabling mic access.'
             );
             Logger.Error(
-                Logger.GetStackTrace(),
                 "For testing you can enable HTTP microphone access Chrome by visiting chrome://flags/ and enabling 'unsafely-treat-insecure-origin-as-secure'"
             );
         }
@@ -93,7 +88,7 @@ export class PeerConnectionController {
      *
      */
     async receiveOffer(offer: RTCSessionDescriptionInit, config: Config) {
-        Logger.Log(Logger.GetStackTrace(), 'Receive Offer', 6);
+        Logger.Info('Receive Offer');
 
         this.peerConnection?.setRemoteDescription(offer).then(() => {
             const isLocalhostConnection =
@@ -103,11 +98,9 @@ export class PeerConnectionController {
             if (useMic && !(isLocalhostConnection || isHttpsConnection)) {
                 useMic = false;
                 Logger.Error(
-                    Logger.GetStackTrace(),
                     'Microphone access in the browser will not work if you are not on HTTPS or localhost. Disabling mic access.'
                 );
                 Logger.Error(
-                    Logger.GetStackTrace(),
                     "For testing you can enable HTTP microphone access Chrome by visiting chrome://flags/ and enabling 'unsafely-treat-insecure-origin-as-secure'"
                 );
             }
@@ -129,7 +122,7 @@ export class PeerConnectionController {
                         this.onSendWebRTCAnswer(this.peerConnection?.currentLocalDescription);
                     })
                     .catch(() => {
-                        Logger.Error(Logger.GetStackTrace(), 'createAnswer() failed');
+                        Logger.Error('createAnswer() failed');
                     });
             });
         });
@@ -219,16 +212,14 @@ export class PeerConnectionController {
      * @param iceCandidate - RTC Ice Candidate from the Signaling Server
      */
     handleOnIce(iceCandidate: RTCIceCandidate) {
-        Logger.Log(Logger.GetStackTrace(), 'peerconnection handleOnIce', 6);
+        Logger.Info('peerconnection handleOnIce');
 
         // // if forcing TURN, reject any candidates not relay
         if (this.config.isFlagEnabled(Flags.ForceTURN)) {
             // check if no relay address is found, if so, we are assuming it means no TURN server
             if (iceCandidate.candidate.indexOf('relay') < 0) {
                 Logger.Info(
-                    Logger.GetStackTrace(),
-                    `Dropping candidate because it was not TURN relay. | Type= ${iceCandidate.type} | Protocol= ${iceCandidate.protocol} | Address=${iceCandidate.address} | Port=${iceCandidate.port} |`,
-                    6
+                    `Dropping candidate because it was not TURN relay. | Type= ${iceCandidate.type} | Protocol= ${iceCandidate.protocol} | Address=${iceCandidate.address} | Port=${iceCandidate.port} |`
                 );
                 return;
             }
@@ -242,7 +233,7 @@ export class PeerConnectionController {
      * @param state - Signaling Server State Change Event
      */
     handleSignalStateChange(state: Event) {
-        Logger.Log(Logger.GetStackTrace(), 'signaling state change: ' + state, 6);
+        Logger.Info('signaling state change: ' + state);
     }
 
     /**
@@ -250,7 +241,7 @@ export class PeerConnectionController {
      * @param state - Ice Connection State
      */
     handleIceConnectionStateChange(state: Event) {
-        Logger.Log(Logger.GetStackTrace(), 'ice connection state change: ' + state, 6);
+        Logger.Info('ice connection state change: ' + state);
         this.onIceConnectionStateChange(state);
     }
 
@@ -259,7 +250,7 @@ export class PeerConnectionController {
      * @param state - Ice Gathering State Change
      */
     handleIceGatheringStateChange(state: Event) {
-        Logger.Log(Logger.GetStackTrace(), 'ice gathering state change: ' + JSON.stringify(state), 6);
+        Logger.Info('ice gathering state change: ' + JSON.stringify(state));
     }
 
     /**

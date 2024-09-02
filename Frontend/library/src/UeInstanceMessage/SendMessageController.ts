@@ -35,7 +35,6 @@ export class SendMessageController {
         const messageFormat = toStreamerMessages.get(messageType);
         if (messageFormat === undefined) {
             Logger.Error(
-                Logger.GetStackTrace(),
                 `Attempted to send a message to the streamer with message type: ${messageType}, but the frontend hasn't been configured to send such a message. Check you've added the message type in your cpp`
             );
             return;
@@ -43,7 +42,6 @@ export class SendMessageController {
 
         if (messageFormat.structure && messageData && messageFormat.structure.length !== messageData.length) {
             Logger.Error(
-                Logger.GetStackTrace(),
                 `Provided message data doesn't match expected layout. Expected [ ${messageFormat.structure
                     .map((element: string) => {
                         switch (element) {
@@ -142,7 +140,6 @@ export class SendMessageController {
 
         if (!this.dataChannelSender.canSend()) {
             Logger.Info(
-                Logger.GetStackTrace(),
                 `Data channel cannot send yet, skipping sending message: ${messageType} - ${new Uint8Array(
                     data.buffer
                 )}`

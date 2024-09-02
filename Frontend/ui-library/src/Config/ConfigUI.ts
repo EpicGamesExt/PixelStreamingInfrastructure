@@ -339,7 +339,6 @@ export class ConfigUI {
     setCustomFlagLabel(id: ExtraFlags, label: string) {
         if (!this.customFlags.has(id)) {
             Logger.Warning(
-                Logger.GetStackTrace(),
                 `Cannot set label for flag called ${id} - it does not exist in the Config.flags map.`
             );
         } else {

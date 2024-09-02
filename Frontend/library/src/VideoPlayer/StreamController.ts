@@ -26,7 +26,7 @@ export class StreamController {
      * @param rtcTrackEvent - RTC Track Event
      */
     handleOnTrack(rtcTrackEvent: RTCTrackEvent) {
-        Logger.Log(Logger.GetStackTrace(), 'handleOnTrack ' + JSON.stringify(rtcTrackEvent.streams), 6);
+        Logger.Info('handleOnTrack ' + JSON.stringify(rtcTrackEvent.streams));
         // Do not add the track if the ID is `probator` as this is special track created by mediasoup for bitrate probing.
         // Refer to https://github.com/EpicGamesExt/PixelStreamingInfrastructure/pull/86 for more details.
         if (rtcTrackEvent.streams.length < 1 || rtcTrackEvent.streams[0].id == 'probator') {
@@ -36,15 +36,13 @@ export class StreamController {
         const videoElement = this.videoElementProvider.getVideoElement();
 
         if (rtcTrackEvent.track) {
-            Logger.Log(
-                Logger.GetStackTrace(),
+            Logger.Info(
                 'Got track - ' +
                     rtcTrackEvent.track.kind +
                     ' id=' +
                     rtcTrackEvent.track.id +
                     ' readyState=' +
-                    rtcTrackEvent.track.readyState,
-                6
+                    rtcTrackEvent.track.readyState
             );
         }
 
@@ -56,7 +54,7 @@ export class StreamController {
             videoElement.srcObject !== rtcTrackEvent.streams[0]
         ) {
             videoElement.srcObject = rtcTrackEvent.streams[0];
-            Logger.Log(Logger.GetStackTrace(), 'Set video source from video track ontrack.');
+            Logger.Info('Set video source from video track ontrack.');
             return;
         }
     }
@@ -76,7 +74,7 @@ export class StreamController {
         else if (videoElement.srcObject && videoElement.srcObject !== audioMediaStream) {
             // create a new audio element
             this.audioElement.srcObject = audioMediaStream;
-            Logger.Log(Logger.GetStackTrace(), 'Created new audio element to play separate audio stream.');
+            Logger.Info('Created new audio element to play separate audio stream.');
         }
     }
 }

@@ -731,10 +731,7 @@ export class Config {
      */
     setFlagEnabled(id: FlagsIds, flagEnabled: boolean) {
         if (!this.flags.has(id)) {
-            Logger.Warning(
-                Logger.GetStackTrace(),
-                `Cannot toggle flag called ${id} - it does not exist in the Config.flags map.`
-            );
+            Logger.Warning(`Cannot toggle flag called ${id} - it does not exist in the Config.flags map.`);
         } else {
             this.flags.get(id).flag = flagEnabled;
         }
@@ -748,7 +745,6 @@ export class Config {
     setTextSetting(id: TextParametersIds, settingValue: string) {
         if (!this.textParameters.has(id)) {
             Logger.Warning(
-                Logger.GetStackTrace(),
                 `Cannot set text setting called ${id} - it does not exist in the Config.textParameters map.`
             );
         } else {
@@ -764,7 +760,6 @@ export class Config {
     setOptionSettingOptions(id: OptionParametersIds, settingOptions: Array<string>) {
         if (!this.optionParameters.has(id)) {
             Logger.Warning(
-                Logger.GetStackTrace(),
                 `Cannot set text setting called ${id} - it does not exist in the Config.optionParameters map.`
             );
         } else {
@@ -780,7 +775,6 @@ export class Config {
     setOptionSettingValue(id: OptionParametersIds, settingValue: string) {
         if (!this.optionParameters.has(id)) {
             Logger.Warning(
-                Logger.GetStackTrace(),
                 `Cannot set text setting called ${id} - it does not exist in the Config.enumParameters map.`
             );
         } else {
@@ -802,7 +796,6 @@ export class Config {
     setFlagLabel(id: FlagsIds, label: string) {
         if (!this.flags.has(id)) {
             Logger.Warning(
-                Logger.GetStackTrace(),
                 `Cannot set label for flag called ${id} - it does not exist in the Config.flags map.`
             );
         } else {

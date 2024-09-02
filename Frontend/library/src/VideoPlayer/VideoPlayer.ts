@@ -217,7 +217,7 @@ export class VideoPlayer {
 
             this.lastTimeResized = new Date().getTime();
         } else {
-            Logger.Log(Logger.GetStackTrace(), 'Resizing too often - skipping', 6);
+            Logger.Info('Resizing too often - skipping');
             clearTimeout(this.resizeTimeoutHandle);
             this.resizeTimeoutHandle = window.setTimeout(() => this.updateVideoStreamSize(), 100);
         }

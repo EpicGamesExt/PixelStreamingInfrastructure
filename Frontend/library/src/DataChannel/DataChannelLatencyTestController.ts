@@ -108,7 +108,7 @@ export class DataChannelLatencyTestController {
             return;
         }
         if (!response) {
-            Logger.Error(Logger.GetStackTrace(), 'Undefined response from server');
+            Logger.Error('Undefined response from server');
             return;
         }
         const record = this.records.get(response.Seq);

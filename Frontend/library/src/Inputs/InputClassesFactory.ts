@@ -39,7 +39,7 @@ export class InputClassesFactory {
      * Registers browser key events.
      */
     registerKeyBoard(config: Config) {
-        Logger.Log(Logger.GetStackTrace(), 'Register Keyboard Events', 7);
+        Logger.Info('Register Keyboard Events');
         const keyboardController = new KeyboardController(
             this.toStreamerMessagesProvider,
             config,
@@ -54,7 +54,7 @@ export class InputClassesFactory {
      * @param controlScheme - if the mouse is either hovering or locked
      */
     registerMouse(controlScheme: ControlSchemeType) {
-        Logger.Log(Logger.GetStackTrace(), 'Register Mouse Events', 7);
+        Logger.Info('Register Mouse Events');
         const mouseController = new MouseController(
             this.toStreamerMessagesProvider,
             this.videoElementProvider,
@@ -70,10 +70,7 @@ export class InputClassesFactory {
                 mouseController.registerHoveringMouseEvents(mouseController);
                 break;
             default:
-                Logger.Info(
-                    Logger.GetStackTrace(),
-                    'unknown Control Scheme Type Defaulting to Locked Mouse Events'
-                );
+                Logger.Info('unknown Control Scheme Type Defaulting to Locked Mouse Events');
                 mouseController.registerLockedMouseEvents(mouseController);
                 break;
         }
@@ -86,7 +83,7 @@ export class InputClassesFactory {
      * @param fakeMouseTouch - the faked mouse touch event
      */
     registerTouch(fakeMouseTouch: boolean, videoElementParentClientRect: DOMRect) {
-        Logger.Log(Logger.GetStackTrace(), 'Registering Touch', 6);
+        Logger.Info('Registering Touch');
         if (fakeMouseTouch) {
             const fakeTouchController = new FakeTouchController(
                 this.toStreamerMessagesProvider,
@@ -108,7 +105,7 @@ export class InputClassesFactory {
      * registers a gamepad
      */
     registerGamePad() {
-        Logger.Log(Logger.GetStackTrace(), 'Register Game Pad', 7);
+        Logger.Info('Register Game Pad');
         const gamePadController = new GamePadController(this.toStreamerMessagesProvider);
         return gamePadController;
     }

@@ -56,7 +56,7 @@ export class DataChannelController {
      * Handles when the Data Channel is opened
      */
     handleOnOpen(ev: Event) {
-        Logger.Log(Logger.GetStackTrace(), `Data Channel (${this.label}) opened.`, 7);
+        Logger.Info(`Data Channel (${this.label}) opened.`);
         this.onOpen(this.dataChannel?.label, ev);
     }
 
@@ -64,7 +64,7 @@ export class DataChannelController {
      * Handles when the Data Channel is closed
      */
     handleOnClose(ev: Event) {
-        Logger.Log(Logger.GetStackTrace(), `Data Channel (${this.label}) closed.`, 7);
+        Logger.Info(`Data Channel (${this.label}) closed.`);
         this.onClose(this.dataChannel?.label, ev);
     }
 
@@ -74,7 +74,7 @@ export class DataChannelController {
      */
     handleOnMessage(event: MessageEvent) {
         // Higher log level to prevent log spam with messages received
-        Logger.Log(Logger.GetStackTrace(), `Data Channel (${this.label}) message: ${event}`, 8);
+        Logger.Info(`Data Channel (${this.label}) message: ${event}`);
     }
 
     /**
@@ -82,7 +82,7 @@ export class DataChannelController {
      * @param event - Error Event
      */
     handleOnError(event: MessageEvent) {
-        Logger.Log(Logger.GetStackTrace(), `Data Channel (${this.label}) error: ${event}`, 7);
+        Logger.Info(`Data Channel (${this.label}) error: ${event}`);
         this.onError(this.dataChannel?.label, event);
     }
 
