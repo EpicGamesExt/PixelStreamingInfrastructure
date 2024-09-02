@@ -51,17 +51,17 @@ export const DataProtocol = {
         KeyDown: {
             id: 60,
             structure: [
-                { name: 'key_code', type: 'uint8' },
-                { name: 'is_repeat', type: 'uint8' }
+                { name: 'keyCode', type: 'uint8' },
+                { name: 'isRepeat', type: 'uint8' }
             ]
         },
         KeyUp: {
             id: 61,
-            structure: [{ name: 'key_code', type: 'uint8' }]
+            structure: [{ name: 'keyCode', type: 'uint8' }]
         },
         KeyPress: {
             id: 62,
-            structure: [{ name: 'key_code', type: 'uint16' }]
+            structure: [{ name: 'keyCode', type: 'uint16' }]
         },
         MouseEnter: {
             id: 70,
@@ -92,8 +92,8 @@ export const DataProtocol = {
             structure: [
                 { name: 'x', type: 'uint16' },
                 { name: 'y', type: 'uint16' },
-                { name: 'delta_x', type: 'int16' },
-                { name: 'delta_y', type: 'int16' }
+                { name: 'deltaX', type: 'int16' },
+                { name: 'deltaY', type: 'int16' }
             ]
         },
         MouseWheel: {
@@ -115,7 +115,7 @@ export const DataProtocol = {
         TouchStart: {
             id: 80,
             structure: [
-                { name: 'num_touches', type: 'uint8' },
+                { name: 'numTouches', type: 'uint8' },
                 { name: 'x', type: 'uint16' },
                 { name: 'y', type: 'uint16' },
                 { name: 'idx', type: 'uint8' },
@@ -126,7 +126,7 @@ export const DataProtocol = {
         TouchEnd: {
             id: 81,
             structure: [
-                { name: 'num_touches', type: 'uint8' },
+                { name: 'numTouches', type: 'uint8' },
                 { name: 'x', type: 'uint16' },
                 { name: 'y', type: 'uint16' },
                 { name: 'idx', type: 'uint8' },
@@ -137,7 +137,7 @@ export const DataProtocol = {
         TouchMove: {
             id: 82,
             structure: [
-                { name: 'num_touches', type: 'uint8' },
+                { name: 'numTouches', type: 'uint8' },
                 { name: 'x', type: 'uint16' },
                 { name: 'y', type: 'uint16' },
                 { name: 'idx', type: 'uint8' },
@@ -148,25 +148,25 @@ export const DataProtocol = {
         GamepadButtonPressed: {
             id: 90,
             structure: [
-                { name: 'controller_id', type: 'uint8' },
+                { name: 'controllerId', type: 'uint8' },
                 { name: 'button', type: 'uint8' },
-                { name: 'is_repeat', type: 'uint8' }
+                { name: 'isRepeat', type: 'uint8' }
             ]
         },
         GamepadButtonReleased: {
             id: 91,
             structure: [
-                { name: 'controller_id', type: 'uint8' },
+                { name: 'controllerId', type: 'uint8' },
                 { name: 'button', type: 'uint8' },
-                { name: 'is_repeat', type: 'uint8' }
+                { name: 'isRepeat', type: 'uint8' }
             ]
         },
         GamepadAnalog: {
             id: 92,
             structure: [
-                { name: 'controller_id', type: 'uint8' },
+                { name: 'controllerId', type: 'uint8' },
                 { name: 'button', type: 'uint8' },
-                { name: 'analog_value', type: 'double' }
+                { name: 'analogValue', type: 'double' }
             ]
         },
         GamepadConnected: {
@@ -175,7 +175,7 @@ export const DataProtocol = {
         },
         GamepadDisconnected: {
             id: 94,
-            structure: [{ name: 'controller_id', type: 'uint8' }]
+            structure: [{ name: 'controllerId', type: 'uint8' }]
         }
     },
     FromStreamer: {
