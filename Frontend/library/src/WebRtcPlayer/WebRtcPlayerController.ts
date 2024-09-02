@@ -204,7 +204,7 @@ export class WebRtcPlayerController {
         });
         this.protocol.transport.addListener('error', () => {
             // dont really need to do anything here since the close event should follow.
-            Logger.Error(Logger.GetStackTrace(), `Got a transport error.`);
+            Logger.Error(`Got a transport error.`);
         });
         this.protocol.transport.addListener('close', (event: CloseEvent) => {
             // when we refresh the page during a stream we get the going away code.
@@ -312,7 +312,7 @@ export class WebRtcPlayerController {
      */
     handleOnMessage(event: MessageEvent) {
         const message = new Uint8Array(event.data);
-        Logger.Log(Logger.GetStackTrace(), 'Message incoming:' + message, 6);
+        Logger.Info('Message incoming:' + message);
 
         //try {
         const messageType = this.streamMessageController.fromStreamerMessages.get(message[0]);
@@ -637,10 +637,10 @@ export class WebRtcPlayerController {
      * @param message
      */
     onCommand(message: ArrayBuffer) {
-        Logger.Log(Logger.GetStackTrace(), 'DataChannelReceiveMessageType.Command', 6);
+        Logger.Info('DataChannelReceiveMessageType.Command');
         const commandAsString = new TextDecoder('utf-16').decode(message.slice(1));
 
-        Logger.Log(Logger.GetStackTrace(), 'Data Channel Command: ' + commandAsString, 6);
+        Logger.Info('Data Channel Command: ' + commandAsString);
         const command = JSON.parse(commandAsString);
         if (command.command === 'onScreenKeyboard') {
             this.pixelStreaming._activateOnScreenKeyboard(command);
@@ -656,15 +656,11 @@ export class WebRtcPlayerController {
             const protocolString = new TextDecoder('utf-16').decode(message.slice(1));
             const protocolJSON = JSON.parse(protocolString);
             if (!Object.prototype.hasOwnProperty.call(protocolJSON, 'Direction')) {
-                Logger.Error(
-                    Logger.GetStackTrace(),
-                    'Malformed protocol received. Ensure the protocol message contains a direction'
-                );
+                Logger.Error('Malformed protocol received. Ensure the protocol message contains a direction');
             }
             const direction = protocolJSON.Direction;
             delete protocolJSON.Direction;
-            Logger.Log(
-                Logger.GetStackTrace(),
+            Logger.Info(
                 `Received new ${
                     direction == MessageDirection.FromStreamer ? 'FromStreamer' : 'ToStreamer'
                 } protocol. Updating existing protocol...`
@@ -676,7 +672,6 @@ export class WebRtcPlayerController {
                         // Check that the message contains all the relevant params
                         if (!Object.prototype.hasOwnProperty.call(message, 'id')) {
                             Logger.Error(
-                                Logger.GetStackTrace(),
                                 `ToStreamer->${messageType} protocol definition was malformed as it didn't contain at least an id\n
                                            Definition was: ${JSON.stringify(message, null, 2)}`
                             );
@@ -698,7 +693,6 @@ export class WebRtcPlayerController {
                             this.streamMessageController.toStreamerMessages.set(messageType, message);
                         } else {
                             Logger.Error(
-                                Logger.GetStackTrace(),
                                 `There was no registered handler for "${messageType}" - try adding one using registerMessageHandler(MessageDirection.ToStreamer, "${messageType}", myHandler)`
                             );
                         }
@@ -707,7 +701,6 @@ export class WebRtcPlayerController {
                         // Check that the message contains all the relevant params
                         if (!Object.prototype.hasOwnProperty.call(message, 'id')) {
                             Logger.Error(
-                                Logger.GetStackTrace(),
                                 `FromStreamer->${messageType} protocol definition was malformed as it didn't contain at least an id\n
                             Definition was: ${JSON.stringify(message, null, 2)}`
                             );
@@ -719,13 +712,12 @@ export class WebRtcPlayerController {
                             this.streamMessageController.fromStreamerMessages.set(message.id, messageType);
                         } else {
                             Logger.Error(
-                                Logger.GetStackTrace(),
                                 `There was no registered handler for "${message}" - try adding one using registerMessageHandler(MessageDirection.FromStreamer, "${messageType}", myHandler)`
                             );
                         }
                         break;
                     default:
-                        Logger.Error(Logger.GetStackTrace(), `Unknown direction: ${direction}`);
+                        Logger.Error(`Unknown direction: ${direction}`);
                 }
             });
 
@@ -733,7 +725,7 @@ export class WebRtcPlayerController {
             this.toStreamerMessagesController.SendRequestInitialSettings();
             this.toStreamerMessagesController.SendRequestQualityControl();
         } catch (e) {
-            Logger.Log(Logger.GetStackTrace(), e);
+            Logger.Info(e);
         }
     }
 
@@ -743,10 +735,9 @@ export class WebRtcPlayerController {
      */
     onInputControlOwnership(message: ArrayBuffer) {
         const view = new Uint8Array(message);
-        Logger.Log(Logger.GetStackTrace(), 'DataChannelReceiveMessageType.InputControlOwnership', 6);
+        Logger.Info('DataChannelReceiveMessageType.InputControlOwnership');
         const inputControlOwnership = new Boolean(view[1]).valueOf();
-        Logger.Log(
-            Logger.GetStackTrace(),
+        Logger.Info(
             `Received input controller message - will your input control the stream: ${inputControlOwnership}`
         );
         this.pixelStreaming._onInputControlOwnership(inputControlOwnership);
@@ -797,7 +788,7 @@ export class WebRtcPlayerController {
     doReconnect(message: string) {
         // if there is no webSocketController return immediately or this will not work
         if (!this.protocol) {
-            Logger.Log(Logger.GetStackTrace(), 'This player has no protocol connection.');
+            Logger.Info('This player has no protocol connection.');
             return;
         }
 
@@ -827,10 +818,10 @@ export class WebRtcPlayerController {
             })
         );
         if (this.shouldShowPlayOverlay === true) {
-            Logger.Log(Logger.GetStackTrace(), 'showing play overlay');
+            Logger.Info('showing play overlay');
             this.resizePlayerStyle();
         } else {
-            Logger.Log(Logger.GetStackTrace(), 'showing freeze frame');
+            Logger.Info('showing freeze frame');
             this.freezeFrameController.showFreezeFrame();
         }
         setTimeout(() => {
@@ -843,7 +834,7 @@ export class WebRtcPlayerController {
      * @param message The freeze frame data in bytes
      */
     onFreezeFrameMessage(message: ArrayBuffer) {
-        Logger.Log(Logger.GetStackTrace(), 'DataChannelReceiveMessageType.FreezeFrame', 6);
+        Logger.Info('DataChannelReceiveMessageType.FreezeFrame');
         const view = new Uint8Array(message);
         this.freezeFrameController.processFreezeFrameMessage(view, () =>
             this.loadFreezeFrameOrShowPlayOverlay()
@@ -854,7 +845,7 @@ export class WebRtcPlayerController {
      * Enable the video after hiding a freeze frame
      */
     invalidateFreezeFrameAndEnableVideo() {
-        Logger.Log(Logger.GetStackTrace(), 'DataChannelReceiveMessageType.FreezeFrame', 6);
+        Logger.Info('DataChannelReceiveMessageType.FreezeFrame');
         setTimeout(() => {
             this.pixelStreaming.dispatchEvent(new HideFreezeFrameEvent());
             this.freezeFrameController.hideFreezeFrame();
@@ -899,7 +890,7 @@ export class WebRtcPlayerController {
             const message =
                 'Could not play video stream because the video player was not initialized correctly.';
             this.pixelStreaming.dispatchEvent(new PlayStreamErrorEvent({ message }));
-            Logger.Error(Logger.GetStackTrace(), message);
+            Logger.Error(message);
 
             // close the connection
             this.closeSignalingServer('Stream not initialized correctly', false);
@@ -907,10 +898,7 @@ export class WebRtcPlayerController {
         }
 
         if (!this.videoPlayer.hasVideoSource()) {
-            Logger.Warning(
-                Logger.GetStackTrace(),
-                'Cannot play stream, the video element has no srcObject to play.'
-            );
+            Logger.Warning('Cannot play stream, the video element has no srcObject to play.');
             return;
         }
 
@@ -930,9 +918,8 @@ export class WebRtcPlayerController {
                         this.playVideo();
                     })
                     .catch((onRejectedReason) => {
-                        Logger.Log(Logger.GetStackTrace(), onRejectedReason);
-                        Logger.Log(
-                            Logger.GetStackTrace(),
+                        Logger.Info(onRejectedReason);
+                        Logger.Info(
                             'Browser does not support autoplaying video without interaction - to resolve this we are going to show the play button overlay.'
                         );
                         this.pixelStreaming.dispatchEvent(
@@ -959,9 +946,8 @@ export class WebRtcPlayerController {
             if (this.streamController.audioElement.srcObject) {
                 this.streamController.audioElement.pause();
             }
-            Logger.Log(Logger.GetStackTrace(), onRejectedReason);
-            Logger.Log(
-                Logger.GetStackTrace(),
+            Logger.Info(onRejectedReason);
+            Logger.Info(
                 'Browser does not support autoplaying video without interaction - to resolve this we are going to show the play button overlay.'
             );
             this.pixelStreaming.dispatchEvent(new PlayStreamRejectedEvent({ reason: onRejectedReason }));
@@ -1005,7 +991,6 @@ export class WebRtcPlayerController {
             // close and error if turn is forced and there is no turn server
             if (!hasTurnServer) {
                 Logger.Info(
-                    Logger.GetStackTrace(),
                     'No turn server was found in the Peer Connection Options. TURN cannot be forced, closing connection. Please use STUN instead'
                 );
                 this.closeSignalingServer(
@@ -1075,7 +1060,7 @@ export class WebRtcPlayerController {
     checkTurnServerAvailability(options: RTCConfiguration) {
         // if iceServers is empty return false this should not be the general use case but is here incase
         if (!options.iceServers) {
-            Logger.Info(Logger.GetStackTrace(), 'A turn sever was not found');
+            Logger.Info('A turn sever was not found');
             return false;
         }
 
@@ -1083,13 +1068,13 @@ export class WebRtcPlayerController {
         for (const iceServer of options.iceServers) {
             for (const url of iceServer.urls) {
                 if (url.includes('turn')) {
-                    Logger.Log(Logger.GetStackTrace(), `A turn sever was found at ${url}`);
+                    Logger.Info(`A turn sever was found at ${url}`);
                     return true;
                 }
             }
         }
 
-        Logger.Info(Logger.GetStackTrace(), 'A turn sever was not found');
+        Logger.Info('A turn sever was not found');
         return false;
     }
 
@@ -1108,7 +1093,7 @@ export class WebRtcPlayerController {
      * Handles when the signalling server gives us the list of streamer ids.
      */
     handleStreamerListMessage(messageStreamerList: Messages.streamerList) {
-        Logger.Log(Logger.GetStackTrace(), `Got streamer list ${messageStreamerList.ids}`, 6);
+        Logger.Info(`Got streamer list ${messageStreamerList.ids}`);
 
         let wantedStreamerId: string = '';
 
@@ -1229,7 +1214,7 @@ export class WebRtcPlayerController {
      * @param Answer - Answer SDP from the peer.
      */
     handleWebRtcAnswer(Answer: Messages.answer) {
-        Logger.Log(Logger.GetStackTrace(), `Got answer sdp ${Answer.sdp}`, 6);
+        Logger.Info(`Got answer sdp ${Answer.sdp}`);
 
         const sdpAnswer: RTCSessionDescriptionInit = {
             sdp: Answer.sdp,
@@ -1245,7 +1230,7 @@ export class WebRtcPlayerController {
      * @param Offer - Offer SDP from the peer.
      */
     handleWebRtcOffer(Offer: Messages.offer) {
-        Logger.Log(Logger.GetStackTrace(), `Got offer sdp ${Offer.sdp}`, 6);
+        Logger.Info(`Got offer sdp ${Offer.sdp}`);
 
         this.isUsingSFU = Offer.sfu ? Offer.sfu : false;
         if (this.isUsingSFU) {
@@ -1327,7 +1312,7 @@ export class WebRtcPlayerController {
      * @param iceCandidate - Ice Candidate from Server
      */
     handleIceCandidate(iceCandidate: RTCIceCandidateInit) {
-        Logger.Log(Logger.GetStackTrace(), 'Web RTC Controller: onWebRtcIce', 6);
+        Logger.Info('Web RTC Controller: onWebRtcIce');
 
         const candidate = new RTCIceCandidate(iceCandidate);
         this.peerConnectionController.handleOnIce(candidate);
@@ -1338,7 +1323,7 @@ export class WebRtcPlayerController {
      * @param iceEvent - RTC Peer ConnectionIceEvent) {
      */
     handleSendIceCandidate(iceEvent: RTCPeerConnectionIceEvent) {
-        Logger.Log(Logger.GetStackTrace(), 'OnIceCandidate', 6);
+        Logger.Info('OnIceCandidate');
         if (iceEvent.candidate && iceEvent.candidate.candidate) {
             this.protocol.sendMessage(
                 MessageHelpers.createMessage(Messages.iceCandidate, { candidate: iceEvent.candidate })
@@ -1351,11 +1336,7 @@ export class WebRtcPlayerController {
      * @param iceEvent - RTC Peer ConnectionIceEvent) {
      */
     handleDataChannel(datachannelEvent: RTCDataChannelEvent) {
-        Logger.Log(
-            Logger.GetStackTrace(),
-            'Data channel created for us by browser as we are a receiving peer.',
-            6
-        );
+        Logger.Info('Data channel created for us by browser as we are a receiving peer.');
         this.sendrecvDataChannelController.dataChannel = datachannelEvent.channel;
         // Data channel was created for us, so we just need to setup its callbacks and array type
         this.sendrecvDataChannelController.setupDataChannel();
@@ -1368,7 +1349,7 @@ export class WebRtcPlayerController {
      * @param offer - RTC Session Description
      */
     handleSendWebRTCOffer(offer: RTCSessionDescriptionInit) {
-        Logger.Log(Logger.GetStackTrace(), 'Sending the offer to the Server', 6);
+        Logger.Info('Sending the offer to the Server');
 
         const extraParams = {
             sdp: offer.sdp,
@@ -1384,7 +1365,7 @@ export class WebRtcPlayerController {
      * @param answer - RTC Session Description
      */
     handleSendWebRTCAnswer(answer: RTCSessionDescriptionInit) {
-        Logger.Log(Logger.GetStackTrace(), 'Sending the answer to the Server', 6);
+        Logger.Info('Sending the answer to the Server');
 
         const extraParams = {
             sdp: answer.sdp,
@@ -1473,7 +1454,7 @@ export class WebRtcPlayerController {
      * to aim for the best quality it can on the given network link.
      */
     sendEncoderMinQP(minQP: number) {
-        Logger.Log(Logger.GetStackTrace(), `MinQP=${minQP}\n`, 6);
+        Logger.Info(`MinQP=${minQP}\n`);
 
         if (minQP != null) {
             this.streamMessageController.toStreamerHandlers.get('Command')([
@@ -1494,7 +1475,7 @@ export class WebRtcPlayerController {
      * to drop quality as low as needed on the given network link.
      */
     sendEncoderMaxQP(maxQP: number) {
-        Logger.Log(Logger.GetStackTrace(), `MaxQP=${maxQP}\n`, 6);
+        Logger.Info(`MaxQP=${maxQP}\n`);
 
         if (maxQP != null) {
             this.streamMessageController.toStreamerHandlers.get('Command')([
@@ -1512,7 +1493,7 @@ export class WebRtcPlayerController {
      * @param minBitrate - The minimum bitrate we would like WebRTC to not fall below.
      */
     sendWebRTCMinBitrate(minBitrate: number) {
-        Logger.Log(Logger.GetStackTrace(), `WebRTC Min Bitrate=${minBitrate}`, 6);
+        Logger.Info(`WebRTC Min Bitrate=${minBitrate}`);
         if (minBitrate != null) {
             this.streamMessageController.toStreamerHandlers.get('Command')([
                 JSON.stringify({
@@ -1529,7 +1510,7 @@ export class WebRtcPlayerController {
      * @param minBitrate - The minimum bitrate we would like WebRTC to not fall below.
      */
     sendWebRTCMaxBitrate(maxBitrate: number) {
-        Logger.Log(Logger.GetStackTrace(), `WebRTC Max Bitrate=${maxBitrate}`, 6);
+        Logger.Info(`WebRTC Max Bitrate=${maxBitrate}`);
         if (maxBitrate != null) {
             this.streamMessageController.toStreamerHandlers.get('Command')([
                 JSON.stringify({
@@ -1546,7 +1527,7 @@ export class WebRtcPlayerController {
      * @param fps - The maximum stream fps.
      */
     sendWebRTCFps(fps: number) {
-        Logger.Log(Logger.GetStackTrace(), `WebRTC FPS=${fps}`, 6);
+        Logger.Info(`WebRTC FPS=${fps}`);
         if (fps != null) {
             this.streamMessageController.toStreamerHandlers.get('Command')([
                 JSON.stringify({ 'WebRTC.Fps': fps })
@@ -1563,7 +1544,7 @@ export class WebRtcPlayerController {
      * Sends the UI Descriptor `stat fps` to the UE Instance
      */
     sendShowFps(): void {
-        Logger.Log(Logger.GetStackTrace(), '----   Sending show stat to UE   ----', 6);
+        Logger.Info('----   Sending show stat to UE   ----');
 
         this.streamMessageController.toStreamerHandlers.get('Command')([JSON.stringify({ 'stat.fps': '' })]);
     }
@@ -1572,7 +1553,7 @@ export class WebRtcPlayerController {
      * Send an Iframe request to the streamer
      */
     sendIframeRequest(): void {
-        Logger.Log(Logger.GetStackTrace(), '----   Sending Request for an IFrame  ----', 6);
+        Logger.Info('----   Sending Request for an IFrame  ----');
         this.streamMessageController.toStreamerHandlers.get('IFrameRequest')();
     }
 
@@ -1580,7 +1561,7 @@ export class WebRtcPlayerController {
      * Send a UIInteraction message
      */
     emitUIInteraction(descriptor: object | string) {
-        Logger.Log(Logger.GetStackTrace(), '----   Sending custom UIInteraction message   ----', 6);
+        Logger.Info('----   Sending custom UIInteraction message   ----');
 
         this.streamMessageController.toStreamerHandlers.get('UIInteraction')([JSON.stringify(descriptor)]);
     }
@@ -1589,7 +1570,7 @@ export class WebRtcPlayerController {
      * Send a Command message
      */
     emitCommand(descriptor: object) {
-        Logger.Log(Logger.GetStackTrace(), '----   Sending custom Command message   ----', 6);
+        Logger.Info('----   Sending custom Command message   ----');
 
         this.streamMessageController.toStreamerHandlers.get('Command')([JSON.stringify(descriptor)]);
     }
@@ -1598,7 +1579,7 @@ export class WebRtcPlayerController {
      * Send a console command message
      */
     emitConsoleCommand(command: string) {
-        Logger.Log(Logger.GetStackTrace(), '----   Sending custom Command:ConsoleCommand message   ----', 6);
+        Logger.Info('----   Sending custom Command:ConsoleCommand message   ----');
 
         this.streamMessageController.toStreamerHandlers.get('Command')([
             JSON.stringify({
@@ -1611,7 +1592,7 @@ export class WebRtcPlayerController {
      * Sends a request to the UE Instance to have ownership of Quality
      */
     sendRequestQualityControlOwnership(): void {
-        Logger.Log(Logger.GetStackTrace(), '----   Sending Request to Control Quality  ----', 6);
+        Logger.Info('----   Sending Request to Control Quality  ----');
         this.toStreamerMessagesController.SendRequestQualityControl();
     }
 
@@ -1620,7 +1601,7 @@ export class WebRtcPlayerController {
      * @param message - Latency Test Timings
      */
     handleLatencyTestResult(message: ArrayBuffer) {
-        Logger.Log(Logger.GetStackTrace(), 'DataChannelReceiveMessageType.latencyTest', 6);
+        Logger.Info('DataChannelReceiveMessageType.latencyTest');
         const latencyAsString = new TextDecoder('utf-16').decode(message.slice(1));
         const latencyTestResults: LatencyTestResults = new LatencyTestResults();
         Object.assign(latencyTestResults, JSON.parse(latencyAsString));
@@ -1652,7 +1633,7 @@ export class WebRtcPlayerController {
      * @param message - Data Channel Latency Test Response
      */
     handleDataChannelLatencyTestResponse(message: ArrayBuffer) {
-        Logger.Log(Logger.GetStackTrace(), 'DataChannelReceiveMessageType.dataChannelLatencyResponse', 6);
+        Logger.Info('DataChannelReceiveMessageType.dataChannelLatencyResponse');
         const responseAsString = new TextDecoder('utf-16').decode(message.slice(1));
         const latencyTestResponse: DataChannelLatencyTestResponse = JSON.parse(responseAsString);
         this.pixelStreaming._onDataChannelLatencyTestResponse(latencyTestResponse);
@@ -1663,7 +1644,7 @@ export class WebRtcPlayerController {
      * @param message - Initial Encoder and Web RTC Settings
      */
     handleInitialSettings(message: ArrayBuffer) {
-        Logger.Log(Logger.GetStackTrace(), 'DataChannelReceiveMessageType.InitialSettings', 6);
+        Logger.Info('DataChannelReceiveMessageType.InitialSettings');
         const payloadAsString = new TextDecoder('utf-16').decode(message.slice(1));
         const parsedInitialSettings = JSON.parse(payloadAsString);
 
@@ -1692,7 +1673,7 @@ export class WebRtcPlayerController {
         }
 
         initialSettings.ueCompatible();
-        Logger.Log(Logger.GetStackTrace(), payloadAsString, 6);
+        Logger.Info(payloadAsString);
 
         this.pixelStreaming._onInitialSettings(initialSettings);
     }
@@ -1702,7 +1683,7 @@ export class WebRtcPlayerController {
      * @param message - Encoders Quantization Parameter
      */
     handleVideoEncoderAvgQP(message: ArrayBuffer) {
-        Logger.Log(Logger.GetStackTrace(), 'DataChannelReceiveMessageType.VideoEncoderAvgQP', 6);
+        Logger.Info('DataChannelReceiveMessageType.VideoEncoderAvgQP');
         const AvgQP = Number(new TextDecoder('utf-16').decode(message.slice(1)));
         this.setVideoEncoderAvgQP(AvgQP);
     }
@@ -1725,12 +1706,9 @@ export class WebRtcPlayerController {
      */
     onQualityControlOwnership(message: ArrayBuffer) {
         const view = new Uint8Array(message);
-        Logger.Log(Logger.GetStackTrace(), 'DataChannelReceiveMessageType.QualityControlOwnership', 6);
+        Logger.Info('DataChannelReceiveMessageType.QualityControlOwnership');
         this.isQualityController = new Boolean(view[1]).valueOf();
-        Logger.Log(
-            Logger.GetStackTrace(),
-            `Received quality controller message, will control quality: ${this.isQualityController}`
-        );
+        Logger.Info(`Received quality controller message, will control quality: ${this.isQualityController}`);
         this.pixelStreaming._onQualityControlOwnership(this.isQualityController);
     }
 
@@ -1829,10 +1807,7 @@ export class WebRtcPlayerController {
         handler?: (data: ArrayBuffer | Array<number | string>) => void
     ) {
         if (direction === MessageDirection.FromStreamer && typeof handler === 'undefined') {
-            Logger.Warning(
-                Logger.GetStackTrace(),
-                `Unable to register handler for ${name} as no handler was passed`
-            );
+            Logger.Warning(`Unable to register handler for ${name} as no handler was passed`);
         }
 
         this.streamMessageController.registerMessageHandler(

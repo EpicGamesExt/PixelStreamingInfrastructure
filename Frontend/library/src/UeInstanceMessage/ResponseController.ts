@@ -27,10 +27,10 @@ export class ResponseController {
      * @param message - Data received from the data channel with the command in question
      */
     onResponse(message: ArrayBuffer) {
-        Logger.Log(Logger.GetStackTrace(), 'DataChannelReceiveMessageType.Response', 6);
+        Logger.Info('DataChannelReceiveMessageType.Response');
         const responses = new TextDecoder('utf-16').decode(message.slice(1));
 
-        Logger.Log(Logger.GetStackTrace(), responses, 6);
+        Logger.Info(responses);
         this.responseEventListeners.forEach((listener: (response: string) => void) => {
             listener(responses);
         });

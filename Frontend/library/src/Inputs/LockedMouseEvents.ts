@@ -63,13 +63,13 @@ export class LockedMouseEvents implements IMouseEvents {
             document.pointerLockElement === videoElementParent ||
             document.mozPointerLockElement === videoElementParent
         ) {
-            Logger.Log(Logger.GetStackTrace(), 'Pointer locked', 6);
+            Logger.Info('Pointer locked');
             document.addEventListener('mousemove', this.updateMouseMovePositionEvent, false);
             this.mouseEventListenerTracker.addUnregisterCallback(() =>
                 document.removeEventListener('mousemove', this.updateMouseMovePositionEvent, false)
             );
         } else {
-            Logger.Log(Logger.GetStackTrace(), 'The pointer lock status is now unlocked', 6);
+            Logger.Info('The pointer lock status is now unlocked');
             // !a new arrow function must not be used here as it will be counted as a new function that cannot be removed
             document.removeEventListener('mousemove', this.updateMouseMovePositionEvent, false);
 

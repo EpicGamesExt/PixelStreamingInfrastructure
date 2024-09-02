@@ -124,7 +124,7 @@ export class AFKController {
                 // The user failed to click so hide the overlay and disconnect them.
                 this.pixelStreaming.dispatchEvent(new AfkTimedOutEvent());
                 this.onAFKTimedOutCallback();
-                Logger.Log(Logger.GetStackTrace(), 'You have been disconnected due to inactivity');
+                Logger.Info('You have been disconnected due to inactivity');
 
                 // switch off the afk feature as stream has closed
                 this.stopAfkWarningTimer();

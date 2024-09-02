@@ -1,4 +1,10 @@
-import { ITransport, SignallingProtocol, Messages, MessageHelpers, BaseMessage } from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
+import {
+    ITransport,
+    SignallingProtocol,
+    Messages,
+    MessageHelpers,
+    BaseMessage
+} from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
 import { EventEmitter } from 'events';
 import { Logger } from './Logger';
 import { IMessageLogger } from './LoggingUtils';
@@ -8,7 +14,7 @@ import { IPlayerInfo } from './PlayerRegistry';
  * An interface that describes a streamer that can be added to the
  * streamer registry.
  */
-export interface IStreamer extends EventEmitter, IMessageLogger  {
+export interface IStreamer extends EventEmitter, IMessageLogger {
     streamerId: string;
     transport: ITransport;
     protocol: SignallingProtocol;
@@ -22,11 +28,11 @@ export interface IStreamer extends EventEmitter, IMessageLogger  {
  * Used by the API to describe a streamer.
  */
 export interface IStreamerInfo {
-    streamerId: string,
-    type: string,
-    streaming: boolean,
-    remoteAddress: string | undefined,
-    subscribers: IPlayerInfo[],
+    streamerId: string;
+    type: string;
+    streaming: boolean;
+    remoteAddress: string | undefined;
+    subscribers: IPlayerInfo[];
 }
 
 /**
@@ -39,7 +45,7 @@ export interface IStreamerInfo {
  */
 export class StreamerRegistry extends EventEmitter {
     streamers: IStreamer[];
-    defaultStreamerIdPrefix: string = "UnknownStreamer";
+    defaultStreamerIdPrefix: string = 'UnknownStreamer';
 
     constructor() {
         super();
@@ -57,7 +63,9 @@ export class StreamerRegistry extends EventEmitter {
         streamer.streamerId = this.sanitizeStreamerId(streamer.streamerId);
 
         if (this.find(streamer.streamerId)) {
-            Logger.error(`StreamerRegistry: Tried to register streamer ${streamer.streamerId} but that id already exists.`);
+            Logger.error(
+                `StreamerRegistry: Tried to register streamer ${streamer.streamerId} but that id already exists.`
+            );
             return false;
         }
 
@@ -80,7 +88,9 @@ export class StreamerRegistry extends EventEmitter {
     remove(streamer: IStreamer): boolean {
         const index = this.streamers.indexOf(streamer);
         if (index == -1) {
-            Logger.debug(`StreamerRegistry: Tried to remove streamer ${streamer.streamerId} but it doesn't exist`);
+            Logger.debug(
+                `StreamerRegistry: Tried to remove streamer ${streamer.streamerId} but it doesn't exist`
+            );
             return false;
         }
         this.streamers.splice(index, 1);
@@ -132,7 +142,9 @@ export class StreamerRegistry extends EventEmitter {
         streamer.emit('id_changed', streamer.streamerId);
 
         // because we might have sanitized the id, we confirm the id back to the streamer
-        streamer.sendMessage(MessageHelpers.createMessage(Messages.endpointIdConfirm, { committedId: streamer.streamerId }));
+        streamer.sendMessage(
+            MessageHelpers.createMessage(Messages.endpointIdConfirm, { committedId: streamer.streamerId })
+        );
     }
 
     private sanitizeStreamerId(id: string): string {
@@ -153,7 +165,7 @@ export class StreamerRegistry extends EventEmitter {
             }
             const numPostfix = Number(postfix);
             if (numPostfix > maxPostfix) {
-                maxPostfix = numPostfix
+                maxPostfix = numPostfix;
             }
         }
         if (maxPostfix >= 0) {

@@ -1,10 +1,12 @@
 import WebSocket from 'ws';
-import { ITransport,
-         WebSocketTransportNJS,
-         SignallingProtocol,
-         MessageHelpers,
-         Messages,
-         BaseMessage } from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
+import {
+    ITransport,
+    WebSocketTransportNJS,
+    SignallingProtocol,
+    MessageHelpers,
+    Messages,
+    BaseMessage
+} from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
 import { IPlayer, IPlayerInfo } from './PlayerRegistry';
 import { IStreamer, IStreamerInfo } from './StreamerRegistry';
 import { EventEmitter } from 'events';
@@ -18,7 +20,7 @@ import { SignallingServer } from './SignallingServer';
  * streamers like a player, and other players can subscribe to the sfu.
  * Therefore the SFU will have a streamer id and a player id and be
  * registered in both streamer registries and player registries.
- * 
+ *
  * Interesting internals:
  * playerId: The player id of this connectiom.
  * streamerId: The streamer id of this connection.
@@ -80,7 +82,9 @@ export class SFUConnection extends EventEmitter implements IPlayer, IStreamer, L
      * Returns an identifier that is displayed in logs.
      * @returns A string describing this connection.
      */
-    getReadableIdentifier(): string { return `(${this.streamerId}:${this.playerId})`; }
+    getReadableIdentifier(): string {
+        return `(${this.streamerId}:${this.playerId})`;
+    }
 
     /**
      * Sends a signalling message to the SFU.
@@ -101,7 +105,10 @@ export class SFUConnection extends EventEmitter implements IPlayer, IStreamer, L
             type: 'SFU',
             streaming: this.streaming,
             remoteAddress: this.remoteAddress,
-            subscribers: this.server.playerRegistry.listPlayers().filter(player => player.subscribedStreamer == this).map(player => player.getPlayerInfo()),
+            subscribers: this.server.playerRegistry
+                .listPlayers()
+                .filter((player) => player.subscribedStreamer == this)
+                .map((player) => player.getPlayerInfo())
         };
     }
 
@@ -114,19 +121,40 @@ export class SFUConnection extends EventEmitter implements IPlayer, IStreamer, L
             playerId: this.playerId,
             type: 'SFU',
             remoteAddress: this.remoteAddress,
-            subscribedTo: this.subscribedStreamer?.streamerId,
+            subscribedTo: this.subscribedStreamer?.streamerId
         };
     }
 
     private registerMessageHandlers(): void {
         /* eslint-disable @typescript-eslint/unbound-method */
-        this.protocol.on(Messages.subscribe.typeName, LogUtils.createHandlerListener(this, this.onSubscribeMessage));
-        this.protocol.on(Messages.unsubscribe.typeName, LogUtils.createHandlerListener(this, this.onUnsubscribeMessage));
-        this.protocol.on(Messages.listStreamers.typeName, LogUtils.createHandlerListener(this, this.onListStreamers));
-        this.protocol.on(Messages.endpointId.typeName, LogUtils.createHandlerListener(this, this.onEndpointId));
-        this.protocol.on(Messages.streamerDataChannels.typeName, LogUtils.createHandlerListener(this, this.onStreamerDataChannels));
-        this.protocol.on(Messages.startStreaming.typeName, LogUtils.createHandlerListener(this, this.onStartStreaming));
-        this.protocol.on(Messages.stopStreaming.typeName, LogUtils.createHandlerListener(this, this.onStopStreaming));
+        this.protocol.on(
+            Messages.subscribe.typeName,
+            LogUtils.createHandlerListener(this, this.onSubscribeMessage)
+        );
+        this.protocol.on(
+            Messages.unsubscribe.typeName,
+            LogUtils.createHandlerListener(this, this.onUnsubscribeMessage)
+        );
+        this.protocol.on(
+            Messages.listStreamers.typeName,
+            LogUtils.createHandlerListener(this, this.onListStreamers)
+        );
+        this.protocol.on(
+            Messages.endpointId.typeName,
+            LogUtils.createHandlerListener(this, this.onEndpointId)
+        );
+        this.protocol.on(
+            Messages.streamerDataChannels.typeName,
+            LogUtils.createHandlerListener(this, this.onStreamerDataChannels)
+        );
+        this.protocol.on(
+            Messages.startStreaming.typeName,
+            LogUtils.createHandlerListener(this, this.onStartStreaming)
+        );
+        this.protocol.on(
+            Messages.stopStreaming.typeName,
+            LogUtils.createHandlerListener(this, this.onStopStreaming)
+        );
         /* eslint-enable @typescript-eslint/unbound-method */
 
         this.protocol.on(Messages.offer.typeName, this.sendToPlayer.bind(this));
@@ -137,7 +165,9 @@ export class SFUConnection extends EventEmitter implements IPlayer, IStreamer, L
     private subscribe(streamerId: string) {
         const streamer = this.server.streamerRegistry.find(streamerId);
         if (!streamer) {
-            Logger.error(`subscribe: SFU ${this.playerId} tried to subscribe to a non-existent streamer ${streamerId}`);
+            Logger.error(
+                `subscribe: SFU ${this.playerId} tried to subscribe to a non-existent streamer ${streamerId}`
+            );
             return;
         }
 
@@ -146,9 +176,11 @@ export class SFUConnection extends EventEmitter implements IPlayer, IStreamer, L
         this.subscribedStreamer.on('id_changed', this.streamerIdChangeListener);
         this.subscribedStreamer.on('disconnect', this.streamerDisconnectedListener);
 
-        const connectedMessage = MessageHelpers.createMessage(Messages.playerConnected, { playerId: this.playerId,
-                                                                                          dataChannel: true,
-                                                                                          sfu: true });
+        const connectedMessage = MessageHelpers.createMessage(Messages.playerConnected, {
+            playerId: this.playerId,
+            dataChannel: true,
+            sfu: true
+        });
         this.sendToStreamer(connectedMessage);
     }
 
@@ -157,7 +189,9 @@ export class SFUConnection extends EventEmitter implements IPlayer, IStreamer, L
             return;
         }
 
-        const disconnectedMessage = MessageHelpers.createMessage(Messages.playerDisconnected, { playerId: this.playerId });
+        const disconnectedMessage = MessageHelpers.createMessage(Messages.playerDisconnected, {
+            playerId: this.playerId
+        });
         this.sendToStreamer(disconnectedMessage);
 
         this.subscribedStreamer.off('layer_preference', this.layerPreferenceListener);
@@ -168,7 +202,9 @@ export class SFUConnection extends EventEmitter implements IPlayer, IStreamer, L
 
     private sendToStreamer(message: BaseMessage): void {
         if (!this.subscribedStreamer) {
-            Logger.error(`SFU ${this.playerId} tried to send to a streamer but they're not subscribed to any.`)
+            Logger.error(
+                `SFU ${this.playerId} tried to send to a streamer but they're not subscribed to any.`
+            );
             return;
         }
 
@@ -183,7 +219,9 @@ export class SFUConnection extends EventEmitter implements IPlayer, IStreamer, L
 
     private sendToPlayer(message: BaseMessage): void {
         if (!message.playerId) {
-            Logger.error(`SFU ${this.streamerId} trying to send a message to a player with no playerId. Ignored.`);
+            Logger.error(
+                `SFU ${this.streamerId} trying to send a message to a player with no playerId. Ignored.`
+            );
             return;
         }
         const player = this.server.playerRegistry.get(message.playerId);
@@ -236,7 +274,9 @@ export class SFUConnection extends EventEmitter implements IPlayer, IStreamer, L
     }
 
     private onListStreamers(_message: Messages.listStreamers): void {
-        const listMessage = MessageHelpers.createMessage(Messages.streamerList, { ids: this.server.streamerRegistry.streamers.map(streamer => streamer.streamerId) });
+        const listMessage = MessageHelpers.createMessage(Messages.streamerList, {
+            ids: this.server.streamerRegistry.streamers.map((streamer) => streamer.streamerId)
+        });
         this.sendMessage(listMessage);
     }
 

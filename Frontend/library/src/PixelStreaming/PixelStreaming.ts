@@ -178,40 +178,40 @@ export class PixelStreaming {
 
         // encoder settings
         this.config._addOnNumericSettingChangedListener(NumericParameters.MinQP, (newValue: number) => {
-            Logger.Log(Logger.GetStackTrace(), '--------  Sending MinQP  --------', 7);
+            Logger.Info('--------  Sending MinQP  --------');
             this._webRtcController.sendEncoderMinQP(newValue);
-            Logger.Log(Logger.GetStackTrace(), '-------------------------------------------', 7);
+            Logger.Info('-------------------------------------------');
         });
 
         this.config._addOnNumericSettingChangedListener(NumericParameters.MaxQP, (newValue: number) => {
-            Logger.Log(Logger.GetStackTrace(), '--------  Sending encoder settings  --------', 7);
+            Logger.Info('--------  Sending encoder settings  --------');
             this._webRtcController.sendEncoderMaxQP(newValue);
-            Logger.Log(Logger.GetStackTrace(), '-------------------------------------------', 7);
+            Logger.Info('-------------------------------------------');
         });
 
         // WebRTC settings
         this.config._addOnNumericSettingChangedListener(
             NumericParameters.WebRTCMinBitrate,
             (newValue: number) => {
-                Logger.Log(Logger.GetStackTrace(), '--------  Sending web rtc settings  --------', 7);
+                Logger.Info('--------  Sending web rtc settings  --------');
                 this._webRtcController.sendWebRTCMinBitrate(newValue * 1000 /* kbps to bps */);
-                Logger.Log(Logger.GetStackTrace(), '-------------------------------------------', 7);
+                Logger.Info('-------------------------------------------');
             }
         );
 
         this.config._addOnNumericSettingChangedListener(
             NumericParameters.WebRTCMaxBitrate,
             (newValue: number) => {
-                Logger.Log(Logger.GetStackTrace(), '--------  Sending web rtc settings  --------', 7);
+                Logger.Info('--------  Sending web rtc settings  --------');
                 this._webRtcController.sendWebRTCMaxBitrate(newValue * 1000 /* kbps to bps */);
-                Logger.Log(Logger.GetStackTrace(), '-------------------------------------------', 7);
+                Logger.Info('-------------------------------------------');
             }
         );
 
         this.config._addOnNumericSettingChangedListener(NumericParameters.WebRTCFPS, (newValue: number) => {
-            Logger.Log(Logger.GetStackTrace(), '--------  Sending web rtc settings  --------', 7);
+            Logger.Info('--------  Sending web rtc settings  --------');
             this._webRtcController.sendWebRTCFps(newValue);
-            Logger.Log(Logger.GetStackTrace(), '-------------------------------------------', 7);
+            Logger.Info('-------------------------------------------');
         });
 
         this.config._addOnOptionSettingChangedListener(
@@ -328,7 +328,6 @@ export class PixelStreaming {
 
         // If we prefer not to force a reconnection, just warn the user that this operation didn't happen
         Logger.Warning(
-            Logger.GetStackTrace(),
             'Trying to unmute mic, but PixelStreaming was initialized with no microphone track. Call with forceEnable == true to re-connect with a mic track.'
         );
     }
@@ -341,7 +340,6 @@ export class PixelStreaming {
 
         // If there wasn't a mic track, just let user know there's nothing to mute
         Logger.Info(
-            Logger.GetStackTrace(),
             'Trying to mute mic, but PixelStreaming has no microphone track, so sending sound is already disabled.'
         );
     }
@@ -519,7 +517,6 @@ export class PixelStreaming {
             this.allowConsoleCommands = settings.PixelStreamingSettings.AllowPixelStreamingCommands ?? false;
             if (this.allowConsoleCommands === false) {
                 Logger.Info(
-                    Logger.GetStackTrace(),
                     '-AllowPixelStreamingCommands=false, sending arbitrary console commands from browser to UE is disabled.'
                 );
             }
@@ -527,7 +524,7 @@ export class PixelStreaming {
 
         const useUrlParams = this.config.useUrlParams;
         const urlParams = new IURLSearchParams(window.location.search);
-        Logger.Info(Logger.GetStackTrace(), `using URL parameters ${useUrlParams}`);
+        Logger.Info(`using URL parameters ${useUrlParams}`);
         if (settings.EncoderSettings) {
             this.config.setNumericSetting(
                 NumericParameters.MinQP,
@@ -774,6 +771,10 @@ export class PixelStreaming {
         this._webRtcController.signallingUrlBuilder = signallingUrlBuilderFunc;
     }
 
+    public get webRtcController() {
+        return this._webRtcController;
+    }
+
     /**
      * Public getter for the websocket controller. Access to this property allows you to send
      * custom websocket messages.
@@ -795,7 +796,7 @@ export class PixelStreaming {
         handler?: (data: ArrayBuffer | Array<number | string>) => void
     ) {
         if (direction === MessageDirection.FromStreamer && typeof handler === 'undefined') {
-            Logger.Warning(Logger.GetStackTrace(), `Unable to register an undefined handler for ${name}`);
+            Logger.Warning(`Unable to register an undefined handler for ${name}`);
             return;
         }
 

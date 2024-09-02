@@ -6,11 +6,12 @@ module.exports = {
     parserOptions: { project: './tsconfig.esm.json' },
     plugins: [
         '@typescript-eslint',
-        'eslint-plugin-tsdoc'
+        'eslint-plugin-tsdoc',
     ],
     extends: [
         'eslint:recommended',
-        'plugin:@typescript-eslint/recommended-type-checked'
+        'plugin:@typescript-eslint/recommended-type-checked',
+        "plugin:prettier/recommended",
     ],
     rules: {
         "tsdoc/syntax": "warn",

@@ -39,7 +39,7 @@ class SdpEndpoint {
         this.sctpMedia = null;
         this.consumeData = false;
     }
-    async processOffer(sdpOffer) {
+    async processOffer(sdpOffer, scalabilityMode) {
         if (this.remoteSdp) {
             console.error("[SdpEndpoint.processOffer] ERROR: A remote description was already set");
             return [];
@@ -63,10 +63,7 @@ class SdpEndpoint {
                 if (!("direction" in media)) {
                     continue;
                 }
-                if (media.direction !== "sendonly") {
-                    continue;
-                }
-                const sendParams = SdpUtils.sdpToSendRtpParameters(remoteSdpObj, media, this.localCaps, media.type);
+                const sendParams = SdpUtils.sdpToSendRtpParameters(remoteSdpObj, media, this.localCaps, media.type, scalabilityMode);
                 let producer;
                 try {
                     producer = await this.transport.produce({

@@ -89,7 +89,7 @@ export class GamePadController {
      * @param gamePadEvent - the activating gamepad event
      */
     gamePadConnectHandler(gamePadEvent: GamepadEvent) {
-        Logger.Log(Logger.GetStackTrace(), 'Gamepad connect handler', 6);
+        Logger.Info('Gamepad connect handler');
         const gamepad = gamePadEvent.gamepad;
 
         const temp: Controller = {
@@ -101,7 +101,7 @@ export class GamePadController {
         this.controllers.push(temp);
         this.controllers[gamepad.index].currentState = gamepad;
         this.controllers[gamepad.index].prevState = gamepad;
-        Logger.Log(Logger.GetStackTrace(), 'gamepad: ' + gamepad.id + ' connected', 6);
+        Logger.Info('gamepad: ' + gamepad.id + ' connected');
         window.requestAnimationFrame(() => this.updateStatus());
         this.onGamepadConnected();
     }
@@ -111,8 +111,8 @@ export class GamePadController {
      * @param gamePadEvent - the activating gamepad event
      */
     gamePadDisconnectHandler(gamePadEvent: GamepadEvent) {
-        Logger.Log(Logger.GetStackTrace(), 'Gamepad disconnect handler', 6);
-        Logger.Log(Logger.GetStackTrace(), 'gamepad: ' + gamePadEvent.gamepad.id + ' disconnected', 6);
+        Logger.Info('Gamepad disconnect handler');
+        Logger.Info('gamepad: ' + gamePadEvent.gamepad.id + ' disconnected');
         const deletedController = this.controllers[gamePadEvent.gamepad.index];
         delete this.controllers[gamePadEvent.gamepad.index];
         this.controllers = this.controllers.filter((controller) => controller !== undefined);

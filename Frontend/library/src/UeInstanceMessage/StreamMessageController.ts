@@ -210,7 +210,7 @@ export class StreamMessageController {
                 this.fromStreamerHandlers.set(messageType, messageHandler);
                 break;
             default:
-                Logger.Log(Logger.GetStackTrace(), `Unknown message direction ${messageDirection}`);
+                Logger.Info(`Unknown message direction ${messageDirection}`);
         }
     }
 }

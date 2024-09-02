@@ -70,9 +70,11 @@ export class WebServer {
             });
 
             app.use(helmet());
-            app.use(hsts({
-                maxAge: 15552000  // 180 days in seconds
-            }));
+            app.use(
+                hsts({
+                    maxAge: 15552000 // 180 days in seconds
+                })
+            );
 
             // Setup http -> https redirect if requested
             if (config.https_redirect) {
@@ -87,7 +89,9 @@ export class WebServer {
                             // eslint-disable-next-line @typescript-eslint/no-unsafe-return
                             return res.redirect(['https://', hostAddress, req.originalUrl].join(''));
                         } else {
-                            Logger.error(`Unable to get host name from header. Requestor ${req.ip}, url path: '${req.originalUrl}', available headers ${JSON.stringify(req.headers)}`);
+                            Logger.error(
+                                `Unable to get host name from header. Requestor ${req.ip}, url path: '${req.originalUrl}', available headers ${JSON.stringify(req.headers)}`
+                            );
                             // eslint-disable-next-line @typescript-eslint/no-unsafe-return
                             return res.status(400).send('Bad Request');
                         }
@@ -100,8 +104,8 @@ export class WebServer {
         app.use(express.static(config.root));
 
         const limiter = RateLimit({
-          windowMs: 60 * 1000, // 1 minute
-          max: config.perMinuteRateLimit ? config.perMinuteRateLimit : 3000
+            windowMs: 60 * 1000, // 1 minute
+            max: config.perMinuteRateLimit ? config.perMinuteRateLimit : 3000
         });
 
         // apply rate limiter to all requests

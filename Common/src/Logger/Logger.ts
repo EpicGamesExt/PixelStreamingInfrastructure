@@ -1,17 +1,88 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
+export enum LogLevel {
+    Disabled = 0,
+    Error,
+    Warning,
+    Info,
+    Debug
+}
+
 /**
  * A basic console logger utilized by the Pixel Streaming frontend to allow
  * logging to the browser console.
  */
 export class Logger {
-    static verboseLogLevel = 5;
+    static logLevel: LogLevel = LogLevel.Debug;
+    static includeStack: boolean = true;
+
+    /**
+     * Set the log verbosity level
+     */
+    static InitLogging(logLevel: number, includeStack: boolean) {
+        this.logLevel = logLevel;
+        this.includeStack = includeStack;
+    }
+
+    /**
+     * Logging output for debugging
+     * @param message - the message to be logged
+     */
+    static Debug(message: string) {
+        if (this.logLevel >= LogLevel.Debug) {
+            this.CommonLog('Debug', message);
+        }
+    }
+
+    /**
+     * Basic logging output for standard messages
+     * @param message - the message to be logged
+     */
+    static Info(message: string) {
+        if (this.logLevel >= LogLevel.Info) {
+            this.CommonLog('Info', message);
+        }
+    }
+
+    /**
+     * Logging for warnings
+     * @param message - the message to be logged
+     */
+    static Warning(message: string) {
+        if (this.logLevel >= LogLevel.Warning) {
+            this.CommonLog('Warning', message);
+        }
+    }
+
+    /**
+     * Error logging
+     * @param message - the message to be logged
+     */
+    static Error(message: string) {
+        if (this.logLevel >= LogLevel.Error) {
+            this.CommonLog('Error', message);
+        }
+    }
+
+    /**
+     * The common log function that all other log functions call to.
+     * @param level - the level of this log message.
+     * @param stack - an optional stack trace string from where the log message was called.
+     * @param message - the message to be logged.
+     */
+    static CommonLog(level: string, message: string) {
+        let logMessage = `[${level}] - ${message}`;
+        if (this.includeStack) {
+            logMessage += `\nStack: ${Logger.GetStackTrace()}`;
+        }
+        console.log(logMessage);
+    }
 
     /**
      * Captures the stack and returns it
      * @returns the current stack
      */
-    static GetStackTrace() {
+    private static GetStackTrace() {
         const error = new Error();
         let formattedStack = 'No Stack Available for this browser';
 
@@ -21,74 +92,5 @@ export class Logger {
         }
 
         return formattedStack;
-    }
-
-    /**
-     * Set the log verbosity level
-     */
-    static SetLoggerVerbosity(verboseLogLevel: number) {
-        if (this.verboseLogLevel != null) {
-            this.verboseLogLevel = verboseLogLevel;
-        }
-    }
-
-    /**
-     * The standard logging output
-     * @param stack - the stack trace
-     * @param message - the message to be logged
-     * @param verbosity - the verbosity level
-     */
-    static Log(stack: string, message: string, verbosity?: number) {
-        if (verbosity !== undefined && verbosity > this.verboseLogLevel) {
-            return;
-        }
-
-        this.CommonLog("Log", null, message);
-    }
-
-    /**
-     * The standard logging output
-     * @param stack - the stack trace
-     * @param message - the message to be logged
-     * @param verbosity - the verbosity level
-     */
-    static Info(stack: string, message: string, verbosity?: number) {
-        if (verbosity !== undefined && verbosity > this.verboseLogLevel) {
-            return;
-        }
-
-        this.CommonLog("Info", null, message);
-    }
-
-    /**
-     * The standard logging output
-     * @param stack - the stack trace
-     * @param message - the message to be logged
-     */
-    static Error(stack: string, message: string) {
-        this.CommonLog("Error", stack, message);
-    }
-
-    /**
-     * The standard logging output
-     * @param stack - the stack trace
-     * @param message - the message to be logged
-     */
-    static Warning(stack: string, message: string) {
-        this.CommonLog("Warning", null, message);
-    }
-
-    /**
-     * The common log function that all other log functions call to.
-     * @param level - the level of this log message.
-     * @param stack - an optional stack trace string from where the log message was called.
-     * @param message - the message to be logged.
-     */
-    static CommonLog(level: string, stack: null | string, message: string) {
-        if (stack) {
-            console.log(`[${level}] - ${message}\nCaller: ${stack}`);
-        } else {
-            console.log(`[${level}] - ${message}`);
-        }
     }
 }

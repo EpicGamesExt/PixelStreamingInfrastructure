@@ -2,12 +2,12 @@ import { BaseMessage } from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
 import { Logger } from './Logger';
 
 export interface IProtoLogObj {
-    event: string,
-    direction: string,
-    sender?: string,
-    receiver?: string,
-    target?: string,
-    protoMessage: BaseMessage
+    event: string;
+    direction: string;
+    sender?: string;
+    receiver?: string;
+    target?: string;
+    protoMessage: BaseMessage;
 }
 
 /**

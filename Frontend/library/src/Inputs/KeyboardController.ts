@@ -193,7 +193,7 @@ export class KeyboardController {
             return;
         }
 
-        Logger.Log(Logger.GetStackTrace(), `key down ${keyCode}, repeat = ${keyboardEvent.repeat}`, 6);
+        Logger.Info(`key down ${keyCode}, repeat = ${keyboardEvent.repeat}`);
         const toStreamerHandlers = this.toStreamerMessagesProvider.toStreamerHandlers;
         toStreamerHandlers.get('KeyDown')([this.getKeycode(keyboardEvent), keyboardEvent.repeat ? 1 : 0]);
         const activeKeys = this.activeKeysProvider.getActiveKeys();
@@ -223,7 +223,7 @@ export class KeyboardController {
             return;
         }
 
-        Logger.Log(Logger.GetStackTrace(), `key up ${keyCode}`, 6);
+        Logger.Info(`key up ${keyCode}`);
         const toStreamerHandlers = this.toStreamerMessagesProvider.toStreamerHandlers;
         toStreamerHandlers.get('KeyUp')([keyCode]);
 
@@ -236,20 +236,15 @@ export class KeyboardController {
      * Handles when a key is press
      * @param keyboard - Keyboard Event
      */
-    handleOnKeyPress(keyboard: KeyboardEvent) {
-        if (!('charCode' in keyboard)) {
-            Logger.Warning(
-                Logger.GetStackTrace(),
-                'KeyboardEvent.charCode is deprecated in this browser, cannot send key press.'
-            );
+    handleOnKeyPress(keyboardEvent: KeyboardEvent) {
+        const keyCode = this.getKeycode(keyboardEvent);
+        if (!keyCode) {
             return;
         }
 
-        const charCode = keyboard.charCode;
-        Logger.Log(Logger.GetStackTrace(), `key press ${charCode}`, 6);
-
+        Logger.Info(`key press ${keyCode}`);
         const toStreamerHandlers = this.toStreamerMessagesProvider.toStreamerHandlers;
-        toStreamerHandlers.get('KeyPress')([charCode]);
+        toStreamerHandlers.get('KeyPress')([keyCode]);
     }
 
     /**
@@ -298,7 +293,6 @@ export class KeyboardController {
                 return this.CodeToKeyCode[event.code];
             } else {
                 Logger.Warning(
-                    Logger.GetStackTrace(),
                     `Keyboard code of ${event.code} is not supported in our mapping, ignoring this key.`
                 );
                 return null;
