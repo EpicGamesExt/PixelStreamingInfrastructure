@@ -28,28 +28,28 @@ test('Test mouse enter/leave', {
     // reduce the size of the window so we can leave
     await page.setViewportSize({ width: 100, height: 100 });
 
-    const player_box = await page.locator('#videoElementParent').boundingBox();
-    expect(player_box).not.toBeNull();
+    const playerBox = await page.locator('#videoElementParent').boundingBox();
+    expect(playerBox).not.toBeNull();
 
-    if (player_box) {
+    if (playerBox) {
         // perform the actions
         const events = await getEventsFor(streamerPage, async () => {
             // start outside the view
             await page.mouse.move(200, 200);
             // move to the top left of the video
-            await page.mouse.move(player_box.x, player_box.y);
+            await page.mouse.move(playerBox.x, playerBox.y);
             // move back outside
             await page.mouse.move(150, 150);
         });
 
         // check we got the expected events
-        const first_player_id = Object.keys(events)[0];
-        const single_player_events = events[first_player_id];
-        const expected_actions: DataChannelEvent[] = [
+        const firstPlayerId = Object.keys(events)[0];
+        const singlePlayerEvents = events[firstPlayerId];
+        const expectedActions: DataChannelEvent[] = [
             { type: PSEventTypes.MouseEnter },
             { type: PSEventTypes.MouseLeave },
         ];
-        expect(single_player_events).toContainActions(expected_actions);
+        expect(singlePlayerEvents).toContainActions(expectedActions);
     }
 });
 
@@ -71,17 +71,17 @@ test('Test locked mouse movement', {
 
     await helpers.waitForVideo(page);
 
-    const player_box = await page.locator('#videoElementParent').boundingBox();
-    expect(player_box).not.toBeNull();
+    const playerBox = await page.locator('#videoElementParent').boundingBox();
+    expect(playerBox).not.toBeNull();
 
-    if (player_box) {
-        const video_size = await page.evaluate(()=>{
-            let video_elem = document.getElementById('streamingVideo') as HTMLVideoElement;
-            return { width: video_elem.videoWidth, height: video_elem.videoHeight };
+    if (playerBox) {
+        const videoSize = await page.evaluate(()=>{
+            let videoElem = document.getElementById('streamingVideo') as HTMLVideoElement;
+            return { width: videoElem.videoWidth, height: videoElem.videoHeight };
         });
 
-        const coord_converter = new helpers.CoordConverter(player_box, video_size);
-        const expected_actions: DataChannelEvent[] = [];
+        const coordConverter = new helpers.CoordConverter(playerBox, videoSize);
+        const expectedActions: DataChannelEvent[] = [];
         const movements = [
             { x: 100, y: 0 },
             { x: 0, y: 100 },
@@ -92,9 +92,9 @@ test('Test locked mouse movement', {
         // where the pointer anchors in locked mode changes by browser
         const anchor: helpers.Coord = (() => {
             if (browserName == 'firefox') {
-                return { x: player_box.x + player_box.width / 2, y: player_box.y + player_box.height / 2 };
+                return { x: playerBox.x + playerBox.width / 2, y: playerBox.y + playerBox.height / 2 };
             } else {
-                return { x: player_box.x, y: player_box.y };
+                return { x: playerBox.x, y: playerBox.y };
             }
         })();
 
@@ -105,15 +105,15 @@ test('Test locked mouse movement', {
         const events = await getEventsFor(streamerPage, async () => {
             for (const movement of movements) {
                 await page.mouse.move(anchor.x + movement.x, anchor.y + movement.y);
-                const translated = coord_converter.normalizeQuantizeSigned(movement.x, movement.y);
-                expected_actions.push({ type: PSEventTypes.MouseMove, delta_x: translated.x, delta_y: translated.y });
+                const translated = coordConverter.normalizeQuantizeSigned(movement.x, movement.y);
+                expectedActions.push({ type: PSEventTypes.MouseMove, deltaX: translated.x, deltaY: translated.y });
             }
         });
 
         // check we got the expected events
-        const first_player_id = Object.keys(events)[0];
-        const single_player_events = events[first_player_id];
-        expect(single_player_events).toContainActions(expected_actions);
+        const firstPlayerId = Object.keys(events)[0];
+        const singlePlayerEvents = events[firstPlayerId];
+        expect(singlePlayerEvents).toContainActions(expectedActions);
     }
 });
 
@@ -135,19 +135,19 @@ test('Test hovering mouse movement', {
 
     await helpers.waitForVideo(page);
 
-    const player_box = await page.locator('#videoElementParent').boundingBox();
-    expect(player_box).not.toBeNull();
+    const playerBox = await page.locator('#videoElementParent').boundingBox();
+    expect(playerBox).not.toBeNull();
 
-    if (player_box) {
-        const video_size = await page.evaluate(()=>{
-            let video_elem = document.getElementById('streamingVideo') as HTMLVideoElement;
-            return { width: video_elem.videoWidth, height: video_elem.videoHeight };
+    if (playerBox) {
+        const videoSize = await page.evaluate(()=>{
+            let videoElem = document.getElementById('streamingVideo') as HTMLVideoElement;
+            return { width: videoElem.videoWidth, height: videoElem.videoHeight };
         });
 
         // where the pointer anchors in locked mode changes by browser
-        const anchor = { x: player_box.x, y: player_box.y };
-        const coord_converter = new helpers.CoordConverter(player_box, video_size);
-        const expected_actions: DataChannelEvent[] = [];
+        const anchor = { x: playerBox.x, y: playerBox.y };
+        const coordConverter = new helpers.CoordConverter(playerBox, videoSize);
+        const expectedActions: DataChannelEvent[] = [];
         const movements = [
             { x: anchor.x + 300, y: anchor.y + 0 },
             { x: anchor.x + 300, y: anchor.y + 200 },
@@ -162,15 +162,15 @@ test('Test hovering mouse movement', {
         const events = await getEventsFor(streamerPage, async () => {
             for (const movement of movements) {
                 await page.mouse.move(movement.x, movement.y);
-                const translated = coord_converter.normalizeQuantizeUnsigned(movement.x, movement.y);
-                expected_actions.push({ type: PSEventTypes.MouseMove, x: translated.x, y: translated.y });
+                const translated = coordConverter.normalizeQuantizeUnsigned(movement.x, movement.y);
+                expectedActions.push({ type: PSEventTypes.MouseMove, x: translated.x, y: translated.y });
             }
         });
 
         // check we got the expected events
-        const first_player_id = Object.keys(events)[0];
-        const single_player_events = events[first_player_id];
-        expect(single_player_events).toContainActions(expected_actions);
+        const firstPlayerId = Object.keys(events)[0];
+        const singlePlayerEvents = events[firstPlayerId];
+        expect(singlePlayerEvents).toContainActions(expectedActions);
     }
 });
 

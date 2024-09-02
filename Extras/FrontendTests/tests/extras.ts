@@ -6,8 +6,8 @@ declare global {
     interface Window {
         pixelStreaming: PixelStreaming;
         streamer: Streamer;
-        data_messages: Record<string,DataChannelEvent[]>;
-        data_message_listener(player_id: number, message: any): void;
+        dataMessages: Record<string,DataChannelEvent[]>;
+        dataMessageListener(playerId: number, message: any): void;
     }
 }
 
@@ -31,14 +31,14 @@ export interface DataChannelMouseInput {
     button?: number;
     x?: number;
     y?: number;
-    delta_x?: number;
-    delta_y?: number;
+    deltaX?: number;
+    deltaY?: number;
 };
 
 // keyboard input events captured by the streamer
 export interface DataChannelKeyboardInput {
     type: number;
-    key_code: number;
+    keyCode: number;
 };
 
 export interface DataChannelCommandInput {
@@ -52,34 +52,34 @@ export type DataChannelEvent = DataChannelMouseInput | DataChannelKeyboardInput 
 // sets up the streamer page to capture data channel messages
 export function setupEventCapture(streamerPage: Page) {
     return streamerPage.evaluate(() => {
-        window.data_messages = {};
-        window.data_message_listener = (player_id, message) => {
-            if (window.data_messages[player_id] == undefined) {
-                window.data_messages[player_id] = [];
+        window.dataMessages = {};
+        window.dataMessageListener = (playerId, message) => {
+            if (window.dataMessages[playerId] == undefined) {
+                window.dataMessages[playerId] = [];
             }
-            window.data_messages[player_id].push({ type: message.type, ...message.message });
+            window.dataMessages[playerId].push({ type: message.type, ...message.message });
         };
-        window.streamer.on('data_channel_message', window.data_message_listener);
+        window.streamer.on('data_channel_message', window.dataMessageListener);
     });
 }
 
 // turns off the data channel capturing on the streamer page
 export function teardownEventCapture(streamerPage: Page) {
     return streamerPage.evaluate(() => {
-        window.streamer.off('data_channel_message', window.data_message_listener);
+        window.streamer.off('data_channel_message', window.dataMessageListener);
     });
 }
 
 // gets all the captured data channel messages between setup/teardownEventCapture
 export function getCapturedEvents(streamerPage: Page): Promise<Record<string, DataChannelEvent[]>> {
     return streamerPage.evaluate(() => {
-        return window.data_messages;
+        return window.dataMessages;
     });
 }
 
-export async function getEventsFor(streamerPage: Page, perform_action: () => Promise<void>): Promise<Record<string, DataChannelEvent[]>> {
+export async function getEventsFor(streamerPage: Page, performAction: () => Promise<void>): Promise<Record<string, DataChannelEvent[]>> {
     await setupEventCapture(streamerPage);
-    await perform_action();
+    await performAction();
     await teardownEventCapture(streamerPage);
     return await getCapturedEvents(streamerPage);
 }

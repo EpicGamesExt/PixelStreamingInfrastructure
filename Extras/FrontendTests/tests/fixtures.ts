@@ -12,7 +12,7 @@ export const test = base.extend<PSTestFixtures>({
         await use(streamerPage);
     },
     streamerId: async ({ streamerPage }, use) => {
-        const id_promise: Promise<string> = streamerPage.evaluate(()=> {
+        const idPromise: Promise<string> = streamerPage.evaluate(()=> {
             return new Promise((resolve) => {
                 window.streamer.on('endpoint_id_confirmed', () => {
                     resolve(window.streamer.id);
@@ -20,7 +20,7 @@ export const test = base.extend<PSTestFixtures>({
             })
         });
         await streamerPage.getByText('Start Streaming').click();
-        const streamerId: string = await id_promise;
+        const streamerId: string = await idPromise;
         await use(streamerId);
     },
 });

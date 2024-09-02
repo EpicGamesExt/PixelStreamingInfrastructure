@@ -22,12 +22,12 @@ export const expect = baseExpect.extend({
     toContainActions(received: DataChannelEvent[], expected: DataChannelEvent[]) {
         const assertionName = 'toContainActions';
         let pass: boolean = false;
-        let action_index = 0;
+        let actionIndex = 0;
         if (expected.length > 0) {
             for (const event of received) {
-                if (dataChannelActionMatches(expected[action_index], event)) {
-                    action_index += 1;
-                    if (action_index == expected.length) {
+                if (dataChannelActionMatches(expected[actionIndex], event)) {
+                    actionIndex += 1;
+                    if (actionIndex == expected.length) {
                         pass = true;
                         break;
                     }
@@ -40,7 +40,7 @@ export const expect = baseExpect.extend({
                 return `expected is empty.`;
             }
             if (!pass) {
-                return `Could not find action ${action_index} : ${JSON.stringify(expected[action_index])} in ${JSON.stringify(received)}`;
+                return `Could not find action ${actionIndex} : ${JSON.stringify(expected[actionIndex])} in ${JSON.stringify(received)}`;
             }
             return '';
         };

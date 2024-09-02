@@ -23,13 +23,13 @@ test('Test resolution changes with match viewport on.', {
         await helpers.delay(500);
     });
 
-    const first_player_id = Object.keys(events)[0];
-    const single_player_events = events[first_player_id];
-    const expected_actions: DataChannelEvent[] = [
+    const firstPlayerId = Object.keys(events)[0];
+    const singlePlayerEvents = events[firstPlayerId];
+    const expectedActions: DataChannelEvent[] = [
         { type: PSEventTypes.Command, command: '{\"Resolution.Width\":100,\"Resolution.Height\":100}' },
         { type: PSEventTypes.Command, command: '{\"Resolution.Width\":800,\"Resolution.Height\":600}' },
     ];
-    expect(single_player_events).toContainActions(expected_actions);
+    expect(singlePlayerEvents).toContainActions(expectedActions);
 });
 
 
@@ -49,13 +49,13 @@ test('Test resolution changes with match viewport off.', {
         await helpers.delay(500);
     });
 
-    const first_player_id = Object.keys(events)[0];
-    const single_player_events = events[first_player_id];
-    const expected_actions: DataChannelEvent[] = [
+    const firstPlayerId = Object.keys(events)[0];
+    const singlePlayerEvents = events[firstPlayerId];
+    const expectedActions: DataChannelEvent[] = [
         { type: PSEventTypes.Command, command: '{\"Resolution.Width\":100,\"Resolution.Height\":100}' },
         { type: PSEventTypes.Command, command: '{\"Resolution.Width\":800,\"Resolution.Height\":600}' },
     ];
-    expect(single_player_events).not.toContainActions(expected_actions);
+    expect(singlePlayerEvents).not.toContainActions(expectedActions);
 });
 
 

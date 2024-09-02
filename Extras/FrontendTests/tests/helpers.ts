@@ -18,9 +18,9 @@ export function getResultsDirectory() {
    return __resultsDirectory;
 }
 
-export async function takeScreenshot(page: Page, file_name: string) {
+export async function takeScreenshot(page: Page, fileName: string) {
    await page.screenshot({
-       path: path.join(__screenshotDirectory, file_name),
+       path: path.join(__screenshotDirectory, fileName),
        fullPage: false
    });
 }
@@ -74,35 +74,35 @@ export interface Coord {
 };
 
 export class CoordConverter {
-    player_size: BoxSize;
-    video_size: BoxSize;
+    playerSize: BoxSize;
+    videoSize: BoxSize;
     ratio: number;
-    player_is_larger: boolean;
+    playerIsLarger: boolean;
 
-    constructor(player_size: BoxSize, video_size: BoxSize) {
-        this.player_size = player_size;
-        this.video_size = video_size;
-        const player_aspect_ratio = this.player_size.height / this.player_size.width;
-        const video_aspect_ratio = this.video_size.height / this.video_size.width;
-        this.player_is_larger = player_aspect_ratio > video_aspect_ratio;
-        if (this.player_is_larger) {
-            this.ratio = player_aspect_ratio / video_aspect_ratio;
+    constructor(playerSize: BoxSize, videoSize: BoxSize) {
+        this.playerSize = playerSize;
+        this.videoSize = videoSize;
+        const playerAspectRatio = this.playerSize.height / this.playerSize.width;
+        const videoAspectRatio = this.videoSize.height / this.videoSize.width;
+        this.playerIsLarger = playerAspectRatio > videoAspectRatio;
+        if (this.playerIsLarger) {
+            this.ratio = playerAspectRatio / videoAspectRatio;
         } else {
-            this.ratio = video_aspect_ratio / player_aspect_ratio;
+            this.ratio = videoAspectRatio / playerAspectRatio;
         }
     }
 
     public normalizeQuantizeSigned(x: number, y: number): Coord {
-        if (this.player_is_larger) {
-            const normalizedX = x / (0.5 * this.player_size.width);
-            const normalizedY = (this.ratio * y) / (0.5 * this.player_size.height);
+        if (this.playerIsLarger) {
+            const normalizedX = x / (0.5 * this.playerSize.width);
+            const normalizedY = (this.ratio * y) / (0.5 * this.playerSize.height);
             return {
                 x: Math.trunc(normalizedX * 32767),
                 y: Math.trunc(normalizedY * 32767)
             };
         } else {
-            const normalizedX = (this.ratio * x) / (0.5 * this.player_size.width);
-            const normalizedY = y / (0.5 * this.player_size.height);
+            const normalizedX = (this.ratio * x) / (0.5 * this.playerSize.width);
+            const normalizedY = y / (0.5 * this.playerSize.height);
             return {
                 x: Math.trunc(normalizedX * 32767),
                 y: Math.trunc(normalizedY * 32767)
@@ -110,16 +110,16 @@ export class CoordConverter {
         }
     }
     public normalizeQuantizeUnsigned(x: number, y: number): Coord {
-        if (this.player_is_larger) {
-            const normalizedX = x / this.player_size.width;
-            const normalizedY = this.ratio * (y / this.player_size.height - 0.5) + 0.5;
+        if (this.playerIsLarger) {
+            const normalizedX = x / this.playerSize.width;
+            const normalizedY = this.ratio * (y / this.playerSize.height - 0.5) + 0.5;
             return {
                 x: Math.trunc(normalizedX * 65536),
                 y: Math.trunc(normalizedY * 65536)
             };
         } else {
-            const normalizedX = this.ratio * (x / this.player_size.width - 0.5) + 0.5;
-            const normalizedY = y / this.player_size.height;
+            const normalizedX = this.ratio * (x / this.playerSize.width - 0.5) + 0.5;
+            const normalizedY = y / this.playerSize.height;
             return {
                 x: Math.trunc(normalizedX * 65536),
                 y: Math.trunc(normalizedY * 65536)
