@@ -7,7 +7,7 @@
   "module": "build/pixelstreamingjsstreamer.js",
   "scripts": {
     "develop": "webpack-dev-server --mode development",
-    "build": "webpack --mode production",
+    "build": "tsc --project tsconfig.json && webpack --mode production",
     "build-dev": "npm link ../Common && npm run build",
     "lint": "eslint ./src --ext .js,.jsx,.ts,.tsx",
     "test": "echo \"Error: no test specified\" && exit 1"
