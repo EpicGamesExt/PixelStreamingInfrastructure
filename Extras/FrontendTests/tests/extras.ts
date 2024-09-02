@@ -50,6 +50,7 @@ export interface DataChannelCommandInput {
 export type DataChannelEvent = DataChannelMouseInput | DataChannelKeyboardInput | DataChannelCommandInput;
 
 // sets up the streamer page to capture data channel messages
+// will capture events in a map on the window keyed by player id
 export function setupEventCapture(streamerPage: Page) {
     return streamerPage.evaluate(() => {
         window.dataMessages = {};
