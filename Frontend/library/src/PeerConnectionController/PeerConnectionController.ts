@@ -64,7 +64,7 @@ export class PeerConnectionController {
             useMic = false;
             useCamera = false;
             Logger.Error(
-                "Microphone and Webcam access in the browser will not work if you are not on HTTPS or localhost. Disabling mic and webcam access."
+                'Microphone and Webcam access in the browser will not work if you are not on HTTPS or localhost. Disabling mic and webcam access.'
             );
             Logger.Error(
                 "For testing you can enable HTTP microphone access Chrome by visiting chrome://flags/ and enabling 'unsafely-treat-insecure-origin-as-secure'"
@@ -102,7 +102,7 @@ export class PeerConnectionController {
                 useMic = false;
                 useCamera = false;
                 Logger.Error(
-                    "Microphone and Webcam access in the browser will not work if you are not on HTTPS or localhost. Disabling mic and webcam access."
+                    'Microphone and Webcam access in the browser will not work if you are not on HTTPS or localhost. Disabling mic and webcam access.'
                 );
                 Logger.Error(
                     "For testing you can enable HTTP microphone access Chrome by visiting chrome://flags/ and enabling 'unsafely-treat-insecure-origin-as-secure'"
