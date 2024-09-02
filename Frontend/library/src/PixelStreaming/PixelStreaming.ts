@@ -720,6 +720,10 @@ export class PixelStreaming {
         this._webRtcController.signallingUrlBuilder = signallingUrlBuilderFunc;
     }
 
+    public get webRtcController() {
+        return this._webRtcController;
+    }
+
     /**
      * Public getter for the websocket controller. Access to this property allows you to send
      * custom websocket messages.
