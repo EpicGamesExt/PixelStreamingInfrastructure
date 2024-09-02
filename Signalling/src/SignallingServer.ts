@@ -123,7 +123,11 @@ export class SignallingServer {
         this.streamerRegistry.add(newStreamer);
         newStreamer.transport.on('close', () => {
             this.streamerRegistry.remove(newStreamer);
-            Logger.info(`Streamer %s (%s) disconnected.`, newStreamer.streamerId, request.socket.remoteAddress);
+            Logger.info(
+                `Streamer %s (%s) disconnected.`,
+                newStreamer.streamerId,
+                request.socket.remoteAddress
+            );
         });
 
         // because peer connection options is a general field with all optional fields
