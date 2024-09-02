@@ -1,6 +1,6 @@
 import { Page } from 'playwright';
-import { Streamer } from '../../src/streamer';
-import { DataProtocol } from '../../src/protocol';
+import { Streamer } from '../../JSStreamer/src/streamer';
+import { DataProtocol } from '../../JSStreamer/src/protocol';
 import { PixelStreaming } from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.5';
 
 declare global {
