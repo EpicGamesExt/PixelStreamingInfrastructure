@@ -127,6 +127,7 @@ export class ConfigUI {
         this.addSettingFlag(psSettingsSection, this.flagsUi.get(Flags.AutoConnect));
         this.addSettingFlag(psSettingsSection, this.flagsUi.get(Flags.AutoPlayVideo));
         this.addSettingFlag(psSettingsSection, this.flagsUi.get(Flags.UseMic));
+        this.addSettingFlag(psSettingsSection, this.flagsUi.get(Flags.UseCamera));
         this.addSettingFlag(psSettingsSection, this.flagsUi.get(Flags.StartVideoMuted));
         this.addSettingFlag(psSettingsSection, this.flagsUi.get(Flags.IsQualityController));
         this.addSettingFlag(psSettingsSection, this.flagsUi.get(Flags.ForceMonoAudio));

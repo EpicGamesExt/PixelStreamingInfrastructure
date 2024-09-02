@@ -354,6 +354,57 @@ export class PixelStreaming {
     }
 
     /**
+     * Will unmute the video track which is sent to Unreal Engine.
+     * By default, will only unmute an existing video track.
+     *
+     * @param forceEnable Can be used for cases when this object wasn't initialized with a video track.
+     * If this parameter is true, the connection will be restarted with a camera.
+     * Warning: this takes some time, as a full renegotiation and reconnection will happen.
+     */
+    public unmuteCamera(forceEnable = false): void {
+        // If there's an existing video track, we just set muted state
+        if (this.config.isFlagEnabled('UseCamera')) {
+            this.setCameraMuted(false);
+            return;
+        }
+
+        // If there's no pre-existing video track, and caller is ok with full reset, we enable and reset
+        if (forceEnable) {
+            this.config.setFlagEnabled('UseCamera', true);
+            this.reconnect();
+            return;
+        }
+
+        // If we prefer not to force a reconnection, just warn the user that this operation didn't happen
+        Logger.Warning(
+            Logger.GetStackTrace(),
+            'Trying to unmute video, but PixelStreaming was initialized with no video track. Call with forceEnable == true to re-connect with a video track.'
+        );
+    }
+
+    public muteCamera(): void {
+        if (this.config.isFlagEnabled('UseCamera')) {
+            this.setCameraMuted(true);
+            return;
+        }
+
+        // If there wasn't a mic track, just let user know there's nothing to mute
+        Logger.Info(
+            Logger.GetStackTrace(),
+            'Trying to mute camera, but PixelStreaming has no video track, so sending video is already disabled.'
+        );
+    }
+
+    private setCameraMuted(mute: boolean): void {
+        for (const transceiver of this._webRtcController?.peerConnectionController?.peerConnection?.getTransceivers() ??
+            []) {
+            if (RTCUtils.canTransceiverSendVideo(transceiver)) {
+                transceiver.sender.track.enabled = !mute;
+            }
+        }
+    }
+
+    /**
      * Emit an event on auto connecting
      */
     _onWebRtcAutoConnect() {

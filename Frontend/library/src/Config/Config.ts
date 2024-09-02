@@ -25,6 +25,7 @@ export class Flags {
     static StartVideoMuted = 'StartVideoMuted' as const;
     static SuppressBrowserKeys = 'SuppressBrowserKeys' as const;
     static UseMic = 'UseMic' as const;
+    static UseCamera = 'UseCamera' as const;
     static KeyboardInput = 'KeyboardInput' as const;
     static MouseInput = 'MouseInput' as const;
     static TouchInput = 'TouchInput' as const;
@@ -265,6 +266,19 @@ export class Config {
                 'Make browser request microphone access and open an input audio track.',
                 settings && Object.prototype.hasOwnProperty.call(settings, Flags.UseMic)
                     ? settings[Flags.UseMic]
+                    : false,
+                useUrlParams
+            )
+        );
+
+        this.flags.set(
+            Flags.UseCamera,
+            new SettingFlag(
+                Flags.UseCamera,
+                'Use webcam',
+                'Make browser request webcam access and open a input video track.',
+                settings && Object.prototype.hasOwnProperty.call(settings, Flags.UseCamera)
+                    ? settings[Flags.UseCamera]
                     : false,
                 useUrlParams
             )

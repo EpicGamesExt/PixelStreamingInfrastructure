@@ -59,17 +59,19 @@ export class PeerConnectionController {
         const isLocalhostConnection = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
         const isHttpsConnection = location.protocol === 'https:';
         let useMic = config.isFlagEnabled(Flags.UseMic);
-        if (useMic && !(isLocalhostConnection || isHttpsConnection)) {
+        let useCamera = config.isFlagEnabled(Flags.UseCamera);
+        if ((useMic || useCamera) && !(isLocalhostConnection || isHttpsConnection)) {
             useMic = false;
+            useCamera = false;
             Logger.Error(
-                'Microphone access in the browser will not work if you are not on HTTPS or localhost. Disabling mic access.'
+                "Microphone and Webcam access in the browser will not work if you are not on HTTPS or localhost. Disabling mic and webcam access."
             );
             Logger.Error(
                 "For testing you can enable HTTP microphone access Chrome by visiting chrome://flags/ and enabling 'unsafely-treat-insecure-origin-as-secure'"
             );
         }
 
-        this.setupTransceiversAsync(useMic).finally(() => {
+        this.setupTransceiversAsync(useMic, useCamera).finally(() => {
             this.peerConnection
                 ?.createOffer(offerOptions)
                 .then((offer: RTCSessionDescriptionInit) => {
@@ -95,10 +97,12 @@ export class PeerConnectionController {
                 location.hostname === 'localhost' || location.hostname === '127.0.0.1';
             const isHttpsConnection = location.protocol === 'https:';
             let useMic = config.isFlagEnabled(Flags.UseMic);
-            if (useMic && !(isLocalhostConnection || isHttpsConnection)) {
+            let useCamera = config.isFlagEnabled(Flags.UseCamera);
+            if ((useMic || useCamera) && !(isLocalhostConnection || isHttpsConnection)) {
                 useMic = false;
+                useCamera = false;
                 Logger.Error(
-                    'Microphone access in the browser will not work if you are not on HTTPS or localhost. Disabling mic access.'
+                    "Microphone and Webcam access in the browser will not work if you are not on HTTPS or localhost. Disabling mic and webcam access."
                 );
                 Logger.Error(
                     "For testing you can enable HTTP microphone access Chrome by visiting chrome://flags/ and enabling 'unsafely-treat-insecure-origin-as-secure'"
@@ -111,7 +115,7 @@ export class PeerConnectionController {
                 this.fuzzyIntersectUEAndBrowserCodecs(offer)
             );
 
-            this.setupTransceiversAsync(useMic).finally(() => {
+            this.setupTransceiversAsync(useMic, useCamera).finally(() => {
                 this.peerConnection
                     ?.createAnswer()
                     .then((Answer: RTCSessionDescriptionInit) => {
@@ -359,9 +363,9 @@ export class PeerConnectionController {
     /**
      * Setup tracks on the RTC Peer Connection
      * @param useMic - is mic in use
+     * @param useCamera - is webcam in use
      */
-    async setupTransceiversAsync(useMic: boolean) {
-        // Setup a transceiver for receiving video (if we need to)
+    async setupTransceiversAsync(useMic: boolean, useCamera: boolean) {
         let hasVideoReceiver = false;
         for (const transceiver of this.peerConnection?.getTransceivers() ?? []) {
             if (
@@ -374,8 +378,14 @@ export class PeerConnectionController {
                 break;
             }
         }
-        if (!hasVideoReceiver) {
-            this.peerConnection?.addTransceiver('video', { direction: 'recvonly' });
+
+        // Setup a transceiver for sending webcam video to UE and receiving video from UE
+        if (!useCamera) {
+            if (!hasVideoReceiver) {
+                this.peerConnection?.addTransceiver('video', { direction: 'recvonly' });
+            }
+        } else {
+            await this.setupVideoSender(hasVideoReceiver);
         }
 
         if (RTCRtpReceiver.getCapabilities && this.preferredCodec != '') {
@@ -446,53 +456,94 @@ export class PeerConnectionController {
                 });
             }
         } else {
-            // set the audio options based on mic usage
-            const audioOptions = {
-                autoGainControl: false,
-                channelCount: 1,
-                echoCancellation: false,
-                latency: 0,
-                noiseSuppression: false,
-                sampleRate: 48000,
-                sampleSize: 16,
-                volume: 1.0
-            };
+            await this.setupAudioSender(hasAudioReceiver);
+        }
+    }
 
-            // set the media send options
-            const mediaSendOptions: MediaStreamConstraints = {
-                video: false,
-                audio: audioOptions
-            };
+    async setupVideoSender(hasVideoReceiver: boolean) {
+        // set the media send options
+        const mediaSendOptions: MediaStreamConstraints = {
+            video: true
+        };
 
-            // Note using mic on android chrome requires SSL or chrome://flags/ "unsafely-treat-insecure-origin-as-secure"
-            const stream = await navigator.mediaDevices.getUserMedia(mediaSendOptions);
-            if (stream) {
-                if (hasAudioReceiver) {
-                    for (const transceiver of this.peerConnection?.getTransceivers() ?? []) {
-                        if (RTCUtils.canTransceiverReceiveAudio(transceiver)) {
-                            for (const track of stream.getTracks()) {
-                                if (track.kind && track.kind == 'audio') {
-                                    transceiver.sender.replaceTrack(track);
-                                    transceiver.direction = 'sendrecv';
-                                }
+        // Note using webcam on android chrome requires SSL or chrome://flags/ "unsafely-treat-insecure-origin-as-secure"
+        const stream = await navigator.mediaDevices.getUserMedia(mediaSendOptions);
+
+        if (stream) {
+            if (hasVideoReceiver) {
+                for (const transceiver of this.peerConnection?.getTransceivers() ?? []) {
+                    if (RTCUtils.canTransceiverReceiveVideo(transceiver)) {
+                        for (const track of stream.getTracks()) {
+                            if (track.kind && track.kind == 'video') {
+                                transceiver.sender.replaceTrack(track);
+                                transceiver.direction = 'sendrecv';
                             }
-                        }
-                    }
-                } else {
-                    for (const track of stream.getTracks()) {
-                        if (track.kind && track.kind == 'audio') {
-                            this.peerConnection?.addTransceiver(track, {
-                                direction: 'sendrecv'
-                            });
                         }
                     }
                 }
             } else {
-                if (!hasAudioReceiver) {
-                    this.peerConnection?.addTransceiver('audio', {
-                        direction: 'recvonly'
-                    });
+                for (const track of stream.getTracks()) {
+                    if (track.kind && track.kind == 'video') {
+                        this.peerConnection?.addTransceiver(track, {
+                            direction: 'sendrecv'
+                        });
+                    }
                 }
+            }
+        } else {
+            if (!hasVideoReceiver) {
+                this.peerConnection?.addTransceiver('video', { direction: 'recvonly' });
+            }
+        }
+    }
+
+    async setupAudioSender(hasAudioReceiver: boolean) {
+        // set the audio options based on mic usage
+        const audioOptions = {
+            autoGainControl: false,
+            channelCount: 1,
+            echoCancellation: false,
+            latency: 0,
+            noiseSuppression: false,
+            sampleRate: 48000,
+            sampleSize: 16,
+            volume: 1.0
+        };
+
+        // set the media send options
+        const mediaSendOptions: MediaStreamConstraints = {
+            video: false,
+            audio: audioOptions
+        };
+
+        // Note using mic on android chrome requires SSL or chrome://flags/ "unsafely-treat-insecure-origin-as-secure"
+        const stream = await navigator.mediaDevices.getUserMedia(mediaSendOptions);
+        if (stream) {
+            if (hasAudioReceiver) {
+                for (const transceiver of this.peerConnection?.getTransceivers() ?? []) {
+                    if (RTCUtils.canTransceiverReceiveAudio(transceiver)) {
+                        for (const track of stream.getTracks()) {
+                            if (track.kind && track.kind == 'audio') {
+                                transceiver.sender.replaceTrack(track);
+                                transceiver.direction = 'sendrecv';
+                            }
+                        }
+                    }
+                }
+            } else {
+                for (const track of stream.getTracks()) {
+                    if (track.kind && track.kind == 'audio') {
+                        this.peerConnection?.addTransceiver(track, {
+                            direction: 'sendrecv'
+                        });
+                    }
+                }
+            }
+        } else {
+            if (!hasAudioReceiver) {
+                this.peerConnection?.addTransceiver('audio', {
+                    direction: 'recvonly'
+                });
             }
         }
     }
