@@ -1,12 +1,12 @@
 {
-  "name": "prtest",
+  "name": "frontend-tests",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {},
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "Epic Games",
+  "license": "MIT",
   "devDependencies": {
     "@epicgames-ps/lib-pixelstreamingfrontend-ue5.5": "^0.1.4",
     "@playwright/test": "^1.43.1",

@@ -1,5 +1,5 @@
 {
-  "name": "@epicgames-ps/streamer",
+  "name": "@epicgames-ps/js-streamer",
   "version": "0.0.1",
   "description": "A Node JS implementation of a webrtc streamer for testing.",
   "main": "build/index.js",
