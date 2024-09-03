@@ -29,7 +29,9 @@ export class CoordinateConverter {
     ratio: number;
     playerIsLarger: boolean;
 
-    setup(playerSize: RectSize, videoSize: RectSize) {
+    // we dont use a constructor here because the object is created and passed around to various locations
+    // possibly before this method is called.
+    configure(playerSize: RectSize, videoSize: RectSize) {
         const playerAspectRatio = playerSize.height / playerSize.width;
         const videoAspectRatio = videoSize.height / videoSize.width;
         this.playerIsLarger = playerAspectRatio > videoAspectRatio;

@@ -1388,7 +1388,7 @@ export class WebRtcPlayerController {
         this.videoElementParentClientRect = this.videoPlayer.getVideoParentElement().getBoundingClientRect();
         const playerElement = this.videoPlayer.getVideoParentElement();
         const videoElement = this.videoPlayer.getVideoElement();
-        this.coordinateConverter.setup(
+        this.coordinateConverter.configure(
             { width: playerElement.clientWidth, height: playerElement.clientHeight },
             { width: videoElement.videoWidth, height: videoElement.videoHeight }
         );
