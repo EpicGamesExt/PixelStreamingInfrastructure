@@ -399,7 +399,7 @@ export class Config {
                 'A single finger touch is converted into a mouse event. This allows a non-touch application to be controlled partially via a touch device.',
                 settings && Object.prototype.hasOwnProperty.call(settings, Flags.FakeMouseWithTouches)
                     ? settings[Flags.FakeMouseWithTouches]
-                    : true,
+                    : false,
                 useUrlParams
             )
         );
