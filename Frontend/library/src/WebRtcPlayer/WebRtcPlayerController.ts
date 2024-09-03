@@ -155,7 +155,7 @@ export class WebRtcPlayerController {
 
         this.streamController = new StreamController(this.videoPlayer);
 
-        this.coordinateConverter = new CoordinateConverter(this.videoPlayer);
+        this.coordinateConverter = new CoordinateConverter();
 
         this.sendrecvDataChannelController = new DataChannelController();
         this.recvDataChannelController = new DataChannelController();
@@ -1386,7 +1386,12 @@ export class WebRtcPlayerController {
     setUpMouseAndFreezeFrame() {
         // Calculating and normalizing positions depends on the width and height of the player.
         this.videoElementParentClientRect = this.videoPlayer.getVideoParentElement().getBoundingClientRect();
-        this.coordinateConverter.setupNormalizeAndQuantize();
+        const playerElement = this.videoPlayer.getVideoParentElement();
+        const videoElement = this.videoPlayer.getVideoElement();
+        this.coordinateConverter.setup(
+            { width: playerElement.clientWidth, height: playerElement.clientHeight },
+            { width: videoElement.videoWidth, height: videoElement.videoHeight }
+        );
         this.freezeFrameController.freezeFrame.resize();
     }
 
