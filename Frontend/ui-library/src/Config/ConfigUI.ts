@@ -250,6 +250,11 @@ export class ConfigUI {
 
         this.addSettingFlag(
             inputSettingsSection,
+            this.flagsUi.get(Flags.FakeMouseWithTouches)
+        );
+
+        this.addSettingFlag(
+            inputSettingsSection,
             this.flagsUi.get(Flags.TouchInput)
         );
 
