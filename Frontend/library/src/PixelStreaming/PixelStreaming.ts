@@ -190,6 +190,13 @@ export class PixelStreaming {
         );
 
         this.config._addOnSettingChangedListener(
+            Flags.FakeMouseWithTouches,
+            (_isFakeMouseEnabled: boolean) => {
+                this._webRtcController.setTouchInputEnabled(this.config.isFlagEnabled(Flags.TouchInput));
+            }
+        );
+
+        this.config._addOnSettingChangedListener(
             Flags.TouchInput,
             (isEnabled: boolean) => {
                 this._webRtcController.setTouchInputEnabled(isEnabled);
