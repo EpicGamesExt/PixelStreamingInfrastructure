@@ -1,6 +1,6 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
-import { FakeTouchController } from './FakeTouchController';
+import { TouchControllerFake } from './TouchControllerFake';
 import { KeyboardController } from './KeyboardController';
 import { MouseController } from './MouseController';
 import { MouseControllerLocked } from './MouseControllerLocked';
@@ -85,7 +85,7 @@ export class InputClassesFactory {
     registerTouch(fakeMouseTouch: boolean, videoElementParentClientRect: DOMRect) {
         Logger.Info('Registering Touch');
         if (fakeMouseTouch) {
-            const fakeTouchController = new FakeTouchController(
+            const fakeTouchController = new TouchControllerFake(
                 this.toStreamerMessagesProvider,
                 this.videoElementProvider,
                 this.coordinateConverter
