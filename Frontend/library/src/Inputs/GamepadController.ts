@@ -56,9 +56,6 @@ export class GamePadController {
     beforeUnloadListener: (event: Event) => void;
     requestAnimationFrame: (callback: FrameRequestCallback) => number;
 
-    /**
-     * @param streamMessageController - Stream message instance
-     */
     constructor(streamMessageController: StreamMessageController) {
         this.streamMessageController = streamMessageController;
 
@@ -102,6 +99,15 @@ export class GamePadController {
             }
         }
         this.controllers = [];
+    }
+
+    onGamepadResponseReceived(gamepadId: number) {
+        for (const controller of this.controllers) {
+            if (controller.id === undefined) {
+                controller.id = gamepadId;
+                break;
+            }
+        }
     }
 
     private gamePadConnectHandler(gamePadEvent: GamepadEvent) {
@@ -198,15 +204,6 @@ export class GamePadController {
         }
         if (this.controllers.length > 0) {
             this.requestAnimationFrame(() => this.updateStatus());
-        }
-    }
-
-    onGamepadResponseReceived(gamepadId: number) {
-        for (const controller of this.controllers) {
-            if (controller.id === undefined) {
-                controller.id = gamepadId;
-                break;
-            }
         }
     }
 
