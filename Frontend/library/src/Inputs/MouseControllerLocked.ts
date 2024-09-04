@@ -1,16 +1,15 @@
 import { Logger } from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
 import { StreamMessageController } from '../UeInstanceMessage/StreamMessageController';
-import { CoordinateConverter } from '../Util/CoordinateConverter';
+import { InputCoordTranslator, TranslatedCoordUnsigned } from '../Util/InputCoordTranslator';
 import { VideoPlayer } from '../VideoPlayer/VideoPlayer';
 import type { ActiveKeys } from './InputClassesFactory';
-import { NormalizedQuantizedUnsignedCoord } from '../Util/CoordinateConverter';
 import { MouseController } from './MouseController';
 
 export class MouseControllerLocked extends MouseController {
     videoElementParent: HTMLDivElement;
     x: number;
     y: number;
-    normalizedCoord: NormalizedQuantizedUnsignedCoord;
+    normalizedCoord: TranslatedCoordUnsigned;
 
     // bound listeners
     onRequestLockListener: () => void;
@@ -24,14 +23,14 @@ export class MouseControllerLocked extends MouseController {
     constructor(
         streamMessageController: StreamMessageController,
         videoPlayer: VideoPlayer,
-        coordinateConverter: CoordinateConverter,
+        coordinateConverter: InputCoordTranslator,
         activeKeys: ActiveKeys
     ) {
         super(streamMessageController, videoPlayer, coordinateConverter, activeKeys);
         this.videoElementParent = videoPlayer.getVideoParentElement() as HTMLDivElement;
         this.x = this.videoElementParent.getBoundingClientRect().width / 2;
         this.y = this.videoElementParent.getBoundingClientRect().height / 2;
-        this.normalizedCoord = this.coordinateConverter.normalizeAndQuantizeUnsigned(this.x, this.y);
+        this.normalizedCoord = this.coordinateConverter.translateUnsigned(this.x, this.y);
 
         this.onRequestLockListener = this.onRequestLock.bind(this);
         this.onLockStateChangeListener = this.onLockStateChange.bind(this);
@@ -154,8 +153,8 @@ export class MouseControllerLocked extends MouseController {
             this.y += styleHeight;
         }
 
-        this.normalizedCoord = this.coordinateConverter.normalizeAndQuantizeUnsigned(this.x, this.y);
-        const delta = this.coordinateConverter.normalizeAndQuantizeSigned(event.movementX, event.movementY);
+        this.normalizedCoord = this.coordinateConverter.translateUnsigned(this.x, this.y);
+        const delta = this.coordinateConverter.translateSigned(event.movementX, event.movementY);
         this.streamMessageController.toStreamerHandlers.get('MouseMove')([
             this.normalizedCoord.x,
             this.normalizedCoord.y,

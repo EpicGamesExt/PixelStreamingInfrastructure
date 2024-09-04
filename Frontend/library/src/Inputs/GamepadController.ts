@@ -47,7 +47,7 @@ export enum GamepadLayout {
 }
 /* eslint-enable @typescript-eslint/no-duplicate-enum-values */
 
-export class GamePadController {
+export class GamepadController {
     controllers: Array<Controller>;
     streamMessageController: StreamMessageController;
 
@@ -59,8 +59,8 @@ export class GamePadController {
     constructor(streamMessageController: StreamMessageController) {
         this.streamMessageController = streamMessageController;
 
-        this.onGamepadConnectedListener = this.gamePadConnectHandler.bind(this);
-        this.onGamepadDisconnectedListener = this.gamePadDisconnectHandler.bind(this);
+        this.onGamepadConnectedListener = this.onGamepadConnected.bind(this);
+        this.onGamepadDisconnectedListener = this.onGamepadDisconnected.bind(this);
         this.beforeUnloadListener = this.onBeforeUnload.bind(this);
         this.requestAnimationFrame = (
             window.mozRequestAnimationFrame ||
@@ -82,13 +82,13 @@ export class GamePadController {
         if (navigator.getGamepads) {
             for (const gamepad of navigator.getGamepads()) {
                 if (gamepad) {
-                    this.gamePadConnectHandler(new GamepadEvent('gamepadconnected', { gamepad }));
+                    this.onGamepadConnected(new GamepadEvent('gamepadconnected', { gamepad }));
                 }
             }
         }
     }
 
-    unregisterGamePadEvents() {
+    unregisterGamepadEvents() {
         window.removeEventListener('gamepadconnected', this.onGamepadConnectedListener);
         window.removeEventListener('gamepaddisconnected', this.onGamepadDisconnectedListener);
         window.removeEventListener('webkitgamepadconnected', this.onGamepadConnectedListener);
@@ -110,8 +110,8 @@ export class GamePadController {
         }
     }
 
-    private gamePadConnectHandler(gamePadEvent: GamepadEvent) {
-        const gamepad = gamePadEvent.gamepad;
+    private onGamepadConnected(event: GamepadEvent) {
+        const gamepad = event.gamepad;
 
         const temp: Controller = {
             currentState: gamepad,
@@ -126,14 +126,14 @@ export class GamePadController {
         this.streamMessageController.toStreamerHandlers.get('GamepadConnected')();
     }
 
-    private gamePadDisconnectHandler(gamePadEvent: GamepadEvent) {
-        const deletedController = this.controllers[gamePadEvent.gamepad.index];
-        delete this.controllers[gamePadEvent.gamepad.index];
+    private onGamepadDisconnected(event: GamepadEvent) {
+        const deletedController = this.controllers[event.gamepad.index];
+        delete this.controllers[event.gamepad.index];
         this.controllers = this.controllers.filter((controller) => controller !== undefined);
         this.streamMessageController.toStreamerHandlers.get('GamepadDisconnected')([deletedController.id]);
     }
 
-    private scanGamePads() {
+    private scanGamepads() {
         const gamepads = navigator.getGamepads
             ? navigator.getGamepads()
             : navigator.webkitGetGamepads
@@ -147,7 +147,7 @@ export class GamePadController {
     }
 
     private updateStatus() {
-        this.scanGamePads();
+        this.scanGamepads();
         const toStreamerHandlers = this.streamMessageController.toStreamerHandlers;
 
         // Iterate over multiple controllers in the case the multiple gamepads are connected

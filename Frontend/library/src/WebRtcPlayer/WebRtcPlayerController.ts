@@ -33,9 +33,9 @@ import { StreamMessageController, MessageDirection } from '../UeInstanceMessage/
 import { ResponseController } from '../UeInstanceMessage/ResponseController';
 import { SendMessageController } from '../UeInstanceMessage/SendMessageController';
 import { ToStreamerMessagesController } from '../UeInstanceMessage/ToStreamerMessagesController';
-import { GamePadController } from '../Inputs/GamepadController';
+import { GamepadController } from '../Inputs/GamepadController';
 import { DataChannelSender } from '../DataChannel/DataChannelSender';
-import { CoordinateConverter, UnquantizedDenormalizedUnsignedCoord } from '../Util/CoordinateConverter';
+import { InputCoordTranslator, UntranslatedCoordUnsigned } from '../Util/InputCoordTranslator';
 import { PixelStreaming } from '../PixelStreaming/PixelStreaming';
 import { ITouchController } from '../Inputs/ITouchController';
 import {
@@ -88,8 +88,8 @@ export class WebRtcPlayerController {
     keyboardController: KeyboardController;
     mouseController: MouseController;
     touchController: ITouchController;
-    gamePadController: GamePadController;
-    coordinateConverter: CoordinateConverter;
+    gamePadController: GamepadController;
+    coordinateConverter: InputCoordTranslator;
     isUsingSFU: boolean;
     isQualityController: boolean;
     statsTimerHandle: number;
@@ -155,7 +155,7 @@ export class WebRtcPlayerController {
 
         this.streamController = new StreamController(this.videoPlayer);
 
-        this.coordinateConverter = new CoordinateConverter();
+        this.coordinateConverter = new InputCoordTranslator();
 
         this.sendrecvDataChannelController = new DataChannelController();
         this.recvDataChannelController = new DataChannelController();
@@ -302,8 +302,8 @@ export class WebRtcPlayerController {
      * @param x x axis coordinate
      * @param y y axis coordinate
      */
-    requestUnquantizedAndDenormalizeUnsigned(x: number, y: number): UnquantizedDenormalizedUnsignedCoord {
-        return this.coordinateConverter.unquantizeAndDenormalizeUnsigned(x, y);
+    requestUnquantizedAndDenormalizeUnsigned(x: number, y: number): UntranslatedCoordUnsigned {
+        return this.coordinateConverter.untranslateUnsigned(x, y);
     }
 
     /**
@@ -1388,7 +1388,7 @@ export class WebRtcPlayerController {
         this.videoElementParentClientRect = this.videoPlayer.getVideoParentElement().getBoundingClientRect();
         const playerElement = this.videoPlayer.getVideoParentElement();
         const videoElement = this.videoPlayer.getVideoElement();
-        this.coordinateConverter.configure(
+        this.coordinateConverter.reconfigure(
             { width: playerElement.clientWidth, height: playerElement.clientHeight },
             { width: videoElement.videoWidth, height: videoElement.videoHeight }
         );
@@ -1785,7 +1785,7 @@ export class WebRtcPlayerController {
      * enables/disables game pad event listeners
      */
     setGamePadInputEnabled(isEnabled: boolean) {
-        this.gamePadController?.unregisterGamePadEvents();
+        this.gamePadController?.unregisterGamepadEvents();
         if (isEnabled) {
             this.gamePadController = this.inputClassesFactory.registerGamePad();
         }

@@ -6,10 +6,10 @@ import { MouseController } from './MouseController';
 import { MouseControllerLocked } from './MouseControllerLocked';
 import { MouseControllerHovering } from './MouseControllerHovering';
 import { TouchController } from './TouchController';
-import { GamePadController } from './GamepadController';
+import { GamepadController } from './GamepadController';
 import { Config, ControlSchemeType } from '../Config/Config';
 import { Logger } from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
-import { CoordinateConverter } from '../Util/CoordinateConverter';
+import { InputCoordTranslator } from '../Util/InputCoordTranslator';
 import { StreamMessageController } from '../UeInstanceMessage/StreamMessageController';
 import { VideoPlayer } from '../VideoPlayer/VideoPlayer';
 
@@ -19,7 +19,7 @@ import { VideoPlayer } from '../VideoPlayer/VideoPlayer';
 export class InputClassesFactory {
     toStreamerMessagesProvider: StreamMessageController;
     videoElementProvider: VideoPlayer;
-    coordinateConverter: CoordinateConverter;
+    coordinateConverter: InputCoordTranslator;
     activeKeys: ActiveKeys = new ActiveKeys();
 
     /**
@@ -30,7 +30,7 @@ export class InputClassesFactory {
     constructor(
         toStreamerMessagesProvider: StreamMessageController,
         videoElementProvider: VideoPlayer,
-        coordinateConverter: CoordinateConverter
+        coordinateConverter: InputCoordTranslator
     ) {
         this.toStreamerMessagesProvider = toStreamerMessagesProvider;
         this.videoElementProvider = videoElementProvider;
@@ -106,7 +106,7 @@ export class InputClassesFactory {
      */
     registerGamePad() {
         Logger.Info('Register Game Pad');
-        const gamePadController = new GamePadController(this.toStreamerMessagesProvider);
+        const gamePadController = new GamepadController(this.toStreamerMessagesProvider);
         return gamePadController;
     }
 }

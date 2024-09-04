@@ -1,5 +1,5 @@
 import { StreamMessageController } from '../UeInstanceMessage/StreamMessageController';
-import { CoordinateConverter } from '../Util/CoordinateConverter';
+import { InputCoordTranslator } from '../Util/InputCoordTranslator';
 import { VideoPlayer } from '../VideoPlayer/VideoPlayer';
 import type { ActiveKeys } from './InputClassesFactory';
 import { MouseController } from './MouseController';
@@ -17,7 +17,7 @@ export class MouseControllerHovering extends MouseController {
     constructor(
         streamMessageController: StreamMessageController,
         videoPlayer: VideoPlayer,
-        coordinateConverter: CoordinateConverter,
+        coordinateConverter: InputCoordTranslator,
         activeKeys: ActiveKeys
     ) {
         super(streamMessageController, videoPlayer, coordinateConverter, activeKeys);
@@ -56,7 +56,7 @@ export class MouseControllerHovering extends MouseController {
         if (!this.videoPlayer.isVideoReady()) {
             return;
         }
-        const coord = this.coordinateConverter.normalizeAndQuantizeUnsigned(event.offsetX, event.offsetY);
+        const coord = this.coordinateConverter.translateUnsigned(event.offsetX, event.offsetY);
         this.streamMessageController.toStreamerHandlers.get('MouseDown')([event.button, coord.x, coord.y]);
         event.preventDefault();
     }
@@ -65,7 +65,7 @@ export class MouseControllerHovering extends MouseController {
         if (!this.videoPlayer.isVideoReady()) {
             return;
         }
-        const coord = this.coordinateConverter.normalizeAndQuantizeUnsigned(event.offsetX, event.offsetY);
+        const coord = this.coordinateConverter.translateUnsigned(event.offsetX, event.offsetY);
         this.streamMessageController.toStreamerHandlers.get('MouseUp')([event.button, coord.x, coord.y]);
         event.preventDefault();
     }
@@ -81,8 +81,8 @@ export class MouseControllerHovering extends MouseController {
         if (!this.videoPlayer.isVideoReady()) {
             return;
         }
-        const coord = this.coordinateConverter.normalizeAndQuantizeUnsigned(event.offsetX, event.offsetY);
-        const delta = this.coordinateConverter.normalizeAndQuantizeSigned(event.movementX, event.movementY);
+        const coord = this.coordinateConverter.translateUnsigned(event.offsetX, event.offsetY);
+        const delta = this.coordinateConverter.translateSigned(event.movementX, event.movementY);
         this.streamMessageController.toStreamerHandlers.get('MouseMove')([
             coord.x,
             coord.y,
@@ -96,7 +96,7 @@ export class MouseControllerHovering extends MouseController {
         if (!this.videoPlayer.isVideoReady()) {
             return;
         }
-        const coord = this.coordinateConverter.normalizeAndQuantizeUnsigned(event.offsetX, event.offsetY);
+        const coord = this.coordinateConverter.translateUnsigned(event.offsetX, event.offsetY);
         this.streamMessageController.toStreamerHandlers.get('MouseWheel')([
             event.wheelDelta,
             coord.x,
@@ -109,7 +109,7 @@ export class MouseControllerHovering extends MouseController {
         if (!this.videoPlayer.isVideoReady()) {
             return;
         }
-        const coord = this.coordinateConverter.normalizeAndQuantizeUnsigned(event.offsetX, event.offsetY);
+        const coord = this.coordinateConverter.translateUnsigned(event.offsetX, event.offsetY);
         this.streamMessageController.toStreamerHandlers.get('MouseDouble')([event.button, coord.x, coord.y]);
     }
 }

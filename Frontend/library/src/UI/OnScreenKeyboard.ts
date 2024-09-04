@@ -1,6 +1,6 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
-import { UnquantizedDenormalizedUnsignedCoord } from '../Util/CoordinateConverter';
+import { UntranslatedCoordUnsigned } from '../Util/InputCoordTranslator';
 
 /**
  * Class for handling on screen keyboard usage
@@ -35,7 +35,7 @@ export class OnScreenKeyboard {
      * @returns unquantizeAndDenormalizeUnsigned object
      */
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    unquantizeAndDenormalizeUnsigned(x: number, y: number): UnquantizedDenormalizedUnsignedCoord {
+    unquantizeAndDenormalizeUnsigned(x: number, y: number): UntranslatedCoordUnsigned {
         return null;
     }
 

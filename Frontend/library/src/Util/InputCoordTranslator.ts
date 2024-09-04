@@ -5,18 +5,18 @@ export interface RectSize {
     height: number;
 }
 
-export interface NormalizedQuantizedUnsignedCoord {
+export interface TranslatedCoordUnsigned {
     inRange: boolean;
     x: number;
     y: number;
 }
 
-export interface UnquantizedDenormalizedUnsignedCoord {
+export interface TranslatedCoordSigned {
     x: number;
     y: number;
 }
 
-export interface NormalizedQuantizedSignedCoord {
+export interface UntranslatedCoordUnsigned {
     x: number;
     y: number;
 }
@@ -24,14 +24,14 @@ export interface NormalizedQuantizedSignedCoord {
 /**
  * Converts coordinates from element relative coordinates to values normalized within the value range of a short (and back again)
  */
-export class CoordinateConverter {
+export class InputCoordTranslator {
     playerSize: RectSize;
     ratio: number;
     playerIsLarger: boolean;
 
     // we dont use a constructor here because the object is created and passed around to various locations
     // possibly before this method is called.
-    configure(playerSize: RectSize, videoSize: RectSize) {
+    reconfigure(playerSize: RectSize, videoSize: RectSize) {
         const playerAspectRatio = playerSize.height / playerSize.width;
         const videoAspectRatio = videoSize.height / videoSize.width;
         this.playerIsLarger = playerAspectRatio > videoAspectRatio;
@@ -41,7 +41,7 @@ export class CoordinateConverter {
             : videoAspectRatio / playerAspectRatio;
     }
 
-    normalizeAndQuantizeUnsigned(x: number, y: number): NormalizedQuantizedUnsignedCoord {
+    translateUnsigned(x: number, y: number): TranslatedCoordUnsigned {
         const normalizedX = this.playerIsLarger
             ? x / this.playerSize.width
             : this.ratio * (x / this.playerSize.width - 0.5) + 0.5;
@@ -55,19 +55,19 @@ export class CoordinateConverter {
         }
     }
 
-    unquantizeAndDenormalizeUnsigned(x: number, y: number): UnquantizedDenormalizedUnsignedCoord {
-        const normalizedX = this.playerIsLarger ? x / 65536 : (x / 65536 - 0.5) / this.ratio + 0.5;
-        const normalizedY = this.playerIsLarger ? (y / 65536 - 0.5) / this.ratio + 0.5 : y / 65536;
-        return { x: normalizedX * this.playerSize.width, y: normalizedY * this.playerSize.height };
-    }
-
-    normalizeAndQuantizeSigned(x: number, y: number): NormalizedQuantizedSignedCoord {
+    translateSigned(x: number, y: number): TranslatedCoordSigned {
         const normalizedX = this.playerIsLarger
             ? x / (0.5 * this.playerSize.width)
             : (this.ratio * x) / (0.5 * this.playerSize.width);
-        const normalizedY = this.playerIsLarger
-            ? (this.ratio * y) / (0.5 * this.playerSize.height)
-            : y / (0.5 * this.playerSize.height);
-        return { x: normalizedX * 32767, y: normalizedY * 32767 };
+            const normalizedY = this.playerIsLarger
+                ? (this.ratio * y) / (0.5 * this.playerSize.height)
+                : y / (0.5 * this.playerSize.height);
+                return { x: normalizedX * 32767, y: normalizedY * 32767 };
+    }
+
+    untranslateUnsigned(x: number, y: number): UntranslatedCoordUnsigned {
+        const normalizedX = this.playerIsLarger ? x / 65536 : (x / 65536 - 0.5) / this.ratio + 0.5;
+        const normalizedY = this.playerIsLarger ? (y / 65536 - 0.5) / this.ratio + 0.5 : y / 65536;
+        return { x: normalizedX * this.playerSize.width, y: normalizedY * this.playerSize.height };
     }
 }

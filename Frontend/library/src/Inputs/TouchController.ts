@@ -1,7 +1,7 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 import { Logger } from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
-import { CoordinateConverter } from '../Util/CoordinateConverter';
+import { InputCoordTranslator } from '../Util/InputCoordTranslator';
 import { StreamMessageController } from '../UeInstanceMessage/StreamMessageController';
 import { VideoPlayer } from '../VideoPlayer/VideoPlayer';
 import { ITouchController } from './ITouchController';
@@ -9,7 +9,7 @@ import { ITouchController } from './ITouchController';
 export class TouchController implements ITouchController {
     streamMessageController: StreamMessageController;
     videoPlayer: VideoPlayer;
-    coordinateConverter: CoordinateConverter;
+    coordinateConverter: InputCoordTranslator;
     videoElementParent: HTMLVideoElement;
     fingers = [9, 8, 7, 6, 5, 4, 3, 2, 1, 0];
     fingerIds = new Map();
@@ -22,7 +22,7 @@ export class TouchController implements ITouchController {
     constructor(
         streamMessageController: StreamMessageController,
         videoPlayer: VideoPlayer,
-        coordinateConverter: CoordinateConverter
+        coordinateConverter: InputCoordTranslator
     ) {
         this.streamMessageController = streamMessageController;
         this.videoPlayer = videoPlayer;
@@ -107,7 +107,7 @@ export class TouchController implements ITouchController {
             const y = touch.clientY - offset.top;
             Logger.Info(`F${this.fingerIds.get(touch.identifier)}=(${x}, ${y})`);
 
-            const coord = this.coordinateConverter.normalizeAndQuantizeUnsigned(x, y);
+            const coord = this.coordinateConverter.translateUnsigned(x, y);
             switch (type) {
                 case 'TouchStart':
                     toStreamerHandlers.get('TouchStart')([

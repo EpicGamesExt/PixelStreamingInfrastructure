@@ -1,6 +1,6 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
-import { CoordinateConverter } from '../Util/CoordinateConverter';
+import { InputCoordTranslator } from '../Util/InputCoordTranslator';
 import { StreamMessageController } from '../UeInstanceMessage/StreamMessageController';
 import { VideoPlayer } from '../VideoPlayer/VideoPlayer';
 import { ITouchController } from './ITouchController';
@@ -21,7 +21,7 @@ export class TouchControllerFake implements ITouchController {
     fakeTouchFinger: FakeTouchFinger;
     streamMessageController: StreamMessageController;
     videoPlayer: VideoPlayer;
-    coordinateConverter: CoordinateConverter;
+    coordinateConverter: InputCoordTranslator;
     videoElementParentClientRect: DOMRect;
 
     onTouchStartListener: (event: TouchEvent) => void;
@@ -31,7 +31,7 @@ export class TouchControllerFake implements ITouchController {
     constructor(
         streamMessageController: StreamMessageController,
         videoPlayer: VideoPlayer,
-        coordinateConverter: CoordinateConverter
+        coordinateConverter: InputCoordTranslator
     ) {
         this.streamMessageController = streamMessageController;
         this.videoPlayer = videoPlayer;
@@ -76,7 +76,7 @@ export class TouchControllerFake implements ITouchController {
             const mouseEvent = new MouseEvent('mouseenter', first_touch);
             videoElementParent.dispatchEvent(mouseEvent);
 
-            const coord = this.coordinateConverter.normalizeAndQuantizeUnsigned(
+            const coord = this.coordinateConverter.translateUnsigned(
                 this.fakeTouchFinger.x,
                 this.fakeTouchFinger.y
             );
@@ -98,7 +98,7 @@ export class TouchControllerFake implements ITouchController {
             if (touch.identifier === this.fakeTouchFinger.id) {
                 const x = touch.clientX - this.videoElementParentClientRect.left;
                 const y = touch.clientY - this.videoElementParentClientRect.top;
-                const coord = this.coordinateConverter.normalizeAndQuantizeUnsigned(x, y);
+                const coord = this.coordinateConverter.translateUnsigned(x, y);
                 toStreamerHandlers.get('MouseUp')([MouseButton.mainButton, coord.x, coord.y]);
 
                 const mouseEvent = new MouseEvent('mouseleave', touch);
@@ -121,8 +121,8 @@ export class TouchControllerFake implements ITouchController {
             if (touch.identifier === this.fakeTouchFinger.id) {
                 const x = touch.clientX - this.videoElementParentClientRect.left;
                 const y = touch.clientY - this.videoElementParentClientRect.top;
-                const coord = this.coordinateConverter.normalizeAndQuantizeUnsigned(x, y);
-                const delta = this.coordinateConverter.normalizeAndQuantizeSigned(
+                const coord = this.coordinateConverter.translateUnsigned(x, y);
+                const delta = this.coordinateConverter.translateSigned(
                     x - this.fakeTouchFinger.x,
                     y - this.fakeTouchFinger.y
                 );
