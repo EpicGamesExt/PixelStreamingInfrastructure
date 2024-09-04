@@ -2,7 +2,9 @@
 
 import { FakeTouchController } from './FakeTouchController';
 import { KeyboardController } from './KeyboardController';
-import { IMouseController, LockedMouseController, HoveringMouseController } from './MouseController';
+import { MouseController } from './MouseController';
+import { MouseControllerLocked } from './MouseControllerLocked';
+import { MouseControllerHovering } from './MouseControllerHovering';
 import { TouchController } from './TouchController';
 import { GamePadController } from './GamepadController';
 import { Config, ControlSchemeType } from '../Config/Config';
@@ -55,16 +57,16 @@ export class InputClassesFactory {
      */
     registerMouse(controlScheme: ControlSchemeType) {
         Logger.Info('Register Mouse Events');
-        let mouseController: IMouseController;
+        let mouseController: MouseController;
         if (controlScheme == ControlSchemeType.HoveringMouse) {
-            mouseController = new HoveringMouseController(
+            mouseController = new MouseControllerHovering(
                 this.toStreamerMessagesProvider,
                 this.videoElementProvider,
                 this.coordinateConverter,
                 this.activeKeys
             );
         } else {
-            mouseController = new LockedMouseController(
+            mouseController = new MouseControllerLocked(
                 this.toStreamerMessagesProvider,
                 this.videoElementProvider,
                 this.coordinateConverter,
