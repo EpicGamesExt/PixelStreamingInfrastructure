@@ -430,41 +430,41 @@ export class InitialSettingsEvent extends Event {
 
 export type SettingsData =
     | {
-        /** Flag id */
-        id: FlagsIds;
-        type: 'flag';
-        /** Flag value */
-        value: boolean;
-        /** SettingFlag object */
-        target: SettingFlag;
-    }
+          /** Flag id */
+          id: FlagsIds;
+          type: 'flag';
+          /** Flag value */
+          value: boolean;
+          /** SettingFlag object */
+          target: SettingFlag;
+      }
     | {
-        /** Numeric setting id */
-        id: NumericParametersIds;
-        type: 'number';
-        /** Numeric setting value */
-        value: number;
-        /** SettingNumber object */
-        target: SettingNumber;
-    }
+          /** Numeric setting id */
+          id: NumericParametersIds;
+          type: 'number';
+          /** Numeric setting value */
+          value: number;
+          /** SettingNumber object */
+          target: SettingNumber;
+      }
     | {
-        /** Text setting id */
-        id: TextParametersIds;
-        type: 'text';
-        /** Text setting value */
-        value: string;
-        /** SettingText object */
-        target: SettingText;
-    }
+          /** Text setting id */
+          id: TextParametersIds;
+          type: 'text';
+          /** Text setting value */
+          value: string;
+          /** SettingText object */
+          target: SettingText;
+      }
     | {
-        /** Option setting id */
-        id: OptionParametersIds;
-        type: 'option';
-        /** Option setting selected value */
-        value: string;
-        /** SettingOption object */
-        target: SettingOption;
-    };
+          /** Option setting id */
+          id: OptionParametersIds;
+          type: 'option';
+          /** Option setting selected value */
+          value: string;
+          /** SettingOption object */
+          target: SettingOption;
+      };
 
 /**
  * An event that is emitted when PixelStreaming settings change.

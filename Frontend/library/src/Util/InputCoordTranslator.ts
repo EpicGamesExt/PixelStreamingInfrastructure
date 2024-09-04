@@ -59,10 +59,10 @@ export class InputCoordTranslator {
         const normalizedX = this.playerIsLarger
             ? x / (0.5 * this.playerSize.width)
             : (this.ratio * x) / (0.5 * this.playerSize.width);
-            const normalizedY = this.playerIsLarger
-                ? (this.ratio * y) / (0.5 * this.playerSize.height)
-                : y / (0.5 * this.playerSize.height);
-                return { x: normalizedX * 32767, y: normalizedY * 32767 };
+        const normalizedY = this.playerIsLarger
+            ? (this.ratio * y) / (0.5 * this.playerSize.height)
+            : y / (0.5 * this.playerSize.height);
+        return { x: normalizedX * 32767, y: normalizedY * 32767 };
     }
 
     untranslateUnsigned(x: number, y: number): UntranslatedCoordUnsigned {

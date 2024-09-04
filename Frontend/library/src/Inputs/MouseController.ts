@@ -129,4 +129,3 @@ export class MouseController {
         this.streamMessageController.toStreamerHandlers.get('MouseUp')?.([button, coord.x, coord.y]);
     }
 }
-
