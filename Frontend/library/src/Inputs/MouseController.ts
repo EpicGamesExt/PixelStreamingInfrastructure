@@ -1,212 +1,92 @@
-// Copyright Epic Games, Inc. All Rights Reserved.
-
 import { MouseButtonsMask, MouseButton } from './MouseButtons';
 import { Logger } from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
 import { StreamMessageController } from '../UeInstanceMessage/StreamMessageController';
 import { CoordinateConverter } from '../Util/CoordinateConverter';
 import { VideoPlayer } from '../VideoPlayer/VideoPlayer';
-import { IMouseEvents } from './IMouseEvents';
-import { LockedMouseEvents } from './LockedMouseEvents';
-import { HoveringMouseEvents } from './HoveringMouseEvents';
 import type { ActiveKeys } from './InputClassesFactory';
-import { EventListenerTracker } from '../Util/EventListenerTracker';
+import { NormalizedQuantizedUnsignedCoord } from '../Util/CoordinateConverter';
+
+export interface IMouseController {
+    registerMouseEvents(): void;
+    unregisterMouseEvents(): void;
+}
 
 /**
- * Handles the Mouse Inputs for the document
+ * Extra types for Document and WheelEvent
  */
-export class MouseController {
-    videoElementProvider: VideoPlayer;
-    toStreamerMessagesProvider: StreamMessageController;
+declare global {
+    interface Document {
+        mozPointerLockElement: unknown;
+        mozExitPointerLock?(): void;
+    }
+
+    interface WheelEvent {
+        wheelDelta: number;
+    }
+}
+
+class BaseMouseController implements IMouseController {
+    videoPlayer: VideoPlayer;
+    streamMessageController: StreamMessageController;
     coordinateConverter: CoordinateConverter;
-    activeKeysProvider: ActiveKeys;
+    activeKeys: ActiveKeys;
 
-    // Utility for keeping track of event handlers and to unregister them.
-    private mouseEventListenerTracker = new EventListenerTracker();
+    // bound listeners
+    onEnterListener: (event: MouseEvent) => void;
+    onLeaveListener: (event: MouseEvent) => void;
 
-    /**
-     * @param toStreamerMessagesProvider - Stream message instance
-     * @param videoElementProvider - Video Player instance
-     * @param normalizeAndQuantize - A normalize and quantize instance
-     */
     constructor(
-        toStreamerMessagesProvider: StreamMessageController,
-        videoElementProvider: VideoPlayer,
+        streamMessageController: StreamMessageController,
+        videoPlayer: VideoPlayer,
         coordinateConverter: CoordinateConverter,
-        activeKeysProvider: ActiveKeys
+        activeKeys: ActiveKeys
     ) {
-        this.toStreamerMessagesProvider = toStreamerMessagesProvider;
+        this.streamMessageController = streamMessageController;
         this.coordinateConverter = coordinateConverter;
-        this.videoElementProvider = videoElementProvider;
-        this.activeKeysProvider = activeKeysProvider;
+        this.videoPlayer = videoPlayer;
+        this.activeKeys = activeKeys;
+
+        this.onEnterListener = this.onMouseEnter.bind(this);
+        this.onLeaveListener = this.onMouseLeave.bind(this);
+    }
+
+    registerMouseEvents() {
         this.registerMouseEnterAndLeaveEvents();
     }
 
-    /**
-     * Clears all the click events on the current video element parent div
-     */
     unregisterMouseEvents() {
-        this.mouseEventListenerTracker.unregisterAll();
+        this.unregisterMouseEnterAndLeaveEvents();
     }
 
-    /**
-     * Register a locked mouse class
-     * @param mouseController - a mouse controller instance
-     * @param playerStyleAttributesProvider - a player style attributes instance
-     */
-    registerLockedMouseEvents(mouseController: MouseController) {
-        const videoElementParent = this.videoElementProvider.getVideoParentElement() as HTMLDivElement;
-        const lockedMouseEvents: IMouseEvents = new LockedMouseEvents(
-            this.videoElementProvider,
-            mouseController,
-            this.activeKeysProvider
-        );
-
-        videoElementParent.requestPointerLock =
-            videoElementParent.requestPointerLock || videoElementParent.mozRequestPointerLock;
-        document.exitPointerLock = document.exitPointerLock || document.mozExitPointerLock;
-
-        // minor hack to alleviate ios not supporting pointerlock
-        if (videoElementParent.requestPointerLock) {
-            const onclick = () => {
-                videoElementParent.requestPointerLock();
-            };
-            videoElementParent.addEventListener('click', onclick);
-            this.mouseEventListenerTracker.addUnregisterCallback(() =>
-                videoElementParent.removeEventListener('click', onclick)
-            );
-        }
-
-        const lockStateChangeListener = () => lockedMouseEvents.lockStateChange();
-        document.addEventListener('pointerlockchange', lockStateChangeListener, false);
-        document.addEventListener('mozpointerlockchange', lockStateChangeListener, false);
-        this.mouseEventListenerTracker.addUnregisterCallback(() =>
-            document.removeEventListener('pointerlockchange', lockStateChangeListener, false)
-        );
-        this.mouseEventListenerTracker.addUnregisterCallback(() =>
-            document.removeEventListener('mozpointerlockchange', lockStateChangeListener, false)
-        );
-
-        const onmousedown = (mouseEvent: MouseEvent) => lockedMouseEvents.handleMouseDown(mouseEvent);
-        const onmouseup = (mouseEvent: MouseEvent) => lockedMouseEvents.handleMouseUp(mouseEvent);
-        const onwheel = (wheelEvent: WheelEvent) => lockedMouseEvents.handleMouseWheel(wheelEvent);
-        const ondblclick = (mouseEvent: MouseEvent) => lockedMouseEvents.handleMouseDouble(mouseEvent);
-        videoElementParent.addEventListener('mousedown', onmousedown);
-        videoElementParent.addEventListener('mouseup', onmouseup);
-        videoElementParent.addEventListener('wheel', onwheel);
-        videoElementParent.addEventListener('dblclick', ondblclick);
-
-        this.mouseEventListenerTracker.addUnregisterCallback(() =>
-            videoElementParent.removeEventListener('mousedown', onmousedown)
-        );
-        this.mouseEventListenerTracker.addUnregisterCallback(() =>
-            videoElementParent.removeEventListener('mouseup', onmouseup)
-        );
-        this.mouseEventListenerTracker.addUnregisterCallback(() =>
-            videoElementParent.removeEventListener('wheel', onwheel)
-        );
-        this.mouseEventListenerTracker.addUnregisterCallback(() =>
-            videoElementParent.removeEventListener('dblclick', ondblclick)
-        );
-        this.mouseEventListenerTracker.addUnregisterCallback(() => lockedMouseEvents.unregisterMouseEvents());
-        this.mouseEventListenerTracker.addUnregisterCallback(() => {
-            if (
-                document.exitPointerLock &&
-                (document.pointerLockElement === videoElementParent ||
-                    document.mozPointerLockElement === videoElementParent)
-            ) {
-                document.exitPointerLock();
-            }
-        });
-    }
-
-    /**
-     * Register a hovering mouse class
-     * @param mouseController - A mouse controller object
-     */
-    registerHoveringMouseEvents(mouseController: MouseController) {
-        const videoElementParent = this.videoElementProvider.getVideoParentElement() as HTMLDivElement;
-        const hoveringMouseEvents = new HoveringMouseEvents(mouseController);
-
-        const onmousemove = (mouseEvent: MouseEvent) =>
-            hoveringMouseEvents.updateMouseMovePosition(mouseEvent);
-        const onmousedown = (mouseEvent: MouseEvent) => hoveringMouseEvents.handleMouseDown(mouseEvent);
-        const onmouseup = (mouseEvent: MouseEvent) => hoveringMouseEvents.handleMouseUp(mouseEvent);
-        const oncontextmenu = (mouseEvent: MouseEvent) => hoveringMouseEvents.handleContextMenu(mouseEvent);
-        const onwheel = (wheelEvent: WheelEvent) => hoveringMouseEvents.handleMouseWheel(wheelEvent);
-        const ondblclick = (mouseEvent: MouseEvent) => hoveringMouseEvents.handleMouseDouble(mouseEvent);
-        videoElementParent.addEventListener('mousemove', onmousemove);
-        videoElementParent.addEventListener('mousedown', onmousedown);
-        videoElementParent.addEventListener('mouseup', onmouseup);
-        videoElementParent.addEventListener('contextmenu', oncontextmenu);
-        videoElementParent.addEventListener('wheel', onwheel);
-        videoElementParent.addEventListener('dblclick', ondblclick);
-
-        this.mouseEventListenerTracker.addUnregisterCallback(() =>
-            videoElementParent.removeEventListener('mousemove', onmousemove)
-        );
-        this.mouseEventListenerTracker.addUnregisterCallback(() =>
-            videoElementParent.removeEventListener('mousedown', onmousedown)
-        );
-        this.mouseEventListenerTracker.addUnregisterCallback(() =>
-            videoElementParent.removeEventListener('mouseup', onmouseup)
-        );
-        this.mouseEventListenerTracker.addUnregisterCallback(() =>
-            videoElementParent.removeEventListener('contextmenu', oncontextmenu)
-        );
-        this.mouseEventListenerTracker.addUnregisterCallback(() =>
-            videoElementParent.removeEventListener('wheel', onwheel)
-        );
-        this.mouseEventListenerTracker.addUnregisterCallback(() =>
-            videoElementParent.removeEventListener('dblclick', ondblclick)
-        );
-        this.mouseEventListenerTracker.addUnregisterCallback(() =>
-            hoveringMouseEvents.unregisterMouseEvents()
-        );
-    }
-
-    /**
-     * Set the mouse enter and mouse leave events
-     */
     registerMouseEnterAndLeaveEvents() {
-        const videoElementParent = this.videoElementProvider.getVideoParentElement() as HTMLDivElement;
-
-        // Handle when the Mouse has entered the element
-        const onmouseenter = (event: MouseEvent) => {
-            if (!this.videoElementProvider.isVideoReady()) {
-                return;
-            }
-            Logger.Info('Mouse Entered');
-            this.sendMouseEnter();
-            this.pressMouseButtons(event.buttons, event.x, event.y);
-        };
-
-        // Handles when the mouse has left the element
-        const onmouseleave = (event: MouseEvent) => {
-            if (!this.videoElementProvider.isVideoReady()) {
-                return;
-            }
-            Logger.Info('Mouse Left');
-            this.sendMouseLeave();
-            this.releaseMouseButtons(event.buttons, event.x, event.y);
-        };
-        videoElementParent.addEventListener('mouseenter', onmouseenter);
-        videoElementParent.addEventListener('mouseleave', onmouseleave);
-
-        this.mouseEventListenerTracker.addUnregisterCallback(() =>
-            videoElementParent.removeEventListener('mouseenter', onmouseenter)
-        );
-        this.mouseEventListenerTracker.addUnregisterCallback(() =>
-            videoElementParent.removeEventListener('mouseleave', onmouseleave)
-        );
+        const videoElementParent = this.videoPlayer.getVideoParentElement() as HTMLDivElement;
+        videoElementParent.addEventListener('mouseenter', this.onEnterListener);
+        videoElementParent.addEventListener('mouseleave', this.onLeaveListener);
     }
 
-    /**
-     * Handle when a mouse button is released
-     * @param buttons - Mouse Button
-     * @param X - Mouse pointer X coordinate
-     * @param Y - Mouse pointer Y coordinate
-     */
-    releaseMouseButtons(buttons: number, X: number, Y: number) {
+    unregisterMouseEnterAndLeaveEvents() {
+        const videoElementParent = this.videoPlayer.getVideoParentElement() as HTMLDivElement;
+        videoElementParent.removeEventListener('mouseenter', this.onEnterListener);
+        videoElementParent.removeEventListener('mouseleave', this.onLeaveListener);
+    }
+
+    private onMouseEnter(event: MouseEvent) {
+        if (!this.videoPlayer.isVideoReady()) {
+            return;
+        }
+        this.streamMessageController.toStreamerHandlers.get('MouseEnter')();
+        this.pressMouseButtons(event.buttons, event.x, event.y);
+    }
+
+    private onMouseLeave(event: MouseEvent) {
+        if (!this.videoPlayer.isVideoReady()) {
+            return;
+        }
+        this.streamMessageController.toStreamerHandlers.get('MouseLeave')();
+        this.releaseMouseButtons(event.buttons, event.x, event.y);
+    }
+
+    private releaseMouseButtons(buttons: number, X: number, Y: number) {
         const coord = this.coordinateConverter.normalizeAndQuantizeUnsigned(X, Y);
         if (buttons & MouseButtonsMask.primaryButton) {
             this.sendMouseUp(MouseButton.mainButton, coord.x, coord.y);
@@ -225,14 +105,8 @@ export class MouseController {
         }
     }
 
-    /**
-     * Handle when a mouse button is pressed
-     * @param buttons - Mouse Button
-     * @param X - Mouse pointer X coordinate
-     * @param Y - Mouse pointer Y coordinate
-     */
-    pressMouseButtons(buttons: number, X: number, Y: number) {
-        if (!this.videoElementProvider.isVideoReady()) {
+    private pressMouseButtons(buttons: number, X: number, Y: number) {
+        if (!this.videoPlayer.isVideoReady()) {
             return;
         }
         const coord = this.coordinateConverter.normalizeAndQuantizeUnsigned(X, Y);
@@ -253,56 +127,307 @@ export class MouseController {
         }
     }
 
-    /**
-     * Handles mouse enter
-     */
-    sendMouseEnter() {
-        if (!this.videoElementProvider.isVideoReady()) {
-            return;
-        }
-        const toStreamerHandlers = this.toStreamerMessagesProvider.toStreamerHandlers;
-        toStreamerHandlers.get('MouseEnter')();
+    private sendMouseDown(button: number, X: number, Y: number) {
+        this.streamMessageController.toStreamerHandlers.get('MouseDown')?.([button, X, Y]);
     }
 
-    /**
-     * Handles mouse Leave
-     */
-    sendMouseLeave() {
-        if (!this.videoElementProvider.isVideoReady()) {
-            return;
-        }
-        const toStreamerHandlers = this.toStreamerMessagesProvider.toStreamerHandlers;
-        toStreamerHandlers.get('MouseLeave')();
-    }
-
-    /**
-     * Handles when a mouse button is pressed down
-     * @param button - Mouse Button Pressed
-     * @param X  - Mouse X Coordinate
-     * @param Y  - Mouse Y Coordinate
-     */
-    sendMouseDown(button: number, X: number, Y: number) {
-        if (!this.videoElementProvider.isVideoReady()) {
-            return;
-        }
-        Logger.Info(`mouse button ${button} down at (${X}, ${Y})`);
-        const toStreamerHandlers = this.toStreamerMessagesProvider.toStreamerHandlers;
-        toStreamerHandlers.get('MouseDown')([button, X, Y]);
-    }
-
-    /**
-     * Handles when a mouse button is pressed up
-     * @param button - Mouse Button Pressed
-     * @param X  - Mouse X Coordinate
-     * @param Y  - Mouse Y Coordinate
-     */
-    sendMouseUp(button: number, X: number, Y: number) {
-        if (!this.videoElementProvider.isVideoReady()) {
-            return;
-        }
-        Logger.Info(`mouse button ${button} up at (${X}, ${Y})`);
+    private sendMouseUp(button: number, X: number, Y: number) {
         const coord = this.coordinateConverter.normalizeAndQuantizeUnsigned(X, Y);
-        const toStreamerHandlers = this.toStreamerMessagesProvider.toStreamerHandlers;
-        toStreamerHandlers.get('MouseUp')([button, coord.x, coord.y]);
+        this.streamMessageController.toStreamerHandlers.get('MouseUp')?.([button, coord.x, coord.y]);
+    }
+}
+
+export class LockedMouseController extends BaseMouseController {
+    videoElementParent: HTMLDivElement;
+    x: number;
+    y: number;
+    normalizedCoord: NormalizedQuantizedUnsignedCoord;
+
+    // bound listeners
+    onRequestLockListener: () => void;
+    onLockStateChangeListener: () => void;
+    onMouseUpListener: (event: MouseEvent) => void;
+    onMouseDownListener: (event: MouseEvent) => void;
+    onMouseDblClickListener: (event: MouseEvent) => void;
+    onMouseWheelListener: (event: WheelEvent) => void;
+    onMouseMoveListener: (event: MouseEvent) => void;
+
+    constructor(
+        streamMessageController: StreamMessageController,
+        videoPlayer: VideoPlayer,
+        coordinateConverter: CoordinateConverter,
+        activeKeys: ActiveKeys
+    ) {
+        super(streamMessageController, videoPlayer, coordinateConverter, activeKeys);
+        this.videoElementParent = videoPlayer.getVideoParentElement() as HTMLDivElement;
+        this.x = this.videoElementParent.getBoundingClientRect().width / 2;
+        this.y = this.videoElementParent.getBoundingClientRect().height / 2;
+        this.normalizedCoord = this.coordinateConverter.normalizeAndQuantizeUnsigned(this.x, this.y);
+
+        this.onRequestLockListener = this.onRequestLock.bind(this);
+        this.onLockStateChangeListener = this.onLockStateChange.bind(this);
+        this.onMouseUpListener = this.onMouseUp.bind(this);
+        this.onMouseDownListener = this.onMouseDown.bind(this);
+        this.onMouseDblClickListener = this.onMouseDblClick.bind(this);
+        this.onMouseWheelListener = this.onMouseWheel.bind(this);
+        this.onMouseMoveListener = this.onMouseMove.bind(this);
+    }
+
+    registerMouseEvents() {
+        super.registerMouseEvents();
+
+        this.videoElementParent.requestPointerLock =
+            this.videoElementParent.requestPointerLock || this.videoElementParent.mozRequestPointerLock;
+        document.exitPointerLock = document.exitPointerLock || document.mozExitPointerLock;
+
+        if (this.videoElementParent.requestPointerLock) {
+            this.videoElementParent.addEventListener('click', this.onRequestLockListener);
+        }
+
+        document.addEventListener('pointerlockchange', this.onLockStateChangeListener);
+        document.addEventListener('mozpointerlockchange', this.onLockStateChangeListener);
+
+        this.videoElementParent.addEventListener('mousedown', this.onMouseDownListener);
+        this.videoElementParent.addEventListener('mouseup', this.onMouseUpListener);
+        this.videoElementParent.addEventListener('wheel', this.onMouseWheelListener);
+        this.videoElementParent.addEventListener('dblclick', this.onMouseDblClickListener);
+    }
+
+    unregisterMouseEvents() {
+        const pointerLockElement = document.pointerLockElement || document.mozPointerLockElement;
+        if (document.exitPointerLock && pointerLockElement === this.videoElementParent) {
+            document.exitPointerLock();
+        }
+
+        this.videoElementParent.removeEventListener('click', this.onRequestLockListener);
+        document.removeEventListener('pointerlockchange', this.onLockStateChangeListener);
+        document.removeEventListener('mozpointerlockchange', this.onLockStateChangeListener);
+        document.removeEventListener('mousemove', this.onMouseMoveListener);
+
+        this.videoElementParent.removeEventListener('mousedown', this.onMouseDownListener);
+        this.videoElementParent.removeEventListener('mouseup', this.onMouseUpListener);
+        this.videoElementParent.removeEventListener('wheel', this.onMouseWheelListener);
+        this.videoElementParent.removeEventListener('dblclick', this.onMouseDblClickListener);
+
+        super.unregisterMouseEvents();
+    }
+
+    private onRequestLock() {
+        this.videoElementParent.requestPointerLock();
+    }
+
+    private onLockStateChange() {
+        const pointerLockElement = document.pointerLockElement || document.mozPointerLockElement;
+        if (pointerLockElement === this.videoElementParent) {
+            Logger.Info('Pointer locked');
+            document.addEventListener('mousemove', this.onMouseMoveListener);
+        } else {
+            Logger.Info('The pointer lock status is now unlocked');
+            document.removeEventListener('mousemove', this.onMouseMoveListener);
+
+            // If mouse loses focus, send a key up for all of the currently held-down keys
+            // This is necessary as when the mouse loses focus, the windows stops listening for events and as such
+            // the keyup listener won't get fired
+            const activeKeys = this.activeKeys.getActiveKeys();
+            activeKeys.forEach((key: number) => {
+                this.streamMessageController.toStreamerHandlers.get('KeyUp')([key]);
+            });
+        }
+    }
+
+    private onMouseDown(event: MouseEvent) {
+        if (!this.videoPlayer.isVideoReady()) {
+            return;
+        }
+
+        this.streamMessageController.toStreamerHandlers.get('MouseDown')([
+            event.button,
+            // We use the store value of this.coord as opposed to the mouseEvent.x/y as the mouseEvent location
+            // uses the system cursor location which hasn't moved
+            this.normalizedCoord.x,
+            this.normalizedCoord.y
+        ]);
+    }
+
+    private onMouseUp(event: MouseEvent) {
+        if (!this.videoPlayer.isVideoReady()) {
+            return;
+        }
+        this.streamMessageController.toStreamerHandlers.get('MouseUp')([
+            event.button,
+            // We use the store value of this.coord as opposed to the mouseEvent.x/y as the mouseEvent location
+            // uses the system cursor location which hasn't moved
+            this.normalizedCoord.x,
+            this.normalizedCoord.y
+        ]);
+    }
+
+    private onMouseMove(event: MouseEvent) {
+        if (!this.videoPlayer.isVideoReady()) {
+            return;
+        }
+        const styleWidth = this.videoPlayer.getVideoParentElement().clientWidth;
+        const styleHeight = this.videoPlayer.getVideoParentElement().clientHeight;
+
+        this.x += event.movementX;
+        this.y += event.movementY;
+
+        while (this.x > styleWidth) {
+            this.x -= styleWidth;
+        }
+        while (this.y > styleHeight) {
+            this.y -= styleHeight;
+        }
+        while (this.x < 0) {
+            this.x += styleWidth;
+        }
+        while (this.y < 0) {
+            this.y += styleHeight;
+        }
+
+        this.normalizedCoord = this.coordinateConverter.normalizeAndQuantizeUnsigned(this.x, this.y);
+        const delta = this.coordinateConverter.normalizeAndQuantizeSigned(event.movementX, event.movementY);
+        this.streamMessageController.toStreamerHandlers.get('MouseMove')([
+            this.normalizedCoord.x,
+            this.normalizedCoord.y,
+            delta.x,
+            delta.y
+        ]);
+    }
+
+    private onMouseWheel(event: WheelEvent) {
+        if (!this.videoPlayer.isVideoReady()) {
+            return;
+        }
+        this.streamMessageController.toStreamerHandlers.get('MouseWheel')([
+            event.wheelDelta,
+            // We use the store value of this.coord as opposed to the mouseEvent.x/y as the mouseEvent location
+            // uses the system cursor location which hasn't moved
+            this.normalizedCoord.x,
+            this.normalizedCoord.y
+        ]);
+    }
+
+    private onMouseDblClick(event: MouseEvent) {
+        if (!this.videoPlayer.isVideoReady()) {
+            return;
+        }
+        this.streamMessageController.toStreamerHandlers.get('MouseDouble')([
+            event.button,
+            // We use the store value of this.coord as opposed to the mouseEvent.x/y as the mouseEvent location
+            // uses the system cursor location which hasn't moved
+            this.normalizedCoord.x,
+            this.normalizedCoord.y
+        ]);
+    }
+}
+
+export class HoveringMouseController extends BaseMouseController {
+    videoElementParent: HTMLDivElement;
+
+    onMouseUpListener: (event: MouseEvent) => void;
+    onMouseDownListener: (event: MouseEvent) => void;
+    onMouseDblClickListener: (event: MouseEvent) => void;
+    onMouseWheelListener: (event: WheelEvent) => void;
+    onMouseMoveListener: (event: MouseEvent) => void;
+    onContextMenuListener: (event: MouseEvent) => void;
+
+    constructor(
+        streamMessageController: StreamMessageController,
+        videoPlayer: VideoPlayer,
+        coordinateConverter: CoordinateConverter,
+        activeKeys: ActiveKeys
+    ) {
+        super(streamMessageController, videoPlayer, coordinateConverter, activeKeys);
+        this.videoElementParent = videoPlayer.getVideoParentElement() as HTMLDivElement;
+        this.onMouseUpListener = this.onMouseUp.bind(this);
+        this.onMouseDownListener = this.onMouseDown.bind(this);
+        this.onMouseDblClickListener = this.onMouseDblClick.bind(this);
+        this.onMouseWheelListener = this.onMouseWheel.bind(this);
+        this.onMouseMoveListener = this.onMouseMove.bind(this);
+        this.onContextMenuListener = this.onContextMenu.bind(this);
+    }
+
+    registerMouseEvents(): void {
+        super.registerMouseEvents();
+
+        this.videoElementParent.addEventListener('mousemove', this.onMouseMoveListener);
+        this.videoElementParent.addEventListener('mousedown', this.onMouseDownListener);
+        this.videoElementParent.addEventListener('mouseup', this.onMouseUpListener);
+        this.videoElementParent.addEventListener('contextmenu', this.onContextMenuListener);
+        this.videoElementParent.addEventListener('wheel', this.onMouseWheelListener);
+        this.videoElementParent.addEventListener('dblclick', this.onMouseDblClickListener);
+    }
+
+    unregisterMouseEvents(): void {
+        this.videoElementParent.removeEventListener('mousemove', this.onMouseMoveListener);
+        this.videoElementParent.removeEventListener('mousedown', this.onMouseDownListener);
+        this.videoElementParent.removeEventListener('mouseup', this.onMouseUpListener);
+        this.videoElementParent.removeEventListener('contextmenu', this.onContextMenuListener);
+        this.videoElementParent.removeEventListener('wheel', this.onMouseWheelListener);
+        this.videoElementParent.removeEventListener('dblclick', this.onMouseDblClickListener);
+
+        super.unregisterMouseEvents();
+    }
+
+    private onMouseDown(event: MouseEvent) {
+        if (!this.videoPlayer.isVideoReady()) {
+            return;
+        }
+        const coord = this.coordinateConverter.normalizeAndQuantizeUnsigned(event.offsetX, event.offsetY);
+        this.streamMessageController.toStreamerHandlers.get('MouseDown')([event.button, coord.x, coord.y]);
+        event.preventDefault();
+    }
+
+    private onMouseUp(event: MouseEvent) {
+        if (!this.videoPlayer.isVideoReady()) {
+            return;
+        }
+        const coord = this.coordinateConverter.normalizeAndQuantizeUnsigned(event.offsetX, event.offsetY);
+        this.streamMessageController.toStreamerHandlers.get('MouseUp')([event.button, coord.x, coord.y]);
+        event.preventDefault();
+    }
+
+    private onContextMenu(event: MouseEvent) {
+        if (!this.videoPlayer.isVideoReady()) {
+            return;
+        }
+        event.preventDefault();
+    }
+
+    private onMouseMove(event: MouseEvent) {
+        if (!this.videoPlayer.isVideoReady()) {
+            return;
+        }
+        const coord = this.coordinateConverter.normalizeAndQuantizeUnsigned(event.offsetX, event.offsetY);
+        const delta = this.coordinateConverter.normalizeAndQuantizeSigned(event.movementX, event.movementY);
+        this.streamMessageController.toStreamerHandlers.get('MouseMove')([
+            coord.x,
+            coord.y,
+            delta.x,
+            delta.y
+        ]);
+        event.preventDefault();
+    }
+
+    private onMouseWheel(event: WheelEvent) {
+        if (!this.videoPlayer.isVideoReady()) {
+            return;
+        }
+        const coord = this.coordinateConverter.normalizeAndQuantizeUnsigned(event.offsetX, event.offsetY);
+        this.streamMessageController.toStreamerHandlers.get('MouseWheel')([
+            event.wheelDelta,
+            coord.x,
+            coord.y
+        ]);
+        event.preventDefault();
+    }
+
+    private onMouseDblClick(event: MouseEvent) {
+        if (!this.videoPlayer.isVideoReady()) {
+            return;
+        }
+        const coord = this.coordinateConverter.normalizeAndQuantizeUnsigned(event.offsetX, event.offsetY);
+        this.streamMessageController.toStreamerHandlers.get('MouseDouble')([event.button, coord.x, coord.y]);
     }
 }

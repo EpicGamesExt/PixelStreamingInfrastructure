@@ -2,7 +2,7 @@
 
 import { FakeTouchController } from './FakeTouchController';
 import { KeyboardController } from './KeyboardController';
-import { MouseController } from './MouseController';
+import { IMouseController, LockedMouseController, HoveringMouseController } from './MouseController';
 import { TouchController } from './TouchController';
 import { GamePadController } from './GamepadController';
 import { Config, ControlSchemeType } from '../Config/Config';
@@ -55,26 +55,24 @@ export class InputClassesFactory {
      */
     registerMouse(controlScheme: ControlSchemeType) {
         Logger.Info('Register Mouse Events');
-        const mouseController = new MouseController(
-            this.toStreamerMessagesProvider,
-            this.videoElementProvider,
-            this.coordinateConverter,
-            this.activeKeys
-        );
-
-        switch (controlScheme) {
-            case ControlSchemeType.LockedMouse:
-                mouseController.registerLockedMouseEvents(mouseController);
-                break;
-            case ControlSchemeType.HoveringMouse:
-                mouseController.registerHoveringMouseEvents(mouseController);
-                break;
-            default:
-                Logger.Info('unknown Control Scheme Type Defaulting to Locked Mouse Events');
-                mouseController.registerLockedMouseEvents(mouseController);
-                break;
+        let mouseController: IMouseController;
+        if (controlScheme == ControlSchemeType.HoveringMouse) {
+            mouseController = new HoveringMouseController(
+                this.toStreamerMessagesProvider,
+                this.videoElementProvider,
+                this.coordinateConverter,
+                this.activeKeys
+            );
+        } else {
+            mouseController = new LockedMouseController(
+                this.toStreamerMessagesProvider,
+                this.videoElementProvider,
+                this.coordinateConverter,
+                this.activeKeys
+            );
         }
 
+        mouseController.registerMouseEvents();
         return mouseController;
     }
 

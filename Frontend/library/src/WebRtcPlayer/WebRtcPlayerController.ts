@@ -33,7 +33,6 @@ import { StreamMessageController, MessageDirection } from '../UeInstanceMessage/
 import { ResponseController } from '../UeInstanceMessage/ResponseController';
 import { SendMessageController } from '../UeInstanceMessage/SendMessageController';
 import { ToStreamerMessagesController } from '../UeInstanceMessage/ToStreamerMessagesController';
-import { MouseController } from '../Inputs/MouseController';
 import { GamePadController } from '../Inputs/GamepadController';
 import { DataChannelSender } from '../DataChannel/DataChannelSender';
 import { CoordinateConverter, UnquantizedDenormalizedUnsignedCoord } from '../Util/CoordinateConverter';
@@ -56,6 +55,7 @@ import {
     DataChannelLatencyTestResponse
 } from '../DataChannel/DataChannelLatencyTestResults';
 import { IURLSearchParams } from '../Util/IURLSearchParams';
+import { IMouseController } from '../Inputs/MouseController';
 
 /**
  * Entry point for the WebRTC Player
@@ -86,7 +86,7 @@ export class WebRtcPlayerController {
     sendMessageController: SendMessageController;
     toStreamerMessagesController: ToStreamerMessagesController;
     keyboardController: KeyboardController;
-    mouseController: MouseController;
+    mouseController: IMouseController;
     touchController: ITouchController;
     gamePadController: GamePadController;
     coordinateConverter: CoordinateConverter;
