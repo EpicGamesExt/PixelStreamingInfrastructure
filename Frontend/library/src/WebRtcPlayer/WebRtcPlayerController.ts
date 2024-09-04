@@ -1788,12 +1788,6 @@ export class WebRtcPlayerController {
         this.gamePadController?.unregisterGamePadEvents();
         if (isEnabled) {
             this.gamePadController = this.inputClassesFactory.registerGamePad();
-            this.gamePadController.onGamepadConnected = () => {
-                this.streamMessageController.toStreamerHandlers.get('GamepadConnected')();
-            };
-            this.gamePadController.onGamepadDisconnected = (controllerIdx: number) => {
-                this.streamMessageController.toStreamerHandlers.get('GamepadDisconnected')([controllerIdx]);
-            };
         }
     }
 
