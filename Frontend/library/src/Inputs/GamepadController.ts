@@ -1,6 +1,7 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 import { StreamMessageController } from '../UeInstanceMessage/StreamMessageController';
+import { IInputController } from './IInputController';
 import { Controller } from './GamepadTypes';
 
 /**
@@ -47,7 +48,10 @@ export enum GamepadLayout {
 }
 /* eslint-enable @typescript-eslint/no-duplicate-enum-values */
 
-export class GamepadController {
+/**
+ * Handles gamepad events from the document to send to the streamer.
+ */
+export class GamepadController implements IInputController {
     controllers: Array<Controller>;
     streamMessageController: StreamMessageController;
 
@@ -67,7 +71,9 @@ export class GamepadController {
             window.webkitRequestAnimationFrame ||
             window.requestAnimationFrame
         ).bind(window);
+    }
 
+    register() {
         window.addEventListener('beforeunload', this.beforeUnloadListener);
 
         const browserWindow = window as Window;
@@ -88,7 +94,7 @@ export class GamepadController {
         }
     }
 
-    unregisterGamepadEvents() {
+    unregister() {
         window.removeEventListener('gamepadconnected', this.onGamepadConnectedListener);
         window.removeEventListener('gamepaddisconnected', this.onGamepadDisconnectedListener);
         window.removeEventListener('webkitgamepadconnected', this.onGamepadConnectedListener);

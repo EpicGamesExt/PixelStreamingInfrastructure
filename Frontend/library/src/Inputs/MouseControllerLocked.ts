@@ -41,8 +41,8 @@ export class MouseControllerLocked extends MouseController {
         this.onMouseMoveListener = this.onMouseMove.bind(this);
     }
 
-    registerMouseEvents() {
-        super.registerMouseEvents();
+    register() {
+        super.register();
 
         this.videoElementParent.requestPointerLock =
             this.videoElementParent.requestPointerLock || this.videoElementParent.mozRequestPointerLock;
@@ -61,7 +61,7 @@ export class MouseControllerLocked extends MouseController {
         this.videoElementParent.addEventListener('dblclick', this.onMouseDblClickListener);
     }
 
-    unregisterMouseEvents() {
+    unregister() {
         const pointerLockElement = document.pointerLockElement || document.mozPointerLockElement;
         if (document.exitPointerLock && pointerLockElement === this.videoElementParent) {
             document.exitPointerLock();
@@ -77,7 +77,7 @@ export class MouseControllerLocked extends MouseController {
         this.videoElementParent.removeEventListener('wheel', this.onMouseWheelListener);
         this.videoElementParent.removeEventListener('dblclick', this.onMouseDblClickListener);
 
-        super.unregisterMouseEvents();
+        super.unregister();
     }
 
     private onRequestLock() {

@@ -30,8 +30,8 @@ export class MouseControllerHovering extends MouseController {
         this.onContextMenuListener = this.onContextMenu.bind(this);
     }
 
-    registerMouseEvents(): void {
-        super.registerMouseEvents();
+    register(): void {
+        super.register();
 
         this.videoElementParent.addEventListener('mousemove', this.onMouseMoveListener);
         this.videoElementParent.addEventListener('mousedown', this.onMouseDownListener);
@@ -41,7 +41,7 @@ export class MouseControllerHovering extends MouseController {
         this.videoElementParent.addEventListener('dblclick', this.onMouseDblClickListener);
     }
 
-    unregisterMouseEvents(): void {
+    unregister(): void {
         this.videoElementParent.removeEventListener('mousemove', this.onMouseMoveListener);
         this.videoElementParent.removeEventListener('mousedown', this.onMouseDownListener);
         this.videoElementParent.removeEventListener('mouseup', this.onMouseUpListener);
@@ -49,7 +49,7 @@ export class MouseControllerHovering extends MouseController {
         this.videoElementParent.removeEventListener('wheel', this.onMouseWheelListener);
         this.videoElementParent.removeEventListener('dblclick', this.onMouseDblClickListener);
 
-        super.unregisterMouseEvents();
+        super.unregister();
     }
 
     private onMouseDown(event: MouseEvent) {

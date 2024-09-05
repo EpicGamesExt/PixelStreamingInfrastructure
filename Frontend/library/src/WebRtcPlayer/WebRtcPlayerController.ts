@@ -14,7 +14,6 @@ import { FreezeFrameController } from '../FreezeFrame/FreezeFrameController';
 import { AFKController } from '../AFK/AFKController';
 import { DataChannelController } from '../DataChannel/DataChannelController';
 import { PeerConnectionController } from '../PeerConnectionController/PeerConnectionController';
-import { KeyboardController } from '../Inputs/KeyboardController';
 import { AggregatedStats } from '../PeerConnectionController/AggregatedStats';
 import {
     Config,
@@ -33,11 +32,9 @@ import { StreamMessageController, MessageDirection } from '../UeInstanceMessage/
 import { ResponseController } from '../UeInstanceMessage/ResponseController';
 import { SendMessageController } from '../UeInstanceMessage/SendMessageController';
 import { ToStreamerMessagesController } from '../UeInstanceMessage/ToStreamerMessagesController';
-import { GamepadController } from '../Inputs/GamepadController';
 import { DataChannelSender } from '../DataChannel/DataChannelSender';
 import { InputCoordTranslator, UntranslatedCoordUnsigned } from '../Util/InputCoordTranslator';
 import { PixelStreaming } from '../PixelStreaming/PixelStreaming';
-import { ITouchController } from '../Inputs/ITouchController';
 import {
     DataChannelCloseEvent,
     DataChannelErrorEvent,
@@ -55,7 +52,8 @@ import {
     DataChannelLatencyTestResponse
 } from '../DataChannel/DataChannelLatencyTestResults';
 import { IURLSearchParams } from '../Util/IURLSearchParams';
-import { MouseController } from '../Inputs/MouseController';
+import { IInputController } from '../Inputs/IInputController';
+import { GamepadController } from '../Inputs/GamepadController';
 
 /**
  * Entry point for the WebRTC Player
@@ -79,15 +77,14 @@ export class WebRtcPlayerController {
     freezeFrameController: FreezeFrameController;
     shouldShowPlayOverlay = true;
     afkController: AFKController;
-    videoElementParentClientRect: DOMRect;
     latencyStartTime: number;
     pixelStreaming: PixelStreaming;
     streamMessageController: StreamMessageController;
     sendMessageController: SendMessageController;
     toStreamerMessagesController: ToStreamerMessagesController;
-    keyboardController: KeyboardController;
-    mouseController: MouseController;
-    touchController: ITouchController;
+    keyboardController: IInputController;
+    mouseController: IInputController;
+    touchController: IInputController;
     gamePadController: GamepadController;
     coordinateConverter: InputCoordTranslator;
     isUsingSFU: boolean;
@@ -1385,7 +1382,6 @@ export class WebRtcPlayerController {
      */
     setUpMouseAndFreezeFrame() {
         // Calculating and normalizing positions depends on the width and height of the player.
-        this.videoElementParentClientRect = this.videoPlayer.getVideoParentElement().getBoundingClientRect();
         const playerElement = this.videoPlayer.getVideoParentElement();
         const videoElement = this.videoPlayer.getVideoElement();
         this.coordinateConverter.reconfigure(
@@ -1749,7 +1745,7 @@ export class WebRtcPlayerController {
      * enables/disables keyboard event listeners
      */
     setKeyboardInputEnabled(isEnabled: boolean) {
-        this.keyboardController?.unregisterKeyBoardEvents();
+        this.keyboardController?.unregister();
         if (isEnabled) {
             this.keyboardController = this.inputClassesFactory.registerKeyBoard(this.config);
         }
@@ -1759,7 +1755,7 @@ export class WebRtcPlayerController {
      * enables/disables mouse event listeners
      */
     setMouseInputEnabled(isEnabled: boolean) {
-        this.mouseController?.unregisterMouseEvents();
+        this.mouseController?.unregister();
         if (isEnabled) {
             const mouseMode = this.config.isFlagEnabled(Flags.HoveringMouseMode)
                 ? ControlSchemeType.HoveringMouse
@@ -1772,11 +1768,10 @@ export class WebRtcPlayerController {
      * enables/disables touch event listeners
      */
     setTouchInputEnabled(isEnabled: boolean) {
-        this.touchController?.unregisterTouchEvents();
+        this.touchController?.unregister();
         if (isEnabled) {
             this.touchController = this.inputClassesFactory.registerTouch(
-                this.config.isFlagEnabled(Flags.FakeMouseWithTouches),
-                this.videoElementParentClientRect
+                this.config.isFlagEnabled(Flags.FakeMouseWithTouches)
             );
         }
     }
@@ -1785,7 +1780,7 @@ export class WebRtcPlayerController {
      * enables/disables game pad event listeners
      */
     setGamePadInputEnabled(isEnabled: boolean) {
-        this.gamePadController?.unregisterGamepadEvents();
+        this.gamePadController?.unregister();
         if (isEnabled) {
             this.gamePadController = this.inputClassesFactory.registerGamePad();
         }

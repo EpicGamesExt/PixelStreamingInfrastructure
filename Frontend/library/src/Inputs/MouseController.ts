@@ -3,6 +3,7 @@ import { StreamMessageController } from '../UeInstanceMessage/StreamMessageContr
 import { InputCoordTranslator } from '../Util/InputCoordTranslator';
 import { VideoPlayer } from '../VideoPlayer/VideoPlayer';
 import type { ActiveKeys } from './InputClassesFactory';
+import { IInputController } from './IInputController';
 
 /**
  * Extra types for Document and WheelEvent
@@ -18,7 +19,7 @@ declare global {
     }
 }
 
-export class MouseController {
+export class MouseController implements IInputController {
     videoPlayer: VideoPlayer;
     streamMessageController: StreamMessageController;
     coordinateConverter: InputCoordTranslator;
@@ -43,11 +44,11 @@ export class MouseController {
         this.onLeaveListener = this.onMouseLeave.bind(this);
     }
 
-    registerMouseEvents() {
+    register() {
         this.registerMouseEnterAndLeaveEvents();
     }
 
-    unregisterMouseEvents() {
+    unregister() {
         this.unregisterMouseEnterAndLeaveEvents();
     }
 

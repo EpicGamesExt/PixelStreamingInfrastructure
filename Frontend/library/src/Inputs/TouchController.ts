@@ -4,12 +4,13 @@ import { Logger } from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
 import { InputCoordTranslator } from '../Util/InputCoordTranslator';
 import { StreamMessageController } from '../UeInstanceMessage/StreamMessageController';
 import { VideoPlayer } from '../VideoPlayer/VideoPlayer';
-import { ITouchController } from './ITouchController';
+import { IInputController } from './IInputController';
 
-export class TouchController implements ITouchController {
+export class TouchController implements IInputController {
     streamMessageController: StreamMessageController;
     videoPlayer: VideoPlayer;
     coordinateConverter: InputCoordTranslator;
+
     videoElementParent: HTMLVideoElement;
     fingers = [9, 8, 7, 6, 5, 4, 3, 2, 1, 0];
     fingerIds = new Map();
@@ -27,18 +28,21 @@ export class TouchController implements ITouchController {
         this.streamMessageController = streamMessageController;
         this.videoPlayer = videoPlayer;
         this.coordinateConverter = coordinateConverter;
+
         this.videoElementParent = videoPlayer.getVideoElement();
 
         this.onTouchStartListener = this.onTouchStart.bind(this);
         this.onTouchEndListener = this.onTouchEnd.bind(this);
         this.onTouchMoveListener = this.onTouchMove.bind(this);
+    }
 
+    register() {
         this.videoElementParent.addEventListener('touchstart', this.onTouchStartListener);
         this.videoElementParent.addEventListener('touchend', this.onTouchEndListener);
         this.videoElementParent.addEventListener('touchmove', this.onTouchMoveListener);
     }
 
-    unregisterTouchEvents() {
+    unregister() {
         this.videoElementParent.addEventListener('touchstart', this.onTouchStartListener);
         this.videoElementParent.addEventListener('touchend', this.onTouchEndListener);
         this.videoElementParent.addEventListener('touchmove', this.onTouchMoveListener);

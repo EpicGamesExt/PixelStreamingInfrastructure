@@ -1,17 +1,18 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
-import { TouchControllerFake } from './TouchControllerFake';
 import { KeyboardController } from './KeyboardController';
 import { MouseController } from './MouseController';
 import { MouseControllerLocked } from './MouseControllerLocked';
 import { MouseControllerHovering } from './MouseControllerHovering';
 import { TouchController } from './TouchController';
+import { TouchControllerFake } from './TouchControllerFake';
 import { GamepadController } from './GamepadController';
 import { Config, ControlSchemeType } from '../Config/Config';
 import { Logger } from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
 import { InputCoordTranslator } from '../Util/InputCoordTranslator';
 import { StreamMessageController } from '../UeInstanceMessage/StreamMessageController';
 import { VideoPlayer } from '../VideoPlayer/VideoPlayer';
+import { IInputController } from './IInputController';
 
 /**
  * Class for making and setting up input class types
@@ -47,7 +48,7 @@ export class InputClassesFactory {
             config,
             this.activeKeys
         );
-        keyboardController.registerKeyBoardEvents();
+        keyboardController.register();
         return keyboardController;
     }
 
@@ -74,7 +75,7 @@ export class InputClassesFactory {
             );
         }
 
-        mouseController.registerMouseEvents();
+        mouseController.register();
         return mouseController;
     }
 
@@ -82,23 +83,24 @@ export class InputClassesFactory {
      * register touch events
      * @param fakeMouseTouch - the faked mouse touch event
      */
-    registerTouch(fakeMouseTouch: boolean, videoElementParentClientRect: DOMRect) {
+    registerTouch(fakeMouseTouch: boolean) {
         Logger.Info('Registering Touch');
+        let touchController: IInputController;
         if (fakeMouseTouch) {
-            const fakeTouchController = new TouchControllerFake(
+            touchController = new TouchControllerFake(
                 this.toStreamerMessagesProvider,
                 this.videoElementProvider,
                 this.coordinateConverter
             );
-            fakeTouchController.setVideoElementParentClientRect(videoElementParentClientRect);
-            return fakeTouchController;
         } else {
-            return new TouchController(
+            touchController = new TouchController(
                 this.toStreamerMessagesProvider,
                 this.videoElementProvider,
                 this.coordinateConverter
             );
         }
+        touchController.register();
+        return touchController;
     }
 
     /**
@@ -106,8 +108,9 @@ export class InputClassesFactory {
      */
     registerGamePad() {
         Logger.Info('Register Game Pad');
-        const gamePadController = new GamepadController(this.toStreamerMessagesProvider);
-        return gamePadController;
+        const gamepadController = new GamepadController(this.toStreamerMessagesProvider);
+        gamepadController.register();
+        return gamepadController;
     }
 }
 

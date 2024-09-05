@@ -3,25 +3,24 @@
 import { InputCoordTranslator } from '../Util/InputCoordTranslator';
 import { StreamMessageController } from '../UeInstanceMessage/StreamMessageController';
 import { VideoPlayer } from '../VideoPlayer/VideoPlayer';
-import { ITouchController } from './ITouchController';
 import { MouseButton } from './MouseButtons';
+import { IInputController } from './IInputController';
 
-export interface FakeTouchFinger {
+interface FakeTouchFinger {
     id: number;
     x: number;
     y: number;
 }
 
 /**
- * Allows for the usage of fake touch events and implements ITouchController
- * @param dataChannelController - The controller for the Data channel
- * @param videoElementParent - The video player DOM element
+ * Allows for the usage of fake touch events
  */
-export class TouchControllerFake implements ITouchController {
-    fakeTouchFinger: FakeTouchFinger;
+export class TouchControllerFake implements IInputController {
     streamMessageController: StreamMessageController;
     videoPlayer: VideoPlayer;
     coordinateConverter: InputCoordTranslator;
+
+    fakeTouchFinger: FakeTouchFinger;
     videoElementParentClientRect: DOMRect;
 
     onTouchStartListener: (event: TouchEvent) => void;
@@ -41,23 +40,19 @@ export class TouchControllerFake implements ITouchController {
         this.onTouchEndListener = this.onTouchEnd.bind(this);
         this.onTouchMoveListener = this.onTouchMove.bind(this);
 
+        this.videoElementParentClientRect = this.videoPlayer.getVideoParentElement().getBoundingClientRect();
+    }
+
+    register() {
         document.addEventListener('touchstart', this.onTouchStartListener);
         document.addEventListener('touchend', this.onTouchEndListener);
         document.addEventListener('touchmove', this.onTouchMoveListener);
     }
 
-    unregisterTouchEvents() {
+    unregister() {
         document.removeEventListener('touchstart', this.onTouchStartListener);
         document.removeEventListener('touchend', this.onTouchEndListener);
         document.removeEventListener('touchmove', this.onTouchMoveListener);
-    }
-
-    /**
-     * Sets the video Element Parent Client Rect numbers for this class
-     * @param videoElementParentClientRect - a html ElementParentClientRect object
-     */
-    setVideoElementParentClientRect(videoElementParentClientRect: DOMRect) {
-        this.videoElementParentClientRect = videoElementParentClientRect;
     }
 
     private onTouchStart(touch: TouchEvent): void {
