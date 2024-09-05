@@ -6,6 +6,7 @@ import {
     getEventsFor,
 } from './extras';
 import * as helpers from './helpers';
+import { InputCoordTranslator, TranslatedCoordUnsigned } from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.5';
 
 test('Test mouse enter/leave', {
     tag: ['@mouse'],
@@ -80,7 +81,8 @@ test('Test locked mouse movement', {
             return { width: videoElem.videoWidth, height: videoElem.videoHeight };
         });
 
-        const coordConverter = new helpers.CoordConverter(playerBox, videoSize);
+        const coordConverter = new InputCoordTranslator();
+        coordConverter.reconfigure(playerBox, videoSize);
         const expectedActions: DataChannelEvent[] = [];
         const movements = [
             { x: 100, y: 0 },
@@ -90,7 +92,7 @@ test('Test locked mouse movement', {
         ];
         
         // where the pointer anchors in locked mode changes by browser
-        const anchor: helpers.Coord = (() => {
+        const anchor: TranslatedCoordUnsigned = (() => {
             if (browserName == 'firefox') {
                 return { x: playerBox.x + playerBox.width / 2, y: playerBox.y + playerBox.height / 2 };
             } else {
@@ -105,8 +107,8 @@ test('Test locked mouse movement', {
         const events = await getEventsFor(streamerPage, async () => {
             for (const movement of movements) {
                 await page.mouse.move(anchor.x + movement.x, anchor.y + movement.y);
-                const translated = coordConverter.normalizeQuantizeSigned(movement.x, movement.y);
-                expectedActions.push({ type: PSEventTypes.MouseMove, deltaX: translated.x, deltaY: translated.y });
+                const translated = coordConverter.translateSigned(movement.x, movement.y);
+                expectedActions.push({ type: PSEventTypes.MouseMove, deltaX: Math.trunc(translated.x), deltaY: Math.trunc(translated.y) });
             }
         });
 
@@ -146,7 +148,8 @@ test('Test hovering mouse movement', {
 
         // where the pointer anchors in locked mode changes by browser
         const anchor = { x: playerBox.x, y: playerBox.y };
-        const coordConverter = new helpers.CoordConverter(playerBox, videoSize);
+        const coordConverter = new InputCoordTranslator();
+        coordConverter.reconfigure(playerBox, videoSize);
         const expectedActions: DataChannelEvent[] = [];
         const movements = [
             { x: anchor.x + 300, y: anchor.y + 0 },
@@ -162,8 +165,8 @@ test('Test hovering mouse movement', {
         const events = await getEventsFor(streamerPage, async () => {
             for (const movement of movements) {
                 await page.mouse.move(movement.x, movement.y);
-                const translated = coordConverter.normalizeQuantizeUnsigned(movement.x, movement.y);
-                expectedActions.push({ type: PSEventTypes.MouseMove, x: translated.x, y: translated.y });
+                const translated = coordConverter.translateUnsigned(movement.x, movement.y);
+                expectedActions.push({ type: PSEventTypes.MouseMove, x: Math.trunc(translated.x), y: Math.trunc(translated.y) });
             }
         });
 
