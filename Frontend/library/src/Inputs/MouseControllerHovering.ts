@@ -4,6 +4,9 @@ import { VideoPlayer } from '../VideoPlayer/VideoPlayer';
 import type { ActiveKeys } from './InputClassesFactory';
 import { MouseController } from './MouseController';
 
+/**
+ * A mouse controller that allows the mouse to freely float over the video document.
+ */
 export class MouseControllerHovering extends MouseController {
     videoElementParent: HTMLDivElement;
 

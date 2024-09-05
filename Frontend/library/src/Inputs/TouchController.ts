@@ -6,6 +6,9 @@ import { StreamMessageController } from '../UeInstanceMessage/StreamMessageContr
 import { VideoPlayer } from '../VideoPlayer/VideoPlayer';
 import { IInputController } from './IInputController';
 
+/**
+ * The basic touch controller that handles the touch events on the document.
+ */
 export class TouchController implements IInputController {
     streamMessageController: StreamMessageController;
     videoPlayer: VideoPlayer;

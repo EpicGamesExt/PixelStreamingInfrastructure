@@ -5,6 +5,9 @@ import { VideoPlayer } from '../VideoPlayer/VideoPlayer';
 import type { ActiveKeys } from './InputClassesFactory';
 import { MouseController } from './MouseController';
 
+/**
+ * A mouse controller that locks the mouse to the video document and prevents it from leaving the window
+ */
 export class MouseControllerLocked extends MouseController {
     videoElementParent: HTMLDivElement;
     x: number;

@@ -19,6 +19,10 @@ declare global {
     }
 }
 
+/**
+ * The base class for mouse controllers. Since there is a bunch of shared behaviour between locked and
+ * hover mouse controllers this is where that shared behaviour lives.
+ */
 export class MouseController implements IInputController {
     videoPlayer: VideoPlayer;
     streamMessageController: StreamMessageController;
