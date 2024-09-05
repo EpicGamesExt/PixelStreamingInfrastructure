@@ -2,7 +2,7 @@
 
 import { StreamMessageController } from '../UeInstanceMessage/StreamMessageController';
 import { IInputController } from './IInputController';
-import { Controller } from './GamepadTypes';
+import { Controller, deepCopyGamepad } from './GamepadTypes';
 
 /**
  * Additional types for Window and Navigator
@@ -118,23 +118,21 @@ export class GamepadController implements IInputController {
 
     private onGamepadConnected(event: GamepadEvent) {
         const gamepad = event.gamepad;
-
-        const temp: Controller = {
-            currentState: gamepad,
-            prevState: gamepad,
+        const newController: Controller = {
+            currentState: deepCopyGamepad(gamepad),
+            prevState: deepCopyGamepad(gamepad),
             id: undefined
         };
 
-        this.controllers.push(temp);
-        this.controllers[gamepad.index].currentState = gamepad;
-        this.controllers[gamepad.index].prevState = gamepad;
+        this.controllers[gamepad.index] = newController;
         window.requestAnimationFrame(() => this.updateStatus());
         this.streamMessageController.toStreamerHandlers.get('GamepadConnected')();
     }
 
     private onGamepadDisconnected(event: GamepadEvent) {
-        const deletedController = this.controllers[event.gamepad.index];
-        delete this.controllers[event.gamepad.index];
+        const gamepad = event.gamepad;
+        const deletedController = this.controllers[gamepad.index];
+        delete this.controllers[gamepad.index];
         this.controllers = this.controllers.filter((controller) => controller !== undefined);
         this.streamMessageController.toStreamerHandlers.get('GamepadDisconnected')([deletedController.id]);
     }
@@ -168,10 +166,10 @@ export class GamepadController implements IInputController {
                 if (currentButton.pressed) {
                     // press
                     if (i == GamepadLayout.LeftTrigger) {
-                        //                       UEs left analog has a button index of 5
+                        // UEs left analog has a button index of 5
                         toStreamerHandlers.get('GamepadAnalog')([controllerIndex, 5, currentButton.value]);
                     } else if (i == GamepadLayout.RightTrigger) {
-                        //                       UEs right analog has a button index of 6
+                        // UEs right analog has a button index of 6
                         toStreamerHandlers.get('GamepadAnalog')([controllerIndex, 6, currentButton.value]);
                     } else {
                         toStreamerHandlers.get('GamepadButtonPressed')([
@@ -183,10 +181,10 @@ export class GamepadController implements IInputController {
                 } else if (!currentButton.pressed && previousButton.pressed) {
                     // release
                     if (i == GamepadLayout.LeftTrigger) {
-                        //                       UEs left analog has a button index of 5
+                        // UEs left analog has a button index of 5
                         toStreamerHandlers.get('GamepadAnalog')([controllerIndex, 5, 0]);
                     } else if (i == GamepadLayout.RightTrigger) {
-                        //                       UEs right analog has a button index of 6
+                        // UEs right analog has a button index of 6
                         toStreamerHandlers.get('GamepadAnalog')([controllerIndex, 6, 0]);
                     } else {
                         toStreamerHandlers.get('GamepadButtonReleased')([controllerIndex, i, 0]);
@@ -206,7 +204,7 @@ export class GamepadController implements IInputController {
                 toStreamerHandlers.get('GamepadAnalog')([controllerIndex, i + 1, x]); // Horizontal axes, only offset by 1
                 toStreamerHandlers.get('GamepadAnalog')([controllerIndex, i + 2, y]); // Vertical axes, offset by two (1 to match UEs axes convention and then another 1 for the vertical axes)
             }
-            this.controllers[controllerIndex].prevState = currentState;
+            this.controllers[controllerIndex].prevState = deepCopyGamepad(currentState);
         }
         if (this.controllers.length > 0) {
             this.requestAnimationFrame(() => this.updateStatus());
