@@ -348,6 +348,18 @@ export interface answer {
      * @generated from protobuf field: optional string playerId = 3;
      */
     playerId?: string;
+    /**
+     * Specifies the minimum bitrate requested for streams.
+     *
+     * @generated from protobuf field: optional int32 minBitrateBps = 4;
+     */
+    minBitrateBps?: number;
+    /**
+     * Specifies the maximum bitrate requested for streams.
+     *
+     * @generated from protobuf field: optional int32 maxBitrateBps = 5;
+     */
+    maxBitrateBps?: number;
 }
 /**
  * *
@@ -1443,7 +1455,9 @@ class answer$Type extends MessageType<answer> {
         super("answer", [
             { no: 1, name: "type", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
             { no: 2, name: "sdp", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
-            { no: 3, name: "playerId", kind: "scalar", opt: true, T: 9 /*ScalarType.STRING*/ }
+            { no: 3, name: "playerId", kind: "scalar", opt: true, T: 9 /*ScalarType.STRING*/ },
+            { no: 4, name: "minBitrateBps", kind: "scalar", opt: true, T: 5 /*ScalarType.INT32*/ },
+            { no: 5, name: "maxBitrateBps", kind: "scalar", opt: true, T: 5 /*ScalarType.INT32*/ }
         ]);
     }
     create(value?: PartialMessage<answer>): answer {
@@ -1468,6 +1482,12 @@ class answer$Type extends MessageType<answer> {
                 case /* optional string playerId */ 3:
                     message.playerId = reader.string();
                     break;
+                case /* optional int32 minBitrateBps */ 4:
+                    message.minBitrateBps = reader.int32();
+                    break;
+                case /* optional int32 maxBitrateBps */ 5:
+                    message.maxBitrateBps = reader.int32();
+                    break;
                 default:
                     let u = options.readUnknownField;
                     if (u === "throw")
@@ -1489,6 +1509,12 @@ class answer$Type extends MessageType<answer> {
         /* optional string playerId = 3; */
         if (message.playerId !== undefined)
             writer.tag(3, WireType.LengthDelimited).string(message.playerId);
+        /* optional int32 minBitrateBps = 4; */
+        if (message.minBitrateBps !== undefined)
+            writer.tag(4, WireType.Varint).int32(message.minBitrateBps);
+        /* optional int32 maxBitrateBps = 5; */
+        if (message.maxBitrateBps !== undefined)
+            writer.tag(5, WireType.Varint).int32(message.maxBitrateBps);
         let u = options.writeUnknownFields;
         if (u !== false)
             (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
