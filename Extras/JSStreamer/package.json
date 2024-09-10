@@ -36,7 +36,7 @@
     "webpack-node-externals": "^3.0.0"
   },
   "dependencies": {
-    "express": "^4.18.2"
+    "express": "^4.20.0"
   },
   "repository": {
     "type": "git",
