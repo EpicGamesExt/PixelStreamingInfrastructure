@@ -27,7 +27,10 @@ export { AFKController as AfkLogic } from './AFK/AFKController';
 export { LatencyTestResults } from './DataChannel/LatencyTestResults';
 export { EncoderSettings, InitialSettings, WebRTCSettings } from './DataChannel/InitialSettings';
 export { AggregatedStats } from './PeerConnectionController/AggregatedStats';
-export { UnquantizedDenormalizedUnsignedCoord as UnquantizedAndDenormalizeUnsigned } from './Util/CoordinateConverter';
+export {
+    InputCoordTranslator,
+    UntranslatedCoordUnsigned as UnquantizedAndDenormalizeUnsigned
+} from './Util/InputCoordTranslator';
 export { MessageDirection } from './UeInstanceMessage/StreamMessageController';
 
 export { CandidatePairStats } from './PeerConnectionController/CandidatePairStats';

@@ -1,5 +1,11 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
+declare global {
+    interface Window {
+        loggerContext: LoggerContext;
+    }
+}
+
 export enum LogLevel {
     Disabled = 0,
     Error,
@@ -9,27 +15,39 @@ export enum LogLevel {
 }
 
 /**
+ * The global context for the logger configuration.
+ * This cannot be stored statically in the Logger class because we sometimes have multiple execution
+ * contexts, such as stats reporting. Instead we store the logger config context on the window object
+ * to be shared with any Logger instances.
+ */
+class LoggerContext {
+    logLevel: LogLevel = LogLevel.Debug;
+    includeStack: boolean = true;
+}
+
+/**
  * A basic console logger utilized by the Pixel Streaming frontend to allow
  * logging to the browser console.
  */
-export class Logger {
-    static logLevel: LogLevel = LogLevel.Debug;
-    static includeStack: boolean = true;
+class LoggerType {
+    context?: LoggerContext;
 
     /**
      * Set the log verbosity level
      */
-    static InitLogging(logLevel: number, includeStack: boolean) {
-        this.logLevel = logLevel;
-        this.includeStack = includeStack;
+    InitLogging(logLevel: number, includeStack: boolean) {
+        this.ValidateContext();
+        this.context!.logLevel = logLevel;
+        this.context!.includeStack = includeStack;
     }
 
     /**
      * Logging output for debugging
      * @param message - the message to be logged
      */
-    static Debug(message: string) {
-        if (this.logLevel >= LogLevel.Debug) {
+    Debug(message: string) {
+        this.ValidateContext();
+        if (this.context!.logLevel >= LogLevel.Debug) {
             this.CommonLog('Debug', message);
         }
     }
@@ -38,8 +56,9 @@ export class Logger {
      * Basic logging output for standard messages
      * @param message - the message to be logged
      */
-    static Info(message: string) {
-        if (this.logLevel >= LogLevel.Info) {
+    Info(message: string) {
+        this.ValidateContext();
+        if (this.context!.logLevel >= LogLevel.Info) {
             this.CommonLog('Info', message);
         }
     }
@@ -48,8 +67,9 @@ export class Logger {
      * Logging for warnings
      * @param message - the message to be logged
      */
-    static Warning(message: string) {
-        if (this.logLevel >= LogLevel.Warning) {
+    Warning(message: string) {
+        this.ValidateContext();
+        if (this.context!.logLevel >= LogLevel.Warning) {
             this.CommonLog('Warning', message);
         }
     }
@@ -58,8 +78,9 @@ export class Logger {
      * Error logging
      * @param message - the message to be logged
      */
-    static Error(message: string) {
-        if (this.logLevel >= LogLevel.Error) {
+    Error(message: string) {
+        this.ValidateContext();
+        if (this.context!.logLevel >= LogLevel.Error) {
             this.CommonLog('Error', message);
         }
     }
@@ -70,10 +91,10 @@ export class Logger {
      * @param stack - an optional stack trace string from where the log message was called.
      * @param message - the message to be logged.
      */
-    static CommonLog(level: string, message: string) {
+    private CommonLog(level: string, message: string) {
         let logMessage = `[${level}] - ${message}`;
-        if (this.includeStack) {
-            logMessage += `\nStack: ${Logger.GetStackTrace()}`;
+        if (this.context!.includeStack) {
+            logMessage += `\nStack: ${this.GetStackTrace()}`;
         }
         console.log(logMessage);
     }
@@ -82,7 +103,7 @@ export class Logger {
      * Captures the stack and returns it
      * @returns the current stack
      */
-    private static GetStackTrace() {
+    private GetStackTrace() {
         const error = new Error();
         let formattedStack = 'No Stack Available for this browser';
 
@@ -93,4 +114,25 @@ export class Logger {
 
         return formattedStack;
     }
+
+    /**
+     * Since there can be multiple execution contexts, (stats reporting and some webxr logging comes from
+     * different execution contexts we can end up with multiple static Logger instances. Here we try to
+     * work around it by storing the context on the window object.
+     */
+    private ValidateContext() {
+        if (!this.context) {
+            if (!window) {
+                // no window object so we can only store a local context.
+                this.context = new LoggerContext();
+            } else if (!window.loggerContext) {
+                this.context = new LoggerContext();
+                window.loggerContext = this.context;
+            } else {
+                this.context = window.loggerContext;
+            }
+        }
+    }
 }
+
+export const Logger = new LoggerType();

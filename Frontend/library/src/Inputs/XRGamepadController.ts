@@ -1,7 +1,7 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 import { StreamMessageController } from '../UeInstanceMessage/StreamMessageController';
-import { Controller } from './GamepadTypes';
+import { Controller, deepCopyGamepad } from './GamepadTypes';
 
 /**
  * The class that handles the functionality of XR gamepads and controllers.
@@ -16,29 +16,6 @@ export class XRGamepadController {
     constructor(toStreamerMessagesProvider: StreamMessageController) {
         this.toStreamerMessagesProvider = toStreamerMessagesProvider;
         this.controllers = [];
-    }
-
-    /**
-     * Deep copies the values from a gamepad by first converting it to a JSON object and then back to a gamepad
-     *
-     * @param gamepad the original gamepad
-     * @returns a new gamepad object, populated with the original gamepads values
-     */
-    static deepCopyGamepad(gamepad: Gamepad): Gamepad {
-        return JSON.parse(
-            JSON.stringify({
-                buttons: gamepad.buttons.map((b) =>
-                    JSON.parse(
-                        JSON.stringify({
-                            pressed: b.pressed,
-                            touched: b.touched,
-                            value: b.value
-                        })
-                    )
-                ),
-                axes: gamepad.axes
-            })
-        );
     }
 
     updateStatus(source: XRInputSource, frame: XRFrame, refSpace: XRReferenceSpace) {
@@ -91,10 +68,10 @@ export class XRGamepadController {
                     currentState: undefined,
                     id: undefined
                 };
-                this.controllers[handedness].prevState = XRGamepadController.deepCopyGamepad(source.gamepad);
+                this.controllers[handedness].prevState = deepCopyGamepad(source.gamepad);
             }
 
-            this.controllers[handedness].currentState = XRGamepadController.deepCopyGamepad(source.gamepad);
+            this.controllers[handedness].currentState = deepCopyGamepad(source.gamepad);
 
             const controller = this.controllers[handedness];
             const currState = controller.currentState;

@@ -25,14 +25,17 @@ export enum PSEventTypes {
     Command = DataProtocol.ToStreamer.Command.id,
 };
 
+type NumberValidator = (n: number) => boolean;
+
 // mouse input events captured by the streamer
 export interface DataChannelMouseInput {
     type: number;
     button?: number;
-    x?: number;
-    y?: number;
-    deltaX?: number;
-    deltaY?: number;
+    x?: number | NumberValidator;
+    y?: number | NumberValidator;
+    deltaX?: number | NumberValidator;
+    deltaY?: number | NumberValidator;
+    delta?: number | NumberValidator;
 };
 
 // keyboard input events captured by the streamer

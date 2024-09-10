@@ -11,8 +11,13 @@ function dataChannelActionMatches(target: DataChannelEvent, match: DataChannelEv
         if (!match.hasOwnProperty(key)) {
             return false;
         }
-        if (match[key] != value) {
-            return false;
+        switch (typeof value) {
+            case 'function':
+                if (!value(match[key])) return false;
+                break;
+            default:
+                if (match[key] != value) return false;
+                break;
         }
     }
     return true;

@@ -1,6 +1,5 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
-import { MouseController } from '../Inputs/MouseController';
 import { Logger } from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
 import { VideoPlayer } from './VideoPlayer';
 
@@ -10,7 +9,6 @@ import { VideoPlayer } from './VideoPlayer';
 export class StreamController {
     videoElementProvider: VideoPlayer;
     audioElement: HTMLAudioElement;
-    mouseController: MouseController;
 
     /**
      * @param videoElementProvider Video Player instance

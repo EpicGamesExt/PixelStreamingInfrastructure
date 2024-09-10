@@ -1,79 +1,57 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 import { Logger } from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
-import { CoordinateConverter } from '../Util/CoordinateConverter';
+import { InputCoordTranslator } from '../Util/InputCoordTranslator';
 import { StreamMessageController } from '../UeInstanceMessage/StreamMessageController';
 import { VideoPlayer } from '../VideoPlayer/VideoPlayer';
-import { ITouchController } from './ITouchController';
-import { EventListenerTracker } from '../Util/EventListenerTracker';
+import { IInputController } from './IInputController';
+
 /**
- * Handles the Touch input Events
+ * The basic touch controller that handles the touch events on the document.
  */
-export class TouchController implements ITouchController {
-    toStreamerMessagesProvider: StreamMessageController;
-    videoElementProvider: VideoPlayer;
-    coordinateConverter: CoordinateConverter;
+export class TouchController implements IInputController {
+    streamMessageController: StreamMessageController;
+    videoPlayer: VideoPlayer;
+    coordinateConverter: InputCoordTranslator;
+
     videoElementParent: HTMLVideoElement;
     fingers = [9, 8, 7, 6, 5, 4, 3, 2, 1, 0];
     fingerIds = new Map();
     maxByteValue = 255;
 
-    // Utility for keeping track of event handlers and to unregister them.
-    private touchEventListenerTracker = new EventListenerTracker();
+    onTouchStartListener: (event: TouchEvent) => void;
+    onTouchEndListener: (event: TouchEvent) => void;
+    onTouchMoveListener: (event: TouchEvent) => void;
 
-    /**
-     * @param toStreamerMessagesProvider - Stream message instance
-     * @param videoElementProvider - Video Player instance
-     * @param coordinateConverter - A coordinate converter instance
-     */
     constructor(
-        toStreamerMessagesProvider: StreamMessageController,
-        videoElementProvider: VideoPlayer,
-        coordinateConverter: CoordinateConverter
+        streamMessageController: StreamMessageController,
+        videoPlayer: VideoPlayer,
+        coordinateConverter: InputCoordTranslator
     ) {
-        this.toStreamerMessagesProvider = toStreamerMessagesProvider;
-        this.videoElementProvider = videoElementProvider;
+        this.streamMessageController = streamMessageController;
+        this.videoPlayer = videoPlayer;
         this.coordinateConverter = coordinateConverter;
-        this.videoElementParent = videoElementProvider.getVideoElement();
-        const ontouchstart = (ev: TouchEvent) => this.onTouchStart(ev);
-        const ontouchend = (ev: TouchEvent) => this.onTouchEnd(ev);
-        const ontouchmove = (ev: TouchEvent) => this.onTouchMove(ev);
-        this.videoElementParent.addEventListener('touchstart', ontouchstart);
-        this.videoElementParent.addEventListener('touchend', ontouchend);
-        this.videoElementParent.addEventListener('touchmove', ontouchmove);
-        this.touchEventListenerTracker.addUnregisterCallback(() =>
-            this.videoElementParent.removeEventListener('touchstart', ontouchstart)
-        );
-        this.touchEventListenerTracker.addUnregisterCallback(() =>
-            this.videoElementParent.removeEventListener('touchend', ontouchend)
-        );
-        this.touchEventListenerTracker.addUnregisterCallback(() =>
-            this.videoElementParent.removeEventListener('touchmove', ontouchmove)
-        );
-        Logger.Info('Touch Events Registered');
 
-        // is this strictly necessary?
-        const preventOnTouchMove = (event: TouchEvent) => {
-            event.preventDefault();
-        };
-        document.addEventListener('touchmove', preventOnTouchMove);
-        this.touchEventListenerTracker.addUnregisterCallback(() =>
-            document.removeEventListener('touchmove', preventOnTouchMove)
-        );
+        this.videoElementParent = videoPlayer.getVideoElement();
+
+        this.onTouchStartListener = this.onTouchStart.bind(this);
+        this.onTouchEndListener = this.onTouchEnd.bind(this);
+        this.onTouchMoveListener = this.onTouchMove.bind(this);
     }
 
-    /**
-     * Unregister all touch events
-     */
-    unregisterTouchEvents() {
-        this.touchEventListenerTracker.unregisterAll();
+    register() {
+        this.videoElementParent.addEventListener('touchstart', this.onTouchStartListener);
+        this.videoElementParent.addEventListener('touchend', this.onTouchEndListener);
+        this.videoElementParent.addEventListener('touchmove', this.onTouchMoveListener);
     }
 
-    /**
-     * Remember a touch command
-     * @param touch - the touch command
-     */
-    rememberTouch(touch: Touch) {
+    unregister() {
+        this.videoElementParent.addEventListener('touchstart', this.onTouchStartListener);
+        this.videoElementParent.addEventListener('touchend', this.onTouchEndListener);
+        this.videoElementParent.addEventListener('touchmove', this.onTouchMoveListener);
+    }
+
+    private rememberTouch(touch: Touch) {
         const finger = this.fingers.pop();
         if (finger === undefined) {
             Logger.Info('exhausted touch identifiers');
@@ -81,11 +59,7 @@ export class TouchController implements ITouchController {
         this.fingerIds.set(touch.identifier, finger);
     }
 
-    /**
-     * Forgets a touch command
-     * @param touch - the touch command
-     */
-    forgetTouch(touch: Touch) {
+    private forgetTouch(touch: Touch) {
         this.fingers.push(this.fingerIds.get(touch.identifier));
         // Sort array back into descending order. This means if finger '1' were to lift after finger '0', we would ensure that 0 will be the first index to pop
         this.fingers.sort(function (a, b) {
@@ -94,32 +68,22 @@ export class TouchController implements ITouchController {
         this.fingerIds.delete(touch.identifier);
     }
 
-    /**
-     * When a touch event starts
-     * @param touchEvent - the touch event being intercepted
-     */
-    onTouchStart(touchEvent: TouchEvent) {
-        if (!this.videoElementProvider.isVideoReady()) {
+    private onTouchStart(touchEvent: TouchEvent) {
+        if (!this.videoPlayer.isVideoReady()) {
             return;
         }
         for (let t = 0; t < touchEvent.changedTouches.length; t++) {
             this.rememberTouch(touchEvent.changedTouches[t]);
         }
-        Logger.Info('touch start');
 
         this.emitTouchData('TouchStart', touchEvent.changedTouches);
         touchEvent.preventDefault();
     }
 
-    /**
-     * When a touch event ends
-     * @param touchEvent - the touch event being intercepted
-     */
-    onTouchEnd(touchEvent: TouchEvent) {
-        if (!this.videoElementProvider.isVideoReady()) {
+    private onTouchEnd(touchEvent: TouchEvent) {
+        if (!this.videoPlayer.isVideoReady()) {
             return;
         }
-        Logger.Info('touch end');
         this.emitTouchData('TouchEnd', touchEvent.changedTouches);
         // Re-cycle unique identifiers previously assigned to each touch.
         for (let t = 0; t < touchEvent.changedTouches.length; t++) {
@@ -128,25 +92,20 @@ export class TouchController implements ITouchController {
         touchEvent.preventDefault();
     }
 
-    /**
-     * when a moving touch event occurs
-     * @param touchEvent - the touch event being intercepted
-     */
-    onTouchMove(touchEvent: TouchEvent) {
-        if (!this.videoElementProvider.isVideoReady()) {
+    private onTouchMove(touchEvent: TouchEvent) {
+        if (!this.videoPlayer.isVideoReady()) {
             return;
         }
-        Logger.Info('touch move');
         this.emitTouchData('TouchMove', touchEvent.touches);
         touchEvent.preventDefault();
     }
 
-    emitTouchData(type: string, touches: TouchList) {
-        if (!this.videoElementProvider.isVideoReady()) {
+    private emitTouchData(type: string, touches: TouchList) {
+        if (!this.videoPlayer.isVideoReady()) {
             return;
         }
-        const offset = this.videoElementProvider.getVideoParentElement().getBoundingClientRect();
-        const toStreamerHandlers = this.toStreamerMessagesProvider.toStreamerHandlers;
+        const offset = this.videoPlayer.getVideoParentElement().getBoundingClientRect();
+        const toStreamerHandlers = this.streamMessageController.toStreamerHandlers;
 
         for (let t = 0; t < touches.length; t++) {
             const numTouches = 1; // the number of touches to be sent this message
@@ -155,7 +114,7 @@ export class TouchController implements ITouchController {
             const y = touch.clientY - offset.top;
             Logger.Info(`F${this.fingerIds.get(touch.identifier)}=(${x}, ${y})`);
 
-            const coord = this.coordinateConverter.normalizeAndQuantizeUnsigned(x, y);
+            const coord = this.coordinateConverter.translateUnsigned(x, y);
             switch (type) {
                 case 'TouchStart':
                     toStreamerHandlers.get('TouchStart')([
