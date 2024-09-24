@@ -54,10 +54,9 @@ async function createDataRouter()
       };
     }
     const length = message.readUint16LE(1);
-    let utfDecoder = new TextDecoder();
     const headerEnd = length + 3;
     return {
-      playerId: utfDecoder.decode(message.subarray(3, headerEnd)),
+      playerId: new TextDecoder("utf-16").decode(message.subarray(3, headerEnd)),
       buffer: message.subarray(headerEnd, message.length)
     }
   }
@@ -84,7 +83,7 @@ async function createDataRouter()
     consumer.on('message', (message, ppid) =>
     {
       const relayMessage = parseMultiplexHeader(message);
-      if (relayMessage.playerId !== "") {
+      if (relayMessage.playerId !== "" && producers.hasOwnProperty(relayMessage.playerId)) {
         producers[relayMessage.playerId].send(relayMessage.buffer, 53);
       }
     });
@@ -105,7 +104,6 @@ async function createDataRouter()
     consumer.on('message', (message, ppid) =>
     {
       if (streamerProducer) {
-        console.log("Relaying message from [%s], type [%d]", playerId, message.readUInt8(0));
         const relayMessage = Buffer.concat([createMultiplexHeader(playerId), message]);
         streamerProducer.send(relayMessage, 53);
       }
@@ -184,14 +182,13 @@ async function onStreamerOffer(msg) {
   const transport = await createWebRtcTransport("Streamer");
   const sdpEndpoint = mediasoupSdp.createSdpEndpoint(transport, mediasoupRouter.rtpCapabilities);
   const producers = await sdpEndpoint.processOffer(msg.sdp, msg.scalabilityMode ? msg.scalabilityMode : "L1T1");
+  const multiplex = msg.multiplex;
   const sdpAnswer = sdpEndpoint.createAnswer();
   const answer = { type: "answer", sdp: sdpAnswer };
 
   console.log("Sending answer to streamer.");
   signalServer.send(JSON.stringify(answer));
-  //TODO: This should be signalled to have backward compatibility
-  const multiplexed = true;
-  streamer = { transport: transport, producers: producers, multiplexChannels: multiplexed};
+  streamer = { transport: transport, producers: producers, multiplexChannels: multiplex};
 }
 
 function getNextStreamerSCTPId() {

@@ -168,6 +168,8 @@ message offer {
   optional string playerId = 3;
   // Indiates that this offer is coming from an SFU.
   optional bool sfu = 4;
+  //Indicates that the streamer is multiplexing data channels
+  optional bool multiplex = 5;
 }
 
 /**
