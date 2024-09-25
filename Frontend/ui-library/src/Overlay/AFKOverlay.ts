@@ -32,11 +32,7 @@ export class AFKOverlay extends ActionOverlay {
      * @param parentElement - the element this overlay will be inserted into
      */
     public constructor(rootDiv: HTMLElement) {
-        super(
-            rootDiv,
-            AFKOverlay.createRootElement(),
-            AFKOverlay.createContentElement()
-        );
+        super(rootDiv, AFKOverlay.createRootElement(), AFKOverlay.createContentElement());
 
         this.rootElement.addEventListener('click', () => {
             this.activate();

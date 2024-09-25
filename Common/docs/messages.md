@@ -60,6 +60,8 @@ an offer and the other should answer.
 | type | [string](#string) |  | Should always be &#39;answer&#39; |
 | sdp | [string](#string) |  | The WebRTC SDP payload |
 | playerId | [string](#string) | optional | If being sent to a player this should be set to a valid player ID. |
+| minBitrateBps | [int32](#int32) | optional | Specifies the minimum bitrate requested for streams. |
+| maxBitrateBps | [int32](#int32) | optional | Specifies the maximum bitrate requested for streams. |
 
 
 

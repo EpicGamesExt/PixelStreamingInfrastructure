@@ -3,14 +3,14 @@
 import { Logger } from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
 import { WebRtcPlayerController } from '../WebRtcPlayer/WebRtcPlayerController';
 import { XRGamepadController } from '../Inputs/XRGamepadController';
-import { XrFrameEvent } from '../Util/EventEmitter'
+import { XrFrameEvent } from '../Util/EventEmitter';
 import { Flags } from '../pixelstreamingfrontend';
 
 export class WebXRController {
     private xrSession: XRSession;
     private xrRefSpace: XRReferenceSpace;
     private gl: WebGL2RenderingContext;
-    private xrViewerPose : XRViewerPose = null;
+    private xrViewerPose: XRViewerPose = null;
     // Used for comparisons to ensure two numbers are close enough.
     private EPSILON = 0.0000001;
 
@@ -43,9 +43,7 @@ export class WebXRController {
     constructor(webRtcPlayerController: WebRtcPlayerController) {
         this.xrSession = null;
         this.webRtcController = webRtcPlayerController;
-        this.xrGamepadController = new XRGamepadController(
-            this.webRtcController.streamMessageController
-        );
+        this.xrGamepadController = new XRGamepadController(this.webRtcController.streamMessageController);
         this.onSessionEnded = new EventTarget();
         this.onSessionStarted = new EventTarget();
         this.onFrame = new EventTarget();
@@ -53,9 +51,8 @@ export class WebXRController {
 
     public xrClicked() {
         if (!this.xrSession) {
-
-            if(!navigator.xr){
-                Logger.Error(Logger.GetStackTrace(), "This browser does not support XR.");
+            if (!navigator.xr) {
+                Logger.Error('This browser does not support XR.');
                 return;
             }
 
@@ -71,13 +68,15 @@ export class WebXRController {
     }
 
     onXrSessionEnded() {
-        Logger.Log(Logger.GetStackTrace(), 'XR Session ended');
+        Logger.Info('XR Session ended');
         this.xrSession = null;
         this.onSessionEnded.dispatchEvent(new Event('xrSessionEnded'));
     }
 
     initGL() {
-        if (this.gl) { return; }
+        if (this.gl) {
+            return;
+        }
         const canvas = document.createElement('canvas');
         this.gl = canvas.getContext('webgl2', {
             xrCompatible: true
@@ -88,10 +87,8 @@ export class WebXRController {
     }
 
     initShaders() {
-
         // shader source code
-        const vertexShaderSource: string =
-        `
+        const vertexShaderSource: string = `
         attribute vec2 a_position;
         attribute vec2 a_texCoord;
 
@@ -106,8 +103,7 @@ export class WebXRController {
         }
         `;
 
-        const fragmentShaderSource: string =
-        `
+        const fragmentShaderSource: string = `
         precision mediump float;
 
         // our texture
@@ -139,51 +135,28 @@ export class WebXRController {
         this.gl.useProgram(shaderProgram);
 
         // look up where vertex data needs to go
-        this.positionLocation = this.gl.getAttribLocation(
-            shaderProgram,
-            'a_position'
-        );
-        this.texcoordLocation = this.gl.getAttribLocation(
-            shaderProgram,
-            'a_texCoord'
-        );
+        this.positionLocation = this.gl.getAttribLocation(shaderProgram, 'a_position');
+        this.texcoordLocation = this.gl.getAttribLocation(shaderProgram, 'a_texCoord');
     }
 
-    updateVideoTexture(){
-
-        if(!this.videoTexture){
+    updateVideoTexture() {
+        if (!this.videoTexture) {
             // Create our texture that we use in our shader
             // and bind it once because we never use any other texture.
             this.videoTexture = this.gl.createTexture();
             this.gl.bindTexture(this.gl.TEXTURE_2D, this.videoTexture);
 
             // Set the parameters so we can render any size image.
-            this.gl.texParameteri(
-                this.gl.TEXTURE_2D,
-                this.gl.TEXTURE_WRAP_S,
-                this.gl.CLAMP_TO_EDGE
-            );
-            this.gl.texParameteri(
-                this.gl.TEXTURE_2D,
-                this.gl.TEXTURE_WRAP_T,
-                this.gl.CLAMP_TO_EDGE
-            );
-            this.gl.texParameteri(
-                this.gl.TEXTURE_2D,
-                this.gl.TEXTURE_MIN_FILTER,
-                this.gl.LINEAR
-            );
-            this.gl.texParameteri(
-                this.gl.TEXTURE_2D,
-                this.gl.TEXTURE_MAG_FILTER,
-                this.gl.LINEAR
-            );
+            this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_WRAP_S, this.gl.CLAMP_TO_EDGE);
+            this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_WRAP_T, this.gl.CLAMP_TO_EDGE);
+            this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_MIN_FILTER, this.gl.LINEAR);
+            this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_MAG_FILTER, this.gl.LINEAR);
         }
 
         const videoHeight = this.webRtcController.videoPlayer.getVideoElement().videoHeight;
         const videoWidth = this.webRtcController.videoPlayer.getVideoElement().videoWidth;
 
-        if(this.prevVideoHeight != videoHeight || this.prevVideoWidth != videoWidth){
+        if (this.prevVideoHeight != videoHeight || this.prevVideoWidth != videoWidth) {
             // Do full update of texture if dimensions do not match
             this.gl.texImage2D(
                 this.gl.TEXTURE_2D,
@@ -216,7 +189,7 @@ export class WebXRController {
         this.prevVideoWidth = videoWidth;
     }
 
-    initBuffers(){
+    initBuffers() {
         // Create out position buffer and its vertex shader attribute
         {
             // Create a buffer to put the the vertices of the plane we will draw the video stream onto
@@ -263,14 +236,7 @@ export class WebXRController {
             // The texture coordinates to apply for rectangle we are drawing
             this.gl.bufferData(
                 this.gl.ARRAY_BUFFER,
-                new Float32Array([
-                    0.0, 0.0,
-                    1.0, 0.0,
-                    0.0, 1.0,
-                    0.0, 1.0,
-                    1.0, 0.0,
-                    1.0, 1.0
-                ]),
+                new Float32Array([0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0]),
                 this.gl.STATIC_DRAW
             );
 
@@ -287,7 +253,7 @@ export class WebXRController {
     }
 
     onXrSessionStarted(session: XRSession) {
-        Logger.Log(Logger.GetStackTrace(), 'XR Session started');
+        Logger.Info('XR Session started');
 
         this.xrSession = session;
         this.xrSession.addEventListener('end', () => {
@@ -308,9 +274,9 @@ export class WebXRController {
             });
 
             // Update target framerate to 90 fps if 90 fps is supported in this XR device
-            if(this.xrSession.supportedFrameRates) {
+            if (this.xrSession.supportedFrameRates) {
                 for (const frameRate of this.xrSession.supportedFrameRates) {
-                    if(frameRate == 90){
+                    if (frameRate == 90) {
                         session.updateTargetFrameRate(90);
                     }
                 }
@@ -323,16 +289,22 @@ export class WebXRController {
         this.onSessionStarted.dispatchEvent(new Event('xrSessionStarted'));
     }
 
-    areArraysEqual(a: Float32Array, b: Float32Array) : boolean {
-        return a.length === b.length && a.every((element, index) => Math.abs(element - b[index]) <= this.EPSILON);
+    areArraysEqual(a: Float32Array, b: Float32Array): boolean {
+        return (
+            a.length === b.length && a.every((element, index) => Math.abs(element - b[index]) <= this.EPSILON)
+        );
     }
 
-    arePointsEqual(a: DOMPointReadOnly, b: DOMPointReadOnly) : boolean {
-        return Math.abs(a.x - b.x) >= this.EPSILON && Math.abs(a.y - b.y) >= this.EPSILON && Math.abs(a.z - b.z) >= this.EPSILON;
+    arePointsEqual(a: DOMPointReadOnly, b: DOMPointReadOnly): boolean {
+        return (
+            Math.abs(a.x - b.x) >= this.EPSILON &&
+            Math.abs(a.y - b.y) >= this.EPSILON &&
+            Math.abs(a.z - b.z) >= this.EPSILON
+        );
     }
 
     sendXRDataToUE() {
-        if(this.leftView == null || this.rightView == null) {
+        if (this.leftView == null || this.rightView == null) {
             return;
         }
 
@@ -341,10 +313,11 @@ export class WebXRController {
         // the `XREyeViews` is a much larger message and changes infrequently (e.g. only when user changes headset IPD).
         // Therefore, we only need to send it once on startup and then any time it changes.
         // The rest of the time we can send the `XRHMDTransform` message.
-        let shouldSendEyeViews = this.lastSentLeftEyeProj == null ||
-                                 this.lastSentRightEyeProj == null ||
-                                 this.lastSentRelativeLeftEyePos == null ||
-                                 this.lastSentRelativeRightEyePos == null;
+        let shouldSendEyeViews =
+            this.lastSentLeftEyeProj == null ||
+            this.lastSentRightEyeProj == null ||
+            this.lastSentRelativeLeftEyePos == null ||
+            this.lastSentRelativeRightEyePos == null;
 
         const leftEyeTrans = this.leftView.transform.matrix;
         const leftEyeProj = this.leftView.projectionMatrix;
@@ -353,7 +326,7 @@ export class WebXRController {
         const hmdTrans = this.xrViewerPose.transform.matrix;
 
         // Check if projection matrices have changed
-        if(!shouldSendEyeViews && this.lastSentLeftEyeProj != null && this.lastSentRightEyeProj != null) {
+        if (!shouldSendEyeViews && this.lastSentLeftEyeProj != null && this.lastSentRightEyeProj != null) {
             const leftEyeProjUnchanged = this.areArraysEqual(leftEyeProj, this.lastSentLeftEyeProj);
             const rightEyeProjUnchanged = this.areArraysEqual(rightEyeProj, this.lastSentRightEyeProj);
             shouldSendEyeViews = leftEyeProjUnchanged == false || rightEyeProjUnchanged == false;
@@ -374,14 +347,24 @@ export class WebXRController {
         );
 
         // Check if relative eye pos has changed (e.g IPD changed)
-        if(!shouldSendEyeViews && this.lastSentRelativeLeftEyePos != null && this.lastSentRelativeRightEyePos != null) {
-            const leftEyePosUnchanged = this.arePointsEqual(leftEyeRelativePos, this.lastSentRelativeLeftEyePos);
-            const rightEyePosUnchanged = this.arePointsEqual(rightEyeRelativePos, this.lastSentRelativeRightEyePos);
+        if (
+            !shouldSendEyeViews &&
+            this.lastSentRelativeLeftEyePos != null &&
+            this.lastSentRelativeRightEyePos != null
+        ) {
+            const leftEyePosUnchanged = this.arePointsEqual(
+                leftEyeRelativePos,
+                this.lastSentRelativeLeftEyePos
+            );
+            const rightEyePosUnchanged = this.arePointsEqual(
+                rightEyeRelativePos,
+                this.lastSentRelativeRightEyePos
+            );
             shouldSendEyeViews = leftEyePosUnchanged == false || rightEyePosUnchanged == false;
             // Note: We are not checking if EyeView rotation changes (as far as I know no HMD supports changing this value at runtime).
         }
 
-        if(shouldSendEyeViews) {
+        if (shouldSendEyeViews) {
             // send transform (4x4) and projection matrix (4x4) data for each eye (left first, then right)
             // prettier-ignore
             this.webRtcController.streamMessageController.toStreamerHandlers.get('XREyeViews')([
@@ -415,15 +398,26 @@ export class WebXRController {
             this.lastSentRightEyeProj = rightEyeProj;
             this.lastSentRelativeLeftEyePos = leftEyeRelativePos;
             this.lastSentRelativeRightEyePos = rightEyeRelativePos;
-        }
-        else {
+        } else {
             // If we don't need to the entire eye views being sent just send the HMD transform
             this.webRtcController.streamMessageController.toStreamerHandlers.get('XRHMDTransform')([
                 // HMD 4x4 transform
-                hmdTrans[0], hmdTrans[4], hmdTrans[8],  hmdTrans[12],
-                hmdTrans[1], hmdTrans[5], hmdTrans[9],  hmdTrans[13],
-                hmdTrans[2], hmdTrans[6], hmdTrans[10], hmdTrans[14],
-                hmdTrans[3], hmdTrans[7], hmdTrans[11], hmdTrans[15],
+                hmdTrans[0],
+                hmdTrans[4],
+                hmdTrans[8],
+                hmdTrans[12],
+                hmdTrans[1],
+                hmdTrans[5],
+                hmdTrans[9],
+                hmdTrans[13],
+                hmdTrans[2],
+                hmdTrans[6],
+                hmdTrans[10],
+                hmdTrans[14],
+                hmdTrans[3],
+                hmdTrans[7],
+                hmdTrans[11],
+                hmdTrans[15]
             ]);
         }
     }
@@ -432,7 +426,7 @@ export class WebXRController {
         this.xrViewerPose = frame.getViewerPose(this.xrRefSpace);
         if (this.xrViewerPose) {
             this.updateViews();
-            if(this.leftView == null || this.rightView == null) {
+            if (this.leftView == null || this.rightView == null) {
                 return;
             }
 
@@ -444,33 +438,27 @@ export class WebXRController {
         if (this.webRtcController.config.isFlagEnabled(Flags.XRControllerInput)) {
             this.xrSession.inputSources.forEach(
                 (source: XRInputSource, _index: number, _array: XRInputSource[]) => {
-                    this.xrGamepadController.updateStatus(
-                        source,
-                        frame,
-                        this.xrRefSpace
-                    );
+                    this.xrGamepadController.updateStatus(source, frame, this.xrRefSpace);
                 },
                 this
             );
         }
 
-        this.xrSession.requestAnimationFrame(
-            (time: DOMHighResTimeStamp, frame: XRFrame) =>
-                this.onXrFrame(time, frame)
+        this.xrSession.requestAnimationFrame((time: DOMHighResTimeStamp, frame: XRFrame) =>
+            this.onXrFrame(time, frame)
         );
 
         this.onFrame.dispatchEvent(new XrFrameEvent({ time, frame }));
     }
 
     private updateViews() {
-        if(!this.xrViewerPose) {
+        if (!this.xrViewerPose) {
             return;
         }
         for (const view of this.xrViewerPose.views) {
-            if (view.eye === "left") {
+            if (view.eye === 'left') {
                 this.leftView = view;
-            }
-            else if(view.eye === "right") {
+            } else if (view.eye === 'right') {
                 this.rightView = view;
             }
         }
@@ -493,8 +481,8 @@ export class WebXRController {
     }
 
     static isSessionSupported(mode: XRSessionMode): Promise<boolean> {
-        if (location.protocol !== "https:") {
-            Logger.Info(null, "WebXR requires https, if you want WebXR use https.");
+        if (location.protocol !== 'https:') {
+            Logger.Info('WebXR requires https, if you want WebXR use https.');
         }
 
         if (navigator.xr) {

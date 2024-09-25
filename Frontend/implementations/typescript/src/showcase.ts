@@ -286,14 +286,14 @@ class Showcase {
 		// stat pixelstreaming
 		const statgpuBtn = document.createElement("button");
 		statgpuBtn.classList.add("btn-flat");
-		statgpuBtn.onclick = () => { this._pixelStreaming.emitConsoleCommand("stat pixelstreaming"); }
+		statgpuBtn.onclick = () => { this._pixelStreaming.emitConsoleCommand("stat pixelstreaming"); this._pixelStreaming.emitConsoleCommand("stat pixelstreaming2"); }
 		statgpuBtn.innerText = "stat pixelstreaming";
 		consoleCmdBtnsContainer.appendChild(statgpuBtn);
 
 		//stat pixelStreamingGraphs
 		const statGraphBtn = document.createElement("button");
 		statGraphBtn.classList.add("btn-flat");
-		statGraphBtn.onclick = () => { this._pixelStreaming.emitConsoleCommand("stat pixelstreaminggraphs"); }
+		statGraphBtn.onclick = () => { this._pixelStreaming.emitConsoleCommand("stat pixelstreaminggraphs"); this._pixelStreaming.emitConsoleCommand("stat pixelstreaming2graphs"); }
 		statGraphBtn.innerText = "stat pixelstreaminggraphs";
 		consoleCmdBtnsContainer.appendChild(statGraphBtn);
 

@@ -10,7 +10,8 @@ module.exports = {
     ],
     extends: [
         'eslint:recommended',
-        'plugin:@typescript-eslint/recommended-type-checked'
+        'plugin:@typescript-eslint/recommended-type-checked',
+        'plugin:prettier/recommended'
     ],
     rules: {
         "tsdoc/syntax": "warn",

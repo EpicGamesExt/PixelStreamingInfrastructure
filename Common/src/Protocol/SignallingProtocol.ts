@@ -8,25 +8,27 @@ import * as MessageHelpers from '../Messages/message_helpers';
 
 /**
  * Signalling protocol for handling messages from the signalling server.
- * 
+ *
  * Listen on this emitter for messages. Message type is the name of the event to listen for.
- * Example:  
+ * Example:
  *      signallingProtocol.on('config', (message: Messages.config) =\> console.log(`Got a config message: ${message}`)));
- * 
+ *
  * The transport in this class will also emit on message events.
- * 
- * Events emitted on transport:  
- *   message:  
+ *
+ * Events emitted on transport:
+ *   message:
  *      Emitted any time a message is received by the transport. Listen on this if
  *      you wish to capture all messages, rather than specific messages on
  *      'messageHandlers'.
- * 
- *   out:  
+ *
+ *   out:
  *      Emitted when sending a message out on the transport. Similar to 'message' but
  *      only for when messages are sent from this endpoint. Useful for debugging.
  */
 export class SignallingProtocol extends EventEmitter {
-    static get SIGNALLING_VERSION(): string { return '1.2.0'; }
+    static get SIGNALLING_VERSION(): string {
+        return '1.2.1';
+    }
 
     // The transport in use by this protocol object.
     transport: ITransport;
@@ -38,13 +40,15 @@ export class SignallingProtocol extends EventEmitter {
         transport.onMessage = (msg: BaseMessage) => {
             // auto handle ping messages
             if (msg.type == Messages.ping.typeName) {
-                const pongMessage = MessageHelpers.createMessage(Messages.pong, { time: new Date().getTime() });
+                const pongMessage = MessageHelpers.createMessage(Messages.pong, {
+                    time: new Date().getTime()
+                });
                 transport.sendMessage(pongMessage);
             }
-            
+
             // call the handlers
             transport.emit('message', msg); // emit this for listeners listening to any message
-            this.emit(msg.type, msg);  // emit this for listeners listening for specific messages
+            this.emit(msg.type, msg); // emit this for listeners listening for specific messages
         };
     }
 

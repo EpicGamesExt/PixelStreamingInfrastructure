@@ -302,19 +302,18 @@ export class PixelStreamingApplicationStyle {
             textOverflow: 'ellipsis',
             whiteSpace: 'nowrap'
         },
-        '#connectOverlay, #playOverlay, #infoOverlay, #errorOverlay, #afkOverlay, #disconnectOverlay':
-            {
-                zIndex: '30',
-                position: 'absolute',
-                color: 'var(--color2)',
-                fontSize: '1.8em',
-                width: '100%',
-                height: '100%',
-                backgroundColor: 'var(--color1)',
-                alignItems: 'center',
-                justifyContent: 'center',
-                textTransform: 'uppercase'
-            },
+        '#connectOverlay, #playOverlay, #infoOverlay, #errorOverlay, #afkOverlay, #disconnectOverlay': {
+            zIndex: '30',
+            position: 'absolute',
+            color: 'var(--color2)',
+            fontSize: '1.8em',
+            width: '100%',
+            height: '100%',
+            backgroundColor: 'var(--color1)',
+            alignItems: 'center',
+            justifyContent: 'center',
+            textTransform: 'uppercase'
+        },
         '.clickableState': {
             alignItems: 'center',
             justifyContent: 'center',
@@ -367,11 +366,10 @@ export class PixelStreamingApplicationStyle {
         '.tgl-switch .tgl': {
             display: 'none'
         },
-        '.tgl, .tgl:after, .tgl:before, .tgl *, .tgl *:after, .tgl *:before, .tgl+.tgl-slider':
-            {
-                '-webkit-box-sizing': 'border-box',
-                boxSizing: 'border-box'
-            },
+        '.tgl, .tgl:after, .tgl:before, .tgl *, .tgl *:after, .tgl *:before, .tgl+.tgl-slider': {
+            '-webkit-box-sizing': 'border-box',
+            boxSizing: 'border-box'
+        },
         '.tgl::-moz-selection, .tgl:after::-moz-selection, .tgl:before::-moz-selection, .tgl *::-moz-selection, .tgl *:after::-moz-selection, .tgl *:before::-moz-selection, .tgl+.tgl-slider::-moz-selection':
             {
                 background: 'none'
@@ -500,10 +498,9 @@ export class PixelStreamingApplicationStyle {
             fontWeight: 'lighter',
             color: 'var(--color7)'
         },
-        '.streamTools-shown>#streamToolsSettings, .streamTools-shown>#streamToolsStats':
-            {
-                display: 'block'
-            },
+        '.streamTools-shown>#streamToolsSettings, .streamTools-shown>#streamToolsStats': {
+            display: 'block'
+        },
         '#streamToolsToggle': {
             width: '100%'
         },
@@ -526,8 +523,7 @@ export class PixelStreamingApplicationStyle {
         darkModePalette?: ColorPalette;
         jssInsertionPoint?: string | HTMLElement;
     }) {
-        const { customStyles, lightModePalette, darkModePalette, jssInsertionPoint } =
-            options ?? {};
+        const { customStyles, lightModePalette, darkModePalette, jssInsertionPoint } = options ?? {};
         // One time setup with default plugins and settings.
         const jssOptions = {
             // JSS has many interesting plugins we may wish to turn on
@@ -539,8 +535,7 @@ export class PixelStreamingApplicationStyle {
         jss.setup(jssOptions);
 
         this.customStyles = customStyles;
-        this.lightModePalette =
-            lightModePalette ?? this.defaultLightModePalette;
+        this.lightModePalette = lightModePalette ?? this.defaultLightModePalette;
         this.darkModePalette = darkModePalette ?? this.defaultDarkModePalette;
     }
 

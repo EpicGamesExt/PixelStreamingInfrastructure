@@ -6,7 +6,7 @@ import { SignallingServer } from '@epicgames-ps/lib-pixelstreamingsignalling-ue5
 
 export default function (signallingServer: SignallingServer) {
     const operations = {
-        GET,
+        GET
     };
 
     function GET(req: any, res: any, _next: any) {
@@ -18,30 +18,30 @@ export default function (signallingServer: SignallingServer) {
     }
 
     GET.apiDoc = {
-        summary: "Returns a single player",
-        operationId: "getOnePlayer",
+        summary: 'Returns a single player',
+        operationId: 'getOnePlayer',
         parameters: [
             {
-                name: "playerId",
-                in: "path",
+                name: 'playerId',
+                in: 'path',
                 required: true,
                 schema: {
-                    type: "string",
-                },
-            },
+                    type: 'string'
+                }
+            }
         ],
         responses: {
             200: {
-                description: "Player data",
+                description: 'Player data',
                 content: {
-                    "application/json": {
+                    'application/json': {
                         schema: {
-                            $ref: "#/components/schemas/Player",
-                        },
-                    },
-                },
-            },
-        },
+                            $ref: '#/components/schemas/Player'
+                        }
+                    }
+                }
+            }
+        }
     };
 
     return operations;

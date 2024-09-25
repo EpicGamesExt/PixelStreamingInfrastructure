@@ -6,9 +6,7 @@ import { SettingBase } from './SettingBase';
 /**
  * A number setting object with a text label. Min and max limit the range of allowed values.
  */
-export class SettingNumber<
-    CustomIds extends string = NumericParametersIds
-> extends SettingBase {
+export class SettingNumber<CustomIds extends string = NumericParametersIds> extends SettingBase {
     _min: number;
     _max: number;
 
@@ -23,8 +21,10 @@ export class SettingNumber<
         max: number,
         defaultNumber: number,
         useUrlParams: boolean,
-		// eslint-disable-next-line @typescript-eslint/no-empty-function
-		defaultOnChangeListener: (changedValue: unknown, setting: SettingBase) => void = () => { /* Do nothing, to be overridden. */ }
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
+        defaultOnChangeListener: (changedValue: unknown, setting: SettingBase) => void = () => {
+            /* Do nothing, to be overridden. */
+        }
     ) {
         super(id, label, description, defaultNumber, defaultOnChangeListener);
 

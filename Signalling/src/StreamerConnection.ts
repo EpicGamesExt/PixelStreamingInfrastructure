@@ -1,10 +1,12 @@
 import WebSocket from 'ws';
-import { ITransport,
-         SignallingProtocol,
-         WebSocketTransportNJS,
-         BaseMessage,
-         Messages,
-         MessageHelpers } from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
+import {
+    ITransport,
+    SignallingProtocol,
+    WebSocketTransportNJS,
+    BaseMessage,
+    Messages,
+    MessageHelpers
+} from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
 import { IStreamer, IStreamerInfo } from './StreamerRegistry';
 import { EventEmitter } from 'events';
 import { stringify } from './Utils';
@@ -16,7 +18,7 @@ import { SignallingServer } from './SignallingServer';
  * A connection between the signalling server and a streamer connection.
  * This is where messages expected to be handled by the streamer come in
  * and where messages are sent to the streamer.
- * 
+ *
  * Interesting internals:
  * streamerId: The unique id string of this streamer.
  * transport: The ITransport where transport events can be subscribed to
@@ -65,7 +67,9 @@ export class StreamerConnection extends EventEmitter implements IStreamer, LogUt
      * Returns an identifier that is displayed in logs.
      * @returns A string describing this connection.
      */
-    getReadableIdentifier(): string { return this.streamerId; }
+    getReadableIdentifier(): string {
+        return this.streamerId;
+    }
 
     /**
      * Sends a signalling message to the player.
@@ -86,16 +90,28 @@ export class StreamerConnection extends EventEmitter implements IStreamer, LogUt
             type: 'Streamer',
             streaming: this.streaming,
             remoteAddress: this.remoteAddress,
-            subscribers: this.server.playerRegistry.listPlayers().filter(player => player.subscribedStreamer == this).map(player => player.getPlayerInfo()),
+            subscribers: this.server.playerRegistry
+                .listPlayers()
+                .filter((player) => player.subscribedStreamer == this)
+                .map((player) => player.getPlayerInfo())
         };
     }
 
     private registerMessageHandlers(): void {
         /* eslint-disable @typescript-eslint/unbound-method */
-        this.protocol.on(Messages.endpointId.typeName, LogUtils.createHandlerListener(this, this.onEndpointId));
+        this.protocol.on(
+            Messages.endpointId.typeName,
+            LogUtils.createHandlerListener(this, this.onEndpointId)
+        );
         this.protocol.on(Messages.ping.typeName, LogUtils.createHandlerListener(this, this.onPing));
-        this.protocol.on(Messages.disconnectPlayer.typeName, LogUtils.createHandlerListener(this, this.onDisconnectPlayerRequest));
-        this.protocol.on(Messages.layerPreference.typeName, LogUtils.createHandlerListener(this, this.onLayerPreference));
+        this.protocol.on(
+            Messages.disconnectPlayer.typeName,
+            LogUtils.createHandlerListener(this, this.onDisconnectPlayerRequest)
+        );
+        this.protocol.on(
+            Messages.layerPreference.typeName,
+            LogUtils.createHandlerListener(this, this.onLayerPreference)
+        );
         /* eslint-enable @typescript-eslint/unbound-method */
 
         this.protocol.on(Messages.offer.typeName, this.forwardMessage.bind(this));
@@ -121,7 +137,7 @@ export class StreamerConnection extends EventEmitter implements IStreamer, LogUt
     }
 
     private onTransportClose(): void {
-        Logger.debug('StreamerConnection transport close.');
+        Logger.info(`Streamer '${this.streamerId}' - websocket disconnected.`);
         this.emit('disconnect');
     }
 

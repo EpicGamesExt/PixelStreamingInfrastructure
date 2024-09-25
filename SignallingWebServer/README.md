@@ -74,9 +74,8 @@ Options:
   --no_config                       Skips the reading of the config file. Only CLI options will be used. (default:
                                     false)
   --config_file <path>              Sets the path of the config file. (default: "config.json")
-  --no_save                         On startup the given configuration is resaved out to config.json. This switch will
-                                    prevent this behaviour allowing the config.json file to remain untouched while
-                                    running with new configurations. (default: false)
+  --save                            After arguments are parsed the config.json is saved with whatever arguments were
+                                    specified at launch. (default: false)
   -h, --help                        Display this help text.
 ```
 These CLI options can also be described in a `config.json` (default config file overridable with --config_file) by specifying the command option name and value in a simple JSON object. eg.

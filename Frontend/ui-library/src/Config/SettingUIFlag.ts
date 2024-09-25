@@ -1,14 +1,9 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
-import type {
-    FlagsIds,
-    SettingFlag
-} from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.5';
+import type { FlagsIds, SettingFlag } from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.5';
 import { SettingUIBase } from './SettingUIBase';
 
-export class SettingUIFlag<
-    CustomIds extends string = FlagsIds
-> extends SettingUIBase {
+export class SettingUIFlag<CustomIds extends string = FlagsIds> extends SettingUIBase {
     /* We toggle this checkbox to reflect the value of our setting's boolean flag. */
     _checkbox: HTMLInputElement; // input type="checkbox"
 

@@ -18,7 +18,7 @@ async function waitForVideo(page: Page) {
 }
 
 // just quickly test that the default stream is working
-test('Test default stream.', async ({ page }) => {
+test('Test default stream.', async ({ page }, testinfo) => {
 
     // set a long timeout to allow for slow software rendering
     test.setTimeout(2 * 60 * 1000);
@@ -30,7 +30,7 @@ test('Test default stream.', async ({ page }) => {
     await waitForVideo(page);
 
     // let the stream run for a small duration
-    await delay(3000);
+    await delay(15000);
 
     // query the frontend for its calculated stats
     const frame_count:number = await page.evaluate(()=> {
@@ -40,10 +40,11 @@ test('Test default stream.', async ({ page }) => {
 
     // take a screenshot for posterity
     const __dirname = path.dirname(__filename);
-    await page.screenshot({
+    const screenshot = await page.screenshot({
         path: path.join(__dirname, '..', 'StreamResult.png'),
         fullPage: false
     });
+    testinfo.attach('screenshot', { body: screenshot, contentType: 'image/png' });
 
     // pass the test if we recorded any frames
     expect(frame_count).toBeGreaterThan(0);

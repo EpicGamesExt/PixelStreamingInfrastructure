@@ -1,12 +1,14 @@
 import express from 'express';
 import fs from 'fs';
 import path from 'path';
-import { SignallingServer,
-         IServerConfig,
-         WebServer,
-         InitLogging,
-         Logger,
-         IWebServerConfig } from '@epicgames-ps/lib-pixelstreamingsignalling-ue5.5';
+import {
+    SignallingServer,
+    IServerConfig,
+    WebServer,
+    InitLogging,
+    Logger,
+    IWebServerConfig
+} from '@epicgames-ps/lib-pixelstreamingsignalling-ue5.5';
 import { beautify, IProgramOptions } from './Utils';
 import { initInputHandler } from './InputHandler';
 import { Command, Option } from 'commander';
@@ -20,7 +22,11 @@ const pjson = require('../package.json');
 let config_file: IProgramOptions = {};
 const configArgsParser = new Command()
     .option('--no_config', 'Skips the reading of the config file. Only CLI options will be used.', false)
-    .option('--config_file <path>', 'Sets the path of the config file.', `${path.resolve(__dirname, '..', 'config.json')}`)
+    .option(
+        '--config_file <path>',
+        'Sets the path of the config file.',
+        `${path.resolve(__dirname, '..', 'config.json')}`
+    )
     .allowUnknownOption() // ignore unknown options as we are doing a minimal parse here
     .parse()
     .opts();
@@ -28,16 +34,15 @@ const configArgsParser = new Command()
 // If we do not get passed `--no_config` then attempt open the config file
 if (!configArgsParser.no_config) {
     try {
-        if(fs.existsSync(configArgsParser.config_file)){
+        if (fs.existsSync(configArgsParser.config_file)) {
             console.log(`Config file configured as: ${configArgsParser.config_file}`);
             const configData = fs.readFileSync(configArgsParser.config_file, { encoding: 'utf8' });
             config_file = JSON.parse(configData);
-        }
-        else {
+        } else {
             // Even though proper logging is not intialized, logging here is better than nothing.
             console.log(`No config file found at: ${configArgsParser.config_file}`);
         }
-    } catch(error: unknown) {
+    } catch (error: unknown) {
         console.error(error);
     }
 }
@@ -58,35 +63,95 @@ program
 // This allow the user to have values in the configuration file but also override them by specifying an argument on the command line.
 program
     .option('--log_folder <path>', 'Sets the path for the log files.', config_file.log_folder || 'logs')
-    .addOption(new Option('--log_level_console <level>', 'Sets the logging level for console messages.')
-        .choices(["debug","info","warning","error"])
-        .default(config_file.log_level_console || "info"))
-    .addOption(new Option('--log_level_file <level>', 'Sets the logging level for log files.')
-        .choices(["debug","info","warning","error"])
-        .default(config_file.log_level_file || "info"))
-    .addOption(new Option('--console_messages [detail]', 'Displays incoming and outgoing signalling messages on the console.')
-        .choices(["basic","verbose","formatted"])
-        .preset(config_file.console_messages || "basic"))
-    .option('--streamer_port <port>', 'Sets the listening port for streamer connections.', config_file.streamer_port || '8888')
-    .option('--player_port <port>', 'Sets the listening port for player connections.', config_file.player_port || '80')
-    .option('--sfu_port <port>', 'Sets the listening port for SFU connections.', config_file.sfu_port || '8889')
+    .addOption(
+        new Option('--log_level_console <level>', 'Sets the logging level for console messages.')
+            .choices(['debug', 'info', 'warning', 'error'])
+            .default(config_file.log_level_console || 'info')
+    )
+    .addOption(
+        new Option('--log_level_file <level>', 'Sets the logging level for log files.')
+            .choices(['debug', 'info', 'warning', 'error'])
+            .default(config_file.log_level_file || 'info')
+    )
+    .addOption(
+        new Option(
+            '--console_messages [detail]',
+            'Displays incoming and outgoing signalling messages on the console.'
+        )
+            .choices(['basic', 'verbose', 'formatted'])
+            .preset(config_file.console_messages || 'basic')
+    )
+    .option(
+        '--streamer_port <port>',
+        'Sets the listening port for streamer connections.',
+        config_file.streamer_port || '8888'
+    )
+    .option(
+        '--player_port <port>',
+        'Sets the listening port for player connections.',
+        config_file.player_port || '80'
+    )
+    .option(
+        '--sfu_port <port>',
+        'Sets the listening port for SFU connections.',
+        config_file.sfu_port || '8889'
+    )
     .option('--serve', 'Enables the webserver on player_port.', config_file.serve || false)
-    .option('--http_root <path>', 'Sets the path for the webserver root.', config_file.http_root || `${path.resolve(__dirname, '..', 'www')}`)
-    .option('--homepage <filename>', 'The default html file to serve on the web server.', config_file.homepage || 'player.html')
+    .option(
+        '--http_root <path>',
+        'Sets the path for the webserver root.',
+        config_file.http_root || `${path.resolve(__dirname, '..', 'www')}`
+    )
+    .option(
+        '--homepage <filename>',
+        'The default html file to serve on the web server.',
+        config_file.homepage || 'player.html'
+    )
     .option('--https', 'Enables the webserver on https_port and enabling SSL', config_file.https || false)
-    .addOption(new Option('--https_port <port>', 'Sets the listen port for the https server.')
-        .implies({https: true})
-        .default(config_file.https_port || 443))
-    .option('--ssl_key_path <path>', 'Sets the path for the SSL key file.', config_file.ssl_key_path || 'certificates/client-key.pem')
-    .option('--ssl_cert_path <path>', 'Sets the path for the SSL certificate file.', config_file.ssl_cert_path || 'certificates/client-cert.pem')
-    .option('--https_redirect', 'Enables the redirection of connection attempts on http to https. If this is not set the webserver will only listen on https_port. Player websockets will still listen on player_port.', config_file.https_redirect || false)
-    .option('--rest_api', 'Enables the rest API interface that can be accessed at <server_url>/api/api-definition', config_file.rest_api || false)
-    .addOption(new Option('--peer_options <json-string>', 'Additional JSON data to send in peerConnectionOptions of the config message.')
-        .argParser(JSON.parse)
-        .default(config_file.peer_options || ""))
-    .option('--log_config', 'Will print the program configuration on startup.', config_file.log_config || false)
+    .addOption(
+        new Option('--https_port <port>', 'Sets the listen port for the https server.')
+            .implies({ https: true })
+            .default(config_file.https_port || 443)
+    )
+    .option(
+        '--ssl_key_path <path>',
+        'Sets the path for the SSL key file.',
+        config_file.ssl_key_path || 'certificates/client-key.pem'
+    )
+    .option(
+        '--ssl_cert_path <path>',
+        'Sets the path for the SSL certificate file.',
+        config_file.ssl_cert_path || 'certificates/client-cert.pem'
+    )
+    .option(
+        '--https_redirect',
+        'Enables the redirection of connection attempts on http to https. If this is not set the webserver will only listen on https_port. Player websockets will still listen on player_port.',
+        config_file.https_redirect || false
+    )
+    .option(
+        '--rest_api',
+        'Enables the rest API interface that can be accessed at <server_url>/api/api-definition',
+        config_file.rest_api || false
+    )
+    .addOption(
+        new Option(
+            '--peer_options <json-string>',
+            'Additional JSON data to send in peerConnectionOptions of the config message.'
+        )
+            .argParser(JSON.parse)
+            .default(config_file.peer_options || '')
+    )
+    .option(
+        '--log_config',
+        'Will print the program configuration on startup.',
+        config_file.log_config || false
+    )
     .option('--stdin', 'Allows stdin input while running.', config_file.stdin || false)
-    .option('--no_save', 'On startup the given configuration is resaved out to config.json. This switch will prevent this behaviour allowing the config.json file to remain untouched while running with new configurations.', config_file.no_save || false)
+    .option(
+        '--save',
+        'After arguments are parsed the config.json is saved with whatever arguments were specified at launch.',
+        config_file.save || false
+    )
     .helpOption('-h, --help', 'Display this help text.')
     .allowUnknownOption() // ignore unknown options which will allow versions to be swapped out into existing scripts with maybe older/newer options
     .parse();
@@ -96,13 +161,12 @@ const cli_options: IProgramOptions = program.opts();
 const options: IProgramOptions = { ...cli_options };
 
 // save out new configuration (unless disabled)
-if (!options.no_save) {
-
+if (options.save) {
     // dont save certain options
     const save_options = { ...options };
     delete save_options.no_config;
     delete save_options.config_file;
-    delete save_options.no_save;
+    delete save_options.save;
 
     // save out the config file with the current settings
     fs.writeFile(configArgsParser.config_file, beautify(save_options), (error: any) => {
@@ -114,15 +178,15 @@ InitLogging({
     logDir: options.log_folder,
     logMessagesToConsole: options.console_messages,
     logLevelConsole: options.log_level_console,
-    logLevelFile: options.log_level_file,
+    logLevelFile: options.log_level_file
 });
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
 Logger.info(`${pjson.name} v${pjson.version} starting...`);
 if (options.log_config) {
-    Logger.info("Config:")
-    for(const key in options) {
-        Logger.info(`"${key}": "${options[key]}"`)
+    Logger.info('Config:');
+    for (const key in options) {
+        Logger.info(`"${key}": "${options[key]}"`);
     }
 }
 
@@ -132,8 +196,8 @@ const serverOpts: IServerConfig = {
     streamerPort: options.streamer_port,
     playerPort: options.player_port,
     sfuPort: options.sfu_port,
-    peerOptions: options.peer_options,
-}
+    peerOptions: options.peer_options
+};
 
 if (options.serve) {
     const webserverOptions: IWebServerConfig = {
@@ -145,7 +209,7 @@ if (options.serve) {
         webserverOptions.httpsPort = options.https_port;
         const sslKeyPath = path.join(__dirname, '..', options.ssl_key_path);
         const sslCertPath = path.join(__dirname, '..', options.ssl_cert_path);
-        if(fs.existsSync(sslKeyPath) && fs.existsSync(sslCertPath)) {
+        if (fs.existsSync(sslKeyPath) && fs.existsSync(sslCertPath)) {
             Logger.info(`Reading SSL key and cert. Key path: ${sslKeyPath} | Cert path: ${sslCertPath}`);
             webserverOptions.ssl_key = fs.readFileSync(sslKeyPath);
             webserverOptions.ssl_cert = fs.readFileSync(sslCertPath);
@@ -170,12 +234,12 @@ if (options.stdin) {
 if (options.rest_api) {
     void initialize({
         app,
-        docsPath: "/api-definition",
+        docsPath: '/api-definition',
         exposeApiDocs: true,
-        apiDoc: "./apidoc/api-definition-base.yml",
-        paths: "./build/paths",
+        apiDoc: './apidoc/api-definition-base.yml',
+        paths: './build/paths',
         dependencies: {
-            signallingServer,
+            signallingServer
         }
     });
 }

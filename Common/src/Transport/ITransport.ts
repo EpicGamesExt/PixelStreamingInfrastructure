@@ -38,4 +38,3 @@ export interface ITransport extends EventEmitter {
      */
     isConnected(): boolean;
 }
-

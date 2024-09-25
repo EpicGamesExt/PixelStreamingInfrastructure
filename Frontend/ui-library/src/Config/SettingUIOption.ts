@@ -1,14 +1,9 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
-import type {
-    OptionParametersIds,
-    SettingOption
-} from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.5';
+import type { OptionParametersIds, SettingOption } from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.5';
 import { SettingUIBase } from './SettingUIBase';
 
-export class SettingUIOption<
-    CustomIds extends string = OptionParametersIds
-> extends SettingUIBase {
+export class SettingUIOption<CustomIds extends string = OptionParametersIds> extends SettingUIBase {
     /* A select element that reflects the value of this setting. */
     _selector: HTMLSelectElement; // <select></select>
 
@@ -116,9 +111,7 @@ export class SettingUIOption<
     public set selected(value: string) {
         // A user may not specify the full possible value so we instead use the closest match.
         // eg ?xxx=H264 would select 'H264 level-asymmetry-allowed=1;packetization-mode=1;profile-level-id=42001f'
-        const filteredList = this.options.filter(
-            (option: string) => option.indexOf(value) !== -1
-        );
+        const filteredList = this.options.filter((option: string) => option.indexOf(value) !== -1);
         if (filteredList.length) {
             this.selector.value = filteredList[0];
         }

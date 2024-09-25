@@ -2,7 +2,7 @@
  * A case insensitive, partial implementation of URLSearchParams
  */
 export class IURLSearchParams {
-    _urlParams : Record<string, string>;
+    _urlParams: Record<string, string>;
 
     constructor(search: string) {
         this._urlParams = {};
@@ -23,4 +23,3 @@ export class IURLSearchParams {
         return null;
     }
 }
-

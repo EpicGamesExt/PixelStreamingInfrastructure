@@ -28,31 +28,19 @@ type ExtraFlags = typeof LightMode;
 export type FlagsIdsExtended = FlagsIds | ExtraFlags;
 
 export class ConfigUI {
-    private customFlags = new Map<
-        FlagsIdsExtended,
-        SettingFlag<FlagsIdsExtended>
-    >();
+    private customFlags = new Map<FlagsIdsExtended, SettingFlag<FlagsIdsExtended>>();
 
     /* A map of flags that can be toggled - options that can be set in the application - e.g. Use Mic? */
-    private flagsUi = new Map<
-        FlagsIdsExtended,
-        SettingUIFlag<FlagsIdsExtended>
-    >();
+    private flagsUi = new Map<FlagsIdsExtended, SettingUIFlag<FlagsIdsExtended>>();
 
     /* A map of numerical settings - options that can be in the application - e.g. MinBitrate */
-    private numericParametersUi = new Map<
-        NumericParametersIds,
-        SettingUINumber
-    >();
+    private numericParametersUi = new Map<NumericParametersIds, SettingUINumber>();
 
     /* A map of text settings - e.g. signalling server url */
     private textParametersUi = new Map<TextParametersIds, SettingUIText>();
 
     /* A map of enum based settings - e.g. preferred codec */
-    private optionParametersUi = new Map<
-        OptionParametersIds,
-        SettingUIOption
-    >();
+    private optionParametersUi = new Map<OptionParametersIds, SettingUIOption>();
 
     // ------------ Settings -----------------
 
@@ -89,25 +77,16 @@ export class ConfigUI {
             this.flagsUi.set(setting.id, new SettingUIFlag(setting));
         }
         for (const setting of Array.from(this.customFlags.values())) {
-            this.flagsUi.set(
-                setting.id,
-                new SettingUIFlag<FlagsIdsExtended>(setting)
-            );
+            this.flagsUi.set(setting.id, new SettingUIFlag<FlagsIdsExtended>(setting));
         }
         for (const setting of config.getTextSettings()) {
             this.textParametersUi.set(setting.id, new SettingUIText(setting));
         }
         for (const setting of config.getNumericSettings()) {
-            this.numericParametersUi.set(
-                setting.id,
-                new SettingUINumber(setting)
-            );
+            this.numericParametersUi.set(setting.id, new SettingUINumber(setting));
         }
         for (const setting of config.getOptionSettings()) {
-            this.optionParametersUi.set(
-                setting.id,
-                new SettingUIOption(setting)
-            );
+            this.optionParametersUi.set(setting.id, new SettingUIOption(setting));
         }
     }
 
@@ -140,63 +119,29 @@ export class ConfigUI {
      */
     populateSettingsElement(settingsElem: HTMLElement): void {
         /* Setup all Pixel Streaming specific settings */
-        const psSettingsSection = this.buildSectionWithHeading(
-            settingsElem,
-            'Pixel Streaming'
-        );
+        const psSettingsSection = this.buildSectionWithHeading(settingsElem, 'Pixel Streaming');
 
         // make settings show up in DOM
-        this.addSettingText(
-            psSettingsSection,
-            this.textParametersUi.get(TextParameters.SignallingServerUrl)
-        );
-        this.addSettingOption(
-            psSettingsSection,
-            this.optionParametersUi.get(OptionParameters.StreamerId)
-        );
-        this.addSettingFlag(
-            psSettingsSection,
-            this.flagsUi.get(Flags.AutoConnect)
-        );
-        this.addSettingFlag(
-            psSettingsSection,
-            this.flagsUi.get(Flags.AutoPlayVideo)
-        );
-        this.addSettingFlag(
-            psSettingsSection, 
-            this.flagsUi.get(Flags.UseMic)
-        );
-        this.addSettingFlag(
-            psSettingsSection,
-            this.flagsUi.get(Flags.StartVideoMuted)
-        );
-        this.addSettingFlag(
-            psSettingsSection,
-            this.flagsUi.get(Flags.IsQualityController)
-        );
-        this.addSettingFlag(
-            psSettingsSection,
-            this.flagsUi.get(Flags.ForceMonoAudio)
-        );
-        this.addSettingFlag(
-            psSettingsSection,
-            this.flagsUi.get(Flags.ForceTURN)
-        );
-        this.addSettingFlag(
-            psSettingsSection,
-            this.flagsUi.get(Flags.SuppressBrowserKeys)
-        );
-        this.addSettingFlag(
-            psSettingsSection,
-            this.flagsUi.get(Flags.AFKDetection)
-        );
-        this.addSettingFlag(
-            psSettingsSection,
-            this.flagsUi.get(Flags.WaitForStreamer)
-        );
+        this.addSettingText(psSettingsSection, this.textParametersUi.get(TextParameters.SignallingServerUrl));
+        this.addSettingOption(psSettingsSection, this.optionParametersUi.get(OptionParameters.StreamerId));
+        this.addSettingFlag(psSettingsSection, this.flagsUi.get(Flags.AutoConnect));
+        this.addSettingFlag(psSettingsSection, this.flagsUi.get(Flags.AutoPlayVideo));
+        this.addSettingFlag(psSettingsSection, this.flagsUi.get(Flags.UseMic));
+        this.addSettingFlag(psSettingsSection, this.flagsUi.get(Flags.UseCamera));
+        this.addSettingFlag(psSettingsSection, this.flagsUi.get(Flags.StartVideoMuted));
+        this.addSettingFlag(psSettingsSection, this.flagsUi.get(Flags.IsQualityController));
+        this.addSettingFlag(psSettingsSection, this.flagsUi.get(Flags.ForceMonoAudio));
+        this.addSettingFlag(psSettingsSection, this.flagsUi.get(Flags.ForceTURN));
+        this.addSettingFlag(psSettingsSection, this.flagsUi.get(Flags.SuppressBrowserKeys));
+        this.addSettingFlag(psSettingsSection, this.flagsUi.get(Flags.AFKDetection));
+        this.addSettingFlag(psSettingsSection, this.flagsUi.get(Flags.WaitForStreamer));
         this.addSettingNumeric(
             psSettingsSection,
             this.numericParametersUi.get(NumericParameters.AFKTimeoutSecs)
+        );
+        this.addSettingNumeric(
+            psSettingsSection,
+            this.numericParametersUi.get(NumericParameters.AFKCountdownSecs)
         );
         this.addSettingNumeric(
             psSettingsSection,
@@ -208,71 +153,35 @@ export class ConfigUI {
         );
 
         /* Setup all view/ui related settings under this section */
-        const viewSettingsSection = this.buildSectionWithHeading(
-            settingsElem,
-            'UI'
-        );
-        this.addSettingFlag(
-            viewSettingsSection,
-            this.flagsUi.get(Flags.MatchViewportResolution)
-        );
+        const viewSettingsSection = this.buildSectionWithHeading(settingsElem, 'UI');
+        this.addSettingFlag(viewSettingsSection, this.flagsUi.get(Flags.MatchViewportResolution));
 
-        this.addSettingFlag(
-            viewSettingsSection,
-            this.flagsUi.get(Flags.HoveringMouseMode)
-        );
+        this.addSettingFlag(viewSettingsSection, this.flagsUi.get(Flags.HoveringMouseMode));
 
         this.addSettingFlag(viewSettingsSection, this.flagsUi.get(LightMode));
 
         /* Setup all encoder related settings under this section */
-        const inputSettingsSection = this.buildSectionWithHeading(
-            settingsElem,
-            'Input'
-        );
-        
-        this.addSettingFlag(
-            inputSettingsSection,
-            this.flagsUi.get(Flags.KeyboardInput)
-        );
+        const inputSettingsSection = this.buildSectionWithHeading(settingsElem, 'Input');
 
-        this.addSettingFlag(
-            inputSettingsSection,
-            this.flagsUi.get(Flags.MouseInput)
-        );
+        this.addSettingFlag(inputSettingsSection, this.flagsUi.get(Flags.KeyboardInput));
 
-        this.addSettingFlag(
-            inputSettingsSection,
-            this.flagsUi.get(Flags.TouchInput)
-        );
+        this.addSettingFlag(inputSettingsSection, this.flagsUi.get(Flags.MouseInput));
 
-        this.addSettingFlag(
-            inputSettingsSection,
-            this.flagsUi.get(Flags.GamepadInput)
-        );
+        this.addSettingFlag(inputSettingsSection, this.flagsUi.get(Flags.FakeMouseWithTouches));
 
-        this.addSettingFlag(
-            inputSettingsSection,
-            this.flagsUi.get(Flags.XRControllerInput)
-        );
+        this.addSettingFlag(inputSettingsSection, this.flagsUi.get(Flags.TouchInput));
+
+        this.addSettingFlag(inputSettingsSection, this.flagsUi.get(Flags.GamepadInput));
+
+        this.addSettingFlag(inputSettingsSection, this.flagsUi.get(Flags.XRControllerInput));
 
         /* Setup all encoder related settings under this section */
-        const encoderSettingsSection = this.buildSectionWithHeading(
-            settingsElem,
-            'Encoder'
-        );
+        const encoderSettingsSection = this.buildSectionWithHeading(settingsElem, 'Encoder');
 
-        this.addSettingNumeric(
-            encoderSettingsSection,
-            this.numericParametersUi.get(NumericParameters.MinQP)
-        );
-        this.addSettingNumeric(
-            encoderSettingsSection,
-            this.numericParametersUi.get(NumericParameters.MaxQP)
-        );
+        this.addSettingNumeric(encoderSettingsSection, this.numericParametersUi.get(NumericParameters.MinQP));
+        this.addSettingNumeric(encoderSettingsSection, this.numericParametersUi.get(NumericParameters.MaxQP));
 
-        const preferredCodecOption = this.optionParametersUi.get(
-            OptionParameters.PreferredCodec
-        );
+        const preferredCodecOption = this.optionParametersUi.get(OptionParameters.PreferredCodec);
         this.addSettingOption(
             encoderSettingsSection,
             this.optionParametersUi.get(OptionParameters.PreferredCodec)
@@ -287,10 +196,7 @@ export class ConfigUI {
         }
 
         /* Setup all webrtc related settings under this section */
-        const webrtcSettingsSection = this.buildSectionWithHeading(
-            settingsElem,
-            'WebRTC'
-        );
+        const webrtcSettingsSection = this.buildSectionWithHeading(settingsElem, 'WebRTC');
 
         this.addSettingNumeric(
             webrtcSettingsSection,
@@ -311,10 +217,7 @@ export class ConfigUI {
      * @param settingsSection - The settings section HTML element.
      * @param settingText - The textual settings object.
      */
-    addSettingText(
-        settingsSection: HTMLElement,
-        settingText?: SettingUIText
-    ): void {
+    addSettingText(settingsSection: HTMLElement, settingText?: SettingUIText): void {
         if (settingText) {
             settingsSection.appendChild(settingText.rootElement);
             this.textParametersUi.set(settingText.setting.id, settingText);
@@ -326,10 +229,7 @@ export class ConfigUI {
      * @param settingsSection - The settings section HTML element.
      * @param settingFlag - The settings flag object.
      */
-    addSettingFlag(
-        settingsSection: HTMLElement,
-        settingFlag?: SettingUIFlag<FlagsIdsExtended>
-    ): void {
+    addSettingFlag(settingsSection: HTMLElement, settingFlag?: SettingUIFlag<FlagsIdsExtended>): void {
         if (settingFlag) {
             settingsSection.appendChild(settingFlag.rootElement);
             this.flagsUi.set(settingFlag.setting.id, settingFlag);
@@ -341,10 +241,7 @@ export class ConfigUI {
      * @param settingsSection - The settings section HTML element.
      * @param settingFlag - The settings flag object.
      */
-    addSettingNumeric(
-        settingsSection: HTMLElement,
-        setting?: SettingUINumber
-    ): void {
+    addSettingNumeric(settingsSection: HTMLElement, setting?: SettingUINumber): void {
         if (setting) {
             settingsSection.appendChild(setting.rootElement);
             this.numericParametersUi.set(setting.setting.id, setting);
@@ -356,10 +253,7 @@ export class ConfigUI {
      * @param settingsSection - The settings section HTML element.
      * @param settingFlag - The settings flag object.
      */
-    addSettingOption(
-        settingsSection: HTMLElement,
-        setting?: SettingUIOption
-    ): void {
+    addSettingOption(settingsSection: HTMLElement, setting?: SettingUIOption): void {
         if (setting) {
             settingsSection.appendChild(setting.rootElement);
             this.optionParametersUi.set(setting.setting.id, setting);
@@ -448,7 +342,6 @@ export class ConfigUI {
     setCustomFlagLabel(id: ExtraFlags, label: string) {
         if (!this.customFlags.has(id)) {
             Logger.Warning(
-                Logger.GetStackTrace(),
                 `Cannot set label for flag called ${id} - it does not exist in the Config.flags map.`
             );
         } else {

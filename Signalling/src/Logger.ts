@@ -41,10 +41,7 @@ export function InitLogging(config: IConfig): void {
     logMessagesToConsole = config.logMessagesToConsole || 'none';
 
     Logger = winston.createLogger({
-        transports: [
-            createConsoleTransport(logLevelConsole),
-            createFileTransport(logDir, logLevelFile),
-        ],
+        transports: [createConsoleTransport(logLevelConsole), createFileTransport(logDir, logLevelFile)]
     });
 }
 
@@ -54,8 +51,8 @@ function createDefaultLogger() {
     return winston.createLogger({
         level: 'info',
         format: winston.format.cli(),
-        transports: [new winston.transports.Console()],
-    })
+        transports: [new winston.transports.Console()]
+    });
 }
 
 function createConsoleTransport(logLevel: string) {
@@ -66,14 +63,20 @@ function createConsoleTransport(logLevel: string) {
             timestamp({ format: 'HH:mm:ss.SSS' }),
             colorize(),
             splat(),
-            createConsoleFormat(),
-        ),
+            createConsoleFormat()
+        )
     });
 }
 
 function isLogObject(object: any): object is IProtoLogObj {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    return 'event' in object && object.event == 'proto_message' && 'direction' in object && 'protoMessage' in object;
+    /* eslint-disable @typescript-eslint/no-unsafe-member-access */
+    return (
+        'event' in object &&
+        object.event == 'proto_message' &&
+        'direction' in object &&
+        'protoMessage' in object
+    );
+    /* eslint-enable @typescript-eslint/no-unsafe-member-access */
 }
 
 function createConsoleFormat() {
@@ -84,10 +87,14 @@ function createConsoleFormat() {
         } else if (isLogObject(logObj.message)) {
             const { direction, receiver, sender, target, protoMessage } = logObj.message;
             switch (direction) {
-            case 'incoming': return prefix + `> ${receiver} :: ${formatMessageForConsole(protoMessage)}`;
-            case 'outgoing': return prefix + `< ${sender} :: ${formatMessageForConsole(protoMessage)}`;
-            case 'forward': return prefix + `${receiver} > ${target} :: ${formatMessageForConsole(protoMessage)}`;
-            default: return prefix + `Unknown proto direction: ${direction}`;
+                case 'incoming':
+                    return prefix + `> ${receiver} :: ${formatMessageForConsole(protoMessage)}`;
+                case 'outgoing':
+                    return prefix + `< ${sender} :: ${formatMessageForConsole(protoMessage)}`;
+                case 'forward':
+                    return prefix + `${receiver} > ${target} :: ${formatMessageForConsole(protoMessage)}`;
+                default:
+                    return prefix + `Unknown proto direction: ${direction}`;
             }
         }
         return '';
@@ -96,17 +103,18 @@ function createConsoleFormat() {
 
 function formatMessageForConsole(message: BaseMessage) {
     switch (logMessagesToConsole) {
-    case 'verbose': return stringify(message);
-    case 'formatted': return beautify(message);
-    default: return `[${message.type}]`;
+        case 'verbose':
+            return stringify(message);
+        case 'formatted':
+            return beautify(message);
+        default:
+            return `[${message.type}]`;
     }
 }
 
 function createProtoMessageFilter() {
     return winston.format((info: TransformableInfo, _opts: any) => {
-        if (typeof info.message !== 'string'
-            && isLogObject(info.message)
-            && logMessagesToConsole == 'none') {
+        if (typeof info.message !== 'string' && isLogObject(info.message) && logMessagesToConsole == 'none') {
             return false;
         }
         return info;
@@ -119,11 +127,7 @@ function createFileTransport(logDirPath: string, logLevel: string) {
         filename: path.join(logDirPath, 'server-%DATE%.log'),
         datePattern: 'YYYY-MM-DD',
         maxFiles: '14d',
-        format: combine(
-                    timestamp({ format: 'YYYY-MM-DD HH:mm:ss.SSS' }),
-                    splat(),
-                    createFileFormat(),
-                ),
+        format: combine(timestamp({ format: 'YYYY-MM-DD HH:mm:ss.SSS' }), splat(), createFileFormat())
     });
 }
 
@@ -136,7 +140,7 @@ function createFileFormat() {
                 timestamp,
                 level,
                 event: 'message',
-                message,
+                message
             });
         } else if (isLogObject(logObj.message)) {
             const { timestamp, level, message } = logObj;
@@ -150,4 +154,3 @@ function createFileFormat() {
     });
 }
 /* eslint-enable @typescript-eslint/no-unsafe-assignment */
-

@@ -168,6 +168,8 @@ message offer {
   optional string playerId = 3;
   // Indiates that this offer is coming from an SFU.
   optional bool sfu = 4;
+  //Indicates that the streamer is multiplexing data channels
+  optional bool multiplex = 5;
 }
 
 /**
@@ -183,6 +185,10 @@ message answer {
   string sdp = 2;
   // If being sent to a player this should be set to a valid player ID.
   optional string playerId = 3;
+  // Specifies the minimum bitrate requested for streams.
+  optional int32 minBitrateBps = 4;
+  // Specifies the maximum bitrate requested for streams.
+  optional int32 maxBitrateBps = 5;
 }
 
 /**

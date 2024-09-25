@@ -42,7 +42,7 @@ function sdpToRecvRtpCapabilities(sdpObject, localCaps) {
     return recvCaps;
 }
 exports.sdpToRecvRtpCapabilities = sdpToRecvRtpCapabilities;
-function sdpToSendRtpParameters(sdpObject, sdpMediaObj, localCaps, kind) {
+function sdpToSendRtpParameters(sdpObject, sdpMediaObj, localCaps, kind, scalabilityMode) {
     var _a;
     const caps = MsSdpUtils.extractRtpCapabilities({
         sdpObject,
@@ -75,6 +75,13 @@ function sdpToSendRtpParameters(sdpObject, sdpMediaObj, localCaps, kind) {
         //     kind,
         // });
         sendParams.encodings = MsRtpUtils.getRtpEncodings({ offerMediaObject: sdpMediaObj });
+        if(kind === "video")
+        {
+            for(let encoding of sendParams.encodings)
+            {
+                encoding.scalabilityMode = scalabilityMode;
+            }
+        }
     }
     sendParams.rtcp = {
         cname: MsSdpUtils.getCname({ offerMediaObject: sdpMediaObj }),

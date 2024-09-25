@@ -1,4 +1,4 @@
-import { IMessageType } from "@protobuf-ts/runtime";
+import { IMessageType } from '@protobuf-ts/runtime';
 import { BaseMessage } from './base_message';
 import { Logger } from '../Logger/Logger';
 import { MessageRegistry } from './message_registry';
@@ -30,13 +30,13 @@ export function validateMessage(msg: BaseMessage): IMessageType<BaseMessage> | n
     let valid = true;
 
     if (!msg.type) {
-        Logger.Error(Logger.GetStackTrace(), `Parsed message has no type. Rejected. ${JSON.stringify(msg)}`);
+        Logger.Error(`Parsed message has no type. Rejected. ${JSON.stringify(msg)}`);
         return null;
     }
 
     const messageType = MessageRegistry[msg.type];
     if (!messageType) {
-        Logger.Error(Logger.GetStackTrace(), `Message is of an unknown type: "${msg.type}". Rejected.`);
+        Logger.Error(`Message is of an unknown type: "${msg.type}". Rejected.`);
         return null;
     }
 
@@ -44,7 +44,9 @@ export function validateMessage(msg: BaseMessage): IMessageType<BaseMessage> | n
         for (const field of messageType.fields) {
             if (!field.opt) {
                 if (!Object.prototype.hasOwnProperty.call(msg, field.name)) {
-                    Logger.Error(Logger.GetStackTrace(), `Message "${msg.type}"" is missing required field "${field.name}". Rejected.`);
+                    Logger.Error(
+                        `Message "${msg.type}"" is missing required field "${field.name}". Rejected.`
+                    );
                     valid = false;
                 }
             }
@@ -52,9 +54,9 @@ export function validateMessage(msg: BaseMessage): IMessageType<BaseMessage> | n
     }
 
     for (const fieldName in msg) {
-        const found = messageType.fields.find(field => field.name === fieldName);
+        const found = messageType.fields.find((field) => field.name === fieldName);
         if (!found) {
-            Logger.Error(Logger.GetStackTrace(), `Message "${msg.type}" contains unknown field "${fieldName}". Rejected.`);
+            Logger.Error(`Message "${msg.type}" contains unknown field "${fieldName}". Rejected.`);
             valid = false;
         }
     }

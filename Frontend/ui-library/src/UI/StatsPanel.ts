@@ -4,8 +4,8 @@ import { LatencyTest } from './LatencyTest';
 import { CandidatePairStats, Logger, PixelStreaming } from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.5';
 import { AggregatedStats } from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.5';
 import { MathUtils } from '../Util/MathUtils';
-import {DataChannelLatencyTest} from "./DataChannelLatencyTest";
-import {PixelStreamingSettings} from "@epicgames-ps/lib-pixelstreamingfrontend-ue5.5/types/DataChannel/InitialSettings";
+import { DataChannelLatencyTest } from './DataChannelLatencyTest';
+import { PixelStreamingSettings } from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.5/types/DataChannel/InitialSettings';
 
 /**
  * A stat structure, an id, the stat string, and the element where it is rendered.
@@ -130,10 +130,10 @@ export class StatsPanel {
     public onDisconnect(): void {
         this.latencyTest.latencyTestButton.onclick = () => {
             // do nothing
-        }
+        };
         this.dataChannelLatencyTest.latencyTestButton.onclick = () => {
             //do nothing
-        }
+        };
     }
 
     public onVideoInitialized(stream: PixelStreaming): void {
@@ -157,13 +157,11 @@ export class StatsPanel {
     public configure(settings: PixelStreamingSettings): void {
         if (settings.DisableLatencyTest) {
             this.latencyTest.latencyTestButton.disabled = true;
-            this.latencyTest.latencyTestButton.title =
-                'Disabled by -PixelStreamingDisableLatencyTester=true';
+            this.latencyTest.latencyTestButton.title = 'Disabled by -PixelStreamingDisableLatencyTester=true';
             this.dataChannelLatencyTest.latencyTestButton.disabled = true;
             this.dataChannelLatencyTest.latencyTestButton.title =
                 'Disabled by -PixelStreamingDisableLatencyTester=true';
             Logger.Info(
-                Logger.GetStackTrace(),
                 '-PixelStreamingDisableLatencyTester=true, requesting latency report from the the browser to UE is disabled.'
             );
         }
@@ -195,11 +193,7 @@ export class StatsPanel {
     }
 
     public handlePlayerCount(playerCount: number) {
-        this.addOrUpdateStat(
-            'PlayerCountStat',
-            'Players',
-            playerCount.toString()
-        );
+        this.addOrUpdateStat('PlayerCountStat', 'Players', playerCount.toString());
     }
 
     /**
@@ -213,24 +207,14 @@ export class StatsPanel {
         });
 
         // Inbound data
-        const inboundData = MathUtils.formatBytes(
-            stats.inboundVideoStats.bytesReceived,
-            2
-        );
+        const inboundData = MathUtils.formatBytes(stats.inboundVideoStats.bytesReceived, 2);
         this.addOrUpdateStat('InboundDataStat', 'Received', inboundData);
 
         // Packets lost
-        const packetsLostStat = Object.prototype.hasOwnProperty.call(
-            stats.inboundVideoStats,
-            'packetsLost'
-        )
+        const packetsLostStat = Object.prototype.hasOwnProperty.call(stats.inboundVideoStats, 'packetsLost')
             ? numberFormat.format(stats.inboundVideoStats.packetsLost)
             : 'Chrome only';
-        this.addOrUpdateStat(
-            'PacketsLostStat',
-            'Packets Lost',
-            packetsLostStat
-        );
+        this.addOrUpdateStat('PacketsLostStat', 'Packets Lost', packetsLostStat);
 
         // Bitrate
         if (stats.inboundVideoStats.bitrate) {
@@ -251,34 +235,19 @@ export class StatsPanel {
 
         // Video resolution
         const resStat =
-            Object.prototype.hasOwnProperty.call(
-                stats.inboundVideoStats,
-                'frameWidth'
-            ) &&
+            Object.prototype.hasOwnProperty.call(stats.inboundVideoStats, 'frameWidth') &&
             stats.inboundVideoStats.frameWidth &&
-            Object.prototype.hasOwnProperty.call(
-                stats.inboundVideoStats,
-                'frameHeight'
-            ) &&
+            Object.prototype.hasOwnProperty.call(stats.inboundVideoStats, 'frameHeight') &&
             stats.inboundVideoStats.frameHeight
-                ? stats.inboundVideoStats.frameWidth +
-                  'x' +
-                  stats.inboundVideoStats.frameHeight
+                ? stats.inboundVideoStats.frameWidth + 'x' + stats.inboundVideoStats.frameHeight
                 : 'Chrome only';
         this.addOrUpdateStat('VideoResStat', 'Video resolution', resStat);
 
         // Frames decoded
-        const framesDecoded = Object.prototype.hasOwnProperty.call(
-            stats.inboundVideoStats,
-            'framesDecoded'
-        )
+        const framesDecoded = Object.prototype.hasOwnProperty.call(stats.inboundVideoStats, 'framesDecoded')
             ? numberFormat.format(stats.inboundVideoStats.framesDecoded)
             : 'Chrome only';
-        this.addOrUpdateStat(
-            'FramesDecodedStat',
-            'Frames Decoded',
-            framesDecoded
-        );
+        this.addOrUpdateStat('FramesDecodedStat', 'Frames Decoded', framesDecoded);
 
         // Framerate
         if (stats.inboundVideoStats.framesPerSecond) {
@@ -301,9 +270,7 @@ export class StatsPanel {
                 'VideoCodecStat',
                 'Video codec',
                 // Split the codec to remove the Fmtp line
-                stats.codecs
-                    .get(stats.inboundVideoStats.codecId)
-                    ?.split(' ')[0] ?? ''
+                stats.codecs.get(stats.inboundVideoStats.codecId)?.split(' ')[0] ?? ''
             );
         }
 
@@ -312,32 +279,25 @@ export class StatsPanel {
                 'AudioCodecStat',
                 'Audio codec',
                 // Split the codec to remove the Fmtp line
-                stats.codecs
-                    .get(stats.inboundAudioStats.codecId)
-                    ?.split(' ')[0] ?? ''
+                stats.codecs.get(stats.inboundAudioStats.codecId)?.split(' ')[0] ?? ''
             );
         }
 
         // Store the active candidate pair return a new Candidate pair stat if getActiveCandidate is null
-        const activeCandidatePair = stats.getActiveCandidatePair() != null ? stats.getActiveCandidatePair() : new CandidatePairStats();
+        const activeCandidatePair =
+            stats.getActiveCandidatePair() != null
+                ? stats.getActiveCandidatePair()
+                : new CandidatePairStats();
 
         // RTT
         const netRTT =
-            Object.prototype.hasOwnProperty.call(
-                activeCandidatePair,
-                'currentRoundTripTime'
-            ) && stats.isNumber(activeCandidatePair.currentRoundTripTime)
-                ? numberFormat.format(
-                    activeCandidatePair.currentRoundTripTime * 1000
-                  )
+            Object.prototype.hasOwnProperty.call(activeCandidatePair, 'currentRoundTripTime') &&
+            stats.isNumber(activeCandidatePair.currentRoundTripTime)
+                ? numberFormat.format(activeCandidatePair.currentRoundTripTime * 1000)
                 : "Can't calculate";
         this.addOrUpdateStat('RTTStat', 'Net RTT (ms)', netRTT);
 
-        this.addOrUpdateStat(
-            'DurationStat',
-            'Duration',
-            stats.sessionStats.runTime
-        );
+        this.addOrUpdateStat('DurationStat', 'Duration', stats.sessionStats.runTime);
 
         this.addOrUpdateStat(
             'ControlsInputStat',
@@ -355,11 +315,7 @@ export class StatsPanel {
         // todo:
         //statsText += `<div>Browser receive to composite (ms): ${stats.inboundVideoStats.receiveToCompositeMs}</div>`;
 
-        Logger.Log(
-            Logger.GetStackTrace(),
-            `--------- Stats ---------\n ${JSON.stringify(stats)}\n------------------------`,
-            6
-        );
+        Logger.Info(`--------- Stats ---------\n ${JSON.stringify(stats)}\n------------------------`);
     }
 
     /**

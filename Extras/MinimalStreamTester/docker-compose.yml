@@ -1,0 +1,50 @@
+---
+version: "3.4"
+services:
+  signalling:
+    build:
+      context: ../../
+      dockerfile: ./SignallingWebServer/Dockerfile
+    image: signalling
+    command: --rest_api
+    networks:
+      - testing
+    healthcheck:
+        test: ["CMD", "curl", "-f", "http://signalling:80"]
+        interval: 10s
+        timeout: 5s
+        retries: 3
+        start_period: 30s
+        start_interval: 5s # only supported on docker engine 25+
+
+  streamer:
+    image: pixelstreamingunofficial/ps-minimal-streamer-linux
+    command: -PixelStreamingURL=ws://signalling:8888 -nothreadtimeout
+    networks:
+      - testing
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://signalling:80/api/streamers/DefaultStreamer"]
+      interval: 20s
+      timeout: 5s
+      retries: 10
+    depends_on:
+      signalling:
+        condition: service_healthy
+
+  tester:
+    build:
+      context: ../../
+      dockerfile: ./Extras/MinimalStreamTester/dockerfiles/linux/Dockerfile
+    image: tester
+    environment:
+      - PIXELSTREAMING_URL=http://signalling
+    networks:
+      - testing
+    volumes:
+      - ./results:/tester/playwright-report
+    depends_on:
+      streamer:
+        condition: service_healthy
+
+networks:
+  testing:

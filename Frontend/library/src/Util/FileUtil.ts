@@ -20,17 +20,11 @@ export class FileUtil {
             file.size = 0;
             file.data = [];
             file.timestampStart = new Date().getTime();
-            Logger.Log(
-                Logger.GetStackTrace(),
-                'Received first chunk of file',
-                6
-            );
+            Logger.Info('Received first chunk of file');
         }
 
-        const extensionAsString = new TextDecoder('utf-16').decode(
-            view.slice(1)
-        );
-        Logger.Log(Logger.GetStackTrace(), extensionAsString, 6);
+        const extensionAsString = new TextDecoder('utf-16').decode(view.slice(1));
+        Logger.Info(extensionAsString);
         file.extension = extensionAsString;
     }
 
@@ -48,15 +42,11 @@ export class FileUtil {
             file.size = 0;
             file.data = [];
             file.timestampStart = new Date().getTime();
-            Logger.Log(
-                Logger.GetStackTrace(),
-                'Received first chunk of file',
-                6
-            );
+            Logger.Info('Received first chunk of file');
         }
 
         const mimeAsString = new TextDecoder('utf-16').decode(view.slice(1));
-        Logger.Log(Logger.GetStackTrace(), mimeAsString, 6);
+        Logger.Info(mimeAsString);
         file.mimetype = mimeAsString;
     }
 
@@ -81,26 +71,16 @@ export class FileUtil {
         file.data.push(fileBytes);
 
         // Uncomment for debug
-        Logger.Log(
-            Logger.GetStackTrace(),
-            `Received file chunk: ${file.data.length}/${file.size}`,
-            6
-        );
+        Logger.Info(`Received file chunk: ${file.data.length}/${file.size}`);
 
         if (file.data.length === file.size) {
             file.receiving = false;
             file.valid = true;
-            Logger.Log(Logger.GetStackTrace(), 'Received complete file', 6);
+            Logger.Info('Received complete file');
             const transferDuration = new Date().getTime() - file.timestampStart;
-            const transferBitrate = Math.round(
-                (file.size * 16 * 1024) / transferDuration
-            );
-            Logger.Log(
-                Logger.GetStackTrace(),
-                `Average transfer bitrate: ${transferBitrate}kb/s over ${
-                    transferDuration / 1000
-                } seconds`,
-                6
+            const transferBitrate = Math.round((file.size * 16 * 1024) / transferDuration);
+            Logger.Info(
+                `Average transfer bitrate: ${transferBitrate}kb/s over ${transferDuration / 1000} seconds`
             );
 
             // File reconstruction
@@ -118,10 +98,7 @@ export class FileUtil {
             a.remove();
         } else if (file.data.length > file.size) {
             file.receiving = false;
-            Logger.Error(
-                Logger.GetStackTrace(),
-                `Received bigger file than advertised: ${file.data.length}/${file.size}`
-            );
+            Logger.Error(`Received bigger file than advertised: ${file.data.length}/${file.size}`);
         }
     }
 }
