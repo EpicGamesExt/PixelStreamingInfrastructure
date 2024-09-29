@@ -470,7 +470,7 @@ export class Config {
                 'AFK timeout',
                 'The time (in seconds) it takes for the application to time out if AFK timeout is enabled.',
                 0 /*min*/,
-                600 /*max*/,
+                undefined /*max*/,
                 120 /*value*/,
                 useUrlParams
             )
