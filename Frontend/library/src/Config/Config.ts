@@ -527,7 +527,7 @@ export class Config {
                 'AFK timeout',
                 'The time (in seconds) it takes for the application to time out if AFK timeout is enabled.',
                 0 /*min*/,
-                600 /*max*/,
+                null /*max*/,
                 settings && settings.hasOwnProperty(NumericParameters.AFKTimeoutSecs) ?
                     settings[NumericParameters.AFKTimeoutSecs] :
                     120, /*value*/
@@ -542,7 +542,7 @@ export class Config {
                 'AFK countdown',
                 'The time (in seconds) for a user to respond before the stream is ended after an AFK timeout.',
                 10 /*min*/,
-                180 /*max*/,
+                null /*max*/,
                 10 /*value*/,
                 useUrlParams
             )
