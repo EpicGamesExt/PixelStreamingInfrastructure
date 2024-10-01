@@ -542,7 +542,7 @@ export class Config {
                 'AFK countdown',
                 'The time (in seconds) for a user to respond before the stream is ended after an AFK timeout.',
                 10 /*min*/,
-                undefined /*max*/,
+                null /*max*/,
                 10 /*value*/,
                 useUrlParams
             )
