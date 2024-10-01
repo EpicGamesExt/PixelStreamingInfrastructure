@@ -9,8 +9,8 @@ import { SettingBase } from './SettingBase';
 export class SettingNumber<
     CustomIds extends string = NumericParametersIds
 > extends SettingBase {
-    _min: number | undefined;
-    _max: number | undefined;
+    _min: number | null;
+    _max: number | null;
 
     id: NumericParametersIds | CustomIds;
     onChangeEmit: (changedValue: number) => void;
@@ -20,8 +20,8 @@ export class SettingNumber<
         id: NumericParametersIds | CustomIds,
         label: string,
         description: string,
-        min: number | undefined,
-        max: number | undefined,
+        min: number | null,
+        max: number | null,
         defaultNumber: number,
         useUrlParams: boolean,
 		// eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -83,11 +83,11 @@ export class SettingNumber<
      * @returns The clamped number.
      */
     public clamp(inNumber: number): number {
-        if (this._min == undefined && this._max == undefined) {
+        if (this._min == null && this._max == null) {
             return inNumber;
-        } else if (this._min == undefined) {
+        } else if (this._min == null) {
             return Math.min(this._max, inNumber);
-        } else if (this._max == undefined) {
+        } else if (this._max == null) {
             return Math.max(this._min, inNumber);
         } else {
             return Math.max(Math.min(this._max, inNumber), this._min);
