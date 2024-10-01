@@ -83,11 +83,11 @@ export class SettingNumber<
      * @returns The clamped number.
      */
     public clamp(inNumber: number): number {
-        if (this._min == undefined && this._max == undefined) {
+        if (this._min == null && this._max == null) {
             return inNumber;
-        } else if (this._min == undefined) {
+        } else if (this._min == null) {
             return Math.min(this._max, inNumber);
-        } else if (this._max == undefined) {
+        } else if (this._max == null) {
             return Math.max(this._min, inNumber);
         } else {
             return Math.max(Math.min(this._max, inNumber), this._min);
