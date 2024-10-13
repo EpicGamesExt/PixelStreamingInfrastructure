@@ -78,31 +78,27 @@ export class SettingOption<CustomIds extends string = OptionParametersIds> exten
             console.error('Invalid value for selected:', value);
             return;
         }
-    
-        let filteredList = this.options.filter(
-            (option: string) => {
-                return option && option.indexOf(value.split(' ')[0]) !== -1;
-            }
-        );
-    
+
+        let filteredList = this.options.filter((option: string) => {
+            return option && option.indexOf(value.split(' ')[0]) !== -1;
+        });
+
         if (filteredList.length > 0) {
             this.value = filteredList[0];
             return;
         }
-    
+
         // If no match is found, and value contains parameters, try matching only the codec
         const valueCodec = value.split(' ')[0];
-        filteredList = this.options.filter(
-            (option: string) => {
-                return option && option.indexOf(valueCodec) !== -1;
-            }
-        );
-    
+        filteredList = this.options.filter((option: string) => {
+            return option && option.indexOf(valueCodec) !== -1;
+        });
+
         if (filteredList.length > 0) {
             this.value = filteredList[0];
             return;
         }
-    
+
         // If still no match is found
         console.warn('No matching option found for selected value:', value);
     }
