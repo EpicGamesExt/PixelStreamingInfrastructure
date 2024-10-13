@@ -74,18 +74,36 @@ export class SettingOption<CustomIds extends string = OptionParametersIds> exten
     public set selected(value: string) {
         // A user may not specify the full possible value so we instead use the closest match.
         // eg ?xxx=H264 would select 'H264 level-asymmetry-allowed=1;packetization-mode=1;profile-level-id=42001f'
-        let filteredList = this.options.filter((option: string) => option.indexOf(value) !== -1);
-        if (filteredList.length) {
+        if (!value || typeof value !== 'string' || value.trim() === '') {
+            console.error('Invalid value for selected:', value);
+            return;
+        }
+    
+        let filteredList = this.options.filter(
+            (option: string) => {
+                return option && option.indexOf(value.split(' ')[0]) !== -1;
+            }
+        );
+    
+        if (filteredList.length > 0) {
             this.value = filteredList[0];
             return;
         }
-
-        // A user has specified a codec with a fmtp string but this codec + fmtp line isn't available.
-        // in that case, just use the codec
-        filteredList = this.options.filter((option: string) => option.indexOf(value.split(' ')[0]) !== -1);
-        if (filteredList.length) {
+    
+        // If no match is found, and value contains parameters, try matching only the codec
+        const valueCodec = value.split(' ')[0];
+        filteredList = this.options.filter(
+            (option: string) => {
+                return option && option.indexOf(valueCodec) !== -1;
+            }
+        );
+    
+        if (filteredList.length > 0) {
             this.value = filteredList[0];
             return;
         }
+    
+        // If still no match is found
+        console.warn('No matching option found for selected value:', value);
     }
 }
