@@ -319,6 +319,12 @@ export interface offer {
      * @generated from protobuf field: optional bool sfu = 4;
      */
     sfu?: boolean;
+    /**
+     * Indicates that the streamer is multiplexing data channels
+     *
+     * @generated from protobuf field: optional bool multiplex = 5;
+     */
+    multiplex?: boolean;
 }
 /**
  * *
@@ -1387,7 +1393,8 @@ class offer$Type extends MessageType<offer> {
             { no: 1, name: "type", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
             { no: 2, name: "sdp", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
             { no: 3, name: "playerId", kind: "scalar", opt: true, T: 9 /*ScalarType.STRING*/ },
-            { no: 4, name: "sfu", kind: "scalar", opt: true, T: 8 /*ScalarType.BOOL*/ }
+            { no: 4, name: "sfu", kind: "scalar", opt: true, T: 8 /*ScalarType.BOOL*/ },
+            { no: 5, name: "multiplex", kind: "scalar", opt: true, T: 8 /*ScalarType.BOOL*/ }
         ]);
     }
     create(value?: PartialMessage<offer>): offer {
@@ -1415,6 +1422,9 @@ class offer$Type extends MessageType<offer> {
                 case /* optional bool sfu */ 4:
                     message.sfu = reader.bool();
                     break;
+                case /* optional bool multiplex */ 5:
+                    message.multiplex = reader.bool();
+                    break;
                 default:
                     let u = options.readUnknownField;
                     if (u === "throw")
@@ -1439,6 +1449,9 @@ class offer$Type extends MessageType<offer> {
         /* optional bool sfu = 4; */
         if (message.sfu !== undefined)
             writer.tag(4, WireType.Varint).bool(message.sfu);
+        /* optional bool multiplex = 5; */
+        if (message.multiplex !== undefined)
+            writer.tag(5, WireType.Varint).bool(message.multiplex);
         let u = options.writeUnknownFields;
         if (u !== false)
             (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
