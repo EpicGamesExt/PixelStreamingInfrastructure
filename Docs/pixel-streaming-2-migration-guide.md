@@ -339,7 +339,7 @@ Changed Console Settings:
 - -PixelStreamingWebRTCMaxBitrate - drop default from 100mb/s to 40mb/s
 - -PixelStreamingWebRTCLowQpThreshold - removed
 - `-PixelStreamingWebRTCHighQpThreshold` - Removed as this was an internal WebRTC setting that was not properly exposed to work correctly.
-- -PixelStreamingWebRTCUseLegacyAudioDevice - removed and LegacyAudioDevice is deprecated
+- `-PixelStreamingWebRTCUseLegacyAudioDevice` - removed and LegacyAudioDevice is deprecated.
 
 ## PixelStreamingPlayer (Engine/Plugins/Experimental/PixelStreamingPlayer)
 
