@@ -58,7 +58,7 @@ The following methods have been removed as the external video source was a hack 
 - `SetExternalVideoSourceCoupleFramerate`
 - `SetExternalVideoSourceInput`
 - `CreateExternalVideoSource`
-- ReleaseExternalVideoSource
+- `ReleaseExternalVideoSource`
 - CreateVideoEncoderFactory
 
 The following methods have been removed from the module as the InputComponent C++ interface has moved internally to the module:
