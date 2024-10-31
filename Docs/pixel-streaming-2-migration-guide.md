@@ -359,7 +359,7 @@ Has been completely removed with no replacement. This class is no longer require
 
 `PixelStreamingWebRTCWrappers.h`
 
-Has been completely removed with no replacement as WebRTC is no longer exposed and EpicRtc is used.
+Has been completely removed with no replacement as WebRTC is no longer exposed.
 
 ### Blueprints
 
