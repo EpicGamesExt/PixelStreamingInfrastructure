@@ -347,7 +347,7 @@ In Pixel Streaming 2, the Pixel Streaming player functionality is no longer a st
 
 `PixelStreamingMediaTexture.h`
 
-Has been completely removed with no replacement. This component is used to update materials with video frames received in PS2. This functionality is still exposed in blueprints, however, interacting with this type in C++ has now been made internal to the plugin only. For users wanting to display video frames received in PS2, users should implement IPixelStreaming2VideoConsumer and add it to an IPixelStreaming2VideoSink.
+Has been completely removed with no replacement. This component is used to update materials with video frames received in PS2. This functionality is still exposed in blueprints, however, interacting with this type in C++ has now been made internal to the plugin only. For users wanting to display video frames received in PS2, users should implement `IPixelStreaming2VideoConsumer` and add it to an `IPixelStreaming2VideoSink`.
 
 `PixelStreamingPeerComponent.h`
 
