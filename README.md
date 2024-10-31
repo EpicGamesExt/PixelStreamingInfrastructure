@@ -1,3 +1,10 @@
+# Experimental Pixel Streaming 2 plugin release in 5.5
+
+From UE 5.5 onwards, UE introduced a layer that makes it easier for Epic to maintain WebRTC internally. As the original Pixel Streaming plugin used WebRTC directly, this change meant that we had to introduce a new plugin to ensure a better transition phase for the developers who have developed custom solutions on top of the PixelStreaming plugin. For now, both the original Pixel Streaming plugin and the Pixel Streaming 2 plugin will be shipped with Unreal Engine to give users time to migrate.
+
+We have created a [migration guide](/Docs/pixel-streaming-2-migration-guide.md) to ensure a smooth transition for all licensees using the plugin and highlight all major changes between the plugins.
+
+
 | Health Checks |
 |-|
 | [![Libraries](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/actions/workflows/healthcheck-libraries.yml/badge.svg?branch=master)](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/actions/workflows/healthcheck-libraries.yml) |
