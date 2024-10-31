@@ -22,7 +22,7 @@ Pixel Streaming 2 is directly compatible with the existing Pixel Streaming infra
 
 ### Blueprints
 
-All blueprints nodes will have PS2 version and will need to be manually recreated and relinked (a redirector is not possible when the entire plugin name is changed).
+All blueprints nodes will have a Pixel Streaming 2 (PS2) version and will need to be manually recreated and relinked (a redirector is not possible when the entire plugin name is changed).
 
 **Migration action**
 
