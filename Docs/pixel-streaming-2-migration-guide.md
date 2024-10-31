@@ -338,7 +338,7 @@ Changed Console Settings:
 - -PixelStreamingEncoderScalabilityMode - specifies the encoder scalability mode which is one of the supported modes: https://www.w3.org/TR/webrtc-svc/#scalabilitymodes*.
 - -PixelStreamingWebRTCMaxBitrate - drop default from 100mb/s to 40mb/s
 - -PixelStreamingWebRTCLowQpThreshold - removed
-- -PixelStreamingWebRTCHighQpThreshold - removed
+- `-PixelStreamingWebRTCHighQpThreshold` - Removed as this was an internal WebRTC setting that was not properly exposed to work correctly.
 - -PixelStreamingWebRTCUseLegacyAudioDevice - removed and LegacyAudioDevice is deprecated
 
 ## PixelStreamingPlayer (Engine/Plugins/Experimental/PixelStreamingPlayer)
