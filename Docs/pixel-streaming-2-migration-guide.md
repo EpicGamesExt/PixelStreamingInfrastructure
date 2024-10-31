@@ -57,7 +57,7 @@ The following methods have been removed as the external video source was a hack 
 - `SetExternalVideoSourceFPS`
 - `SetExternalVideoSourceCoupleFramerate`
 - `SetExternalVideoSourceInput`
-- CreateExternalVideoSource
+- `CreateExternalVideoSource`
 - ReleaseExternalVideoSource
 - CreateVideoEncoderFactory
 
