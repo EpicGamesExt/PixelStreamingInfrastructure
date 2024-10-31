@@ -363,7 +363,7 @@ Has been completely removed with no replacement as WebRTC is no longer exposed.
 
 ### Blueprints
 
-A significant portion of the blueprint nodes required to set up a PixelStreamingPlayer component have been removed. The following steps outline the new process for initializing a UPixelStreamingEpicRtcPeer component:
+A significant portion of the blueprint nodes required to set up a PixelStreamingPlayer component have been removed. The following steps outline the new process for initializing a `UPixelStreamingEpicRtcPeer` component:
 1. Enable the Pixel Streaming2 plugin.
 2. Create a new Blueprint class (Actor). Save and name this anything you like.
 3. Open the new Blueprint class and add the Pixel Streaming Peer Component.
