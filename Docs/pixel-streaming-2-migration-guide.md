@@ -376,3 +376,7 @@ A significant portion of the blueprint nodes required to set up a PixelStreaming
 10. Drag your saved Pixel Streaming Media Texture directly from the content browser onto the plane in the scene. This will automatically create a Material and apply it to the object.
 11. Start a basic local Pixel Stream external to this project. Start the Signalling server and run the application with relevant Pixel Streaming args.
 12. Play your scene. You should now see your external Pixel Stream displayed on the plane in your scene!
+
+<p align="center">
+    <img src="Resources\Images\pixelstreamingplayerblueprint.png" alt="Pixel Streaming Player Blueprint">
+</p>
