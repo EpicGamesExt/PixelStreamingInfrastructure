@@ -55,7 +55,7 @@ Renamed to `IPixelStreaming2Module.h`. The following methods have been removed a
 The following methods have been removed as the external video source was a hack for another plugin:
 
 - `SetExternalVideoSourceFPS`
-- SetExternalVideoSourceCoupleFramerate
+- `SetExternalVideoSourceCoupleFramerate`
 - SetExternalVideoSourceInput
 - CreateExternalVideoSource
 - ReleaseExternalVideoSource
