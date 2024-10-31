@@ -48,7 +48,7 @@ Renamed to IPixelStreaming2AudioSink.h. The IPixelStreamingAudioSink has had the
 
 `IPixelStreamingModule.h`
 
-Renamed to IPixelStreaming2Module.h. The following methods have been removed as they were just wrapping CVar functionality. Users wishing to set the PS2 codec programmatically should use the Engine’s IConsoleManager and its relevant methods:
+Renamed to `IPixelStreaming2Module.h`. The following methods have been removed as they were just wrapping CVar functionality. Users wishing to set the PS2 codec programmatically should use the Engine’s `IConsoleManager` and its relevant methods:
 - SetCodec
 - GetCodec
 
