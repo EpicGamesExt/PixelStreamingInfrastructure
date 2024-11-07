@@ -31,6 +31,13 @@ function connectSignalling(server) {
 async function onStreamerList(msg) {
   let success = false;
 
+  // If we're reconnecting, this SFU id will be in the streamer list. We want to remove it 
+  // as we don't want to subscribe to ourself
+  const index = msg.ids.indexOf(config.SFUId);
+  if (index > -1) {
+    msg.ids.splice(index, 1);
+  }
+
   // subscribe to either the configured streamer, or if not configured, just grab the first id
   if (msg.ids.length > 0) {
     if (!!config.subscribeStreamerId && config.subscribeStreamerId.length != 0) {
