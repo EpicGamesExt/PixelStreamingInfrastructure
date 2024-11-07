@@ -116,6 +116,10 @@ export class PlayerConnection implements IPlayer, LogUtils.IMessageLogger {
         this.protocol.on(Messages.dataChannelRequest.typeName, this.sendToStreamer.bind(this));
         this.protocol.on(Messages.peerDataChannelsReady.typeName, this.sendToStreamer.bind(this));
         this.protocol.on(Messages.layerPreference.typeName, this.sendToStreamer.bind(this));
+
+        this.protocol.on('unhandled', (message: BaseMessage) => {
+            Logger.warn(`Unhandled protocol message: ${JSON.stringify(message)}`);
+        });
     }
 
     private sendToStreamer(message: BaseMessage): void {
@@ -210,7 +214,9 @@ export class PlayerConnection implements IPlayer, LogUtils.IMessageLogger {
 
     private onListStreamers(_message: Messages.listStreamers): void {
         const listMessage = MessageHelpers.createMessage(Messages.streamerList, {
-            ids: this.server.streamerRegistry.streamers.map((streamer) => streamer.streamerId)
+            ids: this.server.streamerRegistry.streamers
+                .filter((streamer) => streamer.streaming)
+                .map((streamer) => streamer.streamerId)
         });
         this.sendMessage(listMessage);
     }
