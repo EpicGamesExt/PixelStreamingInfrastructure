@@ -11,7 +11,6 @@ document.body.onload = function() {
 		initialSettings: {
 			AutoPlayVideo: true,
 			AutoConnect: true,
-			ss: "ws://localhost:80",
 			StartVideoMuted: true,
 		}
 	});
