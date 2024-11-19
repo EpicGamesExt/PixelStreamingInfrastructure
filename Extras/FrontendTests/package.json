@@ -8,12 +8,14 @@
   "author": "Epic Games",
   "license": "MIT",
   "devDependencies": {
-    "@epicgames-ps/lib-pixelstreamingfrontend-ue5.5": "^0.1.4",
     "@playwright/test": "^1.43.1",
     "@types/node": "^20.12.7",
     "@types/uuid": "^9.0.8"
   },
   "dependencies": {
+    "@epicgames-ps/lib-pixelstreamingcommon-ue5.5": "file://../../Common",
+    "@epicgames-ps/lib-pixelstreamingfrontend-ue5.5": "file://../../Frontend/library",
+    "@epicgames-ps/js-streamer": "file://../JSStreamer",
     "dotenv": "^16.4.5",
     "node-fetch": "^2.7.0",
     "uuid": "^9.0.0"

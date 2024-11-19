@@ -17,11 +17,9 @@ module.exports = {
             }
         ]
     },
+    externals : {},
     resolve: {
         extensions: ['.tsx', '.ts', '.js']
-    },
-    externals: {
-        sdp: "sdp"
     },
     plugins: [
         new webpack.DefinePlugin({
@@ -33,3 +31,9 @@ module.exports = {
         globalObject: 'this'
     }
 };
+
+// Add each of our package.json dependencies as a external so it is not bundled.
+// See: https://webpack.js.org/configuration/externals/
+for(let dependency in package.dependencies) {
+    module.exports.externals[dependency] = dependency;
+}

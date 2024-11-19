@@ -188,7 +188,9 @@ export class Config {
                 settings && Object.prototype.hasOwnProperty.call(settings, OptionParameters.StreamerId)
                     ? settings[OptionParameters.StreamerId]
                     : '',
-                [],
+                [settings && Object.prototype.hasOwnProperty.call(settings, OptionParameters.StreamerId)
+                    ? settings[OptionParameters.StreamerId]
+                    : ''],
                 useUrlParams
             )
         );

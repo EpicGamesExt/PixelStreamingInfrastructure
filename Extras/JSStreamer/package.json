@@ -8,14 +8,13 @@
   "scripts": {
     "develop": "webpack-dev-server --mode development",
     "build": "tsc --project tsconfig.json && webpack --mode production",
-    "build-dev": "npm link ../Common && npm run build",
+    "build-dev": "tsc --project tsconfig.json && webpack --mode development",
     "lint": "eslint ./src --ext .js,.jsx,.ts,.tsx",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Epic Games",
   "license": "MIT",
   "devDependencies": {
-    "@epicgames-ps/lib-pixelstreamingcommon-ue5.5": "^0.0.14",
     "@types/express": "^4.17.21",
     "@types/node": "^20.11.13",
     "@typescript-eslint/eslint-plugin": "^6.21.0",
@@ -36,7 +35,8 @@
     "webpack-node-externals": "^3.0.0"
   },
   "dependencies": {
-    "express": "^4.21.1"
+    "express": "^4.21.1",
+    "@epicgames-ps/lib-pixelstreamingcommon-ue5.5": "file://../../Common"
   },
   "repository": {
     "type": "git",

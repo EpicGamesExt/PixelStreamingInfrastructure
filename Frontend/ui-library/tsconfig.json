@@ -1,14 +1,13 @@
 {
     "compilerOptions": {
-        "outDir": "./types",
+        "outDir": "./dist",
         "noImplicitAny": true,
         "module": "es6",
         "esModuleInterop": true,
         "target": "ES6",
-        "moduleResolution": "node",
+        "moduleResolution": "nodenext",
         "sourceMap": true,
         "allowJs": true,
-        "declaration": true
     },
     "lib": ["es2015"],
     "include": ["./src/*.ts"],
