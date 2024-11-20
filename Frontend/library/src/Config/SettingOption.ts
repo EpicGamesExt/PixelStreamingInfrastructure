@@ -2,6 +2,7 @@
 
 import type { OptionParametersIds } from './Config';
 import { SettingBase } from './SettingBase';
+import { Logger } from '../Logger/Logger';
 
 /**
  * An Option setting object with a text label. Allows you to specify an array of options and select one of them.
@@ -75,12 +76,15 @@ export class SettingOption<CustomIds extends string = OptionParametersIds> exten
         // A user may not specify the full possible value so we instead use the closest match.
         // eg ?xxx=H264 would select 'H264 level-asymmetry-allowed=1;packetization-mode=1;profile-level-id=42001f'
         if (!value || typeof value !== 'string' || value.trim() === '') {
-            console.error('Invalid value for selected:', value);
+            Logger.Warning(
+                Logger.GetStackTrace(),
+                `Invalid argument type for the selected codec, argument type: ${typeof value}, with value: ${value}`
+            );
             return;
         }
 
         let filteredList = this.options.filter((option: string) => {
-            return option && option.indexOf(value.split(' ')[0]) !== -1;
+            return option && value.split(" ")[0] !== undefined && option.indexOf(value.split(' ')[0]) !== -1;
         });
 
         if (filteredList.length > 0) {
