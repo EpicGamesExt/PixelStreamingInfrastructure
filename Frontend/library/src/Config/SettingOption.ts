@@ -76,7 +76,12 @@ export class SettingOption<CustomIds extends string = OptionParametersIds> exten
         // A user may not specify the full possible value so we instead use the closest match.
         // eg ?xxx=H264 would select 'H264 level-asymmetry-allowed=1;packetization-mode=1;profile-level-id=42001f'
         if (!value || typeof value !== 'string' || value.trim() === '') {
-            Logger.Warning(`Invalid argument type for the selected codec, argument type: ${typeof value}, with value: ${value}`);
+            Logger.Warning(
+                `
+                Invalid argument type for the selected codec,
+                argument type: ${typeof value}, with value: ${value}
+                `
+            );
             return;
         }
 
