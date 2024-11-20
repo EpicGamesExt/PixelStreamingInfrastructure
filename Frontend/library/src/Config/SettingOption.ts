@@ -2,7 +2,7 @@
 
 import type { OptionParametersIds } from './Config';
 import { SettingBase } from './SettingBase';
-import { Logger } from '../Logger/Logger';
+import { Logger } from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
 
 /**
  * An Option setting object with a text label. Allows you to specify an array of options and select one of them.
