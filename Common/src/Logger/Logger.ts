@@ -96,13 +96,11 @@ class LoggerType {
         if (this.context!.includeStack) {
             logMessage += `\nStack: ${this.GetStackTrace()}`;
         }
-        if(level === 'Error') {
+        if (level === 'Error') {
             console.error(logMessage);
-        }
-        else if(level === 'Warning') {
+        } else if (level === 'Warning') {
             console.warn(logMessage);
-        }
-        else {
+        } else {
             console.log(logMessage);
         }
     }
