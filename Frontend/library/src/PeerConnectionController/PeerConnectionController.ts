@@ -151,20 +151,28 @@ export class PeerConnectionController {
      * Generate Aggregated Stats and then fire a onVideo Stats event
      */
     generateStats() {
-
-        const audioPromise = this.audioTrack ? this.peerConnection?.getStats(this.audioTrack).then((statsData: RTCStatsReport) => { this.aggregatedStats.processStats(statsData); }) : Promise.resolve();
-        const videoPromise = this.videoTrack ? this.peerConnection?.getStats(this.videoTrack).then((statsData: RTCStatsReport) => { this.aggregatedStats.processStats(statsData); }) : Promise.resolve();
+        const audioPromise = this.audioTrack
+            ? this.peerConnection?.getStats(this.audioTrack).then((statsData: RTCStatsReport) => {
+                  this.aggregatedStats.processStats(statsData);
+              })
+            : Promise.resolve();
+        const videoPromise = this.videoTrack
+            ? this.peerConnection?.getStats(this.videoTrack).then((statsData: RTCStatsReport) => {
+                  this.aggregatedStats.processStats(statsData);
+              })
+            : Promise.resolve();
 
         Promise.allSettled([audioPromise, videoPromise]).then(() => {
             this.onVideoStats(this.aggregatedStats);
             // Update the preferred codec selection based on what was actually negotiated
             if (this.updateCodecSelection && !!this.aggregatedStats.inboundVideoStats.codecId) {
-
                 // Construct the qualified codec name from the mimetype and fmtp
-                let codecStats: CodecStats = this.aggregatedStats.codecs.get(this.aggregatedStats.inboundVideoStats.codecId);
-                let codecShortname = codecStats.mimeType.replace("video/", "");
+                const codecStats: CodecStats = this.aggregatedStats.codecs.get(
+                    this.aggregatedStats.inboundVideoStats.codecId
+                );
+                const codecShortname = codecStats.mimeType.replace('video/', '');
                 let fullCodecName = codecShortname;
-                if(codecStats.sdpFmtpLine && codecStats.sdpFmtpLine.trim() !== ""){
+                if (codecStats.sdpFmtpLine && codecStats.sdpFmtpLine.trim() !== '') {
                     fullCodecName = `${codecShortname} ${codecStats.sdpFmtpLine.trim()}`;
                 }
 
@@ -173,13 +181,15 @@ export class PeerConnectionController {
                 ).options;
 
                 // The list of codecs directly contains the one that was negotiated, select that
-                if(allBrowserCodecs.includes(fullCodecName)) {
+                if (allBrowserCodecs.includes(fullCodecName)) {
                     this.config.setOptionSettingValue(OptionParameters.PreferredCodec, fullCodecName);
                     return;
                 }
 
                 // If we couldn't match on the full name, try to match on just the codec shortname
-                let filteredList = allBrowserCodecs.filter((option: string) => option.indexOf(codecShortname) !== -1);
+                const filteredList = allBrowserCodecs.filter(
+                    (option: string) => option.indexOf(codecShortname) !== -1
+                );
                 if (filteredList.length > 0) {
                     this.config.setOptionSettingValue(OptionParameters.PreferredCodec, filteredList[0]);
                     return;

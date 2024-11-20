@@ -1,7 +1,12 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 import { LatencyTest } from './LatencyTest';
-import { CandidatePairStats, Logger, PixelStreaming, PixelStreamingSettings } from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.5';
+import {
+    CandidatePairStats,
+    Logger,
+    PixelStreaming,
+    PixelStreamingSettings
+} from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.5';
 import { AggregatedStats } from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.5';
 import { MathUtils } from '../Util/MathUtils';
 import { DataChannelLatencyTest } from './DataChannelLatencyTest';
@@ -269,7 +274,7 @@ export class StatsPanel {
                 'VideoCodecStat',
                 'Video codec',
                 // Split the codec to remove the Fmtp line
-                stats.codecs.get(stats.inboundVideoStats.codecId)?.mimeType.replace("video/", "") ?? ''
+                stats.codecs.get(stats.inboundVideoStats.codecId)?.mimeType.replace('video/', '') ?? ''
             );
         }
 
@@ -278,7 +283,7 @@ export class StatsPanel {
                 'AudioCodecStat',
                 'Audio codec',
                 // Split the codec to remove the Fmtp line
-                stats.codecs.get(stats.inboundAudioStats.codecId)?.mimeType.replace("audio/", "") ?? ''
+                stats.codecs.get(stats.inboundAudioStats.codecId)?.mimeType.replace('audio/', '') ?? ''
             );
         }
 

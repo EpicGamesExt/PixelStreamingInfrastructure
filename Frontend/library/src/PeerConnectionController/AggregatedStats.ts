@@ -179,23 +179,33 @@ export class AggregatedStats {
         switch (stat.kind) {
             case 'video':
                 // Calculate bitrate between stat updates
-                if (stat.bytesReceived > this.inboundVideoStats.bytesReceived && stat.timestamp > this.inboundVideoStats.timestamp) {
-                    this.inboundVideoStats.bitrate = (8 * (stat.bytesReceived - this.inboundVideoStats.bytesReceived)) / (stat.timestamp - this.inboundVideoStats.timestamp);
+                if (
+                    stat.bytesReceived > this.inboundVideoStats.bytesReceived &&
+                    stat.timestamp > this.inboundVideoStats.timestamp
+                ) {
+                    this.inboundVideoStats.bitrate =
+                        (8 * (stat.bytesReceived - this.inboundVideoStats.bytesReceived)) /
+                        (stat.timestamp - this.inboundVideoStats.timestamp);
                     this.inboundVideoStats.bitrate = Math.floor(this.inboundVideoStats.bitrate);
                 }
 
                 // Copy members from stat into `this.inboundVideoStats`
-                for(let key in stat) {
+                for (const key in stat) {
                     (this.inboundVideoStats as any)[key] = (stat as any)[key];
                 }
                 break;
             case 'audio':
-                if (stat.bytesReceived > this.inboundAudioStats.bytesReceived && stat.timestamp > this.inboundAudioStats.timestamp) {
-                    this.inboundAudioStats.bitrate = (8 * (stat.bytesReceived - this.inboundAudioStats.bytesReceived)) / (stat.timestamp - this.inboundAudioStats.timestamp);
+                if (
+                    stat.bytesReceived > this.inboundAudioStats.bytesReceived &&
+                    stat.timestamp > this.inboundAudioStats.timestamp
+                ) {
+                    this.inboundAudioStats.bitrate =
+                        (8 * (stat.bytesReceived - this.inboundAudioStats.bytesReceived)) /
+                        (stat.timestamp - this.inboundAudioStats.timestamp);
                     this.inboundAudioStats.bitrate = Math.floor(this.inboundAudioStats.bitrate);
                 }
                 // Copy members from stat into `this.inboundAudioStats`
-                for(let key in stat) {
+                for (const key in stat) {
                     (this.inboundAudioStats as any)[key] = (stat as any)[key];
                 }
                 break;

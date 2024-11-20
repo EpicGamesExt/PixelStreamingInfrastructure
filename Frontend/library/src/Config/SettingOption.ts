@@ -73,16 +73,17 @@ export class SettingOption<CustomIds extends string = OptionParametersIds> exten
      * @param value Selected option
      */
     public set selected(value: string) {
-        if(value === undefined) {
+        if (value === undefined) {
             return;
         }
 
         // If options contains the value, then set that as selected
-        if(this.options.includes(value)) {
+        if (this.options.includes(value)) {
             this.value = value;
-        }
-        else {
-            Logger.Error(`Could not set "${value}" as the selected option for ${this.id} because it wasn't one of the options.`)
+        } else {
+            Logger.Error(
+                `Could not set "${value}" as the selected option for ${this.id} because it wasn't one of the options.`
+            );
         }
     }
 }
