@@ -86,7 +86,7 @@ export class SettingOption<CustomIds extends string = OptionParametersIds> exten
         }
 
         let filteredList = this.options.filter((option: string) => {
-            return option && value.split(" ")[0] !== undefined && option.indexOf(value.split(' ')[0]) !== -1;
+            return option && value.split(' ')[0] !== undefined && option.indexOf(value.split(' ')[0]) !== -1;
         });
 
         if (filteredList.length > 0) {
