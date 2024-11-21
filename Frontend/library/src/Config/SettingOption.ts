@@ -26,10 +26,11 @@ export class SettingOption<CustomIds extends string = OptionParametersIds> exten
     ) {
         super(id, label, description, defaultTextValue, defaultOnChangeListener);
 
-        this.options = options;
         const stringToMatch: string = this.hasURLParam(this.id)
             ? this.getURLParam(this.id)
             : defaultTextValue;
+
+        this.options = options ?? [ stringToMatch ];
         this.selected = stringToMatch;
         this.useUrlParams = useUrlParams;
     }

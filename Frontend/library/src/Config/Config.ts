@@ -188,14 +188,54 @@ export class Config {
                 settings && Object.prototype.hasOwnProperty.call(settings, OptionParameters.StreamerId)
                     ? settings[OptionParameters.StreamerId]
                     : '',
-                [
-                    settings && Object.prototype.hasOwnProperty.call(settings, OptionParameters.StreamerId)
-                        ? settings[OptionParameters.StreamerId]
-                        : ''
-                ],
+                settings && Object.prototype.hasOwnProperty.call(settings, OptionParameters.StreamerId)
+                    ? [ settings[OptionParameters.StreamerId] ]
+                    : undefined,
                 useUrlParams
             )
         );
+
+
+        const getBrowserSupportedVideoCodecs = function(): Array<string> {
+            const browserSupportedCodecs: Array<string> = [];
+            // Try get the info needed from the RTCRtpReceiver. This is only available on chrome
+            if (!RTCRtpReceiver.getCapabilities) {
+                Logger.Warning("RTCRtpReceiver.getCapabilities API is not available in your browser, defaulting to guess that we support H.264.");
+                browserSupportedCodecs.push('H264 level-asymmetry-allowed=1;packetization-mode=1;profile-level-id=42e01f');
+                return browserSupportedCodecs;
+            }
+
+            const matcher = /(VP\d|H26\d|AV1).*/;
+            const codecs = RTCRtpReceiver.getCapabilities('video').codecs;
+            codecs.forEach((codec) => {
+                const str = codec.mimeType.split('/')[1] + ' ' + (codec.sdpFmtpLine || '');
+                const match = matcher.exec(str);
+                if (match !== null) {
+                    browserSupportedCodecs.push(str);
+                }
+            });
+            return browserSupportedCodecs;
+        };
+
+        const getDefaultVideoCodecs = function(): string {
+            const videoCodecs = getBrowserSupportedVideoCodecs();
+            // If only one option, then select that.
+            if(videoCodecs.length == 1) {
+                return videoCodecs[0];
+            }
+            else if(videoCodecs.length > 0) {
+                let defaultCodec = videoCodecs[0];
+                for(let codec of videoCodecs) {
+                    if(codec.startsWith("H264")) {
+                        return codec;
+                    }
+                }
+                return defaultCodec;
+            }
+
+            Logger.Error("Could not find any reasonable video codec to assign as a default.");
+            return "";
+        };
 
         /**
          * Enum Parameters
@@ -206,28 +246,10 @@ export class Config {
                 OptionParameters.PreferredCodec,
                 'Preferred Codec',
                 'The preferred codec to be used during codec negotiation',
-                'H264 level-asymmetry-allowed=1;packetization-mode=1;profile-level-id=42e01f',
+                getDefaultVideoCodecs(),
                 settings && Object.prototype.hasOwnProperty.call(settings, OptionParameters.PreferredCodec)
                     ? [settings[OptionParameters.PreferredCodec]]
-                    : (function (): Array<string> {
-                          const browserSupportedCodecs: Array<string> = [];
-                          // Try get the info needed from the RTCRtpReceiver. This is only available on chrome
-                          if (!RTCRtpReceiver.getCapabilities) {
-                              browserSupportedCodecs.push('Only available on Chrome');
-                              return browserSupportedCodecs;
-                          }
-
-                          const matcher = /(VP\d|H26\d|AV1).*/;
-                          const codecs = RTCRtpReceiver.getCapabilities('video').codecs;
-                          codecs.forEach((codec) => {
-                              const str = codec.mimeType.split('/')[1] + ' ' + (codec.sdpFmtpLine || '');
-                              const match = matcher.exec(str);
-                              if (match !== null) {
-                                  browserSupportedCodecs.push(str);
-                              }
-                          });
-                          return browserSupportedCodecs;
-                      })(),
+                    : getBrowserSupportedVideoCodecs(),
                 useUrlParams
             )
         );
