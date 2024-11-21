@@ -6,13 +6,12 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "rimraf ./build && tsc",
-    "build-dev": "rimraf ./build && npm link ../Common && tsc",
     "start": "npm run build && node ./build/index.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@epicgames-ps/lib-pixelstreamingcommon-ue5.5": "^0.0.14",
+    "@epicgames-ps/lib-pixelstreamingcommon-ue5.5": "../Common",
     "@protobuf-ts/plugin": "^2.9.3",
     "ws": "^8.17.1"
   },
