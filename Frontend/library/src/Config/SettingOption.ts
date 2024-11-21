@@ -23,7 +23,7 @@ export class SettingOption<CustomIds extends string = OptionParametersIds> exten
         options: Array<string>,
         useUrlParams: boolean,
         // eslint-disable-next-line @typescript-eslint/no-empty-function
-        defaultUrlParamResolver: (urlParamValue: string) => string = function(value: string){
+        defaultUrlParamResolver: (urlParamValue: string) => string = function (value: string) {
             /* Return the string as-is by default */
             return value;
         },
@@ -40,7 +40,7 @@ export class SettingOption<CustomIds extends string = OptionParametersIds> exten
             ? this._urlParamResolver(this.getURLParam(this.id))
             : defaultTextValue;
 
-        this.options = options ?? [ stringToMatch ];
+        this.options = options ?? [stringToMatch];
         this.selected = stringToMatch;
         this.useUrlParams = useUrlParams;
     }
@@ -103,7 +103,7 @@ export class SettingOption<CustomIds extends string = OptionParametersIds> exten
      * that is extracted from the url parameters.
      * @param urlParam A function that transforms the extracted url parameter string for this setting to something else.
      */
-    public set urlParamResolver(value: (urlParam: string) => string){
+    public set urlParamResolver(value: (urlParam: string) => string) {
         this._urlParamResolver = value;
     }
 }

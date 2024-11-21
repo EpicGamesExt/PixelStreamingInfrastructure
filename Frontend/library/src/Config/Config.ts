@@ -189,19 +189,22 @@ export class Config {
                     ? settings[OptionParameters.StreamerId]
                     : '',
                 settings && Object.prototype.hasOwnProperty.call(settings, OptionParameters.StreamerId)
-                    ? [ settings[OptionParameters.StreamerId] ]
+                    ? [settings[OptionParameters.StreamerId]]
                     : undefined,
                 useUrlParams
             )
         );
 
-
-        const getBrowserSupportedVideoCodecs = function(): Array<string> {
+        const getBrowserSupportedVideoCodecs = function (): Array<string> {
             const browserSupportedCodecs: Array<string> = [];
             // Try get the info needed from the RTCRtpReceiver. This is only available on chrome
             if (!RTCRtpReceiver.getCapabilities) {
-                Logger.Warning("RTCRtpReceiver.getCapabilities API is not available in your browser, defaulting to guess that we support H.264.");
-                browserSupportedCodecs.push('H264 level-asymmetry-allowed=1;packetization-mode=1;profile-level-id=42e01f');
+                Logger.Warning(
+                    'RTCRtpReceiver.getCapabilities API is not available in your browser, defaulting to guess that we support H.264.'
+                );
+                browserSupportedCodecs.push(
+                    'H264 level-asymmetry-allowed=1;packetization-mode=1;profile-level-id=42e01f'
+                );
                 return browserSupportedCodecs;
             }
 
@@ -217,46 +220,44 @@ export class Config {
             return browserSupportedCodecs;
         };
 
-        const getDefaultVideoCodec = function(): string {
+        const getDefaultVideoCodec = function (): string {
             const videoCodecs = getBrowserSupportedVideoCodecs();
             // If only one option, then select that.
-            if(videoCodecs.length == 1) {
+            if (videoCodecs.length == 1) {
                 return videoCodecs[0];
-            }
-            else if(videoCodecs.length > 0) {
-                let defaultCodec = videoCodecs[0];
-                for(let codec of videoCodecs) {
-                    if(codec.startsWith("H264")) {
+            } else if (videoCodecs.length > 0) {
+                const defaultCodec = videoCodecs[0];
+                for (const codec of videoCodecs) {
+                    if (codec.startsWith('H264')) {
                         return codec;
                     }
                 }
                 return defaultCodec;
             }
 
-            Logger.Error("Could not find any reasonable video codec to assign as a default.");
-            return "";
+            Logger.Error('Could not find any reasonable video codec to assign as a default.');
+            return '';
         };
 
-        const matchSpecifiedCodecToClosestSupported = function(specifiedCodec: string) : string {
-
-            const browserSupportedCodecs : Array<string> = getBrowserSupportedVideoCodecs();
+        const matchSpecifiedCodecToClosestSupported = function (specifiedCodec: string): string {
+            const browserSupportedCodecs: Array<string> = getBrowserSupportedVideoCodecs();
 
             // Codec supplied in url param is an exact match for the browser codec.
             // (e.g. H264 level-asymmetry-allowed=1;packetization-mode=1;profile-level-id=42e01f)
-            if(browserSupportedCodecs.includes(specifiedCodec)) {
+            if (browserSupportedCodecs.includes(specifiedCodec)) {
                 return specifiedCodec;
             }
 
             // Try to match the start of whatever is passed into the url parameter with what the browser supports
-            for(let browserCodec of browserSupportedCodecs) {
-                if(browserCodec.startsWith(specifiedCodec)) {
+            for (const browserCodec of browserSupportedCodecs) {
+                if (browserCodec.startsWith(specifiedCodec)) {
                     return browserCodec;
                 }
             }
 
             // If we weren't able to match, just return the codec as from the URL as-is.
             return specifiedCodec;
-        }
+        };
 
         /**
          * Enum Parameters
