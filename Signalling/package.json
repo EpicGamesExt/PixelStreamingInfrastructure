@@ -7,7 +7,7 @@
   "types": "build/types/pixelstreamingsignalling.d.ts",
   "scripts": {
     "build": "tsc --project tsconfig.esm.json && tsc --project tsconfig.cjs.json",
-    "build-dev": "npm link ../Common && npm run build",
+    "build-dev": "npm run build",
     "build-all": "rimraf ./build && cd ../Common && npm run build-dev && cd ../Signalling && npm run build-dev",
     "build-docs": "typedoc --tsconfig tsconfig.base.json",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
@@ -31,6 +31,9 @@
     "typedoc": "^0.25.8",
     "typedoc-plugin-markdown": "^3.17.1",
     "typescript": "^5.3.3"
+  },
+  "optionalDependencies": {
+    "@epicgames-ps/lib-pixelstreamingcommon-ue5.5": "file:../Common"
   },
   "dependencies": {
     "@epicgames-ps/lib-pixelstreamingcommon-ue5.5": "^0.0.14",
