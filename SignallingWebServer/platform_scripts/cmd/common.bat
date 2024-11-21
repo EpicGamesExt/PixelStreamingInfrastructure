@@ -163,7 +163,6 @@ set PATH=%NODE_DIR%;%PATH%
 IF "%FORCE_BUILD%"=="1" (
     rem We could replace this all with a single npm script that does all this. we do have several build-all scripts already
     rem but this does give a good reference about the dependency chain for all of this.
-    rem Note: npm link will also run npm install so we dont need that here
     echo Building common library...
     echo ----------------------------
     pushd %CD%\Common

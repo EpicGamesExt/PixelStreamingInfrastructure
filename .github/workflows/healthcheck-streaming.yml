@@ -75,28 +75,24 @@ jobs:
       working-directory: Signalling
       run: |
         npm ci
-        npm link ../Common
         npm run build
 
     - name: Build Wilbur
       working-directory: SignallingWebServer
       run: |
         npm ci
-        npm link ../Signalling
         npm run build
 
     - name: Build Frontend lib
       working-directory: Frontend/library
       run: |
         npm ci
-        npm link ../../Common
         npm run build
 
     - name: Build Frontend ui lib
       working-directory: Frontend/ui-library
       run: |
         npm ci
-        npm link ../library
         npm run build
 
     - name: Build Frontend implementation
@@ -104,7 +100,6 @@ jobs:
       run: |
         $Env:WEBPACK_OUTPUT_PATH='${{ github.workspace }}\www'
         npm ci
-        npm link ../../library ../../ui-library
         npm run build
 
     - name: Run Signalling

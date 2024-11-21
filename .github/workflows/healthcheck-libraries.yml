@@ -41,21 +41,21 @@ jobs:
 
     - name: Clean build and lint checks on signalling library
       working-directory: Signalling
-      run: npm ci && npm link ../Common && npm run build && npm run lint
+      run: npm ci && npm run build && npm run lint
 
     - name: Clean build and lint checks on wilbur
       working-directory: SignallingWebServer
-      run: npm ci && npm link ../Signalling && npm run build && npm run lint
+      run: npm ci && npm run build && npm run lint
 
     - name: Clean build, lint and unit tests on frontend library
       working-directory: Frontend/library
-      run: npm ci && npm link ../../Common && npm run build && npm run lint && npm run test
+      run: npm ci && npm run build && npm run lint && npm run test
         
     - name: Clean build and lint checks on frontend ui library
       working-directory: Frontend/ui-library
-      run: npm ci && npm link ../library && npm run build && npm run lint
+      run: npm ci && npm run build && npm run lint
 
     - name: Clean build of frontend implementation
       working-directory: Frontend/implementations/typescript
-      run: npm ci && npm link ../../library ../../ui-library && npm run build
+      run: npm ci && npm run build
 
