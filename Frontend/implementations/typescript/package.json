@@ -9,8 +9,8 @@
     "watch": "npx webpack --watch",
     "serve": "webpack serve --config webpack.dev.js",
     "serve-prod": "webpack serve --config webpack.prod.js",
-    "build-all": "cd ../ui-library && npm run build-all && cd ../implementations/typescript && npm install && npm run build",
-    "build-dev-all": "cd ../ui-library && npm run build-all && cd ../implementations/typescript && npm install && npm run build-dev"
+    "build-all": "cd ../../ui-library && npm run build-all && cd ../implementations/typescript && npm install && npm run build",
+    "build-dev-all": "cd ../../ui-library && npm run build-all && cd ../implementations/typescript && npm install && npm run build-dev"
   },
   "devDependencies": {
     "css-loader": "^6.7.3",
