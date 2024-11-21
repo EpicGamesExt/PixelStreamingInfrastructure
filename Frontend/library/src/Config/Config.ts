@@ -217,7 +217,7 @@ export class Config {
             return browserSupportedCodecs;
         };
 
-        const getDefaultVideoCodecs = function(): string {
+        const getDefaultVideoCodec = function(): string {
             const videoCodecs = getBrowserSupportedVideoCodecs();
             // If only one option, then select that.
             if(videoCodecs.length == 1) {
@@ -237,6 +237,27 @@ export class Config {
             return "";
         };
 
+        const matchUrlCodecToClosestSupported = function(urlParamCodec: string) : string {
+
+            const browserSupportedCodecs : Array<string> = getBrowserSupportedVideoCodecs();
+
+            // Codec supplied in url param is an exact match for the browser codec.
+            // (e.g. H264 level-asymmetry-allowed=1;packetization-mode=1;profile-level-id=42e01f)
+            if(browserSupportedCodecs.includes(urlParamCodec)) {
+                return urlParamCodec;
+            }
+
+            // Try to match the start of whatever is passed into the url parameter with what the browser supports
+            for(let browserCodec of browserSupportedCodecs) {
+                if(browserCodec.startsWith(urlParamCodec)) {
+                    return browserCodec;
+                }
+            }
+
+            // If we weren't able to match, just return the codec as from the URL as-is.
+            return urlParamCodec;
+        }
+
         /**
          * Enum Parameters
          */
@@ -246,11 +267,12 @@ export class Config {
                 OptionParameters.PreferredCodec,
                 'Preferred Codec',
                 'The preferred codec to be used during codec negotiation',
-                getDefaultVideoCodecs(),
+                getDefaultVideoCodec(),
                 settings && Object.prototype.hasOwnProperty.call(settings, OptionParameters.PreferredCodec)
                     ? [settings[OptionParameters.PreferredCodec]]
                     : getBrowserSupportedVideoCodecs(),
-                useUrlParams
+                useUrlParams,
+                matchUrlCodecToClosestSupported
             )
         );
 

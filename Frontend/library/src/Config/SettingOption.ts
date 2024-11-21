@@ -12,6 +12,9 @@ export class SettingOption<CustomIds extends string = OptionParametersIds> exten
     onChangeEmit: (changedValue: string) => void;
     _options: Array<string>;
 
+    /* Transforms the url parameter value into something else, by default no transformation is made, the url param is returned as-is. */
+    _urlParamResolver: (urlParamValue: string) => string;
+
     constructor(
         id: OptionParametersIds | CustomIds,
         label: string,
@@ -20,14 +23,21 @@ export class SettingOption<CustomIds extends string = OptionParametersIds> exten
         options: Array<string>,
         useUrlParams: boolean,
         // eslint-disable-next-line @typescript-eslint/no-empty-function
+        defaultUrlParamResolver: (urlParamValue: string) => string = function(value: string){
+            /* Return the string as-is by default */
+            return value;
+        },
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
         defaultOnChangeListener: (changedValue: unknown, setting: SettingBase) => void = () => {
             /* Do nothing, to be overridden. */
         }
     ) {
         super(id, label, description, defaultTextValue, defaultOnChangeListener);
 
+        this._urlParamResolver = defaultUrlParamResolver;
+
         const stringToMatch: string = this.hasURLParam(this.id)
-            ? this.getURLParam(this.id)
+            ? this._urlParamResolver(this.getURLParam(this.id))
             : defaultTextValue;
 
         this.options = options ?? [ stringToMatch ];
@@ -86,5 +96,14 @@ export class SettingOption<CustomIds extends string = OptionParametersIds> exten
                 `Could not set "${value}" as the selected option for ${this.id} because it wasn't one of the options.`
             );
         }
+    }
+
+    /**
+     * Set the url parameter resolver to do some transformation to the string value
+     * that is extracted from the url parameters.
+     * @param urlParam A function that transforms the extracted url parameter string for this setting to something else.
+     */
+    public set urlParamResolver(value: (urlParam: string) => string){
+        this._urlParamResolver = value;
     }
 }
