@@ -237,25 +237,25 @@ export class Config {
             return "";
         };
 
-        const matchUrlCodecToClosestSupported = function(urlParamCodec: string) : string {
+        const matchSpecifiedCodecToClosestSupported = function(specifiedCodec: string) : string {
 
             const browserSupportedCodecs : Array<string> = getBrowserSupportedVideoCodecs();
 
             // Codec supplied in url param is an exact match for the browser codec.
             // (e.g. H264 level-asymmetry-allowed=1;packetization-mode=1;profile-level-id=42e01f)
-            if(browserSupportedCodecs.includes(urlParamCodec)) {
-                return urlParamCodec;
+            if(browserSupportedCodecs.includes(specifiedCodec)) {
+                return specifiedCodec;
             }
 
             // Try to match the start of whatever is passed into the url parameter with what the browser supports
             for(let browserCodec of browserSupportedCodecs) {
-                if(browserCodec.startsWith(urlParamCodec)) {
+                if(browserCodec.startsWith(specifiedCodec)) {
                     return browserCodec;
                 }
             }
 
             // If we weren't able to match, just return the codec as from the URL as-is.
-            return urlParamCodec;
+            return specifiedCodec;
         }
 
         /**
@@ -267,12 +267,12 @@ export class Config {
                 OptionParameters.PreferredCodec,
                 'Preferred Codec',
                 'The preferred codec to be used during codec negotiation',
-                getDefaultVideoCodec(),
                 settings && Object.prototype.hasOwnProperty.call(settings, OptionParameters.PreferredCodec)
-                    ? [settings[OptionParameters.PreferredCodec]]
-                    : getBrowserSupportedVideoCodecs(),
+                    ? matchSpecifiedCodecToClosestSupported(settings[OptionParameters.PreferredCodec])
+                    : getDefaultVideoCodec(),
+                getBrowserSupportedVideoCodecs(),
                 useUrlParams,
-                matchUrlCodecToClosestSupported
+                matchSpecifiedCodecToClosestSupported
             )
         );
 
