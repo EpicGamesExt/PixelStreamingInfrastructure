@@ -11,5 +11,13 @@ See [lib-pixelstreamingfrontend-ui](/Frontend/implementations/typescript) for an
 - Opens a data channel connection sending and receiving custom data (in addition to input).
 
 ### Adding it to your project
-`npm i @epicgames-ps/lib-pixelstreamingfrontend-ue5.4`
+`npm i @epicgames-ps/lib-pixelstreamingfrontend-ue5.5`
 
+### How this library is built
+The NPM packages supports:
+- ES6 module usage
+- CommonJS usage
+- Type definitions
+- Source maps
+
+**Note:** The NPM package does not contain a minified/bundled output, this is up to the user to do this in their application.
