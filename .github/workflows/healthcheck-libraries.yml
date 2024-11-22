@@ -37,27 +37,27 @@ jobs:
 
     - name: Clean build and lint checks on common library
       working-directory: Common
-      run: npm ci && npm run build && npm run lint
+      run: npm install && npm run build && npm run lint
 
     - name: Clean build and lint checks on signalling library
       working-directory: Signalling
-      run: npm ci && npm run build && npm run lint
+      run: npm install && npm run build && npm run lint
 
     - name: Clean build and lint checks on wilbur
       working-directory: SignallingWebServer
-      run: npm ci && npm run build && npm run lint
+      run: npm install && npm run build && npm run lint
 
     - name: Clean build, lint and unit tests on frontend library
       working-directory: Frontend/library
-      run: npm ci && npm run build && npm run lint && npm run test
+      run: npm install && npm run build && npm run lint && npm run test
 
     - name: Clean build and lint checks on frontend ui library
       working-directory: Frontend/ui-library
-      run: npm ci && npm run build && npm run lint
+      run: npm install && npm run build && npm run lint
 
     - name: Clean build of frontend implementation
       working-directory: Frontend/implementations/typescript
-      run: npm ci && npm run build
+      run: npm install && npm run build
 
   build-signalling-only:
     if: github.repository == 'EpicGamesExt/PixelStreamingInfrastructure'
@@ -76,7 +76,7 @@ jobs:
 
     - name: Build signalling using published packages only
       working-directory: Signalling
-      run: npm ci && npm run build && npm run lint
+      run: npm install && npm run build && npm run lint
 
   build-wilbur-only:
     if: github.repository == 'EpicGamesExt/PixelStreamingInfrastructure'
@@ -95,7 +95,7 @@ jobs:
 
     - name: Build Wilbur using published packages only
       working-directory: SignallingWebServer
-      run: npm ci && npm run build && npm run lint
+      run: npm install && npm run build && npm run lint
 
   build-frontend-only:
     if: github.repository == 'EpicGamesExt/PixelStreamingInfrastructure'
@@ -114,7 +114,7 @@ jobs:
 
     - name: Build Frontend/library using published packages only
       working-directory: Frontend/library
-      run: npm ci && npm run build && npm run lint && npm run test
+      run: npm install && npm run build && npm run lint && npm run test
 
   build-frontend-ui-only:
     if: github.repository == 'EpicGamesExt/PixelStreamingInfrastructure'
@@ -133,7 +133,7 @@ jobs:
 
     - name: Build Frontend/ui-library using published packages only
       working-directory: Frontend/ui-library
-      run: npm ci && npm run build && npm run lint
+      run: npm install && npm run build && npm run lint
 
   build-implementation-typescript-only:
     if: github.repository == 'EpicGamesExt/PixelStreamingInfrastructure'
@@ -152,5 +152,5 @@ jobs:
 
     - name: Build Frontend/implementations/typescript using published packages only
       working-directory: Frontend/implementations/typescript
-      run: npm ci && npm run build
+      run: npm install && npm run build
 

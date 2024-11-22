@@ -68,38 +68,38 @@ jobs:
     - name: Build Common
       working-directory: Common
       run: |
-        npm ci
+        npm install
         npm run build
 
     - name: Build Signalling
       working-directory: Signalling
       run: |
-        npm ci
+        npm install
         npm run build
 
     - name: Build Wilbur
       working-directory: SignallingWebServer
       run: |
-        npm ci
+        npm install
         npm run build
 
     - name: Build Frontend lib
       working-directory: Frontend/library
       run: |
-        npm ci
+        npm install
         npm run build
 
     - name: Build Frontend ui lib
       working-directory: Frontend/ui-library
       run: |
-        npm ci
+        npm install
         npm run build
 
     - name: Build Frontend implementation
       working-directory: Frontend/implementations/typescript
       run: |
         $Env:WEBPACK_OUTPUT_PATH='${{ github.workspace }}\www'
-        npm ci
+        npm install
         npm run build
 
     - name: Run Signalling
@@ -113,7 +113,7 @@ jobs:
     - name: Prepare test
       working-directory: Extras\MinimalStreamTester
       run: |
-        npm i
+        npm install
         npx playwright install --with-deps
         npx playwright install chrome
 

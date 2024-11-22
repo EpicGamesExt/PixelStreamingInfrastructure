@@ -15,7 +15,6 @@
     "@types/uuid": "^9.0.8"
   },
   "dependencies": {
-    "@epicgames-ps/lib-pixelstreamingcommon-ue5.5": "*",
     "@epicgames-ps/lib-pixelstreamingfrontend-ue5.5": "*",
     "@epicgames-ps/js-streamer": "*",
     "dotenv": "^16.4.5",

@@ -3,16 +3,17 @@
 	"workspaces": [
 		"Common",
 		"Extras/FrontendTests",
-		"Extras/JSSStreamer",
+		"Extras/JSStreamer",
 		"Extras/MinimalStreamTester",
 		"Frontend/library",
 		"Frontend/ui-library",
 		"Frontend/implementations/typescript",
 		"Frontend/implementations/react",
 		"SFU",
+		"SFU/mediasoup-sdp-bridge",
 		"Signalling",
 		"SignallingWebServer",
-		"SSTest"
+		"SS_Test"
 	],
 	"private": true
   }

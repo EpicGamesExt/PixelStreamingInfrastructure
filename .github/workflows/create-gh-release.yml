@@ -41,19 +41,19 @@ jobs:
 
     - name: Build common library
       working-directory: ./Common
-      run: npm ci && npm run build
+      run: npm install && npm run build
 
     - name: Build frontend library
       working-directory: ./Frontend/library
-      run: npm ci && npm run build
+      run: npm install && npm run build
 
     - name: Build frontend ui-library
       working-directory: ./Frontend/ui-library
-      run: npm ci && npm run build
+      run: npm install && npm run build
 
     - name: Install implementations/typescript deps
       working-directory: ./Frontend/implementations/typescript
-      run: npm ci && npm run build
+      run: npm install && npm run build
 
     - name: Move all content into output directory for archiving
       run: items=(*) && mkdir PixelStreamingInfrastructure-${{ github.ref_name }}-${{ steps.getversion.outputs.version }} && mv ${items[*]} PixelStreamingInfrastructure-${{ github.ref_name }}-${{ steps.getversion.outputs.version }}/
