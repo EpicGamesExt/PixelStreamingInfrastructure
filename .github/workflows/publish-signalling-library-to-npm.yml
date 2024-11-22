@@ -17,12 +17,13 @@ jobs:
         working-directory: Signalling
     steps:
       - uses: actions/checkout@v4
+        with:
+          sparse-checkout: 'Signalling'
+          sparse-checkout-cone-mode: false
       - uses: actions/setup-node@v4
         with:
           node-version: "${{ env.NODE_VERSION }}"
           registry-url: 'https://registry.npmjs.org'
-      - working-directory: Common
-        run: npm ci && npm run build
       - run: npm ci && npm run build
       - run: npm publish --access public
         env:

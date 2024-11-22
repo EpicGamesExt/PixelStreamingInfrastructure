@@ -17,6 +17,9 @@ jobs:
         working-directory: Frontend/ui-library
     steps:
       - uses: actions/checkout@v4
+        with:
+          sparse-checkout: 'Frontend/ui-library'
+          sparse-checkout-cone-mode: false
       - uses: actions/setup-node@v4
         with:
           node-version: "${{ env.NODE_VERSION }}"

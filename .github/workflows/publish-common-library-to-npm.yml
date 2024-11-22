@@ -17,6 +17,9 @@ jobs:
         working-directory: Common
     steps:
       - uses: actions/checkout@v4
+        with:
+          sparse-checkout: 'Common'
+          sparse-checkout-cone-mode: false
       - uses: actions/setup-node@v4
         with:
           node-version: "${{ env.NODE_VERSION }}"

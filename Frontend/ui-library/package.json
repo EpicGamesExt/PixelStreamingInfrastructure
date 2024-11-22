@@ -33,7 +33,7 @@
         "@epicgames-ps/lib-pixelstreamingfrontend-ue5.5": "file:../library/"
     },
     "peerDependencies": {
-        "@epicgames-ps/lib-pixelstreamingfrontend-ue5.5": "^0.1.0"
+        "@epicgames-ps/lib-pixelstreamingfrontend-ue5.5": "^0.2.0"
     },
     "repository": {
         "type": "git",
