@@ -30,7 +30,7 @@ export class DataChannelLatencyTestController {
     callback: DataChannelLatencyTestResultCallback;
     records: Map<DataChannelLatencyTestSeq, DataChannelLatencyTestRecord>;
     seq: DataChannelLatencyTestSeq;
-    interval: NodeJS.Timer;
+    intervalHandle: number = undefined;
 
     constructor(sink: DataChannelLatencyTestSink, callback: DataChannelLatencyTestResultCallback) {
         this.sink = sink;
@@ -45,7 +45,7 @@ export class DataChannelLatencyTestController {
         }
         this.startTime = Date.now();
         this.records.clear();
-        this.interval = setInterval(
+        this.intervalHandle = window.setInterval(
             (() => {
                 if (Date.now() - this.startTime >= config.duration) {
                     this.stop();
@@ -59,9 +59,9 @@ export class DataChannelLatencyTestController {
     }
 
     stop() {
-        if (this.interval) {
-            clearInterval(this.interval);
-            this.interval = undefined;
+        if (this.intervalHandle) {
+            window.clearInterval(this.intervalHandle);
+            this.intervalHandle = undefined;
             this.callback(this.produceResult());
         }
     }
@@ -100,7 +100,7 @@ export class DataChannelLatencyTestController {
     }
 
     isRunning() {
-        return !!this.interval;
+        return !!this.intervalHandle;
     }
 
     receive(response: DataChannelLatencyTestResponse) {

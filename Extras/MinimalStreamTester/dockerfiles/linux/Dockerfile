@@ -3,7 +3,7 @@ FROM node:20-bookworm
 WORKDIR /tester
 COPY /Extras/MinimalStreamTester .
 
-RUN npm ci
+RUN npm install
 RUN npx playwright install --with-deps
 RUN npx playwright install chrome
 

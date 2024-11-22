@@ -1,12 +1,12 @@
 {
   "name": "@epicgames-ps/wilbur",
-  "version": "2.0.1",
+  "version": "2.1.0",
   "description": "A basic signalling server application for Unreal Engine's Pixel Streaming applications.",
   "main": "index.js",
   "scripts": {
-    "build": "npm link ../Signalling && tsc",
-    "build-dev": "npm link ../Signalling && npm run build",
-    "build-all": "rimraf ./build && npm link ../Signalling && cd ../Signalling && npm run build-all && cd ../SignallingWebServer && npm run build-dev",
+    "build": "tsc",
+    "build-dev": "npm run build",
+    "build-all": "rimraf ./build && cd ../Signalling && npm run build-all && cd ../SignallingWebServer && npm run build-dev",
     "start": "node ./build/index.js --serve --console_messages verbose --log_config --https_redirect",
     "lint": "eslint ./src --ext .js,.jsx,.ts,.tsx",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -31,7 +31,7 @@
     "typescript": "^5.3.3"
   },
   "dependencies": {
-    "@epicgames-ps/lib-pixelstreamingsignalling-ue5.5": "^2.0.0",
+    "@epicgames-ps/lib-pixelstreamingsignalling-ue5.5": "^2.1.0",
     "commander": "^12.0.0",
     "express": "^4.21.1",
     "express-openapi": "^12.1.3",

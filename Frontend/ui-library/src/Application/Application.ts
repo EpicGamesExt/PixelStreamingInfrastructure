@@ -7,7 +7,8 @@ import {
     AggregatedStats,
     LatencyTestResults,
     InitialSettings,
-    Messages
+    Messages,
+    DataChannelLatencyTestResult
 } from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.5';
 import { OverlayBase } from '../Overlay/BaseOverlay';
 import { ActionOverlay } from '../Overlay/ActionOverlay';
@@ -31,7 +32,6 @@ import {
     UIElementConfig
 } from '../UI/UIConfigurationTypes';
 import { FullScreenIconBase, FullScreenIconExternal } from '../UI/FullscreenIcon';
-import { DataChannelLatencyTestResult } from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.5/types/DataChannel/DataChannelLatencyTestResults';
 
 /**
  * Configuration of the internal video QP indicator element.

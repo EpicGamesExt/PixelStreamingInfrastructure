@@ -12,7 +12,7 @@ declare global {
 }
 
 document.body.onload = function() {
-    Logger.InitLogging(LogLevel.Warning, false);
+    Logger.InitLogging(LogLevel.Warning, true);
 
 	// Create a config object
 	const config = new Config({ useUrlParams: true });
@@ -24,8 +24,7 @@ document.body.onload = function() {
 		stream,
 		onColorModeChanged: (isLightMode) => PixelStreamingApplicationStyles.setColorMode(isLightMode)
 	});
-	// document.getElementById("centrebox").appendChild(application.rootElement);
 	document.body.appendChild(application.rootElement);
-	
+
 	window.pixelStreaming = stream;
 }

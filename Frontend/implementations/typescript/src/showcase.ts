@@ -7,9 +7,6 @@ PixelStreamingApplicationStyles.applyStyleSheet();
 
 
 document.body.onload = function() {
-	// Example of how to set the logger level
-	// Logger.SetLoggerVerbosity(10);
-
 	// Create a config object
 	const config = new Config({ useUrlParams: true });
 
@@ -25,8 +22,6 @@ document.body.onload = function() {
 
 	// Bind example selection to the onExampleChanged function
 	document.getElementById("exampleSelect").onchange = (event : Event) => { showcase.onExampleChanged(event); };
-
-
 }
 
 class Showcase {

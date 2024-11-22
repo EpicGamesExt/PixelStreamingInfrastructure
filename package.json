@@ -1,0 +1,19 @@
+{
+	"name": "pixelstreaming-infrastructure",
+	"workspaces": [
+		"Common",
+		"Extras/FrontendTests",
+		"Extras/JSStreamer",
+		"Extras/MinimalStreamTester",
+		"Frontend/library",
+		"Frontend/ui-library",
+		"Frontend/implementations/typescript",
+		"Frontend/implementations/react",
+		"SFU",
+		"SFU/mediasoup-sdp-bridge",
+		"Signalling",
+		"SignallingWebServer",
+		"SS_Test"
+	],
+	"private": true
+  }

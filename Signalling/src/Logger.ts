@@ -81,7 +81,7 @@ function isLogObject(object: any): object is IProtoLogObj {
 
 function createConsoleFormat() {
     return printf((logObj: TransformableInfo) => {
-        const prefix = `[${logObj.timestamp}] ${logObj.level}: `;
+        const prefix = `[${String(logObj.timestamp)}] ${logObj.level}: `;
         if (typeof logObj.message === 'string') {
             return prefix + logObj.message;
         } else if (isLogObject(logObj.message)) {

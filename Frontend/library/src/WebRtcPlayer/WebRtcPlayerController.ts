@@ -273,7 +273,7 @@ export class WebRtcPlayerController {
         this.isReconnecting = false;
 
         this.config._addOnOptionSettingChangedListener(OptionParameters.StreamerId, (streamerid) => {
-            if (streamerid === '') {
+            if (streamerid === undefined || streamerid === '') {
                 return;
             }
 
