@@ -24,12 +24,8 @@
     "webpack-cli": "^5.0.1",
     "webpack-dev-server": "^4.11.1"
   },
-  "optionalDependencies": {
-    "@epicgames-ps/lib-pixelstreamingfrontend-ue5.5": "file://../../library",
-    "@epicgames-ps/lib-pixelstreamingfrontend-ui-ue5.5": "file://../../ui-library"
-  },
   "dependencies": {
-    "@epicgames-ps/lib-pixelstreamingfrontend-ue5.5": "^0.2.0",
-    "@epicgames-ps/lib-pixelstreamingfrontend-ui-ue5.5": "^0.1.0"
+    "@epicgames-ps/lib-pixelstreamingfrontend-ue5.5": "*",
+    "@epicgames-ps/lib-pixelstreamingfrontend-ui-ue5.5": "*"
   }
 }
