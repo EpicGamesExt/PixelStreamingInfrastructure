@@ -13,5 +13,6 @@
 		"Signalling",
 		"SignallingWebServer",
 		"SSTest"
-	]
+	],
+	"private": true
   }
