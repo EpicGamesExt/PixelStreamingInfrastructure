@@ -29,9 +29,6 @@
         "jss-plugin-camel-case": "^10.9.2",
         "jss-plugin-global": "^10.9.2"
     },
-    "optionalDependencies": {
-        "@epicgames-ps/lib-pixelstreamingfrontend-ue5.5": "file:../library/"
-    },
     "peerDependencies": {
         "@epicgames-ps/lib-pixelstreamingfrontend-ue5.5": "^0.2.0"
     },

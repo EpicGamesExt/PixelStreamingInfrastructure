@@ -36,7 +36,7 @@
   },
   "dependencies": {
     "express": "^4.21.1",
-    "@epicgames-ps/lib-pixelstreamingcommon-ue5.5": "file://../../Common"
+    "@epicgames-ps/lib-pixelstreamingcommon-ue5.5": "*"
   },
   "repository": {
     "type": "git",

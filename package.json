@@ -1,0 +1,17 @@
+{
+	"name": "pixelstreaming-infrastructure",
+	"workspaces": [
+		"Common",
+		"Extras/FrontendTests",
+		"Extras/JSSStreamer",
+		"Extras/MinimalStreamTester",
+		"Frontend/library",
+		"Frontend/ui-library",
+		"Frontend/implementations/typescript",
+		"Frontend/implementations/react",
+		"SFU",
+		"Signalling",
+		"SignallingWebServer",
+		"SSTest"
+	]
+  }
