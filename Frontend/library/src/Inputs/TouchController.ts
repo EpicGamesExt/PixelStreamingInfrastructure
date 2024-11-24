@@ -46,9 +46,9 @@ export class TouchController implements IInputController {
     }
 
     unregister() {
-        this.videoElementParent.addEventListener('touchstart', this.onTouchStartListener);
-        this.videoElementParent.addEventListener('touchend', this.onTouchEndListener);
-        this.videoElementParent.addEventListener('touchmove', this.onTouchMoveListener);
+        this.videoElementParent.removeEventListener('touchstart', this.onTouchStartListener);
+        this.videoElementParent.removeEventListener('touchend', this.onTouchEndListener);
+        this.videoElementParent.removeEventListener('touchmove', this.onTouchMoveListener);
     }
 
     private rememberTouch(touch: Touch) {
