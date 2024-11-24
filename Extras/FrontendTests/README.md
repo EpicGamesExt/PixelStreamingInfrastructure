@@ -3,7 +3,7 @@
 ## Running locally
 ### Setup
 ```
-npm ci
+npm install
 npx playwright install --with-deps
 ```
 

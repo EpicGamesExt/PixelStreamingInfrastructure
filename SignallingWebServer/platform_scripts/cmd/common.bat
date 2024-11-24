@@ -163,29 +163,28 @@ set PATH=%NODE_DIR%;%PATH%
 IF "%FORCE_BUILD%"=="1" (
     rem We could replace this all with a single npm script that does all this. we do have several build-all scripts already
     rem but this does give a good reference about the dependency chain for all of this.
-    rem Note: npm link will also run npm install so we dont need that here
     echo Building common library...
     echo ----------------------------
     pushd %CD%\Common
-    call "%SCRIPT_DIR%node\npm" ci
+    call "%SCRIPT_DIR%node\npm" install
     call "%SCRIPT_DIR%node\npm" run build
     popd
     echo Building frontend library...
     echo ----------------------------
     pushd %CD%\Frontend\library
-    call "%SCRIPT_DIR%node\npm" link ../../Common
+    call "%SCRIPT_DIR%node\npm" install
     call "%SCRIPT_DIR%node\npm" run build
     popd
     echo Building frontend-ui library...
     echo ----------------------------
     pushd %CD%\Frontend\ui-library
-    call "%SCRIPT_DIR%node\npm" link ../library
+    call "%SCRIPT_DIR%node\npm" install
     call "%SCRIPT_DIR%node\npm" run build
     popd
     echo Building Epic Games reference frontend...
     echo ----------------------------
     pushd %CD%\Frontend\implementations\typescript
-    call "%SCRIPT_DIR%node\npm" link ../../library ../../ui-library
+    call "%SCRIPT_DIR%node\npm" install
     call "%SCRIPT_DIR%node\npm" run build
     popd
     popd

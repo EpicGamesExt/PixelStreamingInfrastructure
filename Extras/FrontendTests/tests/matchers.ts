@@ -45,7 +45,9 @@ export const expect = baseExpect.extend({
                 return `expected is empty.`;
             }
             if (!pass) {
-                return `Could not find action ${actionIndex} : ${JSON.stringify(expected[actionIndex])} in ${JSON.stringify(received)}`;
+                return `Could not find action ${actionIndex} : ${JSON.stringify(expected[actionIndex])} in ${JSON.stringify(received)}
+                \r\n Expected: ${JSON.stringify(expected)}
+                \r\n Received: ${JSON.stringify(received)};`
             }
             return '';
         };

@@ -7,6 +7,7 @@ The frontend consists of two packages:
 1. [lib-pixelstreamingfrontend](/Frontend/library/): the core Pixel Streaming frontend for WebRTC, settings, input, and general functionality.
 2. [lib-pixelstreamingfrontend-ui](/Frontend/implementations/typescript): the reference UI that users can either optionally apply on top of the core library or build on top of.
 
+These libraries are published as [NPM packages](/README.md#npm-packages) and support usage as ES6 modules, CommonJS, include type definitions and source maps.
 
 ## Docs
 - [The Settings Panel](Docs/Settings%20Panel.md)
@@ -29,7 +30,7 @@ The TypeScript libraries are provided as both an [NPM](https://www.npmjs.com/set
 ## Usage from source
 
 When developing your own Pixel Streaming experience the intent is you will start with this library and extend it through the use of 
-its public API. We have provided an example of this workflow in our [implementations/typescript](/Frontend/implementations/typescript), which is an implementation of this library.
+its public API. We have provided an example of this workflow in our [implementations/typescript](/Frontend/implementations/typescript), which is an implementation of the frontend libraries and contains a working example of how you can bundle/minify your final application JavaScript..
 
 ## Contributing
 
@@ -39,18 +40,18 @@ If part of the library is not exposed and you wish to extend it, please do so in
 
 ⚠️ Only NodeJS LTS 18.17.0 is officially supported, some newer versions on NodeJS **WILL BREAK YOUR BUILD** ⚠️
 
-### Prerequisites
+### Prerequisites for local dev
 - Install NodeJS LTS 18.17.0 on your system.
 - Install npm globally using: `npm install npm -g` (yes this is required)
 
 ### Building the Library
 
 Changes to the library occur in the [/library](/Frontend/library) directory and require you to have NodeJS installed as part of your development environment.
-Once you have NodeJS installed: 
+Once you have NodeJS installed:
 
 - `cd library`
 - `npm install`
-- `npm run build`
+- `npm run build-all`
 
 ### Building the UI-Library
 
@@ -76,7 +77,7 @@ This will produce `player.html` and `player.js` under the `SignallingWebServer/P
 We recommend studying [/ui-library](/Frontend/ui-library) and [player.ts](/Frontend/implementations/typescript/src/player.ts)/[player.html](/Frontend/implementations/typescript/src/player.html), or alternatively the sample React implementation in [implementations/react](/Frontend/implementations/react), then once you have copied and modified the [package.json](/Frontend/implementations/typescript/package.json) and `.ts` into your own `implementation/your_implementation` directory, the process is similar:
 
 - `cd implementation/your_implementation`
-- `npm build-all`
+- `npm run build-all`
 
 ## Unit tests
 
@@ -87,4 +88,4 @@ The [/library](/Frontend/library) project has unit tests that test the Pixel Str
 
 ## Legal
 
-Copyright &copy; 2024, Epic Games. Licensed under the MIT License, see the file [LICENSE](/LICENSE) for details.
+Copyright &copy; 2024, Epic Games. Licensed under the MIT License, see the file [LICENSE](/LICENSE.md) for details.

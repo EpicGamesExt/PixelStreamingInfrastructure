@@ -61,6 +61,10 @@ export class StreamerConnection extends EventEmitter implements IStreamer, LogUt
         this.transport.on('close', this.onTransportClose.bind(this));
 
         this.registerMessageHandlers();
+
+        this.protocol.on('unhandled', (message: BaseMessage) => {
+            Logger.warn(`Unhandled protocol message: ${JSON.stringify(message)}`);
+        });
     }
 
     /**

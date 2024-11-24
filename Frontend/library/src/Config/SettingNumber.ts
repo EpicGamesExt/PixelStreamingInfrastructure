@@ -7,8 +7,8 @@ import { SettingBase } from './SettingBase';
  * A number setting object with a text label. Min and max limit the range of allowed values.
  */
 export class SettingNumber<CustomIds extends string = NumericParametersIds> extends SettingBase {
-    _min: number;
-    _max: number;
+    _min: number | null;
+    _max: number | null;
 
     id: NumericParametersIds | CustomIds;
     onChangeEmit: (changedValue: number) => void;
@@ -17,8 +17,8 @@ export class SettingNumber<CustomIds extends string = NumericParametersIds> exte
         id: NumericParametersIds | CustomIds,
         label: string,
         description: string,
-        min: number,
-        max: number,
+        min: number | null,
+        max: number | null,
         defaultNumber: number,
         useUrlParams: boolean,
         // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -65,7 +65,15 @@ export class SettingNumber<CustomIds extends string = NumericParametersIds> exte
      * @returns The clamped number.
      */
     public clamp(inNumber: number): number {
-        return Math.max(Math.min(this._max, inNumber), this._min);
+        if (this._min == null && this._max == null) {
+            return inNumber;
+        } else if (this._min == null) {
+            return Math.min(this._max, inNumber);
+        } else if (this._max == null) {
+            return Math.max(this._min, inNumber);
+        } else {
+            return Math.max(Math.min(this._max, inNumber), this._min);
+        }
     }
 
     /**

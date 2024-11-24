@@ -24,8 +24,8 @@ export class StressTester {
 	streamCreationIntervalMs: number;
 	streamDeletionIntervalMs: number;
 	pixelStreamingFrames: Array<PixelStreamingFrame>;
-	creationIntervalHandle: NodeJS.Timer;
-	deletionIntervalHandle: NodeJS.Timer;
+	creationIntervalHandle: number;
+	deletionIntervalHandle: number;
 	streamsContainer: HTMLElement;
 
 	constructor() {
@@ -97,7 +97,7 @@ export class StressTester {
 			clearInterval(this.creationIntervalHandle);
 		}
 
-		this.creationIntervalHandle = setInterval(() => {
+		this.creationIntervalHandle = window.setInterval(() => {
 			if(this.play) {
 				const curNPeers = this.pixelStreamingFrames.length;
 				if(curNPeers >= this.maxPeers) return;
@@ -123,7 +123,7 @@ export class StressTester {
 			clearInterval(this.deletionIntervalHandle)
 		}
 
-		this.deletionIntervalHandle = setInterval(() => {
+		this.deletionIntervalHandle = window.setInterval(() => {
 			if(!this.play) return;
 
 			const curNPeers = this.pixelStreamingFrames.length;

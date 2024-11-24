@@ -40,6 +40,22 @@ To **build** and **run** everything you need to connect to the Pixel Streaming p
 ./SignallingWebServer/platform_scripts/bash/start.sh
 ```
 
+If you want to work on a specific library within this monorepo then `cd` into that directory and run:
+
+`npm install`
+`npm run build-all`
+
+If you want to install all the dependencies and flush any existing `node_modules`, go to the root of the repo and run:
+
+`npm install`
+
+This works because this monorepo is using [NPM workspaces](https://docs.npmjs.com/cli/v7/using-npm/workspaces?v=true). Using NPM workspaces means:
+
+- Each sub-workspace within the monorepo does not have its own `package-lock.json`. There is only a single one in the root.
+- Common dependencies are hoisted into the root `node_modules` directory.
+- Some sub-workspaces will not have a `node_modules` directory because all their dependencies exist in the root `node_modules`.
+- When working locally within the monorepo dependencies on sub-workspaces will first try to use a local `symlink` to those dependencies instead of downloading the published packages from NPM. For example, `pixelstreaming-frontend` depends on `pixelstreaming-common`, when working in this repo that dependency will first be attempted to be resolved using the local `./Common` directory.
+
 ## Goals
 
 The goals of this repository are to:
@@ -87,6 +103,7 @@ The following are `unofficial` NPM packages (official ones coming soon):
 | Frontend lib | [lib-pixelstreamingfrontend-ue5.5](https://www.npmjs.com/package/@epicgames-ps/lib-pixelstreamingfrontend-ue5.5) | [lib-pixelstreamingfrontend-ue5.4](https://www.npmjs.com/package/@epicgames-ps/lib-pixelstreamingfrontend-ue5.4) | [lib-pixelstreamingfrontend-ue5.3](https://www.npmjs.com/package/@epicgames-ps/lib-pixelstreamingfrontend-ue5.3) |
 | Frontend-ui lib | [lib-pixelstreamingfrontend-ui-ue5.5](https://www.npmjs.com/package/@epicgames-ps/lib-pixelstreamingfrontend-ui-ue5.5) | [lib-pixelstreamingfrontend-ui-ue5.4](https://www.npmjs.com/package/@epicgames-ps/lib-pixelstreamingfrontend-ui-ue5.4) | [lib-pixelstreamingfrontend-ui-ue5.3](https://www.npmjs.com/package/@epicgames-ps/lib-pixelstreamingfrontend-ui-ue5.3) |
 | Signalling lib  | [lib-pixelstreamingsignalling-ue5.5](https://www.npmjs.com/package/@epicgames-ps/lib-pixelstreamingsignalling-ue5.5)  | `N/A` | `N/A` |
+| Common lib  | [lib-pixelstreamingcommon-ue5.5](https://www.npmjs.com/package/@epicgames-ps/lib-pixelstreamingcommon-ue5.5)  | `N/A` | `N/A` |
 
 ### NPM getting started
 

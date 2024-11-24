@@ -48,7 +48,11 @@ export class SignallingProtocol extends EventEmitter {
 
             // call the handlers
             transport.emit('message', msg); // emit this for listeners listening to any message
-            this.emit(msg.type, msg); // emit this for listeners listening for specific messages
+            if (!this.emit(msg.type, msg)) {
+                // emit this for listeners listening for specific messages
+                // no listeners
+                this.emit('unhandled', msg);
+            }
         };
     }
 

@@ -43,8 +43,12 @@ export class SettingUINumber<CustomIds extends string = NumericParametersIds> ex
         if (!this._spinner) {
             this._spinner = document.createElement('input');
             this._spinner.type = 'number';
-            this._spinner.min = this.setting.min.toString();
-            this._spinner.max = this.setting.max.toString();
+            if (this.setting.min != null) {
+                this._spinner.min = this.setting.min.toString();
+            }
+            if (this.setting.max != null) {
+                this._spinner.max = this.setting.max.toString();
+            }
             this._spinner.value = this.setting.number.toString();
             this._spinner.title = this.setting.description;
             this._spinner.classList.add('form-control');

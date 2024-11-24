@@ -19,8 +19,6 @@ type RTCStatsTypePS = RTCStatsType | 'stream' | 'media-playout' | 'track';
 export class AggregatedStats {
     inboundVideoStats: InboundVideoStats;
     inboundAudioStats: InboundAudioStats;
-    lastVideoStats: InboundVideoStats;
-    lastAudioStats: InboundAudioStats;
     candidatePairs: Array<CandidatePairStats>;
     DataChannelStats: DataChannelStats;
     localCandidates: Array<CandidateStat>;
@@ -28,7 +26,7 @@ export class AggregatedStats {
     outBoundVideoStats: OutBoundVideoStats;
     sessionStats: SessionStats;
     streamStats: StreamStats;
-    codecs: Map<string, string>;
+    codecs: Map<string, CodecStats>;
     transportStats: RTCTransportStats;
 
     constructor() {
@@ -38,7 +36,7 @@ export class AggregatedStats {
         this.outBoundVideoStats = new OutBoundVideoStats();
         this.sessionStats = new SessionStats();
         this.streamStats = new StreamStats();
-        this.codecs = new Map<string, string>();
+        this.codecs = new Map<string, CodecStats>();
     }
 
     /**
@@ -180,35 +178,39 @@ export class AggregatedStats {
     handleInBoundRTP(stat: InboundRTPStats) {
         switch (stat.kind) {
             case 'video':
-                // Need to convert to unknown first to remove an error around
-                // InboundVideoStats having the bitrate member which isn't found on
-                // the InboundRTPStats
-                this.inboundVideoStats = stat as unknown as InboundVideoStats;
-
-                if (this.lastVideoStats != undefined) {
+                // Calculate bitrate between stat updates
+                if (
+                    stat.bytesReceived > this.inboundVideoStats.bytesReceived &&
+                    stat.timestamp > this.inboundVideoStats.timestamp
+                ) {
                     this.inboundVideoStats.bitrate =
-                        (8 * (this.inboundVideoStats.bytesReceived - this.lastVideoStats.bytesReceived)) /
-                        (this.inboundVideoStats.timestamp - this.lastVideoStats.timestamp);
+                        (8 * (stat.bytesReceived - this.inboundVideoStats.bytesReceived)) /
+                        (stat.timestamp - this.inboundVideoStats.timestamp);
                     this.inboundVideoStats.bitrate = Math.floor(this.inboundVideoStats.bitrate);
                 }
-                this.lastVideoStats = { ...this.inboundVideoStats };
+
+                // Copy members from stat into `this.inboundVideoStats`
+                for (const key in stat) {
+                    (this.inboundVideoStats as any)[key] = (stat as any)[key];
+                }
                 break;
             case 'audio':
-                // Need to convert to unknown first to remove an error around
-                // InboundAudioStats having the bitrate member which isn't found on
-                // the InboundRTPStats
-                this.inboundAudioStats = stat as unknown as InboundAudioStats;
-
-                if (this.lastAudioStats != undefined) {
+                if (
+                    stat.bytesReceived > this.inboundAudioStats.bytesReceived &&
+                    stat.timestamp > this.inboundAudioStats.timestamp
+                ) {
                     this.inboundAudioStats.bitrate =
-                        (8 * (this.inboundAudioStats.bytesReceived - this.lastAudioStats.bytesReceived)) /
-                        (this.inboundAudioStats.timestamp - this.lastAudioStats.timestamp);
+                        (8 * (stat.bytesReceived - this.inboundAudioStats.bytesReceived)) /
+                        (stat.timestamp - this.inboundAudioStats.timestamp);
                     this.inboundAudioStats.bitrate = Math.floor(this.inboundAudioStats.bitrate);
                 }
-                this.lastAudioStats = { ...this.inboundAudioStats };
+                // Copy members from stat into `this.inboundAudioStats`
+                for (const key in stat) {
+                    (this.inboundAudioStats as any)[key] = (stat as any)[key];
+                }
                 break;
             default:
-                Logger.Info('Kind is not handled');
+                Logger.Error(`Kind should be audio or video, we got ${stat.kind} - that's unsupported.`);
                 break;
         }
     }
@@ -255,10 +257,7 @@ export class AggregatedStats {
 
     handleCodec(stat: CodecStats) {
         const codecId = stat.id;
-        const codecType = `${stat.mimeType.replace('video/', '').replace('audio/', '')}${
-            stat.sdpFmtpLine ? ` ${stat.sdpFmtpLine}` : ''
-        }`;
-        this.codecs.set(codecId, codecType);
+        this.codecs.set(codecId, stat);
     }
 
     handleSessionStatistics(
