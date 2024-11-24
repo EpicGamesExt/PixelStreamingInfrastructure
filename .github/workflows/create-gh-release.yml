@@ -69,6 +69,7 @@ jobs:
           .git
           .github
           output
+          node_modules
           Common/build
           Common/docs
           Common/node_modules
@@ -102,20 +103,27 @@ jobs:
           */.git/*
           */.github/*
           */node_modules/*
+          /*/node_modules/*
           */output/*
           /*/Common/build/*
           /*/Common/docs/*
+          /*/Common/node_modules/*
           /*/Docs/*
           /*/Extras/*
           /*/Frontend/Docs/*
+          /*/Frontend/node_modules/*
           /*/Frontend/library/dist/*
           /*/Frontend/library/types/*
           /*/Frontend/ui-library/dist/*
           /*/Frontend/ui-library/types/*
+          /*/Frontend/ui-library/node_modules/*
+          /*/Frontend/implementations/typescript/node_modules
           /*/SFU/Docs/*
           /*/Signalling/build/*
           /*/Signalling/docs/*
+          /*/Signalling/node_modules/*
           /*/SignallingWebServer/build/*
+          /*/SignallingWebServer/node_modules/*
           /*/SS_Test/*
 
     - name: "Make the release"
