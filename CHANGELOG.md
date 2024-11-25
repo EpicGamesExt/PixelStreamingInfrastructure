@@ -4,7 +4,88 @@ The changelog is a summary of commits between releases of Unreal Engine.
 
 As a reminder each UE-X branch/tag in this repository corresponds to a version of Unreal Engine.
 
-## [UE 5.4 (Current)](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/commits/UE5.4)
+## [UE 5.5 (Current)](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/commits/UE5.5)
+
+### Major Note: Pixel Streaming 2 release
+- Added migration guide and Pixel Streaming 2 release notice by @DenisTensorWorks in https://github.com/EpicGamesExt/PixelStreamingInfrastructure/pull/305
+
+### Features
+- Added bidirectional video support by @Belchy06 in https://github.com/EpicGamesExt/PixelStreamingInfrastructure/pull/251
+- Added SVC support to the SFU by @Belchy06 in https://github.com/EpicGamesExt/PixelStreamingInfrastructure/pull/258
+- Added JS Streamer and Frontend Tests by @mcottontensor in https://github.com/EpicGamesExt/PixelStreamingInfrastructure/pull/266
+- Added `DataChannel` multiplex support to Pixel Streaming 2 by @gingernaz in https://github.com/EpicGamesExt/PixelStreamingInfrastructure/pull/284
+- Added a GH action to run a software streamer to test that the stream can be started by @mcottontensor in https://github.com/EpicGamesExt/PixelStreamingInfrastructure/pull/205
+- Added a GH action for Linux stream testing by @mcottontensor in https://github.com/EpicGamesExt/PixelStreamingInfrastructure/pull/233
+- Removed matchmaker by @mcottontensor in https://github.com/EpicGamesExt/PixelStreamingInfrastructure/pull/160
+- Removed browser send offer support by @mcottontensor in https://github.com/EpicGamesExt/PixelStreamingInfrastructure/pull/212
+
+### Enhancements
+- Updated build GH actions by @mcottontensor in https://github.com/EpicGamesExt/PixelStreamingInfrastructure/pull/90
+- Updated platform scripts to skip build when it is not needed by @mcottontensor in https://github.com/EpicGamesExt/PixelStreamingInfrastructure/pull/126
+- Refactored GH workflows by @mcottontensor in https://github.com/EpicGamesExt/PixelStreamingInfrastructure/pull/134
+- Various script updates by @mcottontensor in https://github.com/EpicGamesExt/PixelStreamingInfrastructure/pull/151
+- Added a hook to handle the `layerPreference` message by forwarding it to the SFU by @mcottontensor in https://github.com/EpicGamesExt/PixelStreamingInfrastructure/pull/152
+- Added a test for `layerPreference message` by @mcottontensor in https://github.com/EpicGamesExt/PixelStreamingInfrastructure/pull/152
+- Added missing websocket close codes and reasons by @mcottontensor in https://github.com/EpicGamesExt/PixelStreamingInfrastructure/pull/198
+- URL parameters are no longer case sensitive by @mcottontensor in https://github.com/EpicGamesExt/PixelStreamingInfrastructure/pull/199
+- Simplified Windows path modification for node by @mcottontensor in https://github.com/EpicGamesExt/PixelStreamingInfrastructure/pull/210
+- Disabled fullscreen button showing on iPhone by @lukehb in https://github.com/EpicGamesExt/PixelStreamingInfrastructure/pull/214
+- Updated release archive excludes by @mcottontensor in https://github.com/EpicGamesExt/PixelStreamingInfrastructure/pull/218
+- Set default inline style for hidden input by @Belchy06 in https://github.com/EpicGamesExt/PixelStreamingInfrastructure/pull/238
+- Changed `--no-save` argument to `--save` to avoid confusion with overwriting `config.json` and added a default `config.json` file by @lukehb in https://github.com/EpicGamesExt/PixelStreamingInfrastructure/pull/240
+- Added logging about streamer disconnecting by @lukehb in https://github.com/EpicGamesExt/PixelStreamingInfrastructure/pull/244
+- Added support for configurable countdown value for `AFKTimeout` by @pr0g in https://github.com/EpicGamesExt/PixelStreamingInfrastructure/pull/247
+- Enabled displaying flexfec, ulpfec, and any other non-video video codecs by @lukehb in https://github.com/EpicGamesExt/PixelStreamingInfrastructure/pull/248
+- Added `prettier` to the linter rules by @mcottontensor in https://github.com/EpicGamesExt/PixelStreamingInfrastructure/pull/253
+- Added `prettier` config to `Common`, `Signalling`, and `SignallingWebServer` by @mcottontensor in https://github.com/EpicGamesExt/PixelStreamingInfrastructure/pull/261
+- Updated keypress to use helper to deal with `charCode` deprecation by @mcottontensor in https://github.com/EpicGamesExt/PixelStreamingInfrastructure/pull/260
+- Refactored `Logger` class by @mcottontensor in https://github.com/EpicGamesExt/PixelStreamingInfrastructure/pull/263
+- Refactored input code by @mcottontensor in https://github.com/EpicGamesExt/PixelStreamingInfrastructure/pull/275
+- Added min and max bitrates to answer message by @mcottontensor in https://github.com/EpicGamesExt/PixelStreamingInfrastructure/pull/277
+- Added the ability to provide no min or max value to a number setting by @mcottontensor in https://github.com/EpicGamesExt/PixelStreamingInfrastructure/pull/288
+- Re-enable preventing unidentified streamers showing up in the streamer list by @mcottontensor in https://github.com/EpicGamesExt/PixelStreamingInfrastructure/pull/300
+- Removed redundant and rigid setting of signaling url in `uiless.html` by @lukehb in https://github.com/EpicGamesExt/PixelStreamingInfrastructure/pull/314
+- Fixed duplicated source code in built libraries by @lukehb in https://github.com/EpicGamesExt/PixelStreamingInfrastructure/pull/324
+  
+### Documentation
+- Added documentation for signalling messages protocol by @mcottontensor in https://github.com/EpicGamesExt/PixelStreamingInfrastructure/pull/124
+- Updated branch links in RELEASING.md by @lukehb in https://github.com/EpicGamesExt/PixelStreamingInfrastructure/pull/129
+
+### Bug Fixes
+- Updated batch scripts to properly handle paths with spaces and updated peer connection option to properly pass them to signalling server by @mcottontensor in https://github.com/EpicGamesExt/PixelStreamingInfrastructure/pull/114
+- Updated signalling server to properly add the peer connection options to the config message by @mcottontensor in https://github.com/EpicGamesExt/PixelStreamingInfrastructure/pull/114
+- Fixed a number of pathing issues in platform scripts on Windows by @lukehb in https://github.com/EpicGamesExt/PixelStreamingInfrastructure/pull/122
+- Fixed issues with scripts not properly launching the TURN server by @mcottontensor in https://github.com/EpicGamesExt/PixelStreamingInfrastructure/pull/142
+- Fixed SFU not working on Firefox due to a `probator` track id by @mcottontensor in https://github.com/EpicGamesExt/PixelStreamingInfrastructure/pull/148
+- Fixed an issue with track stats being set to zero in Firefox by @mcottontensor in https://github.com/EpicGamesExt/PixelStreamingInfrastructure/pull/149
+- Fixed potential NAN value return when using dynamic player aspect ratios by @richardFocus in https://github.com/EpicGamesExt/PixelStreamingInfrastructure/pull/167
+- Fixed XR stereo convergence and incomplete XR input handling by @lukehb in https://github.com/EpicGamesExt/PixelStreamingInfrastructure/pull/172
+- Restored reading configuration from signalling server from config file, default config logging; added handling checks around SSL by @lukehb in https://github.com/EpicGamesExt/PixelStreamingInfrastructure/pull/177
+- Fixed parsing of config file and CLI arguments so that CLI has priority by @lukehb in https://github.com/EpicGamesExt/PixelStreamingInfrastructure/pull/182
+- Fixed stream restart message being omitted or appearing incorrectly by @mcottontensor in https://github.com/EpicGamesExt/PixelStreamingInfrastructure/pull/197
+- Fixed VPX streaming on Firefox by @lukehb in https://github.com/EpicGamesExt/PixelStreamingInfrastructure/pull/204
+- Fixed mobile UI not scaling correctly when nav bars are present by @lukehb in https://github.com/EpicGamesExt/PixelStreamingInfrastructure/pull/213
+- Added missing `track` type option in `RTCStatsTypePS` by @rishi23root in https://github.com/EpicGamesExt/PixelStreamingInfrastructure/pull/235
+- Fixed broken reference to `getUniqueLegacyId` by @mcottontensor in https://github.com/EpicGamesExt/PixelStreamingInfrastructure/pull/243
+- Fixed touch with virtual joystick issues by @mcottontensor in https://github.com/EpicGamesExt/PixelStreamingInfrastructure/pull/271
+- Fixed showcase stat buttons on Pixel Streaming 2 by @Belchy06 in https://github.com/EpicGamesExt/PixelStreamingInfrastructure/pull/282
+- Fixed SFU not being able reconnect once a streamer has disconnected by @Belchy06 in https://github.com/EpicGamesExt/PixelStreamingInfrastructure/pull/309
+- Fixed `TouchControllers` function re-adding the same event listeners instead of removing them by @lucastanger in https://github.com/EpicGamesExt/PixelStreamingInfrastructure/pull/323
+
+### Security
+- Bumped the npm_and_yarn group across a number of directories by @dependabot in https://github.com/EpicGamesExt/PixelStreamingInfrastructure/pull/144
+- Bumped the npm_and_yarn group across a number of directories by @dependabot in https://github.com/EpicGamesExt/PixelStreamingInfrastructure/pull/147
+- Bumped the npm_and_yarn group across a number of directories by @dependabot in https://github.com/EpicGamesExt/PixelStreamingInfrastructure/pull/154
+- Bumped the npm_and_yarn group across a number of directories by @dependabot in https://github.com/EpicGamesExt/PixelStreamingInfrastructure/pull/262
+- Bumped the npm_and_yarn group across a number of directories by @dependabot in https://github.com/EpicGamesExt/PixelStreamingInfrastructure/pull/279
+- Bumped the npm_and_yarn group across a number of directories by @dependabot in https://github.com/EpicGamesExt/PixelStreamingInfrastructure/pull/283
+- Bumped the npm_and_yarn group across a number of directories by @dependabot in https://github.com/EpicGamesExt/PixelStreamingInfrastructure/pull/285
+- Bumped the npm_and_yarn group across a number of directories by @dependabot in https://github.com/EpicGamesExt/PixelStreamingInfrastructure/pull/302
+- Bumped the npm_and_yarn group across a number of directories by @dependabot in https://github.com/EpicGamesExt/PixelStreamingInfrastructure/pull/303
+- Bumped webpack from 5.93.0 to 5.94.0 in /Extras/JSStreamer in the npm_and_yarn group across a number of directories by @dependabot in https://github.com/EpicGamesExt/PixelStreamingInfrastructure/pull/267
+- Bumped React version and its dependencies by @Belchy06 in https://github.com/EpicGamesExt/PixelStreamingInfrastructure/pull/237
+
+## [UE 5.4](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/commits/UE5.4)
 ### Features
 - Add support for non-latin characters by @Belchy06 in https://github.com/EpicGames/PixelStreamingInfrastructure/pull/452
 - Adding an option to hide the UI. by @mcottontensor in https://github.com/EpicGamesExt/PixelStreamingInfrastructure/pull/88
