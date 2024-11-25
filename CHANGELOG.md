@@ -46,7 +46,6 @@ As a reminder each UE-X branch/tag in this repository corresponds to a version o
 - Re-enable preventing unidentified streamers showing up in the streamer list by @mcottontensor in https://github.com/EpicGamesExt/PixelStreamingInfrastructure/pull/300
 - Removed redundant and rigid setting of signaling url in `uiless.html` by @lukehb in https://github.com/EpicGamesExt/PixelStreamingInfrastructure/pull/314
 - Fixed duplicated source code in built libraries by @lukehb in https://github.com/EpicGamesExt/PixelStreamingInfrastructure/pull/324
-- Fixed `TouchControllers` function re-adding the same event listeners instead of removing them by @lucastanger in https://github.com/EpicGamesExt/PixelStreamingInfrastructure/pull/323
   
 ### Documentation
 - Added documentation for signalling messages protocol by @mcottontensor in https://github.com/EpicGamesExt/PixelStreamingInfrastructure/pull/124
@@ -71,6 +70,7 @@ As a reminder each UE-X branch/tag in this repository corresponds to a version o
 - Fixed touch with virtual joystick issues by @mcottontensor in https://github.com/EpicGamesExt/PixelStreamingInfrastructure/pull/271
 - Fixed showcase stat buttons on Pixel Streaming 2 by @Belchy06 in https://github.com/EpicGamesExt/PixelStreamingInfrastructure/pull/282
 - Fixed SFU not being able reconnect once a streamer has disconnected by @Belchy06 in https://github.com/EpicGamesExt/PixelStreamingInfrastructure/pull/309
+- Fixed `TouchControllers` function re-adding the same event listeners instead of removing them by @lucastanger in https://github.com/EpicGamesExt/PixelStreamingInfrastructure/pull/323
 
 ### Security
 - Bumped the npm_and_yarn group across a number of directories by @dependabot in https://github.com/EpicGamesExt/PixelStreamingInfrastructure/pull/144
