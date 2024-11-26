@@ -1,5 +1,5 @@
 import { BaseMessage } from '../Messages/base_message';
-import { EventEmitter } from 'events';
+import { EventEmitter } from '../Event/EventEmitter';
 
 /**
  * An interface to a transport protocol that is in charge of sending and receiving signalling messages.
