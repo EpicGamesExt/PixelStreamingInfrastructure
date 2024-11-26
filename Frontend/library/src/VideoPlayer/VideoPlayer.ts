@@ -36,6 +36,7 @@ export class VideoPlayer {
         this.videoElement.id = 'streamingVideo';
         this.videoElement.disablePictureInPicture = true;
         this.videoElement.playsInline = true;
+        this.videoElement.controls = false;
         this.videoElement.style.width = '100%';
         this.videoElement.style.height = '100%';
         this.videoElement.style.position = 'absolute';
@@ -68,6 +69,15 @@ export class VideoPlayer {
         // set resize events to the windows if it is resized or its orientation is changed
         window.addEventListener('resize', () => this.resizePlayerStyle(), true);
         window.addEventListener('orientationchange', () => this.onOrientationChange());
+        window.addEventListener('fullscreenchange', async () => {
+            if (this.isVideoReady() && this.hasVideoSource() && this.isPaused()) {
+                try{
+                    await this.play();
+                } catch(err) {
+                    Logger.Error(`Could not play video after fullscreen because: ${JSON.stringify(err)}`);
+                }
+            }
+        });
     }
 
     public setAudioElement(audioElement: HTMLAudioElement): void {
