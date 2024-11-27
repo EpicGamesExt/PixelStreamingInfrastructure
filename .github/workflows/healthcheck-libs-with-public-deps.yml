@@ -26,7 +26,6 @@ jobs:
   build-using-public-deps:
     if: github.repository == 'EpicGamesExt/PixelStreamingInfrastructure'
     runs-on: ubuntu-latest
-    continue-on-error: true
     steps:
 
     - name: Checkout source code
@@ -41,21 +40,26 @@ jobs:
       run: rm package.json && rm package-lock.json
 
     - name: Build signalling using published packages only
+      if: always()
       working-directory: Signalling
       run: npm install && npm run build && npm run lint
 
     - name: Build Wilbur using published packages only
+      if: always()
       working-directory: SignallingWebServer
       run: npm install && npm run build && npm run lint
 
     - name: Build Frontend/library using published packages only
+      if: always()
       working-directory: Frontend/library
       run: npm install && npm run build && npm run lint && npm run test
 
     - name: Build Frontend/ui-library using published packages only
+      if: always()
       working-directory: Frontend/ui-library
       run: npm install && npm run build && npm run lint
 
     - name: Build Frontend/implementations/typescript using published packages only
+      if: always()
       working-directory: Frontend/implementations/typescript
       run: npm install && npm run build
