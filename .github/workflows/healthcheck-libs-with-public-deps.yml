@@ -31,11 +31,28 @@ jobs:
       - name: Checkout source code
         uses: actions/checkout@v3
 
+      - name: Check commit message for push event
+        if: github.event_name == 'push'
+        run: |
+          COMMIT=${{ github.event.head_commit.message }}
+          echo "Commit message: $COMMIT"
+          echo "COMMIT=$COMMIT" >> $GITHUB_ENV
+
+      - name: Check commit message for pull request event
+        if: github.event_name == 'pull_request'
+        run: |
+          # Get the latest commit SHA for the pull request
+          COMMIT_SHA="${{ github.event.pull_request.head.sha }}"
+          echo "Fetching commit message for PR commit: $COMMIT_SHA"
+          COMMIT_MESSAGE=$(git log -1 --pretty=%B "$COMMIT_SHA")
+          echo "Commit message: $COMMIT_MESSAGE"
+          echo "COMMIT=${{ github.event.head_commit.message }}" >> $GITHUB_ENV
+
       - name: Check commit message for bypass
         id: checkbypass
         run: |
-          echo $(git log -1 --pretty=%B)
-          if $(git log -1 --pretty=%B) | grep -q "#bypass-publish-check"; then
+          echo ${{ env.COMMIT }}
+          if ${{ env.COMMIT }} | grep -q "#bypass-publish-check"; then
             echo "bypass=true" >> $GITHUB_OUTPUT
             echo "bypass=true"
           else
