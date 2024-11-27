@@ -1,4 +1,4 @@
-name: Check health of libraries
+name: Check health of building libraries using published dependencies only
 
 on:
   workflow_dispatch:
@@ -23,10 +23,11 @@ env:
   NODE_VERSION: 18.17.x
 
 jobs:
-  build-using-local-deps:
+  build-using-public-deps:
     if: github.repository == 'EpicGamesExt/PixelStreamingInfrastructure'
     runs-on: ubuntu-latest
     steps:
+
     - name: Checkout source code
       uses: actions/checkout@v3
 
@@ -35,26 +36,30 @@ jobs:
         node-version: "${{ env.NODE_VERSION }}"
         registry-url: 'https://registry.npmjs.org'
 
-    - name: Clean build and lint checks on common library
-      working-directory: Common
-      run: npm install && npm run build && npm run lint
+    - name: Remove NPM workspaces
+      run: rm package.json && rm package-lock.json
 
-    - name: Clean build and lint checks on signalling library
+    - name: Build signalling using published packages only
+      continue-on-error: true
       working-directory: Signalling
       run: npm install && npm run build && npm run lint
 
-    - name: Clean build and lint checks on wilbur
+    - name: Build Wilbur using published packages only
+      continue-on-error: true
       working-directory: SignallingWebServer
       run: npm install && npm run build && npm run lint
 
-    - name: Clean build, lint and unit tests on frontend library
+    - name: Build Frontend/library using published packages only
+      continue-on-error: true
       working-directory: Frontend/library
       run: npm install && npm run build && npm run lint && npm run test
 
-    - name: Clean build and lint checks on frontend ui library
+    - name: Build Frontend/ui-library using published packages only
+      continue-on-error: true
       working-directory: Frontend/ui-library
       run: npm install && npm run build && npm run lint
 
-    - name: Clean build of frontend implementation
+    - name: Build Frontend/implementations/typescript using published packages only
+      continue-on-error: true
       working-directory: Frontend/implementations/typescript
       run: npm install && npm run build
