@@ -1,10 +1,16 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
-class PixelStreamingEventListener implements EventListenerObject {
-    private _callback: (...args: unknown[]) => void;
-    private _args: unknown[] = [];
+// To match NodeJS' EventEmitter syntax without downstream code changes we need to use `any`.
+// This means we need to disable linting `any` checks on this file.
+//
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
 
-    constructor(callback: (...args: unknown[]) => void) {
+class PixelStreamingEventListener implements EventListenerObject {
+    private _callback: (...args: any[]) => void;
+    private _args: any[] = [];
+
+    constructor(callback: (...args: any[]) => void) {
         this._callback = callback;
     }
 
@@ -14,13 +20,13 @@ class PixelStreamingEventListener implements EventListenerObject {
         this._args = [];
     }
 
-    setArgs(...args: unknown[]) {
+    setArgs(...args: any[]) {
         this._args = args;
     }
 }
 
 interface EventListenerPair {
-    callback: (...args: unknown[]) => void;
+    callback: (...args: any[]) => void;
     eventListenerWrapper: PixelStreamingEventListener;
 }
 
@@ -63,7 +69,7 @@ export class EventEmitter extends EventTarget {
         this._eventListeners = new Map<string, Array<EventListenerPair>>();
     }
 
-    private removeListenerInternal(eventName: string, listener: (...args: unknown[]) => void): this {
+    private removeListenerInternal(eventName: string, listener: (...args: any[]) => void): this {
         if (this._eventListeners.has(eventName)) {
             const listeners: Array<EventListenerPair> | undefined = this._eventListeners.get(eventName);
 
@@ -88,7 +94,7 @@ export class EventEmitter extends EventTarget {
     /**
      * Alias for `emitter.on(eventName, listener)`.
      */
-    addListener(eventName: string, listener: (...args: unknown[]) => void): this {
+    addListener(eventName: string, listener: (...args: any[]) => void): this {
         return this.on(eventName, listener);
     }
 
@@ -107,7 +113,7 @@ export class EventEmitter extends EventTarget {
      * @param eventName - The name of the event.
      * @param listener - The callback function
      */
-    on(eventName: string, listener: (...args: unknown[]) => void): this {
+    on(eventName: string, listener: (...args: any[]) => void): this {
         // Wrap our normal JS function in a event listener interface
         // so we can use it with event target.
         const eventListenerWrapper: PixelStreamingEventListener = new PixelStreamingEventListener(listener);
@@ -140,14 +146,14 @@ export class EventEmitter extends EventTarget {
      * @param eventName - The name of the event.
      * @param listener - The callback function
      */
-    once(eventName: string, listener: (...args: unknown[]) => void): this {
+    once(eventName: string, listener: (...args: any[]) => void): this {
         // Pass options so this event callback is only called once
         const eventListenerOpts: AddEventListenerOptions = { once: true };
 
         // Wrap our normal JS function in a event listener interface
         // so we can use it with event target and remove it from event target when this function completes.
         const eventListenerWrapper: PixelStreamingEventListener = new PixelStreamingEventListener(
-            (...args: unknown[]) => {
+            (...args: any[]) => {
                 listener(args);
                 this.removeListenerInternal(eventName, listener);
             }
@@ -180,7 +186,7 @@ export class EventEmitter extends EventTarget {
      * ```
      * Returns a reference to the `EventEmitter`, so that calls can be chained.
      */
-    removeListener(eventName: string, listener: (...args: unknown[]) => void): this {
+    removeListener(eventName: string, listener: (...args: any[]) => void): this {
         this.removeListenerInternal(eventName, listener);
         return this;
     }
@@ -188,7 +194,7 @@ export class EventEmitter extends EventTarget {
     /**
      * Alias for `emitter.removeListener()`.
      */
-    off(eventName: string, listener: (...args: unknown[]) => void): this {
+    off(eventName: string, listener: (...args: any[]) => void): this {
         return this.removeListener(eventName, listener);
     }
 
@@ -254,7 +260,7 @@ export class EventEmitter extends EventTarget {
      * // event with parameters 1, 2, 3, 4, 5 in third listener
      * ```
      */
-    emit(eventName: string, ...args: unknown[]): boolean {
+    emit(eventName: string, ...args: any[]): boolean {
         if (this._eventListeners.has(eventName)) {
             const listeners: Array<EventListenerPair> | undefined = this._eventListeners.get(eventName);
 
