@@ -53,8 +53,8 @@ jobs:
       - name: Check commit message for bypass
         id: checkbypass
         run: |
-          echo ${{ env.COMMIT }}
-          if ${{ env.COMMIT }} | grep -q "#bypass-publish-check"; then
+          echo "$COMMIT"
+          if echo "$COMMIT" | grep -q "#bypass-publish-check"; then
             echo "bypass=true" >> $GITHUB_OUTPUT
             echo "bypass=true"
           else
