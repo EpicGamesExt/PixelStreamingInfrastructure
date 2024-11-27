@@ -48,7 +48,7 @@ jobs:
           echo "Fetching commit message for PR commit: $COMMIT_SHA"
           COMMIT_MESSAGE=$(git log -1 --pretty=%B "$COMMIT_SHA")
           echo "Commit message: $COMMIT_MESSAGE"
-          echo "COMMIT=${{ github.event.head_commit.message }}" >> $GITHUB_ENV
+          echo "COMMIT=$COMMIT_MESSAGE" >> $GITHUB_ENV
 
       - name: Check commit message for bypass
         id: checkbypass
