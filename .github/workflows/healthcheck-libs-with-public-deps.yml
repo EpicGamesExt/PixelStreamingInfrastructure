@@ -21,12 +21,16 @@ on:
 
 env:
   NODE_VERSION: 18.17.x
+  GITHUB_HEAD_COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
 
 jobs:
   build-using-public-deps:
-      if: github.repository == 'EpicGamesExt/PixelStreamingInfrastructure' && contains(github.event.head_commit.message, '#bypass-publish-check')
+      if: github.repository == 'EpicGamesExt/PixelStreamingInfrastructure'
       runs-on: ubuntu-latest
       steps:
+
+      - name: Debug commit message
+        run: echo "Commit message=$GITHUB_HEAD_COMMIT_MESSAGE"
 
       - name: Checkout source code
         uses: actions/checkout@v3
