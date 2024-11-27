@@ -264,7 +264,7 @@ export class EventEmitter extends EventTarget {
 
             // Ensure each of our listeners have the args the callback injected
             for (const listenerPair of listeners) {
-                listenerPair.eventListenerWrapper.setArgs(args);
+                listenerPair.eventListenerWrapper.setArgs(...args);
             }
 
             // Fire off the actual event
