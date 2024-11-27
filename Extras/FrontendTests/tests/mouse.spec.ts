@@ -114,7 +114,7 @@ test('Test locked mouse movement', {
         console.log("Player: ", ...args);
     });
 
-    await page.goto(`/?StreamerId=${streamerId}&MatchViewportRes=false&HoveringMouse=false`);
+    await page.goto(`/?StreamerId=${streamerId}&MatchViewportRes=true&HoveringMouse=false`);
     await page.getByText('Click to start').click();
 
     await helpers.waitForVideo(page);
@@ -244,7 +244,7 @@ test('Test mouse input after resizing. Hover mouse.', {
     //     console.log("Player: ", ...args);
     // });
 
-    await page.goto(`/?StreamerId=${streamerId}&HoveringMouse=true`);
+    await page.goto(`/?StreamerId=${streamerId}&MatchViewportRes=true&HoveringMouse=true`);
     await page.getByText('Click to start').click();
 
     await helpers.waitForVideo(page);
@@ -308,7 +308,7 @@ test('Test mouse input after resizing. locked mouse.', {
     //     console.log("Player: ", ...args);
     // });
 
-    await page.goto(`/?StreamerId=${streamerId}&HoveringMouse=false`);
+    await page.goto(`/?StreamerId=${streamerId}&MatchViewportRes=true&HoveringMouse=false`);
     await page.getByText('Click to start').click();
 
     await helpers.waitForVideo(page);
