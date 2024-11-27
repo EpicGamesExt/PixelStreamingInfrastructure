@@ -24,7 +24,7 @@ env:
 
 jobs:
   build-using-public-deps:
-      if: github.repository == 'EpicGamesExt/PixelStreamingInfrastructure' && github.event.head_commit.message !~ '#bypass-publish-check'
+      if: github.repository == 'EpicGamesExt/PixelStreamingInfrastructure' && contains(github.event.head_commit.message, '#bypass-publish-check')
       runs-on: ubuntu-latest
       steps:
 
