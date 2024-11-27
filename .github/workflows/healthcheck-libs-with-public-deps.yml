@@ -34,7 +34,8 @@ jobs:
       - name: Check commit message for bypass
         id: checkbypass
         run: |
-          if git log -1 --pretty=%B | grep -q "#bypass-publish-check"; then
+          echo $(git log -1 --pretty=%B)
+          if $(git log -1 --pretty=%B) | grep -q "#bypass-publish-check"; then
             echo "bypass=true" >> $GITHUB_OUTPUT
             echo "bypass=true"
           else
