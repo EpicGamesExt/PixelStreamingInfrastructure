@@ -21,7 +21,7 @@ on:
 
 env:
   NODE_VERSION: 18.17.x
-  GITHUB_HEAD_COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
+  GITHUB_HEAD_COMMIT_MESSAGE: $(git log -1 --pretty=%B)
 
 jobs:
   build-using-public-deps:
