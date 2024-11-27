@@ -21,19 +21,27 @@ on:
 
 env:
   NODE_VERSION: 18.17.x
-  GITHUB_HEAD_COMMIT_MESSAGE: $(git log -1 --pretty=%B)
 
 jobs:
+  check-if-bypass:
+      runs-on: ubuntu-latest
+      steps:
+      - name: Check commit message for bypass
+        run: |
+          if git log -1 --pretty=%B | grep -q "#bypass-publish-check"; then
+            echo "bypass=true" >> $GITHUB_ENV
+          else
+            echo "bypass=false" >> $GITHUB_ENV
+          fi
+
   build-using-public-deps:
-      if: github.repository == 'EpicGamesExt/PixelStreamingInfrastructure'
+      if: github.repository == 'EpicGamesExt/PixelStreamingInfrastructure' && ${{ env.bypass == 'false' }}  # Only run if bypass is false
+      needs: check-if-bypass
       runs-on: ubuntu-latest
       steps:
 
-      - name: Debug commit message
-        run: echo "Commit message=$GITHUB_HEAD_COMMIT_MESSAGE"
-
       - name: Checkout source code
-        uses: actions/checkout@v3
+        uses: actions/checkout@
 
       - uses: actions/setup-node@v4
         with:
