@@ -25,23 +25,26 @@ env:
 jobs:
   check-if-bypass:
       runs-on: ubuntu-latest
+      outputs:
+        bypass: ${{ steps.checkbypass.outputs.bypass }}
       steps:
       - name: Check commit message for bypass
+        id: checkbypass
         run: |
           if git log -1 --pretty=%B | grep -q "#bypass-publish-check"; then
-            echo "bypass=true" >> $GITHUB_ENV
+            echo "bypass=true" >> $GITHUB_OUTPUT
           else
-            echo "bypass=false" >> $GITHUB_ENV
+            echo "bypass=false" >> $GITHUB_OUTPUT
           fi
 
   build-using-public-deps:
-      if: github.repository == 'EpicGamesExt/PixelStreamingInfrastructure' && ${{ env.bypass == 'false' }}  # Only run if bypass is false
       needs: check-if-bypass
+      if: github.repository == 'EpicGamesExt/PixelStreamingInfrastructure' && needs.check-if-bypass.outputs.bypass == 'false' # Only run if bypass is false
       runs-on: ubuntu-latest
       steps:
 
       - name: Checkout source code
-        uses: actions/checkout@
+        uses: actions/checkout@v3
 
       - uses: actions/setup-node@v4
         with:
