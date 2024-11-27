@@ -36,8 +36,10 @@ jobs:
         run: |
           if git log -1 --pretty=%B | grep -q "#bypass-publish-check"; then
             echo "bypass=true" >> $GITHUB_OUTPUT
+            echo "bypass=true"
           else
             echo "bypass=false" >> $GITHUB_OUTPUT
+            echo "bypass=false"
           fi
 
   build-using-public-deps:
