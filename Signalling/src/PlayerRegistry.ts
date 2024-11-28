@@ -1,5 +1,4 @@
-import { SignallingProtocol, BaseMessage } from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
-import { EventEmitter } from 'events';
+import { SignallingProtocol, BaseMessage, EventEmitter } from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
 import { Logger } from './Logger';
 import { IMessageLogger } from './LoggingUtils';
 import { IStreamer } from './StreamerRegistry';

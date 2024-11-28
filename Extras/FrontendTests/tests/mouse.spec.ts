@@ -99,6 +99,12 @@ test('Test locked mouse movement', {
     tag: ['@mouse', '@locked'],
 }, async ({ page, streamerPage, streamerId, browserName }) => {
 
+    if(browserName === 'chromium') {
+        // Chrome playwright is not working with pointerlock - https://github.com/microsoft/playwright/issues/20956
+        // We can remove this early exit once that is fixed.
+        test.skip();
+    }
+
     // helps debugging
     // helpers.attachToConsoleEvents(streamerPage, (...args: any[]) => {
     //     console.log("Streamer: ", ...args);
@@ -287,6 +293,12 @@ test('Test mouse input after resizing. locked mouse.', {
     tag: ['@mouse', '@locked'],
 }, async ({ page, streamerPage, streamerId, browserName }) => {
 
+    if(browserName === 'chromium') {
+        // Chrome playwright is not working with pointerlock - https://github.com/microsoft/playwright/issues/20956
+        // We can remove this early exit once that is fixed.
+        test.skip();
+    }
+
     // helps debugging
     // helpers.attachToConsoleEvents(streamerPage, (...args: any[]) => {
     //     console.log("Streamer: ", ...args);
@@ -332,12 +344,12 @@ test('Test mouse input after resizing. locked mouse.', {
         if (browserName == 'firefox') {
             return { x: playerBox!.x + playerBox!.width / 2, y: playerBox!.y + playerBox!.height / 2 };
         } else {
-            return { x: playerBox!.x, y: playerBox!.y };
+            return { x: playerBox!.x + playerBox!.width / 2, y: playerBox!.y + playerBox!.height / 2 };
         }
     })();
 
     // click on stream to activate pointer lock
-    await page.mouse.click(anchor.x, anchor.y);
+    await page.click("#streamingVideo");
 
     let events : Record<string, DataChannelEvent[]>;
 

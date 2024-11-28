@@ -9,7 +9,7 @@ import { Logger } from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
 import { InitialSettings } from '../DataChannel/InitialSettings';
 import { OnScreenKeyboard } from '../UI/OnScreenKeyboard';
 import {
-    EventEmitter,
+    PixelStreamingEventEmitter,
     InitialSettingsEvent,
     LatencyTestResultEvent,
     PixelStreamingEvent,
@@ -78,7 +78,7 @@ export class PixelStreaming {
     private _videoStartTime: number;
     private _inputController: boolean;
 
-    private _eventEmitter: EventEmitter;
+    private _eventEmitter: PixelStreamingEventEmitter;
 
     /**
      * @param config - A newly instantiated config object
@@ -92,7 +92,7 @@ export class PixelStreaming {
             this._videoElementParent = overrides.videoElementParent;
         }
 
-        this._eventEmitter = new EventEmitter();
+        this._eventEmitter = new PixelStreamingEventEmitter();
 
         this.configureSettings();
 

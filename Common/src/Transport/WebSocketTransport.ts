@@ -2,7 +2,7 @@
 
 import { Logger } from '../Logger/Logger';
 import { ITransport } from './ITransport';
-import { EventEmitter } from 'events';
+import { EventEmitter } from '../Event/EventEmitter';
 import { BaseMessage } from '../Messages/base_message';
 
 // declare the new method for the websocket interface

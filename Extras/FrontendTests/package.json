@@ -4,13 +4,14 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "npx playwright test"
+    "test": "npx playwright test",
+    "build": ""
   },
   "keywords": [],
   "author": "Epic Games",
   "license": "MIT",
   "devDependencies": {
-    "@playwright/test": "^1.43.1",
+    "@playwright/test": "^1.49.0",
     "@types/node": "^20.12.7",
     "@types/uuid": "^9.0.8"
   },

@@ -3,7 +3,7 @@
 import { ITransport } from './ITransport';
 import { BaseMessage } from '../Messages/base_message';
 import WebSocket from 'ws';
-import { EventEmitter } from 'events';
+import { EventEmitter } from '../Event/EventEmitter';
 
 /**
  * An implementation of WebSocketTransport from pixelstreamingcommon that supports node.js websockets

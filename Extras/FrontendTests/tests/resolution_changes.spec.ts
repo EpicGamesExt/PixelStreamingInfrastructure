@@ -41,6 +41,7 @@ test('Test resolution changes with match viewport off.', {
     await page.goto(`/?StreamerId=${streamerId}&MatchViewportRes=false`);
     await page.getByText('Click to start').click();
     await helpers.waitForVideo(page);
+    await page.click("#streamingVideo");
 
     const events = await getEventsFor(streamerPage, async () => {
         await page.setViewportSize({ width: 100, height: 100 });

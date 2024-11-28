@@ -1,0 +1,105 @@
+name: Check health of libraries (public deps)
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "Common/**"
+      - "Signalling/**"
+      - "SignallingWebServer/**"
+      - "Frontend/library/**"
+      - "Frontend/ui-library/**"
+      - "Frontend/implementations/typescript/**"
+  pull_request:
+    paths:
+      - "Common/**"
+      - "Signalling/**"
+      - "SignallingWebServer/**"
+      - "Frontend/library/**"
+      - "Frontend/ui-library/**"
+      - "Frontend/implementations/typescript/**"
+
+env:
+  NODE_VERSION: 18.17.x
+
+jobs:
+  check-if-bypass:
+      runs-on: ubuntu-latest
+      outputs:
+        bypass: ${{ steps.checkbypass.outputs.bypass }}
+      steps:
+      - name: Checkout source code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 5  # This should be enough history to contain the commit that triggered the PR
+
+      - name: Check commit message for push event
+        if: github.event_name == 'push'
+        run: |
+          COMMIT="${{ github.event.head_commit.message }}"
+          echo "Commit message: $COMMIT"
+          echo "COMMIT=$COMMIT" >> $GITHUB_ENV
+
+      - name: Check commit message for pull request event
+        if: github.event_name == 'pull_request'
+        run: |
+          # Get the latest commit SHA for the pull request
+          COMMIT_SHA="${{ github.event.pull_request.head.sha }}"
+          echo "Fetching commit message for PR commit: $COMMIT_SHA"
+          COMMIT_MESSAGE=$(git log -1 --pretty=%B "$COMMIT_SHA")
+          echo "Commit message: $COMMIT_MESSAGE"
+          echo "COMMIT=$COMMIT_MESSAGE" >> $GITHUB_ENV
+
+      - name: Check commit message for bypass
+        id: checkbypass
+        run: |
+          echo "$COMMIT"
+          if echo "$COMMIT" | grep -q "#bypass-publish-check"; then
+            echo "bypass=true" >> $GITHUB_OUTPUT
+            echo "bypass=true"
+          else
+            echo "bypass=false" >> $GITHUB_OUTPUT
+            echo "bypass=false"
+          fi
+
+  build-using-public-deps:
+      needs: check-if-bypass
+      if: github.repository == 'EpicGamesExt/PixelStreamingInfrastructure' && needs.check-if-bypass.outputs.bypass == 'false' # Only run if bypass is false
+      runs-on: ubuntu-latest
+      steps:
+
+      - name: Checkout source code
+        uses: actions/checkout@v3
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "${{ env.NODE_VERSION }}"
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Remove NPM workspaces
+        run: rm package.json && rm package-lock.json
+
+      - name: Build signalling using published packages only
+        if: always()
+        working-directory: Signalling
+        run: npm install && npm run build && npm run lint
+
+      - name: Build Wilbur using published packages only
+        if: always()
+        working-directory: SignallingWebServer
+        run: npm install && npm run build && npm run lint
+
+      - name: Build Frontend/library using published packages only
+        if: always()
+        working-directory: Frontend/library
+        run: npm install && npm run build && npm run lint && npm run test
+
+      - name: Build Frontend/ui-library using published packages only
+        if: always()
+        working-directory: Frontend/ui-library
+        run: npm install && npm run build && npm run lint
+
+      - name: Build Frontend/implementations/typescript using published packages only
+        if: always()
+        working-directory: Frontend/implementations/typescript
+        run: npm install && npm run build

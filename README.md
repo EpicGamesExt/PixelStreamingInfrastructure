@@ -4,7 +4,7 @@ From UE 5.5 onwards, Epic Games introduced a layer that makes it easier to maint
 
 We have created a [migration guide](/Docs/pixel-streaming-2-migration-guide.md) to ensure a smooth transition for all licensees using the plugin and to highlight all major changes between the plugins.
 
-# Repository helth checks and actions
+# Repository health checks and actions
 
 | Health Checks |
 |-|
