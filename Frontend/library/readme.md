@@ -6,12 +6,13 @@ See [lib-pixelstreamingfrontend-ui](/Frontend/implementations/typescript) for an
 
 ### Key features
 - Create a websocket connection to communicate with the signalling server.
-- Create a WebRTC player that displays the Unreal Engine video and audio.
+- Create a WebRTC peer connection that displays the Unreal Engine video and audio.
 - Handling of input from the user and transmitting it back to Unreal Engine.
 - Opens a data channel connection sending and receiving custom data (in addition to input).
+- Programmable and url specified settings.
 
 ### Adding it to your project
-`npm i @epicgames-ps/lib-pixelstreamingfrontend-ue5.5`
+`npm install @epicgames-ps/lib-pixelstreamingfrontend-ue5.5`
 
 ### How this library is built
 The NPM packages supports:
