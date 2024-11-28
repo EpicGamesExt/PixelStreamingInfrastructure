@@ -4,10 +4,10 @@ import {
     SignallingProtocol,
     Messages,
     MessageHelpers,
-    BaseMessage
+    BaseMessage,
+    EventEmitter
 } from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
 import { DataProtocol } from './protocol';
-import { EventEmitter } from 'events';
 
 interface PixelStreamingSettings {
     AllowPixelStreamingCommands: boolean;

@@ -15,5 +15,8 @@
 		"SignallingWebServer",
 		"SS_Test"
 	],
-	"private": true
+	"private": true,
+	"scripts": {
+		"build": "npm run build --ws"
+	}
   }

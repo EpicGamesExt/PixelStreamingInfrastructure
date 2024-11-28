@@ -5,7 +5,8 @@ The **frontend** refers to the HTML, CSS, images, and JavaScript/TypeScript code
 The frontend consists of two packages:
 
 1. [lib-pixelstreamingfrontend](/Frontend/library/): the core Pixel Streaming frontend for WebRTC, settings, input, and general functionality.
-2. [lib-pixelstreamingfrontend-ui](/Frontend/implementations/typescript): the reference UI that users can either optionally apply on top of the core library or build on top of.
+2. [lib-pixelstreamingfrontend-ui](/Frontend/ui-library/): the UI library that users can either optionally apply on top of the core library or build on top of.
+3. [reference-pixelstreamingfrontend](/Frontend/implementations/typescript/): the reference implementation of the Pixel Streaming frontend (the one that ships with the plugin).
 
 These libraries are published as [NPM packages](/README.md#npm-packages) and support usage as ES6 modules, CommonJS, include type definitions and source maps.
 

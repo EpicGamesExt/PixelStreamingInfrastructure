@@ -5,7 +5,7 @@ import { SettingFlag } from './SettingFlag';
 import { SettingNumber } from './SettingNumber';
 import { SettingText } from './SettingText';
 import { SettingOption } from './SettingOption';
-import { EventEmitter, SettingsChangedEvent } from '../Util/EventEmitter';
+import { PixelStreamingEventEmitter, SettingsChangedEvent } from '../Util/EventEmitter';
 import { SettingBase } from './SettingBase';
 
 /**
@@ -942,7 +942,7 @@ export class Config {
      * Emit events when settings change.
      * @param eventEmitter
      */
-    _registerOnChangeEvents(eventEmitter: EventEmitter) {
+    _registerOnChangeEvents(eventEmitter: PixelStreamingEventEmitter) {
         for (const key of this.flags.keys()) {
             const flag = this.flags.get(key);
             if (flag) {

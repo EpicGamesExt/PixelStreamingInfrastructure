@@ -1,7 +1,7 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 import { ITransport } from '../Transport/ITransport';
-import { EventEmitter } from 'events';
+import { EventEmitter } from '../Event/EventEmitter';
 import { BaseMessage } from '../Messages/base_message';
 import * as Messages from '../Messages/signalling_messages';
 import * as MessageHelpers from '../Messages/message_helpers';

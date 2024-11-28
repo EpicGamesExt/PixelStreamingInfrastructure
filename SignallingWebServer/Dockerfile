@@ -1,6 +1,7 @@
 # Use the current Long Term Support (LTS) version of Node.js
 FROM node:lts
 # Copy the signalling server and frontend source code from the build context
+COPY package.json package.json
 COPY /Common /Common
 COPY /Signalling /Signalling
 COPY /SignallingWebServer /SignallingWebServer
