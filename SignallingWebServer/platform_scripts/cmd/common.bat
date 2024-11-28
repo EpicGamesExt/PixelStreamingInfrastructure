@@ -280,20 +280,16 @@ pushd ..\Common
 IF NOT EXIST build\ (
     echo Building common library...
     echo ------------------------
-    call "%SCRIPT_DIR%node\npm" install
     call "%SCRIPT_DIR%node\npm" run build
 )
 popd
 echo Building signalling library...
 echo ----------------------------
-echo Current directory is: %cd%
 pushd ..\Signalling
-call "%SCRIPT_DIR%node\npm" install
 call "%SCRIPT_DIR%node\npm" run build
 popd
 echo Building wilbur...
 echo ----------------------------
-call "%SCRIPT_DIR%node\npm" install
 call "%SCRIPT_DIR%node\npm" run build
 popd
 exit /b
