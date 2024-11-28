@@ -3,12 +3,14 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "build": ""
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@playwright/test": "^1.43.1",
+    "@playwright/test": "^1.49.0",
     "@types/node": "^20.12.7",
     "@types/uuid": "^9.0.8"
   },

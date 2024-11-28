@@ -5,10 +5,10 @@ import {
     WebSocketTransportNJS,
     BaseMessage,
     Messages,
-    MessageHelpers
+    MessageHelpers,
+    EventEmitter
 } from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
 import { IStreamer, IStreamerInfo } from './StreamerRegistry';
-import { EventEmitter } from 'events';
 import { stringify } from './Utils';
 import { Logger } from './Logger';
 import * as LogUtils from './LoggingUtils';

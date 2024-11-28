@@ -4,6 +4,7 @@
   "description": "Reference implementation for a PixelStreaming SFU",
   "private": true,
   "scripts": {
+    "build": "",
     "start-local": "run-script-os --",
     "start-local:windows": ".\\platform_scripts\\cmd\\run.bat",
     "start-local:default": "./platform_scripts/bash/run_local.sh",

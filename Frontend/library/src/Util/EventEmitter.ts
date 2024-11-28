@@ -581,7 +581,7 @@ export type PixelStreamingEvent =
     | PlayerCountEvent
     | WebRtcTCPRelayDetectedEvent;
 
-export class EventEmitter extends EventTarget {
+export class PixelStreamingEventEmitter extends EventTarget {
     /**
      * Dispatch a new event.
      * @param e event

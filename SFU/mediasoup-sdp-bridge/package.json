@@ -17,6 +17,9 @@
     "type": "opencollective",
     "url": "https://opencollective.com/mediasoup"
   },
+  "scripts": {
+    "build": ""
+  },
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "engines": {
