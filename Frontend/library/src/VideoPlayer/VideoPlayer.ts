@@ -71,9 +71,9 @@ export class VideoPlayer {
         window.addEventListener('orientationchange', () => this.onOrientationChange());
         window.addEventListener('fullscreenchange', async () => {
             if (this.isVideoReady() && this.hasVideoSource() && this.isPaused()) {
-                try{
+                try {
                     await this.play();
-                } catch(err) {
+                } catch (err) {
                     Logger.Error(`Could not play video after fullscreen because: ${JSON.stringify(err)}`);
                 }
             }
