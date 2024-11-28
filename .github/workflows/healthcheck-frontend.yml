@@ -1,4 +1,4 @@
-name: Check health of streaming
+name: Check health of frontend
 
 on:
   workflow_dispatch:
