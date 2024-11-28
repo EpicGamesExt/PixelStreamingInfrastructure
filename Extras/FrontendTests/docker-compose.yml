@@ -26,7 +26,7 @@ services:
       - testing
     healthcheck:
       test: ["CMD", "curl", "-f", "http://streamer:4000"]
-      interval: 20s
+      interval: 5s
       timeout: 5s
       retries: 10
     depends_on:
@@ -39,6 +39,7 @@ services:
       dockerfile: ./Extras/FrontendTests/dockerfiles/linux/Dockerfile
     image: tester
     environment:
+      - STREAMER_SIGNALLING_URL=ws://signalling:8888
       - PIXELSTREAMING_URL=http://signalling
       - PIXELSTREAMER_URL=http://streamer:4000
     networks:

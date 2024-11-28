@@ -13,10 +13,9 @@ function maybeCaptureStream(element: HTMLCaptureableMediaElement): MediaStream |
             return element.captureStream();
         } else if (element.mozCaptureStream) {
             return element.mozCaptureStream();
-        } else {
-            return null;
         }
     }
+    return null;
 }
 
 declare global {
@@ -26,12 +25,12 @@ declare global {
     }
 }
 
-document.body.onload = function () {
+document.body.onload = function() {
     window.streamer = new Streamer('MockStreamer');
-    window.startStreaming = function () {
+    window.startStreaming = function() {
         const playbackElement = document.getElementById('source_video') as HTMLCaptureableMediaElement;
         const stream = maybeCaptureStream(playbackElement);
-        if (stream) {
+        if (stream && window.streamer) {
             window.streamer.on('data_channel_message', (playerId: string, message: object) => {
                 console.log(`Data channel msg: (${playerId}) => ${JSON.stringify(message)}`);
             });
@@ -41,9 +40,14 @@ document.body.onload = function () {
                 }
             });
             window.streamer.on('endpoint_id_confirmed', () => {
-                playbackElement.play().catch(() => {});
+                playbackElement.play().catch(() => { });
             });
-            window.streamer.startStreaming(`ws://${window.location.hostname}:8888`, stream);
+            let signallingURL = `ws://${window.location.hostname}:8888`;
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.has('SignallingURL')) {
+                signallingURL = urlParams.get('SignallingURL')!;
+            }
+            window.streamer.startStreaming(signallingURL, stream);
         }
     };
 };
