@@ -171,7 +171,12 @@ export class Application {
         const isIpad =
             /iPad/.test(navigator.userAgent) ||
             (/Macintosh/.test(navigator.userAgent) && 'ontouchend' in document);
-        const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+        const isSafari =
+            navigator.vendor &&
+            navigator.vendor.indexOf('Apple') > -1 &&
+            navigator.userAgent &&
+            navigator.userAgent.indexOf('CriOS') == -1 &&
+            navigator.userAgent.indexOf('FxiOS') == -1;
 
         // In some cases we want to disable fullscreen button if it is not explicitly requested:
 

@@ -351,20 +351,20 @@ function build_wilbur() {
     pushd Common > /dev/null
     if [[ ! -d "build" ]]; then
         echo Building common
-        ${NPM} ci
+        ${NPM} install
         ${NPM} run build
     fi
     popd
 
     pushd Signalling > /dev/null
     echo Building signalling
-    ${NPM} link ../Common
+    ${NPM} install
     ${NPM} run build
     popd > /dev/null
 
     pushd SignallingWebServer > /dev/null
     echo Building wilbur
-    ${NPM} link ../Signalling
+    ${NPM} install
     ${NPM} run build
 
     popd > /dev/null
