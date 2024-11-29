@@ -6,6 +6,7 @@ declare global {
     interface Window {
         pixelStreaming: PixelStreaming;
         streamer: Streamer;
+        signallingURL?: string;
         dataMessages: Record<string,DataChannelEvent[]>;
         dataMessageListener(playerId: number, message: any): void;
     }

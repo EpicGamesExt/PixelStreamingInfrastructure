@@ -8,7 +8,7 @@ type PSTestFixtures = {
 export const test = base.extend<PSTestFixtures>({
     streamerPage: async ({ context }, use) => {
         const streamerPage = await context.newPage();
-        await streamerPage.goto("http://localhost:4000");
+        await streamerPage.goto(`${process.env.PIXELSTREAMER_URL || 'http://localhost:4000'}?SignallingURL=${process.env.STREAMER_SIGNALLING_URL}`);
         await use(streamerPage);
     },
     streamerId: async ({ streamerPage }, use) => {

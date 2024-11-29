@@ -1,0 +1,54 @@
+---
+version: "3.4"
+services:
+  signalling:
+    build:
+      context: ../../
+      dockerfile: ./SignallingWebServer/Dockerfile
+    image: signalling
+    command: --rest_api
+    networks:
+      - testing
+    healthcheck:
+        test: ["CMD", "curl", "-f", "http://signalling:80"]
+        interval: 10s
+        timeout: 5s
+        retries: 3
+        start_period: 30s
+        start_interval: 5s # only supported on docker engine 25+
+
+  streamer:
+    build:
+      context: ../../
+      dockerfile: ./Extras/JSStreamer/Dockerfile
+    image: streamer
+    networks:
+      - testing
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://streamer:4000"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    depends_on:
+      signalling:
+        condition: service_healthy
+
+  tester:
+    build:
+      context: ../../
+      dockerfile: ./Extras/FrontendTests/dockerfiles/linux/Dockerfile
+    image: tester
+    environment:
+      - STREAMER_SIGNALLING_URL=ws://signalling:8888
+      - PIXELSTREAMING_URL=http://signalling
+      - PIXELSTREAMER_URL=http://streamer:4000
+    networks:
+      - testing
+    volumes:
+      - ./results:/tester/playwright-report
+    depends_on:
+      streamer:
+        condition: service_healthy
+
+networks:
+  testing:

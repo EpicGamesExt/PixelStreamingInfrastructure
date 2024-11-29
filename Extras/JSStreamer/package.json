@@ -1,13 +1,13 @@
 {
   "name": "@epicgames-ps/js-streamer",
-  "version": "0.0.1",
+  "version": "0.0.4",
   "description": "A Node JS implementation of a webrtc streamer for testing.",
-  "main": "build/pixelstreamingjsstreamer.js",
-  "types": "build/pixelstreamingjsstreamer.d.ts",
-  "module": "build/pixelstreamingjsstreamer.js",
+  "main": "build/commonjs/pixelstreamingjsstreamer.js",
+  "types": "build/types/pixelstreamingjsstreamer.d.ts",
+  "module": "build/esm/pixelstreamingjsstreamer.js",
   "scripts": {
     "develop": "webpack-dev-server --mode development",
-    "build": "tsc --project tsconfig.json && webpack --mode development",
+    "build": "tsc --project tsconfig.esm.json && tsc --project tsconfig.cjs.json && webpack --mode development",
     "build-dev": "tsc --project tsconfig.json && webpack --mode development",
     "lint": "eslint ./src --ext .js,.jsx,.ts,.tsx",
     "test": "echo \"Error: no test specified\" && exit 1"
