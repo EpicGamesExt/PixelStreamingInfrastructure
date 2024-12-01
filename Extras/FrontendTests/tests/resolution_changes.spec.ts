@@ -18,9 +18,9 @@ test('Test resolution changes with match viewport on.', {
 
     const events = await getEventsFor(streamerPage, async () => {
         await page.setViewportSize({ width: 100, height: 100 });
-        await helpers.delay(500);
+        await helpers.delay(1000);
         await page.setViewportSize({ width: 800, height: 600 });
-        await helpers.delay(500);
+        await helpers.delay(1000);
     });
 
     const firstPlayerId = Object.keys(events)[0];
@@ -45,9 +45,9 @@ test('Test resolution changes with match viewport off.', {
 
     const events = await getEventsFor(streamerPage, async () => {
         await page.setViewportSize({ width: 100, height: 100 });
-        await helpers.delay(500);
+        await helpers.delay(1000);
         await page.setViewportSize({ width: 800, height: 600 });
-        await helpers.delay(500);
+        await helpers.delay(1000);
     });
 
     const firstPlayerId = Object.keys(events)[0];

@@ -167,10 +167,29 @@ export class Application {
      * Set up button click functions and button functionality
      */
     public createButtons() {
+        const isIphone = /iPhone/.test(navigator.userAgent);
+        const isIpad =
+            /iPad/.test(navigator.userAgent) ||
+            (/Macintosh/.test(navigator.userAgent) && 'ontouchend' in document);
+        const isSafari =
+            navigator.vendor &&
+            navigator.vendor.indexOf('Apple') > -1 &&
+            navigator.userAgent &&
+            navigator.userAgent.indexOf('CriOS') == -1 &&
+            navigator.userAgent.indexOf('FxiOS') == -1;
+
+        // In some cases we want to disable fullscreen button if it is not explicitly requested:
+
         // IPhone does not support fullscreen API as at 28th July 2024 (see: https://caniuse.com/fullscreen) so if
         // we are on IPhone and user has not specified explicitly configured UI config for
         // fullscreen button then we should disable this button as it doesn't work.
-        if (this._options.fullScreenControlsConfig === undefined && /iPhone/.test(navigator.userAgent)) {
+
+        // Additionally iPad on non-Safari browsers doesn't really allow touch inputs and fullscreen video at the same time.
+        // If you do this the video gets dragged off back to normal non-fullscreen video and then the video is paused.
+        // See: https://github.com/EpicGamesExt/PixelStreamingInfrastructure/issues/219
+        const disableFullscreenButton = isIphone || (!isSafari && isIpad);
+
+        if (this._options.fullScreenControlsConfig === undefined && disableFullscreenButton) {
             this._options.fullScreenControlsConfig = { creationMode: UIElementCreationMode.Disable };
         }
 

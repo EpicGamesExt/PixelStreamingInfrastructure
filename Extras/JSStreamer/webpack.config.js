@@ -10,7 +10,12 @@ module.exports = {
         rules: [
             {
                 test: /\.ts?$/,
-                use: 'ts-loader',
+                use: [
+                    {
+                        loader: 'ts-loader',
+                        options: { configFile: 'tsconfig.cjs.json' },
+                    }
+                ],
                 include: path.resolve(__dirname, 'src'),
                 exclude: /node_modules/,
             },
@@ -31,7 +36,7 @@ module.exports = {
     plugins: [
         new HtmlWebpackPlugin({ title: 'our project', template: 'src/index.html' }),
         new MiniCssExtractPlugin({ filename: "bundle.css" }),
-        new CopyPlugin({ patterns: [ { from: 'src/video', to: 'video' } ] }),
+        new CopyPlugin({ patterns: [{ from: 'src/video', to: 'video' }] }),
 
     ],
     // externals: [ NodeExternals() ],
