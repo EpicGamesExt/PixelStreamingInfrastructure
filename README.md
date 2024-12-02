@@ -137,14 +137,10 @@ This repository contains the following in branches that track Unreal Engine vers
 | Branch | Status |
 |--------|--------|
 |[Master](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/tree/master)| Dev |
-|[UE5.5](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/tree/UE5.5)| Pre-release |
-|[UE5.4](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/tree/UE5.4)| Current |
-|[UE5.3](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/tree/UE5.3)| Supported |
-|[UE5.2](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/tree/UE5.2)| End of life |
-|[UE5.1](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/tree/UE5.1)| Unsupported |
-|[UE5.0](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/tree/UE5.0)| Unsupported |
-|[UE4.27](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/tree/UE4.27)| Unsupported |
-|[UE4.26](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/tree/UE4.26)| Unsupported |
+|[UE5.5](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/tree/UE5.5)| Current |
+|[UE5.4](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/tree/UE5.4)| Supported |
+|[UE5.3](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/tree/UE5.3)| End of life |
+|[UE5.2](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/tree/UE5.2)| Unsupported |
 
 | Legend | Meaning |
 |---------|-----------|
