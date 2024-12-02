@@ -34,7 +34,7 @@ jobs:
           fetch-depth: 5  # This should be enough history to contain the commit that triggered the PR
 
       - name: Check commit message for push event
-      - env:
+        env:
           COMMIT: ${{ github.event.head_commit.message }}
         if: github.event_name == 'push'
         run: |
