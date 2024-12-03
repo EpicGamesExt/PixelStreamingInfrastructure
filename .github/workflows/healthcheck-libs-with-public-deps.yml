@@ -33,6 +33,11 @@ jobs:
         with:
           fetch-depth: 5  # This should be enough history to contain the commit that triggered the PR
 
+      - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github.event.pull_request) }}
+        run: echo "$GITHUB_CONTEXT"
+
       - name: Check commit message for push event
         env:
           COMMIT: ${{ github.event.head_commit.message }}
