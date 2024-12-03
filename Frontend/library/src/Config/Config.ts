@@ -50,6 +50,10 @@ export class NumericParameters {
     static AFKCountdownSecs = 'AFKCountdown' as const;
     static MinQP = 'MinQP' as const;
     static MaxQP = 'MaxQP' as const;
+    static MinQuality = 'MinQuality' as const;
+    static MaxQuality = 'MaxQuality' as const;
+    static CompatQualityMin = 'CompatQualityMin' as const;
+    static CompatQualityMax = 'CompatQualityMax' as const;
     static WebRTCFPS = 'WebRTCFPS' as const;
     static WebRTCMinBitrate = 'WebRTCMinBitrate' as const;
     static WebRTCMaxBitrate = 'WebRTCMaxBitrate' as const;
@@ -105,12 +109,12 @@ export type OptionIds = FlagsIds | NumericParametersIds | TextParametersIds | Op
 export type OptionKeys<T> = T extends FlagsIds
     ? boolean
     : T extends NumericParametersIds
-      ? number
-      : T extends TextParametersIds
-        ? string
-        : T extends OptionParametersIds
-          ? string
-          : never;
+    ? number
+    : T extends TextParametersIds
+    ? string
+    : T extends OptionParametersIds
+    ? string
+    : never;
 
 export type AllSettings = {
     [K in OptionIds]: OptionKeys<K>;
@@ -170,11 +174,11 @@ export class Config {
                 settings && Object.prototype.hasOwnProperty.call(settings, TextParameters.SignallingServerUrl)
                     ? settings[TextParameters.SignallingServerUrl]
                     : (location.protocol === 'https:' ? 'wss://' : 'ws://') +
-                      window.location.hostname +
-                      // for readability, we omit the port if it's 80
-                      (window.location.port === '80' || window.location.port === ''
-                          ? ''
-                          : `:${window.location.port}`),
+                    window.location.hostname +
+                    // for readability, we omit the port if it's 80
+                    (window.location.port === '80' || window.location.port === ''
+                        ? ''
+                        : `:${window.location.port}`),
                 useUrlParams
             )
         );
@@ -195,7 +199,7 @@ export class Config {
             )
         );
 
-        const getBrowserSupportedVideoCodecs = function (): Array<string> {
+        const getBrowserSupportedVideoCodecs = function(): Array<string> {
             const browserSupportedCodecs: Array<string> = [];
             // Try get the info needed from the RTCRtpReceiver. This is only available on chrome
             if (!RTCRtpReceiver.getCapabilities) {
@@ -220,7 +224,7 @@ export class Config {
             return browserSupportedCodecs;
         };
 
-        const getDefaultVideoCodec = function (): string {
+        const getDefaultVideoCodec = function(): string {
             const videoCodecs = getBrowserSupportedVideoCodecs();
             // If only one option, then select that.
             if (videoCodecs.length == 1) {
@@ -239,7 +243,7 @@ export class Config {
             return '';
         };
 
-        const matchSpecifiedCodecToClosestSupported = function (specifiedCodec: string): string {
+        const matchSpecifiedCodecToClosestSupported = function(specifiedCodec: string): string {
             const browserSupportedCodecs: Array<string> = getBrowserSupportedVideoCodecs();
 
             // Codec supplied in url param is an exact match for the browser codec.
@@ -585,7 +589,7 @@ export class Config {
                 0 /*min*/,
                 999 /*max*/,
                 settings &&
-                Object.prototype.hasOwnProperty.call(settings, NumericParameters.MaxReconnectAttempts)
+                    Object.prototype.hasOwnProperty.call(settings, NumericParameters.MaxReconnectAttempts)
                     ? settings[NumericParameters.MaxReconnectAttempts]
                     : 3 /*value*/,
                 useUrlParams
@@ -618,6 +622,66 @@ export class Config {
                 settings && Object.prototype.hasOwnProperty.call(settings, NumericParameters.MaxQP)
                     ? settings[NumericParameters.MaxQP]
                     : 51 /*value*/,
+                useUrlParams
+            )
+        );
+
+        this.numericParameters.set(
+            NumericParameters.MinQuality,
+            new SettingNumber(
+                NumericParameters.MinQuality,
+                'Min Quality',
+                'The lower bound for the quality factor of the encoder. 0 = Worst quality, 100 = Best quality.',
+                0 /*min*/,
+                100 /*max*/,
+                settings && Object.prototype.hasOwnProperty.call(settings, NumericParameters.MinQuality)
+                    ? settings[NumericParameters.MinQuality]
+                    : 0 /*value*/,
+                useUrlParams
+            )
+        );
+
+        this.numericParameters.set(
+            NumericParameters.MaxQuality,
+            new SettingNumber(
+                NumericParameters.MaxQuality,
+                'Max Quality',
+                'The upper bound for the quality factor of the encoder. 0 = Worst quality, 100 = Best quality.',
+                0 /*min*/,
+                100 /*max*/,
+                settings && Object.prototype.hasOwnProperty.call(settings, NumericParameters.MaxQuality)
+                    ? settings[NumericParameters.MaxQuality]
+                    : 100 /*value*/,
+                useUrlParams
+            )
+        );
+
+        this.numericParameters.set(
+            NumericParameters.CompatQualityMin,
+            new SettingNumber(
+                NumericParameters.CompatQualityMin,
+                'Min Quality',
+                'The lower bound for encoding quality. 0 = Worst, 100 = Best.',
+                0 /*min*/,
+                100 /*max*/,
+                settings && Object.prototype.hasOwnProperty.call(settings, NumericParameters.CompatQualityMin)
+                    ? settings[NumericParameters.CompatQualityMin]
+                    : 0 /*value*/,
+                useUrlParams
+            )
+        );
+
+        this.numericParameters.set(
+            NumericParameters.CompatQualityMax,
+            new SettingNumber(
+                NumericParameters.CompatQualityMax,
+                'Max Quality',
+                'The upper bound for encoding quality. 0 = Worst, 100 = Best.',
+                0 /*min*/,
+                100 /*max*/,
+                settings && Object.prototype.hasOwnProperty.call(settings, NumericParameters.CompatQualityMax)
+                    ? settings[NumericParameters.CompatQualityMax]
+                    : 100 /*value*/,
                 useUrlParams
             )
         );
@@ -676,7 +740,7 @@ export class Config {
                 500 /*min*/,
                 900000 /*max*/,
                 settings &&
-                Object.prototype.hasOwnProperty.call(settings, NumericParameters.StreamerAutoJoinInterval)
+                    Object.prototype.hasOwnProperty.call(settings, NumericParameters.StreamerAutoJoinInterval)
                     ? settings[NumericParameters.StreamerAutoJoinInterval]
                     : 3000 /*value*/,
                 useUrlParams

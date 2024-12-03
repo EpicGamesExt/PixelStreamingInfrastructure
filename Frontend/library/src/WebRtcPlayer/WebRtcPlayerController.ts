@@ -1488,6 +1488,44 @@ export class WebRtcPlayerController {
     }
 
     /**
+     * Send the MinQuality encoder setting to the UE Instance.
+     * @param minQuality - The lower bound for quality when encoding
+     * valid values are (0-100) where:
+     * 0 = Worst quality.
+     * 100 = Best quality.
+     */
+    sendEncoderMinQuality(minQuality: number) {
+        Logger.Info(`MinQuality=${minQuality}\n`);
+
+        if (minQuality != null) {
+            this.streamMessageController.toStreamerHandlers.get('Command')([
+                JSON.stringify({
+                    'Encoder.MinQuality': minQuality
+                })
+            ]);
+        }
+    }
+
+    /**
+     * Send the MaxQuality encoder setting to the UE Instance.
+     * @param maxQuality - The upper bound for quality when encoding
+     * valid values are (0-100) where:
+     * 0 = Best quality.
+     * 100 = Worst quality.
+     */
+    sendEncoderMaxQuality(maxQuality: number) {
+        Logger.Info(`MaxQuality=${maxQuality}\n`);
+
+        if (maxQuality != null) {
+            this.streamMessageController.toStreamerHandlers.get('Command')([
+                JSON.stringify({
+                    'Encoder.MaxQuality': maxQuality
+                })
+            ]);
+        }
+    }
+
+    /**
      * Send the { WebRTC.MinBitrate: SomeNumber }} command to UE to set
      * the minimum bitrate that we allow WebRTC to use
      * (note setting this too high in poor networks can be problematic).
