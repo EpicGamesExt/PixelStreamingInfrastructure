@@ -37,22 +37,24 @@ jobs:
         if: github.event_name == 'pull_request'
         env:
           PR_BODY: ${{ github.event.pull_request.body }}
-        run: |
-          if echo "$PR_BODY" | grep -q "#bypass-publish-check"; then
-            echo "bypass=true"
-            echo "bypass=true" >> $GITHUB_OUTPUT
-          else
-            echo "bypass=false"
-            echo "bypass=false" >> $GITHUB_OUTPUT
-          fi
+        run: echo BODY_CHECK="$PR_BODY" >> $GITHUB_ENV
 
       - name: Check commit message for push event
         if: github.event_name == 'push'
         env:
           COMMIT: ${{ github.event.head_commit.message }}
+        run: echo BODY_CHECK="$COMMIT" >> $GITHUB_ENV
+
+      - name: Check commit message for bypass
+        id: checkbypass
         run: |
-          echo "Commit message: ${{ env.COMMIT }}"
-          echo "COMMIT=${{ env.COMMIT }}" >> $GITHUB_ENV
+          if echo "$BODY_CHECK" | grep -q "#bypass-publish-check"; then
+            echo "bypass=true" >> $GITHUB_OUTPUT
+            echo "bypass=true"
+          else
+            echo "bypass=false" >> $GITHUB_OUTPUT
+            echo "bypass=flase"
+          fi
 
   build-using-public-deps:
       needs: check-if-bypass
