@@ -1510,8 +1510,8 @@ export class WebRtcPlayerController {
      * Send the MaxQuality encoder setting to the UE Instance.
      * @param maxQuality - The upper bound for quality when encoding
      * valid values are (0-100) where:
-     * 0 = Best quality.
-     * 100 = Worst quality.
+     * 0 = Worst quality.
+     * 100 = Best quality.
      */
     sendEncoderMaxQuality(maxQuality: number) {
         Logger.Info(`MaxQuality=${maxQuality}\n`);
