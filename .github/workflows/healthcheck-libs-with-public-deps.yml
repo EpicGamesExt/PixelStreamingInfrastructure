@@ -34,12 +34,15 @@ jobs:
           fetch-depth: 5  # This should be enough history to contain the commit that triggered the PR
 
       - name: Check PR body for bypass-publish-check
+        if: github.event_name == 'pull_request'
         env:
           PR_BODY: ${{ github.event.pull_request.body }}
         run: |
           if echo "$PR_BODY" | grep -q "#bypass-publish-check"; then
+            echo "bypass=true"
             echo "bypass=true" >> $GITHUB_OUTPUT
           else
+            echo "bypass=false"
             echo "bypass=false" >> $GITHUB_OUTPUT
           fi
 
