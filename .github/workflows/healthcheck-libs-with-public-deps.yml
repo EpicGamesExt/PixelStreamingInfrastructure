@@ -33,7 +33,7 @@ jobs:
         with:
           fetch-depth: 5  # This should be enough history to contain the commit that triggered the PR
 
-      - name: Check PR body for bypass-publish-check
+      - name: Grab PR body
         if: github.event_name == 'pull_request'
         env:
           PR_BODY: ${{ github.event.pull_request.body }}
@@ -42,7 +42,7 @@ jobs:
           echo "$PR_BODY" >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
 
-      - name: Check commit message for push event
+      - name: Grab commit message for push event
         if: github.event_name == 'push'
         env:
           COMMIT: ${{ github.event.head_commit.message }}
@@ -51,7 +51,7 @@ jobs:
           echo "$COMMIT" >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
 
-      - name: Check commit message for bypass
+      - name: Check if the body to check contains the bypass tag
         id: checkbypass
         run: |
           if echo "$BODY_CHECK" | grep -q "#bypass-publish-check"; then
