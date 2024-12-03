@@ -109,12 +109,12 @@ export type OptionIds = FlagsIds | NumericParametersIds | TextParametersIds | Op
 export type OptionKeys<T> = T extends FlagsIds
     ? boolean
     : T extends NumericParametersIds
-    ? number
-    : T extends TextParametersIds
-    ? string
-    : T extends OptionParametersIds
-    ? string
-    : never;
+      ? number
+      : T extends TextParametersIds
+        ? string
+        : T extends OptionParametersIds
+          ? string
+          : never;
 
 export type AllSettings = {
     [K in OptionIds]: OptionKeys<K>;
@@ -174,11 +174,11 @@ export class Config {
                 settings && Object.prototype.hasOwnProperty.call(settings, TextParameters.SignallingServerUrl)
                     ? settings[TextParameters.SignallingServerUrl]
                     : (location.protocol === 'https:' ? 'wss://' : 'ws://') +
-                    window.location.hostname +
-                    // for readability, we omit the port if it's 80
-                    (window.location.port === '80' || window.location.port === ''
-                        ? ''
-                        : `:${window.location.port}`),
+                      window.location.hostname +
+                      // for readability, we omit the port if it's 80
+                      (window.location.port === '80' || window.location.port === ''
+                          ? ''
+                          : `:${window.location.port}`),
                 useUrlParams
             )
         );
@@ -199,7 +199,7 @@ export class Config {
             )
         );
 
-        const getBrowserSupportedVideoCodecs = function(): Array<string> {
+        const getBrowserSupportedVideoCodecs = function (): Array<string> {
             const browserSupportedCodecs: Array<string> = [];
             // Try get the info needed from the RTCRtpReceiver. This is only available on chrome
             if (!RTCRtpReceiver.getCapabilities) {
@@ -224,7 +224,7 @@ export class Config {
             return browserSupportedCodecs;
         };
 
-        const getDefaultVideoCodec = function(): string {
+        const getDefaultVideoCodec = function (): string {
             const videoCodecs = getBrowserSupportedVideoCodecs();
             // If only one option, then select that.
             if (videoCodecs.length == 1) {
@@ -243,7 +243,7 @@ export class Config {
             return '';
         };
 
-        const matchSpecifiedCodecToClosestSupported = function(specifiedCodec: string): string {
+        const matchSpecifiedCodecToClosestSupported = function (specifiedCodec: string): string {
             const browserSupportedCodecs: Array<string> = getBrowserSupportedVideoCodecs();
 
             // Codec supplied in url param is an exact match for the browser codec.
@@ -589,7 +589,7 @@ export class Config {
                 0 /*min*/,
                 999 /*max*/,
                 settings &&
-                    Object.prototype.hasOwnProperty.call(settings, NumericParameters.MaxReconnectAttempts)
+                Object.prototype.hasOwnProperty.call(settings, NumericParameters.MaxReconnectAttempts)
                     ? settings[NumericParameters.MaxReconnectAttempts]
                     : 3 /*value*/,
                 useUrlParams
@@ -740,7 +740,7 @@ export class Config {
                 500 /*min*/,
                 900000 /*max*/,
                 settings &&
-                    Object.prototype.hasOwnProperty.call(settings, NumericParameters.StreamerAutoJoinInterval)
+                Object.prototype.hasOwnProperty.call(settings, NumericParameters.StreamerAutoJoinInterval)
                     ? settings[NumericParameters.StreamerAutoJoinInterval]
                     : 3000 /*value*/,
                 useUrlParams

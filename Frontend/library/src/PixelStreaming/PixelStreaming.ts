@@ -216,19 +216,25 @@ export class PixelStreaming {
         });
 
         // new quality value that gets scaled to qp for legacy reasons
-        this.config._addOnNumericSettingChangedListener(NumericParameters.CompatQualityMin, (newValue: number) => {
-            newValue = 51 - (newValue / 100) * 51;
-            Logger.Info('--------  Sending MinQP from quality value  --------');
-            this._webRtcController.sendEncoderMaxQP(newValue);
-            Logger.Info('-------------------------------------------');
-        });
+        this.config._addOnNumericSettingChangedListener(
+            NumericParameters.CompatQualityMin,
+            (newValue: number) => {
+                newValue = 51 - (newValue / 100) * 51;
+                Logger.Info('--------  Sending MinQP from quality value  --------');
+                this._webRtcController.sendEncoderMaxQP(newValue);
+                Logger.Info('-------------------------------------------');
+            }
+        );
 
-        this.config._addOnNumericSettingChangedListener(NumericParameters.CompatQualityMax, (newValue: number) => {
-            newValue = 51 - (newValue / 100) * 51;
-            Logger.Info('--------  Sending MaxQP from quality value  --------');
-            this._webRtcController.sendEncoderMinQP(newValue);
-            Logger.Info('-------------------------------------------');
-        });
+        this.config._addOnNumericSettingChangedListener(
+            NumericParameters.CompatQualityMax,
+            (newValue: number) => {
+                newValue = 51 - (newValue / 100) * 51;
+                Logger.Info('--------  Sending MaxQP from quality value  --------');
+                this._webRtcController.sendEncoderMinQP(newValue);
+                Logger.Info('-------------------------------------------');
+            }
+        );
         // WebRTC settings
         this.config._addOnNumericSettingChangedListener(
             NumericParameters.WebRTCMinBitrate,
@@ -574,14 +580,14 @@ export class PixelStreaming {
                     // If a setting is set in the URL, make sure we respect that value as opposed to what the application sends us
                     useUrlParams && urlParams.has(NumericParameters.MinQP)
                         ? Number.parseFloat(urlParams.get(NumericParameters.MinQP))
-                        : (settings.EncoderSettings.MinQP || 0)
+                        : settings.EncoderSettings.MinQP || 0
                 );
 
                 this.config.setNumericSetting(
                     NumericParameters.MaxQP,
                     useUrlParams && urlParams.has(NumericParameters.MaxQP)
                         ? Number.parseFloat(urlParams.get(NumericParameters.MaxQP))
-                        : (settings.EncoderSettings.MaxQP || 51)
+                        : settings.EncoderSettings.MaxQP || 51
                 );
             }
 
@@ -591,14 +597,14 @@ export class PixelStreaming {
                     // If a setting is set in the URL, make sure we respect that value as opposed to what the application sends us
                     useUrlParams && urlParams.has(NumericParameters.MinQuality)
                         ? Number.parseFloat(urlParams.get(NumericParameters.MinQuality))
-                        : (settings.EncoderSettings.MinQuality || 0)
+                        : settings.EncoderSettings.MinQuality || 0
                 );
 
                 this.config.setNumericSetting(
                     NumericParameters.MaxQuality,
                     useUrlParams && urlParams.has(NumericParameters.MaxQuality)
                         ? Number.parseFloat(urlParams.get(NumericParameters.MaxQuality))
-                        : (settings.EncoderSettings.MaxQuality || 100)
+                        : settings.EncoderSettings.MaxQuality || 100
                 );
             }
 
@@ -606,10 +612,16 @@ export class PixelStreaming {
             // shouldnt exist in EncoderSettings
             if (useUrlParams) {
                 if (urlParams.has(NumericParameters.CompatQualityMin)) {
-                    this.config.setNumericSetting(NumericParameters.CompatQualityMin, Number.parseFloat(urlParams.get(NumericParameters.CompatQualityMin)));
+                    this.config.setNumericSetting(
+                        NumericParameters.CompatQualityMin,
+                        Number.parseFloat(urlParams.get(NumericParameters.CompatQualityMin))
+                    );
                 }
                 if (urlParams.has(NumericParameters.CompatQualityMax)) {
-                    this.config.setNumericSetting(NumericParameters.CompatQualityMax, Number.parseFloat(urlParams.get(NumericParameters.CompatQualityMax)));
+                    this.config.setNumericSetting(
+                        NumericParameters.CompatQualityMax,
+                        Number.parseFloat(urlParams.get(NumericParameters.CompatQualityMax))
+                    );
                 }
             }
         }
