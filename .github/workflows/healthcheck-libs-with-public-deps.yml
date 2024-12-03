@@ -37,13 +37,19 @@ jobs:
         if: github.event_name == 'pull_request'
         env:
           PR_BODY: ${{ github.event.pull_request.body }}
-        run: printf "BODY_CHECK=%s\n" "$PR_BODY" >> $GITHUB_ENV
+        run: |
+          echo "BODY_CHECK<<EOF" >> $GITHUB_ENV
+          echo "$PR_BODY" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
 
       - name: Check commit message for push event
         if: github.event_name == 'push'
         env:
           COMMIT: ${{ github.event.head_commit.message }}
-        run: printf "BODY_CHECK=%s\n" "$COMMIT" >> $GITHUB_ENV
+        run: |
+          echo "BODY_CHECK<<EOF" >> $GITHUB_ENV
+          echo "$COMMIT" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
 
       - name: Check commit message for bypass
         id: checkbypass
