@@ -33,34 +33,33 @@ jobs:
         with:
           fetch-depth: 5  # This should be enough history to contain the commit that triggered the PR
 
-      - name: Check commit message for push event
+      - name: Grab PR body
+        if: github.event_name == 'pull_request'
+        env:
+          PR_BODY: ${{ github.event.pull_request.body }}
+        run: |
+          echo "BODY_CHECK<<EOF" >> $GITHUB_ENV
+          echo "$PR_BODY" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
+      - name: Grab commit message for push event
+        if: github.event_name == 'push'
         env:
           COMMIT: ${{ github.event.head_commit.message }}
-        if: github.event_name == 'push'
         run: |
-          echo "Commit message: ${{ env.COMMIT }}"
-          echo "COMMIT=${{ env.COMMIT }}" >> $GITHUB_ENV
+          echo "BODY_CHECK<<EOF" >> $GITHUB_ENV
+          echo "$COMMIT" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
 
-      - name: Check commit message for pull request event
-        if: github.event_name == 'pull_request'
-        run: |
-          # Get the latest commit SHA for the pull request
-          COMMIT_SHA="${{ github.event.pull_request.head.sha }}"
-          echo "Fetching commit message for PR commit: $COMMIT_SHA"
-          COMMIT_MESSAGE=$(git log -1 --pretty=%B "$COMMIT_SHA")
-          echo "Commit message: $COMMIT_MESSAGE"
-          echo "COMMIT=$COMMIT_MESSAGE" >> $GITHUB_ENV
-
-      - name: Check commit message for bypass
+      - name: Check if the body to check contains the bypass tag
         id: checkbypass
         run: |
-          echo "$COMMIT"
-          if echo "$COMMIT" | grep -q "#bypass-publish-check"; then
+          if echo "$BODY_CHECK" | grep -q "#bypass-publish-check"; then
             echo "bypass=true" >> $GITHUB_OUTPUT
             echo "bypass=true"
           else
             echo "bypass=false" >> $GITHUB_OUTPUT
-            echo "bypass=false"
+            echo "bypass=flase"
           fi
 
   build-using-public-deps:

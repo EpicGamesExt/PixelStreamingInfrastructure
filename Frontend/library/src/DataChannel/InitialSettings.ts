@@ -40,6 +40,8 @@ export class EncoderSettings {
     MaxBitrate?: number;
     MinQP?: number;
     MaxQP?: number;
+    MinQuality?: number;
+    MaxQuality?: number;
     RateControl?: 'CBR' | 'VBR' | 'ConstQP';
     FillerData?: boolean;
     MultiPass?: 'DISABLED' | 'QUARTER' | 'FULL';
