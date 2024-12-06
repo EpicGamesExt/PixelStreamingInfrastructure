@@ -52,6 +52,9 @@ export class PlayerPeer {
 
 const protocolVersion = '1.0.0';
 
+// Official uri for abs-capture-time RTP header extension, used to signal we want to use this extension.
+const kAbsCaptureTime = 'http://www.webrtc.org/experiments/rtp-hdrext/abs-capture-time';
+
 export class Streamer extends EventEmitter {
     id: string;
     settings: Settings;
@@ -129,7 +132,9 @@ export class Streamer extends EventEmitter {
     }
 
     handleConfigMessage(msg: Messages.config) {
-        this.peerConnectionOptions = msg.peerConnectionOptions;
+        if(msg.peerConnectionOptions !== undefined) {
+            this.peerConnectionOptions = msg.peerConnectionOptions;
+        }
     }
 
     handleIdentifyMessage(_msg: Messages.identify) {
@@ -213,6 +218,14 @@ export class Streamer extends EventEmitter {
             peerConnection
                 .createOffer()
                 .then((offer) => {
+
+                    if(offer.sdp == undefined) {
+                        return;
+                    }
+
+                    // Munge offer
+                    offer.sdp = this.mungeOffer(offer.sdp);
+
                     peerConnection
                         .setLocalDescription(offer)
                         .then(() => {
@@ -222,6 +235,7 @@ export class Streamer extends EventEmitter {
                                     sdp: offer.sdp
                                 })
                             );
+                            this.emit('local_description_set', offer);
                         })
                         .catch(() => {});
                 })
@@ -232,8 +246,8 @@ export class Streamer extends EventEmitter {
                 peerConnection
                     .getStats()
                     .then((stats: RTCStatsReport) => {
-                        let qpSum: number;
-                        let fps: number;
+                        let qpSum: number | undefined = undefined;
+                        let fps: number | undefined = undefined;
                         stats.forEach((report) => {
                             /* eslint-disable @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment */
                             if (report.type == 'outbound-rtp' && report.mediaType == 'video') {
@@ -243,14 +257,12 @@ export class Streamer extends EventEmitter {
                             /* eslint-enable @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment */
                         });
                         const nowTime = Date.now();
-                        if (newPlayer.lastStatsTime) {
+                        if (newPlayer.lastStatsTime != undefined && newPlayer.lastQpSum !== undefined && qpSum !== undefined && fps !== undefined) {
                             const deltaMillis = nowTime - newPlayer.lastStatsTime;
                             const qpDelta = (qpSum - newPlayer.lastQpSum) * (deltaMillis / 1000);
                             const qpAvg = qpDelta / fps;
 
-                            newPlayer.dataChannel.send(
-                                this.constructMessage(DataProtocol.FromStreamer.VideoEncoderAvgQP, qpAvg)
-                            );
+                            newPlayer.dataChannel.send(this.constructMessage(DataProtocol.FromStreamer.VideoEncoderAvgQP, qpAvg));
                         }
                         newPlayer.lastQpSum = qpSum;
                         newPlayer.lastStatsTime = nowTime;
@@ -289,6 +301,30 @@ export class Streamer extends EventEmitter {
             const candidate = new RTCIceCandidate(msg.candidate);
             playerPeer.peerConnection.addIceCandidate(candidate);
         }
+    }
+
+    mungeOffer(offerSDP: string) : string {
+        // Add the abs-capture-time header extension to the sdp extmap
+        return this.addHeaderExtensionToSdp(offerSDP, kAbsCaptureTime);
+    }
+
+    addHeaderExtensionToSdp(sdp: string, uri: string) : string {
+        // Find the highest used header extension id by sorting the extension ids used,
+        // eliminating duplicates and adding one.
+        // Todo: Update this when WebRTC in Chrome supports the header extension API.
+        const usedIds = sdp.split('\n')
+            .filter(line => line.startsWith('a=extmap:'))
+            .map(line => parseInt(line.split(' ')[0].substring(9), 10))
+            .sort((a, b) => a - b)
+            .filter((item, index, array) => array.indexOf(item) === index);
+        const nextId = usedIds[usedIds.length - 1] + 1;
+        const extmapLine = 'a=extmap:' + nextId + ' ' + uri + '\r\n';
+
+        const sections = sdp.split('\nm=').map((part, index) => {
+            return (index > 0 ? 'm=' + part : part).trim() + '\r\n';
+        });
+        const sessionPart = sections.shift();
+        return sessionPart + sections.map(mediaSection => mediaSection + extmapLine).join('');
     }
 
     sendDataProtocol(playerId: string) {
@@ -342,10 +378,7 @@ export class Streamer extends EventEmitter {
         let argIndex = 0;
 
         if (messageDef.structure.length != args.length) {
-            console.log(
-                `Incorrect number of parameters given to constructMessage. Got ${args.length}, expected ${messageDef.structure.length}`
-            );
-            return null;
+            throw new Error(`Incorrect number of parameters given to constructMessage. Got ${args.length}, expected ${messageDef.structure.length}`);
         }
 
         dataSize += 1; // message type
