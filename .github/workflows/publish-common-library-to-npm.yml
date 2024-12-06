@@ -22,14 +22,12 @@ jobs:
           sparse-checkout-cone-mode: false
         
       - run: |
-          echo "package_content=$(cat package.json)"
+          echo "package_content=$(cat package.json)" >> $GITHUB_ENV
           
       - name: Extract library version
         id: get-version
         run: |
-          echo "VERSION=$(echo $json)"
-        env:
-          json: ${{ env.json }}
+          echo "VERSION=$(echo ${{ env.json }})"
 
       - name: Check version
         run: |
