@@ -2,7 +2,7 @@ name: Publish common lib
 on:
   workflow_dispatch:
   push:
-    branches: ['UE5.5']
+    # branches: ['UE5.5']
     paths: ['Common/package.json']
 
 env:
@@ -10,7 +10,7 @@ env:
 
 jobs:
   build:
-    if: github.repository == 'EpicGamesExt/PixelStreamingInfrastructure'
+    # if: github.repository == 'EpicGamesExt/PixelStreamingInfrastructure'
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -20,12 +20,24 @@ jobs:
         with:
           sparse-checkout: 'Common'
           sparse-checkout-cone-mode: false
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "${{ env.NODE_VERSION }}"
-          registry-url: 'https://registry.npmjs.org'
-      - run: npm install
-      - run: npm run build
-      - run: npm publish --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Extract library version
+        id: get-version
+        outputs:
+          version: ${{ env.package_version }}
+        run: |
+          package_content=`cat Common/package.json`
+          echo "package_version=${{ fromJson($package_content).version }}" >> $GITHUB_ENV
+
+      - name: Check version
+        run: |
+          echo ${{ steps.get-version.outputs.version }}
+
+      # - uses: actions/setup-node@v4
+      #   with:
+      #     node-version: "${{ env.NODE_VERSION }}"
+      #     registry-url: 'https://registry.npmjs.org'
+      # - run: npm install
+      # - run: npm run build
+      # - run: npm publish --access public
+      #   env:
+      #     NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
