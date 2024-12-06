@@ -22,7 +22,7 @@ jobs:
           sparse-checkout-cone-mode: false
         
       - run: |
-          echo "package_content=$(cat Common/package.json)"
+          echo "package_content=$(cat package.json)"
           
       - name: Extract library version
         id: get-version
