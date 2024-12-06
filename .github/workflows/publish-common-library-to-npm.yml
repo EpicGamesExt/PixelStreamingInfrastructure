@@ -24,9 +24,6 @@ jobs:
       - id: set-var
         run: |
           package_content=`cat package.json`
-          package_content="${package_content//'%'/'%25'}"
-          package_content="${package_content//$'\n'/'%0A'}"
-          package_content="${package_content//$'\r'/'%0D'}"
           echo "json<<EOF" >> $GITHUB_OUTPUT
           echo $package_content >> $GITHUB_OUTPUT
           echo 'EOF' >> $GITHUB_OUTPUT
