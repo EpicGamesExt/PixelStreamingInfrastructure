@@ -19,23 +19,6 @@ jobs:
         with:
             sparse-checkout: 'SFU'
             sparse-checkout-cone-mode: false
-        
-      - id: get-package-json
-        run: |
-          package_content=`cat SFU/package.json`
-          echo "json<<EOF" >> $GITHUB_OUTPUT
-          echo $package_content >> $GITHUB_OUTPUT
-          echo 'EOF' >> $GITHUB_OUTPUT
-
-      - uses: actions/github-script@v5
-        with:
-          script: |
-            github.rest.git.createRef({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              ref: 'refs/tags/sfu-v${{ fromJson(steps.get-package-json.outputs.json).version }}',
-              sha: context.sha
-            })
 
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v2
@@ -50,4 +33,20 @@ jobs:
           tags: 'pixelstreamingunofficial/pixel-streaming-sfu:5.5'
           push: true
           file: SFU/Dockerfile
-          
+        
+      - id: get-package-json
+        run: |
+          package_content=`cat SFU/package.json`
+          echo "json<<EOF" >> $GITHUB_OUTPUT
+          echo $package_content >> $GITHUB_OUTPUT
+          echo 'EOF' >> $GITHUB_OUTPUT
+
+      - uses: actions/github-script@v5
+        with:
+          script: |
+            github.rest.git.createRef({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: 'refs/tags/sfu-${{ fromJson(steps.get-package-json.outputs.json).version }}',
+              sha: context.sha
+            })
