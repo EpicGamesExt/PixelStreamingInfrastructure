@@ -21,15 +21,23 @@ jobs:
           sparse-checkout: 'Common'
           sparse-checkout-cone-mode: false
         
-      - id: set-var
+      - id: get-package-json
         run: |
           package_content=`cat package.json`
           echo "json<<EOF" >> $GITHUB_OUTPUT
           echo $package_content >> $GITHUB_OUTPUT
           echo 'EOF' >> $GITHUB_OUTPUT
 
-      - run: |
-          echo "${{ fromJson(steps.set-var.outputs.json).version }}"
+      - name: Create tag
+        uses: actions/github-script@v5
+        with:
+          script: |
+            github.rest.git.createRef({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: 'refs/tags/common-v${{ fromJson(steps.get-package-json.outputs.json).version }}',
+              sha: context.sha
+            })
           
       # - name: Extract library version
       #   id: get-version
