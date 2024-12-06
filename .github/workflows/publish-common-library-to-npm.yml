@@ -27,7 +27,9 @@ jobs:
           package_content="${package_content//'%'/'%25'}"
           package_content="${package_content//$'\n'/'%0A'}"
           package_content="${package_content//$'\r'/'%0D'}"
-          echo "json=$package_content" >> $GITHUB_OUTPUT
+          echo "json<<EOF" >> $GITHUB_OUTPUT
+          echo $package_content >> $GITHUB_OUTPUT
+          echo 'EOF' >> $GITHUB_OUTPUT
 
       - run: |
           echo "${{ fromJson(steps.set-var.outputs.json).version }}"
