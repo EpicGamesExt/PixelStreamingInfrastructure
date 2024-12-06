@@ -21,18 +21,21 @@ jobs:
           sparse-checkout: 'Common'
           sparse-checkout-cone-mode: false
         
-      - run: |
+      - id: set-var
+        run: |
           package_content=`cat package.json`
           package_content="${package_content//'%'/'%25'}"
           package_content="${package_content//$'\n'/'%0A'}"
           package_content="${package_content//$'\r'/'%0D'}"
-          echo "json=${{ fromJson(env.package_content).version }}"
-          # echo "json=$package_content" >> $GITHUB_ENV
+          echo "::set-output name=json::$package_content"
+
+      - run: |
+          echo "${{ fromJson(steps.set-var.outputs.json).version }}"
           
-      - name: Extract library version
-        id: get-version
-        run: |
-          echo "VERSION=${{ fromJson(env.json).version }}"
+      # - name: Extract library version
+      #   id: get-version
+      #   run: |
+      #     echo "VERSION=${{ fromJson(env.json).version }}"
 
       # - name: Check version
       #   run: |
