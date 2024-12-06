@@ -22,16 +22,20 @@ jobs:
           sparse-checkout-cone-mode: false
         
       - run: |
-          echo "package_content=$(cat package.json)" >> $GITHUB_ENV
+          package_content=`cat package.json`
+          package_content="${package_content//'%'/'%25'}"
+          package_content="${package_content//$'\n'/'%0A'}"
+          package_content="${package_content//$'\r'/'%0D'}"
+          echo "json=$package_content" >> $GITHUB_ENV
           
       - name: Extract library version
         id: get-version
         run: |
-          echo "VERSION=$(echo ${{ env.json }})"
+          echo "VERSION=${{ fromJson(env.json).version }}"
 
-      - name: Check version
-        run: |
-          echo ${{ steps.get-version.outputs.version }}
+      # - name: Check version
+      #   run: |
+      #     echo ${{ steps.get-version.outputs.version }}
 
       # - uses: actions/setup-node@v4
       #   with:
