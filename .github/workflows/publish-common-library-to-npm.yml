@@ -30,8 +30,6 @@ jobs:
           echo "VERSION=$(echo $json)"
         env:
           json: ${{ env.json }}
-        outputs:
-          version: ${{ fromJson(env.json).version }}
 
       - name: Check version
         run: |
