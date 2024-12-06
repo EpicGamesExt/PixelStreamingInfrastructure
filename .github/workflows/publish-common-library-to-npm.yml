@@ -26,7 +26,8 @@ jobs:
           package_content="${package_content//'%'/'%25'}"
           package_content="${package_content//$'\n'/'%0A'}"
           package_content="${package_content//$'\r'/'%0D'}"
-          echo "json=$package_content" >> $GITHUB_ENV
+          echo "json=$package_content"
+          # echo "json=$package_content" >> $GITHUB_ENV
           
       - name: Extract library version
         id: get-version
