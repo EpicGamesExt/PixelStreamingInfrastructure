@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   push:
     branches: ['UE5.5']
-    paths: ['SignallingWebServer/**']
+    paths: ['SignallingWebServer/package.json']
 
 jobs:
   signalling-server-image:
