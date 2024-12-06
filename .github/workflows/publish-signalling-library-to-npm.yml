@@ -20,6 +20,24 @@ jobs:
         with:
           sparse-checkout: 'Signalling'
           sparse-checkout-cone-mode: false
+        
+      - id: get-package-json
+        run: |
+          package_content=`cat Signalling/package.json`
+          echo "json<<EOF" >> $GITHUB_OUTPUT
+          echo $package_content >> $GITHUB_OUTPUT
+          echo 'EOF' >> $GITHUB_OUTPUT
+
+      - uses: actions/github-script@v5
+        with:
+          script: |
+            github.rest.git.createRef({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: 'refs/tags/lib-signalling-v${{ fromJson(steps.get-package-json.outputs.json).version }}',
+              sha: context.sha
+            })
+
       - uses: actions/setup-node@v4
         with:
           node-version: "${{ env.NODE_VERSION }}"
