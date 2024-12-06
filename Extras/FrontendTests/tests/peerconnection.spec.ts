@@ -2,7 +2,7 @@ import { test } from './fixtures';
 import { expect } from './matchers';
 import * as helpers from './helpers';
 
-test('Test abs-capture-time header extension found turned on for streamer', {
+test('Test abs-capture-time header extension found for streamer', {
     tag: ['@capture-time'],
 }, async ({ page, streamerPage, streamerId }) => {
 

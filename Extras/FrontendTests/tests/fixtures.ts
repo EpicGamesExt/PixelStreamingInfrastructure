@@ -19,6 +19,10 @@ export const test = base.extend<PSTestFixtures>({
             // Expose the resolve function to the browser context
             await streamerPage.exposeFunction('resolveFromIdPromise', resolve);
 
+            // Note: If page.evaluate is passed a promise it will try to await it immediately
+            // to avoid this hanging here waiting for endpoint_id_confirmed we instead
+            // wrap the page.evaluate in a promise and expose the resolve into the streamer page
+            // to be called when the endpoint_id_confirmed is actually called.
             streamerPage.evaluate(()=> {
                 window.streamer.on('endpoint_id_confirmed', () => {
                     window.resolveFromIdPromise(window.streamer.id);
