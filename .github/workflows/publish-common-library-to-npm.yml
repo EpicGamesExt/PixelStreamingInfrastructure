@@ -20,13 +20,18 @@ jobs:
         with:
           sparse-checkout: 'Common'
           sparse-checkout-cone-mode: false
+        
+      - run: |
+          echo "package_content=$(cat Common/package.json)"
+          
       - name: Extract library version
         id: get-version
-        outputs:
-          version: ${{ env.package_version }}
         run: |
-          package_content=`cat Common/package.json`
-          echo "package_version=${{ fromJson(package_content).version }}" >> $GITHUB_ENV
+          echo "VERSION=$(echo $json)"
+        env:
+          json: ${{ env.json }}
+        outputs:
+          version: ${{ fromJson(env.json).version }}
 
       - name: Check version
         run: |
