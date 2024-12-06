@@ -32,15 +32,7 @@ jobs:
           tags: 'pixelstreamingunofficial/pixel-streaming-signalling-server:5.5'
           push: true
           file: SignallingWebServer/Dockerfile
-      -
-        name: Build and push the SFU container image
-        uses: docker/build-push-action@v3
-        with:
-          context: .
-          tags: 'pixelstreamingunofficial/pixel-streaming-sfu:5.5'
-          push: true
-          file: SFU/Dockerfile
-        
+
       - id: get-package-json
         run: |
           package_content=`cat SignallingWebServer/package.json`
