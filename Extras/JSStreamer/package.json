@@ -35,7 +35,7 @@
     "webpack-node-externals": "^3.0.0"
   },
   "dependencies": {
-    "express": "^4.21.1",
+    "express": "^4.21.2",
     "@epicgames-ps/lib-pixelstreamingcommon-ue5.5": "*"
   },
   "repository": {
