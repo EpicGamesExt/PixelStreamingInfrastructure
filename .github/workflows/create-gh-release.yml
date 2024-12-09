@@ -14,35 +14,30 @@ env:
   commitsha: "${{ github.event.inputs.commitsha || github.sha }}"
 
 jobs:
-
-  conditional-check:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/github-script@v6
-        with:
-          script: |
-            const result = await github.rest.actions.createWorkflowDispatch({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              workflow_id: 'healthcheck-libs-with-public-deps.yml',
-              ref: context.ref,
-            });
-
   build:
-    needs: conditional-check
-    if: needs.conditional-check.outputs.continue == 'true'
     runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: ./
-
     permissions:
       contents: write
     steps:
+
     - name: "Checkout source code"
       uses: actions/checkout@v3
       with:
         ref: "${{ env.commitsha }}"
+
+    - run: |
+        echo REPO - ${{ github.ref }}
+
+    - name: Wait for tests to succeed
+      uses: lewagon/wait-on-check-action@v1.3.4
+      with:
+        ref: ${{ github.ref }}
+        check-name: test
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+        wait-interval: 20
 
     - name: Read the RELEASE_VERSION file
       id: getversion
