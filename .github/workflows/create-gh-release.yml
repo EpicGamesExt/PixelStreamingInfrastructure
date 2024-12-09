@@ -15,8 +15,22 @@ env:
 
 jobs:
 
+  conditional-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@v6
+        with:
+          script: |
+            const result = await github.rest.actions.createWorkflowDispatch({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: 'healthcheck-libs-with-public-deps.yml',
+              ref: context.ref,
+            });
+
   build:
-    if: github.repository == 'EpicGamesExt/PixelStreamingInfrastructure'
+    needs: conditional-check
+    if: needs.conditional-check.outputs.continue == 'true'
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -126,10 +140,10 @@ jobs:
           /*/SignallingWebServer/node_modules/*
           /*/SS_Test/*
 
-    - name: "Make the release"
-      uses: ncipollo/release-action@v1
-      with:
-        tag: "${{ github.ref_name }}-${{ steps.getversion.outputs.version }}"
-        artifacts: "${{ github.ref_name }}-${{ steps.getversion.outputs.version }}.zip,${{ github.ref_name }}-${{ steps.getversion.outputs.version }}.tar.gz"
-        generateReleaseNotes: true
-        commit: "${{ env.commitsha }}"
+    # - name: "Make the release"
+    #   uses: ncipollo/release-action@v1
+    #   with:
+    #     tag: "${{ github.ref_name }}-${{ steps.getversion.outputs.version }}"
+    #     artifacts: "${{ github.ref_name }}-${{ steps.getversion.outputs.version }}.zip,${{ github.ref_name }}-${{ steps.getversion.outputs.version }}.tar.gz"
+    #     generateReleaseNotes: true
+    #     commit: "${{ env.commitsha }}"
