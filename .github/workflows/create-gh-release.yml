@@ -36,7 +36,7 @@ jobs:
         owner: mcottontensor
         repo: PixelStreamingInfrastructure
         ref: conditional_release
-        github_token: ${{ github.token }}
+        github_token: ${{ secrets.TEST_TOKEN }}
         workflow_file_name: healthcheck-libs-with-public-deps.yml
 
     - name: Read the RELEASE_VERSION file
