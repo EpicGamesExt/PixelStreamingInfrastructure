@@ -36,6 +36,7 @@ jobs:
         owner: mcottontensor
         repo: PixelStreamingInfrastructure
         ref: conditional_release
+        github_user: mcottontensor
         github_token: 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
         workflow_file_name: healthcheck-libs-with-public-deps.yml
 
