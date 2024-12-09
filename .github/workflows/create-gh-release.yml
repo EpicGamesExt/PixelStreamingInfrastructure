@@ -15,20 +15,24 @@ env:
 
 jobs:
   build:
+    # only run this on the main repo, not forks
+    if: github.repository == 'EpicGamesExt/PixelStreamingInfrastructure'
     runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: ./
     permissions:
       contents: write
-    steps:
 
+    steps:
     - name: "Checkout source code"
       uses: actions/checkout@v3
       with:
         ref: "${{ env.commitsha }}"
 
-    - uses: convictional/trigger-workflow-and-wait@v1.3.0
+      # triggers the public library check to make sure all the published items work
+    - if: env.commitsha != ''
+      uses: convictional/trigger-workflow-and-wait@v1.3.0
       with:
         owner: ${{ github.repository_owner }}
         repo: PixelStreamingInfrastructure
