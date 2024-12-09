@@ -35,16 +35,9 @@ jobs:
       with:
         owner: ${{ github.repository_owner }}
         repo: PixelStreamingInfrastructure
-        github_token: ${{ secrets.G_ACCESS_TOKEN }}
-        workflow_file_name: healthcheck-libs-with-public-deps.yml
-
-    - name: Wait for tests to succeed
-      uses: lewagon/wait-on-check-action@v1.3.4
-      with:
         ref: ${{ github.ref_name }}
-        check-name: build-using-public-deps
-        repo-token: ${{ secrets.GITHUB_TOKEN }}
-        wait-interval: 20
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        workflow_file_name: healthcheck-libs-with-public-deps.yml
 
     - name: Read the RELEASE_VERSION file
       id: getversion
