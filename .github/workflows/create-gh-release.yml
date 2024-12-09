@@ -31,6 +31,13 @@ jobs:
     - run: |
         echo REPO - ${{ github.ref_name }}
 
+    - uses: convictional/trigger-workflow-and-wait@v1.3.0
+      with:
+        owner: ${{ github.repository_owner }}
+        repo: PixelStreamingInfrastructure
+        github_token: ${{ secrets.G_ACCESS_TOKEN }}
+        workflow_file_name: healthcheck-libs-with-public-deps.yml
+
     - name: Wait for tests to succeed
       uses: lewagon/wait-on-check-action@v1.3.4
       with:
