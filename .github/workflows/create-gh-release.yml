@@ -33,10 +33,10 @@ jobs:
 
     - uses: convictional/trigger-workflow-and-wait@v1.3.0
       with:
-        owner: ${{ github.repository_owner }}
+        owner: mcottontensor
         repo: PixelStreamingInfrastructure
-        ref: ${{ github.ref }}
-        github_token: ${{ secrets.GITHUB_TOKEN }}
+        ref: conditional_release
+        github_token: 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
         workflow_file_name: healthcheck-libs-with-public-deps.yml
 
     - name: Read the RELEASE_VERSION file
