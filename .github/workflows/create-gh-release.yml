@@ -29,13 +29,13 @@ jobs:
         ref: "${{ env.commitsha }}"
 
     - run: |
-        echo REPO - ${{ github.ref }}
+        echo REPO - ${{ github.ref_name }}
 
     - name: Wait for tests to succeed
       uses: lewagon/wait-on-check-action@v1.3.4
       with:
-        ref: ${{ github.ref }}
-        check-name: test
+        ref: ${{ github.ref_name }}
+        check-name: build-using-public-deps
         repo-token: ${{ secrets.GITHUB_TOKEN }}
         wait-interval: 20
 
