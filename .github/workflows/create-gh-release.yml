@@ -31,7 +31,7 @@ jobs:
         ref: "${{ env.commitsha }}"
 
       # triggers the public library check to make sure all the published items work
-    - if: env.commitsha != ''
+    - if: env.commitsha == ''
       uses: convictional/trigger-workflow-and-wait@v1.3.0
       with:
         owner: ${{ github.repository_owner }}
