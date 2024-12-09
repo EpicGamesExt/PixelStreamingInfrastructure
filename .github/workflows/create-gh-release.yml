@@ -35,7 +35,7 @@ jobs:
       with:
         owner: ${{ github.repository_owner }}
         repo: PixelStreamingInfrastructure
-        ref: ${{ github.ref_name }}
+        ref: ${{ github.ref }}
         github_token: ${{ secrets.GITHUB_TOKEN }}
         workflow_file_name: healthcheck-libs-with-public-deps.yml
 
