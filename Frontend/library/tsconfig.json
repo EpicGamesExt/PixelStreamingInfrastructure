@@ -3,7 +3,7 @@
         "outDir": "./dist",
         "noImplicitAny": true,
         "esModuleInterop": true,
-        "target": "ES6",
+        "target": "ES2015",
         "moduleResolution": "nodenext",
         "sourceMap": true,
         "allowJs": true

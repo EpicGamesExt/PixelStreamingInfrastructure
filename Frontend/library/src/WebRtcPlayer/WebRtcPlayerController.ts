@@ -285,6 +285,18 @@ export class WebRtcPlayerController {
             this.protocol.sendMessage(message);
         });
 
+        this.config._addOnOptionSettingChangedListener(OptionParameters.PreferredQuality, (preferredQuality) => {
+            if (preferredQuality === undefined || preferredQuality === '') {
+                return;
+            }
+
+            // close the current peer connection and create a new one
+            let allQualities = this.config.getSettingOption(OptionParameters.PreferredQuality).options;
+            let qualityIndex = allQualities.indexOf(preferredQuality);
+            const message = MessageHelpers.createMessage(Messages.layerPreference, { spatialLayer: qualityIndex, temporalLayer: 0 });
+            this.protocol.sendMessage(message);
+        });
+
         this.setVideoEncoderAvgQP(-1);
 
         this.signallingUrlBuilder = () => {
@@ -1255,6 +1267,21 @@ export class WebRtcPlayerController {
             // Disable negotiating with the sfu as the sfu only supports one codec at a time
             this.peerConnectionController.preferredCodec = '';
         }
+
+        // NOTE: These two settings configurations are done outside of an if(this.isUsingSFU) so that users
+        // can switch between a default and SFU stream and have the settings reconfigure appropriately
+        
+        // Update the possible video quality options
+        this.config.setOptionSettingOptions(
+            OptionParameters.PreferredQuality,
+            this.isUsingSFU ? [ "Low", "Medium", "High" ] : [ "Default" ]
+        );
+
+        // Update the selected video quality
+        this.config.setOptionSettingValue(
+            OptionParameters.PreferredQuality,
+            this.isUsingSFU ? "High" : "Default"
+        )
 
         const sdpOffer: RTCSessionDescriptionInit = {
             sdp: Offer.sdp,
