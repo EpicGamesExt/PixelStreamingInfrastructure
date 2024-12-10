@@ -6,9 +6,9 @@ on:
     paths: ['RELEASE_VERSION']
 
   workflow_dispatch:
-      inputs:
-        commitsha:
-          description: "Commit SHA for the release (if blank use latest on this branch)"
+    inputs:
+      commitsha:
+        description: "Commit SHA for the release (if blank use latest on this branch)"
 
 env:
   commitsha: "${{ github.event.inputs.commitsha || github.sha }}"
@@ -16,7 +16,7 @@ env:
 jobs:
   build:
     # only run this on the main repo, not forks
-    if: github.repository == 'EpicGamesExt/PixelStreamingInfrastructure'
+    # if: github.repository == 'EpicGamesExt/PixelStreamingInfrastructure'
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -38,6 +38,7 @@ jobs:
         ref: ${{ github.ref_name }}
         github_token: ${{ secrets.WORKFLOW_TOKEN }}
         workflow_file_name: healthcheck-libs-with-public-deps.yml
+        client_payload: '{ "ref": "${{ github.ref_name }}", "commitsha": "${{ env.commitsha }}" }'
 
     - name: Read the RELEASE_VERSION file
       id: getversion
@@ -135,10 +136,10 @@ jobs:
           /*/SignallingWebServer/node_modules/*
           /*/SS_Test/*
 
-    - name: "Make the release"
-      uses: ncipollo/release-action@v1
-      with:
-        tag: "${{ github.ref_name }}-${{ steps.getversion.outputs.version }}"
-        artifacts: "${{ github.ref_name }}-${{ steps.getversion.outputs.version }}.zip,${{ github.ref_name }}-${{ steps.getversion.outputs.version }}.tar.gz"
-        generateReleaseNotes: true
-        commit: "${{ env.commitsha }}"
+    # - name: "Make the release"
+    #   uses: ncipollo/release-action@v1
+    #   with:
+    #     tag: "${{ github.ref_name }}-${{ steps.getversion.outputs.version }}"
+    #     artifacts: "${{ github.ref_name }}-${{ steps.getversion.outputs.version }}.zip,${{ github.ref_name }}-${{ steps.getversion.outputs.version }}.tar.gz"
+    #     generateReleaseNotes: true
+    #     commit: "${{ env.commitsha }}"

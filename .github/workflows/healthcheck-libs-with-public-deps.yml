@@ -2,8 +2,12 @@ name: Check health of libraries (public deps)
 
 on:
   workflow_dispatch:
+    inputs:
+      commitsha:
+        description: "Commit SHA for the release (if blank use latest on this branch)"
 
 env:
+  commitsha: "${{ github.event.inputs.commitsha || github.sha }}"
   NODE_VERSION: 18.17.x
 
 jobs:
@@ -15,6 +19,8 @@ jobs:
     steps:
     - name: Checkout source code
       uses: actions/checkout@v3
+      with:
+        ref: "${{ env.commitsha }}"
 
     - uses: actions/setup-node@v4
       with:
