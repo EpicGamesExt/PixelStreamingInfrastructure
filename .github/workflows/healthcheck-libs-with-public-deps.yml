@@ -2,104 +2,55 @@ name: Check health of libraries (public deps)
 
 on:
   workflow_dispatch:
-  push:
-    paths:
-      - "Common/**"
-      - "Signalling/**"
-      - "SignallingWebServer/**"
-      - "Frontend/library/**"
-      - "Frontend/ui-library/**"
-      - "Frontend/implementations/typescript/**"
-  pull_request:
-    paths:
-      - "Common/**"
-      - "Signalling/**"
-      - "SignallingWebServer/**"
-      - "Frontend/library/**"
-      - "Frontend/ui-library/**"
-      - "Frontend/implementations/typescript/**"
+    inputs:
+      commitsha:
+        description: "Commit SHA for the release (if blank use latest on this branch)"
 
 env:
+  commitsha: "${{ github.event.inputs.commitsha || github.sha }}"
   NODE_VERSION: 18.17.x
 
 jobs:
-  check-if-bypass:
-      runs-on: ubuntu-latest
-      outputs:
-        bypass: ${{ steps.checkbypass.outputs.bypass }}
-      steps:
-      - name: Checkout source code
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 5  # This should be enough history to contain the commit that triggered the PR
-
-      - name: Grab PR body
-        if: github.event_name == 'pull_request'
-        env:
-          PR_BODY: ${{ github.event.pull_request.body }}
-        run: |
-          echo "BODY_CHECK<<EOF" >> $GITHUB_ENV
-          echo "$PR_BODY" >> $GITHUB_ENV
-          echo "EOF" >> $GITHUB_ENV
-
-      - name: Grab commit message for push event
-        if: github.event_name == 'push'
-        env:
-          COMMIT: ${{ github.event.head_commit.message }}
-        run: |
-          echo "BODY_CHECK<<EOF" >> $GITHUB_ENV
-          echo "$COMMIT" >> $GITHUB_ENV
-          echo "EOF" >> $GITHUB_ENV
-
-      - name: Check if the body to check contains the bypass tag
-        id: checkbypass
-        run: |
-          if echo "$BODY_CHECK" | grep -q "#bypass-publish-check"; then
-            echo "bypass=true" >> $GITHUB_OUTPUT
-            echo "bypass=true"
-          else
-            echo "bypass=false" >> $GITHUB_OUTPUT
-            echo "bypass=flase"
-          fi
-
   build-using-public-deps:
-      needs: check-if-bypass
-      if: github.repository == 'EpicGamesExt/PixelStreamingInfrastructure' && needs.check-if-bypass.outputs.bypass == 'false' # Only run if bypass is false
-      runs-on: ubuntu-latest
-      steps:
+    if: github.repository == 'EpicGamesExt/PixelStreamingInfrastructure'
+    runs-on: ubuntu-latest
+    outputs:
+      continue: ${{ steps.set_output.outputs.continue }}
+    steps:
+    - name: Checkout source code
+      uses: actions/checkout@v3
+      with:
+        ref: "${{ env.commitsha }}"
 
-      - name: Checkout source code
-        uses: actions/checkout@v3
+    - uses: actions/setup-node@v4
+      with:
+        node-version: "${{ env.NODE_VERSION }}"
+        registry-url: 'https://registry.npmjs.org'
 
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "${{ env.NODE_VERSION }}"
-          registry-url: 'https://registry.npmjs.org'
+    - name: Remove NPM workspaces
+      run: rm package.json && rm package-lock.json
 
-      - name: Remove NPM workspaces
-        run: rm package.json && rm package-lock.json
+    - name: Build signalling using published packages only
+      if: always()
+      working-directory: Signalling
+      run: npm install && npm run build && npm run lint
+    - name: Build Wilbur using published packages only
+      if: always()
+      working-directory: SignallingWebServer
+      run: npm install && npm run build && npm run lint
+    - name: Build Frontend/library using published packages only
+      if: always()
+      working-directory: Frontend/library
+      run: npm install && npm run build && npm run lint && npm run test
+    - name: Build Frontend/ui-library using published packages only
+      if: always()
+      working-directory: Frontend/ui-library
+      run: npm install && npm run build && npm run lint
+    - name: Build Frontend/implementations/typescript using published packages only
+      if: always()
+      working-directory: Frontend/implementations/typescript
+      run: npm install && npm run build
 
-      - name: Build signalling using published packages only
-        if: always()
-        working-directory: Signalling
-        run: npm install && npm run build && npm run lint
+    - id: set_output
+      run: echo "continue=true" >> $GITHUB_ENV
 
-      - name: Build Wilbur using published packages only
-        if: always()
-        working-directory: SignallingWebServer
-        run: npm install && npm run build && npm run lint
-
-      - name: Build Frontend/library using published packages only
-        if: always()
-        working-directory: Frontend/library
-        run: npm install && npm run build && npm run lint && npm run test
-
-      - name: Build Frontend/ui-library using published packages only
-        if: always()
-        working-directory: Frontend/ui-library
-        run: npm install && npm run build && npm run lint
-
-      - name: Build Frontend/implementations/typescript using published packages only
-        if: always()
-        working-directory: Frontend/implementations/typescript
-        run: npm install && npm run build
