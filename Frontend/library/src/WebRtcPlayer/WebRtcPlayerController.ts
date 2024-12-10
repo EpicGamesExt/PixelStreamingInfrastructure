@@ -88,6 +88,7 @@ export class WebRtcPlayerController {
     gamePadController: GamepadController;
     coordinateConverter: InputCoordTranslator;
     isUsingSFU: boolean;
+    isUsingSVC: boolean
     isQualityController: boolean;
     statsTimerHandle: number;
     file: FileTemplate;
@@ -265,6 +266,7 @@ export class WebRtcPlayerController {
         );
 
         this.isUsingSFU = false;
+        this.isUsingSVC = false;
         this.isQualityController = false;
         this.preferredCodec = '';
         this.enableAutoReconnect = true;
@@ -290,10 +292,19 @@ export class WebRtcPlayerController {
                 return;
             }
 
-            // close the current peer connection and create a new one
-            let allQualities = this.config.getSettingOption(OptionParameters.PreferredQuality).options;
-            let qualityIndex = allQualities.indexOf(preferredQuality);
-            const message = MessageHelpers.createMessage(Messages.layerPreference, { spatialLayer: qualityIndex, temporalLayer: 0 });
+            let message;
+            if (this.isUsingSVC)
+            {
+                // User is using SVC so selected quality will be of the form SxTy(h). Just extract the x and y numbers
+                message = MessageHelpers.createMessage(Messages.layerPreference, { spatialLayer: +preferredQuality[1] - 1, temporalLayer: +preferredQuality[3] - 1 });
+            }
+            else
+            {
+                // User is not using SVC so the selected quality will be either Low, Medium or High so we extract the appropriate spatial layer index
+                let allQualities = this.config.getSettingOption(OptionParameters.PreferredQuality).options;
+                let qualityIndex = allQualities.indexOf(preferredQuality);
+                message = MessageHelpers.createMessage(Messages.layerPreference, { spatialLayer: qualityIndex, temporalLayer: 0 });
+            }
             this.protocol.sendMessage(message);
         });
 
@@ -1263,24 +1274,50 @@ export class WebRtcPlayerController {
         Logger.Info(`Got offer sdp ${Offer.sdp}`);
 
         this.isUsingSFU = Offer.sfu ? Offer.sfu : false;
-        if (this.isUsingSFU) {
+        this.isUsingSVC = Offer.scalabilityMode ? Offer.scalabilityMode != 'L1T1' : false;
+        if (this.isUsingSFU || this.isUsingSVC) {
             // Disable negotiating with the sfu as the sfu only supports one codec at a time
             this.peerConnectionController.preferredCodec = '';
         }
 
         // NOTE: These two settings configurations are done outside of an if(this.isUsingSFU) so that users
         // can switch between a default and SFU stream and have the settings reconfigure appropriately
-        
+
+        const scalabilityMode = Offer.scalabilityMode ? Offer.scalabilityMode : 'L1T1';
+        let availableQualities = [ "Default" ];
+        if (this.isUsingSFU)
+        {
+            if (!this.isUsingSVC)
+            {
+                // User is using an SFU without any temporal scalability. Just offer easily readable names
+                availableQualities = [ "Low", "Medium", "High" ];
+            }
+            else
+            {
+                // User is using SVC. Generate all available options.
+                availableQualities = [];
+                const maxSpatialLayers = +scalabilityMode[1];
+                const maxTemporalLayers = +scalabilityMode[3];
+                for (let s = 1; s <= maxSpatialLayers; s++)
+                {
+                    for (let t = 1; t <= maxTemporalLayers; t++)
+                    {
+                        availableQualities.push(`S${s}T${t}`);
+                    }
+                }
+            }
+        }
+
         // Update the possible video quality options
         this.config.setOptionSettingOptions(
             OptionParameters.PreferredQuality,
-            this.isUsingSFU ? [ "Low", "Medium", "High" ] : [ "Default" ]
+            availableQualities
         );
 
-        // Update the selected video quality
+        // Update the selected video quality with the highest possible resolution
         this.config.setOptionSettingValue(
             OptionParameters.PreferredQuality,
-            this.isUsingSFU ? "High" : "Default"
+            availableQualities.slice(-1)[0]
         )
 
         const sdpOffer: RTCSessionDescriptionInit = {
