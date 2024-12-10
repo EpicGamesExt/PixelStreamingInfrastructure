@@ -8,8 +8,8 @@ import { SettingBase } from './SettingBase';
  * An Option setting object with a text label. Allows you to specify an array of options and select one of them.
  */
 export class SettingOption<CustomIds extends string = OptionParametersIds> extends SettingBase {
-    id: OptionParametersIds | CustomIds;
-    onChangeEmit: (changedValue: string) => void;
+    override id: OptionParametersIds | CustomIds;
+    override onChangeEmit: (changedValue: string) => void;
     _options: Array<string>;
 
     /* Transforms the url parameter value into something else, by default no transformation is made, the url param is returned as-is. */
@@ -45,7 +45,7 @@ export class SettingOption<CustomIds extends string = OptionParametersIds> exten
         this.useUrlParams = useUrlParams;
     }
 
-    protected getValueAsString(): string {
+    protected override getValueAsString(): string {
         return this.selected;
     }
 

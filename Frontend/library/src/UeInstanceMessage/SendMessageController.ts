@@ -50,6 +50,7 @@ export class SendMessageController {
                             case 'int16':
                             case 'float':
                             case 'double':
+                            default:
                                 return 'number';
                             case 'string':
                                 return 'string';

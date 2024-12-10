@@ -6,7 +6,12 @@
         "moduleResolution": "node",
         "sourceMap": true,
         "allowJs": true,
-        "strict": true
+        "strict": true,
+        "forceConsistentCasingInFileNames": true,
+        "noImplicitOverride": true,
+        "noFallthroughCasesInSwitch": true,
+        "noImplicitReturns": true,
+        "noPropertyAccessFromIndexSignature": true
     },
     "include": ["./src/*.ts"],
     "typedocOptions": {

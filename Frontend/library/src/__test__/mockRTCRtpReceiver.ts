@@ -7,7 +7,7 @@ export const mockRTCRtpReceiverImpl = {
                 mimeType: "testMimeType",
                 sdpFmtpLine: "AV1"
             }
-        ] as RTCRtpCodecCapability[],
+        ] as RTCRtpCodec[],
         headerExtensions: [] as RTCRtpHeaderExtensionCapability[]
     })
 } as any as typeof global.RTCRtpReceiver;

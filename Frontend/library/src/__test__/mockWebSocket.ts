@@ -53,17 +53,17 @@ export class MockWebSocketImpl extends WebSocket {
         triggerFunctions.triggerRemoteClose = this.triggerRemoteClose.bind(this);
     }
 
-    get readyState() {
+    override get readyState() {
         return this._readyState;
     }
 
-    close(code?: number | undefined, reason?: string | undefined): void {
+    override close(code?: number | undefined, reason?: string | undefined): void {
         super.close(code, reason);
         this._readyState = this.CLOSED;
         this.triggerOnClose({ code, reason });
     }
 
-    send(data: string | Blob | ArrayBufferView | ArrayBufferLike): void {
+    override send(data: string | Blob | ArrayBufferView | ArrayBufferLike): void {
         spyFunctions.sendSpy?.(data);
     }
 

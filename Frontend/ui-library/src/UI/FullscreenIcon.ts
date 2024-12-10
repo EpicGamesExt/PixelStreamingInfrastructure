@@ -249,7 +249,7 @@ export class FullScreenIcon extends FullScreenIconBase {
         return this._minimizeIcon;
     }
 
-    onFullscreenChange() {
+    override onFullscreenChange() {
         super.onFullscreenChange();
 
         const minimize = this.minimizeIcon;

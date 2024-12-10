@@ -44,7 +44,7 @@ export class MouseControllerLocked extends MouseController {
         this.onMouseMoveListener = this.onMouseMove.bind(this);
     }
 
-    register() {
+    override register() {
         super.register();
 
         this.videoElementParent.requestPointerLock =
@@ -64,7 +64,7 @@ export class MouseControllerLocked extends MouseController {
         this.videoElementParent.addEventListener('dblclick', this.onMouseDblClickListener);
     }
 
-    unregister() {
+    override unregister() {
         const pointerLockElement = document.pointerLockElement || document.mozPointerLockElement;
         if (document.exitPointerLock && pointerLockElement === this.videoElementParent) {
             document.exitPointerLock();

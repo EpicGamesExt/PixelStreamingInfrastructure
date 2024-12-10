@@ -428,18 +428,18 @@ export class PeerConnectionController {
                 ) {
                     // Get our preferred codec from the codecs options drop down
                     const preferredRTPCodec = this.preferredCodec.split(' ');
-                    const preferredRTCRtpCodecCapability: RTCRtpCodecCapability = {
+                    const preferredRTCRtpCodecCapability: RTCRtpCodec = {
                         mimeType: 'video/' + preferredRTPCodec[0] /* Name */,
                         clockRate: 90000 /* All current video formats in browsers have 90khz clock rate */,
                         sdpFmtpLine: preferredRTPCodec[1] ? preferredRTPCodec[1] : ''
                     };
 
                     // Populate a list of codecs we will support with our preferred one in the first position
-                    const ourSupportedCodecs: Array<RTCRtpCodecCapability> = [preferredRTCRtpCodecCapability];
+                    const ourSupportedCodecs: Array<RTCRtpCodec> = [preferredRTCRtpCodecCapability];
 
                     // Go through all codecs the browser supports and add them to the list (in any order)
                     RTCRtpReceiver.getCapabilities('video').codecs.forEach(
-                        (browserSupportedCodec: RTCRtpCodecCapability) => {
+                        (browserSupportedCodec: RTCRtpCodec) => {
                             // Don't add our preferred codec again, but add everything else
                             if (browserSupportedCodec.mimeType != preferredRTCRtpCodecCapability.mimeType) {
                                 ourSupportedCodecs.push(browserSupportedCodec);
@@ -626,11 +626,11 @@ export class PeerConnectionController {
         const sections = splitSections(rtcSessionDescription.sdp);
         // discard the session information as we only want media related info
         sections.shift();
-        sections.forEach((mediaSection) => {
+        sections.forEach((mediaSection: any) => {
             const { codecs } = parseRtpParameters(mediaSection);
             // Filter only for VPX / H26X / AV1
             const matcher = /(VP\d|H26\d|AV1).*/;
-            codecs.forEach((c) => {
+            codecs.forEach((c: any) => {
                 const str =
                     c.name +
                     ' ' +

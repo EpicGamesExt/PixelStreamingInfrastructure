@@ -49,7 +49,7 @@ export class DataChannelController {
         this.dataChannel.onopen = (ev: Event) => this.handleOnOpen(ev);
         this.dataChannel.onclose = (ev: Event) => this.handleOnClose(ev);
         this.dataChannel.onmessage = (ev: MessageEvent) => this.handleOnMessage(ev);
-        this.dataChannel.onerror = (ev: MessageEvent) => this.handleOnError(ev);
+        this.dataChannel.onerror = (ev: Event) => this.handleOnError(ev);
     }
 
     /**
@@ -81,7 +81,7 @@ export class DataChannelController {
      * Handles when an error is thrown
      * @param event - Error Event
      */
-    handleOnError(event: MessageEvent) {
+    handleOnError(event: Event) {
         Logger.Info(`Data Channel (${this.label}) error: ${event}`);
         this.onError(this.dataChannel?.label, event);
     }

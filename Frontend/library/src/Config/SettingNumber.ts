@@ -10,8 +10,8 @@ export class SettingNumber<CustomIds extends string = NumericParametersIds> exte
     _min: number | null;
     _max: number | null;
 
-    id: NumericParametersIds | CustomIds;
-    onChangeEmit: (changedValue: number) => void;
+    override id: NumericParametersIds | CustomIds;
+    override onChangeEmit: (changedValue: number) => void;
 
     constructor(
         id: NumericParametersIds | CustomIds,
@@ -41,7 +41,7 @@ export class SettingNumber<CustomIds extends string = NumericParametersIds> exte
         this.useUrlParams = useUrlParams;
     }
 
-    protected getValueAsString(): string {
+    protected override getValueAsString(): string {
         return this.number.toString();
     }
 

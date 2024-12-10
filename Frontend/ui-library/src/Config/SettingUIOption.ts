@@ -21,7 +21,7 @@ export class SettingUIOption<CustomIds extends string = OptionParametersIds> ext
     /**
      * @returns The setting component.
      */
-    public get setting(): SettingOption<CustomIds> {
+    public override get setting(): SettingOption<CustomIds> {
         return this._setting as SettingOption<CustomIds>;
     }
 
@@ -61,7 +61,7 @@ export class SettingUIOption<CustomIds extends string = OptionParametersIds> ext
     /**
      * @returns Return or creates a HTML element that represents this setting in the DOM.
      */
-    public get rootElement(): HTMLElement {
+    public override get rootElement(): HTMLElement {
         if (!this._rootElement) {
             // create root div with "setting" css class
             this._rootElement = document.createElement('div');
