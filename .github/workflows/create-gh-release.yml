@@ -36,6 +36,7 @@ jobs:
         owner: ${{ github.repository_owner }}
         repo: PixelStreamingInfrastructure
         ref: ${{ github.ref_name }}
+        github_user: ${{ secrets.WORKFLOW_USER }}
         github_token: ${{ secrets.WORKFLOW_TOKEN }}
         workflow_file_name: healthcheck-libs-with-public-deps.yml
         inputs: '{ "commitsha": "${{ env.commitsha }}" }'
