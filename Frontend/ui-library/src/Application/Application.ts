@@ -695,17 +695,18 @@ export class Application {
         // as well as the selected value
         this.configUI.onSettingsChanged(event);
 
-        let { data: { id, target, type } } = event;
+        const {
+            /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
+            data: { id, target, type }
+        } = event;
         // Explicitly handle specific setting behaviour
-        if (id == OptionParameters.PreferredQuality)
-        {
-            const preferredQualityOption = this.stream.config.getSettingOption(OptionParameters.PreferredQuality);    
-            if ([...preferredQualityOption.options].includes('Default'))
-            {
+        if (id == OptionParameters.PreferredQuality) {
+            const preferredQualityOption = this.stream.config.getSettingOption(
+                OptionParameters.PreferredQuality
+            );
+            if ([...preferredQualityOption.options].includes('Default')) {
                 this.configUI.disableSetting(OptionParameters.PreferredQuality);
-            }
-            else
-            {
+            } else {
                 this.configUI.enableSetting(OptionParameters.PreferredQuality);
             }
         }
