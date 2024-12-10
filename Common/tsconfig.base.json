@@ -3,7 +3,6 @@
         "noImplicitAny": true,
         "esModuleInterop": true,
         "target": "ES6",
-        "moduleResolution": "nodenext",
         "sourceMap": true,
         "allowJs": true,
         "strict": true,
