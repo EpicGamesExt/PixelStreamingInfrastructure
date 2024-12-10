@@ -1,0 +1,21 @@
+{
+	"log_folder": "logs",
+	"log_level_console": "info",
+	"log_level_file": "info",
+	"streamer_port": "8888",
+	"player_port": "80",
+	"sfu_port": "8889",
+	"serve": true,
+	"http_root": "D:\\PixelStreamingInfrastructure\\SignallingWebServer\\www",
+	"homepage": "player.html",
+	"https": false,
+	"https_port": 443,
+	"ssl_key_path": "certificates/client-key.pem",
+	"ssl_cert_path": "certificates/client-cert.pem",
+	"https_redirect": true,
+	"rest_api": false,
+	"peer_options": "",
+	"log_config": true,
+	"stdin": false,
+	"console_messages": "verbose"
+}
