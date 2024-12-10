@@ -8,7 +8,9 @@ import {
     LatencyTestResults,
     InitialSettings,
     Messages,
-    DataChannelLatencyTestResult
+    DataChannelLatencyTestResult,
+    OptionParameters,
+    SettingsChangedEvent
 } from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.5';
 import { OverlayBase } from '../Overlay/BaseOverlay';
 import { ActionOverlay } from '../Overlay/ActionOverlay';
@@ -24,7 +26,7 @@ import { LabelledButton } from '../UI/LabelledButton';
 import { SettingsPanel } from '../UI/SettingsPanel';
 import { StatsPanel } from '../UI/StatsPanel';
 import { VideoQpIndicator } from '../UI/VideoQpIndicator';
-import { ConfigUI, LightMode } from '../Config/ConfigUI';
+import { ConfigUI, ExtraFlags } from '../Config/ConfigUI';
 import {
     UIElementCreationMode,
     PanelConfiguration,
@@ -134,7 +136,7 @@ export class Application {
 
         this.showConnectOrAutoConnectOverlays();
 
-        this.setColorMode(this.configUI.isCustomFlagEnabled(LightMode));
+        this.setColorMode(this.configUI.isCustomFlagEnabled(ExtraFlags.LightMode));
 
         this.stream.config._addOnSettingChangedListener(Flags.HideUI, (isEnabled: boolean) => {
             this._uiFeatureElement.style.visibility = isEnabled ? 'hidden' : 'visible';
@@ -285,9 +287,9 @@ export class Application {
         // This builds all the settings sections and flags under this `settingsContent` element.
         this.configUI.populateSettingsElement(this.settingsPanel.settingsContentElement);
 
-        this.configUI.addCustomFlagOnSettingChangedListener(LightMode, (isLightMode: boolean) => {
+        this.configUI.addCustomFlagOnSettingChangedListener(ExtraFlags.LightMode, (isLightMode: boolean) => {
             this.configUI.setCustomFlagLabel(
-                LightMode,
+                ExtraFlags.LightMode,
                 `Color Scheme: ${isLightMode ? 'Light' : 'Dark'} Mode`
             );
             this.setColorMode(isLightMode);
@@ -342,7 +344,7 @@ export class Application {
             ({ data: { messageStreamerList, autoSelectedStreamerId, wantedStreamerId } }) =>
                 this.handleStreamerListMessage(messageStreamerList, autoSelectedStreamerId, wantedStreamerId)
         );
-        this.stream.addEventListener('settingsChanged', (event) => this.configUI.onSettingsChanged(event));
+        this.stream.addEventListener('settingsChanged', (event) => this.onSettingsChanged(event));
         this.stream.addEventListener('playerCount', ({ data: { count } }) => this.onPlayerCount(count));
         this.stream.addEventListener('webRtcTCPRelayDetected', () =>
             Logger.Warning(`Stream quailty degraded due to network enviroment, stream is relayed over TCP.`)
@@ -685,6 +687,28 @@ export class Application {
     setColorMode(isLightMode: boolean) {
         if (this.onColorModeChanged) {
             this.onColorModeChanged(isLightMode);
+        }
+    }
+
+    onSettingsChanged(event: SettingsChangedEvent) {
+        // Pass the event directly onto the configUI. This will do things like updating the possible values
+        // as well as the selected value
+        this.configUI.onSettingsChanged(event);
+
+        const {
+            /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
+            data: { id, target, type }
+        } = event;
+        // Explicitly handle specific setting behaviour
+        if (id == OptionParameters.PreferredQuality) {
+            const preferredQualityOption = this.stream.config.getSettingOption(
+                OptionParameters.PreferredQuality
+            );
+            if ([...preferredQualityOption.options].includes('Default')) {
+                this.configUI.disableSetting(OptionParameters.PreferredQuality);
+            } else {
+                this.configUI.enableSetting(OptionParameters.PreferredQuality);
+            }
         }
     }
 }

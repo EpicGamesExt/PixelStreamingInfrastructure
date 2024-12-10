@@ -38,7 +38,7 @@ export class Flags {
 export type FlagsKeys = Exclude<keyof typeof Flags, 'prototype'>;
 export type FlagsIds = (typeof Flags)[FlagsKeys];
 
-const isFlagId = (id: string): id is FlagsIds =>
+export const isFlagId = (id: string): id is FlagsIds =>
     Object.getOwnPropertyNames(Flags).some((name: FlagsKeys) => Flags[name] === id);
 
 /**
@@ -64,7 +64,7 @@ export class NumericParameters {
 export type NumericParametersKeys = Exclude<keyof typeof NumericParameters, 'prototype'>;
 export type NumericParametersIds = (typeof NumericParameters)[NumericParametersKeys];
 
-const isNumericId = (id: string): id is NumericParametersIds =>
+export const isNumericId = (id: string): id is NumericParametersIds =>
     Object.getOwnPropertyNames(NumericParameters).some(
         (name: NumericParametersKeys) => NumericParameters[name] === id
     );
@@ -80,7 +80,7 @@ export class TextParameters {
 export type TextParametersKeys = Exclude<keyof typeof TextParameters, 'prototype'>;
 export type TextParametersIds = (typeof TextParameters)[TextParametersKeys];
 
-const isTextId = (id: string): id is TextParametersIds =>
+export const isTextId = (id: string): id is TextParametersIds =>
     Object.getOwnPropertyNames(TextParameters).some(
         (name: TextParametersKeys) => TextParameters[name] === id
     );
@@ -92,12 +92,13 @@ const isTextId = (id: string): id is TextParametersIds =>
 export class OptionParameters {
     static PreferredCodec = 'PreferredCodec' as const;
     static StreamerId = 'StreamerId' as const;
+    static PreferredQuality = 'PreferredQuality' as const;
 }
 
 export type OptionParametersKeys = Exclude<keyof typeof OptionParameters, 'prototype'>;
 export type OptionParametersIds = (typeof OptionParameters)[OptionParametersKeys];
 
-const isOptionId = (id: string): id is OptionParametersIds =>
+export const isOptionId = (id: string): id is OptionParametersIds =>
     Object.getOwnPropertyNames(OptionParameters).some(
         (name: OptionParametersKeys) => OptionParameters[name] === id
     );
@@ -278,6 +279,20 @@ export class Config {
                 getBrowserSupportedVideoCodecs(),
                 useUrlParams,
                 matchSpecifiedCodecToClosestSupported
+            )
+        );
+
+        this.optionParameters.set(
+            OptionParameters.PreferredQuality,
+            new SettingOption(
+                OptionParameters.PreferredQuality,
+                'Preferred Quality',
+                'The preferred quality of the stream (only applicable when using the SFU)',
+                settings && Object.prototype.hasOwnProperty.call(settings, OptionParameters.PreferredQuality)
+                    ? settings[OptionParameters.PreferredQuality]!
+                    : 'Default',
+                ['Default'],
+                useUrlParams
             )
         );
 
