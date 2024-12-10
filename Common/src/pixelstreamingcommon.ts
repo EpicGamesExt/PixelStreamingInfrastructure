@@ -9,3 +9,4 @@ export { EventEmitter } from './Event/EventEmitter';
 export { MessageRegistry } from './Messages/message_registry';
 export * as Messages from './Messages/signalling_messages';
 export * as MessageHelpers from './Messages/message_helpers';
+export * from './Util/SdpUtils';

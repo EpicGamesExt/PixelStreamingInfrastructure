@@ -33,6 +33,7 @@ export class Flags {
     static XRControllerInput = 'XRControllerInput' as const;
     static WaitForStreamer = 'WaitForStreamer' as const;
     static HideUI = 'HideUI' as const;
+    static EnableCaptureTimeExt = 'EnableCaptureTimeExt' as const;
 }
 
 export type FlagsKeys = Exclude<keyof typeof Flags, 'prototype'>;
@@ -543,6 +544,19 @@ export class Config {
                 'Will hide all UI overlay details',
                 settings && Object.prototype.hasOwnProperty.call(settings, Flags.HideUI)
                     ? settings[Flags.HideUI]
+                    : false,
+                useUrlParams
+            )
+        );
+
+        this.flags.set(
+            Flags.EnableCaptureTimeExt,
+            new SettingFlag(
+                Flags.EnableCaptureTimeExt,
+                'Enable abs-capture-time',
+                'Enables the abs-capture-time RTP header extension',
+                settings && Object.prototype.hasOwnProperty.call(settings, Flags.EnableCaptureTimeExt)
+                    ? settings[Flags.EnableCaptureTimeExt]
                     : false,
                 useUrlParams
             )

@@ -5,7 +5,8 @@ import {
     Messages,
     MessageHelpers,
     BaseMessage,
-    EventEmitter
+    EventEmitter,
+    SDPUtils
 } from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
 import { DataProtocol } from './protocol';
 
@@ -51,9 +52,6 @@ export class PlayerPeer {
 }
 
 const protocolVersion = '1.0.0';
-
-// Official uri for abs-capture-time RTP header extension, used to signal we want to use this extension.
-const kAbsCaptureTime = 'http://www.webrtc.org/experiments/rtp-hdrext/abs-capture-time';
 
 export class Streamer extends EventEmitter {
     id: string;
@@ -305,26 +303,8 @@ export class Streamer extends EventEmitter {
 
     mungeOffer(offerSDP: string) : string {
         // Add the abs-capture-time header extension to the sdp extmap
-        return this.addHeaderExtensionToSdp(offerSDP, kAbsCaptureTime);
-    }
-
-    addHeaderExtensionToSdp(sdp: string, uri: string) : string {
-        // Find the highest used header extension id by sorting the extension ids used,
-        // eliminating duplicates and adding one.
-        // Todo: Update this when WebRTC in Chrome supports the header extension API.
-        const usedIds = sdp.split('\n')
-            .filter(line => line.startsWith('a=extmap:'))
-            .map(line => parseInt(line.split(' ')[0].substring(9), 10))
-            .sort((a, b) => a - b)
-            .filter((item, index, array) => array.indexOf(item) === index);
-        const nextId = usedIds[usedIds.length - 1] + 1;
-        const extmapLine = 'a=extmap:' + nextId + ' ' + uri + '\r\n';
-
-        const sections = sdp.split('\nm=').map((part, index) => {
-            return (index > 0 ? 'm=' + part : part).trim() + '\r\n';
-        });
-        const sessionPart = sections.shift();
-        return sessionPart + sections.map(mediaSection => mediaSection + extmapLine).join('');
+        const kAbsCaptureTime = 'http://www.webrtc.org/experiments/rtp-hdrext/abs-capture-time';
+        return SDPUtils.addHeaderExtensionToSdp(offerSDP, kAbsCaptureTime);
     }
 
     sendDataProtocol(playerId: string) {
