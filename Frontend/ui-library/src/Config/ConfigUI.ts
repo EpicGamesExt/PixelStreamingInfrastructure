@@ -25,6 +25,7 @@ import { SettingUIOption } from './SettingUIOption';
 
 export const LightMode = 'LightMode' as const;
 type ExtraFlags = typeof LightMode;
+// eslint-disable-next-line @typescript-eslint/no-redundant-type-constituents
 export type FlagsIdsExtended = FlagsIds | ExtraFlags;
 
 export class ConfigUI {
