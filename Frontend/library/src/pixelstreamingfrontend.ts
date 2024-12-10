@@ -15,9 +15,9 @@ export {
     OptionParametersIds,
     AllSettings,
     OptionIds,
-    isFlagId, 
-    isNumericId, 
-    isOptionId, 
+    isFlagId,
+    isNumericId,
+    isOptionId,
     isTextId
 } from './Config/Config';
 export { SettingBase } from './Config/SettingBase';

@@ -291,7 +291,7 @@ export class Config {
                 settings && Object.prototype.hasOwnProperty.call(settings, OptionParameters.PreferredQuality)
                     ? settings[OptionParameters.PreferredQuality]!
                     : 'Default',
-                [ 'Default' ],
+                ['Default'],
                 useUrlParams
             )
         );
