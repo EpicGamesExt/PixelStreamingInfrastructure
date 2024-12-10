@@ -38,7 +38,7 @@ jobs:
         ref: ${{ github.ref_name }}
         github_token: ${{ secrets.WORKFLOW_TOKEN }}
         workflow_file_name: healthcheck-libs-with-public-deps.yml
-        inputs: '{ "ref": "${{ github.ref_name }}", "commitsha": "${{ env.commitsha }}" }'
+        inputs: '{ "commitsha": "${{ env.commitsha }}" }'
 
     - name: Read the RELEASE_VERSION file
       id: getversion
