@@ -178,8 +178,14 @@ export class ConfigUI {
         /* Setup all encoder related settings under this section */
         const encoderSettingsSection = this.buildSectionWithHeading(settingsElem, 'Encoder');
 
-        this.addSettingNumeric(encoderSettingsSection, this.numericParametersUi.get(NumericParameters.MinQP));
-        this.addSettingNumeric(encoderSettingsSection, this.numericParametersUi.get(NumericParameters.MaxQP));
+        this.addSettingNumeric(
+            encoderSettingsSection,
+            this.numericParametersUi.get(NumericParameters.CompatQualityMin)
+        );
+        this.addSettingNumeric(
+            encoderSettingsSection,
+            this.numericParametersUi.get(NumericParameters.CompatQualityMax)
+        );
 
         const preferredCodecOption = this.optionParametersUi.get(OptionParameters.PreferredCodec);
         this.addSettingOption(

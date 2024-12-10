@@ -50,6 +50,10 @@ export class NumericParameters {
     static AFKCountdownSecs = 'AFKCountdown' as const;
     static MinQP = 'MinQP' as const;
     static MaxQP = 'MaxQP' as const;
+    static MinQuality = 'MinQuality' as const;
+    static MaxQuality = 'MaxQuality' as const;
+    static CompatQualityMin = 'CompatQualityMin' as const;
+    static CompatQualityMax = 'CompatQualityMax' as const;
     static WebRTCFPS = 'WebRTCFPS' as const;
     static WebRTCMinBitrate = 'WebRTCMinBitrate' as const;
     static WebRTCMaxBitrate = 'WebRTCMaxBitrate' as const;
@@ -618,6 +622,66 @@ export class Config {
                 settings && Object.prototype.hasOwnProperty.call(settings, NumericParameters.MaxQP)
                     ? settings[NumericParameters.MaxQP]
                     : 51 /*value*/,
+                useUrlParams
+            )
+        );
+
+        this.numericParameters.set(
+            NumericParameters.MinQuality,
+            new SettingNumber(
+                NumericParameters.MinQuality,
+                'Min Quality',
+                'The lower bound for the quality factor of the encoder. 0 = Worst quality, 100 = Best quality.',
+                0 /*min*/,
+                100 /*max*/,
+                settings && Object.prototype.hasOwnProperty.call(settings, NumericParameters.MinQuality)
+                    ? settings[NumericParameters.MinQuality]
+                    : 0 /*value*/,
+                useUrlParams
+            )
+        );
+
+        this.numericParameters.set(
+            NumericParameters.MaxQuality,
+            new SettingNumber(
+                NumericParameters.MaxQuality,
+                'Max Quality',
+                'The upper bound for the quality factor of the encoder. 0 = Worst quality, 100 = Best quality.',
+                0 /*min*/,
+                100 /*max*/,
+                settings && Object.prototype.hasOwnProperty.call(settings, NumericParameters.MaxQuality)
+                    ? settings[NumericParameters.MaxQuality]
+                    : 100 /*value*/,
+                useUrlParams
+            )
+        );
+
+        this.numericParameters.set(
+            NumericParameters.CompatQualityMin,
+            new SettingNumber(
+                NumericParameters.CompatQualityMin,
+                'Min Quality',
+                'The lower bound for encoding quality. 0 = Worst, 100 = Best.',
+                0 /*min*/,
+                100 /*max*/,
+                settings && Object.prototype.hasOwnProperty.call(settings, NumericParameters.CompatQualityMin)
+                    ? settings[NumericParameters.CompatQualityMin]
+                    : 0 /*value*/,
+                useUrlParams
+            )
+        );
+
+        this.numericParameters.set(
+            NumericParameters.CompatQualityMax,
+            new SettingNumber(
+                NumericParameters.CompatQualityMax,
+                'Max Quality',
+                'The upper bound for encoding quality. 0 = Worst, 100 = Best.',
+                0 /*min*/,
+                100 /*max*/,
+                settings && Object.prototype.hasOwnProperty.call(settings, NumericParameters.CompatQualityMax)
+                    ? settings[NumericParameters.CompatQualityMax]
+                    : 100 /*value*/,
                 useUrlParams
             )
         );
