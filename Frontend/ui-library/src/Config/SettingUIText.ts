@@ -20,7 +20,7 @@ export class SettingUIText<CustomIds extends string = TextParametersIds> extends
     /**
      * @returns The setting component.
      */
-    public get setting(): SettingText<CustomIds> {
+    public override get setting(): SettingText<CustomIds> {
         return this._setting as SettingText<CustomIds>;
     }
 
@@ -45,7 +45,7 @@ export class SettingUIText<CustomIds extends string = TextParametersIds> extends
     /**
      * @returns Return or creates a HTML element that represents this setting in the DOM.
      */
-    public get rootElement(): HTMLElement {
+    public override get rootElement(): HTMLElement {
         if (!this._rootElement) {
             // create root div with "setting" css class
             this._rootElement = document.createElement('div');

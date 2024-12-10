@@ -7,8 +7,8 @@ import { SettingBase } from './SettingBase';
  * A boolean flag setting object with a text label.
  */
 export class SettingFlag<CustomIds extends string = FlagsIds> extends SettingBase {
-    id: FlagsIds | CustomIds;
-    onChangeEmit: (changedValue: boolean) => void;
+    override id: FlagsIds | CustomIds;
+    override onChangeEmit: (changedValue: boolean) => void;
 
     constructor(
         id: FlagsIds | CustomIds,
@@ -33,7 +33,7 @@ export class SettingFlag<CustomIds extends string = FlagsIds> extends SettingBas
         this.useUrlParams = useUrlParams;
     }
 
-    protected getValueAsString(): string {
+    protected override getValueAsString(): string  {
         return this.flag ? 'true' : 'false';
     }
 
