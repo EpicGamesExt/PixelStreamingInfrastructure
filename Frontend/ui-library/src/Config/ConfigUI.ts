@@ -381,39 +381,25 @@ export class ConfigUI {
     }
 
     disableSetting(id: OptionIds | ExtraFlagsIds): void {
-        if (isFlagId(id))
-        {
+        if (isFlagId(id)) {
             this.flagsUi.get(id)?.disable();
-        }
-        else if(isNumericId(id))
-        {
+        } else if (isNumericId(id)) {
             this.numericParametersUi.get(id)?.disable();
-        }
-        else if(isTextId(id))
-        {
-            this.textParametersUi.get(id)?.disable();    
-        }
-        else if(isOptionId(id))
-        {
+        } else if (isTextId(id)) {
+            this.textParametersUi.get(id)?.disable();
+        } else if (isOptionId(id)) {
             this.optionParametersUi.get(id)?.disable();
         }
     }
 
     enableSetting(id: OptionIds | ExtraFlagsIds): void {
-        if (isFlagId(id))
-        {
+        if (isFlagId(id)) {
             this.flagsUi.get(id)?.enable();
-        }
-        else if(isNumericId(id))
-        {
+        } else if (isNumericId(id)) {
             this.numericParametersUi.get(id)?.enable();
-        }
-        else if(isTextId(id))
-        {
-            this.textParametersUi.get(id)?.enable();    
-        }
-        else if(isOptionId(id))
-        {
+        } else if (isTextId(id)) {
+            this.textParametersUi.get(id)?.enable();
+        } else if (isOptionId(id)) {
             this.optionParametersUi.get(id)?.enable();
         }
     }
