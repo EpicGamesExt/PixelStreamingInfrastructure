@@ -325,6 +325,12 @@ export interface offer {
      * @generated from protobuf field: optional bool multiplex = 5;
      */
     multiplex?: boolean;
+    /**
+     * Indicates the scalability mode of the video stream
+     *
+     * @generated from protobuf field: optional string scalabilityMode = 6;
+     */
+    scalabilityMode?: string;
 }
 /**
  * *
@@ -1394,7 +1400,8 @@ class offer$Type extends MessageType<offer> {
             { no: 2, name: "sdp", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
             { no: 3, name: "playerId", kind: "scalar", opt: true, T: 9 /*ScalarType.STRING*/ },
             { no: 4, name: "sfu", kind: "scalar", opt: true, T: 8 /*ScalarType.BOOL*/ },
-            { no: 5, name: "multiplex", kind: "scalar", opt: true, T: 8 /*ScalarType.BOOL*/ }
+            { no: 5, name: "multiplex", kind: "scalar", opt: true, T: 8 /*ScalarType.BOOL*/ },
+            { no: 6, name: "scalabilityMode", kind: "scalar", opt: true, T: 9 /*ScalarType.STRING*/ }
         ]);
     }
     create(value?: PartialMessage<offer>): offer {
@@ -1425,6 +1432,9 @@ class offer$Type extends MessageType<offer> {
                 case /* optional bool multiplex */ 5:
                     message.multiplex = reader.bool();
                     break;
+                case /* optional string scalabilityMode */ 6:
+                    message.scalabilityMode = reader.string();
+                    break;
                 default:
                     let u = options.readUnknownField;
                     if (u === "throw")
@@ -1452,6 +1462,9 @@ class offer$Type extends MessageType<offer> {
         /* optional bool multiplex = 5; */
         if (message.multiplex !== undefined)
             writer.tag(5, WireType.Varint).bool(message.multiplex);
+        /* optional string scalabilityMode = 6; */
+        if (message.scalabilityMode !== undefined)
+            writer.tag(6, WireType.LengthDelimited).string(message.scalabilityMode);
         let u = options.writeUnknownFields;
         if (u !== false)
             (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
