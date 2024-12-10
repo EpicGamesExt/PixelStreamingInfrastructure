@@ -16,16 +16,26 @@ import {
     SettingText,
     SettingOption,
     Logger,
-    SettingBase
+    SettingBase,
+    OptionIds,
+    isFlagId,
+    isNumericId,
+    isTextId,
+    isOptionId
 } from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.5';
 import { SettingUIFlag } from './SettingUIFlag';
 import { SettingUINumber } from './SettingUINumber';
 import { SettingUIText } from './SettingUIText';
 import { SettingUIOption } from './SettingUIOption';
 
-export const LightMode = 'LightMode' as const;
-type ExtraFlags = typeof LightMode;
-export type FlagsIdsExtended = FlagsIds | ExtraFlags;
+export class ExtraFlags {
+    static LightMode = 'LightMode' as const;
+}
+
+export type ExtraFlagsKeys = Exclude<keyof typeof ExtraFlags, 'prototype'>;
+export type ExtraFlagsIds = (typeof ExtraFlags)[ExtraFlagsKeys];
+
+export type FlagsIdsExtended = FlagsIds | ExtraFlagsIds;
 
 export class ConfigUI {
     private customFlags = new Map<FlagsIdsExtended, SettingFlag<FlagsIdsExtended>>();
@@ -54,9 +64,9 @@ export class ConfigUI {
      */
     createCustomUISettings(useUrlParams: boolean) {
         this.customFlags.set(
-            LightMode,
+            ExtraFlags.LightMode,
             new SettingFlag<FlagsIdsExtended>(
-                LightMode,
+                ExtraFlags.LightMode,
                 'Color Scheme: Dark Mode',
                 'Page styling will be either light or dark',
                 false /*if want to use system pref: (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches)*/,
@@ -158,7 +168,7 @@ export class ConfigUI {
 
         this.addSettingFlag(viewSettingsSection, this.flagsUi.get(Flags.HoveringMouseMode));
 
-        this.addSettingFlag(viewSettingsSection, this.flagsUi.get(LightMode));
+        this.addSettingFlag(viewSettingsSection, this.flagsUi.get(ExtraFlags.LightMode));
 
         /* Setup all encoder related settings under this section */
         const inputSettingsSection = this.buildSectionWithHeading(settingsElem, 'Input');
@@ -200,6 +210,11 @@ export class ConfigUI {
         ) {
             preferredCodecOption.disable();
         }
+
+        this.addSettingOption(
+            encoderSettingsSection,
+            this.optionParametersUi.get(OptionParameters.PreferredQuality)
+        );
 
         /* Setup all webrtc related settings under this section */
         const webrtcSettingsSection = this.buildSectionWithHeading(settingsElem, 'WebRTC');
@@ -332,7 +347,7 @@ export class ConfigUI {
      * @param onChangeListener - The callback to fire when the value changes.
      */
     addCustomFlagOnSettingChangedListener(
-        id: ExtraFlags,
+        id: ExtraFlagsIds,
         onChangeListener: (newFlagValue: boolean) => void
     ): void {
         if (this.customFlags.has(id)) {
@@ -345,7 +360,7 @@ export class ConfigUI {
      * @param id - The id of the flag.
      * @param label - The new label to use for the flag.
      */
-    setCustomFlagLabel(id: ExtraFlags, label: string) {
+    setCustomFlagLabel(id: ExtraFlagsIds, label: string) {
         if (!this.customFlags.has(id)) {
             Logger.Warning(
                 `Cannot set label for flag called ${id} - it does not exist in the Config.flags map.`
@@ -361,7 +376,45 @@ export class ConfigUI {
      * @param id - The unique id for the flag.
      * @returns True if the flag is enabled.
      */
-    isCustomFlagEnabled(id: ExtraFlags): boolean {
+    isCustomFlagEnabled(id: ExtraFlagsIds): boolean {
         return this.customFlags.get(id).flag as boolean;
+    }
+
+    disableSetting(id: OptionIds | ExtraFlagsIds): void {
+        if (isFlagId(id))
+        {
+            this.flagsUi.get(id)?.disable();
+        }
+        else if(isNumericId(id))
+        {
+            this.numericParametersUi.get(id)?.disable();
+        }
+        else if(isTextId(id))
+        {
+            this.textParametersUi.get(id)?.disable();    
+        }
+        else if(isOptionId(id))
+        {
+            this.optionParametersUi.get(id)?.disable();
+        }
+    }
+
+    enableSetting(id: OptionIds | ExtraFlagsIds): void {
+        if (isFlagId(id))
+        {
+            this.flagsUi.get(id)?.enable();
+        }
+        else if(isNumericId(id))
+        {
+            this.numericParametersUi.get(id)?.enable();
+        }
+        else if(isTextId(id))
+        {
+            this.textParametersUi.get(id)?.enable();    
+        }
+        else if(isOptionId(id))
+        {
+            this.optionParametersUi.get(id)?.enable();
+        }
     }
 }

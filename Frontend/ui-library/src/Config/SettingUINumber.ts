@@ -124,4 +124,12 @@ export class SettingUINumber<CustomIds extends string = NumericParametersIds> ex
     public get label() {
         return this.settingsTextElem.innerText;
     }
+
+    public disable(): void {
+        this.spinner.disabled = true;
+    }
+
+    public enable(): void {
+        this.spinner.disabled = false;
+    }
 }

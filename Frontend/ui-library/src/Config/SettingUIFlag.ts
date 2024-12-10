@@ -110,4 +110,12 @@ export class SettingUIFlag<CustomIds extends string = FlagsIds> extends SettingU
     public get label() {
         return this.settingsTextElem.innerText;
     }
+
+    public disable(): void {
+        this.checkbox.disabled = true;
+    }
+
+    public enable(): void {
+        this.checkbox.disabled = false;
+    }
 }
