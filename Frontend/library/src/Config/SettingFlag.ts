@@ -33,7 +33,7 @@ export class SettingFlag<CustomIds extends string = FlagsIds> extends SettingBas
         this.useUrlParams = useUrlParams;
     }
 
-    protected override getValueAsString(): string  {
+    protected override getValueAsString(): string {
         return this.flag ? 'true' : 'false';
     }
 
