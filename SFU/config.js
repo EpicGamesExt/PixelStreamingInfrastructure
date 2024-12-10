@@ -18,7 +18,7 @@ const config = {
   SFUId: "SFU",
 
   // The ID of the streamer to subscribe to. If you leave this blank it will subscribe to the first streamer it sees.
-  subscribeStreamerId: "",
+  subscribeStreamerId: "DefaultStreamer",
 
   // Delay between list requests when looking for a specifc streamer.
   retrySubscribeDelaySecs: 10,
