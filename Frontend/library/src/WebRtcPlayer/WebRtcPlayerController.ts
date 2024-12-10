@@ -402,6 +402,12 @@ export class WebRtcPlayerController {
         );
         this.streamMessageController.registerMessageHandler(
             MessageDirection.FromStreamer,
+            'Multiplexed',
+            () => {
+                /* Do nothing as this message type is used only by the SFU */                
+        });
+        this.streamMessageController.registerMessageHandler(
+            MessageDirection.FromStreamer,
             'Protocol',
             (data: ArrayBuffer) => this.onProtocolMessage(data)
         );
@@ -627,6 +633,18 @@ export class WebRtcPlayerController {
             (data: Array<number | string>) =>
                 this.sendMessageController.sendMessageToStreamer('XRAnalog', data)
         );
+        this.streamMessageController.registerMessageHandler(
+            MessageDirection.ToStreamer,
+            'ChannelRelayStatus',
+            () => {
+                /* Do nothing as this message type is used only by the SFU */                
+        });
+        this.streamMessageController.registerMessageHandler(
+            MessageDirection.ToStreamer,
+            'Multiplexed',
+            () => {
+                /* Do nothing as this message type is used only by the SFU */                
+        });
     }
 
     /**
