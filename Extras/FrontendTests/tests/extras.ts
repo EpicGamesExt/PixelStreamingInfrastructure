@@ -86,7 +86,7 @@ export function getCapturedEvents(streamerPage: Page): Promise<Record<string, Da
 export async function getEventSetFrom(streamerPage: Page, performAction: () => Promise<void>): Promise<Record<string, DataChannelEvent[]>> {
     await setupEventCapture(streamerPage);
     await performAction();
-    await delay(2); // just give a little time for the events to come through
+    await delay(5); // just give a little time for the events to come through
     await teardownEventCapture(streamerPage);
     return await getCapturedEvents(streamerPage);
 }
