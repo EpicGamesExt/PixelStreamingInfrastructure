@@ -1,6 +1,7 @@
 import { Page } from 'playwright';
 import { Streamer, DataProtocol } from '@epicgames-ps/js-streamer';
 import { PixelStreaming } from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.5';
+import { delay } from './helpers';
 
 declare global {
     interface Window {
@@ -82,10 +83,16 @@ export function getCapturedEvents(streamerPage: Page): Promise<Record<string, Da
     });
 }
 
-export async function getEventsFor(streamerPage: Page, performAction: () => Promise<void>): Promise<Record<string, DataChannelEvent[]>> {
+export async function getEventSetFrom(streamerPage: Page, performAction: () => Promise<void>): Promise<Record<string, DataChannelEvent[]>> {
     await setupEventCapture(streamerPage);
     await performAction();
+    await delay(5); // just give a little time for the events to come through
     await teardownEventCapture(streamerPage);
     return await getCapturedEvents(streamerPage);
+}
+
+export function getEvents(eventSet: Record<string, DataChannelEvent[]>, playerId?: string): DataChannelEvent[] {
+    playerId = playerId || Object.keys(eventSet)[0];
+    return eventSet[playerId];
 }
 
