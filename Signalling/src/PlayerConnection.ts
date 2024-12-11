@@ -138,8 +138,8 @@ export class PlayerConnection implements IPlayer, LogUtils.IMessageLogger {
             }
         }
 
-        LogUtils.logForward(this, this.subscribedStreamer!, message);
         message.playerId = this.playerId;
+        LogUtils.logForward(this, this.subscribedStreamer!, message);
         this.subscribedStreamer!.protocol.sendMessage(message);
     }
 
