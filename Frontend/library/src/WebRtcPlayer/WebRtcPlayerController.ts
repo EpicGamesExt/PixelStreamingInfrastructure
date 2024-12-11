@@ -404,8 +404,9 @@ export class WebRtcPlayerController {
             MessageDirection.FromStreamer,
             'Multiplexed',
             () => {
-                /* Do nothing as this message type is used only by the SFU */                
-        });
+                /* Do nothing as this message type is used only by the SFU */
+            }
+        );
         this.streamMessageController.registerMessageHandler(
             MessageDirection.FromStreamer,
             'Protocol',
@@ -637,14 +638,16 @@ export class WebRtcPlayerController {
             MessageDirection.ToStreamer,
             'ChannelRelayStatus',
             () => {
-                /* Do nothing as this message type is used only by the SFU */                
-        });
+                /* Do nothing as this message type is used only by the SFU */
+            }
+        );
         this.streamMessageController.registerMessageHandler(
             MessageDirection.ToStreamer,
             'Multiplexed',
             () => {
-                /* Do nothing as this message type is used only by the SFU */                
-        });
+                /* Do nothing as this message type is used only by the SFU */
+            }
+        );
     }
 
     /**
