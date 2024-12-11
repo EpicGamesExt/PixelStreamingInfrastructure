@@ -103,4 +103,12 @@ export class SettingUIText<CustomIds extends string = TextParametersIds> extends
     public get label() {
         return this.settingsTextElem.innerText;
     }
+
+    public disable() {
+        this.textbox.disabled = true;
+    }
+
+    public enable() {
+        this.textbox.disabled = false;
+    }
 }
