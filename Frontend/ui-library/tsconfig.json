@@ -4,7 +4,7 @@
         "noImplicitAny": true,
         "module": "es6",
         "esModuleInterop": true,
-        "target": "ES2015",
+        "target": "ES6",
         "moduleResolution": "nodenext",
         "sourceMap": true,
         "allowJs": true,
