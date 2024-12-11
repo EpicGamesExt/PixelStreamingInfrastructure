@@ -7,7 +7,7 @@ import { Logger } from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
  * Extra types for the HTMLElement
  */
 declare global {
-    interface HTMLDivElement {
+    interface HTMLElement {
         mozRequestPointerLock(options: PointerLockOptions): Promise<void>;
     }
 }

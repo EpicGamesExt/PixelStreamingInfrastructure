@@ -30,7 +30,7 @@
         "jss-plugin-global": "^10.9.2"
     },
     "peerDependencies": {
-        "@epicgames-ps/lib-pixelstreamingfrontend-ue5.5": "^0.5.2"
+        "@epicgames-ps/lib-pixelstreamingfrontend-ue5.5": "^0.4.2"
     },
     "repository": {
         "type": "git",
