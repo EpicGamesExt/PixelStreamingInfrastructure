@@ -28,7 +28,7 @@ export const expect = baseExpect.extend({
         const assertionName = 'toContainActions';
         let pass: boolean = false;
         let actionIndex = 0;
-        if (expected.length > 0) {
+        if (received && expected.length > 0) {
             for (const event of received) {
                 if (dataChannelActionMatches(expected[actionIndex], event)) {
                     actionIndex += 1;
@@ -41,6 +41,9 @@ export const expect = baseExpect.extend({
         }
 
         const message = () => {
+            if (!received) {
+                return `received null`;
+            }
             if (expected.length == 0) {
                 return `expected is empty.`;
             }

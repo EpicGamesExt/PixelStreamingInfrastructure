@@ -3,7 +3,7 @@ import { expect } from './matchers';
 import {
     PSEventTypes,
     DataChannelEvent,
-    getEventsFor,
+    getEventSetFrom,
 } from './extras';
 import * as helpers from './helpers';
 
@@ -27,7 +27,7 @@ test('Test keyboard events', {
         // of codes that varied per browser and other odd behaviour. If we DO want to do that we will need
         // to figure out how to unify what the browser sends and what we're looking for.
         const expectedActions: DataChannelEvent[] = [];
-        const events = await getEventsFor(streamerPage, async () => {
+        const events = await getEventSetFrom(streamerPage, async () => {
             const startCode = 'A'.charCodeAt(0);
             const endCode = 'Z'.charCodeAt(0);
             for (let c = startCode; c <= endCode; c++) {
