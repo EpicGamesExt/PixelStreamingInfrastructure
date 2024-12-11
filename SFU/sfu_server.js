@@ -13,6 +13,7 @@ let mediasoupRouter;
 let streamer = null;
 let peers = new Map();
 let dataRouter;
+let scalabilityMode = "L1T1"; // Scalability mode defaults to L1T1 and is set by the offer from the streamer
 
 async function createDataRouter()
 {
@@ -186,9 +187,13 @@ async function onStreamerOffer(msg) {
     return;
   }
 
+  if (msg.scalabilityMode) {
+    scalabilityMode = msg.scalabilityMode;
+  }
+
   const transport = await createWebRtcTransport("Streamer");
   const sdpEndpoint = mediasoupSdp.createSdpEndpoint(transport, mediasoupRouter.rtpCapabilities);
-  const producers = await sdpEndpoint.processOffer(msg.sdp, msg.scalabilityMode ? msg.scalabilityMode : "L1T1");
+  const producers = await sdpEndpoint.processOffer(msg.sdp, scalabilityMode);
   const multiplex = msg.multiplex;
   const sdpAnswer = sdpEndpoint.createAnswer();
   const answer = { type: "answer", sdp: sdpAnswer };
@@ -250,7 +255,8 @@ async function onPeerConnected(peerId) {
     type: "offer",
     playerId: peerId,
     sdp: sdpEndpoint.createOffer(),
-    sfu: true // indicate we're offering from sfu
+    sfu: true, // indicate we're offering from sfu
+    scalabilityMode: scalabilityMode
   };
 
   // send offer to peer
@@ -409,6 +415,7 @@ function disconnectAllPeers() {
 }
 
 function onLayerPreference(msg) {
+  console.log("onLayerPreference: " + JSON.stringify(msg));
   const peer = peers.get(`${msg.playerId}`);
   if (peer != null) {
     for (consumer of peer.consumers) {

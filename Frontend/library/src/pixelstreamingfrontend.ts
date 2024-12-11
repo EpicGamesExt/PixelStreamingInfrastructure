@@ -13,7 +13,12 @@ export {
     NumericParametersIds,
     TextParametersIds,
     OptionParametersIds,
-    AllSettings
+    AllSettings,
+    OptionIds,
+    isFlagId,
+    isNumericId,
+    isOptionId,
+    isTextId
 } from './Config/Config';
 export { SettingBase } from './Config/SettingBase';
 export { SettingFlag } from './Config/SettingFlag';
