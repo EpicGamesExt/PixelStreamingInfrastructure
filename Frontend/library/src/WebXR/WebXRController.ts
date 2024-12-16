@@ -4,7 +4,7 @@ import { Logger } from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
 import { WebRtcPlayerController } from '../WebRtcPlayer/WebRtcPlayerController';
 import { XRGamepadController } from '../Inputs/XRGamepadController';
 import { XrFrameEvent } from '../Util/EventEmitter';
-import { Flags } from '../pixelstreamingfrontend';
+import { Flags } from '../Config/Config';
 
 export class WebXRController {
     private xrSession: XRSession;
