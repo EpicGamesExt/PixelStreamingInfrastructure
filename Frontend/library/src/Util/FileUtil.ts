@@ -61,7 +61,7 @@ export class FileUtil {
         // Extract the total size of the file (across all chunks)
         file.size = Math.ceil(
             new DataView(view.slice(1, 5).buffer).getInt32(0, true) /
-                16379 /* The maximum number of payload bits per message*/
+                (16 * 1024) /* The maximum number of payload bits per message*/
         );
 
         // Get the file part of the payload
