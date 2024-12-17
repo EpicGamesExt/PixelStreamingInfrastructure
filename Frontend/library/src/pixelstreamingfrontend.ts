@@ -2,47 +2,19 @@
 
 export { WebRtcPlayerController } from './WebRtcPlayer/WebRtcPlayerController';
 export { WebXRController } from './WebXR/WebXRController';
-export {
-    Config,
-    ControlSchemeType,
-    Flags,
-    NumericParameters,
-    TextParameters,
-    OptionParameters,
-    FlagsIds,
-    NumericParametersIds,
-    TextParametersIds,
-    OptionParametersIds,
-    AllSettings,
-    OptionIds,
-    isFlagId,
-    isNumericId,
-    isOptionId,
-    isTextId
-} from './Config/Config';
+export * from './Config/Config';
 export { SettingBase } from './Config/SettingBase';
 export { SettingFlag } from './Config/SettingFlag';
 export { SettingNumber } from './Config/SettingNumber';
 export { SettingOption } from './Config/SettingOption';
 export { SettingText } from './Config/SettingText';
-export { PixelStreaming } from './PixelStreaming/PixelStreaming';
-
+export { PixelStreaming, PixelStreamingOverrides } from './PixelStreaming/PixelStreaming';
 export { AFKController as AfkLogic } from './AFK/AFKController';
-
 export { LatencyTestResults } from './DataChannel/LatencyTestResults';
-export {
-    EncoderSettings,
-    InitialSettings,
-    WebRTCSettings,
-    PixelStreamingSettings
-} from './DataChannel/InitialSettings';
+export * from './DataChannel/InitialSettings';
 export { AggregatedStats } from './PeerConnectionController/AggregatedStats';
-export {
-    InputCoordTranslator,
-    UntranslatedCoordUnsigned as UnquantizedAndDenormalizeUnsigned
-} from './Util/InputCoordTranslator';
+export * from './Util/InputCoordTranslator';
 export { MessageDirection } from './UeInstanceMessage/StreamMessageController';
-
 export { CandidatePairStats } from './PeerConnectionController/CandidatePairStats';
 export { CandidateStat } from './PeerConnectionController/CandidateStat';
 export { DataChannelStats } from './PeerConnectionController/DataChannelStats';
