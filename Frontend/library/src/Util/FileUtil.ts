@@ -58,14 +58,20 @@ export class FileUtil {
         // If we haven't received the initial setup instructions, return
         if (!file.receiving) return;
 
+        const typeSize = 1;
+        const intSize = 4;
+        const maxMessageSize = 16 * 1024;
+        const headerSize = typeSize + intSize;
+        const maxPayloadSize = maxMessageSize - headerSize;
+
         // Extract the total size of the file (across all chunks)
         file.size = Math.ceil(
-            new DataView(view.slice(1, 5).buffer).getInt32(0, true) /
-                16379 /* The maximum number of payload bits per message*/
+            new DataView(view.slice(headerSize, headerSize + intSize).buffer).getInt32(0, true) /
+                maxPayloadSize
         );
 
         // Get the file part of the payload
-        const fileBytes = view.slice(1 + 4);
+        const fileBytes = view.slice();
 
         // Append to existing data that holds the file
         file.data.push(fileBytes);
