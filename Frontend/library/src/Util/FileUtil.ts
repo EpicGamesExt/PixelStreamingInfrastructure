@@ -60,18 +60,13 @@ export class FileUtil {
 
         const typeSize = 1;
         const intSize = 4;
-        const maxMessageSize = 16 * 1024;
         const headerSize = typeSize + intSize;
-        const maxPayloadSize = maxMessageSize - headerSize;
 
         // Extract the total size of the file (across all chunks)
-        file.size = Math.ceil(
-            new DataView(view.slice(headerSize, headerSize + intSize).buffer).getInt32(0, true) /
-                maxPayloadSize
-        );
+        file.size = new DataView(view.slice(headerSize, headerSize + intSize).buffer).getInt32(0, true);
 
         // Get the file part of the payload
-        const fileBytes = view.slice();
+        const fileBytes = view.slice(headerSize);
 
         // Append to existing data that holds the file
         file.data.push(fileBytes);
