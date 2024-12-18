@@ -10,6 +10,7 @@ import {
 import { AggregatedStats } from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.5';
 import { MathUtils } from '../Util/MathUtils';
 import { DataChannelLatencyTest } from './DataChannelLatencyTest';
+import { isSectionEnabled, StatsSections, StatsPanelConfiguration } from './UIConfigurationTypes';
 
 /**
  * A stat structure, an id, the stat string, and the element where it is rendered.
@@ -30,6 +31,7 @@ export class StatsPanel {
     _statsContentElement: HTMLElement;
     _statisticsContainer: HTMLElement;
     _statsResult: HTMLElement;
+    _config: StatsPanelConfiguration;
 
     latencyTest: LatencyTest;
     dataChannelLatencyTest: DataChannelLatencyTest;
@@ -37,7 +39,9 @@ export class StatsPanel {
     /* A map stats we are storing/rendering */
     statsMap = new Map<string, Stat>();
 
-    constructor() {
+    constructor(config: StatsPanelConfiguration) {
+        this._config = config;
+
         this.latencyTest = new LatencyTest();
         this.dataChannelLatencyTest = new DataChannelLatencyTest();
     }
@@ -88,18 +92,24 @@ export class StatsPanel {
             statisticsHeader.classList.add('settings-text');
             statisticsHeader.classList.add('settingsHeader');
 
-            const sessionStats = document.createElement('div');
-            sessionStats.innerHTML = 'Session Stats';
-
             this._statsContentElement.appendChild(streamToolStats);
             streamToolStats.appendChild(controlStats);
             controlStats.appendChild(statistics);
             statistics.appendChild(statisticsHeader);
-            statisticsHeader.appendChild(sessionStats);
+            if (isSectionEnabled(this._config, StatsSections.SessionStats)) {
+                const sessionStats = document.createElement('div');
+                sessionStats.innerHTML = StatsSections.SessionStats;
+                statisticsHeader.appendChild(sessionStats);
+            }
             statistics.appendChild(this.statisticsContainer);
 
-            controlStats.appendChild(this.latencyTest.rootElement);
-            controlStats.appendChild(this.dataChannelLatencyTest.rootElement);
+            if (isSectionEnabled(this._config, StatsSections.LatencyTest)) {
+                controlStats.appendChild(this.latencyTest.rootElement);
+            }
+
+            if (isSectionEnabled(this._config, StatsSections.DataChannelLatencyTest)) {
+                controlStats.appendChild(this.dataChannelLatencyTest.rootElement);
+            }
         }
         return this._statsContentElement;
     }
@@ -328,6 +338,10 @@ export class StatsPanel {
      * @param stat - The contents of the stat.
      */
     public addOrUpdateStat(id: string, statLabel: string, stat: string) {
+        if (!isSectionEnabled(this._config, StatsSections.SessionStats)) {
+            return;
+        }
+
         const statHTML = `${statLabel}: ${stat}`;
 
         if (!this.statsMap.has(id)) {
