@@ -10,6 +10,7 @@ import {
     Messages,
     DataChannelLatencyTestResult,
     OptionParameters,
+    TextParameters,
     SettingsChangedEvent
 } from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.5';
 import { OverlayBase } from '../Overlay/BaseOverlay';
@@ -33,6 +34,7 @@ import {
     isPanelEnabled,
     UIElementConfig,
     SettingsPanelConfiguration,
+    StatsPanelConfiguration,
     ExtraFlags
 } from '../UI/UIConfigurationTypes';
 import { FullScreenIconBase, FullScreenIconExternal } from '../UI/FullscreenIcon';
@@ -60,7 +62,7 @@ export interface UIOptions {
     settingsPanelConfig?: SettingsPanelConfiguration;
     /** By default, a stats panel and associate visibility toggle button will be made.
      * If needed, this behaviour can be configured. */
-    statsPanelConfig?: PanelConfiguration;
+    statsPanelConfig?: StatsPanelConfiguration;
     /** If needed, the full screen button can be external or disabled. */
     fullScreenControlsConfig?: UIElementConfig;
     /** If needed, XR button can be external or disabled. */
@@ -115,7 +117,7 @@ export class Application {
 
         if (isPanelEnabled(options.statsPanelConfig)) {
             // Add stats panel
-            this.statsPanel = new StatsPanel();
+            this.statsPanel = new StatsPanel(options.statsPanelConfig);
             this.uiFeaturesElement.appendChild(this.statsPanel.rootElement);
         }
 
