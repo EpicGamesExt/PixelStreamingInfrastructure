@@ -1,6 +1,7 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 import { Logger, DataChannelLatencyTestResult } from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.5';
+import { Sections } from './UIConfigurationTypes';
 
 /**
  * DataChannel Latency test UI elements and results handling.
@@ -26,7 +27,7 @@ export class DataChannelLatencyTest {
             this._rootElement.appendChild(heading);
 
             const headingText = document.createElement('div');
-            headingText.innerHTML = 'Data Channel Latency Test';
+            headingText.innerHTML = Sections.DataChannelLatencyTest;
             heading.appendChild(headingText);
             heading.appendChild(this.latencyTestButton);
 

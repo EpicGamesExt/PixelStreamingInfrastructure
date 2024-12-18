@@ -92,14 +92,13 @@ export class StatsPanel {
             statisticsHeader.classList.add('settings-text');
             statisticsHeader.classList.add('settingsHeader');
 
-            const sessionStats = document.createElement('div');
-            sessionStats.innerHTML = 'Session Stats';
-
             this._statsContentElement.appendChild(streamToolStats);
             streamToolStats.appendChild(controlStats);
             controlStats.appendChild(statistics);
             statistics.appendChild(statisticsHeader);
             if (isSectionEnabled(this._config, Sections.SessionStats)) {
+                const sessionStats = document.createElement('div');
+                sessionStats.innerHTML = Sections.SessionStats;
                 statisticsHeader.appendChild(sessionStats);
             }
             statistics.appendChild(this.statisticsContainer);

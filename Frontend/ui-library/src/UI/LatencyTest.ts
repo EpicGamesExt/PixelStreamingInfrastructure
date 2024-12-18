@@ -2,6 +2,7 @@
 
 import { LatencyTestResults } from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.5';
 import { Logger } from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.5';
+import { Sections } from './UIConfigurationTypes';
 
 /**
  * Latency test UI elements and results handling.
@@ -27,7 +28,7 @@ export class LatencyTest {
             this._rootElement.appendChild(heading);
 
             const headingText = document.createElement('div');
-            headingText.innerHTML = 'Latency Test';
+            headingText.innerHTML = Sections.LatencyTest;
             heading.appendChild(headingText);
             heading.appendChild(this.latencyTestButton);
 

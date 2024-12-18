@@ -130,7 +130,7 @@ export class ConfigUI {
     populateSettingsElement(settingsElem: HTMLElement, settingsConfig: SettingsPanelConfiguration): void {
         if (isSectionEnabled(settingsConfig, Sections.PixelStreaming)) {
             /* Setup all Pixel Streaming specific settings */
-            const psSettingsSection = this.buildSectionWithHeading(settingsElem, 'Pixel Streaming');
+            const psSettingsSection = this.buildSectionWithHeading(settingsElem, Sections.PixelStreaming);
 
             // make settings show up in DOM
             if (isSettingEnabled(settingsConfig, TextParameters.SignallingServerUrl))
@@ -189,7 +189,7 @@ export class ConfigUI {
 
         if (isSectionEnabled(settingsConfig, Sections.UI)) {
             /* Setup all view/ui related settings under this section */
-            const viewSettingsSection = this.buildSectionWithHeading(settingsElem, 'UI');
+            const viewSettingsSection = this.buildSectionWithHeading(settingsElem, Sections.UI);
             if (isSettingEnabled(settingsConfig, Flags.MatchViewportResolution))
                 this.addSettingFlag(viewSettingsSection, this.flagsUi.get(Flags.MatchViewportResolution));
 
@@ -202,7 +202,7 @@ export class ConfigUI {
 
         if (isSectionEnabled(settingsConfig, Sections.Input)) {
             /* Setup all encoder related settings under this section */
-            const inputSettingsSection = this.buildSectionWithHeading(settingsElem, 'Input');
+            const inputSettingsSection = this.buildSectionWithHeading(settingsElem, Sections.Input);
 
             if (isSettingEnabled(settingsConfig, Flags.KeyboardInput))
                 this.addSettingFlag(inputSettingsSection, this.flagsUi.get(Flags.KeyboardInput));
@@ -225,7 +225,7 @@ export class ConfigUI {
 
         if (isSectionEnabled(settingsConfig, Sections.Encoder)) {
             /* Setup all encoder related settings under this section */
-            const encoderSettingsSection = this.buildSectionWithHeading(settingsElem, 'Encoder');
+            const encoderSettingsSection = this.buildSectionWithHeading(settingsElem, Sections.Encoder);
 
             if (isSettingEnabled(settingsConfig, NumericParameters.CompatQualityMin))
                 this.addSettingNumeric(
@@ -262,7 +262,7 @@ export class ConfigUI {
 
         if (isSectionEnabled(settingsConfig, Sections.WebRTC)) {
             /* Setup all webrtc related settings under this section */
-            const webrtcSettingsSection = this.buildSectionWithHeading(settingsElem, 'WebRTC');
+            const webrtcSettingsSection = this.buildSectionWithHeading(settingsElem, Sections.WebRTC);
 
             if (isSettingEnabled(settingsConfig, NumericParameters.WebRTCFPS))
                 this.addSettingNumeric(
