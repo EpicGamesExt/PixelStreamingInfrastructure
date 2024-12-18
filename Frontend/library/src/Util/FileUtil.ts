@@ -17,7 +17,7 @@ export class FileUtil {
             file.extension = '';
             file.receiving = true;
             file.valid = false;
-            file.size = 0;
+            file.chunks = 0;
             file.data = [];
             file.timestampStart = new Date().getTime();
             Logger.Log(
@@ -45,7 +45,7 @@ export class FileUtil {
             file.extension = '';
             file.receiving = true;
             file.valid = false;
-            file.size = 0;
+            file.chunks = 0;
             file.data = [];
             file.timestampStart = new Date().getTime();
             Logger.Log(
@@ -70,10 +70,12 @@ export class FileUtil {
 
         const typeSize = 1;
         const intSize = 4;
+        const maxMessageSize = 16 * 1024;
         const headerSize = typeSize + intSize;
+        const maxPayloadSize = maxMessageSize - headerSize;
 
-        // Extract the total size of the file (across all chunks)
-        file.size = new DataView(view.slice(headerSize, headerSize + intSize).buffer).getInt32(0, true);
+        // Calculate total number of chunks from the total file size
+        file.chunks = Math.ceil(new DataView(view.slice(typeSize, headerSize).buffer).getInt32(0, true) / maxPayloadSize);
 
         // Get the file part of the payload
         const fileBytes = view.slice(headerSize);
@@ -84,25 +86,22 @@ export class FileUtil {
         // Uncomment for debug
         Logger.Log(
             Logger.GetStackTrace(),
-            `Received file chunk: ${file.data.length}/${file.size}`,
+            `Received file chunk: ${file.data.length}/${file.chunks}`,
             6
         );
 
-        if (file.data.length === file.size) {
+        if (file.data.length === file.chunks) {
             file.receiving = false;
             file.valid = true;
             Logger.Log(Logger.GetStackTrace(), 'Received complete file', 6);
             const transferDuration = new Date().getTime() - file.timestampStart;
-            const transferBitrate = Math.round(
-                (file.size * 16 * 1024) / transferDuration
-            );
+            const transferBitrate = Math.round((file.chunks * maxPayloadSize) / transferDuration);
             Logger.Log(
                 Logger.GetStackTrace(),
                 `Average transfer bitrate: ${transferBitrate}kb/s over ${
                     transferDuration / 1000
                 } seconds`,
-                6
-            );
+                6);
 
             // File reconstruction
             /**
@@ -117,11 +116,11 @@ export class FileUtil {
             document.body.append(a);
             // if you are so inclined to make it auto-download, do something like: a.click();
             a.remove();
-        } else if (file.data.length > file.size) {
+        } else if (file.data.length > file.chunks) {
             file.receiving = false;
             Logger.Error(
                 Logger.GetStackTrace(),
-                `Received bigger file than advertised: ${file.data.length}/${file.size}`
+                `Received bigger file than advertised: ${file.data.length}/${file.chunks}`
             );
         }
     }
@@ -134,7 +133,7 @@ export class FileTemplate {
     mimetype = '';
     extension = '';
     receiving = false;
-    size = 0;
+    chunks = 0;
     data: Array<Uint8Array> = [];
     valid = false;
     timestampStart: number;
