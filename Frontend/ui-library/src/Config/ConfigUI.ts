@@ -143,8 +143,6 @@ export class ConfigUI {
                     psSettingsSection,
                     this.optionParametersUi.get(OptionParameters.StreamerId)
                 );
-            if (isSettingEnabled(settingsConfig, TextParameters.PlayerId))
-                this.addSettingText(psSettingsSection, this.textParametersUi.get(TextParameters.PlayerId));
             if (isSettingEnabled(settingsConfig, Flags.AutoConnect))
                 this.addSettingFlag(psSettingsSection, this.flagsUi.get(Flags.AutoConnect));
             if (isSettingEnabled(settingsConfig, Flags.AutoPlayVideo))
