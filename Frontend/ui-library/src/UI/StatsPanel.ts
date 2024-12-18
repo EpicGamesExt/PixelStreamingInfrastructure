@@ -10,7 +10,7 @@ import {
 import { AggregatedStats } from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.5';
 import { MathUtils } from '../Util/MathUtils';
 import { DataChannelLatencyTest } from './DataChannelLatencyTest';
-import { isSectionEnabled, Sections, StatsPanelConfiguration } from './UIConfigurationTypes';
+import { isSectionEnabled, StatsSections, StatsPanelConfiguration } from './UIConfigurationTypes';
 
 /**
  * A stat structure, an id, the stat string, and the element where it is rendered.
@@ -96,18 +96,18 @@ export class StatsPanel {
             streamToolStats.appendChild(controlStats);
             controlStats.appendChild(statistics);
             statistics.appendChild(statisticsHeader);
-            if (isSectionEnabled(this._config, Sections.SessionStats)) {
+            if (isSectionEnabled(this._config, StatsSections.SessionStats)) {
                 const sessionStats = document.createElement('div');
-                sessionStats.innerHTML = Sections.SessionStats;
+                sessionStats.innerHTML = StatsSections.SessionStats;
                 statisticsHeader.appendChild(sessionStats);
             }
             statistics.appendChild(this.statisticsContainer);
 
-            if (isSectionEnabled(this._config, Sections.LatencyTest)) {
+            if (isSectionEnabled(this._config, StatsSections.LatencyTest)) {
                 controlStats.appendChild(this.latencyTest.rootElement);
             }
 
-            if (isSectionEnabled(this._config, Sections.DataChannelLatencyTest)) {
+            if (isSectionEnabled(this._config, StatsSections.DataChannelLatencyTest)) {
                 controlStats.appendChild(this.dataChannelLatencyTest.rootElement);
             }
         }
@@ -338,7 +338,7 @@ export class StatsPanel {
      * @param stat - The contents of the stat.
      */
     public addOrUpdateStat(id: string, statLabel: string, stat: string) {
-        if (!isSectionEnabled(this._config, Sections.SessionStats)) {
+        if (!isSectionEnabled(this._config, StatsSections.SessionStats)) {
             return;
         }
 

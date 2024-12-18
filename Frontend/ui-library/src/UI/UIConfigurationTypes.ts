@@ -16,21 +16,28 @@ export type OptionIdsExtended = OptionIds | ExtraFlagsIds;
 /**
  * All the UI sections across all the panels.
  */
-export class Sections {
+export class SettingsSections {
     static PixelStreaming = 'Pixel Streaming' as const;
     static UI = 'UI' as const;
     static Input = 'Input' as const;
     static Encoder = 'Encoder' as const;
     static WebRTC = 'WebRTC' as const;
     static Commands = 'Commands' as const;
+}
 
+export type SettingsSectionsKeys = Exclude<keyof typeof SettingsSections, 'prototype'>;
+export type SettingsSectionsIds = (typeof SettingsSections)[SettingsSectionsKeys];
+
+export class StatsSections {
     static SessionStats = 'Session Stats' as const;
     static LatencyTest = 'Latency Test' as const;
     static DataChannelLatencyTest = 'Data Channel Latency Test' as const;
 }
 
-export type SectionsKeys = Exclude<keyof typeof Sections, 'prototype'>;
-export type SectionsIds = (typeof Sections)[SectionsKeys];
+export type StatsSectionsKeys = Exclude<keyof typeof StatsSections, 'prototype'>;
+export type StatsSectionsIds = (typeof StatsSections)[StatsSectionsKeys];
+
+export type SectionsIds = SettingsSectionsIds | StatsSectionsIds;
 
 /** Whether a stream UI element is internally made, externally provided, or disabled. */
 export enum UIElementCreationMode {
@@ -67,17 +74,30 @@ export function isPanelEnabled(config: PanelConfiguration | undefined): boolean 
 }
 
 /**
- * Type for all settings and a boolean to represent whether this UI section is enabled
+ * Type for settings sections and a boolean to represent whether this UI section is enabled
  */
-export type AllSectionsConfig = {
-    [K in SectionsIds]: boolean;
+export type SettingsSectionsConfig = {
+    [K in SettingsSectionsIds]: boolean;
 };
 
-export type SectionsConfiguration = {
-    sectionVisibility?: Partial<AllSectionsConfig>;
+export type SettingsSectionsConfiguration = {
+    sectionVisibility?: Partial<SettingsSectionsConfig>;
 };
 
-export function isSectionEnabled(config: SectionsConfiguration | undefined, section: SectionsIds): boolean {
+export type StatsSectionsConfig = {
+    [K in StatsSectionsIds]: boolean;
+};
+
+export type StatsSectionsConfiguration = {
+    sectionVisibility?: Partial<StatsSectionsConfig>;
+};
+
+export type AllSectionsConfiguration = SettingsSectionsConfiguration & StatsSectionsConfiguration;
+
+export function isSectionEnabled(
+    config: AllSectionsConfiguration | undefined,
+    section: SectionsIds
+): boolean {
     return (
         !config ||
         (!!config &&
@@ -114,9 +134,11 @@ export function isSettingEnabled(
 /**
  * Overriden panel configuration to include section visibility for the stats panel
  */
-export type StatsPanelConfiguration = PanelConfiguration & SectionsConfiguration;
+export type StatsPanelConfiguration = PanelConfiguration & StatsSectionsConfiguration;
 
 /**
  * Overriden panel configuration to include setting and section visibility for the settings panel
  */
-export type SettingsPanelConfiguration = PanelConfiguration & SettingsConfiguration & SectionsConfiguration;
+export type SettingsPanelConfiguration = PanelConfiguration &
+    SettingsConfiguration &
+    SettingsSectionsConfiguration;

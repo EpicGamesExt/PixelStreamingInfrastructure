@@ -33,7 +33,7 @@ import {
     isSectionEnabled,
     isSettingEnabled,
     OptionIdsExtended,
-    Sections,
+    SettingsSections,
     SettingsPanelConfiguration
 } from '../UI/UIConfigurationTypes';
 
@@ -128,9 +128,12 @@ export class ConfigUI {
      * @param settingsElem - - The element that contains all the individual settings sections, flags, and so on.
      */
     populateSettingsElement(settingsElem: HTMLElement, settingsConfig: SettingsPanelConfiguration): void {
-        if (isSectionEnabled(settingsConfig, Sections.PixelStreaming)) {
+        if (isSectionEnabled(settingsConfig, SettingsSections.PixelStreaming)) {
             /* Setup all Pixel Streaming specific settings */
-            const psSettingsSection = this.buildSectionWithHeading(settingsElem, Sections.PixelStreaming);
+            const psSettingsSection = this.buildSectionWithHeading(
+                settingsElem,
+                SettingsSections.PixelStreaming
+            );
 
             // make settings show up in DOM
             if (isSettingEnabled(settingsConfig, TextParameters.SignallingServerUrl))
@@ -187,9 +190,9 @@ export class ConfigUI {
                 );
         }
 
-        if (isSectionEnabled(settingsConfig, Sections.UI)) {
+        if (isSectionEnabled(settingsConfig, SettingsSections.UI)) {
             /* Setup all view/ui related settings under this section */
-            const viewSettingsSection = this.buildSectionWithHeading(settingsElem, Sections.UI);
+            const viewSettingsSection = this.buildSectionWithHeading(settingsElem, SettingsSections.UI);
             if (isSettingEnabled(settingsConfig, Flags.MatchViewportResolution))
                 this.addSettingFlag(viewSettingsSection, this.flagsUi.get(Flags.MatchViewportResolution));
 
@@ -200,9 +203,9 @@ export class ConfigUI {
                 this.addSettingFlag(viewSettingsSection, this.flagsUi.get(ExtraFlags.LightMode));
         }
 
-        if (isSectionEnabled(settingsConfig, Sections.Input)) {
+        if (isSectionEnabled(settingsConfig, SettingsSections.Input)) {
             /* Setup all encoder related settings under this section */
-            const inputSettingsSection = this.buildSectionWithHeading(settingsElem, Sections.Input);
+            const inputSettingsSection = this.buildSectionWithHeading(settingsElem, SettingsSections.Input);
 
             if (isSettingEnabled(settingsConfig, Flags.KeyboardInput))
                 this.addSettingFlag(inputSettingsSection, this.flagsUi.get(Flags.KeyboardInput));
@@ -223,9 +226,12 @@ export class ConfigUI {
                 this.addSettingFlag(inputSettingsSection, this.flagsUi.get(Flags.XRControllerInput));
         }
 
-        if (isSectionEnabled(settingsConfig, Sections.Encoder)) {
+        if (isSectionEnabled(settingsConfig, SettingsSections.Encoder)) {
             /* Setup all encoder related settings under this section */
-            const encoderSettingsSection = this.buildSectionWithHeading(settingsElem, Sections.Encoder);
+            const encoderSettingsSection = this.buildSectionWithHeading(
+                settingsElem,
+                SettingsSections.Encoder
+            );
 
             if (isSettingEnabled(settingsConfig, NumericParameters.CompatQualityMin))
                 this.addSettingNumeric(
@@ -260,9 +266,9 @@ export class ConfigUI {
                 );
         }
 
-        if (isSectionEnabled(settingsConfig, Sections.WebRTC)) {
+        if (isSectionEnabled(settingsConfig, SettingsSections.WebRTC)) {
             /* Setup all webrtc related settings under this section */
-            const webrtcSettingsSection = this.buildSectionWithHeading(settingsElem, Sections.WebRTC);
+            const webrtcSettingsSection = this.buildSectionWithHeading(settingsElem, SettingsSections.WebRTC);
 
             if (isSettingEnabled(settingsConfig, NumericParameters.WebRTCFPS))
                 this.addSettingNumeric(
