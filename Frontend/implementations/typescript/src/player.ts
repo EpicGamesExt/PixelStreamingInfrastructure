@@ -22,30 +22,7 @@ document.body.onload = function() {
 
 	const application = new Application({
 		stream,
-		onColorModeChanged: (isLightMode) => PixelStreamingApplicationStyles.setColorMode(isLightMode),
-		settingsPanelConfig: {
-			isEnabled: true,
-			settingVisibility: {
-			  StreamerId: false,
-			  ss: false,
-			  TimeoutIfIdle: false,
-			  ForceTURN: false,
-			  LightMode: false,
-			  UseMic: false,
-			  MatchViewportRes: false,
-			  HoveringMouse: false,
-			  AFKTimeout: false,
-			  AFKCountdown: false,
-			  MaxReconnectAttempts: false,
-			  StartVideoMuted: false
-			},
-			sectionVisibility: {
-			  Encoder: false,
-			  WebRTC: false,
-			  UI: false,
-			  Input: false
-			}
-		  }
+		onColorModeChanged: (isLightMode) => PixelStreamingApplicationStyles.setColorMode(isLightMode)
 	});
 	document.body.appendChild(application.rootElement);
 
