@@ -97,7 +97,7 @@ export class FileUtil {
             file.valid = true;
             Logger.Log(Logger.GetStackTrace(), 'Received complete file', 6);
             const transferDuration = new Date().getTime() - file.timestampStart;
-            const transferBitrate = Math.round((file.chunks * maxPayloadSize) / transferDuration);
+            const transferBitrate = Math.round((file.chunks * maxMessageSize) / transferDuration);
             Logger.Log(
                 Logger.GetStackTrace(),
                 `Average transfer bitrate: ${transferBitrate}kb/s over ${
