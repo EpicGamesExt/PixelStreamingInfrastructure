@@ -65,7 +65,9 @@ export class FileUtil {
         const maxPayloadSize = maxMessageSize - headerSize;
 
         // Calculate total number of chunks from the total file size
-        file.chunks = Math.ceil(new DataView(view.slice(typeSize, headerSize).buffer).getInt32(0, true) / maxPayloadSize);
+        file.chunks = Math.ceil(
+            new DataView(view.slice(typeSize, headerSize).buffer).getInt32(0, true) / maxPayloadSize
+        );
 
         // Get the file part of the payload
         const fileBytes = view.slice(headerSize);
