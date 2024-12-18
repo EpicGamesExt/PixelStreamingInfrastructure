@@ -10,7 +10,6 @@ import {
     Messages,
     DataChannelLatencyTestResult,
     OptionParameters,
-    TextParameters,
     SettingsChangedEvent
 } from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.5';
 import { OverlayBase } from '../Overlay/BaseOverlay';
@@ -30,7 +29,6 @@ import { VideoQpIndicator } from '../UI/VideoQpIndicator';
 import { ConfigUI } from '../Config/ConfigUI';
 import {
     UIElementCreationMode,
-    PanelConfiguration,
     isPanelEnabled,
     UIElementConfig,
     SettingsPanelConfiguration,

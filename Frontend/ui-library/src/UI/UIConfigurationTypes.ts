@@ -82,7 +82,8 @@ export function isSectionEnabled(config: SectionsConfiguration | undefined, sect
         !config ||
         (!!config &&
             (!Object.prototype.hasOwnProperty.call(config.sectionVisibility, section) ||
-                (Object.prototype.hasOwnProperty.call(config.sectionVisibility, section) && config.sectionVisibility[section])))
+                (Object.prototype.hasOwnProperty.call(config.sectionVisibility, section) &&
+                    config.sectionVisibility[section])))
     );
 }
 
