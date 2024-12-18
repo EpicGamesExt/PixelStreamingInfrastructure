@@ -26,12 +26,14 @@ import { LabelledButton } from '../UI/LabelledButton';
 import { SettingsPanel } from '../UI/SettingsPanel';
 import { StatsPanel } from '../UI/StatsPanel';
 import { VideoQpIndicator } from '../UI/VideoQpIndicator';
-import { ConfigUI, ExtraFlags } from '../Config/ConfigUI';
+import { ConfigUI } from '../Config/ConfigUI';
 import {
     UIElementCreationMode,
     PanelConfiguration,
     isPanelEnabled,
-    UIElementConfig
+    UIElementConfig,
+    SettingsPanelConfiguration,
+    ExtraFlags
 } from '../UI/UIConfigurationTypes';
 import { FullScreenIconBase, FullScreenIconExternal } from '../UI/FullscreenIcon';
 
@@ -55,7 +57,7 @@ export interface UIOptions {
     onColorModeChanged?: (isLightMode: boolean) => void;
     /** By default, a settings panel and associate visibility toggle button will be made.
      * If needed, this behaviour can be configured. */
-    settingsPanelConfig?: PanelConfiguration;
+    settingsPanelConfig?: SettingsPanelConfiguration;
     /** By default, a stats panel and associate visibility toggle button will be made.
      * If needed, this behaviour can be configured. */
     statsPanelConfig?: PanelConfiguration;
@@ -285,7 +287,10 @@ export class Application {
      */
     configureSettings(): void {
         // This builds all the settings sections and flags under this `settingsContent` element.
-        this.configUI.populateSettingsElement(this.settingsPanel.settingsContentElement);
+        this.configUI.populateSettingsElement(
+            this.settingsPanel.settingsContentElement,
+            this._options.settingsPanelConfig
+        );
 
         this.configUI.addCustomFlagOnSettingChangedListener(ExtraFlags.LightMode, (isLightMode: boolean) => {
             this.configUI.setCustomFlagLabel(
