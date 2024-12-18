@@ -17,7 +17,6 @@ import {
     SettingOption,
     Logger,
     SettingBase,
-    OptionIds,
     isFlagId,
     isNumericId,
     isTextId,
@@ -27,15 +26,14 @@ import { SettingUIFlag } from './SettingUIFlag';
 import { SettingUINumber } from './SettingUINumber';
 import { SettingUIText } from './SettingUIText';
 import { SettingUIOption } from './SettingUIOption';
-
-export class ExtraFlags {
-    static LightMode = 'LightMode' as const;
-}
-
-export type ExtraFlagsKeys = Exclude<keyof typeof ExtraFlags, 'prototype'>;
-export type ExtraFlagsIds = (typeof ExtraFlags)[ExtraFlagsKeys];
-
-export type FlagsIdsExtended = FlagsIds | ExtraFlagsIds;
+import {
+    ExtraFlags,
+    ExtraFlagsIds,
+    FlagsIdsExtended,
+    isSettingEnabled,
+    OptionIdsExtended,
+    SettingsPanelConfiguration
+} from '../UI/UIConfigurationTypes';
 
 export class ConfigUI {
     private customFlags = new Map<FlagsIdsExtended, SettingFlag<FlagsIdsExtended>>();
@@ -127,81 +125,116 @@ export class ConfigUI {
      * Setup flags with their default values and add them to the `Config.flags` map.
      * @param settingsElem - - The element that contains all the individual settings sections, flags, and so on.
      */
-    populateSettingsElement(settingsElem: HTMLElement): void {
+    populateSettingsElement(settingsElem: HTMLElement, settingsConfig: SettingsPanelConfiguration): void {
         /* Setup all Pixel Streaming specific settings */
         const psSettingsSection = this.buildSectionWithHeading(settingsElem, 'Pixel Streaming');
 
         // make settings show up in DOM
-        this.addSettingText(psSettingsSection, this.textParametersUi.get(TextParameters.SignallingServerUrl));
-        this.addSettingOption(psSettingsSection, this.optionParametersUi.get(OptionParameters.StreamerId));
-        this.addSettingFlag(psSettingsSection, this.flagsUi.get(Flags.AutoConnect));
-        this.addSettingFlag(psSettingsSection, this.flagsUi.get(Flags.AutoPlayVideo));
-        this.addSettingFlag(psSettingsSection, this.flagsUi.get(Flags.UseMic));
-        this.addSettingFlag(psSettingsSection, this.flagsUi.get(Flags.UseCamera));
-        this.addSettingFlag(psSettingsSection, this.flagsUi.get(Flags.StartVideoMuted));
-        this.addSettingFlag(psSettingsSection, this.flagsUi.get(Flags.IsQualityController));
-        this.addSettingFlag(psSettingsSection, this.flagsUi.get(Flags.ForceMonoAudio));
-        this.addSettingFlag(psSettingsSection, this.flagsUi.get(Flags.ForceTURN));
-        this.addSettingFlag(psSettingsSection, this.flagsUi.get(Flags.SuppressBrowserKeys));
-        this.addSettingFlag(psSettingsSection, this.flagsUi.get(Flags.AFKDetection));
-        this.addSettingFlag(psSettingsSection, this.flagsUi.get(Flags.WaitForStreamer));
-        this.addSettingNumeric(
-            psSettingsSection,
-            this.numericParametersUi.get(NumericParameters.AFKTimeoutSecs)
-        );
-        this.addSettingNumeric(
-            psSettingsSection,
-            this.numericParametersUi.get(NumericParameters.AFKCountdownSecs)
-        );
-        this.addSettingNumeric(
-            psSettingsSection,
-            this.numericParametersUi.get(NumericParameters.MaxReconnectAttempts)
-        );
-        this.addSettingNumeric(
-            psSettingsSection,
-            this.numericParametersUi.get(NumericParameters.StreamerAutoJoinInterval)
-        );
+        if (isSettingEnabled(settingsConfig, TextParameters.SignallingServerUrl))
+            this.addSettingText(
+                psSettingsSection,
+                this.textParametersUi.get(TextParameters.SignallingServerUrl)
+            );
+        if (isSettingEnabled(settingsConfig, OptionParameters.StreamerId))
+            this.addSettingOption(
+                psSettingsSection,
+                this.optionParametersUi.get(OptionParameters.StreamerId)
+            );
+        if (isSettingEnabled(settingsConfig, Flags.AutoConnect))
+            this.addSettingFlag(psSettingsSection, this.flagsUi.get(Flags.AutoConnect));
+        if (isSettingEnabled(settingsConfig, Flags.AutoPlayVideo))
+            this.addSettingFlag(psSettingsSection, this.flagsUi.get(Flags.AutoPlayVideo));
+        if (isSettingEnabled(settingsConfig, Flags.UseMic))
+            this.addSettingFlag(psSettingsSection, this.flagsUi.get(Flags.UseMic));
+        if (isSettingEnabled(settingsConfig, Flags.UseCamera))
+            this.addSettingFlag(psSettingsSection, this.flagsUi.get(Flags.UseCamera));
+        if (isSettingEnabled(settingsConfig, Flags.StartVideoMuted))
+            this.addSettingFlag(psSettingsSection, this.flagsUi.get(Flags.StartVideoMuted));
+        if (isSettingEnabled(settingsConfig, Flags.IsQualityController))
+            this.addSettingFlag(psSettingsSection, this.flagsUi.get(Flags.IsQualityController));
+        if (isSettingEnabled(settingsConfig, Flags.ForceMonoAudio))
+            this.addSettingFlag(psSettingsSection, this.flagsUi.get(Flags.ForceMonoAudio));
+        if (isSettingEnabled(settingsConfig, Flags.ForceTURN))
+            this.addSettingFlag(psSettingsSection, this.flagsUi.get(Flags.ForceTURN));
+        if (isSettingEnabled(settingsConfig, Flags.SuppressBrowserKeys))
+            this.addSettingFlag(psSettingsSection, this.flagsUi.get(Flags.SuppressBrowserKeys));
+        if (isSettingEnabled(settingsConfig, Flags.AFKDetection))
+            this.addSettingFlag(psSettingsSection, this.flagsUi.get(Flags.AFKDetection));
+        if (isSettingEnabled(settingsConfig, Flags.WaitForStreamer))
+            this.addSettingFlag(psSettingsSection, this.flagsUi.get(Flags.WaitForStreamer));
+        if (isSettingEnabled(settingsConfig, NumericParameters.AFKTimeoutSecs))
+            this.addSettingNumeric(
+                psSettingsSection,
+                this.numericParametersUi.get(NumericParameters.AFKTimeoutSecs)
+            );
+        if (isSettingEnabled(settingsConfig, NumericParameters.AFKCountdownSecs))
+            this.addSettingNumeric(
+                psSettingsSection,
+                this.numericParametersUi.get(NumericParameters.AFKCountdownSecs)
+            );
+        if (isSettingEnabled(settingsConfig, NumericParameters.MaxReconnectAttempts))
+            this.addSettingNumeric(
+                psSettingsSection,
+                this.numericParametersUi.get(NumericParameters.MaxReconnectAttempts)
+            );
+        if (isSettingEnabled(settingsConfig, NumericParameters.StreamerAutoJoinInterval))
+            this.addSettingNumeric(
+                psSettingsSection,
+                this.numericParametersUi.get(NumericParameters.StreamerAutoJoinInterval)
+            );
 
         /* Setup all view/ui related settings under this section */
         const viewSettingsSection = this.buildSectionWithHeading(settingsElem, 'UI');
-        this.addSettingFlag(viewSettingsSection, this.flagsUi.get(Flags.MatchViewportResolution));
+        if (isSettingEnabled(settingsConfig, Flags.MatchViewportResolution))
+            this.addSettingFlag(viewSettingsSection, this.flagsUi.get(Flags.MatchViewportResolution));
 
-        this.addSettingFlag(viewSettingsSection, this.flagsUi.get(Flags.HoveringMouseMode));
+        if (isSettingEnabled(settingsConfig, Flags.HoveringMouseMode))
+            this.addSettingFlag(viewSettingsSection, this.flagsUi.get(Flags.HoveringMouseMode));
 
-        this.addSettingFlag(viewSettingsSection, this.flagsUi.get(ExtraFlags.LightMode));
+        if (isSettingEnabled(settingsConfig, ExtraFlags.LightMode))
+            this.addSettingFlag(viewSettingsSection, this.flagsUi.get(ExtraFlags.LightMode));
 
         /* Setup all encoder related settings under this section */
         const inputSettingsSection = this.buildSectionWithHeading(settingsElem, 'Input');
 
-        this.addSettingFlag(inputSettingsSection, this.flagsUi.get(Flags.KeyboardInput));
+        if (isSettingEnabled(settingsConfig, Flags.KeyboardInput))
+            this.addSettingFlag(inputSettingsSection, this.flagsUi.get(Flags.KeyboardInput));
 
-        this.addSettingFlag(inputSettingsSection, this.flagsUi.get(Flags.MouseInput));
+        if (isSettingEnabled(settingsConfig, Flags.MouseInput))
+            this.addSettingFlag(inputSettingsSection, this.flagsUi.get(Flags.MouseInput));
 
-        this.addSettingFlag(inputSettingsSection, this.flagsUi.get(Flags.FakeMouseWithTouches));
+        if (isSettingEnabled(settingsConfig, Flags.FakeMouseWithTouches))
+            this.addSettingFlag(inputSettingsSection, this.flagsUi.get(Flags.FakeMouseWithTouches));
 
-        this.addSettingFlag(inputSettingsSection, this.flagsUi.get(Flags.TouchInput));
+        if (isSettingEnabled(settingsConfig, Flags.TouchInput))
+            this.addSettingFlag(inputSettingsSection, this.flagsUi.get(Flags.TouchInput));
 
-        this.addSettingFlag(inputSettingsSection, this.flagsUi.get(Flags.GamepadInput));
+        if (isSettingEnabled(settingsConfig, Flags.GamepadInput))
+            this.addSettingFlag(inputSettingsSection, this.flagsUi.get(Flags.GamepadInput));
 
-        this.addSettingFlag(inputSettingsSection, this.flagsUi.get(Flags.XRControllerInput));
+        if (isSettingEnabled(settingsConfig, Flags.XRControllerInput))
+            this.addSettingFlag(inputSettingsSection, this.flagsUi.get(Flags.XRControllerInput));
 
         /* Setup all encoder related settings under this section */
         const encoderSettingsSection = this.buildSectionWithHeading(settingsElem, 'Encoder');
 
-        this.addSettingNumeric(
-            encoderSettingsSection,
-            this.numericParametersUi.get(NumericParameters.CompatQualityMin)
-        );
-        this.addSettingNumeric(
-            encoderSettingsSection,
-            this.numericParametersUi.get(NumericParameters.CompatQualityMax)
-        );
+        if (isSettingEnabled(settingsConfig, NumericParameters.CompatQualityMin))
+            this.addSettingNumeric(
+                encoderSettingsSection,
+                this.numericParametersUi.get(NumericParameters.CompatQualityMin)
+            );
+        if (isSettingEnabled(settingsConfig, NumericParameters.CompatQualityMax))
+            this.addSettingNumeric(
+                encoderSettingsSection,
+                this.numericParametersUi.get(NumericParameters.CompatQualityMax)
+            );
 
         const preferredCodecOption = this.optionParametersUi.get(OptionParameters.PreferredCodec);
-        this.addSettingOption(
-            encoderSettingsSection,
-            this.optionParametersUi.get(OptionParameters.PreferredCodec)
-        );
+        if (isSettingEnabled(settingsConfig, OptionParameters.PreferredCodec))
+            this.addSettingOption(
+                encoderSettingsSection,
+                this.optionParametersUi.get(OptionParameters.PreferredCodec)
+            );
         if (
             preferredCodecOption &&
             [...preferredCodecOption.selector.options]
@@ -211,26 +244,30 @@ export class ConfigUI {
             preferredCodecOption.disable();
         }
 
-        this.addSettingOption(
-            encoderSettingsSection,
-            this.optionParametersUi.get(OptionParameters.PreferredQuality)
-        );
+        if (isSettingEnabled(settingsConfig, OptionParameters.PreferredQuality))
+            this.addSettingOption(
+                encoderSettingsSection,
+                this.optionParametersUi.get(OptionParameters.PreferredQuality)
+            );
 
         /* Setup all webrtc related settings under this section */
         const webrtcSettingsSection = this.buildSectionWithHeading(settingsElem, 'WebRTC');
 
-        this.addSettingNumeric(
-            webrtcSettingsSection,
-            this.numericParametersUi.get(NumericParameters.WebRTCFPS)
-        );
-        this.addSettingNumeric(
-            webrtcSettingsSection,
-            this.numericParametersUi.get(NumericParameters.WebRTCMinBitrate)
-        );
-        this.addSettingNumeric(
-            webrtcSettingsSection,
-            this.numericParametersUi.get(NumericParameters.WebRTCMaxBitrate)
-        );
+        if (isSettingEnabled(settingsConfig, NumericParameters.WebRTCFPS))
+            this.addSettingNumeric(
+                webrtcSettingsSection,
+                this.numericParametersUi.get(NumericParameters.WebRTCFPS)
+            );
+        if (isSettingEnabled(settingsConfig, NumericParameters.WebRTCMinBitrate))
+            this.addSettingNumeric(
+                webrtcSettingsSection,
+                this.numericParametersUi.get(NumericParameters.WebRTCMinBitrate)
+            );
+        if (isSettingEnabled(settingsConfig, NumericParameters.WebRTCMaxBitrate))
+            this.addSettingNumeric(
+                webrtcSettingsSection,
+                this.numericParametersUi.get(NumericParameters.WebRTCMaxBitrate)
+            );
     }
 
     /**
@@ -380,7 +417,7 @@ export class ConfigUI {
         return this.customFlags.get(id).flag as boolean;
     }
 
-    disableSetting(id: OptionIds | ExtraFlagsIds): void {
+    disableSetting(id: OptionIdsExtended): void {
         if (isFlagId(id)) {
             this.flagsUi.get(id)?.disable();
         } else if (isNumericId(id)) {
@@ -392,7 +429,7 @@ export class ConfigUI {
         }
     }
 
-    enableSetting(id: OptionIds | ExtraFlagsIds): void {
+    enableSetting(id: OptionIdsExtended): void {
         if (isFlagId(id)) {
             this.flagsUi.get(id)?.enable();
         } else if (isNumericId(id)) {
