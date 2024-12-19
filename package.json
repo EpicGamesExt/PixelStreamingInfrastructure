@@ -1,29 +1,29 @@
 {
-	"name": "pixelstreaming-infrastructure",
-	"workspaces": [
-		"Common",
-		"Extras/FrontendTests",
-		"Extras/JSStreamer",
-		"Extras/MinimalStreamTester",
-		"Frontend/library",
-		"Frontend/ui-library",
-		"Frontend/implementations/typescript",
-		"Frontend/implementations/react",
-		"SFU",
-		"SFU/mediasoup-sdp-bridge",
-		"Signalling",
-		"SignallingWebServer",
-		"SS_Test"
-	],
-	"private": true,
-	"scripts": {
-		"build": "npm run build --ws",
+    "name": "pixelstreaming-infrastructure",
+    "workspaces": [
+        "Common",
+        "Extras/FrontendTests",
+        "Extras/JSStreamer",
+        "Extras/MinimalStreamTester",
+        "Frontend/library",
+        "Frontend/ui-library",
+        "Frontend/implementations/typescript",
+        "Frontend/implementations/react",
+        "SFU",
+        "SFU/mediasoup-sdp-bridge",
+        "Signalling",
+        "SignallingWebServer",
+        "SS_Test"
+    ],
+    "private": true,
+    "scripts": {
+        "build": "npm run build --ws",
         "pre-commit-lint": "Extras/Scripts/pre-commit-checks.sh"
-	},
+    },
     "pre-commit": [
         "pre-commit-lint"
     ],
-	"dependencies": {
-		"pre-commit": "^1.2.2"
-	}
+    "dependencies": {
+        "pre-commit": "^1.2.2"
+    }
 }
