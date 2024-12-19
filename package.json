@@ -18,7 +18,7 @@
     "private": true,
     "scripts": {
         "build": "npm run build --ws",
-        "pre-commit-lint": "Extras/Scripts/pre-commit-checks.sh"
+        "pre-commit-lint": "bash ./Extras/Scripts/pre-commit-checks.sh"
     },
     "pre-commit": [
         "pre-commit-lint"
