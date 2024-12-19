@@ -134,7 +134,7 @@ export class GamepadController implements IInputController {
         const deletedController = this.controllers[gamepad.index];
         delete this.controllers[gamepad.index];
         this.controllers = this.controllers.filter((controller) => controller !== undefined);
-        if (deletedController.id) {
+        if (deletedController.id !== undefined) {
             this.streamMessageController.toStreamerHandlers.get('GamepadDisconnected')([
                 deletedController.id
             ]);
@@ -224,7 +224,7 @@ export class GamepadController implements IInputController {
         // When a user navigates away from the page, we need to inform UE of all the disconnecting
         // controllers
         for (const controller of this.controllers) {
-            if (!controller || !controller.id) {
+            if (!controller || controller.id === undefined) {
                 continue;
             }
             this.streamMessageController.toStreamerHandlers.get('GamepadDisconnected')([controller.id]);
