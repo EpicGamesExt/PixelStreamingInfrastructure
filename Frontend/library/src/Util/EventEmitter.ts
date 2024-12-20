@@ -91,6 +91,21 @@ export class WebRtcSdpEvent extends Event {
 }
 
 /**
+ * An event that is emitted after the SDP answer is generated and sent.
+ */
+export class WebRtcSdpAnswerEvent extends Event {
+    readonly type: 'webRtcSdpAnswer';
+    readonly data: {
+        /** The sdp answer */
+        sdp: RTCSessionDescriptionInit;
+    };
+    constructor(answer: RTCSessionDescriptionInit) {
+        super('webRtcSdpAnswer');
+        this.data.sdp = answer;
+    }
+}
+
+/**
  * An event that is emitted when auto connecting.
  */
 export class WebRtcAutoConnectEvent extends Event {
@@ -549,6 +564,7 @@ export type PixelStreamingEvent =
     | AfkTimedOutEvent
     | VideoEncoderAvgQPEvent
     | WebRtcSdpEvent
+    | WebRtcSdpAnswerEvent
     | WebRtcAutoConnectEvent
     | WebRtcConnectingEvent
     | WebRtcConnectedEvent

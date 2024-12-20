@@ -1013,8 +1013,8 @@ export class WebRtcPlayerController {
             this.handleSendWebRTCOffer(offer);
 
         /* When the Peer Connection wants to send an answer have it handled */
-        this.peerConnectionController.onSendWebRTCAnswer = (offer: RTCSessionDescriptionInit) =>
-            this.handleSendWebRTCAnswer(offer);
+        this.peerConnectionController.onSendWebRTCAnswer = (answer: RTCSessionDescriptionInit) =>
+            this.handleSendWebRTCAnswer(answer);
 
         /* When the Peer Connection ice candidate is added have it handled */
         this.peerConnectionController.onPeerIceCandidate = (
@@ -1375,6 +1375,9 @@ export class WebRtcPlayerController {
         if (this.isUsingSFU) {
             this.protocol.sendMessage(MessageHelpers.createMessage(Messages.dataChannelRequest));
         }
+
+        // Send answer back to Pixel Streaming main class for event dispatch
+        this.pixelStreaming._onWebRtcSdpAnswer(answer);
     }
 
     /**

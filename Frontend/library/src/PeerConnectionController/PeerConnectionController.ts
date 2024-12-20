@@ -6,6 +6,7 @@ import { AggregatedStats } from './AggregatedStats';
 import { parseRtpParameters, splitSections } from 'sdp';
 import { RTCUtils } from '../Util/RTCUtils';
 import { CodecStats } from './CodecStats';
+import { SDPUtils } from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
 
 /**
  * Handles the Peer Connection
@@ -236,6 +237,12 @@ export class PeerConnectionController {
 
         // We use the line 'useinbandfec=1' (which Opus uses) to set our Opus specific audio parameters.
         mungedSDP = mungedSDP.replace('useinbandfec=1', audioSDP);
+
+        // Add abs-capture-time RTP header extension if we have enabled the setting
+        if (this.config.isFlagEnabled(Flags.EnableCaptureTimeExt)) {
+            const kAbsCaptureTime = 'http://www.webrtc.org/experiments/rtp-hdrext/abs-capture-time';
+            mungedSDP = SDPUtils.addHeaderExtensionToSdp(mungedSDP, kAbsCaptureTime);
+        }
 
         return mungedSDP;
     }

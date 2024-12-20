@@ -29,7 +29,8 @@ import {
     DataChannelLatencyTestResponseEvent,
     DataChannelLatencyTestResultEvent,
     PlayerCountEvent,
-    WebRtcTCPRelayDetectedEvent
+    WebRtcTCPRelayDetectedEvent,
+    WebRtcSdpAnswerEvent
 } from '../Util/EventEmitter';
 import { WebXRController } from '../WebXR/WebXRController';
 import { MessageDirection } from '../UeInstanceMessage/StreamMessageController';
@@ -456,10 +457,17 @@ export class PixelStreaming {
     }
 
     /**
-     * Set up functionality to happen when receiving a webRTC answer
+     * Set up functionality to happen when SDP negotiation is fully finished.
      */
     _onWebRtcSdp() {
         this._eventEmitter.dispatchEvent(new WebRtcSdpEvent());
+    }
+
+    /**
+     * Set up functionality to happen after SDP has been generated and sent.
+     */
+    _onWebRtcSdpAnswer(answer: RTCSessionDescriptionInit) {
+        this._eventEmitter.dispatchEvent(new WebRtcSdpAnswerEvent(answer));
     }
 
     /**
