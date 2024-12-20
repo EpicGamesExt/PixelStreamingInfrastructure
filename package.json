@@ -23,7 +23,7 @@
     "pre-commit": [
         "pre-commit-lint"
     ],
-    "dependencies": {
+    "devDependencies": {
         "pre-commit": "^1.2.2"
     }
 }
