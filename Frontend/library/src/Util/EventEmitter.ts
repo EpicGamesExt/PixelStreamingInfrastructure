@@ -6,8 +6,8 @@ import {
 } from '../Config/Config';
 import { LatencyTestResults } from '../DataChannel/LatencyTestResults';
 import { AggregatedStats } from '../PeerConnectionController/AggregatedStats';
-import { InitialSettings } from '../pixelstreamingfrontend';
-import { MessageStreamerList } from '../WebSockets/MessageReceive';
+import { InitialSettings } from '../DataChannel/InitialSettings';
+import { Messages } from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
 import { SettingFlag } from '../Config/SettingFlag';
 import { SettingNumber } from '../Config/SettingNumber';
 import { SettingText } from '../Config/SettingText';
