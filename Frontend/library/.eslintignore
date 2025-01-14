@@ -9,4 +9,4 @@ tsconfig.json
 src/__test__/
 webpack.*.js
 *.test.ts
-
+coverage
