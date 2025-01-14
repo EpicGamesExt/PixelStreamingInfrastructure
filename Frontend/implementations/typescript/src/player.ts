@@ -1,5 +1,7 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
+export * from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.3';
+export * from '@epicgames-ps/lib-pixelstreamingfrontend-ui-ue5.3';
 import { Config, PixelStreaming } from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.3';
 import { Application, PixelStreamingApplicationStyle } from '@epicgames-ps/lib-pixelstreamingfrontend-ui-ue5.3';
 const PixelStreamingApplicationStyles =

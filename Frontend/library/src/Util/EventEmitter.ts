@@ -6,7 +6,7 @@ import {
 } from '../Config/Config';
 import { LatencyTestResults } from '../DataChannel/LatencyTestResults';
 import { AggregatedStats } from '../PeerConnectionController/AggregatedStats';
-import { InitialSettings } from '../pixelstreamingfrontend';
+import { InitialSettings } from '../DataChannel/InitialSettings';
 import { MessageStreamerList } from '../WebSockets/MessageReceive';
 import { SettingFlag } from '../Config/SettingFlag';
 import { SettingNumber } from '../Config/SettingNumber';
