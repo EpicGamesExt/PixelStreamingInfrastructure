@@ -34,6 +34,9 @@ module.exports = {
 			exclude: [
 			  /node_modules/,
 			],
+			options: {
+				configFile: "tsconfig.esm.json"
+			}
 		  },
 		  {
 			test: /\.html$/i,

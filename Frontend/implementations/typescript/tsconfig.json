@@ -1,15 +1,16 @@
 {
   "compilerOptions": {
-    "outDir": "./dist/",
-    "noImplicitAny": true,
-    "module": "es6",
-    "esModuleInterop": true,
-    "target": "es5",
-    "moduleResolution": "node",
-    "sourceMap": false,
-    "allowJs": true,
-    "declaration": false
+      "noImplicitAny": true,
+      "esModuleInterop": true,
+      "target": "ES6",
+      "sourceMap": true,
+      "allowJs": true,
+      "forceConsistentCasingInFileNames": true,
+      "noImplicitOverride": true,
+      "noFallthroughCasesInSwitch": true,
+      "noImplicitReturns": true,
+      "noPropertyAccessFromIndexSignature": true
   },
-  "lib": ["es2015"],
-  "include": ["./src/*.ts"],
+  "lib": ["ES6"],
+  "include": ["./src/*.ts"]
 }

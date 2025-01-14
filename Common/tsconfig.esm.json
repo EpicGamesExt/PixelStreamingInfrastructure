@@ -2,7 +2,7 @@
     "extends": "./tsconfig.base.json",
     "compilerOptions": {
         "outDir": "./build/esm",
-        "module": "nodenext",
-        "moduleResolution": "nodenext",
+        "module": "ES6",
+        "moduleResolution": "bundler"
     }
 }
