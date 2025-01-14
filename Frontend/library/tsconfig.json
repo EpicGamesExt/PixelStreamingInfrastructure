@@ -14,7 +14,7 @@
     },
     "lib": ["ES6"],
     "include": ["./src/*.ts"],
-    "exclude": ["./src/**/*.test.ts"],
+    "exclude": ["./src/**/*.test.ts", "./coverage/**", "./dist/**"],
     "typedocOptions": {
         "exclude": "src/index.*",
         "entryPoints": ["src/pixelstreamingfrontend.ts"],

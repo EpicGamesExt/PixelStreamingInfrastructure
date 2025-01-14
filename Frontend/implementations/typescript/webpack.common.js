@@ -31,6 +31,9 @@ module.exports = {
           exclude: [
             /node_modules/,
           ],
+          options: {
+            configFile: "tsconfig.cjs.json"
+          }
         },
         {
           test: /\.html$/i,
