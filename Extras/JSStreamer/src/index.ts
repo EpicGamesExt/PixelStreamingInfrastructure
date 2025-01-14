@@ -25,9 +25,9 @@ declare global {
     }
 }
 
-document.body.onload = function() {
+document.body.onload = function () {
     window.streamer = new Streamer('MockStreamer');
-    window.startStreaming = function() {
+    window.startStreaming = function () {
         const playbackElement = document.getElementById('source_video') as HTMLCaptureableMediaElement;
         const stream = maybeCaptureStream(playbackElement);
         if (stream && window.streamer) {
@@ -40,7 +40,7 @@ document.body.onload = function() {
                 }
             });
             window.streamer.on('endpoint_id_confirmed', () => {
-                playbackElement.play().catch(() => { });
+                playbackElement.play().catch(() => {});
             });
             let signallingURL = `ws://${window.location.hostname}:8888`;
             const urlParams = new URLSearchParams(window.location.search);
