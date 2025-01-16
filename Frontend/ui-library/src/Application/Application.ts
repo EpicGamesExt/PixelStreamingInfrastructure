@@ -46,6 +46,7 @@ import { FullScreenIconBase, FullScreenIconExternal } from '../UI/FullscreenIcon
  */
 export type VideoQPIndicatorConfig = {
     disableIndicator?: boolean;
+    /** Setting this to true will hide the indicator when the connection is "good" ie. green */
     hideWhenGood?: boolean;
 };
 
