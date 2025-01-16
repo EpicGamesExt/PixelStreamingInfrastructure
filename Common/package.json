@@ -45,8 +45,5 @@
         "@protobuf-ts/plugin": "^2.9.3",
         "@types/ws": "^8.5.10",
         "ws": "^8.17.1"
-    },
-    "lint-staged": {
-        "*.ts": "eslint --fix"
     }
 }
