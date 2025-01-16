@@ -1,5 +1,7 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
+import { VideoQPIndicatorConfig } from "../Application/Application";
+
 /**
  * A UI element showing the QP (quantization parameter) of the video stream at the last encoded frame (well, last transmitted QP really).
  * A blockier encoding will have a higher QP and this will make the indicator turn more red.
@@ -7,6 +9,8 @@
  * The QP indicator is represented visually using a WiFi icon.
  */
 export class VideoQpIndicator {
+    config?: VideoQPIndicatorConfig;
+
     videoEncoderAvgQP = -1;
 
     // non html elements
@@ -24,6 +28,10 @@ export class VideoQpIndicator {
     _outer: SVGElement;
     _middle: SVGElement;
     _inner: SVGElement;
+
+    constructor(config?: VideoQPIndicatorConfig) {
+        this.config = config;
+    }
 
     /**
      * Get the root element of the QP indicator.
@@ -192,7 +200,7 @@ export class VideoQpIndicator {
             this.statsText = `<div style="color: ${this.color}">Not connected</div>`;
         } else {
             this.color = 'lime';
-            this.qualityStatus.style.opacity = '1';
+            this.qualityStatus.style.opacity = this.config?.hideWhenGood == true ? '0' : '1';
             this.statsText = `<div style="color: ${this.color}">Clear encoding quality</div>`;
             this.outer.setAttributeNS(null, 'fill', this.color);
             this.middle.setAttributeNS(null, 'fill', this.color);

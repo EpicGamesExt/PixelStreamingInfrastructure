@@ -31,12 +31,12 @@
     "ts-loader": "^9.4.2",
     "typescript": "^5.0.0",
     "webpack-cli": "^5.1.4",
-    "webpack-dev-server": "^5.0.4",
+    "webpack-dev-server": "^5.2.0",
     "webpack-node-externals": "^3.0.0"
   },
   "dependencies": {
-    "express": "^4.21.2",
-    "@epicgames-ps/lib-pixelstreamingcommon-ue5.5": "*"
+    "@epicgames-ps/lib-pixelstreamingcommon-ue5.5": "*",
+    "express": "^4.21.2"
   },
   "repository": {
     "type": "git",

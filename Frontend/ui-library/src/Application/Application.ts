@@ -46,6 +46,7 @@ import { FullScreenIconBase, FullScreenIconExternal } from '../UI/FullscreenIcon
  */
 export type VideoQPIndicatorConfig = {
     disableIndicator?: boolean;
+    hideWhenGood?: boolean;
 };
 
 /**
@@ -128,7 +129,7 @@ export class Application {
 
         if (!options.videoQpIndicatorConfig || !options.videoQpIndicatorConfig.disableIndicator) {
             // Add the video stream QP indicator
-            this.videoQpIndicator = new VideoQpIndicator();
+            this.videoQpIndicator = new VideoQpIndicator(options.videoQpIndicatorConfig);
             this.uiFeaturesElement.appendChild(this.videoQpIndicator.rootElement);
         }
 
