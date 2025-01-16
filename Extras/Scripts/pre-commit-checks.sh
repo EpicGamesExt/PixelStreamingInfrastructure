@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# No longer used in favor of using lint-staged
+# Will remove this eventually but leaving here for reference for now
+
 LINT_CHECK_PATHS=(
     "Common/"
     "Signalling/"

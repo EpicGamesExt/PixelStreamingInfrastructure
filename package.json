@@ -18,12 +18,13 @@
     "private": true,
     "scripts": {
         "build": "npm run build --ws",
-        "pre-commit-lint": "bash ./Extras/Scripts/pre-commit-checks.sh"
+        "pre-commit-lint": "lint-staged"
     },
     "pre-commit": [
         "pre-commit-lint"
     ],
     "devDependencies": {
+        "lint-staged": "^15.3.0",
         "pre-commit": "^1.2.2"
     }
 }
