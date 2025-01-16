@@ -127,8 +127,8 @@ export class PeerConnectionController {
                     .then(() => {
                         this.onSendWebRTCAnswer(this.peerConnection?.currentLocalDescription);
                     })
-                    .catch(() => {
-                        Logger.Error('createAnswer() failed');
+                    .catch((err) => {
+                        Logger.Error(`createAnswer() failed - ${err}`);
                     });
             });
         });

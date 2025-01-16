@@ -101,7 +101,9 @@ export class WebRtcSdpAnswerEvent extends Event {
     };
     constructor(answer: RTCSessionDescriptionInit) {
         super('webRtcSdpAnswer');
-        this.data.sdp = answer;
+        this.data = {
+            sdp: answer
+        };
     }
 }
 

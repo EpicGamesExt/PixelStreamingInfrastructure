@@ -1,20 +1,11 @@
 import { test } from './fixtures';
 import { expect } from './matchers';
 import * as helpers from './helpers';
-import { Flags, WebRtcSdpAnswerEvent } from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.5';
+import { Flags, PixelStreaming, WebRtcSdpAnswerEvent } from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.5';
 
 test('Test abs-capture-time header extension found for streamer', {
     tag: ['@capture-time'],
 }, async ({ page, streamerPage, streamerId }) => {
-
-    // // helps debugging
-    // helpers.attachToConsoleEvents(streamerPage, (...args: any[]) => {
-    //     console.log("Streamer: ", ...args);
-    // });
-    //
-    // helpers.attachToConsoleEvents(page, (...args: any[]) => {
-    //     console.log("Player: ", ...args);
-    // });
 
     const localDescription: Promise<RTCSessionDescriptionInit> = new Promise(async (resolve) => {
 
@@ -40,7 +31,7 @@ test('Test abs-capture-time header extension found for streamer', {
     expect(localDescSdp.sdp).toContain("abs-capture-time");
 });
 
-test('Test abs-capture-time header extension found in player', {
+test('Test abs-capture-time header extension found in PSInfra frontend', {
     tag: ['@capture-time'],
 }, async ({ page, streamerPage, streamerId }) => {
 
@@ -50,17 +41,32 @@ test('Test abs-capture-time header extension found in player', {
 
     // Enable the flag for the capture extension
     await page.evaluate(() => {
-        window.pixelStreaming.config.setFlagEnabled(Flags.EnableCaptureTimeExt, true);
+        window.pixelStreaming.config.setFlagEnabled("EnableCaptureTimeExt", true);
+    });
+
+    // Wait for the sdp answer
+    let getSdpAnswer = new Promise<RTCSessionDescriptionInit>(async (resolve) => {
+
+        // Expose the resolve function to the browser context
+        await page.exposeFunction('resolveFromSdpAnswerPromise', resolve);
+
+        page.evaluate(() => {
+            window.pixelStreaming.addEventListener("webRtcSdpAnswer", (e: WebRtcSdpAnswerEvent) => {
+                resolveFromSdpAnswerPromise(e.data.sdp);
+            });
+        });
+
     });
 
     await page.getByText('Click to start').click();
 
-    //const answer: RTCSessionDescriptionInit = await getSdpAnswer(page);
+    const answer: RTCSessionDescriptionInit = await getSdpAnswer;
 
     await helpers.waitForVideo(page);
 
-    //expect(answer.sdp).toBeDefined();
+    expect(answer).toBeDefined();
+    expect(answer.sdp).toBeDefined();
 
     // If this string is found in the sdp we can say we have turned on the capture time header extension on the streamer
-    //expect(answer.sdp).toContain("abs-capture-time");
+    expect(answer.sdp).toContain("abs-capture-time");
 });
