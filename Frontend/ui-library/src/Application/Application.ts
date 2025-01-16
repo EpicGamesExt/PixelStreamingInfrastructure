@@ -68,6 +68,8 @@ export interface UIOptions {
     xrControlsConfig?: UIElementConfig;
     /** Configuration of the video QP indicator. */
     videoQpIndicatorConfig?: VideoQPIndicatorConfig;
+    /** Hide the controls in fullscreen mode */
+    hideControlsInFullscreen?: boolean;
 }
 
 /**
@@ -206,7 +208,8 @@ export class Application {
                 ? this._options.settingsPanelConfig.visibilityButtonConfig
                 : undefined,
             fullscreenButtonType: this._options.fullScreenControlsConfig,
-            xrIconType: this._options.xrControlsConfig
+            xrIconType: this._options.xrControlsConfig,
+            hideControlsInFullscreen: this._options.hideControlsInFullscreen
         };
 
         // Setup controls
