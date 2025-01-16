@@ -18,6 +18,7 @@ export type ControlsUIConfiguration = {
     fullscreenButtonType?: UIElementConfig;
     settingsButtonType?: UIElementConfig;
     xrIconType?: UIElementConfig;
+    hideControlsInFullscreen?: boolean;
 };
 
 // If there isn't a type provided, default behaviour is to create the element.
@@ -36,10 +37,13 @@ export class Controls {
 
     _rootElement: HTMLElement;
 
+    config?: ControlsUIConfiguration;
+
     /**
      * Construct the controls
      */
     constructor(config?: ControlsUIConfiguration) {
+        this.config = config;
         if (!config || shouldCreateButton(config.statsButtonType)) {
             this.statsIcon = new StatsIcon();
         }
@@ -77,7 +81,18 @@ export class Controls {
                     }
                 });
             }
+            document.addEventListener('fullscreenchange', this.handleFullscreenChange.bind(this));
         }
+
         return this._rootElement;
+    }
+
+    private handleFullscreenChange(): void {
+        const isInFullscreen = !!document.fullscreenElement;
+        if (isInFullscreen && this.config?.hideControlsInFullscreen) {
+            this._rootElement.style.visibility = 'hidden';
+        } else {
+            this._rootElement.style.visibility = 'visible';
+        }
     }
 }

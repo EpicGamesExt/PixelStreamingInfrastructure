@@ -46,6 +46,8 @@ import { FullScreenIconBase, FullScreenIconExternal } from '../UI/FullscreenIcon
  */
 export type VideoQPIndicatorConfig = {
     disableIndicator?: boolean;
+    /** Setting this to true will hide the indicator when the connection is "good" ie. green */
+    hideWhenGood?: boolean;
 };
 
 /**
@@ -67,6 +69,8 @@ export interface UIOptions {
     xrControlsConfig?: UIElementConfig;
     /** Configuration of the video QP indicator. */
     videoQpIndicatorConfig?: VideoQPIndicatorConfig;
+    /** Hide the controls in fullscreen mode */
+    hideControlsInFullscreen?: boolean;
 }
 
 /**
@@ -128,7 +132,7 @@ export class Application {
 
         if (!options.videoQpIndicatorConfig || !options.videoQpIndicatorConfig.disableIndicator) {
             // Add the video stream QP indicator
-            this.videoQpIndicator = new VideoQpIndicator();
+            this.videoQpIndicator = new VideoQpIndicator(options.videoQpIndicatorConfig);
             this.uiFeaturesElement.appendChild(this.videoQpIndicator.rootElement);
         }
 
@@ -205,7 +209,8 @@ export class Application {
                 ? this._options.settingsPanelConfig.visibilityButtonConfig
                 : undefined,
             fullscreenButtonType: this._options.fullScreenControlsConfig,
-            xrIconType: this._options.xrControlsConfig
+            xrIconType: this._options.xrControlsConfig,
+            hideControlsInFullscreen: this._options.hideControlsInFullscreen
         };
 
         // Setup controls
