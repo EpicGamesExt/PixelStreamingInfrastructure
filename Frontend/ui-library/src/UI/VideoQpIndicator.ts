@@ -1,6 +1,6 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
-import { VideoQPIndicatorConfig } from "../Application/Application";
+import { VideoQPIndicatorConfig } from '../Application/Application';
 
 /**
  * A UI element showing the QP (quantization parameter) of the video stream at the last encoded frame (well, last transmitted QP really).
