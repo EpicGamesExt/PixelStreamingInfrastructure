@@ -40,5 +40,9 @@
     "license": "MIT",
     "publishConfig": {
         "access": "public"
+    },
+    "lint-staged": {
+        "*.ts": "eslint --fix"
     }
+
 }
