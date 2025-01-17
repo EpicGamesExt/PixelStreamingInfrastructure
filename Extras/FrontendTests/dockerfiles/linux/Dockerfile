@@ -4,8 +4,9 @@ WORKDIR /tester
 COPY /Extras/FrontendTests .
 
 RUN npm install
-RUN npx playwright install --with-deps
-RUN npx playwright install chrome
+RUN npx playwright install firefox
+RUN npx playwright install chromium
+RUN npx playwright install-deps
 
 VOLUME /tester/playwright-report
 
