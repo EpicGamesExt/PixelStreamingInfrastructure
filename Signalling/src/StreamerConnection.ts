@@ -5,7 +5,6 @@ import {
     WebSocketTransportNJS,
     BaseMessage,
     Messages,
-    MessageHelpers,
     EventEmitter
 } from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
 import { IStreamer, IStreamerInfo } from './StreamerRegistry';
@@ -59,6 +58,7 @@ export class StreamerConnection extends EventEmitter implements IStreamer, LogUt
 
         this.transport.on('error', this.onTransportError.bind(this));
         this.transport.on('close', this.onTransportClose.bind(this));
+        this.transport.on('timeout', this.onTransportTimeout.bind(this));
 
         this.registerMessageHandlers();
 
@@ -107,7 +107,6 @@ export class StreamerConnection extends EventEmitter implements IStreamer, LogUt
             Messages.endpointId.typeName,
             LogUtils.createHandlerListener(this, this.onEndpointId)
         );
-        this.protocol.on(Messages.ping.typeName, LogUtils.createHandlerListener(this, this.onPing));
         this.protocol.on(
             Messages.disconnectPlayer.typeName,
             LogUtils.createHandlerListener(this, this.onDisconnectPlayerRequest)
@@ -145,12 +144,12 @@ export class StreamerConnection extends EventEmitter implements IStreamer, LogUt
         this.emit('disconnect');
     }
 
-    private onEndpointId(_message: Messages.endpointId): void {
-        this.streaming = true; // we're ready to stream when we id ourselves
+    private onTransportTimeout(): void {
+        Logger.error(`Streamer '${this.streamerId}' - websocket timeout.`);
     }
 
-    private onPing(message: Messages.ping): void {
-        this.sendMessage(MessageHelpers.createMessage(Messages.pong, { time: message.time }));
+    private onEndpointId(_message: Messages.endpointId): void {
+        this.streaming = true; // we're ready to stream when we id ourselves
     }
 
     private onDisconnectPlayerRequest(message: Messages.disconnectPlayer): void {

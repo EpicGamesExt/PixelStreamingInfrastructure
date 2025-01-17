@@ -57,6 +57,7 @@ export class PlayerConnection implements IPlayer, LogUtils.IMessageLogger {
 
         this.transport.on('error', this.onTransportError.bind(this));
         this.transport.on('close', this.onTransportClose.bind(this));
+        this.transport.on('timeout', this.onTransportTimeout.bind(this));
 
         this.streamerIdChangeListener = this.onStreamerIdChanged.bind(this);
         this.streamerDisconnectedListener = this.onStreamerDisconnected.bind(this);
@@ -202,6 +203,10 @@ export class PlayerConnection implements IPlayer, LogUtils.IMessageLogger {
     private onTransportClose(_event: CloseEvent): void {
         Logger.debug('PlayerConnection transport close.');
         this.disconnect();
+    }
+
+    private onTransportTimeout(): void {
+        Logger.debug('PlayerConnection transport timeout.');
     }
 
     private onSubscribeMessage(message: Messages.subscribe): void {

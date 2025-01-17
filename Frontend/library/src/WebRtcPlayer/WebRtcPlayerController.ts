@@ -250,6 +250,10 @@ export class WebRtcPlayerController {
             }
         });
 
+        this.protocol.transport.addListener('timeout', () => {
+            Logger.Error(`Transport timeout`);
+        });
+
         // set up the final webRtc player controller methods from within our application so a connection can be activated
         this.sendMessageController = new SendMessageController(
             this.dataChannelSender,
