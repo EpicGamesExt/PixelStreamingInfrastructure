@@ -114,7 +114,7 @@ export class SignallingProtocol extends EventEmitter {
         this.transport.emit('out', msg); // emit this for listeners listening to outgoing messages
     }
 
-    private keepalive: number;
+    private keepalive?: ReturnType<typeof setInterval>;
     private alive: boolean = false;
     private initiator: boolean = false;
 
