@@ -114,11 +114,12 @@ export class WebSocketTransport extends EventEmitter implements ITransport {
             return;
         }
 
-        Logger.Info('received => \n' + JSON.stringify(JSON.parse(event.data as string), undefined, 4));
-
         let parsedMessage: BaseMessage;
         try {
-            parsedMessage = JSON.parse(event.data as string) as BaseMessage;
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+            const parsedData = JSON.parse(event.data as string);
+            Logger.Info('received => \n' + JSON.stringify(parsedData, undefined, 4));
+            parsedMessage = parsedData as BaseMessage;
         } catch (e: unknown) {
             if (e instanceof Error) {
                 Logger.Error(`Error parsing message string ${event.data}.\n${e.message}`);
