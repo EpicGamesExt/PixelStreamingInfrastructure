@@ -376,8 +376,8 @@ export class Application {
     /**
      * Creates the root element for the Pixel Streaming UI.
      * Note: This should be called before the Pixel Streaming object or UI features object are created.
-     * @param pixelstreaming The Pixel Streaming object.
-     * @param uiFeaturesElem The element holding all the custom UI features.
+     * @param pixelstreaming - The Pixel Streaming object.
+     * @param uiFeaturesElem - The element holding all the custom UI features.
      * @returns A div with the id #playerUI populated with videoElementParent and uiFeatureElement.
      */
     private createRootElement(pixelstreaming: PixelStreaming, uiFeaturesElem: HTMLElement): HTMLElement {
