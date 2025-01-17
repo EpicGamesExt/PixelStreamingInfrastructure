@@ -60,13 +60,12 @@ export class SignallingProtocol extends EventEmitter {
             if (msg.type == Messages.ping.typeName) {
                 const pingMsg = msg as Messages.ping;
                 this.onHeartbeatPing(pingMsg.time);
-                return;
             }
             if (msg.type == Messages.pong.typeName) {
                 const pongMsg = msg as Messages.pong;
                 this.onHeartbeatPong(pongMsg.time);
-                return;
             }
+            // allow the above to fall through so clients can still react to the ping and pong messages if needed
 
             // call the handlers
             transport.emit('message', msg); // emit this for listeners listening to any message
