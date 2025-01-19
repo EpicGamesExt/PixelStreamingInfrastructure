@@ -108,6 +108,13 @@ export class Application {
         this._options = options;
 
         this.stream = options.stream;
+
+        // Explicitly create ui features now so creation time is known
+        this._uiFeatureElement = this.createUIFeaturesElement();
+
+        // Explicitly create root element now so creation time is known
+        this._rootElement = this.createRootElement(this.stream, this._uiFeatureElement);
+
         this.onColorModeChanged = options.onColorModeChanged;
         this.configUI = new ConfigUI(this.stream.config);
 
@@ -361,13 +368,40 @@ export class Application {
      */
     public get rootElement(): HTMLElement {
         if (!this._rootElement) {
-            this._rootElement = document.createElement('div');
-            this._rootElement.id = 'playerUI';
-            this._rootElement.classList.add('noselect');
-            this._rootElement.appendChild(this.stream.videoElementParent);
-            this._rootElement.appendChild(this.uiFeaturesElement);
+            this._rootElement = this.createRootElement(this.stream, this.uiFeaturesElement);
         }
         return this._rootElement;
+    }
+
+    /**
+     * Creates the root element for the Pixel Streaming UI.
+     * Note: This should be called before the Pixel Streaming object or UI features object are created.
+     * @param pixelstreaming - The Pixel Streaming object.
+     * @param uiFeaturesElem - The element holding all the custom UI features.
+     * @returns A div with the id #playerUI populated with videoElementParent and uiFeatureElement.
+     */
+    private createRootElement(pixelstreaming: PixelStreaming, uiFeaturesElem: HTMLElement): HTMLElement {
+        const elem = document.createElement('div');
+        elem.id = 'playerUI';
+        elem.classList.add('noselect');
+        if (pixelstreaming === undefined) {
+            throw new Error(
+                'Could not create root element properly - pixelstreaming object was undefined. Are you calling this too early?'
+            );
+        }
+        if (pixelstreaming.videoElementParent === undefined) {
+            throw new Error(
+                'Could not create root element properly - videoElementParent object was undefined. Are you calling this too early?'
+            );
+        }
+        if (uiFeaturesElem === undefined) {
+            throw new Error(
+                'Could not create root element properly - uiFeaturesElement object was undefined. Are you calling this too early?'
+            );
+        }
+        elem.appendChild(pixelstreaming.videoElementParent);
+        elem.appendChild(uiFeaturesElem);
+        return elem;
     }
 
     /**
@@ -375,10 +409,19 @@ export class Application {
      */
     public get uiFeaturesElement(): HTMLElement {
         if (!this._uiFeatureElement) {
-            this._uiFeatureElement = document.createElement('div');
-            this._uiFeatureElement.id = 'uiFeatures';
+            this._uiFeatureElement = this.createUIFeaturesElement();
         }
         return this._uiFeatureElement;
+    }
+
+    /**
+     * Creates the UI features element for holding all the custom UI features.
+     * @returns A div with the id #uiFeatures.
+     */
+    private createUIFeaturesElement(): HTMLElement {
+        const elem = document.createElement('div');
+        elem.id = 'uiFeatures';
+        return elem;
     }
 
     /**
