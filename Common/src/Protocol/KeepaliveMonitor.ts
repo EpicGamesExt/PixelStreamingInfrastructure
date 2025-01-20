@@ -14,6 +14,7 @@ export class KeepaliveMonitor {
     private alive: boolean = false;
     private rtt: number = 0;
 
+    // naming a bound function so we can add and then remove it with on and off.
     private onResponse: (pongMsg: Messages.pong) => void;
 
     /**
@@ -57,8 +58,6 @@ export class KeepaliveMonitor {
         // if we never got a response from the last heartbeat, assume the connection is dead and timeout
         if (this.alive === false) {
             this.onTimeout?.();
-            // this.protocol.disconnect();
-            // this.protocol.transport.emit('timeout');
             return;
         }
 
