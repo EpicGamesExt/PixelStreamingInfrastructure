@@ -30,6 +30,7 @@ import {
     DataChannelLatencyTestResultEvent,
     PlayerCountEvent,
     WebRtcTCPRelayDetectedEvent,
+    WebRtcSdpOfferEvent,
     WebRtcSdpAnswerEvent
 } from '../Util/EventEmitter';
 import { WebXRController } from '../WebXR/WebXRController';
@@ -464,7 +465,14 @@ export class PixelStreaming {
     }
 
     /**
-     * Set up functionality to happen after SDP has been generated and sent.
+     * Set up functionality to happen after offer has been set.
+     */
+    _onWebRtcSdpOffer(offer: RTCSessionDescriptionInit) {
+        this._eventEmitter.dispatchEvent(new WebRtcSdpOfferEvent(offer));
+    }
+
+    /**
+     * Set up functionality to happen after SDP answer has set.
      */
     _onWebRtcSdpAnswer(answer: RTCSessionDescriptionInit) {
         this._eventEmitter.dispatchEvent(new WebRtcSdpAnswerEvent(answer));

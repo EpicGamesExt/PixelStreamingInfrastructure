@@ -89,12 +89,16 @@ export class PeerConnectionController {
     }
 
     /**
-     *
+     * Receive offer from UE side and process it as the remote description of this peer connection
      */
     async receiveOffer(offer: RTCSessionDescriptionInit, config: Config) {
         Logger.Info('Receive Offer');
 
         this.peerConnection?.setRemoteDescription(offer).then(() => {
+
+            // Fire event for when remote offer description is set
+            this.onSetRemoteDescription(offer);
+
             const isLocalhostConnection =
                 location.hostname === 'localhost' || location.hostname === '127.0.0.1';
             const isHttpsConnection = location.protocol === 'https:';
@@ -125,7 +129,7 @@ export class PeerConnectionController {
                         return this.peerConnection?.setLocalDescription(Answer);
                     })
                     .then(() => {
-                        this.onSendWebRTCAnswer(this.peerConnection?.currentLocalDescription);
+                        this.onSetLocalDescription(this.peerConnection?.currentLocalDescription);
                     })
                     .catch((err) => {
                         Logger.Error(`createAnswer() failed - ${err}`);
@@ -603,11 +607,20 @@ export class PeerConnectionController {
     }
 
     /**
-     * Event to send the RTC Answer to the Signaling server
+     * Event fired when remote offer description is set.
+     * @param offer - RTC Offer
+     */
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    onSetRemoteDescription(offer: RTCSessionDescriptionInit) {
+        // Default Functionality: Do Nothing
+    }
+
+    /**
+     * Event fire when local description answer is set.
      * @param answer - RTC Answer
      */
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    onSendWebRTCAnswer(answer: RTCSessionDescriptionInit) {
+    onSetLocalDescription(answer: RTCSessionDescriptionInit) {
         // Default Functionality: Do Nothing
     }
 

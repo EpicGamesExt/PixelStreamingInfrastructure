@@ -1009,12 +1009,19 @@ export class WebRtcPlayerController {
         this.peerConnectionController.onVideoStats = (event: AggregatedStats) => this.handleVideoStats(event);
 
         /* When the Peer Connection wants to send an offer have it handled */
-        this.peerConnectionController.onSendWebRTCOffer = (offer: RTCSessionDescriptionInit) =>
+        this.peerConnectionController.onSendWebRTCOffer = (offer: RTCSessionDescriptionInit) => {
             this.handleSendWebRTCOffer(offer);
+        }
 
-        /* When the Peer Connection wants to send an answer have it handled */
-        this.peerConnectionController.onSendWebRTCAnswer = (answer: RTCSessionDescriptionInit) =>
+        /* Set event handler for when local answer description is set */
+        this.peerConnectionController.onSetLocalDescription = (answer: RTCSessionDescriptionInit) => {
             this.handleSendWebRTCAnswer(answer);
+        }
+
+        /* Set event handler for when remote offer description is set */
+        this.peerConnectionController.onSetRemoteDescription = (offer: RTCSessionDescriptionInit) => {
+            this.pixelStreaming._onWebRtcSdpOffer(offer);
+        };
 
         /* When the Peer Connection ice candidate is added have it handled */
         this.peerConnectionController.onPeerIceCandidate = (

@@ -1,7 +1,7 @@
 import { test } from './fixtures';
 import { expect } from './matchers';
 import * as helpers from './helpers';
-import { Flags, PixelStreaming, WebRtcSdpAnswerEvent } from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.5';
+import { Flags, PixelStreaming, WebRtcSdpAnswerEvent, WebRtcSdpOfferEvent } from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.5';
 
 test('Test abs-capture-time header extension found for streamer', {
     tag: ['@capture-time'],
@@ -20,15 +20,34 @@ test('Test abs-capture-time header extension found for streamer', {
     });
 
     await page.goto(`/?StreamerId=${streamerId}`);
+    await page.waitForLoadState("load");
+
+    // Wait for the sdp offer
+    let getSdpOffer = new Promise<RTCSessionDescriptionInit>(async (resolve) => {
+
+        // Expose the resolve function to the browser context
+        await page.exposeFunction('resolveFromSdpOfferPromise', resolve);
+
+        page.evaluate(() => {
+            window.pixelStreaming.addEventListener("webRtcSdpOffer", (e: WebRtcSdpOfferEvent) => {
+                resolveFromSdpOfferPromise(e.data.sdp);
+            });
+        });
+
+    });
+
     await page.getByText('Click to start').click();
 
     await helpers.waitForVideo(page);
     let localDescSdp: RTCSessionDescriptionInit = await localDescription;
+    let remoteDescSdp: RTCSessionDescriptionInit = await getSdpOffer;
 
     expect(localDescSdp.sdp).toBeDefined();
+    expect(remoteDescSdp.sdp).toBeDefined();
 
     // If this string is found in the sdp we can say we have turned on the capture time header extension on the streamer
     expect(localDescSdp.sdp).toContain("abs-capture-time");
+    expect(remoteDescSdp.sdp).toContain("abs-capture-time");
 });
 
 test('Test abs-capture-time header extension found in PSInfra frontend', {

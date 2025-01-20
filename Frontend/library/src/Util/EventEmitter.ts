@@ -91,7 +91,7 @@ export class WebRtcSdpEvent extends Event {
 }
 
 /**
- * An event that is emitted after the SDP answer is generated and sent.
+ * An event that is emitted after the SDP answer is set.
  */
 export class WebRtcSdpAnswerEvent extends Event {
     readonly type: 'webRtcSdpAnswer';
@@ -103,6 +103,23 @@ export class WebRtcSdpAnswerEvent extends Event {
         super('webRtcSdpAnswer');
         this.data = {
             sdp: answer
+        };
+    }
+}
+
+/**
+ * An event that is emitted after the SDP offer is set.
+ */
+export class WebRtcSdpOfferEvent extends Event {
+    readonly type: 'webRtcSdpOffer';
+    readonly data: {
+        /** The sdp offer */
+        sdp: RTCSessionDescriptionInit;
+    };
+    constructor(offer: RTCSessionDescriptionInit) {
+        super('webRtcSdpOffer');
+        this.data = {
+            sdp: offer
         };
     }
 }
@@ -566,6 +583,7 @@ export type PixelStreamingEvent =
     | AfkTimedOutEvent
     | VideoEncoderAvgQPEvent
     | WebRtcSdpEvent
+    | WebRtcSdpOfferEvent
     | WebRtcSdpAnswerEvent
     | WebRtcAutoConnectEvent
     | WebRtcConnectingEvent
