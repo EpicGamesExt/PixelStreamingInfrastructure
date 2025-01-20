@@ -70,7 +70,6 @@ export class SFUConnection extends EventEmitter implements IPlayer, IStreamer, L
 
         this.transport.on('error', this.onTransportError.bind(this));
         this.transport.on('close', this.onTransportClose.bind(this));
-        this.transport.on('timeout', this.onTransportTimeout.bind(this));
 
         this.layerPreferenceListener = this.onLayerPreference.bind(this);
         this.streamerIdChangeListener = this.onStreamerIdChanged.bind(this);
@@ -156,6 +155,7 @@ export class SFUConnection extends EventEmitter implements IPlayer, IStreamer, L
             Messages.stopStreaming.typeName,
             LogUtils.createHandlerListener(this, this.onStopStreaming)
         );
+        this.protocol.on(Messages.ping.typeName, LogUtils.createHandlerListener(this, this.onPingMessage));
         /* eslint-enable @typescript-eslint/unbound-method */
 
         this.protocol.on(Messages.offer.typeName, this.sendToPlayer.bind(this));
@@ -266,10 +266,6 @@ export class SFUConnection extends EventEmitter implements IPlayer, IStreamer, L
         this.disconnect();
     }
 
-    private onTransportTimeout(): void {
-        Logger.debug('SFUConnection transport timeout.');
-    }
-
     private onSubscribeMessage(message: Messages.subscribe): void {
         this.subscribe(message.streamerId);
     }
@@ -301,5 +297,9 @@ export class SFUConnection extends EventEmitter implements IPlayer, IStreamer, L
     private onStopStreaming(_message: Messages.stopStreaming): void {
         this.streaming = false;
         this.emit('disconnect');
+    }
+
+    private onPingMessage(message: Messages.ping): void {
+        this.sendMessage(MessageHelpers.createMessage(Messages.pong, { time: message.time }));
     }
 }

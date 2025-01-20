@@ -5,7 +5,8 @@ import {
     WebSocketTransportNJS,
     BaseMessage,
     Messages,
-    EventEmitter
+    EventEmitter,
+    MessageHelpers
 } from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
 import { IStreamer, IStreamerInfo } from './StreamerRegistry';
 import { stringify } from './Utils';
@@ -58,12 +59,11 @@ export class StreamerConnection extends EventEmitter implements IStreamer, LogUt
 
         this.transport.on('error', this.onTransportError.bind(this));
         this.transport.on('close', this.onTransportClose.bind(this));
-        this.transport.on('timeout', this.onTransportTimeout.bind(this));
 
         this.registerMessageHandlers();
 
         this.protocol.on('unhandled', (message: BaseMessage) => {
-            Logger.warn(`Unhandled protocol message: ${JSON.stringify(message)}`);
+            Logger.warn(`Unhandled streamer protocol message: ${JSON.stringify(message)}`);
         });
     }
 
@@ -115,6 +115,7 @@ export class StreamerConnection extends EventEmitter implements IStreamer, LogUt
             Messages.layerPreference.typeName,
             LogUtils.createHandlerListener(this, this.onLayerPreference)
         );
+        this.protocol.on(Messages.ping.typeName, LogUtils.createHandlerListener(this, this.onPingMessage));
         /* eslint-enable @typescript-eslint/unbound-method */
 
         this.protocol.on(Messages.offer.typeName, this.forwardMessage.bind(this));
@@ -144,10 +145,6 @@ export class StreamerConnection extends EventEmitter implements IStreamer, LogUt
         this.emit('disconnect');
     }
 
-    private onTransportTimeout(): void {
-        Logger.error(`Streamer '${this.streamerId}' - websocket timeout.`);
-    }
-
     private onEndpointId(_message: Messages.endpointId): void {
         this.streaming = true; // we're ready to stream when we id ourselves
     }
@@ -163,5 +160,9 @@ export class StreamerConnection extends EventEmitter implements IStreamer, LogUt
 
     private onLayerPreference(message: Messages.layerPreference): void {
         this.emit('layer_preference', message);
+    }
+
+    private onPingMessage(message: Messages.ping): void {
+        this.sendMessage(MessageHelpers.createMessage(Messages.pong, { time: message.time }));
     }
 }

@@ -59,6 +59,7 @@ export class NumericParameters {
     static WebRTCMaxBitrate = 'WebRTCMaxBitrate' as const;
     static MaxReconnectAttempts = 'MaxReconnectAttempts' as const;
     static StreamerAutoJoinInterval = 'StreamerAutoJoinInterval' as const;
+    static KeepaliveDelay = 'KeepaliveDelay' as const;
 }
 
 export type NumericParametersKeys = Exclude<keyof typeof NumericParameters, 'prototype'>;
@@ -758,6 +759,21 @@ export class Config {
                 Object.prototype.hasOwnProperty.call(settings, NumericParameters.StreamerAutoJoinInterval)
                     ? settings[NumericParameters.StreamerAutoJoinInterval]
                     : 3000 /*value*/,
+                useUrlParams
+            )
+        );
+
+        this.numericParameters.set(
+            NumericParameters.KeepaliveDelay,
+            new SettingNumber(
+                NumericParameters.KeepaliveDelay,
+                'Connection Keepalive delay',
+                'Delay between keepalive pings to the signalling server.',
+                0 /*min*/,
+                900000 /*max*/,
+                settings && Object.prototype.hasOwnProperty.call(settings, NumericParameters.KeepaliveDelay)
+                    ? settings[NumericParameters.KeepaliveDelay]
+                    : 30000 /*value*/,
                 useUrlParams
             )
         );

@@ -57,7 +57,6 @@ export class PlayerConnection implements IPlayer, LogUtils.IMessageLogger {
 
         this.transport.on('error', this.onTransportError.bind(this));
         this.transport.on('close', this.onTransportClose.bind(this));
-        this.transport.on('timeout', this.onTransportTimeout.bind(this));
 
         this.streamerIdChangeListener = this.onStreamerIdChanged.bind(this);
         this.streamerDisconnectedListener = this.onStreamerDisconnected.bind(this);
@@ -109,6 +108,7 @@ export class PlayerConnection implements IPlayer, LogUtils.IMessageLogger {
             Messages.listStreamers.typeName,
             LogUtils.createHandlerListener(this, this.onListStreamers)
         );
+        this.protocol.on(Messages.ping.typeName, LogUtils.createHandlerListener(this, this.onPingMessage));
         /* eslint-enable @typescript-eslint/unbound-method */
 
         this.protocol.on(Messages.offer.typeName, this.sendToStreamer.bind(this));
@@ -119,7 +119,7 @@ export class PlayerConnection implements IPlayer, LogUtils.IMessageLogger {
         this.protocol.on(Messages.layerPreference.typeName, this.sendToStreamer.bind(this));
 
         this.protocol.on('unhandled', (message: BaseMessage) => {
-            Logger.warn(`Unhandled protocol message: ${JSON.stringify(message)}`);
+            Logger.warn(`Unhandled player protocol message: ${JSON.stringify(message)}`);
         });
     }
 
@@ -205,10 +205,6 @@ export class PlayerConnection implements IPlayer, LogUtils.IMessageLogger {
         this.disconnect();
     }
 
-    private onTransportTimeout(): void {
-        Logger.debug('PlayerConnection transport timeout.');
-    }
-
     private onSubscribeMessage(message: Messages.subscribe): void {
         this.subscribe(message.streamerId);
     }
@@ -231,7 +227,7 @@ export class PlayerConnection implements IPlayer, LogUtils.IMessageLogger {
         this.sendMessage(renameMessage);
     }
 
-    private onStreamerRemoved() {
-        this.disconnect();
+    private onPingMessage(message: Messages.ping): void {
+        this.sendMessage(MessageHelpers.createMessage(Messages.pong, { time: message.time }));
     }
 }

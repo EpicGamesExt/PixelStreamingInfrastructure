@@ -188,6 +188,11 @@ export class ConfigUI {
                     psSettingsSection,
                     this.numericParametersUi.get(NumericParameters.StreamerAutoJoinInterval)
                 );
+            if (isSettingEnabled(settingsConfig, NumericParameters.KeepaliveDelay))
+                this.addSettingNumeric(
+                    psSettingsSection,
+                    this.numericParametersUi.get(NumericParameters.KeepaliveDelay)
+                );
         }
 
         if (isSectionEnabled(settingsConfig, SettingsSections.UI)) {
