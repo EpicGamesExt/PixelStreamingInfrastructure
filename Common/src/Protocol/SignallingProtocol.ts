@@ -3,8 +3,6 @@
 import { ITransport } from '../Transport/ITransport';
 import { EventEmitter } from '../Event/EventEmitter';
 import { BaseMessage } from '../Messages/base_message';
-import * as Messages from '../Messages/signalling_messages';
-import * as MessageHelpers from '../Messages/message_helpers';
 
 /**
  * Signalling protocol for handling messages from the signalling server.
@@ -38,14 +36,6 @@ export class SignallingProtocol extends EventEmitter {
         this.transport = transport;
 
         transport.onMessage = (msg: BaseMessage) => {
-            // auto handle ping messages
-            if (msg.type == Messages.ping.typeName) {
-                const pongMessage = MessageHelpers.createMessage(Messages.pong, {
-                    time: new Date().getTime()
-                });
-                transport.sendMessage(pongMessage);
-            }
-
             // call the handlers
             transport.emit('message', msg); // emit this for listeners listening to any message
             if (!this.emit(msg.type, msg)) {

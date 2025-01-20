@@ -7,7 +7,8 @@ import {
     ITransport,
     Messages,
     MessageHelpers,
-    BaseMessage
+    BaseMessage,
+    KeepaliveMonitor
 } from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
 import { StreamController } from '../VideoPlayer/StreamController';
 import { FreezeFrameController } from '../FreezeFrame/FreezeFrameController';
@@ -104,6 +105,7 @@ export class WebRtcPlayerController {
     subscribedStream: string;
     signallingUrlBuilder: () => string;
     autoJoinTimer: ReturnType<typeof setTimeout> = undefined;
+    keepalive: KeepaliveMonitor;
 
     /**
      *
@@ -170,6 +172,9 @@ export class WebRtcPlayerController {
         this.protocol = new SignallingProtocol(this.transport);
         this.protocol.addListener(Messages.config.typeName, (msg: BaseMessage) =>
             this.handleOnConfigMessage(msg as Messages.config)
+        );
+        this.protocol.addListener(Messages.ping.typeName, (msg: BaseMessage) =>
+            this.handlePingMessage(msg as Messages.ping)
         );
         this.protocol.addListener(Messages.streamerList.typeName, (msg: BaseMessage) =>
             this.handleStreamerListMessage(msg as Messages.streamerList)
@@ -846,7 +851,7 @@ export class WebRtcPlayerController {
         // if the connection is open, first close it and force a reconnect.
         if (this.protocol.isConnected()) {
             if (!this.forceReconnect) {
-                message = `${message} Reconnecting.`;
+                this.disconnectMessage = `${message} Reconnecting.`;
             }
             this.closeSignalingServer(message, true);
         } else {
@@ -1023,6 +1028,15 @@ export class WebRtcPlayerController {
         this.disconnectMessage = null;
         const signallingUrl = this.signallingUrlBuilder();
         this.protocol.connect(signallingUrl);
+        const keepaliveDelay = this.config.getNumericSettingValue(NumericParameters.KeepaliveDelay);
+        if (keepaliveDelay > 0) {
+            this.keepalive = new KeepaliveMonitor(this.protocol, keepaliveDelay);
+            this.keepalive.onTimeout = () => {
+                // if the ping fails just disconnect
+                Logger.Error(`Protocol timeout`);
+                this.protocol.disconnect();
+            };
+        }
     }
 
     /**
@@ -1136,6 +1150,10 @@ export class WebRtcPlayerController {
 
         // Tell the WebRtcController to start a session with the peer options sent from the signaling server
         this.startSession(messageConfig.peerConnectionOptions);
+    }
+
+    handlePingMessage(pingMessage: Messages.ping) {
+        this.protocol.sendMessage(MessageHelpers.createMessage(Messages.pong, { time: pingMessage.time }));
     }
 
     /**
