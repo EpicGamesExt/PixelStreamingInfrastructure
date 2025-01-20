@@ -22,10 +22,6 @@ import { BaseMessage } from '../Messages/base_message';
  *   out:
  *      Emitted when sending a message out on the transport. Similar to 'message' but
  *      only for when messages are sent from this endpoint. Useful for debugging.
- *
- *   timeout:
- *      Emitted when a ping fails to receive a pong in time and the connection is
- *      assumed to be dead. This is emitted after the connection is closed.
  */
 export class SignallingProtocol extends EventEmitter {
     static get SIGNALLING_VERSION(): string {
