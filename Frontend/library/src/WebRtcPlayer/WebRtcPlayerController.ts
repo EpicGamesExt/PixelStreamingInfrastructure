@@ -857,6 +857,7 @@ export class WebRtcPlayerController {
             if (!this.forceReconnect) {
                 this.disconnectMessage = `${message} Reconnecting.`;
             }
+            this.closeSignalingServer(message, true);
         } else {
             this.pixelStreaming._onWebRtcAutoConnect();
             this.connectToSignallingServer();
