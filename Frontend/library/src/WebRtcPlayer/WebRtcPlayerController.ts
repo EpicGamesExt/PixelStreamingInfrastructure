@@ -255,10 +255,6 @@ export class WebRtcPlayerController {
             }
         });
 
-        this.protocol.transport.addListener('timeout', () => {
-            Logger.Error(`Transport timeout`);
-        });
-
         // set up the final webRtc player controller methods from within our application so a connection can be activated
         this.sendMessageController = new SendMessageController(
             this.dataChannelSender,
@@ -1035,6 +1031,11 @@ export class WebRtcPlayerController {
         const keepaliveDelay = this.config.getNumericSettingValue(NumericParameters.KeepaliveDelay);
         if (keepaliveDelay > 0) {
             this.keepalive = new KeepaliveMonitor(this.protocol, keepaliveDelay);
+            this.keepalive.onTimeout = () => {
+                // if the ping fails just disconnect
+                Logger.Error(`Protocol timeout`);
+                this.protocol.disconnect();
+            };
         }
     }
 
