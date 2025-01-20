@@ -49,7 +49,7 @@ If you have a solution to a problem you've encountered or to any other open issu
  - All TypeScript should adhere to the following [linting rules](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/master/Frontend/library/.eslintrc.js).
  - Names should follow US English spelling.
  - All public functions/API should have comments.
- - Code formatting should adhere to the following [whitespace and indentation rules](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/master/Frontend/library/.prettierrc.json).
+ - Code formatting should adhere to the following [whitespace and indentation rules](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/master/.prettierrc.json).
  - All new features should have accompanying unit tests and documentation when they are submitted.
  - Prefer early returns in `if` statements to decrease indentation.
  - Prefer functions to not exceed ~20 lines.
