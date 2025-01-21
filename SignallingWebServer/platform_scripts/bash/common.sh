@@ -40,7 +40,7 @@ function parse_args() {
     DEFAULT_STUN=0
     DEFAULT_TURN=0
     BUILD_WILBUR=0
-    if [[ ! -d "${SCRIPT_DIR}/../../build/" ]]; then
+    if [[ ! -d "${SCRIPT_DIR}/../../dist/" ]]; then
         BUILD_WILBUR=1
     fi
     while(($#)) ; do
@@ -349,11 +349,9 @@ function build_wilbur() {
     pushd ${SCRIPT_DIR}/../../.. > /dev/null
 
     pushd Common > /dev/null
-    if [[ ! -d "build" ]]; then
-        echo Building common
-        ${NPM} install
-        ${NPM} run build
-    fi
+    echo Building common
+    ${NPM} install
+    ${NPM} run build
     popd
 
     pushd Signalling > /dev/null
