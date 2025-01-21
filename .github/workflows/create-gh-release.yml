@@ -101,7 +101,7 @@ jobs:
           Signalling/node_modules
           SignallingWebServer/build
           SignallingWebServer/node_modules
-          SS_Test
+          Extras/SS_Test
 
     - name: Archive Release .zip
       uses: thedoctor0/zip-release@0.7.1
@@ -135,7 +135,6 @@ jobs:
           /*/Signalling/node_modules/*
           /*/SignallingWebServer/build/*
           /*/SignallingWebServer/node_modules/*
-          /*/SS_Test/*
 
     - name: "Make the release"
       uses: ncipollo/release-action@v1
