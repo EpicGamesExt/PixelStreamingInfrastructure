@@ -3,7 +3,7 @@ version: "3.4"
 services:
   signalling:
     build:
-      context: ../
+      context: ../../
       dockerfile: ./SignallingWebServer/Dockerfile
     image: signalling
     init: true
