@@ -1,22 +1,23 @@
 {
-  "name": "prtest",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "build": ""
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "devDependencies": {
-    "@playwright/test": "^1.49.0",
-    "@types/node": "^20.12.7",
-    "@types/uuid": "^9.0.8"
-  },
-  "dependencies": {
-    "dotenv": "^16.4.5",
-    "node-fetch": "^2.7.0",
-    "uuid": "^9.0.0"
-  }
+    "name": "prtest",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "build": "",
+        "clean": ""
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+        "@playwright/test": "^1.49.0",
+        "@types/node": "^20.12.7",
+        "@types/uuid": "^9.0.8"
+    },
+    "dependencies": {
+        "dotenv": "^16.4.5",
+        "node-fetch": "^2.7.0",
+        "uuid": "^9.0.0"
+    }
 }

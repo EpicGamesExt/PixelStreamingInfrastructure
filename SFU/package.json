@@ -1,25 +1,26 @@
 {
-  "name": "@epicgames-ps/pixelstreaming-sfu",
-  "version": "1.0.1",
-  "description": "Reference implementation for a PixelStreaming SFU",
-  "private": true,
-  "scripts": {
-    "build": "",
-    "start-local": "run-script-os --",
-    "start-local:windows": ".\\platform_scripts\\cmd\\run.bat",
-    "start-local:default": "./platform_scripts/bash/run_local.sh",
-    "start-cloud": "run-script-os --",
-    "start-cloud:windows": ".\\platform_scripts\\cmd\\run_cloud.bat",
-    "start-cloud:default": "./platform_scripts/bash/run_cloud.sh",
-    "start": "run-script-os",
-    "start:windows": "platform_scripts\\cmd\\node\\node.exe sfu_server.js",
-    "start:default": "if [ `id -u` -eq 0 ]\nthen\n export process=\"./platform_scripts/bash/node/bin/node sfu_server.js\"\nelse\n export process=\"sudo ./platform_scripts/bash/node/bin/node sfu_server.js\"\nfi\n$process "
-  },
-  "dependencies": {
-    "mediasoup_prebuilt": "^3.8.4",
-    "mediasoup-sdp-bridge": "*",
-    "minimist": "^1.2.8",
-    "run-script-os": "^1.1.6",
-    "ws": "^7.5.10"
-  }
+    "name": "@epicgames-ps/pixelstreaming-sfu",
+    "version": "1.0.1",
+    "description": "Reference implementation for a PixelStreaming SFU",
+    "private": true,
+    "scripts": {
+        "clean": "",
+        "build": "",
+        "start-local": "run-script-os --",
+        "start-local:windows": ".\\platform_scripts\\cmd\\run.bat",
+        "start-local:default": "./platform_scripts/bash/run_local.sh",
+        "start-cloud": "run-script-os --",
+        "start-cloud:windows": ".\\platform_scripts\\cmd\\run_cloud.bat",
+        "start-cloud:default": "./platform_scripts/bash/run_cloud.sh",
+        "start": "run-script-os",
+        "start:windows": "platform_scripts\\cmd\\node\\node.exe sfu_server.js",
+        "start:default": "if [ `id -u` -eq 0 ]\nthen\n export process=\"./platform_scripts/bash/node/bin/node sfu_server.js\"\nelse\n export process=\"sudo ./platform_scripts/bash/node/bin/node sfu_server.js\"\nfi\n$process "
+    },
+    "dependencies": {
+        "mediasoup_prebuilt": "^3.8.4",
+        "mediasoup-sdp-bridge": "*",
+        "minimist": "^1.2.8",
+        "run-script-os": "^1.1.6",
+        "ws": "^7.5.10"
+    }
 }
