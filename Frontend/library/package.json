@@ -13,7 +13,7 @@
         "build": "npm run build:cjs && npm run build:esm",
         "rebuild": "npm run clean && npm run build",
         "watch": "nodemon -V -d 3 --watch src --watch ../../Common/dist -e 'ts,js,mjs,cjs,json' --exec 'npm run build:esm'",
-        "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+        "lint": "eslint src --ext .js,.jsx,.ts,.tsx",
         "test": "jest --detectOpenHandles --coverage=true",
         "spellcheck": "cspell \"{README.md,.github/*.md,src/**/*.ts}\""
     },
