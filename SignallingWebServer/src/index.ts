@@ -238,7 +238,7 @@ if (options.rest_api) {
         docsPath: '/api-definition',
         exposeApiDocs: true,
         apiDoc: './apidoc/api-definition-base.yml',
-        paths: './build/paths',
+        paths: './dist/paths',
         dependencies: {
             signallingServer
         }
