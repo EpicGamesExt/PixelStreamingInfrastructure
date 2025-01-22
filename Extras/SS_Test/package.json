@@ -8,7 +8,7 @@
         "clean": "rimraf ./dist",
         "build": "tsc",
         "rebuild": "npm run clean && npm run build",
-        "start": "npm run build && node ./build/index.js"
+        "start": "npm run build && node ./dist/index.js"
     },
     "author": "",
     "license": "ISC",
