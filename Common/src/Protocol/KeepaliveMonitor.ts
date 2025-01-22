@@ -32,8 +32,8 @@ export class KeepaliveMonitor {
     /**
      * Creates a new monitor and starts the ping timer. If a pong does not come back by the time we want
      * to send a second ping then the connection is considered dead and the onTimeout callback is fired.
-     * @param protocol The connection that we want to monitor.
-     * @param timeout The time in milliseconds between ping messages.
+     * @param protocol - The connection that we want to monitor.
+     * @param timeout - The time in milliseconds between ping messages.
      */
     constructor(protocol: SignallingProtocol, timeout: number) {
         this.protocol = protocol;
