@@ -18,8 +18,8 @@ services:
 
   tester:
     build:
-      context: ../
-      dockerfile: ./SS_Test/Dockerfile
+      context: ../../
+      dockerfile: ./Extras/SS_Test/Dockerfile
     image: signalling_tester
     network_mode: "host"
     depends_on:
