@@ -52,13 +52,12 @@ Options:
   --log_level_file <level>      Sets the logging level for log files. (choices: "debug", "info", "warning", "error",
                                 default: "info")
   --console_messages [detail]   Displays incoming and outgoing signalling messages on the console. (choices: "basic",
-                                "verbose", "formatted", preset: "verbose")
+                                "verbose", "formatted", preset: "basic")
   --streamer_port <port>        Sets the listening port for streamer connections. (default: "8888")
   --player_port <port>          Sets the listening port for player connections. (default: "80")
   --sfu_port <port>             Sets the listening port for SFU connections. (default: "8889")
-  --serve                       Enables the webserver on player_port. (default: true)
-  --http_root <path>            Sets the path for the webserver root. (default:
-                                "D:\\PixelStreamingInfrastructure\\SignallingWebServer\\www")
+  --serve                       Enables the webserver on player_port. (default: false)
+  --http_root <path>            Sets the path for the webserver root. (default: "www")
   --homepage <filename>         The default html file to serve on the web server. (default: "player.html")
   --https                       Enables the webserver on https_port and enabling SSL (default: false)
   --https_port <port>           Sets the listen port for the https server. (default: 443)
@@ -66,12 +65,12 @@ Options:
   --ssl_cert_path <path>        Sets the path for the SSL certificate file. (default: "certificates/client-cert.pem")
   --https_redirect              Enables the redirection of connection attempts on http to https. If this is not set
                                 the webserver will only listen on https_port. Player websockets will still listen on
-                                player_port. (default: true)
-  --rest_api                    Enables the rest API interface that can be accessed at
-                                <server_url>/api/api-definition (default: false)
-  --peer_options <json-string>  Additional JSON data to send in peerConnectionOptions of the config message.
-                                (default: "")
-  --log_config                  Will print the program configuration on startup. (default: true)
+                                player_port. (default: false)
+  --rest_api                    Enables the rest API interface that can be accessed at <server_url>/api/api-definition
+                                (default: false)
+  --peer_options <json-string>  Additional JSON data to send in peerConnectionOptions of the config message. (default:
+                                "")
+  --log_config                  Will print the program configuration on startup. (default: false)
   --stdin                       Allows stdin input while running. (default: false)
   --save                        After arguments are parsed the config.json is saved with whatever arguments were
                                 specified at launch. (default: false)
@@ -95,7 +94,7 @@ These CLI options can also be described in a `config.json` (default config file 
 ```
 Given these options, to start the server with the closest behaviour as the old cirrus, you would invoke,
 ```
-npm start -- --console_messages --https_redirect verbose --serve --log_config --http_root Public --homepage player.html
+npm start -- --console_messages --https_redirect verbose --serve --log_config --http_root www --homepage player.html
 ```
 Note that `Public` being used as the http root assumes your Frontend is in that directory from the old behaviour of the scripts. The new convenience scripts (`platform_scripts` directory) will now build the frontend into the `www` directory.
 
