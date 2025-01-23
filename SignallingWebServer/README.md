@@ -103,6 +103,9 @@ Note that `Public` being used as the http root assumes your Frontend is in that 
 ## Development
 This implementation is built on the [Signalling](../Signalling) library which is supplied as a library for developing signalling applications. Visit its [documentation](../Signalling/docs) for more information.
 
+A development mode that watches for changes to libraries, frontend and source exists in this project. To utilize it you can invoke `npm run develop`. This will kick off a series of watchers that all watch the individual components of the signalling server and frontend for changes and will auto build and restart the signalling server, or in the case of frontend changes, redeploy the frontend for the signalling server to serve.
+Please note that by default, when the signalling server launches in this mode, the port to access the frontend changes to 1025 and so you will need to visit `http://localhost:1025` to access the frontend. This is to get around the need for elevated permissions for port 80.
+
 ### Self-signed certificates
 During development it may be useful to work with self-signed SSL certificates (e.g. HTTPS is required for some features like XR and microphone usage). Self signed certificates can be generated using the following instructions:
 
