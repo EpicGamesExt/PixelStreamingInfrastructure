@@ -96,7 +96,7 @@ Given these options, to start the server with the closest behaviour as the old c
 ```
 npm start -- --console_messages --https_redirect verbose --serve --log_config --http_root www --homepage player.html
 ```
-Note that `Public` being used as the http root assumes your Frontend is in that directory from the old behaviour of the scripts. The new convenience scripts (`platform_scripts` directory) will now build the frontend into the `www` directory.
+Note that `www` being used as the http root assumes your Frontend is in that directory.
 
 ## Development
 This implementation is built on the [Signalling](../Signalling) library which is supplied as a library for developing signalling applications. Visit its [documentation](../Signalling/docs) for more information.
