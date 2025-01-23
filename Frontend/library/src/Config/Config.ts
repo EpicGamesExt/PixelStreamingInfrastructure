@@ -557,7 +557,7 @@ export class Config {
                 'Enables the abs-capture-time RTP header extension',
                 settings && Object.prototype.hasOwnProperty.call(settings, Flags.EnableCaptureTimeExt)
                     ? settings[Flags.EnableCaptureTimeExt]
-                    : false,
+                    : true,
                 useUrlParams
             )
         );

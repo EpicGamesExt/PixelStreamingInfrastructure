@@ -3,6 +3,7 @@
 import { LatencyTest } from './LatencyTest';
 import {
     CandidatePairStats,
+    LatencyInfo,
     Logger,
     PixelStreaming,
     PixelStreamingSettings
@@ -297,7 +298,7 @@ export class StatsPanel {
         const netRTT =
             Object.prototype.hasOwnProperty.call(activeCandidatePair, 'currentRoundTripTime') &&
             stats.isNumber(activeCandidatePair.currentRoundTripTime)
-                ? numberFormat.format(activeCandidatePair.currentRoundTripTime * 1000)
+                ? Math.ceil(activeCandidatePair.currentRoundTripTime * 1000).toString()
                 : "Can't calculate";
         this.addOrUpdateStat('RTTStat', 'Net RTT (ms)', netRTT);
 
@@ -310,16 +311,65 @@ export class StatsPanel {
         );
 
         // QP
-        this.addOrUpdateStat(
-            'QPStat',
-            'Video quantization parameter',
-            stats.sessionStats.videoEncoderAvgQP.toString()
-        );
-
-        // todo:
-        //statsText += `<div>Browser receive to composite (ms): ${stats.inboundVideoStats.receiveToCompositeMs}</div>`;
+        if(stats.sessionStats.videoEncoderAvgQP !== undefined && !Number.isNaN(stats.sessionStats.videoEncoderAvgQP)) {
+            this.addOrUpdateStat(
+                'QPStat',
+                'Video quantization parameter',
+                stats.sessionStats.videoEncoderAvgQP.toString()
+            );
+        }
 
         Logger.Info(`--------- Stats ---------\n ${JSON.stringify(stats)}\n------------------------`);
+    }
+
+    public handleLatencyInfo(latencyInfo: LatencyInfo) {
+        if(latencyInfo.SenderLatencyMs !== undefined && latencyInfo.SenderLatencyMs > 0) {
+            this.addOrUpdateStat(
+                'SenderSideLatency',
+                'Sender latency (ms)',
+                Math.ceil(latencyInfo.SenderLatencyMs).toString()
+            );
+        }
+
+        if(latencyInfo.AverageAssemblyDelayMs !== undefined && latencyInfo.AverageAssemblyDelayMs > 0) {
+            this.addOrUpdateStat(
+                'AvgAssemblyDelay',
+                'Assembly delay (ms)',
+                Math.ceil(latencyInfo.AverageAssemblyDelayMs).toString()
+            );
+        }
+
+        if(latencyInfo.AverageDecodeLatencyMs !== undefined && latencyInfo.AverageDecodeLatencyMs > 0) {
+            this.addOrUpdateStat(
+                'AvgDecodeDelay',
+                'Decode time (ms)',
+                Math.ceil(latencyInfo.AverageDecodeLatencyMs).toString()
+            );
+        }
+
+        if(latencyInfo.AverageJitterBufferDelayMs !== undefined && latencyInfo.AverageJitterBufferDelayMs > 0) {
+            this.addOrUpdateStat(
+                'AvgJitterBufferDelay',
+                'Jitter buffer (ms)',
+                Math.ceil(latencyInfo.AverageJitterBufferDelayMs).toString()
+            );
+        }
+
+        if(latencyInfo.AverageProcessingDelayMs !== undefined && latencyInfo.AverageProcessingDelayMs > 0) {
+            this.addOrUpdateStat(
+                'AvgProcessingDelay',
+                'Processing delay (ms)',
+                Math.ceil(latencyInfo.AverageProcessingDelayMs).toString()
+            );
+        }
+
+        if(latencyInfo.AverageE2ELatency !== undefined && latencyInfo.AverageE2ELatency > 0) {
+            this.addOrUpdateStat(
+                'AvgE2ELatency',
+                'Total latency (ms)',
+                Math.ceil(latencyInfo.AverageE2ELatency).toString()
+            );
+        }
     }
 
     /**

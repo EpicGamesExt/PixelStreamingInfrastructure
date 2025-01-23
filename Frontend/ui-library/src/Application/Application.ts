@@ -8,7 +8,8 @@ import {
     LatencyTestResults,
     InitialSettings,
     Messages,
-    DataChannelLatencyTestResult
+    DataChannelLatencyTestResult,
+    LatencyInfo
 } from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.5';
 import { OverlayBase } from '../Overlay/BaseOverlay';
 import { ActionOverlay } from '../Overlay/ActionOverlay';
@@ -331,6 +332,9 @@ export class Application {
         this.stream.addEventListener('statsReceived', ({ data: { aggregatedStats } }) =>
             this.onStatsReceived(aggregatedStats)
         );
+        this.stream.addEventListener('latencyCalculated', ({ data: { latencyInfo } }) =>
+            this.onLatencyUpdate(latencyInfo)
+        );
         this.stream.addEventListener('latencyTestResult', ({ data: { latencyTimings } }) =>
             this.onLatencyTestResults(latencyTimings)
         );
@@ -621,6 +625,10 @@ export class Application {
     onStatsReceived(aggregatedStats: AggregatedStats) {
         // Grab all stats we can off the aggregated stats
         this.statsPanel?.handleStats(aggregatedStats);
+    }
+
+    onLatencyUpdate(latencyInfo: LatencyInfo) {
+        this.statsPanel?.handleLatencyInfo(latencyInfo);
     }
 
     onLatencyTestResults(latencyTimings: LatencyTestResults) {

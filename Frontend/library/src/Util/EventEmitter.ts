@@ -1,7 +1,7 @@
 import { FlagsIds, NumericParametersIds, OptionParametersIds, TextParametersIds } from '../Config/Config';
 import { LatencyTestResults } from '../DataChannel/LatencyTestResults';
 import { AggregatedStats } from '../PeerConnectionController/AggregatedStats';
-import { InitialSettings } from '../pixelstreamingfrontend';
+import { InitialSettings, LatencyInfo } from '../pixelstreamingfrontend';
 import { Messages } from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
 import { SettingFlag } from '../Config/SettingFlag';
 import { SettingNumber } from '../Config/SettingNumber';
@@ -99,11 +99,9 @@ export class WebRtcSdpAnswerEvent extends Event {
         /** The sdp answer */
         sdp: RTCSessionDescriptionInit;
     };
-    constructor(answer: RTCSessionDescriptionInit) {
+    constructor(data: WebRtcSdpAnswerEvent["data"]) {
         super('webRtcSdpAnswer');
-        this.data = {
-            sdp: answer
-        };
+        this.data = data;
     }
 }
 
@@ -116,11 +114,9 @@ export class WebRtcSdpOfferEvent extends Event {
         /** The sdp offer */
         sdp: RTCSessionDescriptionInit;
     };
-    constructor(offer: RTCSessionDescriptionInit) {
+    constructor(data: WebRtcSdpOfferEvent["data"]) {
         super('webRtcSdpOffer');
-        this.data = {
-            sdp: offer
-        };
+        this.data = data;
     }
 }
 
@@ -417,6 +413,20 @@ export class LatencyTestResultEvent extends Event {
 }
 
 /**
+ * An event that is emitted everytime latency is calculated using the WebRTC stats API.
+ */
+export class LatencyCalculatedEvent extends Event {
+    readonly type: 'latencyCalculated';
+    readonly data: {
+        latencyInfo: LatencyInfo;
+    }
+    constructor(data: LatencyCalculatedEvent['data']) {
+        super('latencyCalculated');
+        this.data = data;
+    }
+}
+
+/**
  * An event that is emitted when receiving data channel latency test response from server.
  * This event is handled by DataChannelLatencyTestController
  */
@@ -606,6 +616,7 @@ export type PixelStreamingEvent =
     | StatsReceivedEvent
     | StreamerListMessageEvent
     | StreamerIDChangedMessageEvent
+    | LatencyCalculatedEvent
     | LatencyTestResultEvent
     | DataChannelLatencyTestResponseEvent
     | DataChannelLatencyTestResultEvent

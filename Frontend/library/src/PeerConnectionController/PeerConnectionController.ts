@@ -7,6 +7,9 @@ import { parseRtpParameters, splitSections } from 'sdp';
 import { RTCUtils } from '../Util/RTCUtils';
 import { CodecStats } from './CodecStats';
 import { SDPUtils } from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
+import { LatencyCalculator, LatencyInfo } from './LatencyCalculator';
+
+export const kAbsCaptureTime = 'http://www.webrtc.org/experiments/rtp-hdrext/abs-capture-time';
 
 /**
  * Handles the Peer Connection
@@ -19,6 +22,7 @@ export class PeerConnectionController {
     updateCodecSelection: boolean;
     videoTrack: MediaStreamTrack;
     audioTrack: MediaStreamTrack;
+    latencyCalculator: LatencyCalculator;
 
     /**
      * Create a new RTC Peer Connection client
@@ -28,6 +32,7 @@ export class PeerConnectionController {
     constructor(options: RTCConfiguration, config: Config, preferredCodec: string) {
         this.config = config;
         this.createPeerConnection(options, preferredCodec);
+        this.latencyCalculator = new LatencyCalculator();
     }
 
     createPeerConnection(options: RTCConfiguration, preferredCodec: string) {
@@ -169,6 +174,11 @@ export class PeerConnectionController {
 
         Promise.allSettled([audioPromise, videoPromise]).then(() => {
             this.onVideoStats(this.aggregatedStats);
+
+            // Calculate latency using stats and video receivers and then call the handling function
+            let latencyInfo: LatencyInfo = this.latencyCalculator.calculate(this.aggregatedStats, this.peerConnection.getReceivers());
+            this.onLatencyCalculated(latencyInfo);
+
             // Update the preferred codec selection based on what was actually negotiated
             if (this.updateCodecSelection && !!this.aggregatedStats.inboundVideoStats.codecId) {
                 // Construct the qualified codec name from the mimetype and fmtp
@@ -244,7 +254,6 @@ export class PeerConnectionController {
 
         // Add abs-capture-time RTP header extension if we have enabled the setting
         if (this.config.isFlagEnabled(Flags.EnableCaptureTimeExt)) {
-            const kAbsCaptureTime = 'http://www.webrtc.org/experiments/rtp-hdrext/abs-capture-time';
             mungedSDP = SDPUtils.addHeaderExtensionToSdp(mungedSDP, kAbsCaptureTime);
         }
 
@@ -594,6 +603,15 @@ export class PeerConnectionController {
      */
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     onVideoStats(event: AggregatedStats) {
+        // Default Functionality: Do Nothing
+    }
+
+    /**
+     * And override event for when latency info is calculated
+     * @param latencyInfo - Calculated latency information.
+     */
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    onLatencyCalculated(latencyInfo: LatencyInfo) {
         // Default Functionality: Do Nothing
     }
 

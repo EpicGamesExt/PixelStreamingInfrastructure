@@ -11,6 +11,7 @@ import { OnScreenKeyboard } from '../UI/OnScreenKeyboard';
 import {
     PixelStreamingEventEmitter,
     InitialSettingsEvent,
+    LatencyCalculatedEvent,
     LatencyTestResultEvent,
     PixelStreamingEvent,
     StatsReceivedEvent,
@@ -45,6 +46,7 @@ import {
 } from '../DataChannel/DataChannelLatencyTestResults';
 import { RTCUtils } from '../Util/RTCUtils';
 import { IURLSearchParams } from '../Util/IURLSearchParams';
+import { LatencyInfo } from '../PeerConnectionController/LatencyCalculator';
 
 export interface PixelStreamingOverrides {
     /** The DOM element where Pixel Streaming video and user input event handlers are attached to.
@@ -451,35 +453,42 @@ export class PixelStreaming {
     }
 
     /**
-     * Emit an event on auto connecting
+     * Internal function to emit an event when auto connecting occurs
      */
     _onWebRtcAutoConnect() {
         this._eventEmitter.dispatchEvent(new WebRtcAutoConnectEvent());
     }
 
     /**
-     * Set up functionality to happen when SDP negotiation is fully finished.
+     * Internal function to emit an event for when SDP negotiation is fully finished.
      */
     _onWebRtcSdp() {
         this._eventEmitter.dispatchEvent(new WebRtcSdpEvent());
     }
 
     /**
-     * Set up functionality to happen after offer has been set.
+     * Internal function to emit an SDP offer after it has been set.
      */
     _onWebRtcSdpOffer(offer: RTCSessionDescriptionInit) {
-        this._eventEmitter.dispatchEvent(new WebRtcSdpOfferEvent(offer));
+        this._eventEmitter.dispatchEvent(new WebRtcSdpOfferEvent({ sdp: offer }));
     }
 
     /**
-     * Set up functionality to happen after SDP answer has set.
+     * Internal function to emit an SDP answer after it has been set.
      */
     _onWebRtcSdpAnswer(answer: RTCSessionDescriptionInit) {
-        this._eventEmitter.dispatchEvent(new WebRtcSdpAnswerEvent(answer));
+        this._eventEmitter.dispatchEvent(new WebRtcSdpAnswerEvent({ sdp: answer }));
     }
 
     /**
-     * Emits a StreamLoading event
+     * Internal function call to emit a `latencyCalculated` event.
+     */
+    _onLatencyCalculated(latencyInfo: LatencyInfo) {
+        this._eventEmitter.dispatchEvent(new LatencyCalculatedEvent({ latencyInfo }));
+    }
+
+    /**
+     * Internal function to emits a StreamLoading event
      */
     _onStreamLoading() {
         this._eventEmitter.dispatchEvent(new StreamLoadingEvent());

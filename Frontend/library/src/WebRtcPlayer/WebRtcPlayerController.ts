@@ -54,6 +54,7 @@ import {
 import { IURLSearchParams } from '../Util/IURLSearchParams';
 import { IInputController } from '../Inputs/IInputController';
 import { GamepadController } from '../Inputs/GamepadController';
+import { LatencyInfo } from '../PeerConnectionController/LatencyCalculator';
 
 /**
  * Entry point for the WebRTC Player
@@ -1006,7 +1007,14 @@ export class WebRtcPlayerController {
         );
 
         // set up peer connection controller video stats
-        this.peerConnectionController.onVideoStats = (event: AggregatedStats) => this.handleVideoStats(event);
+        this.peerConnectionController.onVideoStats = (event: AggregatedStats) => {
+            this.handleVideoStats(event);
+        }
+
+        /* Set event handler for latency information is calculated, handle the event by propogating to the PixelStreaming API */
+        this.peerConnectionController.onLatencyCalculated = (latencyInfo: LatencyInfo) => {
+            this.pixelStreaming._onLatencyCalculated(latencyInfo);
+        }
 
         /* When the Peer Connection wants to send an offer have it handled */
         this.peerConnectionController.onSendWebRTCOffer = (offer: RTCSessionDescriptionInit) => {
