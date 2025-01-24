@@ -311,7 +311,10 @@ export class StatsPanel {
         );
 
         // QP
-        if(stats.sessionStats.videoEncoderAvgQP !== undefined && !Number.isNaN(stats.sessionStats.videoEncoderAvgQP)) {
+        if (
+            stats.sessionStats.videoEncoderAvgQP !== undefined &&
+            !Number.isNaN(stats.sessionStats.videoEncoderAvgQP)
+        ) {
             this.addOrUpdateStat(
                 'QPStat',
                 'Video quantization parameter',
@@ -323,7 +326,7 @@ export class StatsPanel {
     }
 
     public handleLatencyInfo(latencyInfo: LatencyInfo) {
-        if(latencyInfo.SenderLatencyMs !== undefined && latencyInfo.SenderLatencyMs > 0) {
+        if (latencyInfo.SenderLatencyMs !== undefined && latencyInfo.SenderLatencyMs > 0) {
             this.addOrUpdateStat(
                 'SenderSideLatency',
                 'Sender latency (ms)',
@@ -331,7 +334,7 @@ export class StatsPanel {
             );
         }
 
-        if(latencyInfo.AverageAssemblyDelayMs !== undefined && latencyInfo.AverageAssemblyDelayMs > 0) {
+        if (latencyInfo.AverageAssemblyDelayMs !== undefined && latencyInfo.AverageAssemblyDelayMs > 0) {
             this.addOrUpdateStat(
                 'AvgAssemblyDelay',
                 'Assembly delay (ms)',
@@ -339,7 +342,7 @@ export class StatsPanel {
             );
         }
 
-        if(latencyInfo.AverageDecodeLatencyMs !== undefined && latencyInfo.AverageDecodeLatencyMs > 0) {
+        if (latencyInfo.AverageDecodeLatencyMs !== undefined && latencyInfo.AverageDecodeLatencyMs > 0) {
             this.addOrUpdateStat(
                 'AvgDecodeDelay',
                 'Decode time (ms)',
@@ -347,7 +350,10 @@ export class StatsPanel {
             );
         }
 
-        if(latencyInfo.AverageJitterBufferDelayMs !== undefined && latencyInfo.AverageJitterBufferDelayMs > 0) {
+        if (
+            latencyInfo.AverageJitterBufferDelayMs !== undefined &&
+            latencyInfo.AverageJitterBufferDelayMs > 0
+        ) {
             this.addOrUpdateStat(
                 'AvgJitterBufferDelay',
                 'Jitter buffer (ms)',
@@ -355,7 +361,7 @@ export class StatsPanel {
             );
         }
 
-        if(latencyInfo.AverageProcessingDelayMs !== undefined && latencyInfo.AverageProcessingDelayMs > 0) {
+        if (latencyInfo.AverageProcessingDelayMs !== undefined && latencyInfo.AverageProcessingDelayMs > 0) {
             this.addOrUpdateStat(
                 'AvgProcessingDelay',
                 'Processing delay (ms)',
@@ -363,7 +369,7 @@ export class StatsPanel {
             );
         }
 
-        if(latencyInfo.AverageE2ELatency !== undefined && latencyInfo.AverageE2ELatency > 0) {
+        if (latencyInfo.AverageE2ELatency !== undefined && latencyInfo.AverageE2ELatency > 0) {
             this.addOrUpdateStat(
                 'AvgE2ELatency',
                 'Total latency (ms)',

@@ -1009,22 +1009,22 @@ export class WebRtcPlayerController {
         // set up peer connection controller video stats
         this.peerConnectionController.onVideoStats = (event: AggregatedStats) => {
             this.handleVideoStats(event);
-        }
+        };
 
         /* Set event handler for latency information is calculated, handle the event by propogating to the PixelStreaming API */
         this.peerConnectionController.onLatencyCalculated = (latencyInfo: LatencyInfo) => {
             this.pixelStreaming._onLatencyCalculated(latencyInfo);
-        }
+        };
 
         /* When the Peer Connection wants to send an offer have it handled */
         this.peerConnectionController.onSendWebRTCOffer = (offer: RTCSessionDescriptionInit) => {
             this.handleSendWebRTCOffer(offer);
-        }
+        };
 
         /* Set event handler for when local answer description is set */
         this.peerConnectionController.onSetLocalDescription = (answer: RTCSessionDescriptionInit) => {
             this.handleSendWebRTCAnswer(answer);
-        }
+        };
 
         /* Set event handler for when remote offer description is set */
         this.peerConnectionController.onSetRemoteDescription = (offer: RTCSessionDescriptionInit) => {

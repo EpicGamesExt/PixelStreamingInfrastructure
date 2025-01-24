@@ -100,7 +100,6 @@ export class PeerConnectionController {
         Logger.Info('Receive Offer');
 
         this.peerConnection?.setRemoteDescription(offer).then(() => {
-
             // Fire event for when remote offer description is set
             this.onSetRemoteDescription(offer);
 
@@ -176,7 +175,10 @@ export class PeerConnectionController {
             this.onVideoStats(this.aggregatedStats);
 
             // Calculate latency using stats and video receivers and then call the handling function
-            let latencyInfo: LatencyInfo = this.latencyCalculator.calculate(this.aggregatedStats, this.peerConnection.getReceivers());
+            const latencyInfo: LatencyInfo = this.latencyCalculator.calculate(
+                this.aggregatedStats,
+                this.peerConnection.getReceivers()
+            );
             this.onLatencyCalculated(latencyInfo);
 
             // Update the preferred codec selection based on what was actually negotiated

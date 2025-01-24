@@ -99,7 +99,7 @@ export class WebRtcSdpAnswerEvent extends Event {
         /** The sdp answer */
         sdp: RTCSessionDescriptionInit;
     };
-    constructor(data: WebRtcSdpAnswerEvent["data"]) {
+    constructor(data: WebRtcSdpAnswerEvent['data']) {
         super('webRtcSdpAnswer');
         this.data = data;
     }
@@ -114,7 +114,7 @@ export class WebRtcSdpOfferEvent extends Event {
         /** The sdp offer */
         sdp: RTCSessionDescriptionInit;
     };
-    constructor(data: WebRtcSdpOfferEvent["data"]) {
+    constructor(data: WebRtcSdpOfferEvent['data']) {
         super('webRtcSdpOffer');
         this.data = data;
     }
@@ -419,7 +419,7 @@ export class LatencyCalculatedEvent extends Event {
     readonly type: 'latencyCalculated';
     readonly data: {
         latencyInfo: LatencyInfo;
-    }
+    };
     constructor(data: LatencyCalculatedEvent['data']) {
         super('latencyCalculated');
         this.data = data;

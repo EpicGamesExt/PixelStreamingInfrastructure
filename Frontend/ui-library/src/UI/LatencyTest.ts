@@ -71,40 +71,46 @@ export class LatencyTest {
         Logger.Info(JSON.stringify(latencyTimings));
         let latencyStatsInnerHTML = '';
 
-        if(latencyTimings.networkLatency !== undefined && latencyTimings.networkLatency > 0) {
+        if (latencyTimings.networkLatency !== undefined && latencyTimings.networkLatency > 0) {
             latencyStatsInnerHTML += '<div>Net latency RTT (ms): ' + latencyTimings.networkLatency + '</div>';
         }
 
-        if(latencyTimings.EncodeMs !== undefined && latencyTimings.EncodeMs > 0) {
+        if (latencyTimings.EncodeMs !== undefined && latencyTimings.EncodeMs > 0) {
             latencyStatsInnerHTML += '<div>UE Encode (ms): ' + latencyTimings.EncodeMs + '</div>';
         }
 
-        if(latencyTimings.CaptureToSendMs !== undefined && latencyTimings.CaptureToSendMs > 0) {
+        if (latencyTimings.CaptureToSendMs !== undefined && latencyTimings.CaptureToSendMs > 0) {
             latencyStatsInnerHTML += '<div>UE Capture (ms): ' + latencyTimings.CaptureToSendMs + '</div>';
         }
 
-        if(latencyTimings.browserSendLatency !== undefined && latencyTimings.browserSendLatency > 0) {
-            latencyStatsInnerHTML += '<div>Browser send latency (ms): ' + latencyTimings.browserSendLatency + '</div>';
-        }
-
-        if(latencyTimings.frameDisplayDeltaTimeMs !== undefined && latencyTimings.browserReceiptTimeMs !== undefined) {
+        if (latencyTimings.browserSendLatency !== undefined && latencyTimings.browserSendLatency > 0) {
             latencyStatsInnerHTML +=
-            latencyTimings.frameDisplayDeltaTimeMs && latencyTimings.browserReceiptTimeMs
-                ? '<div>Browser receive latency (ms): ' + latencyTimings.frameDisplayDeltaTimeMs + '</div>'
-                : '';
+                '<div>Browser send latency (ms): ' + latencyTimings.browserSendLatency + '</div>';
         }
 
-        if(latencyTimings.latencyExcludingDecode !== undefined) {
+        if (
+            latencyTimings.frameDisplayDeltaTimeMs !== undefined &&
+            latencyTimings.browserReceiptTimeMs !== undefined
+        ) {
             latencyStatsInnerHTML +=
-            '<div>Total latency (excluding browser) (ms): ' +
-            latencyTimings.latencyExcludingDecode +
-            '</div>';
+                latencyTimings.frameDisplayDeltaTimeMs && latencyTimings.browserReceiptTimeMs
+                    ? '<div>Browser receive latency (ms): ' +
+                      latencyTimings.frameDisplayDeltaTimeMs +
+                      '</div>'
+                    : '';
         }
 
-        if(latencyTimings.endToEndLatency !== undefined) {
+        if (latencyTimings.latencyExcludingDecode !== undefined) {
+            latencyStatsInnerHTML +=
+                '<div>Total latency (excluding browser) (ms): ' +
+                latencyTimings.latencyExcludingDecode +
+                '</div>';
+        }
+
+        if (latencyTimings.endToEndLatency !== undefined) {
             latencyStatsInnerHTML += latencyTimings.endToEndLatency
-            ? '<div>Total latency (ms): ' + latencyTimings.endToEndLatency + '</div>'
-            : '';
+                ? '<div>Total latency (ms): ' + latencyTimings.endToEndLatency + '</div>'
+                : '';
         }
 
         this.latencyTestResultsElement.innerHTML = latencyStatsInnerHTML;

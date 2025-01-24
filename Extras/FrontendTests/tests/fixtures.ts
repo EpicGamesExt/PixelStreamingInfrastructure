@@ -11,6 +11,11 @@ export const test = base.extend<PSTestFixtures>({
         const streamerPage = await context.newPage();
         await streamerPage.goto(`${process.env.PIXELSTREAMER_URL || 'http://localhost:4000'}` + `${process.env.STREAMER_SIGNALLING_URL !== undefined ? '?SignallingURL=' + process.env.STREAMER_SIGNALLING_URL : ""}`);
         await use(streamerPage);
+
+        // this is called after test is run by `use`
+        streamerPage.evaluate(() => {
+            window.streamer.stopStreaming();
+        });
     },
     streamerId: async ({ streamerPage }, use) => {
 
@@ -36,3 +41,6 @@ export const test = base.extend<PSTestFixtures>({
     }
 });
 
+
+// Ensure tests run in serial as we don't want a clash with multiple peers putting things in different states
+test.describe.configure({ mode: 'serial' });

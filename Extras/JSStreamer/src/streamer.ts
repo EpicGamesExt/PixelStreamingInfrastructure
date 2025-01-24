@@ -129,6 +129,13 @@ export class Streamer extends EventEmitter {
         this.transport.connect(signallingURL);
     }
 
+    stopStreaming() {
+        this.transport.disconnect(1000, "Normal shutdown by calling stopStreaming");
+        for(let peer of this.playerMap.values()) {
+            peer.peerConnection.close();
+        }
+    }
+
     handleConfigMessage(msg: Messages.config) {
         if(msg.peerConnectionOptions !== undefined) {
             this.peerConnectionOptions = msg.peerConnectionOptions;

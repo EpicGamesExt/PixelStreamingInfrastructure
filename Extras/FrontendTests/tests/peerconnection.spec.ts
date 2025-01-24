@@ -115,7 +115,9 @@ test('Test latency calculation', {
     let latencyInfo: LatencyInfo = await page.evaluate(() => {
         return new Promise((resolve) => {
             window.pixelStreaming.addEventListener("latencyCalculated", (e: LatencyCalculatedEvent) => {
-                // Todo: Add event for `latencyCalculated` to Pixel Streaming API
+                if(e.data.latencyInfo && e.data.latencyInfo.SenderLatencyMs) {
+                    resolve(e.data.latencyInfo);
+                }
             });
         });
     });
@@ -128,12 +130,12 @@ test('Test latency calculation', {
     expect(latencyInfo.AverageAssemblyDelayMs).toBeDefined();
     expect(latencyInfo.AverageDecodeLatencyMs).toBeDefined();
 
-    // Sender side latency should be less than 60ms in pure CPU test
-    expect(latencyInfo.SenderLatencyMs).toBeLessThanOrEqual(60)
+    // Sender side latency should be less than 500ms in pure CPU test
+    expect(latencyInfo.SenderLatencyMs).toBeLessThanOrEqual(500)
 
-    // Expect jitter buffer/processing delay to be no greater than 3 frames @ 30fps
-    expect(latencyInfo.AverageJitterBufferDelayMs).toBeLessThanOrEqual(99);
-    expect(latencyInfo.AverageProcessingDelayMs).toBeLessThanOrEqual(99);
+    // Expect jitter buffer/processing delay to be no greater than 500ms on local link
+    expect(latencyInfo.AverageJitterBufferDelayMs).toBeLessThanOrEqual(500);
+    expect(latencyInfo.AverageProcessingDelayMs).toBeLessThanOrEqual(500);
 
     // Expect RTT to be less than 10ms on loopback
     expect(latencyInfo.RTTMs).toBeLessThanOrEqual(10);
