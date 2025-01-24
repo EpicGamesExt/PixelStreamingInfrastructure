@@ -12,8 +12,8 @@ test('Test keyboard events', {
 }, async ({ page, streamerPage, streamerId }) => {
 
     await page.goto(`/?StreamerId=${streamerId}&MatchViewportRes=true`);
-    await page.getByText('Click to start').click();
-    await helpers.waitForVideo(page);
+
+    await helpers.startAndWaitForVideo(page);
 
     const playerBox = await page.locator('#videoElementParent').boundingBox();
     expect(playerBox).not.toBeNull();

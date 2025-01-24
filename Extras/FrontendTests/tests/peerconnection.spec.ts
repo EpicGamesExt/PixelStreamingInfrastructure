@@ -36,9 +36,8 @@ test('Test abs-capture-time header extension found for streamer', {
 
     });
 
-    await page.getByText('Click to start').click();
+    await helpers.startAndWaitForVideo(page);
 
-    await helpers.waitForVideo(page);
     let localDescSdp: RTCSessionDescriptionInit = await localDescription;
     let remoteDescSdp: RTCSessionDescriptionInit = await getSdpOffer;
 
@@ -77,11 +76,8 @@ test('Test abs-capture-time header extension found in PSInfra frontend', {
 
     });
 
-    await page.getByText('Click to start').click();
-
+    await helpers.startAndWaitForVideo(page);
     const answer: RTCSessionDescriptionInit = await getSdpAnswer;
-
-    await helpers.waitForVideo(page);
 
     expect(answer).toBeDefined();
     expect(answer.sdp).toBeDefined();
@@ -108,8 +104,7 @@ test('Test latency calculation', {
         window.pixelStreaming.config.setFlagEnabled("EnableCaptureTimeExt", true);
     });
 
-    await page.getByText('Click to start').click();
-    await helpers.waitForVideo(page);
+    await helpers.startAndWaitForVideo(page);
 
     // Wait for the latency info event to be fired
     let latencyInfo: LatencyInfo = await page.evaluate(() => {

@@ -22,9 +22,8 @@ test('Test mouse enter/leave', {
     // });
 
     await page.goto(`/?StreamerId=${streamerId}&MatchViewportRes=true&HoveringMouse=true`);
-    await page.getByText('Click to start').click();
 
-    await helpers.waitForVideo(page);
+    await helpers.startAndWaitForVideo(page);
     
     // reduce the size of the window so we can leave
     await page.setViewportSize({ width: 100, height: 100 });
@@ -66,9 +65,8 @@ test('Test mouse wheel', {
     // });
 
     await page.goto(`/?StreamerId=${streamerId}&MatchViewportRes=true&HoveringMouse=false`);
-    await page.getByText('Click to start').click();
 
-    await helpers.waitForVideo(page);
+    await helpers.startAndWaitForVideo(page);
 
     const playerBox = await page.locator('#videoElementParent').boundingBox();
     expect(playerBox).not.toBeNull();
@@ -115,9 +113,8 @@ test('Test locked mouse movement', {
     });
 
     await page.goto(`/?StreamerId=${streamerId}&MatchViewportRes=true&HoveringMouse=false`);
-    await page.getByText('Click to start').click();
 
-    await helpers.waitForVideo(page);
+    await helpers.startAndWaitForVideo(page);
 
     const playerBox = await page.locator('#videoElementParent').boundingBox();
     expect(playerBox).not.toBeNull();
@@ -193,9 +190,8 @@ test('Test hovering mouse movement', {
     // });
 
     await page.goto(`/?StreamerId=${streamerId}&MatchViewportRes=true&HoveringMouse=true`);
-    await page.getByText('Click to start').click();
 
-    await helpers.waitForVideo(page);
+    await helpers.startAndWaitForVideo(page);
 
     const playerBox = await page.locator('#videoElementParent').boundingBox();
     expect(playerBox).not.toBeNull();
@@ -245,9 +241,8 @@ test('Test mouse input after resizing. Hover mouse.', {
     // });
 
     await page.goto(`/?StreamerId=${streamerId}&MatchViewportRes=true&HoveringMouse=true`);
-    await page.getByText('Click to start').click();
 
-    await helpers.waitForVideo(page);
+    await helpers.startAndWaitForVideo(page);
 
     // resize the window to be smaller
     const oldSize = page.viewportSize();
@@ -309,9 +304,8 @@ test('Test mouse input after resizing. locked mouse.', {
     // });
 
     await page.goto(`/?StreamerId=${streamerId}&MatchViewportRes=true&HoveringMouse=false`);
-    await page.getByText('Click to start').click();
 
-    await helpers.waitForVideo(page);
+    await helpers.startAndWaitForVideo(page);
 
     // resize the window to be smaller
     const oldSize = page.viewportSize();
