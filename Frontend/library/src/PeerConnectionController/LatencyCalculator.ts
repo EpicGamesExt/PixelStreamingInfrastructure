@@ -27,7 +27,7 @@ export class LatencyCalculator {
         const activeCandidatePair: CandidatePairStats = stats.getActiveCandidatePair();
 
         if (
-            activeCandidatePair !== null &&
+            !!activeCandidatePair &&
             activeCandidatePair.currentRoundTripTime !== undefined &&
             activeCandidatePair.currentRoundTripTime > 0
         ) {

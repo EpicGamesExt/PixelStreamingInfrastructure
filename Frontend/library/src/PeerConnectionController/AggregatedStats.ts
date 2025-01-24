@@ -288,6 +288,11 @@ export class AggregatedStats {
      * @returns The candidate pair that is currently receiving data
      */
     public getActiveCandidatePair(): CandidatePairStats | null {
+
+        if(this.candidatePairs === undefined) {
+            return null;
+        }
+
         // Check if the RTCTransport stat is not undefined
         if (this.transportStats) {
             // Return the candidate pair that matches the transport candidate pair id
