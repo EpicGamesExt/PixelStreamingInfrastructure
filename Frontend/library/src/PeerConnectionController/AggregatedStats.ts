@@ -288,8 +288,7 @@ export class AggregatedStats {
      * @returns The candidate pair that is currently receiving data
      */
     public getActiveCandidatePair(): CandidatePairStats | null {
-
-        if(this.candidatePairs === undefined) {
+        if (this.candidatePairs === undefined) {
             return null;
         }
 
