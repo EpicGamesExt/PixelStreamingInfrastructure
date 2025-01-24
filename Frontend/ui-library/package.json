@@ -2,15 +2,18 @@
     "name": "@epicgames-ps/lib-pixelstreamingfrontend-ui-ue5.5",
     "version": "0.4.7",
     "description": "Reference frontend UI library for Unreal Engine 5.5 Pixel Streaming - gives the stock look and feel.",
-    "main": "dist/commonjs/pixelstreamingfrontend-ui.js",
+    "main": "dist/cjs/pixelstreamingfrontend-ui.js",
     "module": "dist/esm/pixelstreamingfrontend-ui.esm.js",
     "types": "dist/types/pixelstreamingfrontend-ui.d.ts",
     "sideEffects": false,
     "scripts": {
-        "compile": "tsc --project tsconfig.esm.json && tsc --project tsconfig.cjs.json",
-        "build": "npm run compile",
-        "build-all": "cd ../library && npm install && npm run build-all && cd ../ui-library && npm install && npm run build",
-        "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+        "clean": "rimraf ./dist",
+        "build:cjs": "tsc --project tsconfig.cjs.json",
+        "build:esm": "tsc --project tsconfig.esm.json",
+        "build": "npm run build:cjs && npm run build:esm",
+        "rebuild": "npm run clean && npm run build",
+        "watch": "nodemon -V -d 3 --watch src --watch ../library/dist -e 'ts,js,mjs,cjs,json' --exec 'npm run build:cjs'",
+        "lint": "eslint src --ext .js,.jsx,.ts,.tsx",
         "spellcheck": "cspell \"{README.md,.github/*.md,src/**/*.ts}\""
     },
     "devDependencies": {

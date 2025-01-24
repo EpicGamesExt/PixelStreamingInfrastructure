@@ -1,7 +1,7 @@
 {
-    "extends": "./tsconfig.json",
+    "extends": "./tsconfig.base.json",
     "compilerOptions": {
-        "outDir": "./dist/commonjs",
+        "outDir": "./dist/cjs",
         "module": "commonjs",
         "declaration": true,
         "declarationDir": "./dist/types"

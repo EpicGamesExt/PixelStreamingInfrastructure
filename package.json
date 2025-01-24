@@ -5,6 +5,7 @@
         "Extras/FrontendTests",
         "Extras/JSStreamer",
         "Extras/MinimalStreamTester",
+        "Extras/SS_Test",
         "Frontend/library",
         "Frontend/ui-library",
         "Frontend/implementations/typescript",
@@ -12,8 +13,7 @@
         "SFU",
         "SFU/mediasoup-sdp-bridge",
         "Signalling",
-        "SignallingWebServer",
-        "SS_Test"
+        "SignallingWebServer"
     ],
     "private": true,
     "scripts": {

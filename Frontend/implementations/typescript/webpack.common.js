@@ -72,7 +72,7 @@ module.exports = {
     },
 	devServer: {
     	static: {
-    		directory: path.join(__dirname, '../../../SignallingWebServer/Public'),
+    		directory: path.join(__dirname, '../../../SignallingWebServer/www'),
     	},
     },
 }
