@@ -102,7 +102,7 @@ export class PeerConnectionController {
         // If UE or JSStreamer did send abs-capture-time RTP header extension to a non-Chrome browser
         // then remove it from the SDP because if Firefox detects it in offer or answer it will fail to connect
         // due having 15 or more header extensions: https://mailarchive.ietf.org/arch/msg/rtcweb/QRnWNuWzGuLRovWdHkodNP6VOgg/
-        if(!this.isChromeBased()) {
+        if(this.isFirefox()) {
             // example: a=extmap:15 http://www.webrtc.org/experiments/rtp-hdrext/abs-capture-time
             offer.sdp = offer.sdp.replace(/^a=extmap:\d+ http:\/\/www\.webrtc\.org\/experiments\/rtp-hdrext\/abs-capture-time\r\n/gm,'');
         }
@@ -265,17 +265,15 @@ export class PeerConnectionController {
         // Add abs-capture-time RTP header extension if we have enabled the setting.
         // Note: As at Feb 2025, Chromium based browsers are the only ones that support this and
         // munging it into the answer in Firefox will cause the connection to fail.
-        if (this.config.isFlagEnabled(Flags.EnableCaptureTimeExt) && this.isChromeBased()) {
+        if (this.config.isFlagEnabled(Flags.EnableCaptureTimeExt) && !this.isFirefox()) {
             mungedSDP = SDPUtils.addVideoHeaderExtensionToSdp(mungedSDP, kAbsCaptureTime);
         }
 
         return mungedSDP;
     }
 
-    isChromeBased() : boolean {
-        const browserWindow: any = window;
-        const isChromeLike = !!browserWindow.chrome && (navigator.userAgent.includes("Chromium") || !!browserWindow.chrome.webstore || !!browserWindow.chrome.runtime);
-        return isChromeLike;
+    isFirefox() : boolean {
+        return typeof (window as any).InstallTrigger !== "undefined";
     }
 
     /**
