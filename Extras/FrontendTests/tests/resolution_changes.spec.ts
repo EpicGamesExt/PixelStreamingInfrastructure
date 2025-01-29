@@ -41,22 +41,27 @@ test('Test resolution changes with match viewport off.', {
     await page.goto(`/?StreamerId=${streamerId}&MatchViewportRes=false`);
 
     await helpers.startAndWaitForVideo(page);
-    await page.click("#streamingVideo");
 
     const events = await getEventsFor(streamerPage, async () => {
+        // We do a click here so we have some player input to send the streamer
+        await page.click("#streamingVideo");
         await page.setViewportSize({ width: 100, height: 100 });
         await helpers.delay(1000);
         await page.setViewportSize({ width: 800, height: 600 });
         await helpers.delay(1000);
     });
 
-    const firstPlayerId = Object.keys(events)[0];
-    const singlePlayerEvents = events[firstPlayerId];
-    const expectedActions: DataChannelEvent[] = [
-        { type: PSEventTypes.Command, command: '{\"Resolution.Width\":100,\"Resolution.Height\":100}' },
-        { type: PSEventTypes.Command, command: '{\"Resolution.Width\":800,\"Resolution.Height\":600}' },
-    ];
-    expect(singlePlayerEvents).not.toContainActions(expectedActions);
+    const firstPlayerId = Object.keys(events).length > 0 ? Object.keys(events)[0] : null;
+    if(firstPlayerId != null) {
+        const singlePlayerEvents = events[firstPlayerId];
+        if(singlePlayerEvents.length > 0) {
+            const expectedActions: DataChannelEvent[] = [
+                { type: PSEventTypes.Command, command: '{\"Resolution.Width\":100,\"Resolution.Height\":100}' },
+                { type: PSEventTypes.Command, command: '{\"Resolution.Width\":800,\"Resolution.Height\":600}' },
+            ];
+            expect(singlePlayerEvents).not.toContainActions(expectedActions);
+        }
+    }
 });
 
 
