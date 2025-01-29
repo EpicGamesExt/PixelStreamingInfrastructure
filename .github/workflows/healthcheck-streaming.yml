@@ -109,7 +109,7 @@ jobs:
 
     - name: Run Streamer
       working-directory: Streamer
-      run: Start-Process ".\Minimal\Binaries\Win64\Minimal-Win64-Shipping-Cmd.exe" -ArgumentList "-warp","-dx12","-windowed","-res=1920","-resy=720","-PixelStreamingURL=ws://localhost:8888","-RenderOffScreen","-AllowSoftwareRendering","-PixelStreamingEncoderCodec=vp8"
+      run: Start-Process ".\Minimal\Binaries\Win64\Minimal-Win64-Shipping-Cmd.exe" -ArgumentList "-warp","-dx12","-windowed","-res=1920","-resy=720","-PixelStreamingURL=ws://localhost:8888","-RenderOffScreen","-AllowSoftwareRendering","-PixelStreamingEncoderCodec=vp8", "-Log=Minimal.log"
 
     - name: Prepare test
       working-directory: Extras\MinimalStreamTester
@@ -129,7 +129,7 @@ jobs:
 
     - name: Output streamer logs
       working-directory: Streamer
-      run: ls ".\Minimal\"
+      run: ls ".\Minimal\" && Test-Path ".\Minimal\Saved\Logs\Minimal.log" && cat ".\Minimal\Saved\Logs\Minimal.log"
 
     - name: Test if we can stream
       working-directory: Extras\MinimalStreamTester
