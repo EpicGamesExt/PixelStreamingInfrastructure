@@ -129,7 +129,7 @@ jobs:
 
     - name: Output streamer logs
       working-directory: Streamer
-      run: ls ".\Minimal\Saved\Logs\" && cat ".\Minimal\Saved\Logs\Minimal.log"
+      run: ls ".\Minimal\"
 
     - name: Test if we can stream
       working-directory: Extras\MinimalStreamTester
