@@ -19,6 +19,13 @@ export class SDPUtils {
         });
         const sessionPart = sections.shift();
         // Only add extension to m=video media section
-        return sessionPart + sections.map((mediaSection) => mediaSection.startsWith("m=video") ? mediaSection + extmapLine : mediaSection).join('');
+        return (
+            sessionPart +
+            sections
+                .map((mediaSection) =>
+                    mediaSection.startsWith('m=video') ? mediaSection + extmapLine : mediaSection
+                )
+                .join('')
+        );
     }
 }

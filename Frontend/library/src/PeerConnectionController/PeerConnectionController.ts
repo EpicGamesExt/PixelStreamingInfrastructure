@@ -102,9 +102,12 @@ export class PeerConnectionController {
         // If UE or JSStreamer did send abs-capture-time RTP header extension to a non-Chrome browser
         // then remove it from the SDP because if Firefox detects it in offer or answer it will fail to connect
         // due having 15 or more header extensions: https://mailarchive.ietf.org/arch/msg/rtcweb/QRnWNuWzGuLRovWdHkodNP6VOgg/
-        if(this.isFirefox()) {
+        if (this.isFirefox()) {
             // example: a=extmap:15 http://www.webrtc.org/experiments/rtp-hdrext/abs-capture-time
-            offer.sdp = offer.sdp.replace(/^a=extmap:\d+ http:\/\/www\.webrtc\.org\/experiments\/rtp-hdrext\/abs-capture-time\r\n/gm,'');
+            offer.sdp = offer.sdp.replace(
+                /^a=extmap:\d+ http:\/\/www\.webrtc\.org\/experiments\/rtp-hdrext\/abs-capture-time\r\n/gm,
+                ''
+            );
         }
 
         this.peerConnection?.setRemoteDescription(offer).then(() => {
@@ -272,8 +275,8 @@ export class PeerConnectionController {
         return mungedSDP;
     }
 
-    isFirefox() : boolean {
-        return typeof (window as any).InstallTrigger !== "undefined";
+    isFirefox(): boolean {
+        return typeof (window as any).InstallTrigger !== 'undefined';
     }
 
     /**
