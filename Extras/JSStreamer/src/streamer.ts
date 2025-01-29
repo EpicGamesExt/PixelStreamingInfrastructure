@@ -32,6 +32,7 @@ interface WebRTCSettings {
     MaxBitrate: number;
     LowQP: number;
     HighQP: number;
+    AbsCaptureTimeHeaderExt: boolean
 }
 
 interface Settings {
@@ -90,7 +91,8 @@ export class Streamer extends EventEmitter {
                 MinBitrate: 100000,
                 MaxBitrate: 100000000,
                 LowQP: 25,
-                HighQP: 37
+                HighQP: 37,
+                AbsCaptureTimeHeaderExt: true
             },
             ConfigOptions: {}
         };
@@ -309,9 +311,12 @@ export class Streamer extends EventEmitter {
     }
 
     mungeOffer(offerSDP: string) : string {
-        // Add the abs-capture-time header extension to the sdp extmap
-        const kAbsCaptureTime = 'http://www.webrtc.org/experiments/rtp-hdrext/abs-capture-time';
-        return SDPUtils.addHeaderExtensionToSdp(offerSDP, kAbsCaptureTime);
+        if(this.settings.WebRTC.AbsCaptureTimeHeaderExt) {
+            // Add the abs-capture-time header extension to the sdp extmap
+            const kAbsCaptureTime = 'http://www.webrtc.org/experiments/rtp-hdrext/abs-capture-time';
+            return SDPUtils.addVideoHeaderExtensionToSdp(offerSDP, kAbsCaptureTime);
+        }
+        return offerSDP;
     }
 
     sendDataProtocol(playerId: string) {

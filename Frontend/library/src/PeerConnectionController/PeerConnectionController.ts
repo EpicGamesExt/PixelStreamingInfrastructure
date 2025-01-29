@@ -99,6 +99,14 @@ export class PeerConnectionController {
     async receiveOffer(offer: RTCSessionDescriptionInit, config: Config) {
         Logger.Info('Receive Offer');
 
+        // If UE or JSStreamer did send abs-capture-time RTP header extension to a non-Chrome browser
+        // then remove it from the SDP because if Firefox detects it in offer or answer it will fail to connect
+        // due having 15 or more header extensions: https://mailarchive.ietf.org/arch/msg/rtcweb/QRnWNuWzGuLRovWdHkodNP6VOgg/
+        if(!this.isChromeBased()) {
+            // example: a=extmap:15 http://www.webrtc.org/experiments/rtp-hdrext/abs-capture-time
+            offer.sdp = offer.sdp.replace(/^a=extmap:\d+ http:\/\/www\.webrtc\.org\/experiments\/rtp-hdrext\/abs-capture-time\r\n/gm,'');
+        }
+
         this.peerConnection?.setRemoteDescription(offer).then(() => {
             // Fire event for when remote offer description is set
             this.onSetRemoteDescription(offer);
@@ -254,12 +262,20 @@ export class PeerConnectionController {
         // We use the line 'useinbandfec=1' (which Opus uses) to set our Opus specific audio parameters.
         mungedSDP = mungedSDP.replace('useinbandfec=1', audioSDP);
 
-        // Add abs-capture-time RTP header extension if we have enabled the setting
-        if (this.config.isFlagEnabled(Flags.EnableCaptureTimeExt)) {
-            mungedSDP = SDPUtils.addHeaderExtensionToSdp(mungedSDP, kAbsCaptureTime);
+        // Add abs-capture-time RTP header extension if we have enabled the setting.
+        // Note: As at Feb 2025, Chromium based browsers are the only ones that support this and
+        // munging it into the answer in Firefox will cause the connection to fail.
+        if (this.config.isFlagEnabled(Flags.EnableCaptureTimeExt) && this.isChromeBased()) {
+            mungedSDP = SDPUtils.addVideoHeaderExtensionToSdp(mungedSDP, kAbsCaptureTime);
         }
 
         return mungedSDP;
+    }
+
+    isChromeBased() : boolean {
+        const browserWindow: any = window;
+        const isChromeLike = !!browserWindow.chrome && (navigator.userAgent.includes("Chromium") || !!browserWindow.chrome.webstore || !!browserWindow.chrome.runtime);
+        return isChromeLike;
     }
 
     /**

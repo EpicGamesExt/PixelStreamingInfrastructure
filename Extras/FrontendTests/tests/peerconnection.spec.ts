@@ -5,7 +5,12 @@ import { Flags, PixelStreaming, WebRtcSdpAnswerEvent, WebRtcSdpOfferEvent, Laten
 
 test('Test abs-capture-time header extension found for streamer', {
     tag: ['@capture-time'],
-}, async ({ page, streamerPage, streamerId }) => {
+}, async ({ page, streamerPage, streamerId, browserName }) => {
+
+    if(browserName !== 'chromium') {
+        // Chrome based browsers are the only ones that support.
+        test.skip();
+    }
 
     const localDescription: Promise<RTCSessionDescriptionInit> = new Promise(async (resolve) => {
 
@@ -51,7 +56,12 @@ test('Test abs-capture-time header extension found for streamer', {
 
 test('Test abs-capture-time header extension found in PSInfra frontend', {
     tag: ['@capture-time'],
-}, async ({ page, streamerPage, streamerId }) => {
+}, async ({ page, streamerPage, streamerId, browserName }) => {
+
+    if(browserName !== 'chromium') {
+        // Chrome based browsers are the only ones that support.
+        test.skip();
+    }
 
     await page.goto(`/?StreamerId=${streamerId}`);
 

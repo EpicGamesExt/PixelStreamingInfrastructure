@@ -1,7 +1,7 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 export class SDPUtils {
-    static addHeaderExtensionToSdp(sdp: string, uri: string): string {
+    static addVideoHeaderExtensionToSdp(sdp: string, uri: string): string {
         // Find the highest used header extension id by sorting the extension ids used,
         // eliminating duplicates and adding one.
         // Todo: Update this when WebRTC in Chrome supports the header extension API.
@@ -18,6 +18,7 @@ export class SDPUtils {
             return (index > 0 ? 'm=' + part : part).trim() + '\r\n';
         });
         const sessionPart = sections.shift();
-        return sessionPart + sections.map((mediaSection) => mediaSection + extmapLine).join('');
+        // Only add extension to m=video media section
+        return sessionPart + sections.map((mediaSection) => mediaSection.startsWith("m=video") ? mediaSection + extmapLine : mediaSection).join('');
     }
 }
