@@ -79,7 +79,7 @@ The Pixel Streaming Infrastructure contains reference implementations for all th
   - shared libraries for [communication](Frontend/library/) and [UI](Frontend/ui-library/) functionality
   - separate [implementations](Frontend/implementations/) using different techologies such as TypeScript or React/JSX
   - For detailed information, see the [/frontend](/Frontend/).
-- A signalling protocol test application that validates implementations of the signalling protocol, found in [`SS_Test/`](SS_Test/).
+- A signalling protocol test application that validates implementations of the signalling protocol, found in [`Extras/SS_Test/`](Extras/SS_Test/).
 
 ## Releases
 We release a number of different components under this repository, specifically:

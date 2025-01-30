@@ -1,36 +1,39 @@
 {
     "name": "@epicgames-ps/lib-pixelstreamingfrontend-ue5.5",
-    "version": "0.4.0",
+    "version": "0.4.7",
     "description": "Frontend library for Unreal Engine 5.5 Pixel Streaming",
-    "main": "dist/commonjs/pixelstreamingfrontend.js",
+    "main": "dist/cjs/pixelstreamingfrontend.js",
     "module": "dist/esm/pixelstreamingfrontend.js",
     "types": "dist/types/pixelstreamingfrontend.d.ts",
     "sideEffects": false,
     "scripts": {
-        "compile": "tsc --project tsconfig.esm.json && tsc --project tsconfig.cjs.json",
-        "build": "npm run compile",
-        "build-all": "cd ../../Common && npm install && npm run build && cd ../Frontend/library && npm install && npm run build",
-        "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+        "clean": "rimraf ./dist",
+        "build:cjs": "tsc --project tsconfig.cjs.json",
+        "build:esm": "tsc --project tsconfig.esm.json",
+        "build": "npm run build:cjs && npm run build:esm",
+        "rebuild": "npm run clean && npm run build",
+        "watch": "nodemon -V -d 3 --watch src --watch ../../Common/dist -e 'ts,js,mjs,cjs,json' --exec 'npm run build:esm'",
+        "lint": "eslint src --ext .js,.jsx,.ts,.tsx",
         "test": "jest --detectOpenHandles --coverage=true",
         "spellcheck": "cspell \"{README.md,.github/*.md,src/**/*.ts}\""
     },
     "devDependencies": {
-        "@types/jest": "27.5.1",
+        "@types/jest": "^29.5.14",
         "@typescript-eslint/eslint-plugin": "^6.21.0",
         "cspell": "^4.1.0",
         "eslint": "^8.11.0",
         "eslint-config-prettier": "^9.1.0",
         "eslint-plugin-prettier": "^5.2.1",
-        "jest": "^27.5.1",
-        "jest-environment-jsdom": "27.5.1",
+        "jest": "^29.7.0",
+        "jest-environment-jsdom": "^29.7.0",
         "prettier": "3.3.3",
-        "ts-jest": "27.1.5",
-        "typedoc": "^0.23.24",
-        "typescript": "^4.9.4"
+        "ts-jest": "^29.2.5",
+        "typedoc": "^0.27.4",
+        "typescript": "^5.0.0"
     },
     "dependencies": {
+        "@epicgames-ps/lib-pixelstreamingcommon-ue5.5": "^0.1.4",
         "@types/webxr": "^0.5.1",
-        "@epicgames-ps/lib-pixelstreamingcommon-ue5.5": "^0.1.2",
         "sdp": "^3.1.0"
     },
     "repository": {

@@ -32,7 +32,7 @@ jobs:
         
       - id: get-package-json
         run: |
-          package_content=`cat Signalling/package.json`
+          package_content=`cat package.json`
           echo "json<<EOF" >> $GITHUB_OUTPUT
           echo $package_content >> $GITHUB_OUTPUT
           echo 'EOF' >> $GITHUB_OUTPUT

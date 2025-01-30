@@ -3,7 +3,7 @@ import { expect } from './matchers';
 import {
     PSEventTypes,
     DataChannelEvent,
-    getEventsFor,
+    getEventSetFrom,
 } from './extras';
 import * as helpers from './helpers';
 import { InputCoordTranslator, TranslatedCoordUnsigned } from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.5';
@@ -32,7 +32,7 @@ test('Test mouse enter/leave', {
     expect(playerBox).not.toBeNull();
 
     // perform the actions
-    const events = await getEventsFor(streamerPage, async () => {
+    const events = await getEventSetFrom(streamerPage, async () => {
         // start outside the view
         await page.mouse.move(200, 200);
         // move to the top left of the video
@@ -76,7 +76,7 @@ test('Test mouse wheel', {
 
     // perform the actions
     const expectedActions: DataChannelEvent[] = [];
-    const events = await getEventsFor(streamerPage, async () => {
+    const events = await getEventSetFrom(streamerPage, async () => {
         await page.mouse.wheel(0, 10);
         expectedActions.push({ type: PSEventTypes.MouseWheel, delta: (n: number) => { return n < 0 } });
         await page.mouse.wheel(0, -15);
@@ -108,9 +108,9 @@ test('Test locked mouse movement', {
     //     console.log("Streamer: ", ...args);
     // });
     //
-    helpers.attachToConsoleEvents(page, (...args: any[]) => {
-        console.log("Player: ", ...args);
-    });
+    // helpers.attachToConsoleEvents(page, (...args: any[]) => {
+    //     console.log("Player: ", ...args);
+    // });
 
     await page.goto(`/?StreamerId=${streamerId}&MatchViewportRes=true&HoveringMouse=false`);
 
@@ -149,7 +149,7 @@ test('Test locked mouse movement', {
     let events : Record<string, DataChannelEvent[]>;
 
     if(browserName == 'firefox') {
-        events = await getEventsFor(streamerPage, async () => {
+        events = await getEventSetFrom(streamerPage, async () => {
             for (const movement of movements) {
                 await page.mouse.move(anchor.x + movement.x, anchor.y + movement.y);
                 const translated = coordConverter.translateSigned(movement.x, movement.y);
@@ -157,7 +157,7 @@ test('Test locked mouse movement', {
             }
         });
     } else {
-        events = await getEventsFor(streamerPage, async () => {
+        events = await getEventSetFrom(streamerPage, async () => {
             let mousePos = anchor;
             for (const movement of movements) {
                 mousePos.x += movement.x;
@@ -213,7 +213,7 @@ test('Test hovering mouse movement', {
     ];
 
     // perform the actions
-    const events = await getEventsFor(streamerPage, async () => {
+    const events = await getEventSetFrom(streamerPage, async () => {
         for (const movement of movements) {
             await page.mouse.move(movement.x, movement.y);
             const translated = coordConverter.translateUnsigned(movement.x, movement.y);
@@ -270,7 +270,7 @@ test('Test mouse input after resizing. Hover mouse.', {
     ];
 
     // perform the actions
-    const events = await getEventsFor(streamerPage, async () => {
+    const events = await getEventSetFrom(streamerPage, async () => {
         for (const movement of movements) {
             await page.mouse.move(movement.x, movement.y);
             const translated = coordConverter.translateUnsigned(movement.x, movement.y);
@@ -348,7 +348,7 @@ test('Test mouse input after resizing. locked mouse.', {
     let events : Record<string, DataChannelEvent[]>;
 
     if(browserName == 'firefox') {
-        events = await getEventsFor(streamerPage, async () => {
+        events = await getEventSetFrom(streamerPage, async () => {
             for (const movement of movements) {
                 await page.mouse.move(anchor.x + movement.x, anchor.y + movement.y);
                 const translated = coordConverter.translateSigned(movement.x, movement.y);
@@ -356,7 +356,7 @@ test('Test mouse input after resizing. locked mouse.', {
             }
         });
     } else {
-        events = await getEventsFor(streamerPage, async () => {
+        events = await getEventSetFrom(streamerPage, async () => {
             let mousePos = anchor;
             for (const movement of movements) {
                 mousePos.x += movement.x;

@@ -3,7 +3,6 @@
         "noImplicitAny": false,
         "esModuleInterop": true,
         "target": "ES6",
-        "moduleResolution": "node",
         "sourceMap": true,
         "allowJs": true,
         "strict": false
@@ -20,4 +19,3 @@
         "readme": "none"
     }
 }
-

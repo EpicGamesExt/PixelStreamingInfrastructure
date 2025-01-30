@@ -23,7 +23,7 @@ export class SettingUINumber<CustomIds extends string = NumericParametersIds> ex
     /**
      * @returns The setting component.
      */
-    public get setting(): SettingNumber<CustomIds> {
+    public override get setting(): SettingNumber<CustomIds> {
         return this._setting as SettingNumber<CustomIds>;
     }
 
@@ -59,7 +59,7 @@ export class SettingUINumber<CustomIds extends string = NumericParametersIds> ex
     /**
      * @returns Return or creates a HTML element that represents this setting in the DOM.
      */
-    public get rootElement(): HTMLElement {
+    public override get rootElement(): HTMLElement {
         if (!this._rootElement) {
             // create root div with "setting" css class
             this._rootElement = document.createElement('div');
@@ -123,5 +123,13 @@ export class SettingUINumber<CustomIds extends string = NumericParametersIds> ex
      */
     public get label() {
         return this.settingsTextElem.innerText;
+    }
+
+    public disable(): void {
+        this.spinner.disabled = true;
+    }
+
+    public enable(): void {
+        this.spinner.disabled = false;
     }
 }

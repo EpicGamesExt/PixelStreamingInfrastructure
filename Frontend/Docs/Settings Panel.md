@@ -49,6 +49,7 @@ This page will be updated with new features and commands as they become availabl
 | **Min QP** | The lower bound of quantization parameter (QP) of the encoder. 0 = best quality, 51 = worst quality. |
 | **Max QP** | The upper bound of quantization parameter (QP) of the encoder. 0 = best quality, 51 = worst quality. |
 | **Preferred codec** | The preferred codec to be used during codec negotiation. |
+| **Preferred quality** | The preferred quality of the stream when using the SFU. If using H.264 or VP8, the quality options will be easily readable "Low", "Medium" or "High". If using VP9 SVC, the options will refer to all the possible spatial and temporal layer combinations supported as seen [here](https://www.w3.org/TR/webrtc-svc/#scalabilitymodes*) |
 
 ### WebRTC
 | **Setting** | **Description** |
@@ -74,6 +75,4 @@ Although Pixel Streaming adapts the quality of the stream to match the available
 
 ## Legal
 
-Copyright &copy; 2022, Epic Games. Licensed under the MIT License, see the file [LICENSE](../../LICENSE.md) for details.
-
-
+Copyright &copy; 2025, Epic Games. Licensed under the MIT License, see the file [LICENSE](../../LICENSE.md) for details.

@@ -3,7 +3,8 @@ import { expect } from './matchers';
 import {
     PSEventTypes,
     DataChannelEvent,
-    getEventsFor,
+    getEventSetFrom,
+    getEvents,
 } from './extras';
 import * as helpers from './helpers';
 
@@ -16,15 +17,14 @@ test('Test resolution changes with match viewport on.', {
 
     await helpers.startAndWaitForVideo(page);
 
-    const events = await getEventsFor(streamerPage, async () => {
+    const events = await getEventSetFrom(streamerPage, async () => {
         await page.setViewportSize({ width: 100, height: 100 });
         await helpers.delay(1000);
         await page.setViewportSize({ width: 800, height: 600 });
         await helpers.delay(1000);
     });
 
-    const firstPlayerId = Object.keys(events)[0];
-    const singlePlayerEvents = events[firstPlayerId];
+    const singlePlayerEvents = getEvents(events);
     const expectedActions: DataChannelEvent[] = [
         { type: PSEventTypes.Command, command: '{\"Resolution.Width\":100,\"Resolution.Height\":100}' },
         { type: PSEventTypes.Command, command: '{\"Resolution.Width\":800,\"Resolution.Height\":600}' },
@@ -42,26 +42,19 @@ test('Test resolution changes with match viewport off.', {
 
     await helpers.startAndWaitForVideo(page);
 
-    const events = await getEventsFor(streamerPage, async () => {
-        // We do a click here so we have some player input to send the streamer
-        await page.click("#streamingVideo");
+    const events = await getEventSetFrom(streamerPage, async () => {
         await page.setViewportSize({ width: 100, height: 100 });
         await helpers.delay(1000);
         await page.setViewportSize({ width: 800, height: 600 });
         await helpers.delay(1000);
     });
 
-    const firstPlayerId = Object.keys(events).length > 0 ? Object.keys(events)[0] : null;
-    if(firstPlayerId != null) {
-        const singlePlayerEvents = events[firstPlayerId];
-        if(singlePlayerEvents.length > 0) {
-            const expectedActions: DataChannelEvent[] = [
-                { type: PSEventTypes.Command, command: '{\"Resolution.Width\":100,\"Resolution.Height\":100}' },
-                { type: PSEventTypes.Command, command: '{\"Resolution.Width\":800,\"Resolution.Height\":600}' },
-            ];
-            expect(singlePlayerEvents).not.toContainActions(expectedActions);
-        }
-    }
+    const singlePlayerEvents = getEvents(events);
+    const expectedActions: DataChannelEvent[] = [
+        { type: PSEventTypes.Command, command: '{\"Resolution.Width\":100,\"Resolution.Height\":100}' },
+        { type: PSEventTypes.Command, command: '{\"Resolution.Width\":800,\"Resolution.Height\":600}' },
+    ];
+	expect(singlePlayerEvents).not.toContainActions(expectedActions);
 });
 
 

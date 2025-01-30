@@ -6,29 +6,40 @@ on:
     paths: ['RELEASE_VERSION']
 
   workflow_dispatch:
-      inputs:
-        commitsha:
-          description: "Commit SHA for the release (if blank use latest on this branch)"
+    inputs:
+      commitsha:
+        description: "Commit SHA for the release (if blank use latest on this branch)"
 
 env:
   commitsha: "${{ github.event.inputs.commitsha || github.sha }}"
 
 jobs:
-
   build:
+    # only run this on the main repo, not forks
     if: github.repository == 'EpicGamesExt/PixelStreamingInfrastructure'
     runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: ./
-
     permissions:
       contents: write
+
     steps:
     - name: "Checkout source code"
       uses: actions/checkout@v3
       with:
         ref: "${{ env.commitsha }}"
+
+      # triggers the public library check to make sure all the published items work
+    - uses: convictional/trigger-workflow-and-wait@v1.6.1
+      with:
+        owner: ${{ github.repository_owner }}
+        repo: PixelStreamingInfrastructure
+        ref: ${{ github.ref_name }}
+        github_user: ${{ secrets.WORKFLOW_USER }}
+        github_token: ${{ secrets.WORKFLOW_TOKEN }}
+        workflow_file_name: healthcheck-libs-with-public-deps.yml
+        client_payload: '{ "commitsha": "${{ env.commitsha }}" }'
 
     - name: Read the RELEASE_VERSION file
       id: getversion
@@ -90,7 +101,7 @@ jobs:
           Signalling/node_modules
           SignallingWebServer/build
           SignallingWebServer/node_modules
-          SS_Test
+          Extras/SS_Test
 
     - name: Archive Release .zip
       uses: thedoctor0/zip-release@0.7.1
@@ -124,7 +135,6 @@ jobs:
           /*/Signalling/node_modules/*
           /*/SignallingWebServer/build/*
           /*/SignallingWebServer/node_modules/*
-          /*/SS_Test/*
 
     - name: "Make the release"
       uses: ncipollo/release-action@v1

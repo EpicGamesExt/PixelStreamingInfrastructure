@@ -31,6 +31,9 @@ module.exports = {
           exclude: [
             /node_modules/,
           ],
+          options: {
+            configFile: "tsconfig.cjs.json"
+          }
         },
         {
           test: /\.html$/i,
@@ -69,7 +72,7 @@ module.exports = {
     },
 	devServer: {
     	static: {
-    		directory: path.join(__dirname, '../../../SignallingWebServer/Public'),
+    		directory: path.join(__dirname, '../../../SignallingWebServer/www'),
     	},
     },
 }

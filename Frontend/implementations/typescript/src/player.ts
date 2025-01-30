@@ -1,5 +1,7 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
+export * from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.5';
+export * from '@epicgames-ps/lib-pixelstreamingfrontend-ui-ue5.5';
 import { Config, PixelStreaming, Logger, LogLevel } from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.5';
 import { Application, PixelStreamingApplicationStyle } from '@epicgames-ps/lib-pixelstreamingfrontend-ui-ue5.5';
 const PixelStreamingApplicationStyles =
@@ -17,7 +19,7 @@ document.body.onload = function() {
 	// Create a config object
 	const config = new Config({ useUrlParams: true });
 
-	// Create a Native DOM delegate instance that implements the Delegate interface class
+	// Create the main Pixel Streaming object for interfacing with the web-API of Pixel Streaming
 	const stream = new PixelStreaming(config);
 
 	const application = new Application({

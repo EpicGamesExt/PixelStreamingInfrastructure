@@ -1,31 +1,32 @@
 {
-  "name": "@epicgames-ps/reference-pixelstreamingfrontend-ue5.5",
-  "version": "0.0.1",
-  "description": "",
-  "main": "./src/player.ts",
-  "scripts": {
-    "build": "npx webpack --config webpack.prod.js",
-    "build-dev": "npx webpack --config webpack.dev.js",
-    "watch": "npx webpack --watch",
-    "serve": "webpack serve --config webpack.dev.js",
-    "serve-prod": "webpack serve --config webpack.prod.js",
-    "build-all": "cd ../../ui-library && npm run build-all && cd ../implementations/typescript && npm install && npm run build",
-    "build-dev-all": "cd ../../ui-library && npm run build-all && cd ../implementations/typescript && npm install && npm run build-dev"
-  },
-  "devDependencies": {
-    "css-loader": "^6.7.3",
-    "html-loader": "^4.2.0",
-    "html-webpack-plugin": "^5.5.0",
-    "path": "^0.12.7",
-    "terser-webpack-plugin": "^5.3.10",
-    "ts-loader": "^9.4.2",
-    "typescript": "^4.9.4",
-    "webpack": "^5.94.0",
-    "webpack-cli": "^5.0.1",
-    "webpack-dev-server": "^4.11.1"
-  },
-  "dependencies": {
-    "@epicgames-ps/lib-pixelstreamingfrontend-ue5.5": "*",
-    "@epicgames-ps/lib-pixelstreamingfrontend-ui-ue5.5": "*"
-  }
+    "name": "@epicgames-ps/reference-pixelstreamingfrontend-ue5.5",
+    "version": "0.0.1",
+    "description": "",
+    "main": "./src/player.ts",
+    "scripts": {
+        "clean": "rimraf ./dist",
+        "build": "npx webpack --config webpack.prod.js",
+        "build:dev": "npx webpack --config webpack.dev.js",
+        "build:esm": "npx webpack --config webpack.esmodule.js",
+        "rebuild": "npm run clean && npm run build",
+        "watch": "webpack --watch --config webpack.dev.js",
+        "serve": "webpack serve --config webpack.dev.js",
+        "serve-prod": "webpack serve --config webpack.prod.js"
+    },
+    "devDependencies": {
+        "css-loader": "^6.7.3",
+        "html-loader": "^4.2.0",
+        "html-webpack-plugin": "^5.5.0",
+        "path": "^0.12.7",
+        "terser-webpack-plugin": "^5.3.10",
+        "ts-loader": "^9.5.1",
+        "typescript": "^5.0.0",
+        "webpack": "^5.94.0",
+        "webpack-cli": "^5.1.4",
+        "webpack-dev-server": "^4.11.1"
+    },
+    "dependencies": {
+        "@epicgames-ps/lib-pixelstreamingfrontend-ue5.5": "*",
+        "@epicgames-ps/lib-pixelstreamingfrontend-ui-ue5.5": "*"
+    }
 }

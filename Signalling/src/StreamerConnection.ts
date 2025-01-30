@@ -5,8 +5,8 @@ import {
     WebSocketTransportNJS,
     BaseMessage,
     Messages,
-    MessageHelpers,
-    EventEmitter
+    EventEmitter,
+    MessageHelpers
 } from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
 import { IStreamer, IStreamerInfo } from './StreamerRegistry';
 import { stringify } from './Utils';
@@ -63,7 +63,7 @@ export class StreamerConnection extends EventEmitter implements IStreamer, LogUt
         this.registerMessageHandlers();
 
         this.protocol.on('unhandled', (message: BaseMessage) => {
-            Logger.warn(`Unhandled protocol message: ${JSON.stringify(message)}`);
+            Logger.warn(`Unhandled streamer protocol message: ${JSON.stringify(message)}`);
         });
     }
 
@@ -107,7 +107,6 @@ export class StreamerConnection extends EventEmitter implements IStreamer, LogUt
             Messages.endpointId.typeName,
             LogUtils.createHandlerListener(this, this.onEndpointId)
         );
-        this.protocol.on(Messages.ping.typeName, LogUtils.createHandlerListener(this, this.onPing));
         this.protocol.on(
             Messages.disconnectPlayer.typeName,
             LogUtils.createHandlerListener(this, this.onDisconnectPlayerRequest)
@@ -116,6 +115,7 @@ export class StreamerConnection extends EventEmitter implements IStreamer, LogUt
             Messages.layerPreference.typeName,
             LogUtils.createHandlerListener(this, this.onLayerPreference)
         );
+        this.protocol.on(Messages.ping.typeName, LogUtils.createHandlerListener(this, this.onPingMessage));
         /* eslint-enable @typescript-eslint/unbound-method */
 
         this.protocol.on(Messages.offer.typeName, this.forwardMessage.bind(this));
@@ -149,10 +149,6 @@ export class StreamerConnection extends EventEmitter implements IStreamer, LogUt
         this.streaming = true; // we're ready to stream when we id ourselves
     }
 
-    private onPing(message: Messages.ping): void {
-        this.sendMessage(MessageHelpers.createMessage(Messages.pong, { time: message.time }));
-    }
-
     private onDisconnectPlayerRequest(message: Messages.disconnectPlayer): void {
         if (message.playerId) {
             const player = this.server.playerRegistry.get(message.playerId);
@@ -164,5 +160,9 @@ export class StreamerConnection extends EventEmitter implements IStreamer, LogUt
 
     private onLayerPreference(message: Messages.layerPreference): void {
         this.emit('layer_preference', message);
+    }
+
+    private onPingMessage(message: Messages.ping): void {
+        this.sendMessage(MessageHelpers.createMessage(Messages.pong, { time: message.time }));
     }
 }

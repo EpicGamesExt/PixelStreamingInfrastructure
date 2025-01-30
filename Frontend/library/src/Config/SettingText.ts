@@ -7,9 +7,9 @@ import { SettingBase } from './SettingBase';
  * A text setting object with a text label.
  */
 export class SettingText<CustomIds extends string = TextParametersIds> extends SettingBase {
-    id: TextParametersIds | CustomIds;
-    onChangeEmit: (changedValue: string) => void;
-    useUrlParams: boolean;
+    override id: TextParametersIds | CustomIds;
+    override onChangeEmit: (changedValue: string) => void;
+    override useUrlParams: boolean;
 
     constructor(
         id: TextParametersIds | CustomIds,
@@ -33,7 +33,7 @@ export class SettingText<CustomIds extends string = TextParametersIds> extends S
         this.useUrlParams = useUrlParams;
     }
 
-    protected getValueAsString(): string {
+    protected override getValueAsString(): string {
         return this.text;
     }
 

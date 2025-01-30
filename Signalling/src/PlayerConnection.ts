@@ -108,6 +108,7 @@ export class PlayerConnection implements IPlayer, LogUtils.IMessageLogger {
             Messages.listStreamers.typeName,
             LogUtils.createHandlerListener(this, this.onListStreamers)
         );
+        this.protocol.on(Messages.ping.typeName, LogUtils.createHandlerListener(this, this.onPingMessage));
         /* eslint-enable @typescript-eslint/unbound-method */
 
         this.protocol.on(Messages.offer.typeName, this.sendToStreamer.bind(this));
@@ -118,7 +119,7 @@ export class PlayerConnection implements IPlayer, LogUtils.IMessageLogger {
         this.protocol.on(Messages.layerPreference.typeName, this.sendToStreamer.bind(this));
 
         this.protocol.on('unhandled', (message: BaseMessage) => {
-            Logger.warn(`Unhandled protocol message: ${JSON.stringify(message)}`);
+            Logger.warn(`Unhandled player protocol message: ${JSON.stringify(message)}`);
         });
     }
 
@@ -138,8 +139,8 @@ export class PlayerConnection implements IPlayer, LogUtils.IMessageLogger {
             }
         }
 
-        LogUtils.logForward(this, this.subscribedStreamer!, message);
         message.playerId = this.playerId;
+        LogUtils.logForward(this, this.subscribedStreamer!, message);
         this.subscribedStreamer!.protocol.sendMessage(message);
     }
 
@@ -226,7 +227,7 @@ export class PlayerConnection implements IPlayer, LogUtils.IMessageLogger {
         this.sendMessage(renameMessage);
     }
 
-    private onStreamerRemoved() {
-        this.disconnect();
+    private onPingMessage(message: Messages.ping): void {
+        this.sendMessage(MessageHelpers.createMessage(Messages.pong, { time: message.time }));
     }
 }

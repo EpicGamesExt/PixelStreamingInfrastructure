@@ -9,6 +9,8 @@ import {
     InitialSettings,
     Messages,
     DataChannelLatencyTestResult,
+    OptionParameters,
+    SettingsChangedEvent,
     LatencyInfo
 } from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.5';
 import { OverlayBase } from '../Overlay/BaseOverlay';
@@ -25,12 +27,14 @@ import { LabelledButton } from '../UI/LabelledButton';
 import { SettingsPanel } from '../UI/SettingsPanel';
 import { StatsPanel } from '../UI/StatsPanel';
 import { VideoQpIndicator } from '../UI/VideoQpIndicator';
-import { ConfigUI, LightMode } from '../Config/ConfigUI';
+import { ConfigUI } from '../Config/ConfigUI';
 import {
     UIElementCreationMode,
-    PanelConfiguration,
     isPanelEnabled,
-    UIElementConfig
+    UIElementConfig,
+    SettingsPanelConfiguration,
+    StatsPanelConfiguration,
+    ExtraFlags
 } from '../UI/UIConfigurationTypes';
 import { FullScreenIconBase, FullScreenIconExternal } from '../UI/FullscreenIcon';
 
@@ -43,6 +47,8 @@ import { FullScreenIconBase, FullScreenIconExternal } from '../UI/FullscreenIcon
  */
 export type VideoQPIndicatorConfig = {
     disableIndicator?: boolean;
+    /** Setting this to true will hide the indicator when the connection is "good" ie. green */
+    hideWhenGood?: boolean;
 };
 
 /**
@@ -54,16 +60,18 @@ export interface UIOptions {
     onColorModeChanged?: (isLightMode: boolean) => void;
     /** By default, a settings panel and associate visibility toggle button will be made.
      * If needed, this behaviour can be configured. */
-    settingsPanelConfig?: PanelConfiguration;
+    settingsPanelConfig?: SettingsPanelConfiguration;
     /** By default, a stats panel and associate visibility toggle button will be made.
      * If needed, this behaviour can be configured. */
-    statsPanelConfig?: PanelConfiguration;
+    statsPanelConfig?: StatsPanelConfiguration;
     /** If needed, the full screen button can be external or disabled. */
     fullScreenControlsConfig?: UIElementConfig;
     /** If needed, XR button can be external or disabled. */
     xrControlsConfig?: UIElementConfig;
     /** Configuration of the video QP indicator. */
     videoQpIndicatorConfig?: VideoQPIndicatorConfig;
+    /** Hide the controls in fullscreen mode */
+    hideControlsInFullscreen?: boolean;
 }
 
 /**
@@ -105,6 +113,13 @@ export class Application {
         this._options = options;
 
         this.stream = options.stream;
+
+        // Explicitly create ui features now so creation time is known
+        this._uiFeatureElement = this.createUIFeaturesElement();
+
+        // Explicitly create root element now so creation time is known
+        this._rootElement = this.createRootElement(this.stream, this._uiFeatureElement);
+
         this.onColorModeChanged = options.onColorModeChanged;
         this.configUI = new ConfigUI(this.stream.config);
 
@@ -112,7 +127,7 @@ export class Application {
 
         if (isPanelEnabled(options.statsPanelConfig)) {
             // Add stats panel
-            this.statsPanel = new StatsPanel();
+            this.statsPanel = new StatsPanel(options.statsPanelConfig);
             this.uiFeaturesElement.appendChild(this.statsPanel.rootElement);
         }
 
@@ -125,7 +140,7 @@ export class Application {
 
         if (!options.videoQpIndicatorConfig || !options.videoQpIndicatorConfig.disableIndicator) {
             // Add the video stream QP indicator
-            this.videoQpIndicator = new VideoQpIndicator();
+            this.videoQpIndicator = new VideoQpIndicator(options.videoQpIndicatorConfig);
             this.uiFeaturesElement.appendChild(this.videoQpIndicator.rootElement);
         }
 
@@ -135,7 +150,7 @@ export class Application {
 
         this.showConnectOrAutoConnectOverlays();
 
-        this.setColorMode(this.configUI.isCustomFlagEnabled(LightMode));
+        this.setColorMode(this.configUI.isCustomFlagEnabled(ExtraFlags.LightMode));
 
         this.stream.config._addOnSettingChangedListener(Flags.HideUI, (isEnabled: boolean) => {
             this._uiFeatureElement.style.visibility = isEnabled ? 'hidden' : 'visible';
@@ -202,7 +217,8 @@ export class Application {
                 ? this._options.settingsPanelConfig.visibilityButtonConfig
                 : undefined,
             fullscreenButtonType: this._options.fullScreenControlsConfig,
-            xrIconType: this._options.xrControlsConfig
+            xrIconType: this._options.xrControlsConfig,
+            hideControlsInFullscreen: this._options.hideControlsInFullscreen
         };
 
         // Setup controls
@@ -284,11 +300,14 @@ export class Application {
      */
     configureSettings(): void {
         // This builds all the settings sections and flags under this `settingsContent` element.
-        this.configUI.populateSettingsElement(this.settingsPanel.settingsContentElement);
+        this.configUI.populateSettingsElement(
+            this.settingsPanel.settingsContentElement,
+            this._options.settingsPanelConfig
+        );
 
-        this.configUI.addCustomFlagOnSettingChangedListener(LightMode, (isLightMode: boolean) => {
+        this.configUI.addCustomFlagOnSettingChangedListener(ExtraFlags.LightMode, (isLightMode: boolean) => {
             this.configUI.setCustomFlagLabel(
-                LightMode,
+                ExtraFlags.LightMode,
                 `Color Scheme: ${isLightMode ? 'Light' : 'Dark'} Mode`
             );
             this.setColorMode(isLightMode);
@@ -346,7 +365,7 @@ export class Application {
             ({ data: { messageStreamerList, autoSelectedStreamerId, wantedStreamerId } }) =>
                 this.handleStreamerListMessage(messageStreamerList, autoSelectedStreamerId, wantedStreamerId)
         );
-        this.stream.addEventListener('settingsChanged', (event) => this.configUI.onSettingsChanged(event));
+        this.stream.addEventListener('settingsChanged', (event) => this.onSettingsChanged(event));
         this.stream.addEventListener('playerCount', ({ data: { count } }) => this.onPlayerCount(count));
         this.stream.addEventListener('webRtcTCPRelayDetected', () =>
             Logger.Warning(`Stream quailty degraded due to network enviroment, stream is relayed over TCP.`)
@@ -358,13 +377,40 @@ export class Application {
      */
     public get rootElement(): HTMLElement {
         if (!this._rootElement) {
-            this._rootElement = document.createElement('div');
-            this._rootElement.id = 'playerUI';
-            this._rootElement.classList.add('noselect');
-            this._rootElement.appendChild(this.stream.videoElementParent);
-            this._rootElement.appendChild(this.uiFeaturesElement);
+            this._rootElement = this.createRootElement(this.stream, this.uiFeaturesElement);
         }
         return this._rootElement;
+    }
+
+    /**
+     * Creates the root element for the Pixel Streaming UI.
+     * Note: This should be called before the Pixel Streaming object is created.
+     * @param pixelstreaming - The Pixel Streaming object.
+     * @param uiFeaturesElem - The element holding all the custom UI features.
+     * @returns A div with the id #playerUI populated with videoElementParent and uiFeatureElement.
+     */
+    private createRootElement(pixelstreaming: PixelStreaming, uiFeaturesElem: HTMLElement): HTMLElement {
+        const elem = document.createElement('div');
+        elem.id = 'playerUI';
+        elem.classList.add('noselect');
+        if (pixelstreaming === undefined) {
+            throw new Error(
+                'Could not create root element properly - pixelstreaming object was undefined. Are you calling this too early?'
+            );
+        }
+        if (pixelstreaming.videoElementParent === undefined) {
+            throw new Error(
+                'Could not create root element properly - videoElementParent object was undefined. Are you calling this too early?'
+            );
+        }
+        if (uiFeaturesElem === undefined) {
+            throw new Error(
+                'Could not create root element properly - uiFeaturesElement object was undefined. Are you calling this too early?'
+            );
+        }
+        elem.appendChild(pixelstreaming.videoElementParent);
+        elem.appendChild(uiFeaturesElem);
+        return elem;
     }
 
     /**
@@ -372,10 +418,19 @@ export class Application {
      */
     public get uiFeaturesElement(): HTMLElement {
         if (!this._uiFeatureElement) {
-            this._uiFeatureElement = document.createElement('div');
-            this._uiFeatureElement.id = 'uiFeatures';
+            this._uiFeatureElement = this.createUIFeaturesElement();
         }
         return this._uiFeatureElement;
+    }
+
+    /**
+     * Creates the UI features element for holding all the custom UI features.
+     * @returns A div with the id #uiFeatures.
+     */
+    private createUIFeaturesElement(): HTMLElement {
+        const elem = document.createElement('div');
+        elem.id = 'uiFeatures';
+        return elem;
     }
 
     /**
@@ -693,6 +748,28 @@ export class Application {
     setColorMode(isLightMode: boolean) {
         if (this.onColorModeChanged) {
             this.onColorModeChanged(isLightMode);
+        }
+    }
+
+    onSettingsChanged(event: SettingsChangedEvent) {
+        // Pass the event directly onto the configUI. This will do things like updating the possible values
+        // as well as the selected value
+        this.configUI.onSettingsChanged(event);
+
+        const {
+            /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
+            data: { id, target, type }
+        } = event;
+        // Explicitly handle specific setting behaviour
+        if (id == OptionParameters.PreferredQuality) {
+            const preferredQualityOption = this.stream.config.getSettingOption(
+                OptionParameters.PreferredQuality
+            );
+            if ([...preferredQualityOption.options].includes('Default')) {
+                this.configUI.disableSetting(OptionParameters.PreferredQuality);
+            } else {
+                this.configUI.enableSetting(OptionParameters.PreferredQuality);
+            }
         }
     }
 }

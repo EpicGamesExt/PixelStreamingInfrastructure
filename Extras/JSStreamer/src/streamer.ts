@@ -124,6 +124,8 @@ export class Streamer extends EventEmitter {
         this.protocol.addListener(Messages.iceCandidate.typeName, (msg: BaseMessage) =>
             this.handleIceMessage(msg as Messages.iceCandidate)
         );
+
+        this.transport.on('timeout', () => console.log('Streamer connection timeout'));
     }
 
     startStreaming(signallingURL: string, stream: MediaStream) {

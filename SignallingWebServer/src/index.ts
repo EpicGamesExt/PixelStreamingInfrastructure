@@ -27,6 +27,7 @@ const configArgsParser = new Command()
         'Sets the path of the config file.',
         `${path.resolve(__dirname, '..', 'config.json')}`
     )
+    .helpOption(false)
     .allowUnknownOption() // ignore unknown options as we are doing a minimal parse here
     .parse()
     .opts();
@@ -49,7 +50,7 @@ if (!configArgsParser.no_config) {
 
 const program = new Command();
 program
-    .name('node build/index.js')
+    .name('node dist/index.js')
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
     .description(pjson.description)
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
@@ -237,7 +238,7 @@ if (options.rest_api) {
         docsPath: '/api-definition',
         exposeApiDocs: true,
         apiDoc: './apidoc/api-definition-base.yml',
-        paths: './build/paths',
+        paths: './dist/paths',
         dependencies: {
             signallingServer
         }

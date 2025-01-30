@@ -89,4 +89,4 @@ The [/library](/Frontend/library) project has unit tests that test the Pixel Str
 
 ## Legal
 
-Copyright &copy; 2024, Epic Games. Licensed under the MIT License, see the file [LICENSE](/LICENSE.md) for details.
+Copyright &copy; 2025, Epic Games. Licensed under the MIT License, see the file [LICENSE](/LICENSE.md) for details.

@@ -59,7 +59,7 @@ module.exports = {
       filename: '[name].js',
       library: 'epicgames-react-frontend',
       libraryTarget: 'umd',
-      path: path.resolve(__dirname, '../../../SignallingWebServer/Public'),
+      path: path.resolve(__dirname, '../../../SignallingWebServer/www'),
       clean: true,
       globalObject: 'this',
       hashFunction: 'xxhash64',
@@ -69,7 +69,7 @@ module.exports = {
     },
 	devServer: {
     	static: {
-    		directory: path.join(__dirname, '../../../SignallingWebServer/Public'),
+    		directory: path.join(__dirname, '../../../SignallingWebServer/www'),
     	},
     },
 }

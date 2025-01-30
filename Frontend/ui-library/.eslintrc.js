@@ -3,7 +3,10 @@
 module.exports = {
     root: true,
     parser: '@typescript-eslint/parser',
-    parserOptions: { project: './tsconfig.json' },
+    parserOptions: {
+        project: './tsconfig.cjs.json',
+        tsconfigRootDir: __dirname,
+    },
     plugins: [
         '@typescript-eslint',
         'eslint-plugin-tsdoc'
@@ -23,6 +26,7 @@ module.exports = {
         "@typescript-eslint/no-unsafe-member-access": "off",
         "@typescript-eslint/no-unnecessary-type-assertion": "off",
         "@typescript-eslint/require-array-sort-compare": "error",
+        "@typescript-eslint/no-redundant-type-constituents": "off", // seems to get tripped up with the types in ConfigUI.ts
         "@typescript-eslint/no-unused-vars": [
             "error",
             {
