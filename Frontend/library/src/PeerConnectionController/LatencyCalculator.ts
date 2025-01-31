@@ -1,6 +1,5 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
-import { Logger } from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
 import { AggregatedStats } from './AggregatedStats';
 import { CandidatePairStats } from './CandidatePairStats';
 
@@ -18,13 +17,70 @@ class RTCRtpCaptureSource {
 }
 
 /**
+ * FrameTimingInfo is a Chromium-specific set of WebRTC stats useful for latency calculation. It is stored in WebRTC stats as `googTimingFrameInfo`.
+ * It is defined as an RTP header extension here: https://webrtc.googlesource.com/src/+/refs/heads/main/docs/native-code/rtp-hdrext/video-timing/README.md
+ * It is defined in source code here: https://source.chromium.org/chromium/chromium/src/+/main:third_party/webrtc/api/video/video_timing.cc;l=82;drc=8d399817282e3c12ed54eb23ec42a5e418298ec6
+ * It is discussed by its author here: https://github.com/w3c/webrtc-provisional-stats/issues/40#issuecomment-1272916692
+ * In summary it a comma-delimited string that contains the following (in this order):
+ * 1)  RTP timestamp: the RTP timestamp of the frame
+ * 2)  Capture time: timestamp when this frame was captured
+ * 3)  Encode start: timestamp when this frame started to be encoded
+ * 4)  Encode finish: timestamp when this frame finished encoding
+ * 5)  Packetization finish: timestamp when this frame was split into packets and was ready to be sent over the network
+ * 6)  Pacer exit: timestamp when last packet of this frame was sent over the network by the sender at this timestamp
+ * 7)  Network timestamp1: place for the SFU to mark when the frame started being forwarded. Application specific.
+ * 8)  Network timestamp2: place for the SFU to mark when the frame finished being forwarded. Application specific.
+ * 9)  Receive start: timestamp when the first packet of this frame was received
+ * 10) Receive finish: timestamp when the last packet of this frame was received
+ * 11) Decode start:  timestamp when the frame was passed to decoder
+ * 12) Decode finish:  timestamp when the frame was decoded
+ * 13) Render time:  timestamp of the projected render time for this frame
+ * 14) "is outlier": a flag for if this frame is bigger in encoded size than the average frame by at least 5x.
+ * 15) "triggered by timer": a flag for if this report was triggered by the timer (The report is sent every 200ms)
+ */
+export class FrameTimingInfo {
+    rtpTimestamp: number;
+    captureTimestamp: number;
+    encodeStartTimestamp: number;
+    encodeFinishTimestamp: number;
+    packetizerFinishTimestamp: number;
+    pacerExitTimestamp: number;
+    networkTimestamp1: number;
+    networkTimestamp2: number;
+    receiveStart: number;
+    receiveFinish: number;
+    decodeStart: number;
+    decodeFinish: number;
+    renderTime: number;
+    isOutlier: boolean;
+    isTriggeredByTimer: boolean;
+
+    /* Milliseconds between encoder start and finish */
+    encoderLatencyMs: number;
+
+    /* Milliseconds between encode end and packetizer finish time */
+    packetizeLatencyMs: number;
+
+    /* Milliseconds between packetize finish time and pacer sending the frame */
+    pacerLatencyMs: number;
+
+    /* Milliseconds between capture time and pacer exit */
+    captureToSendLatencyMs: number;
+}
+
+/**
  * Calculates a combination of latency statistics using purely WebRTC API.
  */
 export class LatencyCalculator {
+    /* Clock offset between peer clocks cannot always be calculated as it relies of latest sender reports.
+     * so we store the last time we had a valid clock offset in the assumption that clocks haven't drifted too much since then.
+     */
+    private latestSenderRecvClockOffset: number | null = null;
+
     public calculate(stats: AggregatedStats, receivers: RTCRtpReceiver[]): LatencyInfo {
         const latencyInfo = new LatencyInfo();
 
-        const activeCandidatePair: CandidatePairStats = stats.getActiveCandidatePair();
+        const activeCandidatePair: CandidatePairStats | null = stats.getActiveCandidatePair();
 
         if (
             !!activeCandidatePair &&
@@ -32,12 +88,15 @@ export class LatencyCalculator {
             activeCandidatePair.currentRoundTripTime > 0
         ) {
             // Get RTT
-            latencyInfo.RTTMs = activeCandidatePair.currentRoundTripTime * 1000;
+            latencyInfo.rttMs = activeCandidatePair.currentRoundTripTime * 1000;
 
             // Calculate sender latency using the first valid video ssrc/csrc
-            const captureSource: RTCRtpCaptureSource = this.getCaptureSource(receivers);
-            if (captureSource !== null) {
-                latencyInfo.SenderLatencyMs = this.calculateSenderLatency(stats, captureSource);
+            const captureSource: RTCRtpCaptureSource | null = this.getCaptureSource(receivers);
+            if (captureSource != null) {
+                const senderLatencyMs = this.calculateSenderLatency(stats, captureSource);
+                if (senderLatencyMs !== null) {
+                    latencyInfo.senderLatencyMs = senderLatencyMs;
+                }
             }
         }
 
@@ -46,7 +105,7 @@ export class LatencyCalculator {
             stats.inboundVideoStats.totalProcessingDelay !== undefined &&
             stats.inboundVideoStats.framesDecoded !== undefined
         ) {
-            latencyInfo.AverageProcessingDelayMs =
+            latencyInfo.averageProcessingDelayMs =
                 (stats.inboundVideoStats.totalProcessingDelay / stats.inboundVideoStats.framesDecoded) * 1000;
         }
 
@@ -55,7 +114,7 @@ export class LatencyCalculator {
             stats.inboundVideoStats.jitterBufferDelay !== undefined &&
             stats.inboundVideoStats.jitterBufferEmittedCount !== undefined
         ) {
-            latencyInfo.AverageJitterBufferDelayMs =
+            latencyInfo.averageJitterBufferDelayMs =
                 (stats.inboundVideoStats.jitterBufferDelay /
                     stats.inboundVideoStats.jitterBufferEmittedCount) *
                 1000;
@@ -66,7 +125,7 @@ export class LatencyCalculator {
             stats.inboundVideoStats.framesDecoded !== undefined &&
             stats.inboundVideoStats.totalDecodeTime !== undefined
         ) {
-            latencyInfo.AverageDecodeLatencyMs =
+            latencyInfo.averageDecodeLatencyMs =
                 (stats.inboundVideoStats.totalDecodeTime / stats.inboundVideoStats.framesDecoded) * 1000;
         }
 
@@ -75,36 +134,102 @@ export class LatencyCalculator {
             stats.inboundVideoStats.totalAssemblyTime !== undefined &&
             stats.inboundVideoStats.framesAssembledFromMultiplePackets !== undefined
         ) {
-            latencyInfo.AverageAssemblyDelayMs =
+            latencyInfo.averageAssemblyDelayMs =
                 (stats.inboundVideoStats.totalAssemblyTime /
                     stats.inboundVideoStats.framesAssembledFromMultiplePackets) *
                 1000;
         }
 
+        // Extract extra Chrome-specific stats like encoding latency
+        if (
+            stats.inboundVideoStats.googTimingFrameInfo !== undefined &&
+            stats.inboundVideoStats.googTimingFrameInfo.length > 0
+        ) {
+            latencyInfo.frameTiming = this.extractFrameTimingInfo(
+                stats.inboundVideoStats.googTimingFrameInfo
+            );
+        }
+
+        // If we could not calculate latency because `senderLatencyMs` was missing because of no SenderReport yet
+        // We can try to substitute frame timing capture to send latency instead.
+        if (
+            latencyInfo.senderLatencyMs === undefined &&
+            latencyInfo.frameTiming !== undefined &&
+            latencyInfo.frameTiming.captureToSendLatencyMs !== undefined
+        ) {
+            latencyInfo.senderLatencyMs = latencyInfo.frameTiming.captureToSendLatencyMs;
+        }
+
         // Calculate E2E latency as sender-side latency + network latency + receiver-side latency
         if (
-            latencyInfo.AverageProcessingDelayMs !== undefined &&
-            latencyInfo.AverageProcessingDelayMs > 0 &&
-            latencyInfo.SenderLatencyMs != undefined &&
-            latencyInfo.SenderLatencyMs > 0 &&
-            latencyInfo.RTTMs != undefined &&
-            latencyInfo.RTTMs > 0
+            latencyInfo.averageProcessingDelayMs !== undefined &&
+            latencyInfo.senderLatencyMs != undefined &&
+            latencyInfo.rttMs !== undefined
         ) {
-            latencyInfo.AverageE2ELatency =
-                latencyInfo.SenderLatencyMs + latencyInfo.RTTMs * 0.5 + latencyInfo.AverageProcessingDelayMs;
+            latencyInfo.averageE2ELatency =
+                latencyInfo.senderLatencyMs + latencyInfo.rttMs * 0.5 + latencyInfo.averageProcessingDelayMs;
         }
 
         return latencyInfo;
     }
 
-    private calculateSenderLatency(stats: AggregatedStats, captureSource: RTCRtpCaptureSource): number {
+    private extractFrameTimingInfo(googTimingFrameInfo: string): FrameTimingInfo {
+        const timingInfo: FrameTimingInfo = new FrameTimingInfo();
+
+        const timingInfoArr: string[] = googTimingFrameInfo.split(',');
+
+        // Should have exactly 15 elements according to:
+        // https://source.chromium.org/chromium/chromium/src/+/main:third_party/webrtc/api/video/video_timing.cc;l=82;drc=8d399817282e3c12ed54eb23ec42a5e418298ec6
+        if (timingInfoArr.length === 15) {
+            timingInfo.rtpTimestamp = Number.parseInt(timingInfoArr[0]);
+            timingInfo.captureTimestamp = Number.parseInt(timingInfoArr[1]);
+            timingInfo.encodeStartTimestamp = Number.parseInt(timingInfoArr[2]);
+            timingInfo.encodeFinishTimestamp = Number.parseInt(timingInfoArr[3]);
+            timingInfo.packetizerFinishTimestamp = Number.parseInt(timingInfoArr[4]);
+            timingInfo.pacerExitTimestamp = Number.parseInt(timingInfoArr[5]);
+            timingInfo.networkTimestamp1 = Number.parseInt(timingInfoArr[6]);
+            timingInfo.networkTimestamp2 = Number.parseInt(timingInfoArr[7]);
+            timingInfo.receiveStart = Number.parseInt(timingInfoArr[8]);
+            timingInfo.receiveFinish = Number.parseInt(timingInfoArr[9]);
+            timingInfo.decodeStart = Number.parseInt(timingInfoArr[10]);
+            timingInfo.decodeFinish = Number.parseInt(timingInfoArr[11]);
+            timingInfo.renderTime = Number.parseInt(timingInfoArr[12]);
+            timingInfo.isOutlier = Number.parseInt(timingInfoArr[13]) > 0;
+            timingInfo.isTriggeredByTimer = Number.parseInt(timingInfoArr[14]) > 0;
+
+            // Calculate some latency stats
+            timingInfo.encoderLatencyMs = timingInfo.encodeFinishTimestamp - timingInfo.encodeStartTimestamp;
+            timingInfo.packetizeLatencyMs =
+                timingInfo.packetizerFinishTimestamp - timingInfo.encodeFinishTimestamp;
+            timingInfo.pacerLatencyMs = timingInfo.pacerExitTimestamp - timingInfo.packetizerFinishTimestamp;
+            timingInfo.captureToSendLatencyMs = timingInfo.pacerExitTimestamp - timingInfo.captureTimestamp;
+        }
+
+        return timingInfo;
+    }
+
+    private calculateSenderLatency(
+        stats: AggregatedStats,
+        captureSource: RTCRtpCaptureSource
+    ): number | null {
         // The calculation performed in this function is as per the procedure defined here:
         // https://w3c.github.io/webrtc-extensions/#dom-rtcrtpcontributingsource-sendercapturetimeoffset
 
         // Get the sender capture in the sender's clock
         const senderCaptureTimestamp = captureSource.captureTimestamp + captureSource.senderCaptureTimeOffset;
 
-        const sendRecvClockOffset = this.calculateSenderReceiverClockOffset(stats);
+        let sendRecvClockOffset: number | null = this.calculateSenderReceiverClockOffset(stats);
+
+        // Use latest clock offset if we couldn't calculate one now
+        if (sendRecvClockOffset == null) {
+            if (this.latestSenderRecvClockOffset != null) {
+                sendRecvClockOffset = this.latestSenderRecvClockOffset;
+            } else {
+                return null;
+            }
+        } else {
+            this.latestSenderRecvClockOffset = sendRecvClockOffset;
+        }
 
         // This brings sender clock roughly inline with recv clock
         const recvCaptureTimestampNTP = senderCaptureTimestamp + sendRecvClockOffset;
@@ -124,7 +249,7 @@ export class LatencyCalculator {
      * @param receivers The RTP receviers this peer connection has.
      * @returns A single valid ssrc or csrc that has capture time fields or null if there is none (e.g. in non-chromium browsers it will be null).
      */
-    private getCaptureSource(receivers: RTCRtpReceiver[]): RTCRtpCaptureSource {
+    private getCaptureSource(receivers: RTCRtpReceiver[]): RTCRtpCaptureSource | null {
         // We only want video receivers
         receivers = receivers.filter((receiver) => receiver.track.kind === 'video');
 
@@ -154,17 +279,16 @@ export class LatencyCalculator {
         return null;
     }
 
-    private calculateSenderReceiverClockOffset(stats: AggregatedStats) {
+    private calculateSenderReceiverClockOffset(stats: AggregatedStats): number | null {
         // The calculation performed in this function is as per the procedure defined here:
         // https://w3c.github.io/webrtc-extensions/#dom-rtcrtpcontributingsource-sendercapturetimeoffset
 
         const remoteVideoStatsArrivedTimestamp = stats.outBoundVideoStats.timestamp;
         const remoteVideoStatsSentTimestamp = stats.outBoundVideoStats.remoteTimestamp;
 
-        const activeCandidatePair: CandidatePairStats = stats.getActiveCandidatePair();
-        const networkDelay = activeCandidatePair
-            ? activeCandidatePair.currentRoundTripTime * 0.5 * 1000
-            : 0.0;
+        const activeCandidatePair: CandidatePairStats | null = stats.getActiveCandidatePair();
+        const networkDelay =
+            activeCandidatePair != null ? activeCandidatePair.currentRoundTripTime * 0.5 * 1000 : 0.0;
 
         if (
             remoteVideoStatsArrivedTimestamp !== undefined &&
@@ -173,9 +297,10 @@ export class LatencyCalculator {
         ) {
             return remoteVideoStatsArrivedTimestamp - (remoteVideoStatsSentTimestamp + networkDelay);
         }
-
-        Logger.Warning('Could not get stats to calculate sender/receiver clock offset.');
-        return 0.0;
+        // Could not get stats to calculate sender/receiver clock offset
+        else {
+            return null;
+        }
     }
 }
 
@@ -190,23 +315,26 @@ export class LatencyInfo {
      * Note: This can only be calculated if both offer and answer contain the
      * the RTP header extension for `abs-capture-time`.
      */
-    public SenderLatencyMs: number | undefined = undefined;
+    public senderLatencyMs: number | undefined = undefined;
 
     /* The round trip time (milliseconds) between each sender->receiver->sender */
-    public RTTMs: number | undefined = undefined;
+    public rttMs: number | undefined = undefined;
 
     /* Average time taken (milliseconds) from video packet receipt to post-decode. */
-    public AverageProcessingDelayMs: number | undefined = undefined;
+    public averageProcessingDelayMs: number | undefined = undefined;
 
     /* Average time taken (milliseconds) inside the jitter buffer (which is post-receipt but pre-decode). */
-    public AverageJitterBufferDelayMs: number | undefined = undefined;
+    public averageJitterBufferDelayMs: number | undefined = undefined;
 
     /* Average time taken (milliseconds) to decode a video frame. */
-    public AverageDecodeLatencyMs: number | undefined = undefined;
+    public averageDecodeLatencyMs: number | undefined = undefined;
 
     /* Average time taken (milliseconds) to between receipt of the first and last video packet of a. */
-    public AverageAssemblyDelayMs: number | undefined = undefined;
+    public averageAssemblyDelayMs: number | undefined = undefined;
 
     /* The sender latency + RTT/2 + processing delay */
-    public AverageE2ELatency: number | undefined = undefined;
+    public averageE2ELatency: number | undefined = undefined;
+
+    /* Timing information about the worst performing frame since the last getStats call (only works on Chrome) */
+    public frameTiming: FrameTimingInfo | undefined = undefined;
 }

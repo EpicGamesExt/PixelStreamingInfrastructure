@@ -120,7 +120,7 @@ test('Test latency calculation', {
     let latencyInfo: LatencyInfo = await page.evaluate(() => {
         return new Promise((resolve) => {
             window.pixelStreaming.addEventListener("latencyCalculated", (e: LatencyCalculatedEvent) => {
-                if(e.data.latencyInfo && e.data.latencyInfo.SenderLatencyMs) {
+                if(e.data.latencyInfo && e.data.latencyInfo.senderLatencyMs) {
                     resolve(e.data.latencyInfo);
                 }
             });
@@ -128,27 +128,27 @@ test('Test latency calculation', {
     });
 
     expect(latencyInfo).toBeDefined();
-    expect(latencyInfo.SenderLatencyMs).toBeDefined();
-    expect(latencyInfo.AverageJitterBufferDelayMs).toBeDefined();
-    expect(latencyInfo.AverageProcessingDelayMs).toBeDefined();
-    expect(latencyInfo.RTTMs).toBeDefined();
-    expect(latencyInfo.AverageAssemblyDelayMs).toBeDefined();
-    expect(latencyInfo.AverageDecodeLatencyMs).toBeDefined();
+    expect(latencyInfo.senderLatencyMs).toBeDefined();
+    expect(latencyInfo.averageJitterBufferDelayMs).toBeDefined();
+    expect(latencyInfo.averageProcessingDelayMs).toBeDefined();
+    expect(latencyInfo.rttMs).toBeDefined();
+    expect(latencyInfo.averageAssemblyDelayMs).toBeDefined();
+    expect(latencyInfo.averageDecodeLatencyMs).toBeDefined();
 
     // Sender side latency should be less than 500ms in pure CPU test
-    expect(latencyInfo.SenderLatencyMs).toBeLessThanOrEqual(500)
+    expect(latencyInfo.senderLatencyMs).toBeLessThanOrEqual(500)
 
     // Expect jitter buffer/processing delay to be no greater than 500ms on local link
-    expect(latencyInfo.AverageJitterBufferDelayMs).toBeLessThanOrEqual(500);
-    expect(latencyInfo.AverageProcessingDelayMs).toBeLessThanOrEqual(500);
+    expect(latencyInfo.averageJitterBufferDelayMs).toBeLessThanOrEqual(500);
+    expect(latencyInfo.averageProcessingDelayMs).toBeLessThanOrEqual(500);
 
     // Expect RTT to be less than 10ms on loopback
-    expect(latencyInfo.RTTMs).toBeLessThanOrEqual(10);
+    expect(latencyInfo.rttMs).toBeLessThanOrEqual(10);
 
     // Expect time to assemble frame from packets to be less than the frame rate itself at 30 fps
-    expect(latencyInfo.AverageAssemblyDelayMs).toBeLessThanOrEqual(33);
+    expect(latencyInfo.averageAssemblyDelayMs).toBeLessThanOrEqual(33);
 
     // Expect CPU decoder to at least be able to do 30 fps decode
-    expect(latencyInfo.AverageDecodeLatencyMs).toBeLessThanOrEqual(33);
+    expect(latencyInfo.averageDecodeLatencyMs).toBeLessThanOrEqual(33);
 
 });

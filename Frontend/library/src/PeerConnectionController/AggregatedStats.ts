@@ -15,7 +15,6 @@ import { Logger } from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
  * The Aggregated Stats that is generated from the RTC Stats Report
  */
 
-type RTCStatsTypePS = RTCStatsType | 'stream' | 'media-playout' | 'track';
 export class AggregatedStats {
     inboundVideoStats: InboundVideoStats;
     inboundAudioStats: InboundAudioStats;
@@ -49,7 +48,7 @@ export class AggregatedStats {
         this.candidatePairs = new Array<CandidatePairStats>();
 
         rtcStatsReport.forEach((stat) => {
-            const type: RTCStatsTypePS = stat.type;
+            const type: string = stat.type;
 
             switch (type) {
                 case 'candidate-pair':
@@ -295,13 +294,24 @@ export class AggregatedStats {
         // Check if the RTCTransport stat is not undefined
         if (this.transportStats) {
             // Return the candidate pair that matches the transport candidate pair id
-            return this.candidatePairs.find(
-                (candidatePair) => candidatePair.id === this.transportStats.selectedCandidatePairId,
-                null
+            const selectedPair: CandidatePairStats | undefined = this.candidatePairs.find(
+                (candidatePair) => candidatePair.id === this.transportStats.selectedCandidatePairId
             );
+            if (selectedPair === undefined) {
+                return null;
+            } else {
+                return selectedPair;
+            }
         }
 
-        // Fall back to the selected candidate pair
-        return this.candidatePairs.find((candidatePair) => candidatePair.selected, null);
+        // Fall back to the `.selected` member of the candidate pair
+        const selectedPair: CandidatePairStats | undefined = this.candidatePairs.find(
+            (candidatePair) => candidatePair.selected
+        );
+        if (selectedPair === undefined) {
+            return null;
+        } else {
+            return selectedPair;
+        }
     }
 }

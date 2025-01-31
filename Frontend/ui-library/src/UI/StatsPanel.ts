@@ -299,18 +299,17 @@ export class StatsPanel {
         }
 
         // Store the active candidate pair return a new Candidate pair stat if getActiveCandidate is null
-        const activeCandidatePair =
-            stats.getActiveCandidatePair() != null
-                ? stats.getActiveCandidatePair()
-                : new CandidatePairStats();
+        const activeCandidatePair: CandidatePairStats | null = stats.getActiveCandidatePair();
 
-        // RTT
-        const netRTT =
-            Object.prototype.hasOwnProperty.call(activeCandidatePair, 'currentRoundTripTime') &&
-            stats.isNumber(activeCandidatePair.currentRoundTripTime)
-                ? Math.ceil(activeCandidatePair.currentRoundTripTime * 1000).toString()
-                : "Can't calculate";
-        this.addOrUpdateStat('RTTStat', 'Net RTT (ms)', netRTT);
+        if (activeCandidatePair) {
+            // RTT
+            const netRTT =
+                Object.prototype.hasOwnProperty.call(activeCandidatePair, 'currentRoundTripTime') &&
+                stats.isNumber(activeCandidatePair.currentRoundTripTime)
+                    ? Math.ceil(activeCandidatePair.currentRoundTripTime * 1000).toString()
+                    : "Can't calculate";
+            this.addOrUpdateStat('RTTStat', 'Net RTT (ms)', netRTT);
+        }
 
         this.addOrUpdateStat('DurationStat', 'Duration', stats.sessionStats.runTime);
 
@@ -336,54 +335,89 @@ export class StatsPanel {
     }
 
     public handleLatencyInfo(latencyInfo: LatencyInfo) {
-        if (latencyInfo.SenderLatencyMs !== undefined && latencyInfo.SenderLatencyMs > 0) {
+        if (latencyInfo.frameTiming !== undefined) {
+            // Encoder latency
+            if (latencyInfo.frameTiming.encoderLatencyMs !== undefined) {
+                this.addOrUpdateStat(
+                    'EncodeLatency',
+                    'Encode latency (ms)',
+                    Math.ceil(latencyInfo.frameTiming.encoderLatencyMs).toString()
+                );
+            }
+
+            // Packetizer latency
+            if (latencyInfo.frameTiming.packetizeLatencyMs !== undefined) {
+                this.addOrUpdateStat(
+                    'PacketizerLatency',
+                    'Packetizer latency (ms)',
+                    Math.ceil(latencyInfo.frameTiming.packetizeLatencyMs).toString()
+                );
+            }
+
+            // Pacer latency
+            if (latencyInfo.frameTiming.pacerLatencyMs !== undefined) {
+                this.addOrUpdateStat(
+                    'PacerLatency',
+                    'Pacer latency (ms)',
+                    Math.ceil(latencyInfo.frameTiming.pacerLatencyMs).toString()
+                );
+            }
+
+            // Sender latency calculated using timing stats
+            if (latencyInfo.frameTiming.captureToSendLatencyMs !== undefined) {
+                this.addOrUpdateStat(
+                    'CaptureToSend',
+                    'Capture to send latency (ms)',
+                    Math.ceil(latencyInfo.frameTiming.captureToSendLatencyMs).toString()
+                );
+            }
+        }
+
+        if (latencyInfo.senderLatencyMs !== undefined) {
             this.addOrUpdateStat(
                 'SenderSideLatency',
                 'Sender latency (ms)',
-                Math.ceil(latencyInfo.SenderLatencyMs).toString()
+                Math.ceil(latencyInfo.senderLatencyMs).toString()
             );
         }
 
-        if (latencyInfo.AverageAssemblyDelayMs !== undefined && latencyInfo.AverageAssemblyDelayMs > 0) {
+        if (latencyInfo.averageAssemblyDelayMs !== undefined) {
             this.addOrUpdateStat(
                 'AvgAssemblyDelay',
                 'Assembly delay (ms)',
-                Math.ceil(latencyInfo.AverageAssemblyDelayMs).toString()
+                Math.ceil(latencyInfo.averageAssemblyDelayMs).toString()
             );
         }
 
-        if (latencyInfo.AverageDecodeLatencyMs !== undefined && latencyInfo.AverageDecodeLatencyMs > 0) {
+        if (latencyInfo.averageDecodeLatencyMs !== undefined) {
             this.addOrUpdateStat(
                 'AvgDecodeDelay',
                 'Decode time (ms)',
-                Math.ceil(latencyInfo.AverageDecodeLatencyMs).toString()
+                Math.ceil(latencyInfo.averageDecodeLatencyMs).toString()
             );
         }
 
-        if (
-            latencyInfo.AverageJitterBufferDelayMs !== undefined &&
-            latencyInfo.AverageJitterBufferDelayMs > 0
-        ) {
+        if (latencyInfo.averageJitterBufferDelayMs !== undefined) {
             this.addOrUpdateStat(
                 'AvgJitterBufferDelay',
                 'Jitter buffer (ms)',
-                Math.ceil(latencyInfo.AverageJitterBufferDelayMs).toString()
+                Math.ceil(latencyInfo.averageJitterBufferDelayMs).toString()
             );
         }
 
-        if (latencyInfo.AverageProcessingDelayMs !== undefined && latencyInfo.AverageProcessingDelayMs > 0) {
+        if (latencyInfo.averageProcessingDelayMs !== undefined) {
             this.addOrUpdateStat(
                 'AvgProcessingDelay',
                 'Processing delay (ms)',
-                Math.ceil(latencyInfo.AverageProcessingDelayMs).toString()
+                Math.ceil(latencyInfo.averageProcessingDelayMs).toString()
             );
         }
 
-        if (latencyInfo.AverageE2ELatency !== undefined && latencyInfo.AverageE2ELatency > 0) {
+        if (latencyInfo.averageE2ELatency !== undefined) {
             this.addOrUpdateStat(
                 'AvgE2ELatency',
                 'Total latency (ms)',
-                Math.ceil(latencyInfo.AverageE2ELatency).toString()
+                Math.ceil(latencyInfo.averageE2ELatency).toString()
             );
         }
     }

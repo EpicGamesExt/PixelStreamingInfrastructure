@@ -171,18 +171,9 @@ export class PeerConnectionController {
      * Generate Aggregated Stats and then fire a onVideo Stats event
      */
     generateStats() {
-        const audioPromise = this.audioTrack
-            ? this.peerConnection?.getStats(this.audioTrack).then((statsData: RTCStatsReport) => {
-                  this.aggregatedStats.processStats(statsData);
-              })
-            : Promise.resolve();
-        const videoPromise = this.videoTrack
-            ? this.peerConnection?.getStats(this.videoTrack).then((statsData: RTCStatsReport) => {
-                  this.aggregatedStats.processStats(statsData);
-              })
-            : Promise.resolve();
+        this.peerConnection.getStats().then((statsData: RTCStatsReport) => {
+            this.aggregatedStats.processStats(statsData);
 
-        Promise.allSettled([audioPromise, videoPromise]).then(() => {
             this.onVideoStats(this.aggregatedStats);
 
             // Calculate latency using stats and video receivers and then call the handling function
@@ -195,9 +186,14 @@ export class PeerConnectionController {
             // Update the preferred codec selection based on what was actually negotiated
             if (this.updateCodecSelection && !!this.aggregatedStats.inboundVideoStats.codecId) {
                 // Construct the qualified codec name from the mimetype and fmtp
-                const codecStats: CodecStats = this.aggregatedStats.codecs.get(
+                const codecStats: CodecStats | undefined = this.aggregatedStats.codecs.get(
                     this.aggregatedStats.inboundVideoStats.codecId
                 );
+
+                if (codecStats === undefined) {
+                    return;
+                }
+
                 const codecShortname = codecStats.mimeType.replace('video/', '');
                 let fullCodecName = codecShortname;
                 if (codecStats.sdpFmtpLine && codecStats.sdpFmtpLine.trim() !== '') {
