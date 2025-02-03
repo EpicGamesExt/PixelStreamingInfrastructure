@@ -96,6 +96,11 @@ program
         'Sets the listening port for SFU connections.',
         config_file.sfu_port || '8889'
     )
+    .option(
+        '--max_players <number>',
+        'Sets the maximum number of subscribers per streamer.',
+        config_file.max_players || '0'
+    )
     .option('--serve', 'Enables the webserver on player_port.', config_file.serve || false)
     .option(
         '--http_root <path>',
@@ -196,7 +201,8 @@ const serverOpts: IServerConfig = {
     streamerPort: options.streamer_port,
     playerPort: options.player_port,
     sfuPort: options.sfu_port,
-    peerOptions: options.peer_options
+    peerOptions: options.peer_options,
+    maxSubscribers: options.max_players
 };
 
 if (options.serve) {

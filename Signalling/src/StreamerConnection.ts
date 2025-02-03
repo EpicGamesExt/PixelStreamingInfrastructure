@@ -37,6 +37,10 @@ export class StreamerConnection extends EventEmitter implements IStreamer, LogUt
     streaming: boolean;
     // A descriptive string describing the remote address of this connection.
     remoteAddress?: string;
+    // The max number of subscribed players at a time.
+    maxSubscribers: number;
+    // A list of all the current subscribed players.
+    subscribers: Set<string>;
 
     private server: SignallingServer;
 
@@ -56,6 +60,8 @@ export class StreamerConnection extends EventEmitter implements IStreamer, LogUt
         this.protocol = new SignallingProtocol(this.transport);
         this.streaming = false;
         this.remoteAddress = remoteAddress;
+        this.maxSubscribers = 0;
+        this.subscribers = new Set();
 
         this.transport.on('error', this.onTransportError.bind(this));
         this.transport.on('close', this.onTransportClose.bind(this));
