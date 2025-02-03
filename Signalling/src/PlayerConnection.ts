@@ -160,7 +160,15 @@ export class PlayerConnection implements IPlayer, LogUtils.IMessageLogger {
             this.unsubscribe();
         }
 
+        if (streamer.maxSubscribers > 0 && streamer.subscribers.size >= streamer.maxSubscribers) {
+            Logger.error(
+                `subscribe: Player ${this.playerId} could not subscribe to ${streamerId}. Max players reached.`
+            );
+            return;
+        }
+
         this.subscribedStreamer = streamer;
+        this.subscribedStreamer.subscribers.add(this.playerId);
         this.subscribedStreamer.on('id_changed', this.streamerIdChangeListener);
         this.subscribedStreamer.on('disconnect', this.streamerDisconnectedListener);
 
@@ -176,6 +184,8 @@ export class PlayerConnection implements IPlayer, LogUtils.IMessageLogger {
         if (!this.subscribedStreamer) {
             return;
         }
+
+        this.subscribedStreamer.subscribers.delete(this.playerId);
 
         const disconnectedMessage = MessageHelpers.createMessage(Messages.playerDisconnected, {
             playerId: this.playerId

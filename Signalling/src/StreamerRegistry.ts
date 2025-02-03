@@ -19,6 +19,8 @@ export interface IStreamer extends EventEmitter, IMessageLogger {
     transport: ITransport;
     protocol: SignallingProtocol;
     streaming: boolean;
+    maxSubscribers: number;
+    subscribers: Set<string>;
 
     sendMessage(message: BaseMessage): void;
     getStreamerInfo(): IStreamerInfo;
