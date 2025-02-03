@@ -98,7 +98,7 @@ program
     )
     .option(
         '--max_players <number>',
-        'Sets the maximum number of subscribers per streamer.',
+        'Sets the maximum number of subscribers per streamer. 0 = unlimited',
         config_file.max_players || '0'
     )
     .option('--serve', 'Enables the webserver on player_port.', config_file.serve || false)
