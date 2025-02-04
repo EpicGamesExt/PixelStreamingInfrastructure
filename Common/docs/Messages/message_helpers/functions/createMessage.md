@@ -34,4 +34,4 @@ The resulting message object.
 
 ## Defined in
 
-[Messages/message\_helpers.ts:14](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/a672d2fe0d0173d1eab643bb6d301d286cbbdbb0/Common/src/Messages/message_helpers.ts#L14)
+[Messages/message\_helpers.ts:14](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/457a0dc3b3c9a47385d92ffbc69496977cee683b/Common/src/Messages/message_helpers.ts#L14)
