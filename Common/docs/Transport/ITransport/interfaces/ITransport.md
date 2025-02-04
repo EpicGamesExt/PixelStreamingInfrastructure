@@ -34,7 +34,7 @@ Callback filled in by the SignallingProtocol and should be called by the transpo
 
 #### Defined in
 
-[Transport/ITransport.ts:19](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/a672d2fe0d0173d1eab643bb6d301d286cbbdbb0/Common/src/Transport/ITransport.ts#L19)
+[Transport/ITransport.ts:19](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/457a0dc3b3c9a47385d92ffbc69496977cee683b/Common/src/Transport/ITransport.ts#L19)
 
 ## Methods
 
@@ -64,7 +64,7 @@ Alias for `emitter.on(eventName, listener)`.
 
 #### Defined in
 
-[Event/EventEmitter.ts:97](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/a672d2fe0d0173d1eab643bb6d301d286cbbdbb0/Common/src/Event/EventEmitter.ts#L97)
+[Event/EventEmitter.ts:97](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/457a0dc3b3c9a47385d92ffbc69496977cee683b/Common/src/Event/EventEmitter.ts#L97)
 
 ***
 
@@ -90,7 +90,7 @@ True if the connection was successful.
 
 #### Defined in
 
-[Transport/ITransport.ts:26](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/a672d2fe0d0173d1eab643bb6d301d286cbbdbb0/Common/src/Transport/ITransport.ts#L26)
+[Transport/ITransport.ts:26](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/457a0dc3b3c9a47385d92ffbc69496977cee683b/Common/src/Transport/ITransport.ts#L26)
 
 ***
 
@@ -120,7 +120,7 @@ A descriptive string for the disconnect reason.
 
 #### Defined in
 
-[Transport/ITransport.ts:33](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/a672d2fe0d0173d1eab643bb6d301d286cbbdbb0/Common/src/Transport/ITransport.ts#L33)
+[Transport/ITransport.ts:33](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/457a0dc3b3c9a47385d92ffbc69496977cee683b/Common/src/Transport/ITransport.ts#L33)
 
 ***
 
@@ -186,7 +186,7 @@ myEmitter.emit('event', 1, 2, 3, 4, 5);
 
 #### Defined in
 
-[Event/EventEmitter.ts:263](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/a672d2fe0d0173d1eab643bb6d301d286cbbdbb0/Common/src/Event/EventEmitter.ts#L263)
+[Event/EventEmitter.ts:263](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/457a0dc3b3c9a47385d92ffbc69496977cee683b/Common/src/Event/EventEmitter.ts#L263)
 
 ***
 
@@ -204,7 +204,7 @@ True if the transport is connected.
 
 #### Defined in
 
-[Transport/ITransport.ts:39](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/a672d2fe0d0173d1eab643bb6d301d286cbbdbb0/Common/src/Transport/ITransport.ts#L39)
+[Transport/ITransport.ts:39](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/457a0dc3b3c9a47385d92ffbc69496977cee683b/Common/src/Transport/ITransport.ts#L39)
 
 ***
 
@@ -234,7 +234,7 @@ Alias for `emitter.removeListener()`.
 
 #### Defined in
 
-[Event/EventEmitter.ts:197](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/a672d2fe0d0173d1eab643bb6d301d286cbbdbb0/Common/src/Event/EventEmitter.ts#L197)
+[Event/EventEmitter.ts:197](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/457a0dc3b3c9a47385d92ffbc69496977cee683b/Common/src/Event/EventEmitter.ts#L197)
 
 ***
 
@@ -277,7 +277,7 @@ The callback function
 
 #### Defined in
 
-[Event/EventEmitter.ts:116](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/a672d2fe0d0173d1eab643bb6d301d286cbbdbb0/Common/src/Event/EventEmitter.ts#L116)
+[Event/EventEmitter.ts:116](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/457a0dc3b3c9a47385d92ffbc69496977cee683b/Common/src/Event/EventEmitter.ts#L116)
 
 ***
 
@@ -320,7 +320,7 @@ The callback function
 
 #### Defined in
 
-[Event/EventEmitter.ts:149](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/a672d2fe0d0173d1eab643bb6d301d286cbbdbb0/Common/src/Event/EventEmitter.ts#L149)
+[Event/EventEmitter.ts:149](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/457a0dc3b3c9a47385d92ffbc69496977cee683b/Common/src/Event/EventEmitter.ts#L149)
 
 ***
 
@@ -347,7 +347,7 @@ Returns a reference to the `EventEmitter`, so that calls can be chained.
 
 #### Defined in
 
-[Event/EventEmitter.ts:205](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/a672d2fe0d0173d1eab643bb6d301d286cbbdbb0/Common/src/Event/EventEmitter.ts#L205)
+[Event/EventEmitter.ts:205](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/457a0dc3b3c9a47385d92ffbc69496977cee683b/Common/src/Event/EventEmitter.ts#L205)
 
 ***
 
@@ -387,7 +387,7 @@ Returns a reference to the `EventEmitter`, so that calls can be chained.
 
 #### Defined in
 
-[Event/EventEmitter.ts:189](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/a672d2fe0d0173d1eab643bb6d301d286cbbdbb0/Common/src/Event/EventEmitter.ts#L189)
+[Event/EventEmitter.ts:189](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/457a0dc3b3c9a47385d92ffbc69496977cee683b/Common/src/Event/EventEmitter.ts#L189)
 
 ***
 
@@ -411,4 +411,4 @@ The message to send over the transport.
 
 #### Defined in
 
-[Transport/ITransport.ts:14](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/a672d2fe0d0173d1eab643bb6d301d286cbbdbb0/Common/src/Transport/ITransport.ts#L14)
+[Transport/ITransport.ts:14](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/457a0dc3b3c9a47385d92ffbc69496977cee683b/Common/src/Transport/ITransport.ts#L14)

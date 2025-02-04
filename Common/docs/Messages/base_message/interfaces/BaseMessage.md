@@ -16,7 +16,7 @@ All Pixel Streaming messages should adhere to this interface.
 
 #### Defined in
 
-[Messages/base\_message.ts:8](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/a672d2fe0d0173d1eab643bb6d301d286cbbdbb0/Common/src/Messages/base_message.ts#L8)
+[Messages/base\_message.ts:8](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/457a0dc3b3c9a47385d92ffbc69496977cee683b/Common/src/Messages/base_message.ts#L8)
 
 ***
 
@@ -26,4 +26,4 @@ All Pixel Streaming messages should adhere to this interface.
 
 #### Defined in
 
-[Messages/base\_message.ts:6](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/a672d2fe0d0173d1eab643bb6d301d286cbbdbb0/Common/src/Messages/base_message.ts#L6)
+[Messages/base\_message.ts:6](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/457a0dc3b3c9a47385d92ffbc69496977cee683b/Common/src/Messages/base_message.ts#L6)
