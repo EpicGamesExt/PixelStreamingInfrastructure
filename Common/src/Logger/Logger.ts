@@ -20,7 +20,7 @@ export enum LogLevel {
  * contexts, such as stats reporting. Instead we store the logger config context on the window object
  * to be shared with any Logger instances.
  */
-class LoggerContext {
+export class LoggerContext {
     logLevel: LogLevel = LogLevel.Debug;
     includeStack: boolean = true;
 }
@@ -29,7 +29,7 @@ class LoggerContext {
  * A basic console logger utilized by the Pixel Streaming frontend to allow
  * logging to the browser console.
  */
-class LoggerType {
+export class LoggerType {
     context?: LoggerContext;
 
     /**

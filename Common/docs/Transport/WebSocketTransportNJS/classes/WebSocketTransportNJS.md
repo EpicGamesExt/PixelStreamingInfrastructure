@@ -41,7 +41,7 @@ Do not use this code in a browser use 'WebSocketTransport' instead.
 
 #### Defined in
 
-[Transport/WebSocketTransportNJS.ts:18](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/a672d2fe0d0173d1eab643bb6d301d286cbbdbb0/Common/src/Transport/WebSocketTransportNJS.ts#L18)
+[Transport/WebSocketTransportNJS.ts:18](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/457a0dc3b3c9a47385d92ffbc69496977cee683b/Common/src/Transport/WebSocketTransportNJS.ts#L18)
 
 ## Properties
 
@@ -67,7 +67,7 @@ Callback filled in by the SignallingProtocol and should be called by the transpo
 
 #### Defined in
 
-[Transport/WebSocketTransportNJS.ts:38](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/a672d2fe0d0173d1eab643bb6d301d286cbbdbb0/Common/src/Transport/WebSocketTransportNJS.ts#L38)
+[Transport/WebSocketTransportNJS.ts:38](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/457a0dc3b3c9a47385d92ffbc69496977cee683b/Common/src/Transport/WebSocketTransportNJS.ts#L38)
 
 ***
 
@@ -77,7 +77,7 @@ Callback filled in by the SignallingProtocol and should be called by the transpo
 
 #### Defined in
 
-[Transport/WebSocketTransportNJS.ts:16](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/a672d2fe0d0173d1eab643bb6d301d286cbbdbb0/Common/src/Transport/WebSocketTransportNJS.ts#L16)
+[Transport/WebSocketTransportNJS.ts:16](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/457a0dc3b3c9a47385d92ffbc69496977cee683b/Common/src/Transport/WebSocketTransportNJS.ts#L16)
 
 ***
 
@@ -87,7 +87,7 @@ Callback filled in by the SignallingProtocol and should be called by the transpo
 
 #### Defined in
 
-[Transport/WebSocketTransportNJS.ts:15](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/a672d2fe0d0173d1eab643bb6d301d286cbbdbb0/Common/src/Transport/WebSocketTransportNJS.ts#L15)
+[Transport/WebSocketTransportNJS.ts:15](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/457a0dc3b3c9a47385d92ffbc69496977cee683b/Common/src/Transport/WebSocketTransportNJS.ts#L15)
 
 ## Methods
 
@@ -121,7 +121,7 @@ Alias for `emitter.on(eventName, listener)`.
 
 #### Defined in
 
-[Event/EventEmitter.ts:97](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/a672d2fe0d0173d1eab643bb6d301d286cbbdbb0/Common/src/Event/EventEmitter.ts#L97)
+[Event/EventEmitter.ts:97](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/457a0dc3b3c9a47385d92ffbc69496977cee683b/Common/src/Event/EventEmitter.ts#L97)
 
 ***
 
@@ -137,7 +137,7 @@ Closes the Websocket connection
 
 #### Defined in
 
-[Transport/WebSocketTransportNJS.ts:114](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/a672d2fe0d0173d1eab643bb6d301d286cbbdbb0/Common/src/Transport/WebSocketTransportNJS.ts#L114)
+[Transport/WebSocketTransportNJS.ts:114](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/457a0dc3b3c9a47385d92ffbc69496977cee683b/Common/src/Transport/WebSocketTransportNJS.ts#L114)
 
 ***
 
@@ -167,7 +167,7 @@ If there is a connection
 
 #### Defined in
 
-[Transport/WebSocketTransportNJS.ts:45](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/a672d2fe0d0173d1eab643bb6d301d286cbbdbb0/Common/src/Transport/WebSocketTransportNJS.ts#L45)
+[Transport/WebSocketTransportNJS.ts:45](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/457a0dc3b3c9a47385d92ffbc69496977cee683b/Common/src/Transport/WebSocketTransportNJS.ts#L45)
 
 ***
 
@@ -201,7 +201,7 @@ A descriptive string for the disconnect reason.
 
 #### Defined in
 
-[Transport/WebSocketTransportNJS.ts:56](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/a672d2fe0d0173d1eab643bb6d301d286cbbdbb0/Common/src/Transport/WebSocketTransportNJS.ts#L56)
+[Transport/WebSocketTransportNJS.ts:56](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/457a0dc3b3c9a47385d92ffbc69496977cee683b/Common/src/Transport/WebSocketTransportNJS.ts#L56)
 
 ***
 
@@ -271,7 +271,7 @@ myEmitter.emit('event', 1, 2, 3, 4, 5);
 
 #### Defined in
 
-[Event/EventEmitter.ts:263](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/a672d2fe0d0173d1eab643bb6d301d286cbbdbb0/Common/src/Event/EventEmitter.ts#L263)
+[Event/EventEmitter.ts:263](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/457a0dc3b3c9a47385d92ffbc69496977cee683b/Common/src/Event/EventEmitter.ts#L263)
 
 ***
 
@@ -295,7 +295,7 @@ Close Event
 
 #### Defined in
 
-[Transport/WebSocketTransportNJS.ts:107](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/a672d2fe0d0173d1eab643bb6d301d286cbbdbb0/Common/src/Transport/WebSocketTransportNJS.ts#L107)
+[Transport/WebSocketTransportNJS.ts:107](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/457a0dc3b3c9a47385d92ffbc69496977cee683b/Common/src/Transport/WebSocketTransportNJS.ts#L107)
 
 ***
 
@@ -319,7 +319,7 @@ Error Payload
 
 #### Defined in
 
-[Transport/WebSocketTransportNJS.ts:99](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/a672d2fe0d0173d1eab643bb6d301d286cbbdbb0/Common/src/Transport/WebSocketTransportNJS.ts#L99)
+[Transport/WebSocketTransportNJS.ts:99](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/457a0dc3b3c9a47385d92ffbc69496977cee683b/Common/src/Transport/WebSocketTransportNJS.ts#L99)
 
 ***
 
@@ -343,7 +343,7 @@ Message Received
 
 #### Defined in
 
-[Transport/WebSocketTransportNJS.ts:74](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/a672d2fe0d0173d1eab643bb6d301d286cbbdbb0/Common/src/Transport/WebSocketTransportNJS.ts#L74)
+[Transport/WebSocketTransportNJS.ts:74](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/457a0dc3b3c9a47385d92ffbc69496977cee683b/Common/src/Transport/WebSocketTransportNJS.ts#L74)
 
 ***
 
@@ -367,7 +367,7 @@ Not Used
 
 #### Defined in
 
-[Transport/WebSocketTransportNJS.ts:91](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/a672d2fe0d0173d1eab643bb6d301d286cbbdbb0/Common/src/Transport/WebSocketTransportNJS.ts#L91)
+[Transport/WebSocketTransportNJS.ts:91](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/457a0dc3b3c9a47385d92ffbc69496977cee683b/Common/src/Transport/WebSocketTransportNJS.ts#L91)
 
 ***
 
@@ -389,7 +389,7 @@ True if the transport is connected.
 
 #### Defined in
 
-[Transport/WebSocketTransportNJS.ts:66](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/a672d2fe0d0173d1eab643bb6d301d286cbbdbb0/Common/src/Transport/WebSocketTransportNJS.ts#L66)
+[Transport/WebSocketTransportNJS.ts:66](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/457a0dc3b3c9a47385d92ffbc69496977cee683b/Common/src/Transport/WebSocketTransportNJS.ts#L66)
 
 ***
 
@@ -423,7 +423,7 @@ Alias for `emitter.removeListener()`.
 
 #### Defined in
 
-[Event/EventEmitter.ts:197](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/a672d2fe0d0173d1eab643bb6d301d286cbbdbb0/Common/src/Event/EventEmitter.ts#L197)
+[Event/EventEmitter.ts:197](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/457a0dc3b3c9a47385d92ffbc69496977cee683b/Common/src/Event/EventEmitter.ts#L197)
 
 ***
 
@@ -470,7 +470,7 @@ The callback function
 
 #### Defined in
 
-[Event/EventEmitter.ts:116](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/a672d2fe0d0173d1eab643bb6d301d286cbbdbb0/Common/src/Event/EventEmitter.ts#L116)
+[Event/EventEmitter.ts:116](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/457a0dc3b3c9a47385d92ffbc69496977cee683b/Common/src/Event/EventEmitter.ts#L116)
 
 ***
 
@@ -517,7 +517,7 @@ The callback function
 
 #### Defined in
 
-[Event/EventEmitter.ts:149](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/a672d2fe0d0173d1eab643bb6d301d286cbbdbb0/Common/src/Event/EventEmitter.ts#L149)
+[Event/EventEmitter.ts:149](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/457a0dc3b3c9a47385d92ffbc69496977cee683b/Common/src/Event/EventEmitter.ts#L149)
 
 ***
 
@@ -548,7 +548,7 @@ Returns a reference to the `EventEmitter`, so that calls can be chained.
 
 #### Defined in
 
-[Event/EventEmitter.ts:205](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/a672d2fe0d0173d1eab643bb6d301d286cbbdbb0/Common/src/Event/EventEmitter.ts#L205)
+[Event/EventEmitter.ts:205](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/457a0dc3b3c9a47385d92ffbc69496977cee683b/Common/src/Event/EventEmitter.ts#L205)
 
 ***
 
@@ -592,7 +592,7 @@ Returns a reference to the `EventEmitter`, so that calls can be chained.
 
 #### Defined in
 
-[Event/EventEmitter.ts:189](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/a672d2fe0d0173d1eab643bb6d301d286cbbdbb0/Common/src/Event/EventEmitter.ts#L189)
+[Event/EventEmitter.ts:189](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/457a0dc3b3c9a47385d92ffbc69496977cee683b/Common/src/Event/EventEmitter.ts#L189)
 
 ***
 
@@ -620,4 +620,4 @@ The message to send.
 
 #### Defined in
 
-[Transport/WebSocketTransportNJS.ts:31](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/a672d2fe0d0173d1eab643bb6d301d286cbbdbb0/Common/src/Transport/WebSocketTransportNJS.ts#L31)
+[Transport/WebSocketTransportNJS.ts:31](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/457a0dc3b3c9a47385d92ffbc69496977cee683b/Common/src/Transport/WebSocketTransportNJS.ts#L31)
