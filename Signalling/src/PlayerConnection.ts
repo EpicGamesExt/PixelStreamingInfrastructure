@@ -150,6 +150,10 @@ export class PlayerConnection implements IPlayer, LogUtils.IMessageLogger {
             Logger.error(
                 `subscribe: Player ${this.playerId} tried to subscribe to a non-existent streamer ${streamerId}`
             );
+            const failureMessage = MessageHelpers.createMessage(Messages.subscribeFailed, {
+                message: `Streamer ${streamerId} does not exist.`
+            });
+            this.protocol.sendMessage(failureMessage);
             return;
         }
 
@@ -162,8 +166,12 @@ export class PlayerConnection implements IPlayer, LogUtils.IMessageLogger {
 
         if (streamer.maxSubscribers > 0 && streamer.subscribers.size >= streamer.maxSubscribers) {
             Logger.error(
-                `subscribe: Player ${this.playerId} could not subscribe to ${streamerId}. Max players reached.`
+                `subscribe: Player ${this.playerId} could not subscribe to ${streamerId}. Max players (${streamer.maxSubscribers}) reached.`
             );
+            const failureMessage = MessageHelpers.createMessage(Messages.subscribeFailed, {
+                message: `Streamer ${streamerId} is full. Max players = ${streamer.maxSubscribers}.`
+            });
+            this.protocol.sendMessage(failureMessage);
             return;
         }
 
