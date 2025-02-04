@@ -44,7 +44,7 @@ export class SFUConnection extends EventEmitter implements IPlayer, IStreamer, L
     subscribedStreamer: IStreamer | null;
     // A descriptive string describing the remote address of this connection.
     remoteAddress?: string;
-    // The max number of subscribed players at a time.
+    // The max number of subscribed players at a time. A value of 0 means there is no limit (this the default).
     maxSubscribers: number;
     // A list of all the current subscribed players.
     subscribers: Set<string>;
