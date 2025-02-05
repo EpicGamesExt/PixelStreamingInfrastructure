@@ -13,20 +13,14 @@ a new SignallingServer object.
 
 - [httpServer](SignallingServer.IServerConfig.md#httpserver)
 - [httpsServer](SignallingServer.IServerConfig.md#httpsserver)
-- [matchmakerAddress](SignallingServer.IServerConfig.md#matchmakeraddress)
-- [matchmakerKeepAliveInterval](SignallingServer.IServerConfig.md#matchmakerkeepaliveinterval)
-- [matchmakerPort](SignallingServer.IServerConfig.md#matchmakerport)
-- [matchmakerRetryInterval](SignallingServer.IServerConfig.md#matchmakerretryinterval)
+- [maxSubscribers](SignallingServer.IServerConfig.md#maxsubscribers)
 - [peerOptions](SignallingServer.IServerConfig.md#peeroptions)
 - [playerPort](SignallingServer.IServerConfig.md#playerport)
 - [playerWsOptions](SignallingServer.IServerConfig.md#playerwsoptions)
-- [publicIp](SignallingServer.IServerConfig.md#publicip)
-- [publicPort](SignallingServer.IServerConfig.md#publicport)
 - [sfuPort](SignallingServer.IServerConfig.md#sfuport)
 - [sfuWsOptions](SignallingServer.IServerConfig.md#sfuwsoptions)
 - [streamerPort](SignallingServer.IServerConfig.md#streamerport)
 - [streamerWsOptions](SignallingServer.IServerConfig.md#streamerwsoptions)
-- [useMatchmaker](SignallingServer.IServerConfig.md#usematchmaker)
 
 ## Properties
 
@@ -36,7 +30,7 @@ a new SignallingServer object.
 
 #### Defined in
 
-[SignallingServer.ts:21](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Signalling/src/SignallingServer.ts#L21)
+[Signalling/src/SignallingServer.ts:19](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/709d6fe/Signalling/src/SignallingServer.ts#L19)
 
 ___
 
@@ -46,47 +40,17 @@ ___
 
 #### Defined in
 
-[SignallingServer.ts:24](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Signalling/src/SignallingServer.ts#L24)
+[Signalling/src/SignallingServer.ts:22](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/709d6fe/Signalling/src/SignallingServer.ts#L22)
 
 ___
 
-### matchmakerAddress
+### maxSubscribers
 
-• `Optional` **matchmakerAddress**: `string`
-
-#### Defined in
-
-[SignallingServer.ts:51](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Signalling/src/SignallingServer.ts#L51)
-
-___
-
-### matchmakerKeepAliveInterval
-
-• `Optional` **matchmakerKeepAliveInterval**: `number`
+• `Optional` **maxSubscribers**: `number`
 
 #### Defined in
 
-[SignallingServer.ts:60](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Signalling/src/SignallingServer.ts#L60)
-
-___
-
-### matchmakerPort
-
-• `Optional` **matchmakerPort**: `number`
-
-#### Defined in
-
-[SignallingServer.ts:54](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Signalling/src/SignallingServer.ts#L54)
-
-___
-
-### matchmakerRetryInterval
-
-• `Optional` **matchmakerRetryInterval**: `number`
-
-#### Defined in
-
-[SignallingServer.ts:57](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Signalling/src/SignallingServer.ts#L57)
+[Signalling/src/SignallingServer.ts:46](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/709d6fe/Signalling/src/SignallingServer.ts#L46)
 
 ___
 
@@ -96,7 +60,7 @@ ___
 
 #### Defined in
 
-[SignallingServer.ts:36](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Signalling/src/SignallingServer.ts#L36)
+[Signalling/src/SignallingServer.ts:34](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/709d6fe/Signalling/src/SignallingServer.ts#L34)
 
 ___
 
@@ -106,7 +70,7 @@ ___
 
 #### Defined in
 
-[SignallingServer.ts:30](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Signalling/src/SignallingServer.ts#L30)
+[Signalling/src/SignallingServer.ts:28](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/709d6fe/Signalling/src/SignallingServer.ts#L28)
 
 ___
 
@@ -116,27 +80,7 @@ ___
 
 #### Defined in
 
-[SignallingServer.ts:42](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Signalling/src/SignallingServer.ts#L42)
-
-___
-
-### publicIp
-
-• `Optional` **publicIp**: `string`
-
-#### Defined in
-
-[SignallingServer.ts:63](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Signalling/src/SignallingServer.ts#L63)
-
-___
-
-### publicPort
-
-• `Optional` **publicPort**: `number`
-
-#### Defined in
-
-[SignallingServer.ts:66](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Signalling/src/SignallingServer.ts#L66)
+[Signalling/src/SignallingServer.ts:40](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/709d6fe/Signalling/src/SignallingServer.ts#L40)
 
 ___
 
@@ -146,7 +90,7 @@ ___
 
 #### Defined in
 
-[SignallingServer.ts:33](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Signalling/src/SignallingServer.ts#L33)
+[Signalling/src/SignallingServer.ts:31](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/709d6fe/Signalling/src/SignallingServer.ts#L31)
 
 ___
 
@@ -156,7 +100,7 @@ ___
 
 #### Defined in
 
-[SignallingServer.ts:45](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Signalling/src/SignallingServer.ts#L45)
+[Signalling/src/SignallingServer.ts:43](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/709d6fe/Signalling/src/SignallingServer.ts#L43)
 
 ___
 
@@ -166,7 +110,7 @@ ___
 
 #### Defined in
 
-[SignallingServer.ts:27](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Signalling/src/SignallingServer.ts#L27)
+[Signalling/src/SignallingServer.ts:25](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/709d6fe/Signalling/src/SignallingServer.ts#L25)
 
 ___
 
@@ -176,14 +120,4 @@ ___
 
 #### Defined in
 
-[SignallingServer.ts:39](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Signalling/src/SignallingServer.ts#L39)
-
-___
-
-### useMatchmaker
-
-• `Optional` **useMatchmaker**: `boolean`
-
-#### Defined in
-
-[SignallingServer.ts:48](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Signalling/src/SignallingServer.ts#L48)
+[Signalling/src/SignallingServer.ts:37](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/709d6fe/Signalling/src/SignallingServer.ts#L37)

@@ -43,7 +43,7 @@ subscribed to.
 
 ### constructor
 
-• **new PlayerConnection**(`server`, `ws`, `sendOffer`, `remoteAddress?`): [`PlayerConnection`](PlayerConnection.PlayerConnection.md)
+• **new PlayerConnection**(`server`, `ws`, `remoteAddress?`): [`PlayerConnection`](PlayerConnection.PlayerConnection.md)
 
 Initializes a new connection with given and sane values. Adds listeners for the
 websocket close and error so it can react by unsubscribing and resetting itself.
@@ -54,7 +54,6 @@ websocket close and error so it can react by unsubscribing and resetting itself.
 | :------ | :------ | :------ |
 | `server` | [`SignallingServer`](SignallingServer.SignallingServer.md) | The signalling server object that spawned this player. |
 | `ws` | `WebSocket` | The websocket coupled to this player connection. |
-| `sendOffer` | `boolean` | True if the player is requesting to receive offers from streamers. |
 | `remoteAddress?` | `string` | The remote address of this connection. Only used as display. |
 
 #### Returns
@@ -63,7 +62,7 @@ websocket close and error so it can react by unsubscribing and resetting itself.
 
 #### Defined in
 
-[PlayerConnection.ts:50](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Signalling/src/PlayerConnection.ts#L50)
+[Signalling/src/PlayerConnection.ts:50](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/709d6fe/Signalling/src/PlayerConnection.ts#L50)
 
 ## Properties
 
@@ -77,7 +76,7 @@ websocket close and error so it can react by unsubscribing and resetting itself.
 
 #### Defined in
 
-[PlayerConnection.ts:27](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Signalling/src/PlayerConnection.ts#L27)
+[Signalling/src/PlayerConnection.ts:29](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/709d6fe/Signalling/src/PlayerConnection.ts#L29)
 
 ___
 
@@ -91,7 +90,7 @@ ___
 
 #### Defined in
 
-[PlayerConnection.ts:31](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Signalling/src/PlayerConnection.ts#L31)
+[Signalling/src/PlayerConnection.ts:33](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/709d6fe/Signalling/src/PlayerConnection.ts#L33)
 
 ___
 
@@ -101,7 +100,7 @@ ___
 
 #### Defined in
 
-[PlayerConnection.ts:35](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Signalling/src/PlayerConnection.ts#L35)
+[Signalling/src/PlayerConnection.ts:37](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/709d6fe/Signalling/src/PlayerConnection.ts#L37)
 
 ___
 
@@ -115,7 +114,7 @@ ___
 
 #### Defined in
 
-[PlayerConnection.ts:33](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Signalling/src/PlayerConnection.ts#L33)
+[Signalling/src/PlayerConnection.ts:35](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/709d6fe/Signalling/src/PlayerConnection.ts#L35)
 
 ___
 
@@ -125,7 +124,7 @@ ___
 
 #### Defined in
 
-[PlayerConnection.ts:29](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Signalling/src/PlayerConnection.ts#L29)
+[Signalling/src/PlayerConnection.ts:31](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/709d6fe/Signalling/src/PlayerConnection.ts#L31)
 
 ## Methods
 
@@ -147,7 +146,7 @@ An IPlayerInfo object containing viewable information about this connection.
 
 #### Defined in
 
-[PlayerConnection.ts:87](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Signalling/src/PlayerConnection.ts#L87)
+[Signalling/src/PlayerConnection.ts:88](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/709d6fe/Signalling/src/PlayerConnection.ts#L88)
 
 ___
 
@@ -169,7 +168,7 @@ A string describing this connection.
 
 #### Defined in
 
-[PlayerConnection.ts:72](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Signalling/src/PlayerConnection.ts#L72)
+[Signalling/src/PlayerConnection.ts:71](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/709d6fe/Signalling/src/PlayerConnection.ts#L71)
 
 ___
 
@@ -195,4 +194,4 @@ Sends a signalling message to the player.
 
 #### Defined in
 
-[PlayerConnection.ts:78](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Signalling/src/PlayerConnection.ts#L78)
+[Signalling/src/PlayerConnection.ts:79](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/709d6fe/Signalling/src/PlayerConnection.ts#L79)
