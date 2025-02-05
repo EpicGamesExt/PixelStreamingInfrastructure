@@ -31,11 +31,18 @@ Events:
 ### Methods
 
 - [add](StreamerRegistry.StreamerRegistry.md#add)
+- [addListener](StreamerRegistry.StreamerRegistry.md#addlistener)
 - [count](StreamerRegistry.StreamerRegistry.md#count)
+- [emit](StreamerRegistry.StreamerRegistry.md#emit)
 - [empty](StreamerRegistry.StreamerRegistry.md#empty)
 - [find](StreamerRegistry.StreamerRegistry.md#find)
 - [getFirstStreamerId](StreamerRegistry.StreamerRegistry.md#getfirststreamerid)
+- [off](StreamerRegistry.StreamerRegistry.md#off)
+- [on](StreamerRegistry.StreamerRegistry.md#on)
+- [once](StreamerRegistry.StreamerRegistry.md#once)
 - [remove](StreamerRegistry.StreamerRegistry.md#remove)
+- [removeAllListeners](StreamerRegistry.StreamerRegistry.md#removealllisteners)
+- [removeListener](StreamerRegistry.StreamerRegistry.md#removelistener)
 
 ## Constructors
 
@@ -53,17 +60,17 @@ EventEmitter.constructor
 
 #### Defined in
 
-[StreamerRegistry.ts:44](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Signalling/src/StreamerRegistry.ts#L44)
+[Signalling/src/StreamerRegistry.ts:52](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/709d6fe/Signalling/src/StreamerRegistry.ts#L52)
 
 ## Properties
 
 ### defaultStreamerIdPrefix
 
-• **defaultStreamerIdPrefix**: `string` = `"UnknownStreamer"`
+• **defaultStreamerIdPrefix**: `string` = `'UnknownStreamer'`
 
 #### Defined in
 
-[StreamerRegistry.ts:42](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Signalling/src/StreamerRegistry.ts#L42)
+[Signalling/src/StreamerRegistry.ts:50](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/709d6fe/Signalling/src/StreamerRegistry.ts#L50)
 
 ___
 
@@ -73,7 +80,7 @@ ___
 
 #### Defined in
 
-[StreamerRegistry.ts:41](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Signalling/src/StreamerRegistry.ts#L41)
+[Signalling/src/StreamerRegistry.ts:49](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/709d6fe/Signalling/src/StreamerRegistry.ts#L49)
 
 ## Methods
 
@@ -100,7 +107,34 @@ True if the add was successful.
 
 #### Defined in
 
-[StreamerRegistry.ts:56](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Signalling/src/StreamerRegistry.ts#L56)
+[Signalling/src/StreamerRegistry.ts:64](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/709d6fe/Signalling/src/StreamerRegistry.ts#L64)
+
+___
+
+### addListener
+
+▸ **addListener**(`eventName`, `listener`): `this`
+
+Alias for `emitter.on(eventName, listener)`.
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `eventName` | `string` |
+| `listener` | (...`args`: `any`[]) => `void` |
+
+#### Returns
+
+`this`
+
+#### Inherited from
+
+EventEmitter.addListener
+
+#### Defined in
+
+Common/dist/types/Event/EventEmitter.d.ts:39
 
 ___
 
@@ -116,7 +150,70 @@ Returns the total number of connected streamers.
 
 #### Defined in
 
-[StreamerRegistry.ts:121](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Signalling/src/StreamerRegistry.ts#L121)
+[Signalling/src/StreamerRegistry.ts:133](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/709d6fe/Signalling/src/StreamerRegistry.ts#L133)
+
+___
+
+### emit
+
+▸ **emit**(`eventName`, `...args`): `boolean`
+
+Synchronously calls each of the listeners registered for the event named `eventName`, in the order they were registered, passing the supplied arguments
+to each.
+
+Returns `true` if the event had listeners, `false` otherwise.
+
+```js
+import { EventEmitter } from 'node:events';
+const myEmitter = new EventEmitter();
+
+// First listener
+myEmitter.on('event', function firstListener() {
+  console.log('Helloooo! first listener');
+});
+// Second listener
+myEmitter.on('event', function secondListener(arg1, arg2) {
+  console.log(`event with parameters ${arg1}, ${arg2} in second listener`);
+});
+// Third listener
+myEmitter.on('event', function thirdListener(...args) {
+  const parameters = args.join(', ');
+  console.log(`event with parameters ${parameters} in third listener`);
+});
+
+console.log(myEmitter.listeners('event'));
+
+myEmitter.emit('event', 1, 2, 3, 4, 5);
+
+// Prints:
+// [
+//   [Function: firstListener],
+//   [Function: secondListener],
+//   [Function: thirdListener]
+// ]
+// Helloooo! first listener
+// event with parameters 1, 2 in second listener
+// event with parameters 1, 2, 3, 4, 5 in third listener
+```
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `eventName` | `string` |
+| `...args` | `any`[] |
+
+#### Returns
+
+`boolean`
+
+#### Inherited from
+
+EventEmitter.emit
+
+#### Defined in
+
+Common/dist/types/Event/EventEmitter.d.ts:133
 
 ___
 
@@ -132,7 +229,7 @@ Returns true when the registry is empty.
 
 #### Defined in
 
-[StreamerRegistry.ts:114](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Signalling/src/StreamerRegistry.ts#L114)
+[Signalling/src/StreamerRegistry.ts:126](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/709d6fe/Signalling/src/StreamerRegistry.ts#L126)
 
 ___
 
@@ -154,7 +251,7 @@ Attempts to find the given streamer id in the registry.
 
 #### Defined in
 
-[StreamerRegistry.ts:94](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Signalling/src/StreamerRegistry.ts#L94)
+[Signalling/src/StreamerRegistry.ts:106](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/709d6fe/Signalling/src/StreamerRegistry.ts#L106)
 
 ___
 
@@ -174,7 +271,106 @@ The first streamerId in the registry or null if there are none.
 
 #### Defined in
 
-[StreamerRegistry.ts:104](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Signalling/src/StreamerRegistry.ts#L104)
+[Signalling/src/StreamerRegistry.ts:116](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/709d6fe/Signalling/src/StreamerRegistry.ts#L116)
+
+___
+
+### off
+
+▸ **off**(`eventName`, `listener`): `this`
+
+Alias for `emitter.removeListener()`.
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `eventName` | `string` |
+| `listener` | (...`args`: `any`[]) => `void` |
+
+#### Returns
+
+`this`
+
+#### Inherited from
+
+EventEmitter.off
+
+#### Defined in
+
+Common/dist/types/Event/EventEmitter.d.ts:88
+
+___
+
+### on
+
+▸ **on**(`eventName`, `listener`): `this`
+
+Adds the `listener` function to the end of the listeners array for the event
+named `eventName`.
+
+```js
+server.on('connection', (stream) => {
+  console.log('someone connected!');
+});
+```
+
+Returns a reference to the `EventEmitter`, so that calls can be chained.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `eventName` | `string` | The name of the event. |
+| `listener` | (...`args`: `any`[]) => `void` | The callback function |
+
+#### Returns
+
+`this`
+
+#### Inherited from
+
+EventEmitter.on
+
+#### Defined in
+
+Common/dist/types/Event/EventEmitter.d.ts:55
+
+___
+
+### once
+
+▸ **once**(`eventName`, `listener`): `this`
+
+Adds a **one-time** `listener` function for the event named `eventName`. The
+next time `eventName` is triggered, this listener is removed and then invoked.
+
+```js
+server.once('connection', (stream) => {
+  console.log('Ah, we have our first user!');
+});
+```
+
+Returns a reference to the `EventEmitter`, so that calls can be chained.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `eventName` | `string` | The name of the event. |
+| `listener` | (...`args`: `any`[]) => `void` | The callback function |
+
+#### Returns
+
+`this`
+
+#### Inherited from
+
+EventEmitter.once
+
+#### Defined in
+
+Common/dist/types/Event/EventEmitter.d.ts:70
 
 ___
 
@@ -199,4 +395,68 @@ True if the streamer was removed.
 
 #### Defined in
 
-[StreamerRegistry.ts:80](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Signalling/src/StreamerRegistry.ts#L80)
+[Signalling/src/StreamerRegistry.ts:90](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/709d6fe/Signalling/src/StreamerRegistry.ts#L90)
+
+___
+
+### removeAllListeners
+
+▸ **removeAllListeners**(`eventName`): `this`
+
+Removes all listeners, or those of the specified `eventName`.
+Returns a reference to the `EventEmitter`, so that calls can be chained.
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `eventName` | `string` |
+
+#### Returns
+
+`this`
+
+#### Inherited from
+
+EventEmitter.removeAllListeners
+
+#### Defined in
+
+Common/dist/types/Event/EventEmitter.d.ts:93
+
+___
+
+### removeListener
+
+▸ **removeListener**(`eventName`, `listener`): `this`
+
+Removes the specified `listener` from this EventEmitter.
+
+```js
+const callback = (stream) => {
+  console.log('someone connected!');
+};
+server.on('connection', callback);
+// ...
+server.removeListener('connection', callback);
+```
+Returns a reference to the `EventEmitter`, so that calls can be chained.
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `eventName` | `string` |
+| `listener` | (...`args`: `any`[]) => `void` |
+
+#### Returns
+
+`this`
+
+#### Inherited from
+
+EventEmitter.removeListener
+
+#### Defined in
+
+Common/dist/types/Event/EventEmitter.d.ts:84

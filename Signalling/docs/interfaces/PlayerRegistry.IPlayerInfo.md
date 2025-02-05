@@ -12,7 +12,6 @@ Used by the API to describe the current state of the player.
 
 - [playerId](PlayerRegistry.IPlayerInfo.md#playerid)
 - [remoteAddress](PlayerRegistry.IPlayerInfo.md#remoteaddress)
-- [sendOffer](PlayerRegistry.IPlayerInfo.md#sendoffer)
 - [subscribedTo](PlayerRegistry.IPlayerInfo.md#subscribedto)
 - [type](PlayerRegistry.IPlayerInfo.md#type)
 
@@ -24,7 +23,7 @@ Used by the API to describe the current state of the player.
 
 #### Defined in
 
-[PlayerRegistry.ts:24](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Signalling/src/PlayerRegistry.ts#L24)
+[Signalling/src/PlayerRegistry.ts:23](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/709d6fe/Signalling/src/PlayerRegistry.ts#L23)
 
 ___
 
@@ -34,17 +33,7 @@ ___
 
 #### Defined in
 
-[PlayerRegistry.ts:28](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Signalling/src/PlayerRegistry.ts#L28)
-
-___
-
-### sendOffer
-
-• **sendOffer**: `boolean`
-
-#### Defined in
-
-[PlayerRegistry.ts:27](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Signalling/src/PlayerRegistry.ts#L27)
+[Signalling/src/PlayerRegistry.ts:26](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/709d6fe/Signalling/src/PlayerRegistry.ts#L26)
 
 ___
 
@@ -54,7 +43,7 @@ ___
 
 #### Defined in
 
-[PlayerRegistry.ts:26](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Signalling/src/PlayerRegistry.ts#L26)
+[Signalling/src/PlayerRegistry.ts:25](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/709d6fe/Signalling/src/PlayerRegistry.ts#L25)
 
 ___
 
@@ -64,4 +53,4 @@ ___
 
 #### Defined in
 
-[PlayerRegistry.ts:25](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Signalling/src/PlayerRegistry.ts#L25)
+[Signalling/src/PlayerRegistry.ts:24](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/709d6fe/Signalling/src/PlayerRegistry.ts#L24)
