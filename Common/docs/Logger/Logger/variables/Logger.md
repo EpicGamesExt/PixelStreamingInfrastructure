@@ -6,8 +6,8 @@
 
 # Variable: Logger
 
-> `const` **Logger**: [`LoggerType`](../classes/LoggerType.md)
+> **Logger**: [`ILogger`](../interfaces/ILogger.md)
 
 ## Defined in
 
-[Logger/Logger.ts:144](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/457a0dc3b3c9a47385d92ffbc69496977cee683b/Common/src/Logger/Logger.ts#L144)
+[Logger/Logger.ts:156](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/80aa060d880a8c194a04b83f18bd1ee360ab20e1/Common/src/Logger/Logger.ts#L156)

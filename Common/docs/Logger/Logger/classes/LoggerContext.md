@@ -29,7 +29,7 @@ to be shared with any Logger instances.
 
 #### Defined in
 
-[Logger/Logger.ts:25](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/457a0dc3b3c9a47385d92ffbc69496977cee683b/Common/src/Logger/Logger.ts#L25)
+[Logger/Logger.ts:25](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/80aa060d880a8c194a04b83f18bd1ee360ab20e1/Common/src/Logger/Logger.ts#L25)
 
 ***
 
@@ -39,4 +39,4 @@ to be shared with any Logger instances.
 
 #### Defined in
 
-[Logger/Logger.ts:24](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/457a0dc3b3c9a47385d92ffbc69496977cee683b/Common/src/Logger/Logger.ts#L24)
+[Logger/Logger.ts:24](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/80aa060d880a8c194a04b83f18bd1ee360ab20e1/Common/src/Logger/Logger.ts#L24)

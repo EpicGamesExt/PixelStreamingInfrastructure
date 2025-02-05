@@ -9,6 +9,10 @@
 A basic console logger utilized by the Pixel Streaming frontend to allow
 logging to the browser console.
 
+## Implements
+
+- [`ILogger`](../interfaces/ILogger.md)
+
 ## Constructors
 
 ### new LoggerType()
@@ -27,7 +31,7 @@ logging to the browser console.
 
 #### Defined in
 
-[Logger/Logger.ts:33](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/457a0dc3b3c9a47385d92ffbc69496977cee683b/Common/src/Logger/Logger.ts#L33)
+[Logger/Logger.ts:45](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/80aa060d880a8c194a04b83f18bd1ee360ab20e1/Common/src/Logger/Logger.ts#L45)
 
 ## Methods
 
@@ -49,9 +53,13 @@ the message to be logged
 
 `void`
 
+#### Implementation of
+
+[`ILogger`](../interfaces/ILogger.md).[`Debug`](../interfaces/ILogger.md#debug)
+
 #### Defined in
 
-[Logger/Logger.ts:48](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/457a0dc3b3c9a47385d92ffbc69496977cee683b/Common/src/Logger/Logger.ts#L48)
+[Logger/Logger.ts:60](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/80aa060d880a8c194a04b83f18bd1ee360ab20e1/Common/src/Logger/Logger.ts#L60)
 
 ***
 
@@ -73,9 +81,13 @@ the message to be logged
 
 `void`
 
+#### Implementation of
+
+[`ILogger`](../interfaces/ILogger.md).[`Error`](../interfaces/ILogger.md#error)
+
 #### Defined in
 
-[Logger/Logger.ts:81](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/457a0dc3b3c9a47385d92ffbc69496977cee683b/Common/src/Logger/Logger.ts#L81)
+[Logger/Logger.ts:93](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/80aa060d880a8c194a04b83f18bd1ee360ab20e1/Common/src/Logger/Logger.ts#L93)
 
 ***
 
@@ -97,9 +109,13 @@ the message to be logged
 
 `void`
 
+#### Implementation of
+
+[`ILogger`](../interfaces/ILogger.md).[`Info`](../interfaces/ILogger.md#info)
+
 #### Defined in
 
-[Logger/Logger.ts:59](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/457a0dc3b3c9a47385d92ffbc69496977cee683b/Common/src/Logger/Logger.ts#L59)
+[Logger/Logger.ts:71](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/80aa060d880a8c194a04b83f18bd1ee360ab20e1/Common/src/Logger/Logger.ts#L71)
 
 ***
 
@@ -123,9 +139,13 @@ Set the log verbosity level
 
 `void`
 
+#### Implementation of
+
+[`ILogger`](../interfaces/ILogger.md).[`InitLogging`](../interfaces/ILogger.md#initlogging)
+
 #### Defined in
 
-[Logger/Logger.ts:38](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/457a0dc3b3c9a47385d92ffbc69496977cee683b/Common/src/Logger/Logger.ts#L38)
+[Logger/Logger.ts:50](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/80aa060d880a8c194a04b83f18bd1ee360ab20e1/Common/src/Logger/Logger.ts#L50)
 
 ***
 
@@ -147,6 +167,10 @@ the message to be logged
 
 `void`
 
+#### Implementation of
+
+[`ILogger`](../interfaces/ILogger.md).[`Warning`](../interfaces/ILogger.md#warning)
+
 #### Defined in
 
-[Logger/Logger.ts:70](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/457a0dc3b3c9a47385d92ffbc69496977cee683b/Common/src/Logger/Logger.ts#L70)
+[Logger/Logger.ts:82](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/80aa060d880a8c194a04b83f18bd1ee360ab20e1/Common/src/Logger/Logger.ts#L82)
