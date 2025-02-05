@@ -17,6 +17,14 @@
 - [LoggerContext](classes/LoggerContext.md)
 - [LoggerType](classes/LoggerType.md)
 
+### Interfaces
+
+- [ILogger](interfaces/ILogger.md)
+
 ### Variables
 
 - [Logger](variables/Logger.md)
+
+### Functions
+
+- [overrideLogger](functions/overrideLogger.md)
