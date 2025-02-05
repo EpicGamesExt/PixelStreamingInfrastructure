@@ -14,4 +14,4 @@ to actual message types.
 
 ## Defined in
 
-[Messages/message\_registry.ts:10](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/457a0dc3b3c9a47385d92ffbc69496977cee683b/Common/src/Messages/message_registry.ts#L10)
+[Messages/message\_registry.ts:10](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/80aa060d880a8c194a04b83f18bd1ee360ab20e1/Common/src/Messages/message_registry.ts#L10)

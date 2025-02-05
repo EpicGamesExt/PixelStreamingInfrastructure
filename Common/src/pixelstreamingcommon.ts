@@ -1,4 +1,4 @@
-export { Logger, LogLevel } from './Logger/Logger';
+export { Logger, LogLevel, ILogger, overrideLogger } from './Logger/Logger';
 export { ITransport } from './Transport/ITransport';
 export { WebSocketTransport } from './Transport/WebSocketTransport';
 export { WebSocketTransportNJS } from './Transport/WebSocketTransportNJS';

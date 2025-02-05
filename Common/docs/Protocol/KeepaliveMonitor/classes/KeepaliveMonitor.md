@@ -39,7 +39,7 @@ The time in milliseconds between ping messages.
 
 #### Defined in
 
-[Protocol/KeepaliveMonitor.ts:38](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/457a0dc3b3c9a47385d92ffbc69496977cee683b/Common/src/Protocol/KeepaliveMonitor.ts#L38)
+[Protocol/KeepaliveMonitor.ts:38](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/80aa060d880a8c194a04b83f18bd1ee360ab20e1/Common/src/Protocol/KeepaliveMonitor.ts#L38)
 
 ## Properties
 
@@ -55,7 +55,7 @@ Called when a pong does not come back from a ping.
 
 #### Defined in
 
-[Protocol/KeepaliveMonitor.ts:23](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/457a0dc3b3c9a47385d92ffbc69496977cee683b/Common/src/Protocol/KeepaliveMonitor.ts#L23)
+[Protocol/KeepaliveMonitor.ts:23](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/80aa060d880a8c194a04b83f18bd1ee360ab20e1/Common/src/Protocol/KeepaliveMonitor.ts#L23)
 
 ## Accessors
 
@@ -73,4 +73,4 @@ Gets the Round Trip Time of the current connection in milliseconds.
 
 #### Defined in
 
-[Protocol/KeepaliveMonitor.ts:28](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/457a0dc3b3c9a47385d92ffbc69496977cee683b/Common/src/Protocol/KeepaliveMonitor.ts#L28)
+[Protocol/KeepaliveMonitor.ts:28](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/80aa060d880a8c194a04b83f18bd1ee360ab20e1/Common/src/Protocol/KeepaliveMonitor.ts#L28)

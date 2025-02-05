@@ -50,7 +50,7 @@ Events emitted on transport:
 
 #### Defined in
 
-[Protocol/SignallingProtocol.ts:34](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/457a0dc3b3c9a47385d92ffbc69496977cee683b/Common/src/Protocol/SignallingProtocol.ts#L34)
+[Protocol/SignallingProtocol.ts:35](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/80aa060d880a8c194a04b83f18bd1ee360ab20e1/Common/src/Protocol/SignallingProtocol.ts#L35)
 
 ## Properties
 
@@ -60,7 +60,7 @@ Events emitted on transport:
 
 #### Defined in
 
-[Protocol/SignallingProtocol.ts:32](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/457a0dc3b3c9a47385d92ffbc69496977cee683b/Common/src/Protocol/SignallingProtocol.ts#L32)
+[Protocol/SignallingProtocol.ts:33](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/80aa060d880a8c194a04b83f18bd1ee360ab20e1/Common/src/Protocol/SignallingProtocol.ts#L33)
 
 ## Accessors
 
@@ -76,7 +76,7 @@ Events emitted on transport:
 
 #### Defined in
 
-[Protocol/SignallingProtocol.ts:27](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/457a0dc3b3c9a47385d92ffbc69496977cee683b/Common/src/Protocol/SignallingProtocol.ts#L27)
+[Protocol/SignallingProtocol.ts:28](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/80aa060d880a8c194a04b83f18bd1ee360ab20e1/Common/src/Protocol/SignallingProtocol.ts#L28)
 
 ## Methods
 
@@ -106,7 +106,7 @@ Alias for `emitter.on(eventName, listener)`.
 
 #### Defined in
 
-[Event/EventEmitter.ts:97](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/457a0dc3b3c9a47385d92ffbc69496977cee683b/Common/src/Event/EventEmitter.ts#L97)
+[Event/EventEmitter.ts:97](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/80aa060d880a8c194a04b83f18bd1ee360ab20e1/Common/src/Event/EventEmitter.ts#L97)
 
 ***
 
@@ -132,7 +132,7 @@ True if the connection call succeeded.
 
 #### Defined in
 
-[Protocol/SignallingProtocol.ts:54](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/457a0dc3b3c9a47385d92ffbc69496977cee683b/Common/src/Protocol/SignallingProtocol.ts#L54)
+[Protocol/SignallingProtocol.ts:70](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/80aa060d880a8c194a04b83f18bd1ee360ab20e1/Common/src/Protocol/SignallingProtocol.ts#L70)
 
 ***
 
@@ -162,7 +162,7 @@ An optional descriptive string for the disconnect reason.
 
 #### Defined in
 
-[Protocol/SignallingProtocol.ts:63](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/457a0dc3b3c9a47385d92ffbc69496977cee683b/Common/src/Protocol/SignallingProtocol.ts#L63)
+[Protocol/SignallingProtocol.ts:79](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/80aa060d880a8c194a04b83f18bd1ee360ab20e1/Common/src/Protocol/SignallingProtocol.ts#L79)
 
 ***
 
@@ -228,7 +228,7 @@ myEmitter.emit('event', 1, 2, 3, 4, 5);
 
 #### Defined in
 
-[Event/EventEmitter.ts:263](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/457a0dc3b3c9a47385d92ffbc69496977cee683b/Common/src/Event/EventEmitter.ts#L263)
+[Event/EventEmitter.ts:263](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/80aa060d880a8c194a04b83f18bd1ee360ab20e1/Common/src/Event/EventEmitter.ts#L263)
 
 ***
 
@@ -246,7 +246,7 @@ True if the protocol is connected.
 
 #### Defined in
 
-[Protocol/SignallingProtocol.ts:71](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/457a0dc3b3c9a47385d92ffbc69496977cee683b/Common/src/Protocol/SignallingProtocol.ts#L71)
+[Protocol/SignallingProtocol.ts:87](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/80aa060d880a8c194a04b83f18bd1ee360ab20e1/Common/src/Protocol/SignallingProtocol.ts#L87)
 
 ***
 
@@ -276,7 +276,7 @@ Alias for `emitter.removeListener()`.
 
 #### Defined in
 
-[Event/EventEmitter.ts:197](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/457a0dc3b3c9a47385d92ffbc69496977cee683b/Common/src/Event/EventEmitter.ts#L197)
+[Event/EventEmitter.ts:197](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/80aa060d880a8c194a04b83f18bd1ee360ab20e1/Common/src/Event/EventEmitter.ts#L197)
 
 ***
 
@@ -319,7 +319,7 @@ The callback function
 
 #### Defined in
 
-[Event/EventEmitter.ts:116](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/457a0dc3b3c9a47385d92ffbc69496977cee683b/Common/src/Event/EventEmitter.ts#L116)
+[Event/EventEmitter.ts:116](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/80aa060d880a8c194a04b83f18bd1ee360ab20e1/Common/src/Event/EventEmitter.ts#L116)
 
 ***
 
@@ -362,7 +362,7 @@ The callback function
 
 #### Defined in
 
-[Event/EventEmitter.ts:149](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/457a0dc3b3c9a47385d92ffbc69496977cee683b/Common/src/Event/EventEmitter.ts#L149)
+[Event/EventEmitter.ts:149](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/80aa060d880a8c194a04b83f18bd1ee360ab20e1/Common/src/Event/EventEmitter.ts#L149)
 
 ***
 
@@ -389,7 +389,7 @@ Returns a reference to the `EventEmitter`, so that calls can be chained.
 
 #### Defined in
 
-[Event/EventEmitter.ts:205](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/457a0dc3b3c9a47385d92ffbc69496977cee683b/Common/src/Event/EventEmitter.ts#L205)
+[Event/EventEmitter.ts:205](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/80aa060d880a8c194a04b83f18bd1ee360ab20e1/Common/src/Event/EventEmitter.ts#L205)
 
 ***
 
@@ -429,7 +429,7 @@ Returns a reference to the `EventEmitter`, so that calls can be chained.
 
 #### Defined in
 
-[Event/EventEmitter.ts:189](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/457a0dc3b3c9a47385d92ffbc69496977cee683b/Common/src/Event/EventEmitter.ts#L189)
+[Event/EventEmitter.ts:189](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/80aa060d880a8c194a04b83f18bd1ee360ab20e1/Common/src/Event/EventEmitter.ts#L189)
 
 ***
 
@@ -453,4 +453,4 @@ The message to send.
 
 #### Defined in
 
-[Protocol/SignallingProtocol.ts:79](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/457a0dc3b3c9a47385d92ffbc69496977cee683b/Common/src/Protocol/SignallingProtocol.ts#L79)
+[Protocol/SignallingProtocol.ts:95](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/80aa060d880a8c194a04b83f18bd1ee360ab20e1/Common/src/Protocol/SignallingProtocol.ts#L95)
