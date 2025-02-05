@@ -41,7 +41,7 @@ export class SignallingProtocol extends EventEmitter {
             try {
                 // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
                 const parsedData = JSON.parse(msg);
-                Logger.Info('Protocol received => \n' + JSON.stringify(parsedData, undefined, 4));
+                Logger.Debug('Protocol received => \n' + JSON.stringify(parsedData, undefined, 4));
                 parsedMessage = parsedData as BaseMessage;
             } catch (e: unknown) {
                 if (e instanceof Error) {
@@ -95,5 +95,6 @@ export class SignallingProtocol extends EventEmitter {
     sendMessage(msg: BaseMessage): void {
         this.transport.sendMessage(JSON.stringify(msg));
         this.transport.emit('out', msg); // emit this for listeners listening to outgoing messages
+        Logger.Debug('Protocol sent => \n' + JSON.stringify(msg, undefined, 4));
     }
 }

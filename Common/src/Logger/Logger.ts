@@ -25,11 +25,23 @@ export class LoggerContext {
     includeStack: boolean = true;
 }
 
+export interface ILogger {
+    InitLogging(logLevel: number, includeStack: boolean): void;
+    Debug(message: string): void;
+    Info(message: string): void;
+    Warning(message: string): void;
+    Error(message: string): void;
+}
+
+export function overrideLogger(logger: ILogger) {
+    Logger = logger;
+}
+
 /**
  * A basic console logger utilized by the Pixel Streaming frontend to allow
  * logging to the browser console.
  */
-export class LoggerType {
+export class LoggerType implements ILogger {
     context?: LoggerContext;
 
     /**
@@ -141,4 +153,4 @@ export class LoggerType {
     }
 }
 
-export const Logger = new LoggerType();
+export let Logger: ILogger = new LoggerType();
