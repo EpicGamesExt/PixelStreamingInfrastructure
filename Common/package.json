@@ -17,7 +17,7 @@
         "build": "npm run build:proto && npm run build:cjs && npm run build:esm",
         "rebuild": "npm run clean && npm run build",
         "watch:proto": "nodemon -V -d 3 --watch protobuf/signalling_messages.proto --exec 'npm run build:proto'",
-        "watch": "concurrently -k \"npm run watch:proto\" \"tsc --watch --preserveWatchOutput --project tsconfig.esm.json\"",
+        "watch": "concurrently -k \"npm run watch:proto\" \"tsc --watch --preserveWatchOutput --project tsconfig.cjs.json\"",
         "lint": "eslint src --ext .js,.jsx,.ts,.tsx",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
