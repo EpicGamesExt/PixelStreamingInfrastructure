@@ -361,6 +361,9 @@ export class Application {
             ({ data: { messageStreamerList, autoSelectedStreamerId, wantedStreamerId } }) =>
                 this.handleStreamerListMessage(messageStreamerList, autoSelectedStreamerId, wantedStreamerId)
         );
+        this.stream.addEventListener('subscribeFailed', ({ data: { message } }) =>
+            this.handleSubscribeFailedMessage(message)
+        );
         this.stream.addEventListener('settingsChanged', (event) => this.onSettingsChanged(event));
         this.stream.addEventListener('playerCount', ({ data: { count } }) => this.onPlayerCount(count));
         this.stream.addEventListener('webRtcTCPRelayDetected', () =>
@@ -731,6 +734,10 @@ export class Application {
                 this.showTextOverlay(message);
             }
         }
+    }
+
+    handleSubscribeFailedMessage(message: string) {
+        this.showDisconnectOverlay(`Subscribe failed: "${message}" Click to try again`);
     }
 
     /**

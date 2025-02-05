@@ -10,7 +10,7 @@
         "start": "node ./dist/index.js --serve --console_messages verbose --log_config --https_redirect",
         "lint": "eslint ./src --ext .js,.jsx,.ts,.tsx",
         "test": "echo \"Error: no test specified\" && exit 1",
-        "watch": "nodemon -V -d 3 --watch src --watch ../Signalling/dist -e 'ts,js,mjs,cjs,json' --exec 'npm run build && node ./dist/index.js --serve --console_messages verbose --log_config --https_redirect --player_port 1025' --http_root www",
+        "watch": "nodemon -V -d 3 --watch src --watch ../Signalling/dist -e 'ts,js,mjs,cjs,json' --exec 'npm run build && node ./dist/index.js --serve --console_messages verbose --log_config --https_redirect --player_port 1025' --http_root www --max_players 1",
         "develop": "concurrently -k \"cd ../Common && npm run watch\" \"cd ../Signalling && npm run watch\" \"cd ../Frontend/library && npm run watch\" \"cd ../Frontend/ui-library && npm run watch\" \"cd ../Frontend/implementations/typescript && npm run watch\"  \"npm run watch\""
     },
     "author": "Epic Games",
