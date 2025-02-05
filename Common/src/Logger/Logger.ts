@@ -128,7 +128,7 @@ export class LoggerType {
      */
     private ValidateContext() {
         if (!this.context) {
-            if (!window) {
+            if (typeof window == 'undefined' || !window) {
                 // no window object so we can only store a local context.
                 this.context = new LoggerContext();
             } else if (!window.loggerContext) {

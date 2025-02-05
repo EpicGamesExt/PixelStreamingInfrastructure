@@ -3,7 +3,6 @@
 import { Logger } from '../Logger/Logger';
 import { ITransport } from './ITransport';
 import { EventEmitter } from '../Event/EventEmitter';
-import { BaseMessage } from '../Messages/base_message';
 
 // declare the new method for the websocket interface
 declare global {
@@ -27,14 +26,14 @@ export class WebSocketTransport extends EventEmitter implements ITransport {
      * Sends a message over the websocket.
      * @param msg - The message to send.
      */
-    sendMessage(msg: BaseMessage): void {
+    sendMessage(msg: string): void {
         if (this.webSocket) {
-            this.webSocket.send(JSON.stringify(msg));
+            this.webSocket.send(msg);
         }
     }
 
     // A handler for when messages are received.
-    onMessage?: (msg: BaseMessage) => void;
+    onMessage?: (msg: string) => void;
 
     /**
      * Connect to the signaling server
@@ -114,23 +113,8 @@ export class WebSocketTransport extends EventEmitter implements ITransport {
             return;
         }
 
-        let parsedMessage: BaseMessage;
-        try {
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-            const parsedData = JSON.parse(event.data as string);
-            Logger.Info('received => \n' + JSON.stringify(parsedData, undefined, 4));
-            parsedMessage = parsedData as BaseMessage;
-        } catch (e: unknown) {
-            if (e instanceof Error) {
-                Logger.Error(`Error parsing message string ${event.data}.\n${e.message}`);
-            } else {
-                Logger.Error(`Unknown error while parsing message data in handleOnMessage`);
-            }
-            return;
-        }
-
         if (this.onMessage) {
-            this.onMessage(parsedMessage);
+            this.onMessage(event.data as string);
         }
     }
 

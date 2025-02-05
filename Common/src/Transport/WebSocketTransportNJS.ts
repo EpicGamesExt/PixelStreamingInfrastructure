@@ -1,9 +1,8 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 import { ITransport } from './ITransport';
-import { BaseMessage } from '../Messages/base_message';
-import WebSocket from 'ws';
 import { EventEmitter } from '../Event/EventEmitter';
+import WebSocket from 'ws';
 
 /**
  * An implementation of WebSocketTransport from pixelstreamingcommon that supports node.js websockets
@@ -28,14 +27,14 @@ export class WebSocketTransportNJS extends EventEmitter implements ITransport {
      * Sends a message over the websocket.
      * @param msg - The message to send.
      */
-    sendMessage(msg: BaseMessage): void {
+    sendMessage(msg: string): void {
         if (this.webSocket) {
-            this.webSocket.send(JSON.stringify(msg));
+            this.webSocket.send(msg);
         }
     }
 
     // A handler for when messages are received.
-    onMessage?: (msg: BaseMessage) => void;
+    onMessage?: (msg: string) => void;
 
     /**
      * Connect to the signaling server
@@ -72,15 +71,8 @@ export class WebSocketTransportNJS extends EventEmitter implements ITransport {
      * @param event - Message Received
      */
     handleOnMessage(event: WebSocket.MessageEvent): void {
-        let parsedMessage: BaseMessage;
-        try {
-            parsedMessage = JSON.parse(event.data as string) as BaseMessage;
-        } catch (e) {
-            return;
-        }
-
         if (this.onMessage) {
-            this.onMessage(parsedMessage);
+            this.onMessage(event.data as string);
         }
     }
 

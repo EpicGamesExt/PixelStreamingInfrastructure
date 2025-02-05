@@ -10,7 +10,9 @@
         "noImplicitOverride": false, // generated code breaks this
         "noFallthroughCasesInSwitch": true,
         "noImplicitReturns": true,
-        "noPropertyAccessFromIndexSignature": true
+        "noPropertyAccessFromIndexSignature": true,
+        "declaration": true,
+        "declarationDir": "./dist/types"
     },
     "include": ["./src/*.ts"],
     "typedocOptions": {
