@@ -31,11 +31,6 @@ export function delay(time: number) {
   });
 }
 
-export async function startStreaming(page: Page) {
-    await page.evaluate(()=> {
-        window.pixelStreaming.connect();
-    });
-}
 
 export async function startAndWaitForVideo(page: Page) {
     await page.evaluate(()=> {
