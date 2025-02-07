@@ -120,7 +120,7 @@ test('Test latency calculation', {
     let latencyInfo: LatencyInfo = await page.evaluate(() => {
         return new Promise((resolve) => {
             window.pixelStreaming.addEventListener("latencyCalculated", (e: LatencyCalculatedEvent) => {
-                if(e.data.latencyInfo && e.data.latencyInfo.senderLatencyMs) {
+                if(e.data.latencyInfo && e.data.latencyInfo.senderLatencyMs && e.data.latencyInfo.rttMs) {
                     resolve(e.data.latencyInfo);
                 }
             });

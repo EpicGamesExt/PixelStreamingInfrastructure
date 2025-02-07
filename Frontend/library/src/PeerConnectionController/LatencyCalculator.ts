@@ -80,15 +80,10 @@ export class LatencyCalculator {
     public calculate(stats: AggregatedStats, receivers: RTCRtpReceiver[]): LatencyInfo {
         const latencyInfo = new LatencyInfo();
 
-        const activeCandidatePair: CandidatePairStats | null = stats.getActiveCandidatePair();
+        const rttMS: number | null = this.getRTTMs(stats);
 
-        if (
-            !!activeCandidatePair &&
-            activeCandidatePair.currentRoundTripTime !== undefined &&
-            activeCandidatePair.currentRoundTripTime > 0
-        ) {
-            // Get RTT
-            latencyInfo.rttMs = activeCandidatePair.currentRoundTripTime * 1000;
+        if (rttMS != null) {
+            latencyInfo.rttMs = rttMS;
 
             // Calculate sender latency using the first valid video ssrc/csrc
             const captureSource: RTCRtpCaptureSource | null = this.getCaptureSource(receivers);
@@ -160,7 +155,7 @@ export class LatencyCalculator {
             latencyInfo.senderLatencyMs = latencyInfo.frameTiming.captureToSendLatencyMs;
         }
 
-        // Calculate E2E latency as sender-side latency + network latency + receiver-side latency
+        // Calculate E2E latency as sender-side latency + one way network latency + receiver-side latency
         if (
             latencyInfo.averageProcessingDelayMs !== undefined &&
             latencyInfo.senderLatencyMs != undefined &&
@@ -283,24 +278,71 @@ export class LatencyCalculator {
         // The calculation performed in this function is as per the procedure defined here:
         // https://w3c.github.io/webrtc-extensions/#dom-rtcrtpcontributingsource-sendercapturetimeoffset
 
-        const remoteVideoStatsArrivedTimestamp = stats.outBoundVideoStats.timestamp;
-        const remoteVideoStatsSentTimestamp = stats.outBoundVideoStats.remoteTimestamp;
+        const hasRemoteOutboundVideoStats =
+            stats.remoteOutboundVideoStats !== undefined &&
+            stats.remoteOutboundVideoStats.timestamp !== undefined &&
+            stats.remoteOutboundVideoStats.remoteTimestamp !== undefined;
 
-        const activeCandidatePair: CandidatePairStats | null = stats.getActiveCandidatePair();
-        const networkDelay =
-            activeCandidatePair != null ? activeCandidatePair.currentRoundTripTime * 0.5 * 1000 : 0.0;
+        // Note: As of Chrome 132, remote-outbound-rtp stats for video are not yet implemented (audio works).
+        // This codepath should activate once they do begin to work.
+        if (!hasRemoteOutboundVideoStats) {
+            return null;
+        }
+
+        const remoteStatsArrivedTimestamp = stats.remoteOutboundVideoStats.timestamp;
+        const remoteStatsSentTimestamp = stats.remoteOutboundVideoStats.remoteTimestamp;
+
+        const rttMs: number | null = this.getRTTMs(stats);
 
         if (
-            remoteVideoStatsArrivedTimestamp !== undefined &&
-            remoteVideoStatsSentTimestamp !== undefined &&
-            networkDelay !== undefined
+            remoteStatsArrivedTimestamp !== undefined &&
+            remoteStatsSentTimestamp !== undefined &&
+            rttMs !== null
         ) {
-            return remoteVideoStatsArrivedTimestamp - (remoteVideoStatsSentTimestamp + networkDelay);
+            const onewayDelay = rttMs * 0.5;
+            return remoteStatsArrivedTimestamp - (remoteStatsSentTimestamp + onewayDelay);
         }
         // Could not get stats to calculate sender/receiver clock offset
         else {
             return null;
         }
+    }
+
+    private getRTTMs(stats: AggregatedStats): number | null {
+        // Try to get it from the active candidate pair
+        const activeCandidatePair: CandidatePairStats | null = stats.getActiveCandidatePair();
+        if (!!activeCandidatePair && activeCandidatePair.currentRoundTripTime !== undefined) {
+            const curRTTSeconds = activeCandidatePair.currentRoundTripTime;
+            return curRTTSeconds * 1000;
+        }
+
+        // Next try to get it from remote-outbound-rtp video stats
+        if (
+            !!stats.remoteOutboundVideoStats &&
+            stats.remoteOutboundVideoStats.totalRoundTripTime !== undefined &&
+            stats.remoteOutboundVideoStats.roundTripTimeMeasurements !== undefined &&
+            stats.remoteOutboundVideoStats.roundTripTimeMeasurements > 0
+        ) {
+            const avgRttSeconds =
+                stats.remoteOutboundVideoStats.totalRoundTripTime /
+                stats.remoteOutboundVideoStats.roundTripTimeMeasurements;
+            return avgRttSeconds * 1000;
+        }
+
+        // Next try to get it from remote-outbound-rtp audio stats
+        if (
+            !!stats.remoteOutboundAudioStats &&
+            stats.remoteOutboundAudioStats.totalRoundTripTime !== undefined &&
+            stats.remoteOutboundAudioStats.roundTripTimeMeasurements !== undefined &&
+            stats.remoteOutboundAudioStats.roundTripTimeMeasurements > 0
+        ) {
+            const avgRttSeconds =
+                stats.remoteOutboundAudioStats.totalRoundTripTime /
+                stats.remoteOutboundAudioStats.roundTripTimeMeasurements;
+            return avgRttSeconds * 1000;
+        }
+
+        return null;
     }
 }
 

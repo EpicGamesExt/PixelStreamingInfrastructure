@@ -184,7 +184,7 @@ export class Streamer extends EventEmitter {
                     }
                     const tranceiverOptions: RTCRtpTransceiverInit = {
                         streams: [this.localStream],
-                        direction: 'sendonly',
+                        direction: 'sendrecv',
                         sendEncodings: [
                             {
                                 maxBitrate: this.settings.WebRTC.MaxBitrate,
@@ -224,8 +224,10 @@ export class Streamer extends EventEmitter {
                 dataChannel: dataChannel
             };
 
+            const offerOptions: RTCOfferOptions = { offerToReceiveAudio: true, offerToReceiveVideo: true }
+
             peerConnection
-                .createOffer()
+                .createOffer(offerOptions)
                 .then((offer) => {
 
                     if(offer.sdp == undefined) {
