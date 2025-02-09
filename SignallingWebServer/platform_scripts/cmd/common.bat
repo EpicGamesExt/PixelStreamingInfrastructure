@@ -46,7 +46,7 @@ set TURN_USER=
 set TURN_PASS=
 set STUN_SERVER=
 set PUBLIC_IP=
-if not exist "%SCRIPT_DIR%\..\..\build\" (
+if not exist "%SCRIPT_DIR%\..\..\dist\" (
     set BUILD_WILBUR=1
 )
 :arg_loop
@@ -277,12 +277,10 @@ exit /b
 :BuildWilbur
 pushd %SCRIPT_DIR%\..\..\
 pushd ..\Common
-IF NOT EXIST build\ (
-    echo Building common library...
-    echo ------------------------
-    call "%SCRIPT_DIR%node\npm" install
-    call "%SCRIPT_DIR%node\npm" run build
-)
+echo Building common library...
+echo ------------------------
+call "%SCRIPT_DIR%node\npm" install
+call "%SCRIPT_DIR%node\npm" run build
 popd
 echo Building signalling library...
 echo ----------------------------

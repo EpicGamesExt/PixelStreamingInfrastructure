@@ -3,7 +3,7 @@ FROM node:18.17.0 as builder
 WORKDIR /SignallingTester
 
 COPY Common/ Common
-COPY SS_Test/ SS_Test
+COPY Extras/SS_Test/ SS_Test
 
 WORKDIR /SignallingTester/Common
 
@@ -18,5 +18,5 @@ RUN npm run build
 
 USER node
 
-CMD [ "node", "build/index.js" ]
+CMD [ "node", "dist/index.js" ]
 

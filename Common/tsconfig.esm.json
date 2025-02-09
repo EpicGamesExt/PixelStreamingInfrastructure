@@ -1,8 +1,8 @@
 {
     "extends": "./tsconfig.base.json",
     "compilerOptions": {
-        "outDir": "./build/esm",
-        "module": "ES6",
+        "outDir": "./dist/esm",
+        "module": "es6",
         "moduleResolution": "bundler"
     }
 }
