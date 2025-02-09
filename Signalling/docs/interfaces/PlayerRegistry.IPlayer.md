@@ -40,7 +40,7 @@ player registry.
 
 #### Defined in
 
-[PlayerRegistry.ts:12](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Signalling/src/PlayerRegistry.ts#L12)
+[Signalling/src/PlayerRegistry.ts:11](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/709d6fe/Signalling/src/PlayerRegistry.ts#L11)
 
 ___
 
@@ -50,7 +50,7 @@ ___
 
 #### Defined in
 
-[PlayerRegistry.ts:13](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Signalling/src/PlayerRegistry.ts#L13)
+[Signalling/src/PlayerRegistry.ts:12](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/709d6fe/Signalling/src/PlayerRegistry.ts#L12)
 
 ___
 
@@ -60,7 +60,7 @@ ___
 
 #### Defined in
 
-[PlayerRegistry.ts:14](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Signalling/src/PlayerRegistry.ts#L14)
+[Signalling/src/PlayerRegistry.ts:13](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/709d6fe/Signalling/src/PlayerRegistry.ts#L13)
 
 ## Methods
 
@@ -74,7 +74,7 @@ ___
 
 #### Defined in
 
-[PlayerRegistry.ts:17](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Signalling/src/PlayerRegistry.ts#L17)
+[Signalling/src/PlayerRegistry.ts:16](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/709d6fe/Signalling/src/PlayerRegistry.ts#L16)
 
 ___
 
@@ -92,7 +92,7 @@ ___
 
 #### Defined in
 
-[LoggingUtils.ts:18](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Signalling/src/LoggingUtils.ts#L18)
+[Signalling/src/LoggingUtils.ts:18](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/709d6fe/Signalling/src/LoggingUtils.ts#L18)
 
 ___
 
@@ -112,4 +112,4 @@ ___
 
 #### Defined in
 
-[PlayerRegistry.ts:16](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Signalling/src/PlayerRegistry.ts#L16)
+[Signalling/src/PlayerRegistry.ts:15](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/709d6fe/Signalling/src/PlayerRegistry.ts#L15)

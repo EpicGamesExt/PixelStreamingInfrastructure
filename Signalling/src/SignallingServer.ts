@@ -46,7 +46,7 @@ export interface IServerConfig {
     maxSubscribers?: number;
 }
 
-type ProtocolConfig = {
+export type ProtocolConfig = {
     [key: string]: any;
 };
 

@@ -8,11 +8,10 @@ To build the `Signalling` module invoke the following commands in the `Common` a
 
 ```bash
 npm install
-npm run build-all
-# Or npm run build
+npm run build
 ```
 
-This will result in a `/dist` or `/build` output directory.
+This will result in a `/dist` output directory.
 
 **Note:** If you just want to get a signalling server up and running refer to ["Getting Started"](../README.md#getting-started)
 
@@ -25,7 +24,7 @@ The NPM packages supports:
 
 ## Documentation
 
-- [Protocol Notes](docs/Protocol.md)
+- [Protocol Notes](../Common/docs/Protocol.md)
 - [Protocol Messages](../Common/docs/messages.md)
 
 The API documentation is [here](docs/) and covers details of all exported components of the library.

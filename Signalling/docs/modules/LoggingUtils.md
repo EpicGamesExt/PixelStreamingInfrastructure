@@ -54,7 +54,7 @@ be preceded by the logging call.
 
 #### Defined in
 
-[LoggingUtils.ts:74](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Signalling/src/LoggingUtils.ts#L74)
+[Signalling/src/LoggingUtils.ts:74](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/709d6fe/Signalling/src/LoggingUtils.ts#L74)
 
 ___
 
@@ -79,7 +79,7 @@ one connection and being sent to another with only minor changes being made.
 
 #### Defined in
 
-[LoggingUtils.ts:56](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Signalling/src/LoggingUtils.ts#L56)
+[Signalling/src/LoggingUtils.ts:56](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/709d6fe/Signalling/src/LoggingUtils.ts#L56)
 
 ___
 
@@ -103,7 +103,7 @@ Do not call this for messages being forwarded to another connection.
 
 #### Defined in
 
-[LoggingUtils.ts:26](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Signalling/src/LoggingUtils.ts#L26)
+[Signalling/src/LoggingUtils.ts:26](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/709d6fe/Signalling/src/LoggingUtils.ts#L26)
 
 ___
 
@@ -127,4 +127,4 @@ Do not call this for messages being forwarded to this connection.
 
 #### Defined in
 
-[LoggingUtils.ts:41](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/e96d9c6/Signalling/src/LoggingUtils.ts#L41)
+[Signalling/src/LoggingUtils.ts:41](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/709d6fe/Signalling/src/LoggingUtils.ts#L41)

@@ -27,4 +27,4 @@ The message type from MessageRegistry of the supplied message object if it's val
 
 ## Defined in
 
-[Messages/message\_helpers.ts:29](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/457a0dc3b3c9a47385d92ffbc69496977cee683b/Common/src/Messages/message_helpers.ts#L29)
+[Messages/message\_helpers.ts:29](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/80aa060d880a8c194a04b83f18bd1ee360ab20e1/Common/src/Messages/message_helpers.ts#L29)

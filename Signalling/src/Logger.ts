@@ -4,9 +4,11 @@ import path from 'path';
 import winston from 'winston';
 import 'winston-daily-rotate-file';
 import { TransformableInfo } from 'logform';
-import { BaseMessage } from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
+import { BaseMessage, ILogger, overrideLogger } from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
 
 const { combine, timestamp, printf, colorize, splat } = winston.format;
+
+type WinstonLogger = ReturnType<typeof winston.createLogger>;
 
 /**
  * The actual logger object. This is just a winston logger.
@@ -30,6 +32,35 @@ export interface IConfig {
 }
 
 /**
+ * A wrapper for the log calls in Common lib
+ */
+class CommonLogger implements ILogger {
+    logger: WinstonLogger;
+
+    constructor(winstonLogger: WinstonLogger) {
+        this.logger = winstonLogger;
+    }
+
+    InitLogging(_logLevel: number, _includeStack: boolean): void {}
+
+    Debug(message: string): void {
+        this.logger.debug(message);
+    }
+
+    Info(message: string): void {
+        this.logger.info(message);
+    }
+
+    Warning(message: string): void {
+        this.logger.warn(message);
+    }
+
+    Error(message: string): void {
+        this.logger.error(message);
+    }
+}
+
+/**
  * Call this as early as possible to setup the logging module with your
  * preferred settings.
  * @param config - The settings to init the logger with. See IConfig interface
@@ -43,6 +74,9 @@ export function InitLogging(config: IConfig): void {
     Logger = winston.createLogger({
         transports: [createConsoleTransport(logLevelConsole), createFileTransport(logDir, logLevelFile)]
     });
+
+    const commonLogger = new CommonLogger(Logger);
+    overrideLogger(commonLogger);
 }
 
 let logMessagesToConsole = 'none';

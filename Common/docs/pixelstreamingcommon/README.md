@@ -20,6 +20,12 @@ Re-exports [EventEmitter](../Event/EventEmitter/classes/EventEmitter.md)
 
 ***
 
+### ILogger
+
+Re-exports [ILogger](../Logger/Logger/interfaces/ILogger.md)
+
+***
+
 ### ITransport
 
 Re-exports [ITransport](../Transport/ITransport/interfaces/ITransport.md)
@@ -53,6 +59,12 @@ Renames and re-exports [Messages/message_helpers](../Messages/message_helpers/RE
 ### MessageRegistry
 
 Re-exports [MessageRegistry](../Messages/message_registry/variables/MessageRegistry.md)
+
+***
+
+### overrideLogger
+
+Re-exports [overrideLogger](../Logger/Logger/functions/overrideLogger.md)
 
 ***
 

@@ -3,6 +3,7 @@
 import { ITransport } from '../Transport/ITransport';
 import { EventEmitter } from '../Event/EventEmitter';
 import { BaseMessage } from '../Messages/base_message';
+import { Logger } from '../Logger/Logger';
 
 /**
  * Signalling protocol for handling messages from the signalling server.
@@ -35,13 +36,28 @@ export class SignallingProtocol extends EventEmitter {
         super();
         this.transport = transport;
 
-        transport.onMessage = (msg: BaseMessage) => {
+        transport.onMessage = (msg: string) => {
+            let parsedMessage: BaseMessage;
+            try {
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+                const parsedData = JSON.parse(msg);
+                Logger.Debug('Protocol received => \n' + JSON.stringify(parsedData, undefined, 4));
+                parsedMessage = parsedData as BaseMessage;
+            } catch (e: unknown) {
+                if (e instanceof Error) {
+                    Logger.Error(`Error parsing message string ${msg}.\n${e.message}`);
+                } else {
+                    Logger.Error(`Unknown error while parsing message data in handleOnMessage`);
+                }
+                return;
+            }
+
             // call the handlers
-            transport.emit('message', msg); // emit this for listeners listening to any message
-            if (!this.emit(msg.type, msg)) {
+            transport.emit('message', parsedMessage); // emit this for listeners listening to any message
+            if (!this.emit(parsedMessage.type, parsedMessage)) {
                 // emit this for listeners listening for specific messages
                 // no listeners
-                this.emit('unhandled', msg);
+                this.emit('unhandled', parsedMessage);
             }
         };
     }
@@ -77,7 +93,8 @@ export class SignallingProtocol extends EventEmitter {
      * @param msg - The message to send.
      */
     sendMessage(msg: BaseMessage): void {
-        this.transport.sendMessage(msg);
+        this.transport.sendMessage(JSON.stringify(msg));
         this.transport.emit('out', msg); // emit this for listeners listening to outgoing messages
+        Logger.Debug('Protocol sent => \n' + JSON.stringify(msg, undefined, 4));
     }
 }

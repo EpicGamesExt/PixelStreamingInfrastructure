@@ -19,6 +19,7 @@
 - [Logger](pixelstreamingsignalling.md#logger)
 - [PlayerConnection](pixelstreamingsignalling.md#playerconnection)
 - [PlayerRegistry](pixelstreamingsignalling.md#playerregistry)
+- [ProtocolConfig](pixelstreamingsignalling.md#protocolconfig)
 - [SFUConnection](pixelstreamingsignalling.md#sfuconnection)
 - [SignallingServer](pixelstreamingsignalling.md#signallingserver)
 - [StreamerConnection](pixelstreamingsignalling.md#streamerconnection)
@@ -106,6 +107,12 @@ ___
 ### PlayerRegistry
 
 Re-exports [PlayerRegistry](../classes/PlayerRegistry.PlayerRegistry.md)
+
+___
+
+### ProtocolConfig
+
+Re-exports [ProtocolConfig](SignallingServer.md#protocolconfig)
 
 ___
 
