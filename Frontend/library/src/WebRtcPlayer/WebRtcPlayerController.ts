@@ -180,6 +180,9 @@ export class WebRtcPlayerController {
         this.protocol.addListener(Messages.streamerList.typeName, (msg: BaseMessage) =>
             this.handleStreamerListMessage(msg as Messages.streamerList)
         );
+        this.protocol.addListener(Messages.subscribeFailed.typeName, (msg: BaseMessage) =>
+            this.handleSubscribeFailedMessage(msg as Messages.subscribeFailed)
+        );
         this.protocol.addListener(Messages.streamerIdChanged.typeName, (msg: BaseMessage) =>
             this.handleStreamerIDChangedMessage(msg as Messages.streamerIdChanged)
         );
@@ -1250,6 +1253,13 @@ export class WebRtcPlayerController {
                 wantedStreamerId
             })
         );
+    }
+
+    handleSubscribeFailedMessage(subscribeFailedMessage: Messages.subscribeFailed) {
+        this.reconnectAttempt = 0;
+        this.isReconnecting = false;
+        this.enableAutoReconnect = false;
+        this.pixelStreaming._onSubscribeFailed(subscribeFailedMessage.message);
     }
 
     handleStreamerIDChangedMessage(streamerIDChangedMessage: Messages.streamerIdChanged) {

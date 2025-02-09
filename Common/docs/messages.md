@@ -33,6 +33,7 @@
     - [streamerIdChanged](#-streamerIdChanged)
     - [streamerList](#-streamerList)
     - [subscribe](#-subscribe)
+    - [subscribeFailed](#-subscribeFailed)
     - [unsubscribe](#-unsubscribe)
   
 - [Scalar Value Types](#scalar-value-types)
@@ -284,6 +285,8 @@ stream to the new player.
 | sdp | [string](#string) |  | The SDP payload from WebRTC |
 | playerId | [string](#string) | optional | If being sent to a player this should be a valid player ID |
 | sfu | [bool](#bool) | optional | Indiates that this offer is coming from an SFU. |
+| multiplex | [bool](#bool) | optional | Indicates that the streamer is multiplexing data channels |
+| scalabilityMode | [string](#string) | optional | Indicates the scalability mode of the video stream |
 
 
 
@@ -555,6 +558,22 @@ that the player requests to subscribe to the given stream.
 | ----- | ---- | ----- | ----------- |
 | type | [string](#string) |  | Should always be &#39;subscribe&#39; |
 | streamerId | [string](#string) |  | The ID of the streamer the player wishes to subscribe to. |
+
+
+
+
+
+
+<a name="-subscribeFailed"></a>
+
+### subscribeFailed
+Sent in response to a subscribe message when something goes wrong.
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| type | [string](#string) |  | Should always be &#39;subscribeFailed&#39; |
+| message | [string](#string) |  | A description of what went wrong. |
 
 
 

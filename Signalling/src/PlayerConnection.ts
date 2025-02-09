@@ -150,6 +150,10 @@ export class PlayerConnection implements IPlayer, LogUtils.IMessageLogger {
             Logger.error(
                 `subscribe: Player ${this.playerId} tried to subscribe to a non-existent streamer ${streamerId}`
             );
+            const failureMessage = MessageHelpers.createMessage(Messages.subscribeFailed, {
+                message: `Streamer ${streamerId} does not exist.`
+            });
+            this.protocol.sendMessage(failureMessage);
             return;
         }
 
@@ -160,7 +164,19 @@ export class PlayerConnection implements IPlayer, LogUtils.IMessageLogger {
             this.unsubscribe();
         }
 
+        if (streamer.maxSubscribers > 0 && streamer.subscribers.size >= streamer.maxSubscribers) {
+            Logger.error(
+                `subscribe: Player ${this.playerId} could not subscribe to ${streamerId}. Max players (${streamer.maxSubscribers}) reached.`
+            );
+            const failureMessage = MessageHelpers.createMessage(Messages.subscribeFailed, {
+                message: `Streamer ${streamerId} is full. Max players = ${streamer.maxSubscribers}.`
+            });
+            this.protocol.sendMessage(failureMessage);
+            return;
+        }
+
         this.subscribedStreamer = streamer;
+        this.subscribedStreamer.subscribers.add(this.playerId);
         this.subscribedStreamer.on('id_changed', this.streamerIdChangeListener);
         this.subscribedStreamer.on('disconnect', this.streamerDisconnectedListener);
 
@@ -176,6 +192,8 @@ export class PlayerConnection implements IPlayer, LogUtils.IMessageLogger {
         if (!this.subscribedStreamer) {
             return;
         }
+
+        this.subscribedStreamer.subscribers.delete(this.playerId);
 
         const disconnectedMessage = MessageHelpers.createMessage(Messages.playerDisconnected, {
             playerId: this.playerId

@@ -20,16 +20,28 @@ export enum LogLevel {
  * contexts, such as stats reporting. Instead we store the logger config context on the window object
  * to be shared with any Logger instances.
  */
-class LoggerContext {
+export class LoggerContext {
     logLevel: LogLevel = LogLevel.Debug;
     includeStack: boolean = true;
+}
+
+export interface ILogger {
+    InitLogging(logLevel: number, includeStack: boolean): void;
+    Debug(message: string): void;
+    Info(message: string): void;
+    Warning(message: string): void;
+    Error(message: string): void;
+}
+
+export function overrideLogger(logger: ILogger) {
+    Logger = logger;
 }
 
 /**
  * A basic console logger utilized by the Pixel Streaming frontend to allow
  * logging to the browser console.
  */
-class LoggerType {
+export class LoggerType implements ILogger {
     context?: LoggerContext;
 
     /**
@@ -128,7 +140,7 @@ class LoggerType {
      */
     private ValidateContext() {
         if (!this.context) {
-            if (!window) {
+            if (typeof window == 'undefined' || !window) {
                 // no window object so we can only store a local context.
                 this.context = new LoggerContext();
             } else if (!window.loggerContext) {
@@ -141,4 +153,4 @@ class LoggerType {
     }
 }
 
-export const Logger = new LoggerType();
+export let Logger: ILogger = new LoggerType();

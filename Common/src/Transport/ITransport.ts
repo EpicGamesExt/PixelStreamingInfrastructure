@@ -1,4 +1,3 @@
-import { BaseMessage } from '../Messages/base_message';
 import { EventEmitter } from '../Event/EventEmitter';
 
 /**
@@ -11,12 +10,12 @@ export interface ITransport extends EventEmitter {
      * Called when the protocol wants to send a message over the transport.
      * @param msg - The message to send over the transport.
      */
-    sendMessage(msg: BaseMessage): void;
+    sendMessage(msg: string): void;
 
     /**
      * Callback filled in by the SignallingProtocol and should be called by the transport when a new message arrives.
      */
-    onMessage?: (msg: BaseMessage) => void;
+    onMessage?: (msg: string) => void;
 
     /**
      * Connect to a given URL.

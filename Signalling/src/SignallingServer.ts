@@ -41,9 +41,12 @@ export interface IServerConfig {
 
     // Additional websocket options for the SFU listening websocket.
     sfuWsOptions?: WebSocket.ServerOptions;
+
+    // Max number of players per streamer.
+    maxSubscribers?: number;
 }
 
-type ProtocolConfig = {
+export type ProtocolConfig = {
     [key: string]: any;
 };
 
@@ -118,6 +121,7 @@ export class SignallingServer {
         Logger.info(`New streamer connection: %s`, request.socket.remoteAddress);
 
         const newStreamer = new StreamerConnection(this, ws, request.socket.remoteAddress);
+        newStreamer.maxSubscribers = this.config.maxSubscribers || 0;
 
         // add it to the registry and when the transport closes, remove it.
         this.streamerRegistry.add(newStreamer);
