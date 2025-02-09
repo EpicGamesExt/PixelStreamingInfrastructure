@@ -413,6 +413,17 @@ export class DataChannelLatencyTestResultEvent extends Event {
     }
 }
 
+export class SubscribeFailedEvent extends Event {
+    override readonly type: 'subscribeFailed';
+    readonly data: {
+        message: string;
+    };
+    constructor(data: SubscribeFailedEvent['data']) {
+        super('subscribeFailed');
+        this.data = data;
+    }
+}
+
 /**
  * An event that is emitted when receiving initial settings from UE.
  */
@@ -573,6 +584,7 @@ export type PixelStreamingEvent =
     | LatencyTestResultEvent
     | DataChannelLatencyTestResponseEvent
     | DataChannelLatencyTestResultEvent
+    | SubscribeFailedEvent
     | InitialSettingsEvent
     | SettingsChangedEvent
     | XrSessionStartedEvent

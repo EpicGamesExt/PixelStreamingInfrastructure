@@ -29,7 +29,8 @@ import {
     DataChannelLatencyTestResponseEvent,
     DataChannelLatencyTestResultEvent,
     PlayerCountEvent,
-    WebRtcTCPRelayDetectedEvent
+    WebRtcTCPRelayDetectedEvent,
+    SubscribeFailedEvent
 } from '../Util/EventEmitter';
 import { WebXRController } from '../WebXR/WebXRController';
 import { MessageDirection } from '../UeInstanceMessage/StreamMessageController';
@@ -657,6 +658,10 @@ export class PixelStreaming {
 
     _onPlayerCount(playerCount: number) {
         this._eventEmitter.dispatchEvent(new PlayerCountEvent({ count: playerCount }));
+    }
+
+    _onSubscribeFailed(message: string) {
+        this._eventEmitter.dispatchEvent(new SubscribeFailedEvent({ message: message }));
     }
 
     // Sets up to emit the webrtc tcp relay detect event

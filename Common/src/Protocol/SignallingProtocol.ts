@@ -25,7 +25,7 @@ import { BaseMessage } from '../Messages/base_message';
  */
 export class SignallingProtocol extends EventEmitter {
     static get SIGNALLING_VERSION(): string {
-        return '1.2.1';
+        return '1.3.0';
     }
 
     // The transport in use by this protocol object.
