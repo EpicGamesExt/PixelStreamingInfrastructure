@@ -85,7 +85,7 @@ export class SignallingServer {
         }
 
         // Streamer connections
-        const streamerServer = new WebSocket.Server({
+        const streamerServer = new WebSocket.WebSocketServer({
             port: config.streamerPort,
             backlog: 1,
             ...config.streamerWsOptions

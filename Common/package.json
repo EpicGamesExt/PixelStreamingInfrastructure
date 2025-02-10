@@ -1,6 +1,6 @@
 {
     "name": "@epicgames-ps/lib-pixelstreamingcommon-ue5.5",
-    "version": "0.1.6",
+    "version": "0.1.7",
     "description": "Common utilities library for Unreal Engine 5.5 Pixel Streaming",
     "main": "dist/cjs/pixelstreamingcommon.js",
     "module": "dist/esm/pixelstreamingcommon.js",
@@ -53,5 +53,8 @@
         "@protobuf-ts/plugin": "^2.9.3",
         "@types/ws": "^8.5.10",
         "ws": "^8.17.1"
+    },
+    "lint-staged": {
+        "*.ts": "eslint --fix"
     }
 }
