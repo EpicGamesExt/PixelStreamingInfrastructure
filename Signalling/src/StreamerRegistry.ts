@@ -159,7 +159,7 @@ export class StreamerRegistry extends EventEmitter {
         let maxPostfix = -1;
         for (const streamer of this.streamers) {
             const idMatchRegex = /^(.*?)(\d*)$/;
-            // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+
             const [, baseId, postfix] = streamer.streamerId.match(idMatchRegex)!;
             // if the id is numeric then base id will be empty and we need to compare with the postfix
             if ((baseId != '' && baseId != id) || (baseId == '' && postfix != id)) {

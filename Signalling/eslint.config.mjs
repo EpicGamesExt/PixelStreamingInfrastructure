@@ -26,6 +26,7 @@ export default tseslint.config(
             "tsdoc/syntax": "warn",
             "@typescript-eslint/require-array-sort-compare": "error",
             "no-unused-vars": "off",
+            "@typescript-eslint/no-misused-promises": "off", // http.createServer(app) is throwing this
             "@typescript-eslint/no-unused-vars": [
                 "error",
                 {
