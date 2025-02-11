@@ -6,8 +6,6 @@
 
 # Protocol/SignallingProtocol
 
-## Index
-
-### Classes
+## Classes
 
 - [SignallingProtocol](classes/SignallingProtocol.md)

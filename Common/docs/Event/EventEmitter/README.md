@@ -6,8 +6,6 @@
 
 # Event/EventEmitter
 
-## Index
-
-### Classes
+## Classes
 
 - [EventEmitter](classes/EventEmitter.md)

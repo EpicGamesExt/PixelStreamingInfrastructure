@@ -6,8 +6,6 @@
 
 # Messages/base\_message
 
-## Index
-
-### Interfaces
+## Interfaces
 
 - [BaseMessage](interfaces/BaseMessage.md)

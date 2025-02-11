@@ -6,8 +6,6 @@
 
 # Transport/WebSocketTransportNJS
 
-## Index
-
-### Classes
+## Classes
 
 - [WebSocketTransportNJS](classes/WebSocketTransportNJS.md)

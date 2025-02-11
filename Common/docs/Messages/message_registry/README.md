@@ -6,8 +6,6 @@
 
 # Messages/message\_registry
 
-## Index
-
-### Variables
+## Variables
 
 - [MessageRegistry](variables/MessageRegistry.md)

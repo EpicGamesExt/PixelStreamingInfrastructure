@@ -6,9 +6,7 @@
 
 # Messages/message\_helpers
 
-## Index
-
-### Functions
+## Functions
 
 - [createMessage](functions/createMessage.md)
 - [validateMessage](functions/validateMessage.md)
