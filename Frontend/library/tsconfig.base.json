@@ -15,8 +15,8 @@
         "declarationDir": "./dist/types"
     },
     "lib": ["ES6"],
-    "include": ["./src/*.ts"],
-    "exclude": ["./src/**/*.test.ts", "./coverage/**", "./dist/**"],
+    "include": ["./src/**/*.ts"],
+    "exclude": ["./src/**/*.test.ts"],
     "typedocOptions": {
         "exclude": "src/index.*",
         "entryPoints": ["src/pixelstreamingfrontend.ts"],

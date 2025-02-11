@@ -21,7 +21,7 @@ export class SettingNumber<CustomIds extends string = NumericParametersIds> exte
         max: number | null,
         defaultNumber: number,
         useUrlParams: boolean,
-        // eslint-disable-next-line @typescript-eslint/no-empty-function
+         
         defaultOnChangeListener: (changedValue: unknown, setting: SettingBase) => void = () => {
             /* Do nothing, to be overridden. */
         }

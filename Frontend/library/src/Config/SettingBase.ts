@@ -18,7 +18,7 @@ export class SettingBase {
         label: string,
         description: string,
         defaultSettingValue: unknown,
-        // eslint-disable-next-line @typescript-eslint/no-empty-function
+         
         defaultOnChangeListener: (changedValue: unknown, setting: SettingBase) => void = () => {
             /* Do nothing, to be overridden. */
         }
