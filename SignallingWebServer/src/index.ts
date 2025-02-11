@@ -14,9 +14,10 @@ import { initInputHandler } from './InputHandler';
 import { Command, Option } from 'commander';
 import { initialize } from 'express-openapi';
 
-// eslint-disable-next-line  @typescript-eslint/no-var-requires, @typescript-eslint/no-unsafe-assignment
+// eslint-disable-next-line  @typescript-eslint/no-unsafe-assignment
 const pjson = require('../package.json');
 
+console.log('what?');
 /* eslint-disable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-argument */
 // possible config file options
 let config_file: IProgramOptions = {};
@@ -31,7 +32,7 @@ const configArgsParser = new Command()
     .allowUnknownOption() // ignore unknown options as we are doing a minimal parse here
     .parse()
     .opts();
-
+console.log('huh');
 // If we do not get passed `--no_config` then attempt open the config file
 if (!configArgsParser.no_config) {
     try {
@@ -51,9 +52,9 @@ if (!configArgsParser.no_config) {
 const program = new Command();
 program
     .name('node dist/index.js')
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     .description(pjson.description)
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     .version(pjson.version);
 
 // For any switch that doesn't take an argument, like --serve, its important to give it a default value.
