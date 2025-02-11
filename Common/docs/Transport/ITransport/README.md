@@ -6,8 +6,6 @@
 
 # Transport/ITransport
 
-## Index
-
-### Interfaces
+## Interfaces
 
 - [ITransport](interfaces/ITransport.md)

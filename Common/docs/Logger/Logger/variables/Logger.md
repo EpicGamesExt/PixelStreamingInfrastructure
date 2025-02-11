@@ -8,6 +8,4 @@
 
 > **Logger**: [`ILogger`](../interfaces/ILogger.md)
 
-## Defined in
-
-[Logger/Logger.ts:156](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/80aa060d880a8c194a04b83f18bd1ee360ab20e1/Common/src/Logger/Logger.ts#L156)
+Defined in: [Logger/Logger.ts:156](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/f434cbb2ad489c1de1996ef67307d8cab33a6e8a/Common/src/Logger/Logger.ts#L156)

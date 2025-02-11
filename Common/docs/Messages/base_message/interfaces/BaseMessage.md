@@ -6,6 +6,8 @@
 
 # Interface: BaseMessage
 
+Defined in: [Messages/base\_message.ts:4](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/f434cbb2ad489c1de1996ef67307d8cab33a6e8a/Common/src/Messages/base_message.ts#L4)
+
 All Pixel Streaming messages should adhere to this interface.
 
 ## Properties
@@ -14,9 +16,7 @@ All Pixel Streaming messages should adhere to this interface.
 
 > `optional` **playerId**: `string`
 
-#### Defined in
-
-[Messages/base\_message.ts:8](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/80aa060d880a8c194a04b83f18bd1ee360ab20e1/Common/src/Messages/base_message.ts#L8)
+Defined in: [Messages/base\_message.ts:8](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/f434cbb2ad489c1de1996ef67307d8cab33a6e8a/Common/src/Messages/base_message.ts#L8)
 
 ***
 
@@ -24,6 +24,4 @@ All Pixel Streaming messages should adhere to this interface.
 
 > **type**: `string`
 
-#### Defined in
-
-[Messages/base\_message.ts:6](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/80aa060d880a8c194a04b83f18bd1ee360ab20e1/Common/src/Messages/base_message.ts#L6)
+Defined in: [Messages/base\_message.ts:6](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/f434cbb2ad489c1de1996ef67307d8cab33a6e8a/Common/src/Messages/base_message.ts#L6)

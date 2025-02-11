@@ -8,6 +8,8 @@
 
 > **overrideLogger**(`logger`): `void`
 
+Defined in: [Logger/Logger.ts:36](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/f434cbb2ad489c1de1996ef67307d8cab33a6e8a/Common/src/Logger/Logger.ts#L36)
+
 ## Parameters
 
 ### logger
@@ -17,7 +19,3 @@
 ## Returns
 
 `void`
-
-## Defined in
-
-[Logger/Logger.ts:36](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/80aa060d880a8c194a04b83f18bd1ee360ab20e1/Common/src/Logger/Logger.ts#L36)
