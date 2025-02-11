@@ -13,27 +13,19 @@
         "build": "npm run build:cjs && npm run build:esm",
         "rebuild": "npm run clean && npm run build",
         "watch": "nodemon -V -d 3 --watch src --watch ../library/dist -e \"ts,js,mjs,cjs,json\" --exec \"npm run build:cjs\"",
-        "lint": "eslint src --ext .js,.jsx,.ts,.tsx",
+        "lint": "eslint src",
         "spellcheck": "cspell \"{README.md,.github/*.md,src/**/*.ts}\""
     },
     "devDependencies": {
-        "@typescript-eslint/eslint-plugin": "^6.21.0",
-        "cspell": "^4.1.0",
-        "eslint": "^8.11.0",
-        "eslint-config-prettier": "^9.1.0",
-        "eslint-plugin-prettier": "^5.2.1",
-        "eslint-plugin-tsdoc": "^0.2.17",
-        "prettier": "3.3.3",
-        "typedoc": "^0.27.4",
-        "typescript": "^5.0.0"
-    },
-    "dependencies": {
-        "jss": "^10.9.2",
-        "jss-plugin-camel-case": "^10.9.2",
-        "jss-plugin-global": "^10.9.2"
-    },
-    "peerDependencies": {
-        "@epicgames-ps/lib-pixelstreamingfrontend-ue5.5": "^0.4.8"
+        "@epicgames-ps/lib-pixelstreamingfrontend-ue5.5": "*",
+        "@types/webxr": "^0.5.21",
+        "eslint": "^9.20.0",
+        "jss": "^10.10.0",
+        "jss-plugin-camel-case": "^10.10.0",
+        "jss-plugin-global": "^10.10.0",
+        "nodemon": "^3.1.9",
+        "rimraf": "^6.0.1",
+        "typescript": "^5.7.3"
     },
     "repository": {
         "type": "git",
