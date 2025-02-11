@@ -1,6 +1,6 @@
 import http from 'http';
 import https from 'https';
-import WebSocket from 'ws';
+import * as wslib from 'ws';
 import { StreamerConnection } from './StreamerConnection';
 import { PlayerConnection } from './PlayerConnection';
 import { SFUConnection } from './SFUConnection';
@@ -34,13 +34,13 @@ export interface IServerConfig {
     peerOptions: unknown;
 
     // Additional websocket options for the streamer listening websocket.
-    streamerWsOptions?: WebSocket.ServerOptions;
+    streamerWsOptions?: wslib.ServerOptions;
 
     // Additional websocket options for the player listening websocket.
-    playerWsOptions?: WebSocket.ServerOptions;
+    playerWsOptions?: wslib.ServerOptions;
 
     // Additional websocket options for the SFU listening websocket.
-    sfuWsOptions?: WebSocket.ServerOptions;
+    sfuWsOptions?: wslib.ServerOptions;
 
     // Max number of players per streamer.
     maxSubscribers?: number;
@@ -85,7 +85,7 @@ export class SignallingServer {
         }
 
         // Streamer connections
-        const streamerServer = new WebSocket.WebSocketServer({
+        const streamerServer = new wslib.WebSocketServer({
             port: config.streamerPort,
             backlog: 1,
             ...config.streamerWsOptions
@@ -95,7 +95,7 @@ export class SignallingServer {
 
         // Player connections
         const server = config.httpsServer || config.httpServer;
-        const playerServer = new WebSocket.Server({
+        const playerServer = new wslib.WebSocketServer({
             server: server,
             port: server ? undefined : config.playerPort,
             ...config.playerWsOptions
@@ -107,7 +107,7 @@ export class SignallingServer {
 
         // Optional SFU connections
         if (config.sfuPort) {
-            const sfuServer = new WebSocket.Server({
+            const sfuServer = new wslib.WebSocketServer({
                 port: config.sfuPort,
                 backlog: 1,
                 ...config.sfuWsOptions
@@ -117,7 +117,7 @@ export class SignallingServer {
         }
     }
 
-    private onStreamerConnected(ws: WebSocket, request: http.IncomingMessage) {
+    private onStreamerConnected(ws: wslib.WebSocket, request: http.IncomingMessage) {
         Logger.info(`New streamer connection: %s`, request.socket.remoteAddress);
 
         const newStreamer = new StreamerConnection(this, ws, request.socket.remoteAddress);
@@ -142,7 +142,7 @@ export class SignallingServer {
         newStreamer.sendMessage(message);
     }
 
-    private onPlayerConnected(ws: WebSocket, request: http.IncomingMessage) {
+    private onPlayerConnected(ws: wslib.WebSocket, request: http.IncomingMessage) {
         Logger.info(`New player connection: %s (%s)`, request.socket.remoteAddress, request.url);
 
         const newPlayer = new PlayerConnection(this, ws, request.socket.remoteAddress);
@@ -162,7 +162,7 @@ export class SignallingServer {
         newPlayer.sendMessage(message);
     }
 
-    private onSFUConnected(ws: WebSocket, request: http.IncomingMessage) {
+    private onSFUConnected(ws: wslib.WebSocket, request: http.IncomingMessage) {
         Logger.info(`New SFU connection: %s`, request.socket.remoteAddress);
         const newSFU = new SFUConnection(this, ws, request.socket.remoteAddress);
 
