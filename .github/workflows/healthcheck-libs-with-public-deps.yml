@@ -12,7 +12,6 @@ env:
 
 jobs:
   build-using-public-deps:
-    if: github.repository == 'EpicGamesExt/PixelStreamingInfrastructure'
     runs-on: ubuntu-latest
     outputs:
       continue: ${{ steps.set_output.outputs.continue }}
