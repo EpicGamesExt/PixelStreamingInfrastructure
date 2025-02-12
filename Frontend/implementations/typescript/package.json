@@ -14,11 +14,13 @@
         "serve-prod": "webpack serve --config webpack.prod.js"
     },
     "devDependencies": {
-        "@epicgames-ps/lib-pixelstreamingfrontend-ui-ue5.5": "*",
         "html-loader": "^5.1.0",
         "html-webpack-plugin": "^5.6.3",
         "ts-loader": "^9.5.2",
         "webpack": "^5.97.1",
         "webpack-cli": "^6.0.1"
+    },
+    "dependencies": {
+        "@epicgames-ps/lib-pixelstreamingfrontend-ui-ue5.5": "*"
     }
 }
