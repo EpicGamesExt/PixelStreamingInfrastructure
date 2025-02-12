@@ -5,6 +5,7 @@
         "Frontend/library",
         "Frontend/ui-library",
         "Frontend/implementations/typescript",
+        "Frontend/implementations/react",
         "Signalling",
         "SignallingWebServer",
         "SFU",
