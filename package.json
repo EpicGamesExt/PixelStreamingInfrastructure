@@ -6,7 +6,11 @@
         "Frontend/ui-library",
         "Frontend/implementations/typescript",
         "Signalling",
-        "SignallingWebServer"
+        "SignallingWebServer",
+        "Extras/JSStreamer",
+        "Extras/FrontendTests",
+        "Extras/MinimalStreamTester",
+        "Extras/SS_Test"
     ],
     "private": true,
     "scripts": {
