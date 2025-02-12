@@ -414,8 +414,8 @@ export class StatsPanel {
             // Sender latency calculated using timing stats
             if (latencyInfo.frameTiming.captureToSendLatencyMs !== undefined) {
                 this.addOrUpdateLatencyStat(
-                    'CaptureToSend',
-                    'Capture to send latency (ms)',
+                    'VideoTimingCaptureToSend',
+                    'Post-capture to send latency (ms)',
                     Math.ceil(latencyInfo.frameTiming.captureToSendLatencyMs).toString()
                 );
             }
@@ -423,8 +423,8 @@ export class StatsPanel {
 
         if (latencyInfo.senderLatencyMs !== undefined) {
             this.addOrUpdateLatencyStat(
-                'SenderSideLatency',
-                'Sender latency (ms)',
+                'AbsCaptureTimeToSendLatency',
+                'Post-capture (abs-ct) to send latency (ms)',
                 Math.ceil(latencyInfo.senderLatencyMs).toString()
             );
         }

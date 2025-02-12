@@ -272,7 +272,7 @@ export class PeerConnectionController {
     }
 
     isFirefox(): boolean {
-        return typeof (window as any).InstallTrigger !== 'undefined';
+        return navigator.userAgent.indexOf('Firefox') > 0;
     }
 
     /**

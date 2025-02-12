@@ -96,7 +96,7 @@ test('Test abs-capture-time header extension found in PSInfra frontend', {
     expect(answer.sdp).toContain("abs-capture-time");
 });
 
-test('Test latency calculation', {
+test('Test video-timing header extension found in PSInfra frontend', {
     tag: ['@capture-time'],
 }, async ({ page, streamerPage, streamerId, browserName }) => {
 
@@ -109,10 +109,42 @@ test('Test latency calculation', {
 
     await page.waitForLoadState("load");
 
-    // Enable the flag for the capture extension
-    await page.evaluate(() => {
-        window.pixelStreaming.config.setFlagEnabled("EnableCaptureTimeExt", true);
+    // Wait for the sdp answer
+    let getSdpAnswer = new Promise<RTCSessionDescriptionInit>(async (resolve) => {
+
+        // Expose the resolve function to the browser context
+        await page.exposeFunction('resolveFromSdpAnswerPromise', resolve);
+
+        page.evaluate(() => {
+            window.pixelStreaming.addEventListener("webRtcSdpAnswer", (e: WebRtcSdpAnswerEvent) => {
+                resolveFromSdpAnswerPromise(e.data.sdp);
+            });
+        });
+
     });
+
+    await helpers.startAndWaitForVideo(page);
+    const answer: RTCSessionDescriptionInit = await getSdpAnswer;
+
+    expect(answer).toBeDefined();
+    expect(answer.sdp).toBeDefined();
+
+    // If this string is found in the sdp we can say we have turned on the capture time header extension on the streamer
+    expect(answer.sdp).toContain("video-timing");
+});
+
+test('Test latency calculation with video timing', {
+    tag: ['@video-timing'],
+}, async ({ page, streamerPage, streamerId, browserName }) => {
+
+    if(browserName !== 'chromium') {
+        // Chrome based browsers are the only ones that support.
+        test.skip();
+    }
+
+    await page.goto(`/?StreamerId=${streamerId}`);
+
+    await page.waitForLoadState("load");
 
     await helpers.startAndWaitForVideo(page);
 
@@ -120,7 +152,9 @@ test('Test latency calculation', {
     let latencyInfo: LatencyInfo = await page.evaluate(() => {
         return new Promise((resolve) => {
             window.pixelStreaming.addEventListener("latencyCalculated", (e: LatencyCalculatedEvent) => {
-                if(e.data.latencyInfo && e.data.latencyInfo.senderLatencyMs && e.data.latencyInfo.rttMs) {
+                if(e.data.latencyInfo && e.data.latencyInfo.frameTiming && 
+                    e.data.latencyInfo.frameTiming.captureToSendLatencyMs && 
+                    e.data.latencyInfo.rttMs) {
                     resolve(e.data.latencyInfo);
                 }
             });
@@ -128,7 +162,8 @@ test('Test latency calculation', {
     });
 
     expect(latencyInfo).toBeDefined();
-    expect(latencyInfo.senderLatencyMs).toBeDefined();
+    expect(latencyInfo.frameTiming).toBeDefined();
+    expect(latencyInfo.frameTiming?.captureToSendLatencyMs).toBeDefined();
     expect(latencyInfo.averageJitterBufferDelayMs).toBeDefined();
     expect(latencyInfo.averageProcessingDelayMs).toBeDefined();
     expect(latencyInfo.rttMs).toBeDefined();
@@ -136,7 +171,7 @@ test('Test latency calculation', {
     expect(latencyInfo.averageDecodeLatencyMs).toBeDefined();
 
     // Sender side latency should be less than 500ms in pure CPU test
-    expect(latencyInfo.senderLatencyMs).toBeLessThanOrEqual(500)
+    expect(latencyInfo.frameTiming?.captureToSendLatencyMs).toBeLessThanOrEqual(500)
 
     // Expect jitter buffer/processing delay to be no greater than 500ms on local link
     expect(latencyInfo.averageJitterBufferDelayMs).toBeLessThanOrEqual(500);

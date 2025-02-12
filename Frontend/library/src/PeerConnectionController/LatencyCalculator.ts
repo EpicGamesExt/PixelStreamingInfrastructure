@@ -145,20 +145,23 @@ export class LatencyCalculator {
             );
         }
 
-        // If we could not calculate latency because `senderLatencyMs` was missing because of no SenderReport yet
-        // We can try to substitute frame timing capture to send latency instead.
+        // Calculate E2E latency using video-timing capture to send time + one way network latency + receiver-side latency
         if (
-            latencyInfo.senderLatencyMs === undefined &&
             latencyInfo.frameTiming !== undefined &&
-            latencyInfo.frameTiming.captureToSendLatencyMs !== undefined
+            latencyInfo.frameTiming.captureToSendLatencyMs !== undefined &&
+            latencyInfo.averageProcessingDelayMs !== undefined &&
+            latencyInfo.rttMs !== undefined
         ) {
-            latencyInfo.senderLatencyMs = latencyInfo.frameTiming.captureToSendLatencyMs;
+            latencyInfo.averageE2ELatency =
+                latencyInfo.frameTiming.captureToSendLatencyMs +
+                latencyInfo.rttMs * 0.5 +
+                latencyInfo.averageProcessingDelayMs;
         }
 
-        // Calculate E2E latency as sender-side latency + one way network latency + receiver-side latency
+        // Calculate E2E latency as abs-capture-time capture to send latency + one way network latency + receiver-side latency
         if (
-            latencyInfo.averageProcessingDelayMs !== undefined &&
             latencyInfo.senderLatencyMs != undefined &&
+            latencyInfo.averageProcessingDelayMs !== undefined &&
             latencyInfo.rttMs !== undefined
         ) {
             latencyInfo.averageE2ELatency =
@@ -353,11 +356,18 @@ export class LatencyCalculator {
  */
 export class LatencyInfo {
     /**
-     * The time taken from sender frame capture to receiver frame receipt.
+     * The time taken from the moment a frame is done capturing to the moment it is sent over the network.
      * Note: This can only be calculated if both offer and answer contain the
-     * the RTP header extension for `abs-capture-time`.
+     * the RTP header extension for `video-timing` (Chrome only for now)
      */
     public senderLatencyMs: number | undefined = undefined;
+
+    /**
+     * The time taken from the moment a frame is done capturing to the moment it is sent over the network.
+     * Note: This can only be calculated if both offer and answer contain the
+     * the RTP header extension for `abs-capture-time` (Chrome only for now)
+     */
+    public senderLatencyAbsCaptureTimeMs: number | undefined = undefined;
 
     /* The round trip time (milliseconds) between each sender->receiver->sender */
     public rttMs: number | undefined = undefined;
