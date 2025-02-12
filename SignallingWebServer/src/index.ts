@@ -17,7 +17,6 @@ import { initialize } from 'express-openapi';
 // eslint-disable-next-line  @typescript-eslint/no-unsafe-assignment
 const pjson = require('../package.json');
 
-console.log('what?');
 /* eslint-disable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-argument */
 // possible config file options
 let config_file: IProgramOptions = {};
