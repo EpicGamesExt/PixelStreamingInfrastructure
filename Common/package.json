@@ -1,6 +1,6 @@
 {
     "name": "@epicgames-ps/lib-pixelstreamingcommon-ue5.5",
-    "version": "0.1.6",
+    "version": "0.1.7",
     "description": "Common utilities library for Unreal Engine 5.5 Pixel Streaming",
     "main": "dist/cjs/pixelstreamingcommon.js",
     "module": "dist/esm/pixelstreamingcommon.js",
@@ -16,10 +16,11 @@
         "build:esm": "tsc --project tsconfig.esm.json",
         "build": "npm run build:proto && npm run build:cjs && npm run build:esm",
         "rebuild": "npm run clean && npm run build",
-        "watch:proto": "nodemon -V -d 3 --watch protobuf/signalling_messages.proto --exec 'npm run build:proto'",
+        "watch:proto": "nodemon -V -d 3 --watch protobuf/signalling_messages.proto --exec \"npm run build:proto\"",
         "watch": "concurrently -k \"npm run watch:proto\" \"tsc --watch --preserveWatchOutput --project tsconfig.cjs.json\"",
         "lint": "eslint src --ext .js,.jsx,.ts,.tsx",
-        "test": "echo \"Error: no test specified\" && exit 1"
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "wtf": "concurrently -k \"npm list\""
     },
     "devDependencies": {
         "@types/jest": "^29.5.14",
@@ -52,5 +53,8 @@
         "@protobuf-ts/plugin": "^2.9.3",
         "@types/ws": "^8.5.10",
         "ws": "^8.17.1"
+    },
+    "lint-staged": {
+        "*.ts": "eslint --fix"
     }
 }

@@ -10,8 +10,8 @@
         "start": "node ./dist/index.js --serve --console_messages verbose --log_config --https_redirect",
         "lint": "eslint ./src --ext .js,.jsx,.ts,.tsx",
         "test": "echo \"Error: no test specified\" && exit 1",
-        "watch": "nodemon -V -d 3 --watch src --watch ../Signalling/dist -e 'ts,js,mjs,cjs,json' --exec 'npm run build && node ./dist/index.js --serve --console_messages verbose --log_config --https_redirect --player_port 1025' --http_root www",
-        "develop": "cd ../ && npm run build:all:cjs && cd ../SignallingWebServer/ && concurrently -k \"cd ../Common && npm run watch\" \"cd ../Signalling && npm run watch\" \"cd ../Frontend/library && npm run watch\" \"cd ../Frontend/ui-library && npm run watch\" \"cd ../Frontend/implementations/typescript && npm run watch\"  \"npm run watch\""
+        "watch": "nodemon -V -d 3 --watch src --watch ../Signalling/dist -e \"ts,js,mjs,cjs,json\" --exec \"npm run build && node ./dist/index.js --serve --console_messages verbose --log_config --https_redirect --player_port 1025\" --http_root www",
+        "develop": "cd ../ && npm run build:all:cjs && cd SignallingWebServer && concurrently -k \"cd ../Common && npm run watch\" \"cd ../Signalling && npm run watch\" \"cd ../Frontend/library && npm run watch\" \"cd ../Frontend/ui-library && npm run watch\" \"cd ../Frontend/implementations/typescript && npm run watch\"  \"npm run watch\""
     },
     "author": "Epic Games",
     "license": "MIT",
