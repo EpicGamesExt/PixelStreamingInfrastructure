@@ -32,7 +32,6 @@ const configArgsParser = new Command()
     .allowUnknownOption() // ignore unknown options as we are doing a minimal parse here
     .parse()
     .opts();
-console.log('huh');
 // If we do not get passed `--no_config` then attempt open the config file
 if (!configArgsParser.no_config) {
     try {
