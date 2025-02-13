@@ -8,7 +8,7 @@
 
 > `const` **MessageRegistry**: `Record`\<`string`, `IMessageType`\<[`BaseMessage`](../../base_message/interfaces/BaseMessage.md)\>\>
 
-Defined in: [Messages/message\_registry.ts:10](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/f434cbb2ad489c1de1996ef67307d8cab33a6e8a/Common/src/Messages/message_registry.ts#L10)
+Defined in: [Messages/message\_registry.ts:10](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/5fb85fd65be1623aae0ff7d1b463a27836d35a34/Common/src/Messages/message_registry.ts#L10)
 
 A map of all the supported signalling messages in the Pixel Streaming
 signalling protocol. This allows mapping of signalling message names

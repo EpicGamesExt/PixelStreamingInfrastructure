@@ -6,7 +6,7 @@
 
 # Class: SignallingProtocol
 
-Defined in: [Protocol/SignallingProtocol.ts:27](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/f434cbb2ad489c1de1996ef67307d8cab33a6e8a/Common/src/Protocol/SignallingProtocol.ts#L27)
+Defined in: [Protocol/SignallingProtocol.ts:27](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/5fb85fd65be1623aae0ff7d1b463a27836d35a34/Common/src/Protocol/SignallingProtocol.ts#L27)
 
 Signalling protocol for handling messages from the signalling server.
 
@@ -36,7 +36,7 @@ Events emitted on transport:
 
 > **new SignallingProtocol**(`transport`): [`SignallingProtocol`](SignallingProtocol.md)
 
-Defined in: [Protocol/SignallingProtocol.ts:35](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/f434cbb2ad489c1de1996ef67307d8cab33a6e8a/Common/src/Protocol/SignallingProtocol.ts#L35)
+Defined in: [Protocol/SignallingProtocol.ts:35](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/5fb85fd65be1623aae0ff7d1b463a27836d35a34/Common/src/Protocol/SignallingProtocol.ts#L35)
 
 #### Parameters
 
@@ -58,7 +58,7 @@ Defined in: [Protocol/SignallingProtocol.ts:35](https://github.com/mcottontensor
 
 > **transport**: [`ITransport`](../../../Transport/ITransport/interfaces/ITransport.md)
 
-Defined in: [Protocol/SignallingProtocol.ts:33](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/f434cbb2ad489c1de1996ef67307d8cab33a6e8a/Common/src/Protocol/SignallingProtocol.ts#L33)
+Defined in: [Protocol/SignallingProtocol.ts:33](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/5fb85fd65be1623aae0ff7d1b463a27836d35a34/Common/src/Protocol/SignallingProtocol.ts#L33)
 
 ## Accessors
 
@@ -68,7 +68,7 @@ Defined in: [Protocol/SignallingProtocol.ts:33](https://github.com/mcottontensor
 
 > **get** `static` **SIGNALLING\_VERSION**(): `string`
 
-Defined in: [Protocol/SignallingProtocol.ts:28](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/f434cbb2ad489c1de1996ef67307d8cab33a6e8a/Common/src/Protocol/SignallingProtocol.ts#L28)
+Defined in: [Protocol/SignallingProtocol.ts:28](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/5fb85fd65be1623aae0ff7d1b463a27836d35a34/Common/src/Protocol/SignallingProtocol.ts#L28)
 
 ##### Returns
 
@@ -80,7 +80,7 @@ Defined in: [Protocol/SignallingProtocol.ts:28](https://github.com/mcottontensor
 
 > **addListener**(`eventName`, `listener`): `this`
 
-Defined in: [Event/EventEmitter.ts:96](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/f434cbb2ad489c1de1996ef67307d8cab33a6e8a/Common/src/Event/EventEmitter.ts#L96)
+Defined in: [Event/EventEmitter.ts:96](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/5fb85fd65be1623aae0ff7d1b463a27836d35a34/Common/src/Event/EventEmitter.ts#L96)
 
 Alias for `emitter.on(eventName, listener)`.
 
@@ -108,7 +108,7 @@ Alias for `emitter.on(eventName, listener)`.
 
 > **connect**(`url`): `boolean`
 
-Defined in: [Protocol/SignallingProtocol.ts:70](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/f434cbb2ad489c1de1996ef67307d8cab33a6e8a/Common/src/Protocol/SignallingProtocol.ts#L70)
+Defined in: [Protocol/SignallingProtocol.ts:70](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/5fb85fd65be1623aae0ff7d1b463a27836d35a34/Common/src/Protocol/SignallingProtocol.ts#L70)
 
 Asks the transport to connect to the given URL.
 
@@ -132,7 +132,7 @@ True if the connection call succeeded.
 
 > **disconnect**(`code`?, `reason`?): `void`
 
-Defined in: [Protocol/SignallingProtocol.ts:79](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/f434cbb2ad489c1de1996ef67307d8cab33a6e8a/Common/src/Protocol/SignallingProtocol.ts#L79)
+Defined in: [Protocol/SignallingProtocol.ts:79](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/5fb85fd65be1623aae0ff7d1b463a27836d35a34/Common/src/Protocol/SignallingProtocol.ts#L79)
 
 Asks the transport to disconnect from any connection it might have.
 
@@ -160,7 +160,7 @@ An optional descriptive string for the disconnect reason.
 
 > **emit**(`eventName`, ...`args`): `boolean`
 
-Defined in: [Event/EventEmitter.ts:262](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/f434cbb2ad489c1de1996ef67307d8cab33a6e8a/Common/src/Event/EventEmitter.ts#L262)
+Defined in: [Event/EventEmitter.ts:262](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/5fb85fd65be1623aae0ff7d1b463a27836d35a34/Common/src/Event/EventEmitter.ts#L262)
 
 Synchronously calls each of the listeners registered for the event named `eventName`, in the order they were registered, passing the supplied arguments
 to each.
@@ -224,7 +224,7 @@ myEmitter.emit('event', 1, 2, 3, 4, 5);
 
 > **isConnected**(): `boolean`
 
-Defined in: [Protocol/SignallingProtocol.ts:87](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/f434cbb2ad489c1de1996ef67307d8cab33a6e8a/Common/src/Protocol/SignallingProtocol.ts#L87)
+Defined in: [Protocol/SignallingProtocol.ts:87](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/5fb85fd65be1623aae0ff7d1b463a27836d35a34/Common/src/Protocol/SignallingProtocol.ts#L87)
 
 Returns true if the transport is connected and ready to send/receive messages.
 
@@ -240,7 +240,7 @@ True if the protocol is connected.
 
 > **off**(`eventName`, `listener`): `this`
 
-Defined in: [Event/EventEmitter.ts:196](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/f434cbb2ad489c1de1996ef67307d8cab33a6e8a/Common/src/Event/EventEmitter.ts#L196)
+Defined in: [Event/EventEmitter.ts:196](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/5fb85fd65be1623aae0ff7d1b463a27836d35a34/Common/src/Event/EventEmitter.ts#L196)
 
 Alias for `emitter.removeListener()`.
 
@@ -268,7 +268,7 @@ Alias for `emitter.removeListener()`.
 
 > **on**(`eventName`, `listener`): `this`
 
-Defined in: [Event/EventEmitter.ts:115](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/f434cbb2ad489c1de1996ef67307d8cab33a6e8a/Common/src/Event/EventEmitter.ts#L115)
+Defined in: [Event/EventEmitter.ts:115](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/5fb85fd65be1623aae0ff7d1b463a27836d35a34/Common/src/Event/EventEmitter.ts#L115)
 
 Adds the `listener` function to the end of the listeners array for the event
 named `eventName`.
@@ -309,7 +309,7 @@ The callback function
 
 > **once**(`eventName`, `listener`): `this`
 
-Defined in: [Event/EventEmitter.ts:148](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/f434cbb2ad489c1de1996ef67307d8cab33a6e8a/Common/src/Event/EventEmitter.ts#L148)
+Defined in: [Event/EventEmitter.ts:148](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/5fb85fd65be1623aae0ff7d1b463a27836d35a34/Common/src/Event/EventEmitter.ts#L148)
 
 Adds a **one-time** `listener` function for the event named `eventName`. The
 next time `eventName` is triggered, this listener is removed and then invoked.
@@ -350,7 +350,7 @@ The callback function
 
 > **removeAllListeners**(`eventName`): `this`
 
-Defined in: [Event/EventEmitter.ts:204](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/f434cbb2ad489c1de1996ef67307d8cab33a6e8a/Common/src/Event/EventEmitter.ts#L204)
+Defined in: [Event/EventEmitter.ts:204](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/5fb85fd65be1623aae0ff7d1b463a27836d35a34/Common/src/Event/EventEmitter.ts#L204)
 
 Removes all listeners, or those of the specified `eventName`.
 Returns a reference to the `EventEmitter`, so that calls can be chained.
@@ -375,7 +375,7 @@ Returns a reference to the `EventEmitter`, so that calls can be chained.
 
 > **removeListener**(`eventName`, `listener`): `this`
 
-Defined in: [Event/EventEmitter.ts:188](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/f434cbb2ad489c1de1996ef67307d8cab33a6e8a/Common/src/Event/EventEmitter.ts#L188)
+Defined in: [Event/EventEmitter.ts:188](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/5fb85fd65be1623aae0ff7d1b463a27836d35a34/Common/src/Event/EventEmitter.ts#L188)
 
 Removes the specified `listener` from this EventEmitter.
 
@@ -413,7 +413,7 @@ Returns a reference to the `EventEmitter`, so that calls can be chained.
 
 > **sendMessage**(`msg`): `void`
 
-Defined in: [Protocol/SignallingProtocol.ts:95](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/f434cbb2ad489c1de1996ef67307d8cab33a6e8a/Common/src/Protocol/SignallingProtocol.ts#L95)
+Defined in: [Protocol/SignallingProtocol.ts:95](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/5fb85fd65be1623aae0ff7d1b463a27836d35a34/Common/src/Protocol/SignallingProtocol.ts#L95)
 
 Passes a message to the transport to send to the other end.
 

@@ -6,7 +6,7 @@
 
 # Class: WebSocketTransport
 
-Defined in: [Transport/WebSocketTransport.ts:17](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/f434cbb2ad489c1de1996ef67307d8cab33a6e8a/Common/src/Transport/WebSocketTransport.ts#L17)
+Defined in: [Transport/WebSocketTransport.ts:17](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/5fb85fd65be1623aae0ff7d1b463a27836d35a34/Common/src/Transport/WebSocketTransport.ts#L17)
 
 The controller for the WebSocket and all associated methods
 
@@ -24,7 +24,7 @@ The controller for the WebSocket and all associated methods
 
 > **new WebSocketTransport**(): [`WebSocketTransport`](WebSocketTransport.md)
 
-Defined in: [Transport/WebSocketTransport.ts:21](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/f434cbb2ad489c1de1996ef67307d8cab33a6e8a/Common/src/Transport/WebSocketTransport.ts#L21)
+Defined in: [Transport/WebSocketTransport.ts:21](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/5fb85fd65be1623aae0ff7d1b463a27836d35a34/Common/src/Transport/WebSocketTransport.ts#L21)
 
 #### Returns
 
@@ -40,7 +40,7 @@ Defined in: [Transport/WebSocketTransport.ts:21](https://github.com/mcottontenso
 
 > `optional` **onMessage**: (`msg`) => `void`
 
-Defined in: [Transport/WebSocketTransport.ts:36](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/f434cbb2ad489c1de1996ef67307d8cab33a6e8a/Common/src/Transport/WebSocketTransport.ts#L36)
+Defined in: [Transport/WebSocketTransport.ts:36](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/5fb85fd65be1623aae0ff7d1b463a27836d35a34/Common/src/Transport/WebSocketTransport.ts#L36)
 
 Callback filled in by the SignallingProtocol and should be called by the transport when a new message arrives.
 
@@ -64,7 +64,7 @@ Callback filled in by the SignallingProtocol and should be called by the transpo
 
 > `optional` **webSocket**: `WebSocket`
 
-Defined in: [Transport/WebSocketTransport.ts:19](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/f434cbb2ad489c1de1996ef67307d8cab33a6e8a/Common/src/Transport/WebSocketTransport.ts#L19)
+Defined in: [Transport/WebSocketTransport.ts:19](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/5fb85fd65be1623aae0ff7d1b463a27836d35a34/Common/src/Transport/WebSocketTransport.ts#L19)
 
 ***
 
@@ -72,7 +72,7 @@ Defined in: [Transport/WebSocketTransport.ts:19](https://github.com/mcottontenso
 
 > **WS\_OPEN\_STATE**: `number` = `1`
 
-Defined in: [Transport/WebSocketTransport.ts:18](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/f434cbb2ad489c1de1996ef67307d8cab33a6e8a/Common/src/Transport/WebSocketTransport.ts#L18)
+Defined in: [Transport/WebSocketTransport.ts:18](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/5fb85fd65be1623aae0ff7d1b463a27836d35a34/Common/src/Transport/WebSocketTransport.ts#L18)
 
 ## Methods
 
@@ -80,7 +80,7 @@ Defined in: [Transport/WebSocketTransport.ts:18](https://github.com/mcottontenso
 
 > **addListener**(`eventName`, `listener`): `this`
 
-Defined in: [Event/EventEmitter.ts:96](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/f434cbb2ad489c1de1996ef67307d8cab33a6e8a/Common/src/Event/EventEmitter.ts#L96)
+Defined in: [Event/EventEmitter.ts:96](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/5fb85fd65be1623aae0ff7d1b463a27836d35a34/Common/src/Event/EventEmitter.ts#L96)
 
 Alias for `emitter.on(eventName, listener)`.
 
@@ -112,7 +112,7 @@ Alias for `emitter.on(eventName, listener)`.
 
 > **connect**(`connectionURL`): `boolean`
 
-Defined in: [Transport/WebSocketTransport.ts:43](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/f434cbb2ad489c1de1996ef67307d8cab33a6e8a/Common/src/Transport/WebSocketTransport.ts#L43)
+Defined in: [Transport/WebSocketTransport.ts:43](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/5fb85fd65be1623aae0ff7d1b463a27836d35a34/Common/src/Transport/WebSocketTransport.ts#L43)
 
 Connect to the signaling server
 
@@ -140,7 +140,7 @@ If there is a connection
 
 > **disconnect**(`code`?, `reason`?): `void`
 
-Defined in: [Transport/WebSocketTransport.ts:64](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/f434cbb2ad489c1de1996ef67307d8cab33a6e8a/Common/src/Transport/WebSocketTransport.ts#L64)
+Defined in: [Transport/WebSocketTransport.ts:64](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/5fb85fd65be1623aae0ff7d1b463a27836d35a34/Common/src/Transport/WebSocketTransport.ts#L64)
 
 Disconnect this transport.
 
@@ -172,7 +172,7 @@ A descriptive string for the disconnect reason.
 
 > **emit**(`eventName`, ...`args`): `boolean`
 
-Defined in: [Event/EventEmitter.ts:262](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/f434cbb2ad489c1de1996ef67307d8cab33a6e8a/Common/src/Event/EventEmitter.ts#L262)
+Defined in: [Event/EventEmitter.ts:262](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/5fb85fd65be1623aae0ff7d1b463a27836d35a34/Common/src/Event/EventEmitter.ts#L262)
 
 Synchronously calls each of the listeners registered for the event named `eventName`, in the order they were registered, passing the supplied arguments
 to each.
@@ -240,7 +240,7 @@ myEmitter.emit('event', 1, 2, 3, 4, 5);
 
 > **handleOnClose**(`event`): `void`
 
-Defined in: [Transport/WebSocketTransport.ts:141](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/f434cbb2ad489c1de1996ef67307d8cab33a6e8a/Common/src/Transport/WebSocketTransport.ts#L141)
+Defined in: [Transport/WebSocketTransport.ts:141](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/5fb85fd65be1623aae0ff7d1b463a27836d35a34/Common/src/Transport/WebSocketTransport.ts#L141)
 
 Handles when the Websocket is closed
 
@@ -262,7 +262,7 @@ Close Event
 
 > **handleOnError**(): `void`
 
-Defined in: [Transport/WebSocketTransport.ts:132](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/f434cbb2ad489c1de1996ef67307d8cab33a6e8a/Common/src/Transport/WebSocketTransport.ts#L132)
+Defined in: [Transport/WebSocketTransport.ts:132](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/5fb85fd65be1623aae0ff7d1b463a27836d35a34/Common/src/Transport/WebSocketTransport.ts#L132)
 
 Handles when there is an error on the websocket
 
@@ -276,7 +276,7 @@ Handles when there is an error on the websocket
 
 > **handleOnMessage**(`event`): `void`
 
-Defined in: [Transport/WebSocketTransport.ts:109](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/f434cbb2ad489c1de1996ef67307d8cab33a6e8a/Common/src/Transport/WebSocketTransport.ts#L109)
+Defined in: [Transport/WebSocketTransport.ts:109](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/5fb85fd65be1623aae0ff7d1b463a27836d35a34/Common/src/Transport/WebSocketTransport.ts#L109)
 
 Handles what happens when a message is received
 
@@ -298,7 +298,7 @@ Message Received
 
 > **handleOnMessageBinary**(`event`): `void`
 
-Defined in: [Transport/WebSocketTransport.ts:82](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/f434cbb2ad489c1de1996ef67307d8cab33a6e8a/Common/src/Transport/WebSocketTransport.ts#L82)
+Defined in: [Transport/WebSocketTransport.ts:82](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/5fb85fd65be1623aae0ff7d1b463a27836d35a34/Common/src/Transport/WebSocketTransport.ts#L82)
 
 Handles what happens when a message is received in binary form
 
@@ -320,7 +320,7 @@ Message Received
 
 > **handleOnOpen**(): `void`
 
-Defined in: [Transport/WebSocketTransport.ts:124](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/f434cbb2ad489c1de1996ef67307d8cab33a6e8a/Common/src/Transport/WebSocketTransport.ts#L124)
+Defined in: [Transport/WebSocketTransport.ts:124](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/5fb85fd65be1623aae0ff7d1b463a27836d35a34/Common/src/Transport/WebSocketTransport.ts#L124)
 
 Handles when the Websocket is opened
 
@@ -334,7 +334,7 @@ Handles when the Websocket is opened
 
 > **isConnected**(): `boolean`
 
-Defined in: [Transport/WebSocketTransport.ts:74](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/f434cbb2ad489c1de1996ef67307d8cab33a6e8a/Common/src/Transport/WebSocketTransport.ts#L74)
+Defined in: [Transport/WebSocketTransport.ts:74](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/5fb85fd65be1623aae0ff7d1b463a27836d35a34/Common/src/Transport/WebSocketTransport.ts#L74)
 
 Should return true when the transport is connected and ready to send/receive messages.
 
@@ -354,7 +354,7 @@ True if the transport is connected.
 
 > **off**(`eventName`, `listener`): `this`
 
-Defined in: [Event/EventEmitter.ts:196](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/f434cbb2ad489c1de1996ef67307d8cab33a6e8a/Common/src/Event/EventEmitter.ts#L196)
+Defined in: [Event/EventEmitter.ts:196](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/5fb85fd65be1623aae0ff7d1b463a27836d35a34/Common/src/Event/EventEmitter.ts#L196)
 
 Alias for `emitter.removeListener()`.
 
@@ -386,7 +386,7 @@ Alias for `emitter.removeListener()`.
 
 > **on**(`eventName`, `listener`): `this`
 
-Defined in: [Event/EventEmitter.ts:115](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/f434cbb2ad489c1de1996ef67307d8cab33a6e8a/Common/src/Event/EventEmitter.ts#L115)
+Defined in: [Event/EventEmitter.ts:115](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/5fb85fd65be1623aae0ff7d1b463a27836d35a34/Common/src/Event/EventEmitter.ts#L115)
 
 Adds the `listener` function to the end of the listeners array for the event
 named `eventName`.
@@ -431,7 +431,7 @@ The callback function
 
 > **once**(`eventName`, `listener`): `this`
 
-Defined in: [Event/EventEmitter.ts:148](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/f434cbb2ad489c1de1996ef67307d8cab33a6e8a/Common/src/Event/EventEmitter.ts#L148)
+Defined in: [Event/EventEmitter.ts:148](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/5fb85fd65be1623aae0ff7d1b463a27836d35a34/Common/src/Event/EventEmitter.ts#L148)
 
 Adds a **one-time** `listener` function for the event named `eventName`. The
 next time `eventName` is triggered, this listener is removed and then invoked.
@@ -476,7 +476,7 @@ The callback function
 
 > **removeAllListeners**(`eventName`): `this`
 
-Defined in: [Event/EventEmitter.ts:204](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/f434cbb2ad489c1de1996ef67307d8cab33a6e8a/Common/src/Event/EventEmitter.ts#L204)
+Defined in: [Event/EventEmitter.ts:204](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/5fb85fd65be1623aae0ff7d1b463a27836d35a34/Common/src/Event/EventEmitter.ts#L204)
 
 Removes all listeners, or those of the specified `eventName`.
 Returns a reference to the `EventEmitter`, so that calls can be chained.
@@ -505,7 +505,7 @@ Returns a reference to the `EventEmitter`, so that calls can be chained.
 
 > **removeListener**(`eventName`, `listener`): `this`
 
-Defined in: [Event/EventEmitter.ts:188](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/f434cbb2ad489c1de1996ef67307d8cab33a6e8a/Common/src/Event/EventEmitter.ts#L188)
+Defined in: [Event/EventEmitter.ts:188](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/5fb85fd65be1623aae0ff7d1b463a27836d35a34/Common/src/Event/EventEmitter.ts#L188)
 
 Removes the specified `listener` from this EventEmitter.
 
@@ -547,7 +547,7 @@ Returns a reference to the `EventEmitter`, so that calls can be chained.
 
 > **sendMessage**(`msg`): `void`
 
-Defined in: [Transport/WebSocketTransport.ts:29](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/f434cbb2ad489c1de1996ef67307d8cab33a6e8a/Common/src/Transport/WebSocketTransport.ts#L29)
+Defined in: [Transport/WebSocketTransport.ts:29](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/5fb85fd65be1623aae0ff7d1b463a27836d35a34/Common/src/Transport/WebSocketTransport.ts#L29)
 
 Sends a message over the websocket.
 
