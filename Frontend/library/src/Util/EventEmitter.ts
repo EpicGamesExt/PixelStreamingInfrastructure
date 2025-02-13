@@ -2,6 +2,7 @@ import { FlagsIds, NumericParametersIds, OptionParametersIds, TextParametersIds 
 import { LatencyTestResults } from '../DataChannel/LatencyTestResults';
 import { AggregatedStats } from '../PeerConnectionController/AggregatedStats';
 import { InitialSettings } from '../DataChannel/InitialSettings';
+import { LatencyInfo } from '../pixelstreamingfrontend';
 import { Messages } from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
 import { SettingFlag } from '../Config/SettingFlag';
 import { SettingNumber } from '../Config/SettingNumber';
@@ -87,6 +88,36 @@ export class WebRtcSdpEvent extends Event {
     override readonly type: 'webRtcSdp';
     constructor() {
         super('webRtcSdp');
+    }
+}
+
+/**
+ * An event that is emitted after the SDP answer is set.
+ */
+export class WebRtcSdpAnswerEvent extends Event {
+    override readonly type: 'webRtcSdpAnswer';
+    readonly data: {
+        /** The sdp answer */
+        sdp: RTCSessionDescriptionInit;
+    };
+    constructor(data: WebRtcSdpAnswerEvent['data']) {
+        super('webRtcSdpAnswer');
+        this.data = data;
+    }
+}
+
+/**
+ * An event that is emitted after the SDP offer is set.
+ */
+export class WebRtcSdpOfferEvent extends Event {
+    override readonly type: 'webRtcSdpOffer';
+    readonly data: {
+        /** The sdp offer */
+        sdp: RTCSessionDescriptionInit;
+    };
+    constructor(data: WebRtcSdpOfferEvent['data']) {
+        super('webRtcSdpOffer');
+        this.data = data;
     }
 }
 
@@ -383,6 +414,20 @@ export class LatencyTestResultEvent extends Event {
 }
 
 /**
+ * An event that is emitted everytime latency is calculated using the WebRTC stats API.
+ */
+export class LatencyCalculatedEvent extends Event {
+    override readonly type: 'latencyCalculated';
+    readonly data: {
+        latencyInfo: LatencyInfo;
+    };
+    constructor(data: LatencyCalculatedEvent['data']) {
+        super('latencyCalculated');
+        this.data = data;
+    }
+}
+
+/**
  * An event that is emitted when receiving data channel latency test response from server.
  * This event is handled by DataChannelLatencyTestController
  */
@@ -560,6 +605,8 @@ export type PixelStreamingEvent =
     | AfkTimedOutEvent
     | VideoEncoderAvgQPEvent
     | WebRtcSdpEvent
+    | WebRtcSdpOfferEvent
+    | WebRtcSdpAnswerEvent
     | WebRtcAutoConnectEvent
     | WebRtcConnectingEvent
     | WebRtcConnectedEvent
@@ -581,6 +628,7 @@ export type PixelStreamingEvent =
     | StatsReceivedEvent
     | StreamerListMessageEvent
     | StreamerIDChangedMessageEvent
+    | LatencyCalculatedEvent
     | LatencyTestResultEvent
     | DataChannelLatencyTestResponseEvent
     | DataChannelLatencyTestResultEvent

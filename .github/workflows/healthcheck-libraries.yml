@@ -58,3 +58,7 @@ jobs:
     - name: Clean build of frontend implementation
       working-directory: Frontend/implementations/typescript
       run: npm install && npm run build
+
+    - name: Clean build of frontend implementation as ES6
+      working-directory: Frontend/implementations/typescript
+      run: npm install && npm run build:esm

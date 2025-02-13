@@ -31,12 +31,16 @@ export function delay(time: number) {
   });
 }
 
-export async function waitForVideo(page: Page) {
+
+export async function startAndWaitForVideo(page: Page) {
     await page.evaluate(()=> {
         return new Promise((resolve) => {
+            // Note: Assign listener before we start the connection
             window.pixelStreaming.addEventListener('playStream', (event) => {
                 return resolve(event);
             });
+            // Make the actual connection initiation
+            window.pixelStreaming.connect();
         });
     });
 }

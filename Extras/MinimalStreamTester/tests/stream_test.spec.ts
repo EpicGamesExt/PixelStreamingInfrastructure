@@ -7,12 +7,14 @@ function delay(time: number) {
   });
 }
 
-async function waitForVideo(page: Page) {
+async function startAndWaitForVideo(page: Page) {
     await page.evaluate(()=> {
         return new Promise((resolve) => {
-            pixelStreaming.addEventListener('playStream', (event) => {
+            window.pixelStreaming.addEventListener('playStream', (event) => {
                 return resolve(event);
             });
+            // Start the stream now we have listener attached
+            window.pixelStreaming.connect();
         });
     });
 }
@@ -22,20 +24,24 @@ test('Test default stream.', async ({ page }, testinfo) => {
 
     // set a long timeout to allow for slow software rendering
     test.setTimeout(2 * 60 * 1000);
-    
+
     await page.goto("/?StreamerId=DefaultStreamer");
-    await page.getByText('Click to start').click();
 
     // wait until we get a stream
-    await waitForVideo(page);
+    await startAndWaitForVideo(page);
 
     // let the stream run for a small duration
     await delay(15000);
 
     // query the frontend for its calculated stats
-    const frame_count:number = await page.evaluate(()=> {
-        let videoStats = pixelStreaming._webRtcController.peerConnectionController.aggregatedStats.inboundVideoStats;
-        return videoStats.framesReceived;
+    let frameCount: number = await page.evaluate(()=> {
+        return new Promise<number>((resolve) => {
+            window.pixelStreaming.addEventListener("statsReceived", (e) => {
+                if(e.data.aggregatedStats && e.data.aggregatedStats.inboundVideoStats && e.data.aggregatedStats.inboundVideoStats.framesReceived) {
+                    resolve(e.data.aggregatedStats.inboundVideoStats.framesReceived);
+                }
+            });
+        });
     });
 
     // take a screenshot for posterity
@@ -47,6 +53,6 @@ test('Test default stream.', async ({ page }, testinfo) => {
     testinfo.attach('screenshot', { body: screenshot, contentType: 'image/png' });
 
     // pass the test if we recorded any frames
-    expect(frame_count).toBeGreaterThan(0);
+    expect(frameCount).toBeGreaterThan(0);
 });
 

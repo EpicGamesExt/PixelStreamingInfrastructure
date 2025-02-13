@@ -3,6 +3,7 @@
 import { LatencyTest } from './LatencyTest';
 import {
     CandidatePairStats,
+    LatencyInfo,
     Logger,
     PixelStreaming,
     PixelStreamingSettings
@@ -10,7 +11,12 @@ import {
 import { AggregatedStats } from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.5';
 import { MathUtils } from '../Util/MathUtils';
 import { DataChannelLatencyTest } from './DataChannelLatencyTest';
-import { isSectionEnabled, StatsSections, StatsPanelConfiguration } from './UIConfigurationTypes';
+import {
+    isSectionEnabled,
+    StatsSections,
+    StatsSectionsIds,
+    StatsPanelConfiguration
+} from './UIConfigurationTypes';
 
 /**
  * A stat structure, an id, the stat string, and the element where it is rendered.
@@ -30,7 +36,9 @@ export class StatsPanel {
     _statsCloseButton: HTMLElement;
     _statsContentElement: HTMLElement;
     _statisticsContainer: HTMLElement;
+    _latencyStatsContainer: HTMLElement;
     _statsResult: HTMLElement;
+    _latencyResult: HTMLElement;
     _config: StatsPanelConfiguration;
 
     latencyTest: LatencyTest;
@@ -87,21 +95,41 @@ export class StatsPanel {
             statistics.id = 'statistics';
             statistics.classList.add('settingsContainer');
 
+            const latencyStats = document.createElement('section');
+            latencyStats.id = 'latencyStats';
+            latencyStats.classList.add('settingsContainer');
+
             const statisticsHeader = document.createElement('div');
             statisticsHeader.id = 'statisticsHeader';
             statisticsHeader.classList.add('settings-text');
             statisticsHeader.classList.add('settingsHeader');
 
+            const latencyStatsHeader = document.createElement('div');
+            latencyStatsHeader.id = 'latencyStatsHeader';
+            latencyStatsHeader.classList.add('settings-text');
+            latencyStatsHeader.classList.add('settingsHeader');
+
             this._statsContentElement.appendChild(streamToolStats);
             streamToolStats.appendChild(controlStats);
             controlStats.appendChild(statistics);
+            controlStats.appendChild(latencyStats);
+
             statistics.appendChild(statisticsHeader);
+            latencyStats.appendChild(latencyStatsHeader);
+
             if (isSectionEnabled(this._config, StatsSections.SessionStats)) {
-                const sessionStats = document.createElement('div');
-                sessionStats.innerHTML = StatsSections.SessionStats;
-                statisticsHeader.appendChild(sessionStats);
+                const sessionStatsText = document.createElement('div');
+                sessionStatsText.innerHTML = StatsSections.SessionStats;
+                statisticsHeader.appendChild(sessionStatsText);
             }
             statistics.appendChild(this.statisticsContainer);
+
+            if (isSectionEnabled(this._config, StatsSections.LatencyStats)) {
+                const latencyStatsText = document.createElement('div');
+                latencyStatsText.innerHTML = StatsSections.LatencyStats;
+                latencyStatsHeader.appendChild(latencyStatsText);
+            }
+            latencyStats.appendChild(this.latencyStatsContainer);
 
             if (isSectionEnabled(this._config, StatsSections.LatencyTest)) {
                 controlStats.appendChild(this.latencyTest.rootElement);
@@ -124,6 +152,16 @@ export class StatsPanel {
         return this._statisticsContainer;
     }
 
+    public get latencyStatsContainer(): HTMLElement {
+        if (!this._latencyStatsContainer) {
+            this._latencyStatsContainer = document.createElement('div');
+            this._latencyStatsContainer.id = 'latencyStatsContainer';
+            this._latencyStatsContainer.classList.add('d-none');
+            this._latencyStatsContainer.appendChild(this.latencyResult);
+        }
+        return this._latencyStatsContainer;
+    }
+
     public get statsResult(): HTMLElement {
         if (!this._statsResult) {
             this._statsResult = document.createElement('div');
@@ -131,6 +169,15 @@ export class StatsPanel {
             this._statsResult.classList.add('StatsResult');
         }
         return this._statsResult;
+    }
+
+    public get latencyResult(): HTMLElement {
+        if (!this._latencyResult) {
+            this._latencyResult = document.createElement('div');
+            this._latencyResult.id = 'latencyResult';
+            this._latencyResult.classList.add('StatsResult');
+        }
+        return this._latencyResult;
     }
 
     public get statsCloseButton(): HTMLElement {
@@ -207,7 +254,7 @@ export class StatsPanel {
     }
 
     public handlePlayerCount(playerCount: number) {
-        this.addOrUpdateStat('PlayerCountStat', 'Players', playerCount.toString());
+        this.addOrUpdateSessionStat('PlayerCountStat', 'Players', playerCount.toString());
     }
 
     /**
@@ -222,17 +269,17 @@ export class StatsPanel {
 
         // Inbound data
         const inboundData = MathUtils.formatBytes(stats.inboundVideoStats.bytesReceived, 2);
-        this.addOrUpdateStat('InboundDataStat', 'Received', inboundData);
+        this.addOrUpdateSessionStat('InboundDataStat', 'Received', inboundData);
 
         // Packets lost
         const packetsLostStat = Object.prototype.hasOwnProperty.call(stats.inboundVideoStats, 'packetsLost')
             ? numberFormat.format(stats.inboundVideoStats.packetsLost)
             : 'Chrome only';
-        this.addOrUpdateStat('PacketsLostStat', 'Packets Lost', packetsLostStat);
+        this.addOrUpdateSessionStat('PacketsLostStat', 'Packets Lost', packetsLostStat);
 
         // Bitrate
         if (stats.inboundVideoStats.bitrate) {
-            this.addOrUpdateStat(
+            this.addOrUpdateSessionStat(
                 'VideoBitrateStat',
                 'Video Bitrate (kbps)',
                 stats.inboundVideoStats.bitrate.toString()
@@ -240,7 +287,7 @@ export class StatsPanel {
         }
 
         if (stats.inboundAudioStats.bitrate) {
-            this.addOrUpdateStat(
+            this.addOrUpdateSessionStat(
                 'AudioBitrateStat',
                 'Audio Bitrate (kbps)',
                 stats.inboundAudioStats.bitrate.toString()
@@ -249,23 +296,23 @@ export class StatsPanel {
 
         // Video resolution
         const resStat =
-            Object.prototype.hasOwnProperty.call(stats.inboundVideoStats, 'frameWidth') &&
-            stats.inboundVideoStats.frameWidth &&
-            Object.prototype.hasOwnProperty.call(stats.inboundVideoStats, 'frameHeight') &&
-            stats.inboundVideoStats.frameHeight
+            stats.inboundVideoStats.frameWidth !== undefined &&
+            stats.inboundVideoStats.frameWidth > 0 &&
+            stats.inboundVideoStats.frameHeight !== undefined &&
+            stats.inboundVideoStats.frameHeight > 0
                 ? stats.inboundVideoStats.frameWidth + 'x' + stats.inboundVideoStats.frameHeight
                 : 'Chrome only';
-        this.addOrUpdateStat('VideoResStat', 'Video resolution', resStat);
+        this.addOrUpdateSessionStat('VideoResStat', 'Video resolution', resStat);
 
         // Frames decoded
-        const framesDecoded = Object.prototype.hasOwnProperty.call(stats.inboundVideoStats, 'framesDecoded')
-            ? numberFormat.format(stats.inboundVideoStats.framesDecoded)
-            : 'Chrome only';
-        this.addOrUpdateStat('FramesDecodedStat', 'Frames Decoded', framesDecoded);
+        if (stats.inboundVideoStats.framesDecoded !== undefined) {
+            const framesDecoded = numberFormat.format(stats.inboundVideoStats.framesDecoded);
+            this.addOrUpdateSessionStat('FramesDecodedStat', 'Frames Decoded', framesDecoded);
+        }
 
         // Framerate
         if (stats.inboundVideoStats.framesPerSecond) {
-            this.addOrUpdateStat(
+            this.addOrUpdateSessionStat(
                 'FramerateStat',
                 'Framerate',
                 stats.inboundVideoStats.framesPerSecond.toString()
@@ -273,14 +320,16 @@ export class StatsPanel {
         }
 
         // Frames dropped
-        this.addOrUpdateStat(
-            'FramesDroppedStat',
-            'Frames dropped',
-            stats.inboundVideoStats.framesDropped?.toString()
-        );
+        if (stats.inboundVideoStats.framesDropped !== undefined) {
+            this.addOrUpdateSessionStat(
+                'FramesDroppedStat',
+                'Frames dropped',
+                stats.inboundVideoStats.framesDropped.toString()
+            );
+        }
 
         if (stats.inboundVideoStats.codecId) {
-            this.addOrUpdateStat(
+            this.addOrUpdateSessionStat(
                 'VideoCodecStat',
                 'Video codec',
                 // Split the codec to remove the Fmtp line
@@ -289,7 +338,7 @@ export class StatsPanel {
         }
 
         if (stats.inboundAudioStats.codecId) {
-            this.addOrUpdateStat(
+            this.addOrUpdateSessionStat(
                 'AudioCodecStat',
                 'Audio codec',
                 // Split the codec to remove the Fmtp line
@@ -298,38 +347,127 @@ export class StatsPanel {
         }
 
         // Store the active candidate pair return a new Candidate pair stat if getActiveCandidate is null
-        const activeCandidatePair =
-            stats.getActiveCandidatePair() != null
-                ? stats.getActiveCandidatePair()
-                : new CandidatePairStats();
+        const activeCandidatePair: CandidatePairStats | null = stats.getActiveCandidatePair();
 
-        // RTT
-        const netRTT =
-            Object.prototype.hasOwnProperty.call(activeCandidatePair, 'currentRoundTripTime') &&
-            stats.isNumber(activeCandidatePair.currentRoundTripTime)
-                ? numberFormat.format(activeCandidatePair.currentRoundTripTime * 1000)
-                : "Can't calculate";
-        this.addOrUpdateStat('RTTStat', 'Net RTT (ms)', netRTT);
+        if (activeCandidatePair) {
+            // RTT
+            const netRTT =
+                Object.prototype.hasOwnProperty.call(activeCandidatePair, 'currentRoundTripTime') &&
+                stats.isNumber(activeCandidatePair.currentRoundTripTime)
+                    ? Math.ceil(activeCandidatePair.currentRoundTripTime * 1000).toString()
+                    : "Can't calculate";
+            this.addOrUpdateSessionStat('RTTStat', 'Net RTT (ms)', netRTT);
+        }
 
-        this.addOrUpdateStat('DurationStat', 'Duration', stats.sessionStats.runTime);
+        this.addOrUpdateSessionStat('DurationStat', 'Duration', stats.sessionStats.runTime);
 
-        this.addOrUpdateStat(
+        this.addOrUpdateSessionStat(
             'ControlsInputStat',
             'Controls stream input',
             stats.sessionStats.controlsStreamInput
         );
 
         // QP
-        this.addOrUpdateStat(
-            'QPStat',
-            'Video quantization parameter',
-            stats.sessionStats.videoEncoderAvgQP.toString()
-        );
-
-        // todo:
-        //statsText += `<div>Browser receive to composite (ms): ${stats.inboundVideoStats.receiveToCompositeMs}</div>`;
+        if (
+            stats.sessionStats.videoEncoderAvgQP !== undefined &&
+            !Number.isNaN(stats.sessionStats.videoEncoderAvgQP)
+        ) {
+            this.addOrUpdateSessionStat(
+                'QPStat',
+                'Video quantization parameter',
+                stats.sessionStats.videoEncoderAvgQP.toString()
+            );
+        }
 
         Logger.Info(`--------- Stats ---------\n ${JSON.stringify(stats)}\n------------------------`);
+    }
+
+    public handleLatencyInfo(latencyInfo: LatencyInfo) {
+        if (latencyInfo.frameTiming !== undefined) {
+            // Encoder latency
+            if (latencyInfo.frameTiming.encoderLatencyMs !== undefined) {
+                this.addOrUpdateLatencyStat(
+                    'EncodeLatency',
+                    'Encode latency (ms)',
+                    Math.ceil(latencyInfo.frameTiming.encoderLatencyMs).toString()
+                );
+            }
+
+            // Packetizer latency
+            if (latencyInfo.frameTiming.packetizeLatencyMs !== undefined) {
+                this.addOrUpdateLatencyStat(
+                    'PacketizerLatency',
+                    'Packetizer latency (ms)',
+                    Math.ceil(latencyInfo.frameTiming.packetizeLatencyMs).toString()
+                );
+            }
+
+            // Pacer latency
+            if (latencyInfo.frameTiming.pacerLatencyMs !== undefined) {
+                this.addOrUpdateLatencyStat(
+                    'PacerLatency',
+                    'Pacer latency (ms)',
+                    Math.ceil(latencyInfo.frameTiming.pacerLatencyMs).toString()
+                );
+            }
+
+            // Sender latency calculated using timing stats
+            if (latencyInfo.frameTiming.captureToSendLatencyMs !== undefined) {
+                this.addOrUpdateLatencyStat(
+                    'VideoTimingCaptureToSend',
+                    'Post-capture to send latency (ms)',
+                    Math.ceil(latencyInfo.frameTiming.captureToSendLatencyMs).toString()
+                );
+            }
+        }
+
+        if (latencyInfo.senderLatencyMs !== undefined) {
+            this.addOrUpdateLatencyStat(
+                'AbsCaptureTimeToSendLatency',
+                'Post-capture (abs-ct) to send latency (ms)',
+                Math.ceil(latencyInfo.senderLatencyMs).toString()
+            );
+        }
+
+        if (latencyInfo.averageAssemblyDelayMs !== undefined) {
+            this.addOrUpdateLatencyStat(
+                'AvgAssemblyDelay',
+                'Assembly delay (ms)',
+                Math.ceil(latencyInfo.averageAssemblyDelayMs).toString()
+            );
+        }
+
+        if (latencyInfo.averageDecodeLatencyMs !== undefined) {
+            this.addOrUpdateLatencyStat(
+                'AvgDecodeDelay',
+                'Decode time (ms)',
+                Math.ceil(latencyInfo.averageDecodeLatencyMs).toString()
+            );
+        }
+
+        if (latencyInfo.averageJitterBufferDelayMs !== undefined) {
+            this.addOrUpdateLatencyStat(
+                'AvgJitterBufferDelay',
+                'Jitter buffer (ms)',
+                Math.ceil(latencyInfo.averageJitterBufferDelayMs).toString()
+            );
+        }
+
+        if (latencyInfo.averageProcessingDelayMs !== undefined) {
+            this.addOrUpdateLatencyStat(
+                'AvgProcessingDelay',
+                'Processing delay (ms)',
+                Math.ceil(latencyInfo.averageProcessingDelayMs).toString()
+            );
+        }
+
+        if (latencyInfo.averageE2ELatency !== undefined) {
+            this.addOrUpdateLatencyStat(
+                'AvgE2ELatency',
+                'Total latency (ms)',
+                Math.ceil(latencyInfo.averageE2ELatency).toString()
+            );
+        }
     }
 
     /**
@@ -337,11 +475,47 @@ export class StatsPanel {
      * @param id - The id of the stat to add/update.
      * @param stat - The contents of the stat.
      */
-    public addOrUpdateStat(id: string, statLabel: string, stat: string) {
-        if (!isSectionEnabled(this._config, StatsSections.SessionStats)) {
+    public addOrUpdateSessionStat(id: string, statLabel: string, stat: string) {
+        this.addOrUpdateStat(StatsSections.SessionStats, id, statLabel, stat);
+    }
+
+    /**
+     * Adds a new stat to the latency results in the DOM or updates an exiting stat.
+     * @param id - The id of the stat to add/update.
+     * @param stat - The contents of the stat.
+     */
+    public addOrUpdateLatencyStat(id: string, statLabel: string, stat: string) {
+        this.addOrUpdateStat(StatsSections.LatencyStats, id, statLabel, stat);
+    }
+
+    /**
+     * Adds a new stat to the stats results in the DOM or updates an exiting stat.
+     * @param sectionId - The section to add this stat too.
+     * @param id - The id of the stat to add/update.
+     * @param stat - The contents of the stat.
+     */
+    private addOrUpdateStat(sectionId: StatsSectionsIds, id: string, statLabel: string, stat: string) {
+        if (
+            sectionId === StatsSections.SessionStats &&
+            !isSectionEnabled(this._config, StatsSections.SessionStats)
+        ) {
             return;
         }
 
+        if (
+            sectionId === StatsSections.LatencyStats &&
+            !isSectionEnabled(this._config, StatsSections.LatencyStats)
+        ) {
+            return;
+        }
+
+        // Only support session or latency stats being updated in this function currently
+        if (sectionId !== StatsSections.SessionStats && sectionId !== StatsSections.LatencyStats) {
+            return;
+        }
+
+        const parentElem: HTMLElement =
+            sectionId === StatsSections.SessionStats ? this.statsResult : this.latencyResult;
         const statHTML = `${statLabel}: ${stat}`;
 
         if (!this.statsMap.has(id)) {
@@ -353,7 +527,7 @@ export class StatsPanel {
             newStat.element = document.createElement('div');
             newStat.element.innerHTML = statHTML;
             // add the stat to the dom
-            this.statsResult.appendChild(newStat.element);
+            parentElem.appendChild(newStat.element);
             this.statsMap.set(id, newStat);
         }
         // update the existing stat

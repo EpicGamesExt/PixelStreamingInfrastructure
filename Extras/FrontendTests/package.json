@@ -4,21 +4,20 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "test": "playwright test",
-        "build": "",
-        "clean": ""
+        "test": "npx playwright test",
+        "build": ""
     },
     "keywords": [],
     "author": "Epic Games",
     "license": "MIT",
     "devDependencies": {
-        "@playwright/test": "^1.49.0",
+        "@playwright/test": "^1.49.1",
         "@types/node": "^20.12.7",
         "@types/uuid": "^9.0.8"
     },
     "dependencies": {
-        "@epicgames-ps/lib-pixelstreamingfrontend-ue5.5": "*",
         "@epicgames-ps/js-streamer": "^0.0.4",
+        "@epicgames-ps/lib-pixelstreamingfrontend-ue5.5": "*",
         "dotenv": "^16.4.5",
         "node-fetch": "^2.7.0",
         "uuid": "^9.0.0"

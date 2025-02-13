@@ -4,13 +4,9 @@
 ### Setup
 ```
 npm install
-npx playwright install --with-deps
-```
-
-The above command should install the required browsers but for some reason I find I have to install chrome manually using the following command.
-
-```
-npx playwright install chrome
+npx playwright install-deps
+npx playwright install firefox
+npx playwright install chromium
 ```
 
 ### Prepare

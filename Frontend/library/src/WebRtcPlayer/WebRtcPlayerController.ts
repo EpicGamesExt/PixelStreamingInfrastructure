@@ -55,6 +55,7 @@ import {
 import { IURLSearchParams } from '../Util/IURLSearchParams';
 import { IInputController } from '../Inputs/IInputController';
 import { GamepadController } from '../Inputs/GamepadController';
+import { LatencyInfo } from '../PeerConnectionController/LatencyCalculator';
 
 /**
  * Entry point for the WebRTC Player
@@ -1075,15 +1076,29 @@ export class WebRtcPlayerController {
         );
 
         // set up peer connection controller video stats
-        this.peerConnectionController.onVideoStats = (event: AggregatedStats) => this.handleVideoStats(event);
+        this.peerConnectionController.onVideoStats = (event: AggregatedStats) => {
+            this.handleVideoStats(event);
+        };
+
+        /* Set event handler for latency information is calculated, handle the event by propogating to the PixelStreaming API */
+        this.peerConnectionController.onLatencyCalculated = (latencyInfo: LatencyInfo) => {
+            this.pixelStreaming._onLatencyCalculated(latencyInfo);
+        };
 
         /* When the Peer Connection wants to send an offer have it handled */
-        this.peerConnectionController.onSendWebRTCOffer = (offer: RTCSessionDescriptionInit) =>
+        this.peerConnectionController.onSendWebRTCOffer = (offer: RTCSessionDescriptionInit) => {
             this.handleSendWebRTCOffer(offer);
+        };
 
-        /* When the Peer Connection wants to send an answer have it handled */
-        this.peerConnectionController.onSendWebRTCAnswer = (offer: RTCSessionDescriptionInit) =>
-            this.handleSendWebRTCAnswer(offer);
+        /* Set event handler for when local answer description is set */
+        this.peerConnectionController.onSetLocalDescription = (answer: RTCSessionDescriptionInit) => {
+            this.handleSendWebRTCAnswer(answer);
+        };
+
+        /* Set event handler for when remote offer description is set */
+        this.peerConnectionController.onSetRemoteDescription = (offer: RTCSessionDescriptionInit) => {
+            this.pixelStreaming._onWebRtcSdpOffer(offer);
+        };
 
         /* When the Peer Connection ice candidate is added have it handled */
         this.peerConnectionController.onPeerIceCandidate = (
@@ -1484,6 +1499,9 @@ export class WebRtcPlayerController {
         if (this.isUsingSFU) {
             this.protocol.sendMessage(MessageHelpers.createMessage(Messages.dataChannelRequest));
         }
+
+        // Send answer back to Pixel Streaming main class for event dispatch
+        this.pixelStreaming._onWebRtcSdpAnswer(answer);
     }
 
     /**

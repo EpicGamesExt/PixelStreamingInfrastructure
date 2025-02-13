@@ -19,7 +19,8 @@ export { CandidatePairStats } from './PeerConnectionController/CandidatePairStat
 export { CandidateStat } from './PeerConnectionController/CandidateStat';
 export { DataChannelStats } from './PeerConnectionController/DataChannelStats';
 export { InboundAudioStats, InboundVideoStats } from './PeerConnectionController/InboundRTPStats';
-export { OutBoundVideoStats } from './PeerConnectionController/OutBoundRTPStats';
+export { OutboundRTPStats, RemoteOutboundRTPStats } from './PeerConnectionController/OutBoundRTPStats';
+export * from './PeerConnectionController/LatencyCalculator';
 export * from './DataChannel/DataChannelLatencyTestResults';
 export * from './Util/EventEmitter';
 export * from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
