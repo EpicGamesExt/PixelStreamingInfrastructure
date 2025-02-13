@@ -2,7 +2,7 @@ import { FlagsIds, NumericParametersIds, OptionParametersIds, TextParametersIds 
 import { LatencyTestResults } from '../DataChannel/LatencyTestResults';
 import { AggregatedStats } from '../PeerConnectionController/AggregatedStats';
 import { InitialSettings } from '../DataChannel/InitialSettings';
-import { LatencyInfo } from '../pixelstreamingfrontend';
+import { LatencyInfo } from '../PeerConnectionController/LatencyCalculator';
 import { Messages } from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
 import { SettingFlag } from '../Config/SettingFlag';
 import { SettingNumber } from '../Config/SettingNumber';
