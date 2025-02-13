@@ -1,19 +1,19 @@
-@epicgames-ps/lib-pixelstreamingsignalling-ue5.5
+**@epicgames-ps/lib-pixelstreamingsignalling-ue5.5**
+
+***
 
 # @epicgames-ps/lib-pixelstreamingsignalling-ue5.5
 
-## Table of contents
+## Modules
 
-### Modules
-
-- [Logger](modules/Logger.md)
-- [LoggingUtils](modules/LoggingUtils.md)
-- [PlayerConnection](modules/PlayerConnection.md)
-- [PlayerRegistry](modules/PlayerRegistry.md)
-- [SFUConnection](modules/SFUConnection.md)
-- [SignallingServer](modules/SignallingServer.md)
-- [StreamerConnection](modules/StreamerConnection.md)
-- [StreamerRegistry](modules/StreamerRegistry.md)
-- [Utils](modules/Utils.md)
-- [WebServer](modules/WebServer.md)
-- [pixelstreamingsignalling](modules/pixelstreamingsignalling.md)
+- [Logger](Logger/README.md)
+- [LoggingUtils](LoggingUtils/README.md)
+- [pixelstreamingsignalling](pixelstreamingsignalling/README.md)
+- [PlayerConnection](PlayerConnection/README.md)
+- [PlayerRegistry](PlayerRegistry/README.md)
+- [SFUConnection](SFUConnection/README.md)
+- [SignallingServer](SignallingServer/README.md)
+- [StreamerConnection](StreamerConnection/README.md)
+- [StreamerRegistry](StreamerRegistry/README.md)
+- [Utils](Utils/README.md)
+- [WebServer](WebServer/README.md)
