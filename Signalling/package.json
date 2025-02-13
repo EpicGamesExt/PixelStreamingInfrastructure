@@ -19,6 +19,7 @@
     "author": "Epic Games",
     "license": "MIT",
     "devDependencies": {
+        "@eslint/js": "^9.20.0",
         "@types/express": "^5.0.0",
         "@types/ws": "^8.5.14",
         "eslint": "^9.20.0",
@@ -26,6 +27,9 @@
         "eslint-plugin-prettier": "^5.2.3",
         "eslint-plugin-tsdoc": "^0.4.0",
         "nodemon": "^3.1.9",
+        "rimraf": "^6.0.1",
+        "typedoc": "^0.27.7",
+        "typedoc-plugin-markdown": "^4.4.2",
         "typescript": "^5.7.3",
         "typescript-eslint": "^8.24.0"
     },
@@ -35,9 +39,10 @@
         "helmet": "^8.0.0",
         "hsts": "^2.2.0",
         "jsonc": "^2.0.0",
-        "ws": "^8.18.0",
+        "logform": "^2.7.0",
         "winston": "^3.17.0",
-        "winston-daily-rotate-file": "^5.0.0"
+        "winston-daily-rotate-file": "^5.0.0",
+        "ws": "^8.18.0"
     },
     "peerDependencies": {
         "@epicgames-ps/lib-pixelstreamingcommon-ue5.5": "^0.1.7"
