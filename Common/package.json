@@ -22,7 +22,6 @@
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "devDependencies": {
-        "@protobuf-ts/plugin": "^2.9.4",
         "@types/ws": "^8.5.14",
         "concurrently": "^9.1.2",
         "eslint": "^9.20.0",
@@ -38,12 +37,13 @@
         "typescript": "^5.7.3",
         "typescript-eslint": "^8.24.0"
     },
+    "dependencies": {
+        "@protobuf-ts/plugin": "^2.9.4",
+        "ws": "^8.18.0"
+    },
     "author": "Epic Games",
     "license": "MIT",
     "publishConfig": {
         "access": "public"
-    },
-    "peerDependencies": {
-        "ws": "^8.18.0"
     }
 }
