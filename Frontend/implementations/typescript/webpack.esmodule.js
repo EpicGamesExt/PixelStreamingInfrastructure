@@ -21,7 +21,7 @@ module.exports = {
 		module: true,
 		path: process.env.WEBPACK_OUTPUT_PATH ? path.resolve(process.env.WEBPACK_OUTPUT_PATH) : path.resolve(__dirname, '../../../SignallingWebServer/www'),
 		globalObject: 'this',
-		hashFunction: 'xxhash64',
+		hashFunction: 'xxhash64'
 	},
 	experiments: {
 		outputModule: true,

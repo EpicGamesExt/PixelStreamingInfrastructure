@@ -6,6 +6,10 @@ import { AggregatedStats } from './AggregatedStats';
 import { parseRtpParameters, splitSections } from 'sdp';
 import { RTCUtils } from '../Util/RTCUtils';
 import { CodecStats } from './CodecStats';
+import { SDPUtils } from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
+import { LatencyCalculator, LatencyInfo } from './LatencyCalculator';
+
+export const kAbsCaptureTime = 'http://www.webrtc.org/experiments/rtp-hdrext/abs-capture-time';
 
 /**
  * Handles the Peer Connection
@@ -18,6 +22,7 @@ export class PeerConnectionController {
     updateCodecSelection: boolean;
     videoTrack: MediaStreamTrack;
     audioTrack: MediaStreamTrack;
+    latencyCalculator: LatencyCalculator;
 
     /**
      * Create a new RTC Peer Connection client
@@ -27,6 +32,7 @@ export class PeerConnectionController {
     constructor(options: RTCConfiguration, config: Config, preferredCodec: string) {
         this.config = config;
         this.createPeerConnection(options, preferredCodec);
+        this.latencyCalculator = new LatencyCalculator();
     }
 
     createPeerConnection(options: RTCConfiguration, preferredCodec: string) {
@@ -88,12 +94,26 @@ export class PeerConnectionController {
     }
 
     /**
-     *
+     * Receive offer from UE side and process it as the remote description of this peer connection
      */
     async receiveOffer(offer: RTCSessionDescriptionInit, config: Config) {
         Logger.Info('Receive Offer');
 
+        // If UE or JSStreamer did send abs-capture-time RTP header extension to a non-Chrome browser
+        // then remove it from the SDP because if Firefox detects it in offer or answer it will fail to connect
+        // due having 15 or more header extensions: https://mailarchive.ietf.org/arch/msg/rtcweb/QRnWNuWzGuLRovWdHkodNP6VOgg/
+        if (this.isFirefox()) {
+            // example: a=extmap:15 http://www.webrtc.org/experiments/rtp-hdrext/abs-capture-time
+            offer.sdp = offer.sdp.replace(
+                /^a=extmap:\d+ http:\/\/www\.webrtc\.org\/experiments\/rtp-hdrext\/abs-capture-time\r\n/gm,
+                ''
+            );
+        }
+
         this.peerConnection?.setRemoteDescription(offer).then(() => {
+            // Fire event for when remote offer description is set
+            this.onSetRemoteDescription(offer);
+
             const isLocalhostConnection =
                 location.hostname === 'localhost' || location.hostname === '127.0.0.1';
             const isHttpsConnection = location.protocol === 'https:';
@@ -124,10 +144,10 @@ export class PeerConnectionController {
                         return this.peerConnection?.setLocalDescription(Answer);
                     })
                     .then(() => {
-                        this.onSendWebRTCAnswer(this.peerConnection?.currentLocalDescription);
+                        this.onSetLocalDescription(this.peerConnection?.currentLocalDescription);
                     })
-                    .catch(() => {
-                        Logger.Error('createAnswer() failed');
+                    .catch((err) => {
+                        Logger.Error(`createAnswer() failed - ${err}`);
                     });
             });
         });
@@ -151,25 +171,29 @@ export class PeerConnectionController {
      * Generate Aggregated Stats and then fire a onVideo Stats event
      */
     generateStats() {
-        const audioPromise = this.audioTrack
-            ? this.peerConnection?.getStats(this.audioTrack).then((statsData: RTCStatsReport) => {
-                  this.aggregatedStats.processStats(statsData);
-              })
-            : Promise.resolve();
-        const videoPromise = this.videoTrack
-            ? this.peerConnection?.getStats(this.videoTrack).then((statsData: RTCStatsReport) => {
-                  this.aggregatedStats.processStats(statsData);
-              })
-            : Promise.resolve();
+        this.peerConnection.getStats().then((statsData: RTCStatsReport) => {
+            this.aggregatedStats.processStats(statsData);
 
-        Promise.allSettled([audioPromise, videoPromise]).then(() => {
             this.onVideoStats(this.aggregatedStats);
+
+            // Calculate latency using stats and video receivers and then call the handling function
+            const latencyInfo: LatencyInfo = this.latencyCalculator.calculate(
+                this.aggregatedStats,
+                this.peerConnection.getReceivers()
+            );
+            this.onLatencyCalculated(latencyInfo);
+
             // Update the preferred codec selection based on what was actually negotiated
             if (this.updateCodecSelection && !!this.aggregatedStats.inboundVideoStats.codecId) {
                 // Construct the qualified codec name from the mimetype and fmtp
-                const codecStats: CodecStats = this.aggregatedStats.codecs.get(
+                const codecStats: CodecStats | undefined = this.aggregatedStats.codecs.get(
                     this.aggregatedStats.inboundVideoStats.codecId
                 );
+
+                if (codecStats === undefined) {
+                    return;
+                }
+
                 const codecShortname = codecStats.mimeType.replace('video/', '');
                 let fullCodecName = codecShortname;
                 if (codecStats.sdpFmtpLine && codecStats.sdpFmtpLine.trim() !== '') {
@@ -237,7 +261,18 @@ export class PeerConnectionController {
         // We use the line 'useinbandfec=1' (which Opus uses) to set our Opus specific audio parameters.
         mungedSDP = mungedSDP.replace('useinbandfec=1', audioSDP);
 
+        // Add abs-capture-time RTP header extension if we have enabled the setting.
+        // Note: As at Feb 2025, Chromium based browsers are the only ones that support this and
+        // munging it into the answer in Firefox will cause the connection to fail.
+        if (this.config.isFlagEnabled(Flags.EnableCaptureTimeExt) && !this.isFirefox()) {
+            mungedSDP = SDPUtils.addVideoHeaderExtensionToSdp(mungedSDP, kAbsCaptureTime);
+        }
+
         return mungedSDP;
+    }
+
+    isFirefox(): boolean {
+        return navigator.userAgent.indexOf('Firefox') > 0;
     }
 
     /**
@@ -587,6 +622,15 @@ export class PeerConnectionController {
     }
 
     /**
+     * And override event for when latency info is calculated
+     * @param latencyInfo - Calculated latency information.
+     */
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    onLatencyCalculated(latencyInfo: LatencyInfo) {
+        // Default Functionality: Do Nothing
+    }
+
+    /**
      * Event to send the RTC offer to the Signaling server
      * @param offer - RTC Offer
      */
@@ -596,11 +640,20 @@ export class PeerConnectionController {
     }
 
     /**
-     * Event to send the RTC Answer to the Signaling server
+     * Event fired when remote offer description is set.
+     * @param offer - RTC Offer
+     */
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    onSetRemoteDescription(offer: RTCSessionDescriptionInit) {
+        // Default Functionality: Do Nothing
+    }
+
+    /**
+     * Event fire when local description answer is set.
      * @param answer - RTC Answer
      */
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    onSendWebRTCAnswer(answer: RTCSessionDescriptionInit) {
+    onSetLocalDescription(answer: RTCSessionDescriptionInit) {
         // Default Functionality: Do Nothing
     }
 

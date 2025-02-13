@@ -30,6 +30,7 @@ export type SettingsSectionsIds = (typeof SettingsSections)[SettingsSectionsKeys
 
 export class StatsSections {
     static SessionStats = 'Session Stats' as const;
+    static LatencyStats = 'Latency Stats' as const;
     static LatencyTest = 'Latency Test' as const;
     static DataChannelLatencyTest = 'Data Channel Latency Test' as const;
 }

@@ -14,8 +14,8 @@ test('Test resolution changes with match viewport on.', {
 
     // first with match viewport enabled
     await page.goto(`/?StreamerId=${streamerId}&MatchViewportRes=true`);
-    await page.getByText('Click to start').click();
-    await helpers.waitForVideo(page);
+
+    await helpers.startAndWaitForVideo(page);
 
     const events = await getEventSetFrom(streamerPage, async () => {
         await page.setViewportSize({ width: 100, height: 100 });
@@ -39,9 +39,8 @@ test('Test resolution changes with match viewport off.', {
 
     // first with match viewport enabled
     await page.goto(`/?StreamerId=${streamerId}&MatchViewportRes=false`);
-    await page.getByText('Click to start').click();
-    await helpers.waitForVideo(page);
-    await page.click("#streamingVideo");
+
+    await helpers.startAndWaitForVideo(page);
 
     const events = await getEventSetFrom(streamerPage, async () => {
         await page.setViewportSize({ width: 100, height: 100 });
@@ -55,7 +54,7 @@ test('Test resolution changes with match viewport off.', {
         { type: PSEventTypes.Command, command: '{\"Resolution.Width\":100,\"Resolution.Height\":100}' },
         { type: PSEventTypes.Command, command: '{\"Resolution.Width\":800,\"Resolution.Height\":600}' },
     ];
-    expect(singlePlayerEvents).not.toContainActions(expectedActions);
+	expect(singlePlayerEvents).not.toContainActions(expectedActions);
 });
 
 

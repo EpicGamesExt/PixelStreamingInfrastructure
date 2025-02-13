@@ -111,7 +111,7 @@ export class MockRTCPeerConnectionImpl implements RTCPeerConnection {
         throw new Error("Method not implemented.");
     }
     getReceivers(): RTCRtpReceiver[] {
-        throw new Error("Method not implemented.");
+        return [];
     }
     getSenders(): RTCRtpSender[] {
         throw new Error("Method not implemented.");
