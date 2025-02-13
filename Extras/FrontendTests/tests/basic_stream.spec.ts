@@ -1,6 +1,7 @@
 import { test } from './fixtures';
 import { expect } from './matchers';
 import * as helpers from './helpers';
+import { StatsReceivedEvent } from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.5';
 
 // NOTE: add a new test to check qp values
 
@@ -10,20 +11,22 @@ test('Test default stream.', {
 }, async ({ page, streamerId }) => {
 
     await page.goto(`/?StreamerId=${streamerId}`);
-    await page.getByText('Click to start').click();
 
     // let the stream run for a short duration
-    await helpers.waitForVideo(page);
-    await helpers.delay(1000);
+    await helpers.startAndWaitForVideo(page);
 
-    // query the frontend for its calculated stats
-    const frame_count:number = await page.evaluate(()=> {
-        let videoStats = pixelStreaming._webRtcController.peerConnectionController.aggregatedStats.inboundVideoStats;
-        return videoStats.framesReceived;
+    let frameCount: number = await page.evaluate(()=> {
+        return new Promise<number>((resolve) => {
+            window.pixelStreaming.addEventListener("statsReceived", (e: StatsReceivedEvent) => {
+                if(e.data.aggregatedStats && e.data.aggregatedStats.inboundVideoStats && e.data.aggregatedStats.inboundVideoStats.framesReceived) {
+                    resolve(e.data.aggregatedStats.inboundVideoStats.framesReceived);
+                }
+            });
+        });
     });
 
     // pass the test if we recorded any frames
-    expect(frame_count).toBeGreaterThan(0);
+    expect(frameCount).toBeGreaterThan(0);
 });
 
 

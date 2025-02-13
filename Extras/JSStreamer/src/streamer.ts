@@ -5,7 +5,8 @@ import {
     Messages,
     MessageHelpers,
     BaseMessage,
-    EventEmitter
+    EventEmitter,
+    SDPUtils
 } from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
 import { DataProtocol } from './protocol';
 
@@ -31,6 +32,7 @@ interface WebRTCSettings {
     MaxBitrate: number;
     LowQP: number;
     HighQP: number;
+    AbsCaptureTimeHeaderExt: boolean
 }
 
 interface Settings {
@@ -89,7 +91,8 @@ export class Streamer extends EventEmitter {
                 MinBitrate: 100000,
                 MaxBitrate: 100000000,
                 LowQP: 25,
-                HighQP: 37
+                HighQP: 37,
+                AbsCaptureTimeHeaderExt: true
             },
             ConfigOptions: {}
         };
@@ -130,8 +133,17 @@ export class Streamer extends EventEmitter {
         this.transport.connect(signallingURL);
     }
 
+    stopStreaming() {
+        this.transport.disconnect(1000, "Normal shutdown by calling stopStreaming");
+        for(let peer of this.playerMap.values()) {
+            peer.peerConnection.close();
+        }
+    }
+
     handleConfigMessage(msg: Messages.config) {
-        this.peerConnectionOptions = msg.peerConnectionOptions;
+        if(msg.peerConnectionOptions !== undefined) {
+            this.peerConnectionOptions = msg.peerConnectionOptions;
+        }
     }
 
     handleIdentifyMessage(_msg: Messages.identify) {
@@ -172,7 +184,7 @@ export class Streamer extends EventEmitter {
                     }
                     const tranceiverOptions: RTCRtpTransceiverInit = {
                         streams: [this.localStream],
-                        direction: 'sendonly',
+                        direction: 'sendrecv',
                         sendEncodings: [
                             {
                                 maxBitrate: this.settings.WebRTC.MaxBitrate,
@@ -212,9 +224,19 @@ export class Streamer extends EventEmitter {
                 dataChannel: dataChannel
             };
 
+            const offerOptions: RTCOfferOptions = { offerToReceiveAudio: true, offerToReceiveVideo: true }
+
             peerConnection
-                .createOffer()
+                .createOffer(offerOptions)
                 .then((offer) => {
+
+                    if(offer.sdp == undefined) {
+                        return;
+                    }
+
+                    // Munge offer
+                    offer.sdp = this.mungeOffer(offer.sdp);
+
                     peerConnection
                         .setLocalDescription(offer)
                         .then(() => {
@@ -224,6 +246,7 @@ export class Streamer extends EventEmitter {
                                     sdp: offer.sdp
                                 })
                             );
+                            this.emit('local_description_set', offer);
                         })
                         .catch(() => {});
                 })
@@ -234,8 +257,8 @@ export class Streamer extends EventEmitter {
                 peerConnection
                     .getStats()
                     .then((stats: RTCStatsReport) => {
-                        let qpSum: number;
-                        let fps: number;
+                        let qpSum: number | undefined = undefined;
+                        let fps: number | undefined = undefined;
                         stats.forEach((report) => {
                             /* eslint-disable @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment */
                             if (report.type == 'outbound-rtp' && report.mediaType == 'video') {
@@ -245,14 +268,12 @@ export class Streamer extends EventEmitter {
                             /* eslint-enable @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment */
                         });
                         const nowTime = Date.now();
-                        if (newPlayer.lastStatsTime) {
+                        if (newPlayer.lastStatsTime != undefined && newPlayer.lastQpSum !== undefined && qpSum !== undefined && fps !== undefined) {
                             const deltaMillis = nowTime - newPlayer.lastStatsTime;
                             const qpDelta = (qpSum - newPlayer.lastQpSum) * (deltaMillis / 1000);
                             const qpAvg = qpDelta / fps;
 
-                            newPlayer.dataChannel.send(
-                                this.constructMessage(DataProtocol.FromStreamer.VideoEncoderAvgQP, qpAvg)
-                            );
+                            newPlayer.dataChannel.send(this.constructMessage(DataProtocol.FromStreamer.VideoEncoderAvgQP, qpAvg));
                         }
                         newPlayer.lastQpSum = qpSum;
                         newPlayer.lastStatsTime = nowTime;
@@ -291,6 +312,15 @@ export class Streamer extends EventEmitter {
             const candidate = new RTCIceCandidate(msg.candidate);
             playerPeer.peerConnection.addIceCandidate(candidate);
         }
+    }
+
+    mungeOffer(offerSDP: string) : string {
+        if(this.settings.WebRTC.AbsCaptureTimeHeaderExt) {
+            // Add the abs-capture-time header extension to the sdp extmap
+            const kAbsCaptureTime = 'http://www.webrtc.org/experiments/rtp-hdrext/abs-capture-time';
+            return SDPUtils.addVideoHeaderExtensionToSdp(offerSDP, kAbsCaptureTime);
+        }
+        return offerSDP;
     }
 
     sendDataProtocol(playerId: string) {
@@ -344,10 +374,7 @@ export class Streamer extends EventEmitter {
         let argIndex = 0;
 
         if (messageDef.structure.length != args.length) {
-            console.log(
-                `Incorrect number of parameters given to constructMessage. Got ${args.length}, expected ${messageDef.structure.length}`
-            );
-            return null;
+            throw new Error(`Incorrect number of parameters given to constructMessage. Got ${args.length}, expected ${messageDef.structure.length}`);
         }
 
         dataSize += 1; // message type

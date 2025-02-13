@@ -10,7 +10,8 @@ import {
     Messages,
     DataChannelLatencyTestResult,
     OptionParameters,
-    SettingsChangedEvent
+    SettingsChangedEvent,
+    LatencyInfo
 } from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.5';
 import { OverlayBase } from '../Overlay/BaseOverlay';
 import { ActionOverlay } from '../Overlay/ActionOverlay';
@@ -350,6 +351,9 @@ export class Application {
         this.stream.addEventListener('statsReceived', ({ data: { aggregatedStats } }) =>
             this.onStatsReceived(aggregatedStats)
         );
+        this.stream.addEventListener('latencyCalculated', ({ data: { latencyInfo } }) =>
+            this.onLatencyUpdate(latencyInfo)
+        );
         this.stream.addEventListener('latencyTestResult', ({ data: { latencyTimings } }) =>
             this.onLatencyTestResults(latencyTimings)
         );
@@ -383,7 +387,7 @@ export class Application {
 
     /**
      * Creates the root element for the Pixel Streaming UI.
-     * Note: This should be called before the Pixel Streaming object or UI features object are created.
+     * Note: This should be called before the Pixel Streaming object is created.
      * @param pixelstreaming - The Pixel Streaming object.
      * @param uiFeaturesElem - The element holding all the custom UI features.
      * @returns A div with the id #playerUI populated with videoElementParent and uiFeatureElement.
@@ -679,6 +683,10 @@ export class Application {
     onStatsReceived(aggregatedStats: AggregatedStats) {
         // Grab all stats we can off the aggregated stats
         this.statsPanel?.handleStats(aggregatedStats);
+    }
+
+    onLatencyUpdate(latencyInfo: LatencyInfo) {
+        this.statsPanel?.handleLatencyInfo(latencyInfo);
     }
 
     onLatencyTestResults(latencyTimings: LatencyTestResults) {

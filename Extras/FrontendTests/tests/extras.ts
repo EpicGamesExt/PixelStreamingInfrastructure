@@ -1,7 +1,7 @@
 import { Page } from 'playwright';
 import { Streamer, DataProtocol } from '@epicgames-ps/js-streamer';
-import { PixelStreaming } from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.5';
 import { delay } from './helpers';
+import { PixelStreaming, WebRtcSdpAnswerEvent } from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.5';
 
 declare global {
     interface Window {
@@ -80,6 +80,17 @@ export function teardownEventCapture(streamerPage: Page) {
 export function getCapturedEvents(streamerPage: Page): Promise<Record<string, DataChannelEvent[]>> {
     return streamerPage.evaluate(() => {
         return window.dataMessages;
+    });
+}
+
+// gets the SDP answer from the player page
+export function getSdpAnswer(playerPage: Page): Promise<RTCSessionDescriptionInit> {
+    return playerPage.evaluate(() => {
+        return new Promise<RTCSessionDescriptionInit>((resolve) => {
+            window.pixelStreaming.addEventListener("webRtcSdpAnswer", (evt : WebRtcSdpAnswerEvent) => {
+                resolve(evt.data.sdp);
+            });
+        });
     });
 }
 

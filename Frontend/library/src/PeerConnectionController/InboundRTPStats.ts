@@ -4,41 +4,41 @@
  * Inbound Audio Stats collected from the RTC Stats Report
  */
 export class InboundAudioStats {
-    audioLevel: number;
+    audioLevel: number | undefined;
     bytesReceived: number;
     codecId: string;
-    concealedSamples: number;
-    concealmentEvents: number;
-    fecPacketsDiscarded: number;
-    fecPacketsReceived: number;
+    concealedSamples: number | undefined;
+    concealmentEvents: number | undefined;
+    fecPacketsDiscarded: number | undefined;
+    fecPacketsReceived: number | undefined;
     headerBytesReceived: number;
     id: string;
-    insertedSamplesForDeceleration: number;
+    insertedSamplesForDeceleration: number | undefined;
     jitter: number;
     jitterBufferDelay: number;
     jitterBufferEmittedCount: number;
-    jitterBufferMinimumDelay: number;
-    jitterBufferTargetDelay: number;
+    jitterBufferMinimumDelay: number | undefined;
+    jitterBufferTargetDelay: number | undefined;
     kind: string;
     lastPacketReceivedTimestamp: number;
-    mediaType: string;
+    mediaType: string | undefined;
     mid: string;
-    packetsDiscarded: number;
+    packetsDiscarded: number | undefined;
     packetsLost: number;
     packetsReceived: number;
-    removedSamplesForAcceleration: number;
-    silentConcealedSamples: number;
+    removedSamplesForAcceleration: number | undefined;
+    silentConcealedSamples: number | undefined;
     ssrc: number;
     timestamp: number;
-    totalAudioEnergy: number;
-    totalSamplesDuration: number;
-    totalSamplesReceived: number;
-    trackIdentifier: string;
-    transportId: string;
+    totalAudioEnergy: number | undefined;
+    totalSamplesDuration: number | undefined;
+    totalSamplesReceived: number | undefined;
+    trackIdentifier: string | undefined;
+    transportId: string | undefined;
     type: string;
 
     /* additional, custom stats */
-    bitrate: number;
+    bitrate: number | undefined;
 }
 
 /**
@@ -46,47 +46,47 @@ export class InboundAudioStats {
  */
 export class InboundVideoStats {
     bytesReceived: number;
-    codecId: string;
-    firCount: number;
-    frameHeight: number;
-    frameWidth: number;
-    framesAssembledFromMultiplePackets: number;
-    framesDecoded: number;
-    framesDropped: number;
-    framesPerSecond: number;
-    framesReceived: number;
-    freezeCount: number;
-    googTimingFrameInfo: string;
+    codecId: string | undefined;
+    firCount: number | undefined;
+    frameHeight: number | undefined;
+    frameWidth: number | undefined;
+    framesAssembledFromMultiplePackets: number | undefined;
+    framesDecoded: number | undefined;
+    framesDropped: number | undefined;
+    framesPerSecond: number | undefined;
+    framesReceived: number | undefined;
+    freezeCount: number | undefined;
+    googTimingFrameInfo: string | undefined;
     headerBytesReceived: number;
     id: string;
     jitter: number;
     jitterBufferDelay: number;
     jitterBufferEmittedCount: number;
-    keyFramesDecoded: number;
+    keyFramesDecoded: number | undefined;
     kind: string;
-    lastPacketReceivedTimestamp: number;
-    mediaType: string;
+    lastPacketReceivedTimestamp: number | undefined;
+    mediaType: string | undefined;
     mid: string;
-    nackCount: number;
+    nackCount: number | undefined;
     packetsLost: number;
     packetsReceived: number;
-    pauseCount: number;
-    pliCount: number;
+    pauseCount: number | undefined;
+    pliCount: number | undefined;
     ssrc: number;
     timestamp: number;
-    totalAssemblyTime: number;
-    totalDecodeTime: number;
-    totalFreezesDuration: number;
-    totalInterFrameDelay: number;
-    totalPausesDuration: number;
-    totalProcessingDelay: number;
-    totalSquaredInterFrameDelay: number;
-    trackIdentifier: string;
-    transportId: string;
+    totalAssemblyTime: number | undefined;
+    totalDecodeTime: number | undefined;
+    totalFreezesDuration: number | undefined;
+    totalInterFrameDelay: number | undefined;
+    totalPausesDuration: number | undefined;
+    totalProcessingDelay: number | undefined;
+    totalSquaredInterFrameDelay: number | undefined;
+    trackIdentifier: string | undefined;
+    transportId: string | undefined;
     type: string;
 
     /* additional, custom stats */
-    bitrate: number;
+    bitrate: number | undefined;
 }
 
 /**
@@ -95,60 +95,63 @@ export class InboundVideoStats {
 export class InboundRTPStats {
     /* common stats */
     bytesReceived: number;
-    codecId: string;
+    codecId: string | undefined;
     headerBytesReceived: number;
     id: string;
     jitter: number;
     jitterBufferDelay: number;
     jitterBufferEmittedCount: number;
     kind: string;
-    lastPacketReceivedTimestamp: number;
-    mediaType: string;
+    lastPacketReceivedTimestamp: number | undefined;
+    mediaType: string | undefined;
     mid: string;
     packetsLost: number;
     packetsReceived: number;
+    playoutId: string | undefined;
+    qpsum: number | undefined;
+    remoteId: string | undefined;
     ssrc: number;
     timestamp: number;
-    trackIdentifier: string;
-    transportId: string;
+    trackIdentifier: string | undefined;
+    transportId: string | undefined;
     type: string;
 
     /* audio specific stats */
-    audioLevel: number;
-    concealedSamples: number;
-    concealmentEvents: number;
-    fecPacketsDiscarded: number;
-    fecPacketsReceived: number;
-    insertedSamplesForDeceleration: number;
-    jitterBufferMinimumDelay: number;
-    jitterBufferTargetDelay: number;
-    packetsDiscarded: number;
-    removedSamplesForAcceleration: number;
-    silentConcealedSamples: number;
-    totalAudioEnergy: number;
-    totalSamplesDuration: number;
-    totalSamplesReceived: number;
+    audioLevel: number | undefined;
+    concealedSamples: number | undefined;
+    concealmentEvents: number | undefined;
+    fecPacketsDiscarded: number | undefined;
+    fecPacketsReceived: number | undefined;
+    insertedSamplesForDeceleration: number | undefined;
+    jitterBufferMinimumDelay: number | undefined;
+    jitterBufferTargetDelay: number | undefined;
+    packetsDiscarded: number | undefined;
+    removedSamplesForAcceleration: number | undefined;
+    silentConcealedSamples: number | undefined;
+    totalAudioEnergy: number | undefined;
+    totalSamplesDuration: number | undefined;
+    totalSamplesReceived: number | undefined;
 
     /* video specific stats */
-    firCount: number;
-    frameHeight: number;
-    frameWidth: number;
-    framesAssembledFromMultiplePackets: number;
-    framesDecoded: number;
-    framesDropped: number;
-    framesPerSecond: number;
-    framesReceived: number;
-    freezeCount: number;
-    googTimingFrameInfo: string;
-    keyFramesDecoded: number;
-    nackCount: number;
-    pauseCount: number;
-    pliCount: number;
-    totalAssemblyTime: number;
-    totalDecodeTime: number;
-    totalFreezesDuration: number;
-    totalInterFrameDelay: number;
-    totalPausesDuration: number;
-    totalProcessingDelay: number;
-    totalSquaredInterFrameDelay: number;
+    firCount: number | undefined;
+    frameHeight: number | undefined;
+    frameWidth: number | undefined;
+    framesAssembledFromMultiplePackets: number | undefined;
+    framesDecoded: number | undefined;
+    framesDropped: number | undefined;
+    framesPerSecond: number | undefined;
+    framesReceived: number | undefined;
+    freezeCount: number | undefined;
+    googTimingFrameInfo: string | undefined;
+    keyFramesDecoded: number | undefined;
+    nackCount: number | undefined;
+    pauseCount: number | undefined;
+    pliCount: number | undefined;
+    totalAssemblyTime: number | undefined;
+    totalDecodeTime: number | undefined;
+    totalFreezesDuration: number | undefined;
+    totalInterFrameDelay: number | undefined;
+    totalPausesDuration: number | undefined;
+    totalProcessingDelay: number | undefined;
+    totalSquaredInterFrameDelay: number | undefined;
 }
