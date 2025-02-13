@@ -26,10 +26,12 @@
         "jest-environment-jsdom": "^29.7.0",
         "nodemon": "^3.1.9",
         "rimraf": "^6.0.1",
-        "sdp": "^3.2.0",
         "ts-jest": "^29.2.5",
         "typescript": "^5.7.3",
         "typescript-eslint": "^8.24.0"
+    },
+    "dependencies": {
+        "sdp": "^3.2.0"
     },
     "peerDependencies": {
         "@epicgames-ps/lib-pixelstreamingcommon-ue5.5": "^0.1.7"
