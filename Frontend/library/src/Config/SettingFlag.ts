@@ -16,7 +16,7 @@ export class SettingFlag<CustomIds extends string = FlagsIds> extends SettingBas
         description: string,
         defaultFlagValue: boolean,
         useUrlParams: boolean,
-        // eslint-disable-next-line @typescript-eslint/no-empty-function
+         
         defaultOnChangeListener: (changedValue: unknown, setting: SettingBase) => void = () => {
             /* Do nothing, to be overridden. */
         }

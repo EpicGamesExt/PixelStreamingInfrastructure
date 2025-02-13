@@ -6,11 +6,15 @@
 
 # Interface: ILogger
 
+Defined in: [Logger/Logger.ts:28](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/5fb85fd65be1623aae0ff7d1b463a27836d35a34/Common/src/Logger/Logger.ts#L28)
+
 ## Methods
 
 ### Debug()
 
 > **Debug**(`message`): `void`
+
+Defined in: [Logger/Logger.ts:30](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/5fb85fd65be1623aae0ff7d1b463a27836d35a34/Common/src/Logger/Logger.ts#L30)
 
 #### Parameters
 
@@ -21,10 +25,6 @@
 #### Returns
 
 `void`
-
-#### Defined in
-
-[Logger/Logger.ts:30](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/80aa060d880a8c194a04b83f18bd1ee360ab20e1/Common/src/Logger/Logger.ts#L30)
 
 ***
 
@@ -32,6 +32,8 @@
 
 > **Error**(`message`): `void`
 
+Defined in: [Logger/Logger.ts:33](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/5fb85fd65be1623aae0ff7d1b463a27836d35a34/Common/src/Logger/Logger.ts#L33)
+
 #### Parameters
 
 ##### message
@@ -41,10 +43,6 @@
 #### Returns
 
 `void`
-
-#### Defined in
-
-[Logger/Logger.ts:33](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/80aa060d880a8c194a04b83f18bd1ee360ab20e1/Common/src/Logger/Logger.ts#L33)
 
 ***
 
@@ -52,6 +50,8 @@
 
 > **Info**(`message`): `void`
 
+Defined in: [Logger/Logger.ts:31](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/5fb85fd65be1623aae0ff7d1b463a27836d35a34/Common/src/Logger/Logger.ts#L31)
+
 #### Parameters
 
 ##### message
@@ -62,15 +62,13 @@
 
 `void`
 
-#### Defined in
-
-[Logger/Logger.ts:31](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/80aa060d880a8c194a04b83f18bd1ee360ab20e1/Common/src/Logger/Logger.ts#L31)
-
 ***
 
 ### InitLogging()
 
 > **InitLogging**(`logLevel`, `includeStack`): `void`
+
+Defined in: [Logger/Logger.ts:29](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/5fb85fd65be1623aae0ff7d1b463a27836d35a34/Common/src/Logger/Logger.ts#L29)
 
 #### Parameters
 
@@ -86,15 +84,13 @@
 
 `void`
 
-#### Defined in
-
-[Logger/Logger.ts:29](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/80aa060d880a8c194a04b83f18bd1ee360ab20e1/Common/src/Logger/Logger.ts#L29)
-
 ***
 
 ### Warning()
 
 > **Warning**(`message`): `void`
+
+Defined in: [Logger/Logger.ts:32](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/5fb85fd65be1623aae0ff7d1b463a27836d35a34/Common/src/Logger/Logger.ts#L32)
 
 #### Parameters
 
@@ -105,7 +101,3 @@
 #### Returns
 
 `void`
-
-#### Defined in
-
-[Logger/Logger.ts:32](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/80aa060d880a8c194a04b83f18bd1ee360ab20e1/Common/src/Logger/Logger.ts#L32)

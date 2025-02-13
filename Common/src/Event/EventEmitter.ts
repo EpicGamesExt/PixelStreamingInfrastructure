@@ -3,7 +3,6 @@
 // To match NodeJS' EventEmitter syntax without downstream code changes we need to use `any`.
 // This means we need to disable linting `any` checks on this file.
 //
-/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 
 class PixelStreamingEventListener implements EventListenerObject {

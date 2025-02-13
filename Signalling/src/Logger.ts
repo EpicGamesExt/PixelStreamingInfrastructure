@@ -165,7 +165,6 @@ function createFileTransport(logDirPath: string, logLevel: string) {
     });
 }
 
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 function createFileFormat() {
     return printf((logObj: TransformableInfo) => {
         if (typeof logObj.message === 'string') {
@@ -187,4 +186,3 @@ function createFileFormat() {
         return '';
     });
 }
-/* eslint-enable @typescript-eslint/no-unsafe-assignment */

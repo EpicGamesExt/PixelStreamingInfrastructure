@@ -17,7 +17,7 @@ export class SettingText<CustomIds extends string = TextParametersIds> extends S
         description: string,
         defaultTextValue: string,
         useUrlParams: boolean,
-        // eslint-disable-next-line @typescript-eslint/no-empty-function
+         
         defaultOnChangeListener: (changedValue: unknown, setting: SettingBase) => void = () => {
             /* Do nothing, to be overridden. */
         }

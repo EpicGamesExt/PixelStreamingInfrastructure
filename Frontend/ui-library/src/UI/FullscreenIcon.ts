@@ -1,6 +1,6 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
-/* eslint-disable @typescript-eslint/no-floating-promises */
+ 
 
 /**
  * Declare additions to base types for cross browser fullscreen functionality.

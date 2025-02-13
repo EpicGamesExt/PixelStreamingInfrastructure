@@ -68,6 +68,12 @@ Re-exports [overrideLogger](../Logger/Logger/functions/overrideLogger.md)
 
 ***
 
+### SDPUtils
+
+Re-exports [SDPUtils](../Util/SdpUtils/classes/SDPUtils.md)
+
+***
+
 ### SignallingProtocol
 
 Re-exports [SignallingProtocol](../Protocol/SignallingProtocol/classes/SignallingProtocol.md)
