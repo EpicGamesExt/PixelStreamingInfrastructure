@@ -6,7 +6,7 @@
 
 # Interface: ITransport
 
-Defined in: [Transport/ITransport.ts:8](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/f434cbb2ad489c1de1996ef67307d8cab33a6e8a/Common/src/Transport/ITransport.ts#L8)
+Defined in: [Transport/ITransport.ts:8](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/5fb85fd65be1623aae0ff7d1b463a27836d35a34/Common/src/Transport/ITransport.ts#L8)
 
 An interface to a transport protocol that is in charge of sending and receiving signalling messages.
 Implement this interface to support your custom transport. You can then supply an instance of your
@@ -22,7 +22,7 @@ transport to the constructor of SignallingProtocol during startup.
 
 > `optional` **onMessage**: (`msg`) => `void`
 
-Defined in: [Transport/ITransport.ts:18](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/f434cbb2ad489c1de1996ef67307d8cab33a6e8a/Common/src/Transport/ITransport.ts#L18)
+Defined in: [Transport/ITransport.ts:18](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/5fb85fd65be1623aae0ff7d1b463a27836d35a34/Common/src/Transport/ITransport.ts#L18)
 
 Callback filled in by the SignallingProtocol and should be called by the transport when a new message arrives.
 
@@ -42,7 +42,7 @@ Callback filled in by the SignallingProtocol and should be called by the transpo
 
 > **addListener**(`eventName`, `listener`): `this`
 
-Defined in: [Event/EventEmitter.ts:96](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/f434cbb2ad489c1de1996ef67307d8cab33a6e8a/Common/src/Event/EventEmitter.ts#L96)
+Defined in: [Event/EventEmitter.ts:96](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/5fb85fd65be1623aae0ff7d1b463a27836d35a34/Common/src/Event/EventEmitter.ts#L96)
 
 Alias for `emitter.on(eventName, listener)`.
 
@@ -70,7 +70,7 @@ Alias for `emitter.on(eventName, listener)`.
 
 > **connect**(`url`): `boolean`
 
-Defined in: [Transport/ITransport.ts:25](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/f434cbb2ad489c1de1996ef67307d8cab33a6e8a/Common/src/Transport/ITransport.ts#L25)
+Defined in: [Transport/ITransport.ts:25](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/5fb85fd65be1623aae0ff7d1b463a27836d35a34/Common/src/Transport/ITransport.ts#L25)
 
 Connect to a given URL.
 
@@ -94,7 +94,7 @@ True if the connection was successful.
 
 > **disconnect**(`code`?, `reason`?): `void`
 
-Defined in: [Transport/ITransport.ts:32](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/f434cbb2ad489c1de1996ef67307d8cab33a6e8a/Common/src/Transport/ITransport.ts#L32)
+Defined in: [Transport/ITransport.ts:32](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/5fb85fd65be1623aae0ff7d1b463a27836d35a34/Common/src/Transport/ITransport.ts#L32)
 
 Disconnect this transport.
 
@@ -122,7 +122,7 @@ A descriptive string for the disconnect reason.
 
 > **emit**(`eventName`, ...`args`): `boolean`
 
-Defined in: [Event/EventEmitter.ts:262](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/f434cbb2ad489c1de1996ef67307d8cab33a6e8a/Common/src/Event/EventEmitter.ts#L262)
+Defined in: [Event/EventEmitter.ts:262](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/5fb85fd65be1623aae0ff7d1b463a27836d35a34/Common/src/Event/EventEmitter.ts#L262)
 
 Synchronously calls each of the listeners registered for the event named `eventName`, in the order they were registered, passing the supplied arguments
 to each.
@@ -186,7 +186,7 @@ myEmitter.emit('event', 1, 2, 3, 4, 5);
 
 > **isConnected**(): `boolean`
 
-Defined in: [Transport/ITransport.ts:38](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/f434cbb2ad489c1de1996ef67307d8cab33a6e8a/Common/src/Transport/ITransport.ts#L38)
+Defined in: [Transport/ITransport.ts:38](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/5fb85fd65be1623aae0ff7d1b463a27836d35a34/Common/src/Transport/ITransport.ts#L38)
 
 Should return true when the transport is connected and ready to send/receive messages.
 
@@ -202,7 +202,7 @@ True if the transport is connected.
 
 > **off**(`eventName`, `listener`): `this`
 
-Defined in: [Event/EventEmitter.ts:196](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/f434cbb2ad489c1de1996ef67307d8cab33a6e8a/Common/src/Event/EventEmitter.ts#L196)
+Defined in: [Event/EventEmitter.ts:196](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/5fb85fd65be1623aae0ff7d1b463a27836d35a34/Common/src/Event/EventEmitter.ts#L196)
 
 Alias for `emitter.removeListener()`.
 
@@ -230,7 +230,7 @@ Alias for `emitter.removeListener()`.
 
 > **on**(`eventName`, `listener`): `this`
 
-Defined in: [Event/EventEmitter.ts:115](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/f434cbb2ad489c1de1996ef67307d8cab33a6e8a/Common/src/Event/EventEmitter.ts#L115)
+Defined in: [Event/EventEmitter.ts:115](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/5fb85fd65be1623aae0ff7d1b463a27836d35a34/Common/src/Event/EventEmitter.ts#L115)
 
 Adds the `listener` function to the end of the listeners array for the event
 named `eventName`.
@@ -271,7 +271,7 @@ The callback function
 
 > **once**(`eventName`, `listener`): `this`
 
-Defined in: [Event/EventEmitter.ts:148](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/f434cbb2ad489c1de1996ef67307d8cab33a6e8a/Common/src/Event/EventEmitter.ts#L148)
+Defined in: [Event/EventEmitter.ts:148](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/5fb85fd65be1623aae0ff7d1b463a27836d35a34/Common/src/Event/EventEmitter.ts#L148)
 
 Adds a **one-time** `listener` function for the event named `eventName`. The
 next time `eventName` is triggered, this listener is removed and then invoked.
@@ -312,7 +312,7 @@ The callback function
 
 > **removeAllListeners**(`eventName`): `this`
 
-Defined in: [Event/EventEmitter.ts:204](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/f434cbb2ad489c1de1996ef67307d8cab33a6e8a/Common/src/Event/EventEmitter.ts#L204)
+Defined in: [Event/EventEmitter.ts:204](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/5fb85fd65be1623aae0ff7d1b463a27836d35a34/Common/src/Event/EventEmitter.ts#L204)
 
 Removes all listeners, or those of the specified `eventName`.
 Returns a reference to the `EventEmitter`, so that calls can be chained.
@@ -337,7 +337,7 @@ Returns a reference to the `EventEmitter`, so that calls can be chained.
 
 > **removeListener**(`eventName`, `listener`): `this`
 
-Defined in: [Event/EventEmitter.ts:188](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/f434cbb2ad489c1de1996ef67307d8cab33a6e8a/Common/src/Event/EventEmitter.ts#L188)
+Defined in: [Event/EventEmitter.ts:188](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/5fb85fd65be1623aae0ff7d1b463a27836d35a34/Common/src/Event/EventEmitter.ts#L188)
 
 Removes the specified `listener` from this EventEmitter.
 
@@ -375,7 +375,7 @@ Returns a reference to the `EventEmitter`, so that calls can be chained.
 
 > **sendMessage**(`msg`): `void`
 
-Defined in: [Transport/ITransport.ts:13](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/f434cbb2ad489c1de1996ef67307d8cab33a6e8a/Common/src/Transport/ITransport.ts#L13)
+Defined in: [Transport/ITransport.ts:13](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/5fb85fd65be1623aae0ff7d1b463a27836d35a34/Common/src/Transport/ITransport.ts#L13)
 
 Called when the protocol wants to send a message over the transport.
 
