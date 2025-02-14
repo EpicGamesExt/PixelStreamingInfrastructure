@@ -114,5 +114,5 @@ During development it may be useful to work with self-signed SSL certificates (e
 
 ## Further Documentation
 - [Protocol Messages](../Common/docs/messages.md)
-- [Protocol Negotiation](../Signalling/docs/Protocol.md)
+- [Protocol Negotiation](../Common/docs/Protocol.md)
 
