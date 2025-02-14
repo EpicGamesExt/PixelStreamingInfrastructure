@@ -2,7 +2,7 @@ name: Check health of document links
 
 on: 
   schedule:
-    cron: '0 0 * * *'
+    - cron: '0 0 * * *'
 
 jobs:
   linkChecker:
