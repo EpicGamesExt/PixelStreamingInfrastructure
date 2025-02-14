@@ -6,8 +6,6 @@
 
 # Transport/WebSocketTransport
 
-## Index
-
-### Classes
+## Classes
 
 - [WebSocketTransport](classes/WebSocketTransport.md)

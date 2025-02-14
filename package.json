@@ -2,21 +2,22 @@
     "name": "pixelstreaming-infrastructure",
     "workspaces": [
         "Common",
-        "Extras/FrontendTests",
-        "Extras/JSStreamer",
-        "Extras/MinimalStreamTester",
-        "Extras/SS_Test",
         "Frontend/library",
         "Frontend/ui-library",
         "Frontend/implementations/typescript",
         "Frontend/implementations/react",
+        "Signalling",
+        "SignallingWebServer",
         "SFU",
         "SFU/mediasoup-sdp-bridge",
-        "Signalling",
-        "SignallingWebServer"
+        "Extras/JSStreamer",
+        "Extras/FrontendTests",
+        "Extras/MinimalStreamTester",
+        "Extras/SS_Test"
     ],
     "private": true,
     "scripts": {
+        "clean": "npm run clean --ws",
         "build": "npm run build --ws",
         "build:all:cjs": "cd Common && npm run build:cjs && cd ../Signalling && npm run build:cjs && cd ../SignallingWebServer && npm run build && cd ../Frontend/library && npm run build:cjs && cd ../ui-library && npm run build:cjs && cd ../implementations/typescript && npm run build:dev",
         "build:all:esm": "cd Common && npm run build:esm && cd ../Signalling && npm run build:esm && cd ../SignallingWebServer && npm run build && cd ../Frontend/library && npm run build:esm && cd ../ui-library && npm run build:esm && cd ../implementations/typescript && npm run build:esm",
@@ -27,6 +28,6 @@
     ],
     "devDependencies": {
         "lint-staged": "^15.3.0",
-        "pre-commit": "^1.2.2"
+        "pre-commit": "^1.0.10"
     }
 }

@@ -7,7 +7,7 @@ import helmet from 'helmet';
 import { Logger } from './Logger';
 import RateLimit from 'express-rate-limit';
 
-// eslint-disable-next-line  @typescript-eslint/no-var-requires, @typescript-eslint/no-unsafe-assignment
+// eslint-disable-next-line  @typescript-eslint/no-unsafe-assignment
 const hsts = require('hsts');
 
 /**

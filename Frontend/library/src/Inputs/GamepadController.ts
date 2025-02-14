@@ -21,7 +21,7 @@ declare global {
 /**
  * Gamepad layout codes enum
  */
-/* eslint-disable @typescript-eslint/no-duplicate-enum-values */
+ 
 export enum GamepadLayout {
     RightClusterBottomButton = 0,
     RightClusterRightButton = 1,
@@ -46,7 +46,7 @@ export enum GamepadLayout {
     RightStickHorizontal = 2,
     RightStickVertical = 3
 }
-/* eslint-enable @typescript-eslint/no-duplicate-enum-values */
+ 
 
 /**
  * Handles gamepad events from the document to send to the streamer.

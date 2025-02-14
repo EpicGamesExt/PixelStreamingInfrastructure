@@ -6,25 +6,23 @@
 
 # Logger/Logger
 
-## Index
-
-### Enumerations
+## Enumerations
 
 - [LogLevel](enumerations/LogLevel.md)
 
-### Classes
+## Classes
 
 - [LoggerContext](classes/LoggerContext.md)
 - [LoggerType](classes/LoggerType.md)
 
-### Interfaces
+## Interfaces
 
 - [ILogger](interfaces/ILogger.md)
 
-### Variables
+## Variables
 
 - [Logger](variables/Logger.md)
 
-### Functions
+## Functions
 
 - [overrideLogger](functions/overrideLogger.md)

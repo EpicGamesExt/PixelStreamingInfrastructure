@@ -6,8 +6,6 @@
 
 # Protocol/KeepaliveMonitor
 
-## Index
-
-### Classes
+## Classes
 
 - [KeepaliveMonitor](classes/KeepaliveMonitor.md)
