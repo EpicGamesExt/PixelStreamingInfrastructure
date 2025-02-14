@@ -1,8 +1,8 @@
 name: Check health of document links
 
 on: 
-  push:
-    paths: ['**.md']
+  schedule:
+    cron: '0 0 * * *'
 
 jobs:
   linkChecker:
