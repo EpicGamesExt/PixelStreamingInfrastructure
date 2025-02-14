@@ -1,6 +1,6 @@
 {
     "name": "@epicgames-ps/lib-pixelstreamingcommon-ue5.5",
-    "version": "0.2.7",
+    "version": "0.2.8",
     "description": "Common utilities library for Unreal Engine 5.5 Pixel Streaming",
     "main": "dist/cjs/pixelstreamingcommon.js",
     "module": "dist/esm/pixelstreamingcommon.js",
@@ -24,7 +24,6 @@
     "devDependencies": {
         "@eslint/js": "^9.20.0",
         "@protobuf-ts/plugin": "^2.9.4",
-        "@types/ws": "^8.5.14",
         "concurrently": "^9.1.2",
         "eslint": "^9.20.0",
         "eslint-config-prettier": "^10.0.1",
@@ -39,7 +38,8 @@
     },
     "dependencies": {
         "@protobuf-ts/runtime": "^2.9.4",
-        "ws": "^8.18.0"
+        "ws": "^8.18.0",
+        "@types/ws": "^8.5.14"
     },
     "author": "Epic Games",
     "license": "MIT",
