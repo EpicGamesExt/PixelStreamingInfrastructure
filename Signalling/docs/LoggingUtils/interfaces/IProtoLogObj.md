@@ -6,7 +6,7 @@
 
 # Interface: IProtoLogObj
 
-Defined in: [Signalling/src/LoggingUtils.ts:4](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/LoggingUtils.ts#L4)
+Defined in: [Signalling/src/LoggingUtils.ts:4](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/LoggingUtils.ts#L4)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [Signalling/src/LoggingUtils.ts:4](https://github.com/mcottontensor/
 
 > **direction**: `string`
 
-Defined in: [Signalling/src/LoggingUtils.ts:6](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/LoggingUtils.ts#L6)
+Defined in: [Signalling/src/LoggingUtils.ts:6](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/LoggingUtils.ts#L6)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [Signalling/src/LoggingUtils.ts:6](https://github.com/mcottontensor/
 
 > **event**: `string`
 
-Defined in: [Signalling/src/LoggingUtils.ts:5](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/LoggingUtils.ts#L5)
+Defined in: [Signalling/src/LoggingUtils.ts:5](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/LoggingUtils.ts#L5)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [Signalling/src/LoggingUtils.ts:5](https://github.com/mcottontensor/
 
 > **protoMessage**: `BaseMessage`
 
-Defined in: [Signalling/src/LoggingUtils.ts:10](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/LoggingUtils.ts#L10)
+Defined in: [Signalling/src/LoggingUtils.ts:10](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/LoggingUtils.ts#L10)
 
 ***
 
@@ -38,7 +38,7 @@ Defined in: [Signalling/src/LoggingUtils.ts:10](https://github.com/mcottontensor
 
 > `optional` **receiver**: `string`
 
-Defined in: [Signalling/src/LoggingUtils.ts:8](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/LoggingUtils.ts#L8)
+Defined in: [Signalling/src/LoggingUtils.ts:8](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/LoggingUtils.ts#L8)
 
 ***
 
@@ -46,7 +46,7 @@ Defined in: [Signalling/src/LoggingUtils.ts:8](https://github.com/mcottontensor/
 
 > `optional` **sender**: `string`
 
-Defined in: [Signalling/src/LoggingUtils.ts:7](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/LoggingUtils.ts#L7)
+Defined in: [Signalling/src/LoggingUtils.ts:7](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/LoggingUtils.ts#L7)
 
 ***
 
@@ -54,4 +54,4 @@ Defined in: [Signalling/src/LoggingUtils.ts:7](https://github.com/mcottontensor/
 
 > `optional` **target**: `string`
 
-Defined in: [Signalling/src/LoggingUtils.ts:9](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/LoggingUtils.ts#L9)
+Defined in: [Signalling/src/LoggingUtils.ts:9](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/LoggingUtils.ts#L9)

@@ -6,7 +6,7 @@
 
 # Interface: IWebServerConfig
 
-Defined in: [Signalling/src/WebServer.ts:17](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/WebServer.ts#L17)
+Defined in: [Signalling/src/WebServer.ts:17](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/WebServer.ts#L17)
 
 An interface that describes the possible options to pass to
 WebServer.
@@ -17,7 +17,7 @@ WebServer.
 
 > **homepageFile**: `string`
 
-Defined in: [Signalling/src/WebServer.ts:25](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/WebServer.ts#L25)
+Defined in: [Signalling/src/WebServer.ts:25](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/WebServer.ts#L25)
 
 ***
 
@@ -25,7 +25,7 @@ Defined in: [Signalling/src/WebServer.ts:25](https://github.com/mcottontensor/Pi
 
 > **httpPort**: `number`
 
-Defined in: [Signalling/src/WebServer.ts:19](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/WebServer.ts#L19)
+Defined in: [Signalling/src/WebServer.ts:19](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/WebServer.ts#L19)
 
 ***
 
@@ -33,7 +33,7 @@ Defined in: [Signalling/src/WebServer.ts:19](https://github.com/mcottontensor/Pi
 
 > `optional` **https\_redirect**: `boolean`
 
-Defined in: [Signalling/src/WebServer.ts:40](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/WebServer.ts#L40)
+Defined in: [Signalling/src/WebServer.ts:40](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/WebServer.ts#L40)
 
 ***
 
@@ -41,7 +41,7 @@ Defined in: [Signalling/src/WebServer.ts:40](https://github.com/mcottontensor/Pi
 
 > `optional` **httpsPort**: `number`
 
-Defined in: [Signalling/src/WebServer.ts:31](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/WebServer.ts#L31)
+Defined in: [Signalling/src/WebServer.ts:31](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/WebServer.ts#L31)
 
 ***
 
@@ -49,7 +49,7 @@ Defined in: [Signalling/src/WebServer.ts:31](https://github.com/mcottontensor/Pi
 
 > `optional` **perMinuteRateLimit**: `number`
 
-Defined in: [Signalling/src/WebServer.ts:28](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/WebServer.ts#L28)
+Defined in: [Signalling/src/WebServer.ts:28](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/WebServer.ts#L28)
 
 ***
 
@@ -57,7 +57,7 @@ Defined in: [Signalling/src/WebServer.ts:28](https://github.com/mcottontensor/Pi
 
 > **root**: `string`
 
-Defined in: [Signalling/src/WebServer.ts:22](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/WebServer.ts#L22)
+Defined in: [Signalling/src/WebServer.ts:22](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/WebServer.ts#L22)
 
 ***
 
@@ -65,7 +65,7 @@ Defined in: [Signalling/src/WebServer.ts:22](https://github.com/mcottontensor/Pi
 
 > `optional` **ssl\_cert**: `Buffer`\<`ArrayBufferLike`\>
 
-Defined in: [Signalling/src/WebServer.ts:37](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/WebServer.ts#L37)
+Defined in: [Signalling/src/WebServer.ts:37](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/WebServer.ts#L37)
 
 ***
 
@@ -73,4 +73,4 @@ Defined in: [Signalling/src/WebServer.ts:37](https://github.com/mcottontensor/Pi
 
 > `optional` **ssl\_key**: `Buffer`\<`ArrayBufferLike`\>
 
-Defined in: [Signalling/src/WebServer.ts:34](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/WebServer.ts#L34)
+Defined in: [Signalling/src/WebServer.ts:34](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/WebServer.ts#L34)
