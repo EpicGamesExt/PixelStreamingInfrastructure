@@ -6,7 +6,7 @@
 
 # Class: SignallingServer
 
-Defined in: [Signalling/src/SignallingServer.ts:58](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/SignallingServer.ts#L58)
+Defined in: [Signalling/src/SignallingServer.ts:58](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/SignallingServer.ts#L58)
 
 The main signalling server object.
 Contains a streamer and player registry and handles setting up of websockets
@@ -18,7 +18,7 @@ to listen for incoming connections.
 
 > **new SignallingServer**(`config`): [`SignallingServer`](SignallingServer.md)
 
-Defined in: [Signalling/src/SignallingServer.ts:70](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/SignallingServer.ts#L70)
+Defined in: [Signalling/src/SignallingServer.ts:70](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/SignallingServer.ts#L70)
 
 Initializes the server object and sets up listening sockets for streamers
 players and optionally SFU connections.
@@ -41,7 +41,7 @@ A collection of options for this server.
 
 > **config**: [`IServerConfig`](../interfaces/IServerConfig.md)
 
-Defined in: [Signalling/src/SignallingServer.ts:59](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/SignallingServer.ts#L59)
+Defined in: [Signalling/src/SignallingServer.ts:59](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/SignallingServer.ts#L59)
 
 ***
 
@@ -49,7 +49,7 @@ Defined in: [Signalling/src/SignallingServer.ts:59](https://github.com/mcottonte
 
 > **playerRegistry**: [`PlayerRegistry`](../../PlayerRegistry/classes/PlayerRegistry.md)
 
-Defined in: [Signalling/src/SignallingServer.ts:62](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/SignallingServer.ts#L62)
+Defined in: [Signalling/src/SignallingServer.ts:62](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/SignallingServer.ts#L62)
 
 ***
 
@@ -57,7 +57,7 @@ Defined in: [Signalling/src/SignallingServer.ts:62](https://github.com/mcottonte
 
 > **protocolConfig**: [`ProtocolConfig`](../type-aliases/ProtocolConfig.md)
 
-Defined in: [Signalling/src/SignallingServer.ts:60](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/SignallingServer.ts#L60)
+Defined in: [Signalling/src/SignallingServer.ts:60](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/SignallingServer.ts#L60)
 
 ***
 
@@ -65,7 +65,7 @@ Defined in: [Signalling/src/SignallingServer.ts:60](https://github.com/mcottonte
 
 > **startTime**: `Date`
 
-Defined in: [Signalling/src/SignallingServer.ts:63](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/SignallingServer.ts#L63)
+Defined in: [Signalling/src/SignallingServer.ts:63](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/SignallingServer.ts#L63)
 
 ***
 
@@ -73,4 +73,4 @@ Defined in: [Signalling/src/SignallingServer.ts:63](https://github.com/mcottonte
 
 > **streamerRegistry**: [`StreamerRegistry`](../../StreamerRegistry/classes/StreamerRegistry.md)
 
-Defined in: [Signalling/src/SignallingServer.ts:61](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/SignallingServer.ts#L61)
+Defined in: [Signalling/src/SignallingServer.ts:61](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/SignallingServer.ts#L61)

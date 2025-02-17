@@ -8,7 +8,7 @@
 
 > **Logger**: `Logger`
 
-Defined in: [Signalling/src/Logger.ts:18](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/Logger.ts#L18)
+Defined in: [Signalling/src/Logger.ts:18](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/Logger.ts#L18)
 
 The actual logger object. This is just a winston logger.
 You can use InitLogging to get a decent result, or you can

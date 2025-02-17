@@ -6,7 +6,7 @@
 
 # Class: SDPUtils
 
-Defined in: [Util/SdpUtils.ts:3](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/5fb85fd65be1623aae0ff7d1b463a27836d35a34/Common/src/Util/SdpUtils.ts#L3)
+Defined in: [Util/SdpUtils.ts:3](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/e5168fb9b95d09ea76d485376bd036403b747ad2/Common/src/Util/SdpUtils.ts#L3)
 
 ## Constructors
 
@@ -24,7 +24,7 @@ Defined in: [Util/SdpUtils.ts:3](https://github.com/mcottontensor/PixelStreaming
 
 > `static` **addVideoHeaderExtensionToSdp**(`sdp`, `uri`): `string`
 
-Defined in: [Util/SdpUtils.ts:4](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/5fb85fd65be1623aae0ff7d1b463a27836d35a34/Common/src/Util/SdpUtils.ts#L4)
+Defined in: [Util/SdpUtils.ts:4](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/e5168fb9b95d09ea76d485376bd036403b747ad2/Common/src/Util/SdpUtils.ts#L4)
 
 #### Parameters
 

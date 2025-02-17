@@ -6,7 +6,7 @@
 
 # Class: WebServer
 
-Defined in: [Signalling/src/WebServer.ts:47](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/WebServer.ts#L47)
+Defined in: [Signalling/src/WebServer.ts:47](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/WebServer.ts#L47)
 
 An object to manage the initialization of a web server. Used to serve the
 pixel streaming frontend.
@@ -17,7 +17,7 @@ pixel streaming frontend.
 
 > **new WebServer**(`app`, `config`): [`WebServer`](WebServer.md)
 
-Defined in: [Signalling/src/WebServer.ts:51](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/WebServer.ts#L51)
+Defined in: [Signalling/src/WebServer.ts:51](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/WebServer.ts#L51)
 
 #### Parameters
 
@@ -39,7 +39,7 @@ Defined in: [Signalling/src/WebServer.ts:51](https://github.com/mcottontensor/Pi
 
 > **httpServer**: `undefined` \| `Server`\<*typeof* `IncomingMessage`, *typeof* `ServerResponse`\>
 
-Defined in: [Signalling/src/WebServer.ts:48](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/WebServer.ts#L48)
+Defined in: [Signalling/src/WebServer.ts:48](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/WebServer.ts#L48)
 
 ***
 
@@ -47,4 +47,4 @@ Defined in: [Signalling/src/WebServer.ts:48](https://github.com/mcottontensor/Pi
 
 > **httpsServer**: `undefined` \| `Server`\<*typeof* `IncomingMessage`, *typeof* `ServerResponse`\>
 
-Defined in: [Signalling/src/WebServer.ts:49](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/WebServer.ts#L49)
+Defined in: [Signalling/src/WebServer.ts:49](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/WebServer.ts#L49)

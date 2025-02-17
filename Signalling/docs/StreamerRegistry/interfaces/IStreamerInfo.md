@@ -6,7 +6,7 @@
 
 # Interface: IStreamerInfo
 
-Defined in: [Signalling/src/StreamerRegistry.ts:32](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/StreamerRegistry.ts#L32)
+Defined in: [Signalling/src/StreamerRegistry.ts:32](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/StreamerRegistry.ts#L32)
 
 Used by the API to describe a streamer.
 
@@ -16,7 +16,7 @@ Used by the API to describe a streamer.
 
 > **remoteAddress**: `undefined` \| `string`
 
-Defined in: [Signalling/src/StreamerRegistry.ts:36](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/StreamerRegistry.ts#L36)
+Defined in: [Signalling/src/StreamerRegistry.ts:36](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/StreamerRegistry.ts#L36)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [Signalling/src/StreamerRegistry.ts:36](https://github.com/mcottonte
 
 > **streamerId**: `string`
 
-Defined in: [Signalling/src/StreamerRegistry.ts:33](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/StreamerRegistry.ts#L33)
+Defined in: [Signalling/src/StreamerRegistry.ts:33](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/StreamerRegistry.ts#L33)
 
 ***
 
@@ -32,7 +32,7 @@ Defined in: [Signalling/src/StreamerRegistry.ts:33](https://github.com/mcottonte
 
 > **streaming**: `boolean`
 
-Defined in: [Signalling/src/StreamerRegistry.ts:35](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/StreamerRegistry.ts#L35)
+Defined in: [Signalling/src/StreamerRegistry.ts:35](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/StreamerRegistry.ts#L35)
 
 ***
 
@@ -40,7 +40,7 @@ Defined in: [Signalling/src/StreamerRegistry.ts:35](https://github.com/mcottonte
 
 > **subscribers**: [`IPlayerInfo`](../../PlayerRegistry/interfaces/IPlayerInfo.md)[]
 
-Defined in: [Signalling/src/StreamerRegistry.ts:37](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/StreamerRegistry.ts#L37)
+Defined in: [Signalling/src/StreamerRegistry.ts:37](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/StreamerRegistry.ts#L37)
 
 ***
 
@@ -48,4 +48,4 @@ Defined in: [Signalling/src/StreamerRegistry.ts:37](https://github.com/mcottonte
 
 > **type**: `string`
 
-Defined in: [Signalling/src/StreamerRegistry.ts:34](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/StreamerRegistry.ts#L34)
+Defined in: [Signalling/src/StreamerRegistry.ts:34](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/StreamerRegistry.ts#L34)

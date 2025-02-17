@@ -7,7 +7,7 @@
     "types": "dist/types/pixelstreamingsignalling.d.ts",
     "scripts": {
         "clean": "rimraf ./dist",
-        "build:docs": "typedoc --tsconfig tsconfig.cjs.json",
+        "build:docs": "echo \"Make sure you're passing the right --gitRemote so the source links are correct!\" && typedoc --tsconfig tsconfig.cjs.json",
         "build:cjs": "tsc --project tsconfig.cjs.json",
         "build:esm": "tsc --project tsconfig.esm.json",
         "build": "npm run build:cjs && npm run build:esm",
