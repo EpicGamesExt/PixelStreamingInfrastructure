@@ -136,7 +136,9 @@ export class FullScreenIcon extends FullScreenIconBase {
         createdButton.appendChild(this.maximizeIcon);
         createdButton.appendChild(this.minimizeIcon);
         createdButton.appendChild(this.tooltipText);
-
+        createdButton.style.position = 'absolute'; // Change to 'fixed' if you want it to stay in the same place even when scrolling
+        createdButton.style.top = '1px';  // Adjust vertical position
+        createdButton.style.left = '60px'; // Adjust horizontal position
         this.rootElement = createdButton;
     }
 

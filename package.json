@@ -21,7 +21,8 @@
         "build": "npm run build --ws",
         "build:all:cjs": "cd Common && npm run build:cjs && cd ../Signalling && npm run build:cjs && cd ../SignallingWebServer && npm run build && cd ../Frontend/library && npm run build:cjs && cd ../ui-library && npm run build:cjs && cd ../implementations/typescript && npm run build:dev",
         "build:all:esm": "cd Common && npm run build:esm && cd ../Signalling && npm run build:esm && cd ../SignallingWebServer && npm run build && cd ../Frontend/library && npm run build:esm && cd ../ui-library && npm run build:esm && cd ../implementations/typescript && npm run build:esm",
-        "pre-commit-lint": "lint-staged"
+        "pre-commit-lint": "lint-staged",
+        "watch-ui": "nodemon"
     },
     "pre-commit": [
         "pre-commit-lint"

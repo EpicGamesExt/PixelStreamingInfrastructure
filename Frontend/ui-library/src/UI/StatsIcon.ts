@@ -19,6 +19,7 @@ export class StatsIcon {
             this._rootElement.id = 'statsBtn';
             this._rootElement.appendChild(this.statsIcon);
             this._rootElement.appendChild(this.tooltipText);
+            this._rootElement.setAttributeNS(null, 'style', 'display: None;');
         }
         return this._rootElement;
     }
@@ -39,7 +40,6 @@ export class StatsIcon {
             this._statsIcon.setAttributeNS(null, 'x', '0px');
             this._statsIcon.setAttributeNS(null, 'y', '0px');
             this._statsIcon.setAttributeNS(null, 'viewBox', '0 0 330 330');
-
             // create svg group for the paths
             const svgGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
             svgGroup.classList.add('svgIcon');

@@ -19,6 +19,7 @@ export class SettingsIcon {
             this._rootElement.id = 'settingsBtn';
             this._rootElement.appendChild(this.settingsIcon);
             this._rootElement.appendChild(this.tooltipText);
+            this._rootElement.setAttributeNS(null, 'style', 'display: None;');
         }
         return this._rootElement;
     }

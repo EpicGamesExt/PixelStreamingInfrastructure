@@ -1,0 +1,8 @@
+{
+  "watch": [
+    "Frontend/library/src",
+    "Frontend/ui-library/src",
+    "Frontend/implementations/typescript/src"
+  ],
+  "exec": "npm run build && ./SignallingWebServer/platform_scripts/cmd/start.dat"
+}

@@ -1,0 +1,161 @@
+
+-------------------------------------------------------------------------------
+   ROBOCOPY     ::     Robust File Copy for Windows                              
+-------------------------------------------------------------------------------
+
+  Started : Saturday, February 22, 2025 8:36:19 AM
+   Source : C:\Users\gigum\Documents\Unreal Projects\PixelStreamingInfrastructure\SignallingWebServer\video\
+     Dest : C:\Users\gigum\Documents\Unreal Projects\PixelStreamingInfrastructure\SignallingWebServer\www\video\
+
+    Files : *.*
+	    
+  Options : *.* /S /E /DCOPY:DA /COPY:DAT /XO /R:1000000 /W:30 
+
+------------------------------------------------------------------------------
+
+	  New Dir          1	C:\Users\gigum\Documents\Unreal Projects\PixelStreamingInfrastructure\SignallingWebServer\video\
+	    New File  		  10.8 m	1.mp4  9.2% 18.4% 27.7% 36.9% 46.1% 55.4% 64.6% 73.8% 83.1% 92.3%100%  
+
+------------------------------------------------------------------------------
+
+               Total    Copied   Skipped  Mismatch    FAILED    Extras
+    Dirs :         1         1         0         0         0         0
+   Files :         1         1         0         0         0         0
+   Bytes :   10.82 m   10.82 m         0         0         0         0
+   Times :   0:00:00   0:00:00                       0:00:00   0:00:00
+
+
+   Speed :           709,673,375 Bytes/sec.
+   Speed :            40,607.836 MegaBytes/min.
+   Ended : Saturday, February 22, 2025 8:36:19 AM
+
+
+-------------------------------------------------------------------------------
+   ROBOCOPY     ::     Robust File Copy for Windows                              
+-------------------------------------------------------------------------------
+
+  Started : Saturday, February 22, 2025 8:45:42 AM
+   Source : C:\Users\gigum\Documents\Unreal Projects\PixelStreamingInfrastructure\SignallingWebServer\video\
+     Dest : C:\Users\gigum\Documents\Unreal Projects\PixelStreamingInfrastructure\SignallingWebServer\www\video\
+
+    Files : *.*
+	    
+  Options : *.* /S /E /DCOPY:DA /COPY:DAT /XO /R:1000000 /W:30 
+
+------------------------------------------------------------------------------
+
+	                   1	C:\Users\gigum\Documents\Unreal Projects\PixelStreamingInfrastructure\SignallingWebServer\video\
+
+------------------------------------------------------------------------------
+
+               Total    Copied   Skipped  Mismatch    FAILED    Extras
+    Dirs :         1         0         1         0         0         0
+   Files :         1         0         1         0         0         0
+   Bytes :   10.82 m         0   10.82 m         0         0         0
+   Times :   0:00:00   0:00:00                       0:00:00   0:00:00
+   Ended : Saturday, February 22, 2025 8:45:42 AM
+
+
+-------------------------------------------------------------------------------
+   ROBOCOPY     ::     Robust File Copy for Windows                              
+-------------------------------------------------------------------------------
+
+  Started : Saturday, February 22, 2025 8:46:58 AM
+   Source : C:\Users\gigum\Documents\Unreal Projects\PixelStreamingInfrastructure\SignallingWebServer\video\
+     Dest : C:\Users\gigum\Documents\Unreal Projects\PixelStreamingInfrastructure\SignallingWebServer\www\video\
+
+    Files : *.*
+	    
+  Options : *.* /S /E /DCOPY:DA /COPY:DAT /XO /R:1000000 /W:30 
+
+------------------------------------------------------------------------------
+
+	                   1	C:\Users\gigum\Documents\Unreal Projects\PixelStreamingInfrastructure\SignallingWebServer\video\
+
+------------------------------------------------------------------------------
+
+               Total    Copied   Skipped  Mismatch    FAILED    Extras
+    Dirs :         1         0         1         0         0         0
+   Files :         1         0         1         0         0         0
+   Bytes :   10.82 m         0   10.82 m         0         0         0
+   Times :   0:00:00   0:00:00                       0:00:00   0:00:00
+   Ended : Saturday, February 22, 2025 8:46:58 AM
+
+
+-------------------------------------------------------------------------------
+   ROBOCOPY     ::     Robust File Copy for Windows                              
+-------------------------------------------------------------------------------
+
+  Started : Saturday, February 22, 2025 8:53:14 AM
+   Source : C:\Users\gigum\Documents\Unreal Projects\PixelStreamingInfrastructure\SignallingWebServer\video\
+     Dest : C:\Users\gigum\Documents\Unreal Projects\PixelStreamingInfrastructure\SignallingWebServer\www\video\
+
+    Files : *.*
+	    
+  Options : *.* /S /E /DCOPY:DA /COPY:DAT /XO /R:1000000 /W:30 
+
+------------------------------------------------------------------------------
+
+	                   1	C:\Users\gigum\Documents\Unreal Projects\PixelStreamingInfrastructure\SignallingWebServer\video\
+
+------------------------------------------------------------------------------
+
+               Total    Copied   Skipped  Mismatch    FAILED    Extras
+    Dirs :         1         0         1         0         0         0
+   Files :         1         0         1         0         0         0
+   Bytes :   10.82 m         0   10.82 m         0         0         0
+   Times :   0:00:00   0:00:00                       0:00:00   0:00:00
+   Ended : Saturday, February 22, 2025 8:53:14 AM
+
+
+-------------------------------------------------------------------------------
+   ROBOCOPY     ::     Robust File Copy for Windows                              
+-------------------------------------------------------------------------------
+
+  Started : Saturday, February 22, 2025 8:57:01 AM
+   Source : C:\Users\gigum\Documents\Unreal Projects\PixelStreamingInfrastructure\SignallingWebServer\video\
+     Dest : C:\Users\gigum\Documents\Unreal Projects\PixelStreamingInfrastructure\SignallingWebServer\www\video\
+
+    Files : *.*
+	    
+  Options : *.* /S /E /DCOPY:DA /COPY:DAT /XO /R:1000000 /W:30 
+
+------------------------------------------------------------------------------
+
+	                   1	C:\Users\gigum\Documents\Unreal Projects\PixelStreamingInfrastructure\SignallingWebServer\video\
+
+------------------------------------------------------------------------------
+
+               Total    Copied   Skipped  Mismatch    FAILED    Extras
+    Dirs :         1         0         1         0         0         0
+   Files :         1         0         1         0         0         0
+   Bytes :   10.82 m         0   10.82 m         0         0         0
+   Times :   0:00:00   0:00:00                       0:00:00   0:00:00
+   Ended : Saturday, February 22, 2025 8:57:01 AM
+
+
+-------------------------------------------------------------------------------
+   ROBOCOPY     ::     Robust File Copy for Windows                              
+-------------------------------------------------------------------------------
+
+  Started : Saturday, February 22, 2025 8:59:03 AM
+   Source : C:\Users\gigum\Documents\Unreal Projects\PixelStreamingInfrastructure\SignallingWebServer\video\
+     Dest : C:\Users\gigum\Documents\Unreal Projects\PixelStreamingInfrastructure\SignallingWebServer\www\video\
+
+    Files : *.*
+	    
+  Options : *.* /S /E /DCOPY:DA /COPY:DAT /XO /R:1000000 /W:30 
+
+------------------------------------------------------------------------------
+
+	                   1	C:\Users\gigum\Documents\Unreal Projects\PixelStreamingInfrastructure\SignallingWebServer\video\
+
+------------------------------------------------------------------------------
+
+               Total    Copied   Skipped  Mismatch    FAILED    Extras
+    Dirs :         1         0         1         0         0         0
+   Files :         1         0         1         0         0         0
+   Bytes :   10.82 m         0   10.82 m         0         0         0
+   Times :   0:00:00   0:00:00                       0:00:00   0:00:00
+   Ended : Saturday, February 22, 2025 8:59:03 AM
+

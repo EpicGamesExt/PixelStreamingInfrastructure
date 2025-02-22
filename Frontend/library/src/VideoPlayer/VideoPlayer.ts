@@ -21,16 +21,27 @@ export class VideoPlayer {
     private audioElement?: HTMLAudioElement;
     private orientationChangeTimeout: number;
     private lastTimeResized = new Date().getTime();
-
     onMatchViewportResolutionCallback: (width: number, height: number) => void;
     onResizePlayerCallback: () => void;
     resizeTimeoutHandle: number;
-
+    private placeholderVideo: HTMLVideoElement;
     /**
      * @param videoElementParent the html div the the video player will be injected into
      * @param config the applications configuration. We're interested in the startVideoMuted flag
      */
     constructor(videoElementParent: HTMLElement, config: Config) {
+
+        this.placeholderVideo = document.createElement('video');
+        this.placeholderVideo.id = 'placeholderVideo';
+        this.placeholderVideo.src = './video/1.mp4'; // Set path to your local video
+        this.placeholderVideo.controls = false;
+        this.placeholderVideo.autoplay = true;
+        this.placeholderVideo.loop = true;
+        this.placeholderVideo.muted = true;
+        this.placeholderVideo.style.width = '100%';
+        this.placeholderVideo.style.height = '100%';
+        this.placeholderVideo.style.position = 'absolute';
+
         this.videoElement = document.createElement('video');
         this.config = config;
         this.videoElement.id = 'streamingVideo';
@@ -41,6 +52,7 @@ export class VideoPlayer {
         this.videoElement.style.position = 'absolute';
         this.videoElement.style.pointerEvents = 'all';
         videoElementParent.appendChild(this.videoElement);
+        videoElementParent.appendChild(this.placeholderVideo);
 
         this.onResizePlayerCallback = () => {
             console.log('Resolution changed, restyling player, did you forget to override this function?');
@@ -72,6 +84,12 @@ export class VideoPlayer {
 
     public setAudioElement(audioElement: HTMLAudioElement): void {
         this.audioElement = audioElement;
+    }
+
+    // Method to switch from placeholder to WebRTC stream
+    public switchToWebRTCStream(): void {
+        this.placeholderVideo.style.display = 'none';
+        this.videoElement.style.display = 'block';
     }
 
     /**

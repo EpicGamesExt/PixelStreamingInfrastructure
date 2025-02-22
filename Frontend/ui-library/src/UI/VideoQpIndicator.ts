@@ -42,6 +42,9 @@ export class VideoQpIndicator {
             this._rootElement = document.createElement('div');
             this._rootElement.id = 'connection';
             this._rootElement.classList.add('UiTool');
+            this._rootElement.style.position = 'absolute'; // Change to 'fixed' if you want it to stay in the same place even when scrolling
+            this._rootElement.style.top = '25px';  // Adjust vertical position
+            this._rootElement.style.left = '20px'; // Adjust horizontal position
 
             // add svg icon for the connection strength
             this._rootElement.appendChild(this.qualityStatus);

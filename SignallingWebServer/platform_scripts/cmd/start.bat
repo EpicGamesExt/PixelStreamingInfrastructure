@@ -1,11 +1,12 @@
 @Rem Copyright Epic Games, Inc. All Rights Reserved.
-@echo off
+@echo on
 setlocal enabledelayedexpansion
 
 title Wilbur
-
 call :Init
 call :ParseArgs %*
+
+robocopy ./../../video/ ./../../www/video/ /E /XO /LOG+:robocopy_log.txt
 
 IF "%CONTINUE%"=="1" (
 	call :Setup

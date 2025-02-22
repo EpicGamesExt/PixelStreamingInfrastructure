@@ -13,6 +13,8 @@ export class DisconnectOverlay extends ActionOverlay {
         const disconnectOverlayHtml = document.createElement('div');
         disconnectOverlayHtml.id = 'disconnectOverlay';
         disconnectOverlayHtml.className = 'clickableState';
+        disconnectOverlayHtml.style.background = 'rgba(0, 0, 0, 0.3)'; // Semi-transparent black overlay
+        disconnectOverlayHtml.style.transition = 'opacity 0.8s ease-in-out';
         return disconnectOverlayHtml;
     }
 
