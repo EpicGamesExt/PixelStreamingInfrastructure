@@ -5,7 +5,7 @@ setlocal enabledelayedexpansion
 title Wilbur
 call :Init
 call :ParseArgs %*
-
+npm run build
 robocopy ./../../video/ ./../../www/video/ /E /XO /LOG+:robocopy_log.txt
 
 IF "%CONTINUE%"=="1" (
