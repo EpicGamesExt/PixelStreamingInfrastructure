@@ -42,8 +42,6 @@ jobs:
         id: extract_branch
         run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
 
-      - run: echo This is on branch ${{ steps.extract_branch.outputs.branch }}
-
       - uses: actions/github-script@v5
         with:
           script: |
