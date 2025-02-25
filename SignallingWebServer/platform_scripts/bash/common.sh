@@ -155,7 +155,7 @@ function setup_node() {
     popd > /dev/null
 
     # navigate to project root
-    pushd ${SCRIPT_DIR}/../.. > /dev/null
+    pushd "${SCRIPT_DIR}/../.." > /dev/null
 
     node_version=""
     if [[ -f "${SCRIPT_DIR}/node/bin/node" ]]; then
@@ -194,33 +194,33 @@ function setup_frontend() {
     fi
 
     # tell webpack where to output the built frontend
-    export WEBPACK_OUTPUT_PATH=${FRONTEND_DIR}
+    export WEBPACK_OUTPUT_PATH="${FRONTEND_DIR}"
 
 	# navigate to root
-	pushd ${SCRIPT_DIR}/../../.. > /dev/null
+	pushd "${SCRIPT_DIR}/../../.." > /dev/null
     OLDPATH=$PATH
 	export PATH="${SCRIPT_DIR}/node/bin:$PATH"
 
 	# If player.html doesn't exist, or --build passed as arg, rebuild the frontend
     echo Testing ${WEBPACK_OUTPUT_PATH}/player.html
-	if [ ! -f ${WEBPACK_OUTPUT_PATH}/player.html ] || [ "$FORCE_BUILD" == "1" ] ; then
+	if [ ! -f "${WEBPACK_OUTPUT_PATH}/player.html" ] || [ "$FORCE_BUILD" == "1" ] ; then
 		echo "Building Typescript Frontend."
 		# Using our bundled NodeJS, build the web frontend files
-		pushd ${SCRIPT_DIR}/../../../Common > /dev/null
-		${SCRIPT_DIR}/node/bin/npm install
-		${SCRIPT_DIR}/node/bin/npm run build
+		pushd "${SCRIPT_DIR}/../../../Common" > /dev/null
+		"${SCRIPT_DIR}/node/bin/npm" install
+		"${SCRIPT_DIR}/node/bin/npm" run build
 		popd > /dev/null
-		pushd ${SCRIPT_DIR}/../../../Frontend/library > /dev/null
-		${SCRIPT_DIR}/node/bin/npm install
-		${SCRIPT_DIR}/node/bin/npm run build
+		pushd "${SCRIPT_DIR}/../../../Frontend/library" > /dev/null
+		"${SCRIPT_DIR}/node/bin/npm" install
+		"${SCRIPT_DIR}/node/bin/npm" run build
 		popd > /dev/null
-		pushd ${SCRIPT_DIR}/../../../Frontend/ui-library > /dev/null
-		${SCRIPT_DIR}/node/bin/npm install
-		${SCRIPT_DIR}/node/bin/npm run build
+		pushd "${SCRIPT_DIR}/../../../Frontend/ui-library" > /dev/null
+		"${SCRIPT_DIR}/node/bin/npm" install
+		"${SCRIPT_DIR}/node/bin/npm" run build
 		popd > /dev/null
-		pushd ${SCRIPT_DIR}/../../../Frontend/implementations/typescript > /dev/null
-		${SCRIPT_DIR}/node/bin/npm install
-		${SCRIPT_DIR}/node/bin/npm run build
+		pushd "${SCRIPT_DIR}/../../../Frontend/implementations/typescript" > /dev/null
+		"${SCRIPT_DIR}/node/bin/npm" install
+		"${SCRIPT_DIR}/node/bin/npm" run build
 		popd > /dev/null
 	else
 		echo 'Skipping building Frontend because files already exist. Please run with "--build" to force a rebuild'
@@ -305,7 +305,7 @@ function setup_turn_stun() {
 
     TURN_PROCESS=""
     if [[ "$(uname)" == "Darwin" ]]; then
-        TURN_PROCESS="${SCRIPT_DIR}/coturn/bin/turnserver"
+        TURN_PROCESS="\"${SCRIPT_DIR}/coturn/bin/turnserver\""
     else
         TURN_PROCESS="sudo turnserver"
     fi
@@ -346,24 +346,24 @@ function start_process() {
 # SCRIPT_DIR = The path to the root of the PixelStreamingInfrastructure repo.
 # NPM = The npm command path
 function build_wilbur() {
-    pushd ${SCRIPT_DIR}/../../.. > /dev/null
+    pushd "${SCRIPT_DIR}/../../.." > /dev/null
 
     pushd Common > /dev/null
     echo Building common
-    ${NPM} install
-    ${NPM} run build
+    "${NPM}" install
+    "${NPM}" run build
     popd
 
     pushd Signalling > /dev/null
     echo Building signalling
-    ${NPM} install
-    ${NPM} run build
+    "${NPM}" install
+    "${NPM}" run build
     popd > /dev/null
 
     pushd SignallingWebServer > /dev/null
     echo Building wilbur
-    ${NPM} install
-    ${NPM} run build
+    "${NPM}" install
+    "${NPM}" run build
 
     popd > /dev/null
 }
@@ -373,12 +373,12 @@ function build_wilbur() {
 # NPM = The npm command path
 # SERVER_ARGS The arguments to be passed to the server
 function start_wilbur() {
-    pushd ${SCRIPT_DIR}/../../../SignallingWebServer > /dev/null
+    pushd "${SCRIPT_DIR}/../../../SignallingWebServer" > /dev/null
 
     echo "Starting wilbur signalling server use ctrl-c to exit"
     echo "----------------------------------"
     
-    start_process "sudo PATH=\"$PATH\" ${NPM} start -- ${SERVER_ARGS}"
+    start_process "sudo PATH=\"$PATH\" \"$NPM\" start -- ${SERVER_ARGS}"
 
     popd > /dev/null
 }
