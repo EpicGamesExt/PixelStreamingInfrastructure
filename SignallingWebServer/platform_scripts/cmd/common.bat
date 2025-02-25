@@ -8,6 +8,7 @@ goto :eof
 set SCRIPT_DIR=%~dp0
 set NODE_VERSION=v18.17.0
 set NPM="%SCRIPT_DIR%/node/npm"
+set TAR="%SystemRoot%\System32\tar.exe"
 set CONTINUE=1
 GOTO :eof
 
@@ -122,7 +123,7 @@ if exist node\ (
   rem Download nodejs and follow redirects.
   curl -L -o ./node.zip "https://nodejs.org/dist/%NODE_VERSION%/%NODE_NAME%.zip"
 
-  %SystemRoot%\System32\tar.exe -xf node.zip
+  %TAR% -xf node.zip
   ren "%NODE_NAME%\" "node"
   del node.zip
 )
@@ -206,7 +207,7 @@ if exist coturn\ (
   curl -L -o ./turnserver.zip "https://github.com/EpicGamesExt/PixelStreamingInfrastructure/releases/download/v4.5.2-coturn-windows/turnserver.zip"
 
   @Rem Unarchive the .zip to a directory called "turnserver"
-  mkdir coturn & %SystemRoot%\System32\tar.exe -xf turnserver.zip -C coturn
+  mkdir coturn & %TAR% -xf turnserver.zip -C coturn
 
   @Rem Delete the downloaded turnserver.zip
   del turnserver.zip
