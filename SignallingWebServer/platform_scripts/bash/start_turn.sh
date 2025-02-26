@@ -3,7 +3,7 @@
 
 SCRIPT_DIR="$(cd -P -- "$(dirname -- "$0")" && pwd -P)"
 
-. ${SCRIPT_DIR}/common.sh
+. "${SCRIPT_DIR}/common.sh"
 parse_args $@
 setup $@
 set_public_ip
