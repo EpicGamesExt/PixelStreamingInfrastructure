@@ -69,13 +69,15 @@ export class WebServer {
                 Logger.info(`Https server listening on port ${config.httpsPort}`);
             });
 
-            app.use(helmet({
-                contentSecurityPolicy: {
-                    directives: {
-                        "connect-src": ["*", "'self'"]
+            app.use(
+                helmet({
+                    contentSecurityPolicy: {
+                        directives: {
+                            'connect-src': ['*', "'self'"]
+                        }
                     }
-                }
-            }));
+                })
+            );
 
             app.use(
                 hsts({
