@@ -7,7 +7,7 @@ import helmet from 'helmet';
 import { Logger } from './Logger';
 import RateLimit from 'express-rate-limit';
 
-// eslint-disable-next-line  @typescript-eslint/no-unsafe-assignment
+// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 const hsts = require('hsts');
 
 /**
@@ -69,7 +69,16 @@ export class WebServer {
                 Logger.info(`Https server listening on port ${config.httpsPort}`);
             });
 
-            app.use(helmet());
+            app.use(
+                helmet({
+                    contentSecurityPolicy: {
+                        directives: {
+                            'connect-src': ['*', "'self'"]
+                        }
+                    }
+                })
+            );
+
             app.use(
                 hsts({
                     maxAge: 15552000 // 180 days in seconds
