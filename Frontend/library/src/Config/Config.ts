@@ -128,6 +128,8 @@ export interface ConfigParams {
     initialSettings?: Partial<AllSettings>;
     /** If useUrlParams is set true, will read initial values from URL parameters and persist changed settings into URL */
     useUrlParams?: boolean;
+    /** If webSocketProtocols is set the protocols will be passed to the websocket constructor */
+    webSocketProtocols?: string | string[];
 }
 export class Config {
     /* A map of flags that can be toggled - options that can be set in the application - e.g. Use Mic? */
@@ -144,11 +146,14 @@ export class Config {
 
     private _useUrlParams: boolean;
 
+    private _webSocketProtocols?: string | string[];
+
     // ------------ Settings -----------------
 
     constructor(config: ConfigParams = {}) {
-        const { initialSettings, useUrlParams } = config;
+        const { initialSettings, useUrlParams, webSocketProtocols } = config;
         this._useUrlParams = !!useUrlParams;
+        this._webSocketProtocols = webSocketProtocols;
         this.populateDefaultSettings(this._useUrlParams, initialSettings);
     }
 
@@ -161,9 +166,16 @@ export class Config {
     }
 
     /**
+     * Gets a protocol or list of protocols to pass to the websocket if set.
+     */
+    public get webSocketProtocols() {
+        return this._webSocketProtocols;
+    }
+
+    /**
      * Populate the default settings for a Pixel Streaming application
      */
-    private populateDefaultSettings(useUrlParams: boolean, settings: Partial<AllSettings>): void {
+    private populateDefaultSettings(useUrlParams: boolean, settings?: Partial<AllSettings>): void {
         /**
          * Text Parameters
          */
