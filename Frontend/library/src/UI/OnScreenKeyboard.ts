@@ -81,9 +81,13 @@ export class OnScreenKeyboard {
      * @param command the command received via the data channel containing keyboard positions
      */
     showOnScreenKeyboard(command: any) {
+        if (!this.editTextButton) {
+            return;
+        }
+        
         if (command.showOnScreenKeyboard) {
             // Show the 'edit text' button.
-            this.editTextButton.style.display = 'default';
+            this.editTextButton.style.display = 'block';
             // Place the 'edit text' button near the UE input widget.
             const pos = this.unquantizeAndDenormalizeUnsigned(command.x, command.y);
             this.editTextButton.style.top = pos.y.toString() + 'px';
