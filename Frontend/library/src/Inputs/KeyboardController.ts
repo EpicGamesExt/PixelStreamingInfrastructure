@@ -19,7 +19,7 @@ export class KeyboardController implements IInputController {
     onKeyDownListener: (event: KeyboardEvent) => void;
     onKeyUpListener: (event: KeyboardEvent) => void;
     onKeyPressListener: (event: KeyboardEvent) => void;
-    onCompositionEndListener: (event: KeyboardEvent) => void;
+    onCompositionEndListener: (event: CompositionEvent) => void;
 
     constructor(streamMessageController: StreamMessageController, config: Config, activeKeys: ActiveKeys) {
         this.streamMessageController = streamMessageController;
@@ -54,15 +54,19 @@ export class KeyboardController implements IInputController {
         }
 
         const toStreamerHandlers = this.streamMessageController.toStreamerHandlers;
-        toStreamerHandlers.get('KeyDown')([this.getKeycode(keyboardEvent), keyboardEvent.repeat ? 1 : 0]);
+        toStreamerHandlers.get('KeyDown')?.([this.getKeycode(keyboardEvent)!, keyboardEvent.repeat ? 1 : 0]);
         const activeKeys = this.activeKeys.getActiveKeys();
         activeKeys.push(keyCode);
+
         // Backspace is not considered a keypress in JavaScript but we need it
         // to be so characters may be deleted in a UE text entry field.
+        // since keypress is deprecated we really should be sending all keys to keypress
+        // or we change everything to handle the deprecation of these parts
         if (keyCode === SpecialKeyCodes.backSpace) {
-            document.dispatchEvent(
+            this.handleOnKeyPress(
                 new KeyboardEvent('keypress', {
-                    charCode: SpecialKeyCodes.backSpace
+                    charCode: SpecialKeyCodes.backSpace,
+                    keyCode: SpecialKeyCodes.backSpace
                 })
             );
         }
@@ -79,7 +83,7 @@ export class KeyboardController implements IInputController {
         }
 
         const toStreamerHandlers = this.streamMessageController.toStreamerHandlers;
-        toStreamerHandlers.get('KeyUp')([keyCode]);
+        toStreamerHandlers.get('KeyUp')?.([keyCode]);
 
         if (this.config.isFlagEnabled(Flags.SuppressBrowserKeys) && this.isKeyCodeBrowserKey(keyCode)) {
             keyboardEvent.preventDefault();
@@ -93,7 +97,7 @@ export class KeyboardController implements IInputController {
         }
 
         const toStreamerHandlers = this.streamMessageController.toStreamerHandlers;
-        toStreamerHandlers.get('KeyPress')([keyCode]);
+        toStreamerHandlers.get('KeyPress')?.([keyCode]);
     }
 
     private handleOnCompositionEnd(compositionEvent: CompositionEvent) {
@@ -132,8 +136,10 @@ export class KeyboardController implements IInputController {
         // If we don't have keyCode property because browser API is deprecated then use KeyboardEvent.code instead.
         // See: https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/keyCode#constants_for_keycode_value
         if (!('keyCode' in keyboardEvent)) {
-            // Convert KeyboardEvent.code string into integer-based key code for backwards compatibility reasons.
+            // this type assertion here is required because if 'keyCode' doesnt exist in keyboardEvent then
+            // it cannot be a KeyboardEvent and so it gets narrowed to 'never'
             const event = keyboardEvent as KeyboardEvent;
+            // Convert KeyboardEvent.code string into integer-based key code for backwards compatibility reasons.
             if (event.code in CodeToKeyCode) {
                 return CodeToKeyCode[event.code];
             } else {
