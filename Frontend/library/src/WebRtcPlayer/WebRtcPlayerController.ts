@@ -169,7 +169,7 @@ export class WebRtcPlayerController {
         this.streamMessageController = new StreamMessageController();
 
         // set up websocket methods
-        this.transport = new WebSocketTransport();
+        this.transport = new WebSocketTransport(config.webSocketProtocols);
         this.protocol = new SignallingProtocol(this.transport);
         this.protocol.addListener(Messages.config.typeName, (msg: BaseMessage) =>
             this.handleOnConfigMessage(msg as Messages.config)

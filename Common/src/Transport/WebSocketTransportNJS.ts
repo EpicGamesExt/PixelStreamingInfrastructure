@@ -13,13 +13,33 @@ import WebSocket from 'ws';
 export class WebSocketTransportNJS extends EventEmitter implements ITransport {
     WS_OPEN_STATE = 1;
     webSocket?: WebSocket;
+    protocols?: string | string[];
 
-    constructor(existingSocket?: WebSocket) {
+    /**
+     * Constructs a new instance of a WebSocketTransport for node contexts.
+     * @param existingSocket - An existing WebSocket to use.
+     */
+    constructor(existingSocket: WebSocket);
+
+    /**
+     * Constructs a new instance of a WebSocketTransport for node contexts.
+     * @param protocols - A protocol or list of protocols to pass to the new websocket.
+     */
+    constructor(protocols: string | string[]);
+
+    /**
+     * Constructs a new instance of a WebSocketTransport for node contexts.
+     */
+    constructor();
+
+    constructor(argument?: WebSocket | string | string[]) {
         super();
-        if (existingSocket) {
-            this.webSocket = existingSocket;
+        if (argument instanceof WebSocket) {
+            this.webSocket = argument;
             this.setupSocketHandlers();
             this.emit('open');
+        } else if (argument) {
+            this.protocols = argument;
         }
     }
 
@@ -39,10 +59,11 @@ export class WebSocketTransportNJS extends EventEmitter implements ITransport {
     /**
      * Connect to the signaling server
      * @param connectionURL - The Address of the signaling server
+     * @param protocols - An optional string or list of strings to pass to the new websocket protocols param
      * @returns If there is a connection
      */
     connect(connectionURL: string): boolean {
-        this.webSocket = new WebSocket(connectionURL);
+        this.webSocket = new WebSocket(connectionURL, this.protocols);
         this.setupSocketHandlers();
         return true;
     }

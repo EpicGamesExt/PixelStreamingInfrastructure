@@ -17,9 +17,15 @@ declare global {
 export class WebSocketTransport extends EventEmitter implements ITransport {
     WS_OPEN_STATE = 1;
     webSocket?: WebSocket;
+    protocols?: string | string[];
 
-    constructor() {
+    /**
+     * Constructs a new WebSocketTransport for browser contexts.
+     * @param protocols - An optional string or list of strings to pass to the new websocket protocols param
+     */
+    constructor(protocols?: string | string[]) {
         super();
+        this.protocols = protocols;
     }
 
     /**
@@ -43,7 +49,7 @@ export class WebSocketTransport extends EventEmitter implements ITransport {
     connect(connectionURL: string): boolean {
         Logger.Info(connectionURL);
         try {
-            this.webSocket = new WebSocket(connectionURL);
+            this.webSocket = new WebSocket(connectionURL, this.protocols);
             this.webSocket.onopen = (_: Event) => this.handleOnOpen();
             this.webSocket.onerror = (_: Event) => this.handleOnError();
             this.webSocket.onclose = (event: CloseEvent) => this.handleOnClose(event);
