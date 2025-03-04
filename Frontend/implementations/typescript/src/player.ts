@@ -17,7 +17,7 @@ document.body.onload = function() {
     Logger.InitLogging(LogLevel.Warning, true);
 
 	// Create a config object
-	const config = new Config({ useUrlParams: true, webSocketProtocols: ["soap","xamp"] });
+	const config = new Config({ useUrlParams: true });
 
 	// Create the main Pixel Streaming object for interfacing with the web-API of Pixel Streaming
 	const stream = new PixelStreaming(config);
