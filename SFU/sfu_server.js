@@ -1,7 +1,7 @@
 const config = require('./config');
 const WebSocket = require('ws');
 const mediasoup = require('mediasoup_prebuilt');
-const mediasoupSdp = require('mediasoup-sdp-bridge');
+const mediasoupSdp = require('@epicgames-ps/mediasoup-sdp-bridge');
 const minimist = require('minimist');
 
 if (!config.retrySubscribeDelaySecs) {
