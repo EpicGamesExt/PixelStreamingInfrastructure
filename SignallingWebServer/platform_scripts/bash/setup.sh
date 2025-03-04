@@ -7,4 +7,4 @@ SCRIPT_DIR="$(cd -P -- "$(dirname -- "$0")" && pwd -P)"
 
 parse_args $@
 setup $@
-
+build_wilbur
