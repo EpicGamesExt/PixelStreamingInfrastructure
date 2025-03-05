@@ -1,6 +1,6 @@
 const config = require('./config');
 const WebSocket = require('ws');
-const mediasoup = require('mediasoup_prebuilt');
+const mediasoup = require('mediasoup');
 const mediasoupSdp = require('@epicgames-ps/mediasoup-sdp-bridge');
 const minimist = require('minimist');
 
@@ -198,7 +198,7 @@ async function onStreamerOffer(msg) {
 }
 
 function getNextStreamerSCTPId() {
-    return streamer.transport._getNextSctpStreamId();
+    return streamer.transport.getNextSctpStreamId();
 }
 
 function onStreamerDisconnected() {
@@ -297,9 +297,6 @@ async function setupPeerDataChannels(peerId) {
 
     // streamer data consumer (consumes peer data)
     peer.streamerDataConsumer = await streamer.transport.consumeData({ dataProducerId: peer.peerDataProducer.id });
-
-    streamer.transport._sctpStreamIds[nextStreamerSCTPStreamId] = 1;
-    streamer.transport._sctpStreamIds[nextPeerSCTPStreamId] = 1;
 
     const peerSignal = {
         type: 'peerDataChannels',
