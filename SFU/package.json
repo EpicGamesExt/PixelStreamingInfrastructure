@@ -17,7 +17,7 @@
         "start:default": "if [ `id -u` -eq 0 ]\nthen\n export process=\"./platform_scripts/bash/node/bin/node sfu_server.js\"\nelse\n export process=\"sudo ./platform_scripts/bash/node/bin/node sfu_server.js\"\nfi\n$process "
     },
     "dependencies": {
-        "mediasoup_prebuilt": "^3.8.4",
+        "mediasoup": "^3.15.5",
         "@epicgames-ps/mediasoup-sdp-bridge": "*",
         "minimist": "^1.2.8",
         "run-script-os": "^1.1.6",
