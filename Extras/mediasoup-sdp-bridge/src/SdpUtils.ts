@@ -59,7 +59,8 @@ export function sdpToConsumerRtpCapabilities(
 export function sdpToProducerRtpParameters(
   sdpObject: any,
   localCaps: RtpCapabilities,
-  kind: MediaKind
+  kind: MediaKind,
+  scalabilityMode: string
 ): RtpParameters {
   // Clone input to avoid side effect modifications.
   const _localCaps = JSON.parse(JSON.stringify(localCaps));
@@ -167,6 +168,12 @@ export function sdpToProducerRtpParameters(
             scalabilityMode: "L1T3",
           };
         });
+    }
+
+    if (kind === "video") {
+      for (const encoding of producerParams.encodings) {
+        encoding.scalabilityMode = scalabilityMode;
+      }
     }
   }
 
