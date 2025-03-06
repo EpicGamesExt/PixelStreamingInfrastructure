@@ -81,13 +81,14 @@ jobs:
           .github
           output
           node_modules
-          Common/build
+          Common/dist
           Common/docs
           Common/node_modules
           Docs
           Extras
           Frontend/Docs
           Frontend/implementations/typescript/node_modules
+          Frontend/implementations/typescript/dist
           Frontend/library/dist
           Frontend/library/node_modules
           Frontend/library/types
@@ -96,10 +97,10 @@ jobs:
           Frontend/ui-library/types
           SFU/Docs
           SFU/node_modules
-          Signalling/build
+          Signalling/dist
           Signalling/docs
           Signalling/node_modules
-          SignallingWebServer/build
+          SignallingWebServer/dist
           SignallingWebServer/node_modules
           Extras/SS_Test
 
@@ -116,7 +117,7 @@ jobs:
           */node_modules/*
           /*/node_modules/*
           */output/*
-          /*/Common/build/*
+          /*/Common/dist/*
           /*/Common/docs/*
           /*/Common/node_modules/*
           /*/Docs/*
@@ -129,11 +130,12 @@ jobs:
           /*/Frontend/ui-library/types/*
           /*/Frontend/ui-library/node_modules/*
           /*/Frontend/implementations/typescript/node_modules
+          /*/Frontend/implementations/typescript/dist
           /*/SFU/Docs/*
-          /*/Signalling/build/*
+          /*/Signalling/dist/*
           /*/Signalling/docs/*
           /*/Signalling/node_modules/*
-          /*/SignallingWebServer/build/*
+          /*/SignallingWebServer/dist/*
           /*/SignallingWebServer/node_modules/*
 
     - name: "Make the release"
