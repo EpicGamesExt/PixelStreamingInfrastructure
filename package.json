@@ -9,7 +9,6 @@
         "Signalling",
         "SignallingWebServer",
         "SFU",
-        "SFU/mediasoup-sdp-bridge",
         "Extras/JSStreamer",
         "Extras/FrontendTests",
         "Extras/MinimalStreamTester",
