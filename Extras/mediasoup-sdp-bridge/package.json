@@ -1,16 +1,17 @@
 {
-  "name": "mediasoup-sdp-bridge",
-  "version": "3.6.5",
+  "name": "@epicgames-ps/mediasoup-sdp-bridge",
+  "version": "1.0.4",
   "description": "Node.js library to allow integration of SDP based clients with mediasoup",
   "contributors": [
     "Iñaki Baz Castillo <ibc@aliax.net> (https://inakibaz.me)",
-    "Juan Navarro <juan.navarro@gmx.es> (https://github.com/j1elo)"
+    "Juan Navarro <juan.navarro@gmx.es> (https://github.com/j1elo)",
+    "Matthew Cotton <matt@tensorworks.com.au> (https://github.com/mcottontensor)"
   ],
   "homepage": "https://mediasoup.org",
   "license": "ISC",
   "repository": {
     "type": "git",
-    "url": "https://github.com/versatica/mediasoup-sdp-bridge.git"
+    "url": "https://github.com/EpicGamesExt/PixelStreamingInfrastructure.git"
   },
   "funding": {
     "type": "opencollective",
@@ -63,8 +64,8 @@
     "eslint-plugin-jest": "^23.13.2",
     "jest": "^26.0.1",
     "jest-tobetype": "^1.2.3",
-    "mediasoup": "3.11.26",
-    "mediasoup-client": "3.6.84",
+    "mediasoup": "3.15.5",
+    "mediasoup-client": "3.9.1",
     "open-cli": "^6.0.1",
     "prettier": "~2.5.0",
     "tsc-watch": "^4.2.8",

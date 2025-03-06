@@ -14,7 +14,7 @@
 // * Chrome 116.
 // * Safari 14.1.1 (macOS).
 
-import { RtpCapabilities } from "mediasoup/node/lib/types";
+import { RtpCapabilities, RtpHeaderExtensionUri } from "mediasoup/node/lib/types";
 
 export const firefox: RtpCapabilities = {
   codecs: [
@@ -795,17 +795,17 @@ export const chrome: RtpCapabilities = {
     },
     {
       kind: "video",
-      uri: "http://www.webrtc.org/experiments/rtp-hdrext/video-content-type",
+      uri: "http://www.webrtc.org/experiments/rtp-hdrext/video-content-type" as RtpHeaderExtensionUri,
       preferredId: 6,
     },
     {
       kind: "video",
-      uri: "http://www.webrtc.org/experiments/rtp-hdrext/video-timing",
+      uri: "http://www.webrtc.org/experiments/rtp-hdrext/video-timing" as RtpHeaderExtensionUri,
       preferredId: 7,
     },
     {
       kind: "video",
-      uri: "http://www.webrtc.org/experiments/rtp-hdrext/color-space",
+      uri: "http://www.webrtc.org/experiments/rtp-hdrext/color-space" as RtpHeaderExtensionUri,
       preferredId: 8,
     },
     {
@@ -1197,17 +1197,17 @@ export const safari: RtpCapabilities = {
     },
     {
       kind: "video",
-      uri: "http://www.webrtc.org/experiments/rtp-hdrext/video-content-type",
+      uri: "http://www.webrtc.org/experiments/rtp-hdrext/video-content-type" as RtpHeaderExtensionUri,
       preferredId: 11,
     },
     {
       kind: "video",
-      uri: "http://www.webrtc.org/experiments/rtp-hdrext/video-timing",
+      uri: "http://www.webrtc.org/experiments/rtp-hdrext/video-timing" as RtpHeaderExtensionUri,
       preferredId: 7,
     },
     {
       kind: "video",
-      uri: "http://www.webrtc.org/experiments/rtp-hdrext/color-space",
+      uri: "http://www.webrtc.org/experiments/rtp-hdrext/color-space" as RtpHeaderExtensionUri,
       preferredId: 8,
     },
     {
