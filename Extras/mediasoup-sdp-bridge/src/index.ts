@@ -38,6 +38,10 @@ export class SdpEndpoint {
 
   private consumers: Consumer[] = [];
 
+  // HACK: this should be determined from consumers or something
+  private consumeData: boolean = false;
+  private sctpMedia: object | undefined;
+
   constructor(webRtcTransport: WebRtcTransport, localCaps: RtpCapabilities) {
     this.webRtcTransport = webRtcTransport;
     this.transport = webRtcTransport;
@@ -101,72 +105,77 @@ export class SdpEndpoint {
     // NOTE: Only up to 1 audio and 1 video are accepted.
     const mediaKinds = new Set<MediaKind>();
     for (const media of remoteSdpObj.media) {
-      if (!("rtp" in media)) {
-        // Skip media that is not RTP.
-        continue;
-      }
-      if (!("direction" in media)) {
-        // Skip media for which the direction is unknown.
-        continue;
-      }
-      if (media.direction !== "sendonly") {
-        // Skip media which is not "sendonly", because this is a receive-only
-        // SDP endpoint for remote SDP Offers.
-        // FIXME: A proper SDP endpoint should be able to handle all directions.
-        continue;
-      }
-
-      const mediaKind = media.type as MediaKind
-
-      if (mediaKinds.has(mediaKind)) {
-        // Skip media if the same kind was already processed.
-        // WARNING: Sending more than 1 audio or 1 video is a BUG in the client.
-        console.warn(
-          `WARNING [SdpEndpoint.processOffer] Client BUG: More than 1 '${mediaKind}' media was requested; skipping it`
-        );
-        continue;
-      }
-
-      // Generate RtpSendParameters to be used for the new Producer.
-      // WARNING: This function only works well for max. 1 audio and 1 video.
-      const producerParams = SdpUtils.sdpToProducerRtpParameters(
-        remoteSdpObj,
-        this.localCaps,
-        mediaKind
-      );
-
-      // Add a new Producer for the given media.
-      let producer: Producer;
-      try {
-        producer = await this.transport.produce({
-          kind: mediaKind,
-          rtpParameters: producerParams,
-          paused: false,
-        });
-      } catch (error) {
-        let message = `[SdpEndpoint.processOffer] Cannot create mediasoup Producer, kind: ${mediaKind}`;
-        if (error instanceof Error) {
-          message += `, error: ${error.message}`;
+      if (media.type == "application") {
+        this.sctpMedia = media;
+        console.log("[SdpEndpoint.processOffer] SCTP association received");
+      } else {
+        if (!("rtp" in media)) {
+          // Skip media that is not RTP.
+          continue;
         }
-        console.error(`ERROR ${message}`);
-        throw new Error(message);
+        if (!("direction" in media)) {
+          // Skip media for which the direction is unknown.
+          continue;
+        }
+        if (media.direction !== "sendonly") {
+          // Skip media which is not "sendonly", because this is a receive-only
+          // SDP endpoint for remote SDP Offers.
+          // FIXME: A proper SDP endpoint should be able to handle all directions.
+          continue;
+        }
+
+        const mediaKind = media.type as MediaKind;
+
+        if (mediaKinds.has(mediaKind)) {
+          // Skip media if the same kind was already processed.
+          // WARNING: Sending more than 1 audio or 1 video is a BUG in the client.
+          console.warn(
+            `WARNING [SdpEndpoint.processOffer] Client BUG: More than 1 '${mediaKind}' media was requested; skipping it`
+          );
+          continue;
+        }
+
+        // Generate RtpSendParameters to be used for the new Producer.
+        // WARNING: This function only works well for max. 1 audio and 1 video.
+        const producerParams = SdpUtils.sdpToProducerRtpParameters(
+          remoteSdpObj,
+          this.localCaps,
+          mediaKind
+        );
+
+        // Add a new Producer for the given media.
+        let producer: Producer;
+        try {
+          producer = await this.transport.produce({
+            kind: mediaKind,
+            rtpParameters: producerParams,
+            paused: false,
+          });
+        } catch (error) {
+          let message = `[SdpEndpoint.processOffer] Cannot create mediasoup Producer, kind: ${mediaKind}`;
+          if (error instanceof Error) {
+            message += `, error: ${error.message}`;
+          }
+          console.error(`ERROR ${message}`);
+          throw new Error(message);
+        }
+
+        this.producers.push(producer);
+        this.producerOfferMedias.push(media);
+        this.producerOfferParams.push(producerParams);
+
+        // prettier-ignore
+        console.log(`[SdpEndpoint.processOffer] mediasoup Producer created, kind: ${producer.kind}, type: ${producer.type}, paused: ${producer.paused}`);
+
+        // DEBUG: Uncomment for details.
+        // prettier-ignore
+        // {
+        //   console.debug(`DEBUG [SdpEndpoint.processOffer] mediasoup Producer RtpParameters:\n${JSON.stringify(producer.rtpParameters, null, 2)}`);
+        // }
+
+        // A new Producer was successfully added, so mark this media kind as added.
+        mediaKinds.add(mediaKind);
       }
-
-      this.producers.push(producer);
-      this.producerOfferMedias.push(media);
-      this.producerOfferParams.push(producerParams);
-
-      // prettier-ignore
-      console.log(`[SdpEndpoint.processOffer] mediasoup Producer created, kind: ${producer.kind}, type: ${producer.type}, paused: ${producer.paused}`);
-
-      // DEBUG: Uncomment for details.
-      // prettier-ignore
-      // {
-      //   console.debug(`DEBUG [SdpEndpoint.processOffer] mediasoup Producer RtpParameters:\n${JSON.stringify(producer.rtpParameters, null, 2)}`);
-      // }
-
-      // A new Producer was successfully added, so mark this media kind as added.
-      mediaKinds.add(mediaKind);
     }
 
     return this.producers;
@@ -202,6 +211,10 @@ export class SdpEndpoint {
       });
     }
 
+    if (this.sctpMedia) {
+      sdpBuilder.sendSctpAssociation({ offerMediaObject: this.sctpMedia });
+    }
+
     this.localSdp = sdpBuilder.getSdp();
 
     return this.localSdp;
@@ -216,6 +229,11 @@ export class SdpEndpoint {
 
   public addConsumer(consumer: Consumer): void {
     this.consumers.push(consumer);
+  }
+
+  // HACK: this should be determined from consumers
+  public addConsumeData(): void {
+    this.consumeData = true;
   }
 
   public createOffer(): string {
@@ -255,6 +273,10 @@ export class SdpEndpoint {
         streamId: sendMsid,
         trackId: `${sendMsid}-${kind}`,
       });
+    }
+
+    if (this.consumeData) {
+      sdpBuilder.receiveSctpAssociation();
     }
 
     this.localSdp = sdpBuilder.getSdp();
