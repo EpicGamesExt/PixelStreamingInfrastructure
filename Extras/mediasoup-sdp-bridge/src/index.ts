@@ -260,10 +260,15 @@ export class SdpEndpoint {
 
     console.log("[SdpEndpoint.createOffer] Make 'sendonly' SDP Offer");
 
+    let videoRtpParameters;
     for (let i = 0; i < this.consumers.length; i++) {
       const mid = this.consumers[i].rtpParameters.mid ?? "nomid";
       const kind = this.consumers[i].kind;
       const sendParams = this.consumers[i].rtpParameters;
+
+      if (kind === "video") {
+        videoRtpParameters = sendParams;
+      }
 
       // Each call to RemoteSdp.receive() creates a new OfferMediaSection,
       // which always assumes an `a=sendonly` direction.
@@ -276,6 +281,24 @@ export class SdpEndpoint {
         // a=msid:<streamId> <trackId>
         streamId: sendMsid,
         trackId: `${sendMsid}-${kind}`,
+      });
+    }
+
+    if (videoRtpParameters) {
+      videoRtpParameters.codecs[0].payloadType = 127;
+      const rtpParameters: RtpParameters = {
+        mid: "probator",
+        codecs: [videoRtpParameters.codecs[0]],
+        headerExtensions: videoRtpParameters.headerExtensions,
+        encodings: [{ ssrc: 1234 }],
+        rtcp: { cname: "probator" },
+      };
+      sdpBuilder.receive({
+        mid: "probator",
+        kind: "video",
+        offerRtpParameters: rtpParameters,
+        streamId: "probator",
+        trackId: "probator",
       });
     }
 
