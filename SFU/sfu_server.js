@@ -187,14 +187,14 @@ async function onStreamerOffer(msg) {
 
     const transport = await createWebRtcTransport("Streamer");
     const sdpEndpoint = mediasoupSdp.createSdpEndpoint(transport, mediasoupRouter.rtpCapabilities);
-    const producers = await sdpEndpoint.processOffer(msg.sdp, scalabilityMode);
+    const { producers, dataEnabled } = await sdpEndpoint.processOffer(msg.sdp, scalabilityMode);
     const multiplex = msg.multiplex;
     const sdpAnswer = sdpEndpoint.createAnswer();
     const answer = { type: "answer", sdp: sdpAnswer };
 
     console.log("Sending answer to streamer.");
     signalServer.send(JSON.stringify(answer));
-    streamer = { transport: transport, producers: producers, multiplexChannels: multiplex };
+    streamer = { transport: transport, producers: producers, dataEnabled: dataEnabled, multiplexChannels: multiplex };
 }
 
 function getNextStreamerSCTPId() {
@@ -229,7 +229,6 @@ async function onPeerConnected(peerId) {
 
     const transport = await createWebRtcTransport("Peer " + peerId);
     const sdpEndpoint = mediasoupSdp.createSdpEndpoint(transport, mediasoupRouter.rtpCapabilities);
-    sdpEndpoint.addConsumeData(); // adds the sctp 'application' section to the offer
 
     // media consumers
     let consumers = [];
@@ -243,6 +242,11 @@ async function onPeerConnected(peerId) {
     } catch (err) {
         console.error("transport.consume() failed:", err);
         return;
+    }
+
+    // data
+    if (streamer.dataEnabled) {
+        sdpEndpoint.receiveData();
     }
 
     const offerSignal = {
@@ -312,7 +316,7 @@ async function setupPeerDataChannels(peerId) {
 
 async function setupMultiplexPeerDataChannels(peer) {
     //this will be always 0 as we are using only one producer
-    const nextPeerSCTPStreamId = peer.transport._getNextSctpStreamId();
+    const nextPeerSCTPStreamId = peer.transport.getNextSctpStreamId();
     peer.peerDataProducer = await peer.transport.produceData({ label: 'send-datachannel', sctpStreamParameters: { streamId: nextPeerSCTPStreamId, ordered: true } });
 
     const dataProducerId = await dataRouter.handlePlayer(peer.peerDataProducer, peer.id);
@@ -473,7 +477,7 @@ async function onICEStateChange(identifier, iceState) {
 
     if (identifier == 'Streamer' && iceState == 'completed') {
         if (streamer.multiplexChannels) {
-            const nextStreamerSCTPStreamId = streamer.transport._getNextSctpStreamId();
+            const nextStreamerSCTPStreamId = streamer.transport.getNextSctpStreamId();
             //this will always be 0 since we are using one producer only
             console.log(`Attempting streamer SCTP id=${nextStreamerSCTPStreamId}`);
 
