@@ -5,7 +5,9 @@ code might cause headaches for merges in the future.
 
 ## Merging upstream changes
 If there is a change upstream that we wish to merge in we can achieve that by the following.
-`git subtree pull --prefix Extras/mediasoup-sdp-bridge https://github.com/OpenVidu/mediasoup-sdp-bridge.git v3`
+```
+git subtree pull --prefix Extras/mediasoup-sdp-bridge https://github.com/OpenVidu/mediasoup-sdp-bridge.git v3
+```
 This will pull changes from the v3 branch into this subtree.
 
 
