@@ -9,11 +9,11 @@
         "Signalling",
         "SignallingWebServer",
         "SFU",
-        "SFU/mediasoup-sdp-bridge",
         "Extras/JSStreamer",
         "Extras/FrontendTests",
         "Extras/MinimalStreamTester",
-        "Extras/SS_Test"
+        "Extras/SS_Test",
+        "Extras/mediasoup-sdp-bridge"
     ],
     "private": true,
     "scripts": {
