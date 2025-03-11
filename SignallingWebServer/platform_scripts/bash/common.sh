@@ -30,8 +30,10 @@ function print_usage() {
     Command line options might be omitted to run with defaults and it is a good practice to omit specific ones when just starting the TURN or the STUN server alone, not the whole set of scripts.
     "
     if [[ -d "${SCRIPT_DIR}/../../dist/" ]]; then
+        pushd "${SCRIPT_DIR}/../.."
         echo "Server options:"
         "${NPM}" run start -- --help
+        popd
     fi
     exit 1
 }
