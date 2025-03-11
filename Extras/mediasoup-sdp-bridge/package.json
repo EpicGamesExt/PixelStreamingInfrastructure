@@ -62,7 +62,7 @@
     "eslint-config-prettier": "^6.0.0",
     "eslint-plugin-import": "^2.0.0",
     "eslint-plugin-jest": "^23.13.2",
-    "jest": "^26.0.1",
+    "jest": "^29.7.0",
     "jest-tobetype": "^1.2.3",
     "mediasoup": "3.15.5",
     "mediasoup-client": "3.9.1",
