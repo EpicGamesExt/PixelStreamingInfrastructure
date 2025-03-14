@@ -56,6 +56,7 @@ import { IURLSearchParams } from '../Util/IURLSearchParams';
 import { IInputController } from '../Inputs/IInputController';
 import { GamepadController } from '../Inputs/GamepadController';
 import { LatencyInfo } from '../PeerConnectionController/LatencyCalculator';
+import { BrowserUtils } from '../Util/BrowserUtils';
 
 /**
  * Entry point for the WebRTC Player
@@ -232,6 +233,10 @@ export class WebRtcPlayerController {
 
             this.forceReconnect = false;
 
+            // Reset the list of all possible codecs on disconnect so that if the next connection has "NegotiateCodecs" on
+            // then all codecs can be negotiated
+            this.config.getSettingOption(OptionParameters.PreferredCodec).options = BrowserUtils.getSupportedVideoCodecs();
+            
             this.pixelStreaming._onDisconnect(disconnectMessage, allowClickToReconnect);
 
             this.afkController.stopAfkWarningTimer();

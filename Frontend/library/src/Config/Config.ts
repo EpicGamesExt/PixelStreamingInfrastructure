@@ -7,6 +7,7 @@ import { SettingText } from './SettingText';
 import { SettingOption } from './SettingOption';
 import { PixelStreamingEventEmitter, SettingsChangedEvent } from '../Util/EventEmitter';
 import { SettingBase } from './SettingBase';
+import { BrowserUtils } from '../Util/BrowserUtils';
 
 /**
  * A collection of flags that can be toggled and are core to all Pixel Streaming experiences.
@@ -214,33 +215,8 @@ export class Config {
             )
         );
 
-        const getBrowserSupportedVideoCodecs = function (): Array<string> {
-            const browserSupportedCodecs: Array<string> = [];
-            // Try get the info needed from the RTCRtpReceiver. This is only available on chrome
-            if (!RTCRtpReceiver.getCapabilities) {
-                Logger.Warning(
-                    'RTCRtpReceiver.getCapabilities API is not available in your browser, defaulting to guess that we support H.264.'
-                );
-                browserSupportedCodecs.push(
-                    'H264 level-asymmetry-allowed=1;packetization-mode=1;profile-level-id=42e01f'
-                );
-                return browserSupportedCodecs;
-            }
-
-            const matcher = /(VP\d|H26\d|AV1).*/;
-            const codecs = RTCRtpReceiver.getCapabilities('video').codecs;
-            codecs.forEach((codec) => {
-                const str = codec.mimeType.split('/')[1] + ' ' + (codec.sdpFmtpLine || '');
-                const match = matcher.exec(str);
-                if (match !== null) {
-                    browserSupportedCodecs.push(str);
-                }
-            });
-            return browserSupportedCodecs;
-        };
-
         const getDefaultVideoCodec = function (): string {
-            const videoCodecs = getBrowserSupportedVideoCodecs();
+            const videoCodecs = BrowserUtils.getSupportedVideoCodecs();
             // If only one option, then select that.
             if (videoCodecs.length == 1) {
                 return videoCodecs[0];
@@ -259,7 +235,7 @@ export class Config {
         };
 
         const matchSpecifiedCodecToClosestSupported = function (specifiedCodec: string): string {
-            const browserSupportedCodecs: Array<string> = getBrowserSupportedVideoCodecs();
+            const browserSupportedCodecs: Array<string> =  BrowserUtils.getSupportedVideoCodecs();
 
             // Codec supplied in url param is an exact match for the browser codec.
             // (e.g. H264 level-asymmetry-allowed=1;packetization-mode=1;profile-level-id=42e01f)
@@ -290,7 +266,7 @@ export class Config {
                 settings && Object.prototype.hasOwnProperty.call(settings, OptionParameters.PreferredCodec)
                     ? matchSpecifiedCodecToClosestSupported(settings[OptionParameters.PreferredCodec])
                     : getDefaultVideoCodec(),
-                getBrowserSupportedVideoCodecs(),
+                BrowserUtils.getSupportedVideoCodecs(),
                 useUrlParams,
                 matchSpecifiedCodecToClosestSupported
             )
