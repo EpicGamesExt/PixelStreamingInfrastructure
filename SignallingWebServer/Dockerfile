@@ -2,6 +2,7 @@
 FROM node:lts
 # Copy the signalling server and frontend source code from the build context
 COPY package.json package.json
+COPY /Extras/eslint/plugin-check-copyright /Extras/eslint/plugin-check-copyright
 COPY /Common /Common
 COPY /Signalling /Signalling
 COPY /SignallingWebServer /SignallingWebServer

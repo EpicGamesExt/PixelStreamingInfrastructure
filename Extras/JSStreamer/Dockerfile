@@ -4,6 +4,7 @@ FROM node:20-bookworm
 ## Maybe something like: docker build -t epicgames/jsstreamer:latest -f ./Extras/JSStreamer/Dockerfile .
 
 WORKDIR /streamer
+COPY /Extras/eslint/plugin-check-copyright ./Extras/eslint/plugin-check-copyright
 COPY /Common ./Common
 COPY /Extras/JSStreamer ./Extras/JSStreamer
 COPY ./package.json ./package.json
