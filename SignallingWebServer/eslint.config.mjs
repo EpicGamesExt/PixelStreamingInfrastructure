@@ -2,6 +2,7 @@
 import eslint from '@eslint/js';
 import tseslint from 'typescript-eslint';
 import tsdocPlugin from 'eslint-plugin-tsdoc';
+import checkCopyrightPlugin from '@epicgames-ps/eslint-plugin-check-copyright'
 import prettierPluginRecommended from 'eslint-plugin-prettier/recommended';
 
 export default tseslint.config(
@@ -21,6 +22,7 @@ export default tseslint.config(
         files: ["src/**/*.ts"],
         plugins: {
             'tsdoc': tsdocPlugin,
+            'copyright': checkCopyrightPlugin
         },
         rules: {
             "tsdoc/syntax": "warn",
@@ -32,6 +34,12 @@ export default tseslint.config(
                     "argsIgnorePattern": "^_",
                     "varsIgnorePattern": "^_",
                     "caughtErrorsIgnorePattern": "^_"
+                }
+            ],
+            "copyright/copyright": [
+                "error",
+                { 
+                    notice: "Copyright Epic Games, Inc. All Rights Reserved." 
                 }
             ]
         }
