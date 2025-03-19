@@ -235,7 +235,7 @@ export class Config {
         };
 
         const matchSpecifiedCodecToClosestSupported = function (specifiedCodec: string): string {
-            const browserSupportedCodecs: Array<string> =  BrowserUtils.getSupportedVideoCodecs();
+            const browserSupportedCodecs: Array<string> = BrowserUtils.getSupportedVideoCodecs();
 
             // Codec supplied in url param is an exact match for the browser codec.
             // (e.g. H264 level-asymmetry-allowed=1;packetization-mode=1;profile-level-id=42e01f)

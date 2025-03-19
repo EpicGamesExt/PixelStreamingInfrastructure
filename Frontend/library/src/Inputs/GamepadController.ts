@@ -21,7 +21,7 @@ declare global {
 /**
  * Gamepad layout codes enum
  */
- 
+
 export enum GamepadLayout {
     RightClusterBottomButton = 0,
     RightClusterRightButton = 1,
@@ -46,7 +46,6 @@ export enum GamepadLayout {
     RightStickHorizontal = 2,
     RightStickVertical = 3
 }
- 
 
 /**
  * Handles gamepad events from the document to send to the streamer.

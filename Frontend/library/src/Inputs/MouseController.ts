@@ -1,3 +1,4 @@
+// Copyright Epic Games, Inc. All Rights Reserved.
 import { MouseButtonsMask, MouseButton } from './MouseButtons';
 import { StreamMessageController } from '../UeInstanceMessage/StreamMessageController';
 import { InputCoordTranslator } from '../Util/InputCoordTranslator';
