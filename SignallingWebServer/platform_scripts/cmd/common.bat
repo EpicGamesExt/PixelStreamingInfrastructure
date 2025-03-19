@@ -6,7 +6,7 @@ goto :eof
 
 :Init
 set SCRIPT_DIR=%~dp0
-set NODE_VERSION=v18.17.0
+set /p NODE_VERSION=<"%SCRIPT_DIR%/../../../NODE_VERSION"
 set NPM="%SCRIPT_DIR%/node/npm"
 set TAR="%SystemRoot%\System32\tar.exe"
 set CONTINUE=1
