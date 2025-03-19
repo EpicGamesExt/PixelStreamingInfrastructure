@@ -22,6 +22,7 @@
     },
     "dependencies": {
         "@epicgames-ps/lib-pixelstreamingfrontend-ue5.5": "*",
-        "@epicgames-ps/lib-pixelstreamingfrontend-ui-ue5.5": "*"
+        "@epicgames-ps/lib-pixelstreamingfrontend-ui-ue5.5": "*",
+        "@epicgames-ps/eslint-plugin-check-copyright": "*"
     }
 }
