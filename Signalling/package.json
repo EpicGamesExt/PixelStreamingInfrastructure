@@ -31,7 +31,8 @@
         "typedoc": "^0.28.0",
         "typedoc-plugin-markdown": "^4.4.2",
         "typescript": "^5.7.3",
-        "typescript-eslint": "^8.24.0"
+        "typescript-eslint": "^8.24.0",
+        "@epicgames-ps/eslint-plugin-check-copyright": "*"
     },
     "dependencies": {
         "express": "^4.21.2",
