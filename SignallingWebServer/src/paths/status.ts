@@ -1,6 +1,7 @@
+// Copyright Epic Games, Inc. All Rights Reserved.
 import { SignallingServer } from '@epicgames-ps/lib-pixelstreamingsignalling-ue5.5';
 
-// eslint-disable-next-line  @typescript-eslint/no-var-requires, @typescript-eslint/no-unsafe-assignment
+// eslint-disable-next-line  @typescript-eslint/no-unsafe-assignment
 const pjson = require('../../package.json');
 
 /* eslint-disable @typescript-eslint/no-unsafe-call,
