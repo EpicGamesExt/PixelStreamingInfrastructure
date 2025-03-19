@@ -8,7 +8,7 @@
         "build": "tsc",
         "rebuild": "npm run clean && npm run build",
         "start": "node ./dist/index.js --serve --console_messages verbose --log_config --https_redirect",
-        "lint": "eslint --fix src/index.ts",
+        "lint": "eslint src",
         "test": "echo \"Error: no test specified\" && exit 1",
         "watch": "nodemon -V -d 3 --watch src --watch ../Signalling/dist -e \"ts,js,mjs,cjs,json\" --exec \"npm run build && node ./dist/index.js --serve --console_messages verbose --log_config --https_redirect --player_port 1025\" --http_root www",
         "develop": "cd ../ && npm run build:all:cjs && cd SignallingWebServer && concurrently -k \"cd ../Common && npm run watch\" \"cd ../Signalling && npm run watch\" \"cd ../Frontend/library && npm run watch\" \"cd ../Frontend/ui-library && npm run watch\" \"cd ../Frontend/implementations/typescript && npm run watch\"  \"npm run watch\""
@@ -16,7 +16,6 @@
     "author": "Epic Games",
     "license": "MIT",
     "devDependencies": {
-        "@epicgames-ps/eslint-plugin-check-copyright": "file:../Extras/eslint/plugin-check-copyright",
         "@eslint/js": "^9.20.0",
         "@types/express": "^5.0.0",
         "eslint": "^9.20.0",

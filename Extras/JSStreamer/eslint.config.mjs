@@ -1,16 +1,14 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
-import eslint from '@eslint/js';
+
 import tseslint from 'typescript-eslint';
 import tsdocPlugin from 'eslint-plugin-tsdoc';
-import prettierPluginRecommended from 'eslint-plugin-prettier/recommended';
+import baseConfig from '../../eslint.config.mjs'
 
 export default tseslint.config(
+    baseConfig,
     {
         ignores: [],
     },
-    eslint.configs.recommended,
-    tseslint.configs.recommendedTypeCheckedOnly,
-    prettierPluginRecommended,
     {
         languageOptions: {
             parser: tseslint.parser,
