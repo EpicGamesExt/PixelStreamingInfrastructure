@@ -1,3 +1,4 @@
+// Copyright Epic Games, Inc. All Rights Reserved.
 import * as Messages from '../Messages/signalling_messages';
 import * as MessageHelpers from '../Messages/message_helpers';
 import { SignallingProtocol } from './SignallingProtocol';
