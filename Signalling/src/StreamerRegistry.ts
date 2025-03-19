@@ -1,3 +1,4 @@
+// Copyright Epic Games, Inc. All Rights Reserved.
 import {
     ITransport,
     SignallingProtocol,

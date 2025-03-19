@@ -1,3 +1,4 @@
+// Copyright Epic Games, Inc. All Rights Reserved.
 import { stringify, beautify } from './Utils';
 import { IProtoLogObj } from './LoggingUtils';
 import path from 'path';

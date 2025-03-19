@@ -1,3 +1,4 @@
+// Copyright Epic Games, Inc. All Rights Reserved.
 import { BaseMessage } from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
 import { Logger } from './Logger';
 
