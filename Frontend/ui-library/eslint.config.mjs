@@ -1,13 +1,13 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
-import eslint from '@eslint/js';
+
 import tseslint from 'typescript-eslint';
+import baseConfig from '../eslint.config.mjs'
 
 export default tseslint.config(
+    baseConfig,
     {
         ignores: ["src/__test__/**/*.ts", "**/*.test.ts"],
     },
-    eslint.configs.recommended,
-    tseslint.configs.recommendedTypeCheckedOnly,
     {
         languageOptions: {
             parser: tseslint.parser,
