@@ -103,6 +103,13 @@ jobs:
         npm install
         npm run build
 
+    - name: Prepare test
+      working-directory: Extras\MinimalStreamTester
+      run: |
+        npm install
+        npx playwright install --with-deps
+        npx playwright install chrome
+
     - name: Run Signalling
       working-directory: SignallingWebServer
       run: Start-Process "npm" -ArgumentList "run","start","--","--rest_api","--player_port 999","--http_root ${{ github.workspace }}\www"
@@ -110,13 +117,6 @@ jobs:
     - name: Run Streamer
       working-directory: Streamer
       run: Start-Process ".\Minimal\Binaries\Win64\Minimal-Cmd.exe" -ArgumentList "-warp","-dx12","-windowed","-resx=1920","-resy=720","-PixelStreamingURL=ws://localhost:8888","-RenderOffScreen","-AllowSoftwareRendering","-PixelStreamingEncoderCodec=vp8", "-Log=Minimal.log"
-
-    - name: Prepare test
-      working-directory: Extras\MinimalStreamTester
-      run: |
-        npm install
-        npx playwright install --with-deps
-        npx playwright install chrome
 
     - name: Wait for signalling to come up
       run: curl --retry 10 --retry-delay 20 --retry-connrefused http://localhost:999/api/status
