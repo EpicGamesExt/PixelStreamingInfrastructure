@@ -112,7 +112,8 @@ jobs:
 
     - name: Run Signalling
       working-directory: SignallingWebServer
-      run: Start-Process "npm" -ArgumentList "run","start","--","--rest_api","--player_port 999","--http_root ${{ github.workspace }}\www"
+      run: npm run start -- --rest_api --player_port 999 --http_root ${{ github.workspace }}\www
+      # run: Start-Process "npm" -ArgumentList "run","start","--","--rest_api","--player_port 999","--http_root ${{ github.workspace }}\www"
 
     - name: Run Streamer
       working-directory: Streamer
