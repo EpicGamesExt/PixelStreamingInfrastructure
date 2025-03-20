@@ -84,7 +84,7 @@ export class OnScreenKeyboard {
         if (!this.editTextButton) {
             return;
         }
-        
+
         if (command.showOnScreenKeyboard) {
             // Show the 'edit text' button.
             this.editTextButton.style.display = 'block';

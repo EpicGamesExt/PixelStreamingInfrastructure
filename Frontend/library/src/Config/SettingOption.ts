@@ -22,12 +22,12 @@ export class SettingOption<CustomIds extends string = OptionParametersIds> exten
         defaultTextValue: string,
         options: Array<string>,
         useUrlParams: boolean,
-         
+
         defaultUrlParamResolver: (urlParamValue: string) => string = function (value: string) {
             /* Return the string as-is by default */
             return value;
         },
-         
+
         defaultOnChangeListener: (changedValue: unknown, setting: SettingBase) => void = () => {
             /* Do nothing, to be overridden. */
         }
