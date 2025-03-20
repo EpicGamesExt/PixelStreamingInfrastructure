@@ -1,6 +1,6 @@
 #!/bin/bash
 
-NODE_VERSION=v18.17.0
+NODE_VERSION=$(<"${SCRIPT_DIR}/../../../NODE_VERSION")
 NPM="${SCRIPT_DIR}/node/bin/npm"
 
 # Prints the arguments and their descriptions to the console

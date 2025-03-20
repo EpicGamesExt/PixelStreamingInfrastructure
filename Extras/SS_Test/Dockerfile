@@ -1,7 +1,8 @@
-FROM node:18.17.0 as builder
+FROM node:22.14.0 as builder
 
 WORKDIR /SignallingTester
 
+COPY NODE_VERSION ./NODE_VERSION
 COPY package.json ./package.json
 COPY Common/ ./Common
 COPY Extras/SS_Test/ ./Extras/SS_Test

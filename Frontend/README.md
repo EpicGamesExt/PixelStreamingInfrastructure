@@ -39,10 +39,10 @@ If part of the library is not exposed and you wish to extend it, please do so in
 
 ## Developing
 
-⚠️ Only NodeJS LTS 18.17.0 is officially supported, some newer versions on NodeJS **WILL BREAK YOUR BUILD** ⚠️
+⚠️ Only NodeJS LTS 22.14.0 is officially supported, some newer versions on NodeJS **WILL BREAK YOUR BUILD** ⚠️
 
 ### Prerequisites for local dev
-- Install NodeJS LTS 18.17.0 on your system.
+- Install NodeJS LTS 22.14.0 on your system.
 - Install npm globally using: `npm install npm -g` (yes this is required)
 
 ### Building the Library

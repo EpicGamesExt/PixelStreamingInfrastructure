@@ -53,7 +53,7 @@ jobs:
   #
   #   - uses: actions/setup-node@v4
   #     with:
-  #       node-version: 'v18.17.0'
+  #       node-version: 'v22.14.0'
   #
   #   - name: Download streamer
   #     uses: robinraju/release-downloader@v1

@@ -1,12 +1,14 @@
 # Use the current Long Term Support (LTS) version of Node.js
 FROM node:lts
 # Copy the signalling server and frontend source code from the build context
-COPY package.json package.json
-COPY /Extras/eslint/plugin-check-copyright /Extras/eslint/plugin-check-copyright
-COPY /Common /Common
-COPY /Signalling /Signalling
-COPY /SignallingWebServer /SignallingWebServer
-COPY /Frontend /Frontend
+WORKDIR /SignallingWebServer
+COPY NODE_VERSION ./NODE_VERSION
+COPY package.json ./package.json
+COPY /Extras/eslint/plugin-check-copyright ./Extras/eslint/plugin-check-copyright
+COPY /Common ./Common
+COPY /Signalling ./Signalling
+COPY /SignallingWebServer ./SignallingWebServer
+COPY /Frontend ./Frontend
 # Install the dependencies for the signalling server and build the frontend
 RUN apt-get update
 RUN SignallingWebServer/platform_scripts/bash/setup.sh --build
