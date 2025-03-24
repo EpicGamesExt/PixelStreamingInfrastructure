@@ -511,6 +511,40 @@ export class PixelStreamingApplicationStyle {
         '.svgIcon': {
             fill: 'var(--color2)'
         }
+        ,
+        '.innerModal': {
+			position: 'relative',
+			width: '500px',
+			height: '300px',
+			backgroundColor: 'var(--color0)',
+			display: 'flex',
+			flexDirection: 'column',
+			justifyContent: 'space-between',
+			alignItems: 'center'
+		},
+		'.modalBtnContainer': {
+			display: 'flex',
+			flexDirection: 'row',
+			justifyContent: 'space-around',
+			width: '100%',
+			paddingTop: '1em',
+			paddingBottom: '1em'
+		},
+		'.modalTextArea': {
+			textAlign: 'left',
+			width: '95%',
+			height: '100%',
+			resize: 'none',
+			fontSize: '1rem',
+			border: '1px solid var(--color2)'
+		},
+		'.modalTextArea:focus-visible': {
+			outline: 'none !important',
+			border: '1px solid var(--color3)'
+		},
+		'.modal .btn-flat': {
+		 	fontSize: '1.0rem'
+		}
     };
 
     customStyles?: Partial<Styles>;

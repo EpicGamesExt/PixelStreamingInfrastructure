@@ -28,6 +28,7 @@ import { SettingsPanel } from '../UI/SettingsPanel';
 import { StatsPanel } from '../UI/StatsPanel';
 import { VideoQpIndicator } from '../UI/VideoQpIndicator';
 import { ConfigUI } from '../Config/ConfigUI';
+import { EditTextModal } from '../UI/EditTextModal';
 import {
     UIElementCreationMode,
     isPanelEnabled,
@@ -99,6 +100,7 @@ export class Application {
     settingsPanel: SettingsPanel;
     statsPanel: StatsPanel;
     videoQpIndicator: VideoQpIndicator;
+    editTextModal: EditTextModal | null = null;
 
     configUI: ConfigUI;
 
