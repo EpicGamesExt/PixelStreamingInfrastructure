@@ -45,9 +45,13 @@ jobs:
       id: getversion
       run: echo "version=$(cat RELEASE_VERSION)" >> $GITHUB_OUTPUT
 
+    - name: Get node version
+      id: get_node_version
+      run: echo "node_version=$(cat NODE_VERSION)" >> $Env:GITHUB_OUTPUT
+
     - uses: actions/setup-node@v3
       with:
-        node-version: '22.14.0'
+        node-version: ${{ steps.get_node_version.outputs.node_version }}
         registry-url: 'https://registry.npmjs.org'
 
     - name: Build common library
