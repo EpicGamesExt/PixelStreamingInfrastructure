@@ -52,9 +52,13 @@ jobs:
     - name: Checkout source code
       uses: actions/checkout@v3
 
+    - name: Get node version
+      id: node_version
+      run: cat NODE_VERSION >> $Env:GITHUB_OUTPUT
+
     - uses: actions/setup-node@v4
       with:
-        node-version: 'v22.14.0'
+        node-version: ${{ steps.vars.outputs.node_version }}
 
     - name: Download streamer
       uses: robinraju/release-downloader@v1
