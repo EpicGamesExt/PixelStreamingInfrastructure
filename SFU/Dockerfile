@@ -1,6 +1,7 @@
 # Use the current Long Term Support (LTS) version of Node.js
 FROM node:lts
 
+COPY NODE_VERSION ./NODE_VERSION
 COPY /SFU /SFU
 
 RUN SFU/platform_scripts/bash/setup.sh

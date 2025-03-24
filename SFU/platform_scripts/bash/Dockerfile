@@ -7,6 +7,7 @@ RUN apt -y update
 RUN apt -y install python3-pip
 
 # Copy the Selective Forwarding Unit (SFU) to the Docker build context
+COPY ../NODE_VERSION /opt/NODE_VERSION
 COPY . /opt/SFU
 
 # Install the dependencies for the mediasoup server
