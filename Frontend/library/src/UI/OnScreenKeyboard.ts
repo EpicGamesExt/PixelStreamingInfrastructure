@@ -6,6 +6,11 @@ import { UntranslatedCoordUnsigned } from '../Util/InputCoordTranslator';
  * Class for handling on screen keyboard usage
  */
 export class OnScreenKeyboard {
+
+    // A modal is shown when the OnScreenKeyboard command is triggered.
+    // We show this modal and focus the text area it contains to bring up the native on-device keyboard on mobile
+    editTextModal: HTMLElement | null;
+
     // If the user focuses on a UE input widget then we show them a button to open
     // the on-screen keyboard. JavaScript security means we can only show the
     // on-screen keyboard in response to a user interaction.
@@ -15,15 +20,21 @@ export class OnScreenKeyboard {
     // on-screen keyboard.
     hiddenInput: HTMLInputElement;
 
+    // TODO: Nuke this class
+
     /**
      *
      * @param videoElementParent The div element the video player is injected into
      */
     constructor(videoElementParent: HTMLElement) {
-        this.editTextButton = null;
-        this.hiddenInput = null;
+        this.editTextModal = null;
 
-        if ('ontouchstart' in document.documentElement) {
+        //this.editTextButton = null;
+        //this.hiddenInput = null;
+
+        // Checking in window allows us to use device emulation in Chrome (which is handy for testing)
+        const isTouchDevice = 'ontouchstart' in window;
+        if (isTouchDevice) {
             this.createOnScreenKeyboardHelpers(videoElementParent);
         }
     }
@@ -68,7 +79,7 @@ export class OnScreenKeyboard {
             // Hide the 'edit text' button.
             this.editTextButton.style.display = 'none';
 
-            this.editTextButton.addEventListener('touchend', (event: Event) => {
+            this.editTextButton.addEventListener('click', (event: Event) => {
                 // Show the on-screen keyboard.
                 this.hiddenInput.focus();
                 event.preventDefault();
