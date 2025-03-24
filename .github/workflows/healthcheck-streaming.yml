@@ -53,12 +53,12 @@ jobs:
       uses: actions/checkout@v3
 
     - name: Get node version
-      id: node_version
-      run: cat NODE_VERSION >> $Env:GITHUB_OUTPUT
+      id: get_node_version
+      run: echo "node_version=$(cat NODE_VERSION)" >> $Env:GITHUB_OUTPUT
 
     - uses: actions/setup-node@v4
       with:
-        node-version: ${{ steps.vars.outputs.node_version }}
+        node-version: ${{ steps.get_node_version.outputs.node_version }}
 
     - name: Download streamer
       uses: robinraju/release-downloader@v1
