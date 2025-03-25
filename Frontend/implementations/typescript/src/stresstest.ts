@@ -138,7 +138,7 @@ export class StressTester {
                 psFrame.element.parentNode.removeChild(psFrame.element);
                 // Disconnect Pixel Streaming application so we don't have orphaned WebRTC/WebSocket/PeerConnections
                 psFrame.pixelStreamingApp.stream.disconnect();
-                psFrame?.pixelStreamingApp.stream.webRtcController.destroyPlayer();
+                psFrame?.pixelStreamingApp.stream.webRtcController.destroyVideoPlayer();
             }
         }, this.streamDeletionIntervalMs);
     }
