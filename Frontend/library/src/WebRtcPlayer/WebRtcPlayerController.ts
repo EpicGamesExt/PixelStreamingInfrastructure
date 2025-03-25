@@ -341,6 +341,14 @@ export class WebRtcPlayerController {
     }
 
     /**
+     * Destroys the player and makes sure resources are freed. This helps to prevent the issue in chrome
+     * where it refuses to make new video players.
+     */
+    destroyPlayer() {
+        this.videoPlayer.destroy();
+    }
+
+    /**
      * Make a request to UnquantizedAndDenormalizeUnsigned coordinates
      * @param x x axis coordinate
      * @param y y axis coordinate
