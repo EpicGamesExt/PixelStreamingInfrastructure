@@ -341,10 +341,10 @@ export class WebRtcPlayerController {
     }
 
     /**
-     * Destroys the player and makes sure resources are freed. This helps to prevent the issue in chrome
+     * Destroys the video player and makes sure resources are freed. This helps to prevent the issue in chrome
      * where it refuses to make new video players.
      */
-    destroyPlayer() {
+    destroyVideoPlayer() {
         this.videoPlayer.destroy();
     }
 
