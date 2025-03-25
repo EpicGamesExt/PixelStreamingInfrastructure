@@ -45,6 +45,7 @@ import {
     PlayStreamErrorEvent,
     PlayStreamEvent,
     PlayStreamRejectedEvent,
+    ShowOnScreenKeyboardEvent,
     StreamerListMessageEvent,
     StreamerIDChangedMessageEvent
 } from '../Util/EventEmitter';
@@ -714,9 +715,21 @@ export class WebRtcPlayerController {
 
         Logger.Info('Data Channel Command: ' + commandAsString);
         const command = JSON.parse(commandAsString);
+
+        // Handle "onScreenKeyboard" event
         if (command.command === 'onScreenKeyboard') {
-            this.pixelStreaming._activateOnScreenKeyboard(command);
+            this.handleOnScreenKeyboardCommand(command);
         }
+    }
+
+    handleOnScreenKeyboardCommand(command: any) {
+        const data: ShowOnScreenKeyboardEvent["data"] = {
+            showOnScreenKeyboard: command.showOnScreenKeyboard ?? true,
+            x: command.x ?? 0,
+            y: command.y ?? 0,
+            contents: command.contents ?? ""
+        };
+        this.pixelStreaming.dispatchEvent(new ShowOnScreenKeyboardEvent(data));
     }
 
     /**
@@ -1774,6 +1787,17 @@ export class WebRtcPlayerController {
     sendRequestQualityControlOwnership(): void {
         Logger.Info('----   Sending Request to Control Quality  ----');
         this.toStreamerMessagesController.SendRequestQualityControl();
+    }
+
+    /**
+     * Send a `TextBoxEntry` message back to UE.
+     * @param contents The new contents of the UE side text box.
+     */
+    sendTextboxEntry(contents: string) {
+        Logger.Info('----   Sending TextboxEntry message  ----');
+        this.streamMessageController.toStreamerHandlers.get('TextboxEntry')?.([
+            contents
+        ]);
     }
 
     /**

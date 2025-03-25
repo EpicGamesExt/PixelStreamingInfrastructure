@@ -81,6 +81,10 @@ export class StreamMessageController {
             id: 51,
             structure: ['string']
         });
+        this.toStreamerMessages.set('TextboxEntry', {
+            id: 52,
+            structure: ['string']
+        });
         // Keyboard Input Message. Range = 60..69.
         this.toStreamerMessages.set('KeyDown', {
             id: 60,

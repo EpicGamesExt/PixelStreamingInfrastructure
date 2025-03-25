@@ -28,7 +28,7 @@ import { SettingsPanel } from '../UI/SettingsPanel';
 import { StatsPanel } from '../UI/StatsPanel';
 import { VideoQpIndicator } from '../UI/VideoQpIndicator';
 import { ConfigUI } from '../Config/ConfigUI';
-import { EditTextModal } from '../UI/EditTextModal';
+import { EditConfirmedEvent, EditTextModal } from '../UI/EditTextModal';
 import {
     UIElementCreationMode,
     isPanelEnabled,
@@ -375,6 +375,7 @@ export class Application {
         this.stream.addEventListener('webRtcTCPRelayDetected', () =>
             Logger.Warning(`Stream quailty degraded due to network enviroment, stream is relayed over TCP.`)
         );
+        this.stream.addEventListener('showOnScreenKeyboard', ({ data: { contents }}) => this.onShowOnScreenKeyboard(contents));
     }
 
     /**
@@ -758,6 +759,29 @@ export class Application {
         if (this.onColorModeChanged) {
             this.onColorModeChanged(isLightMode);
         }
+    }
+
+    onShowOnScreenKeyboard(ueTextboxContents: string) {
+        const isTouchDevice = 'ontouchstart' in window;
+        if(!isTouchDevice) {
+            // If we are not on a touch device, no need to show the on-screen keyboard
+            // We can just type into the type box as per normal with our attached keyboards
+            return;
+        }
+
+        // Remove any existing modal
+        this.editTextModal?.rootElement.remove();
+        // Make a new modal for editing the UE textbox on the browser side
+        this.editTextModal = new EditTextModal();
+        // Add it to the root of the Pixel Streaming application
+        this.rootElement.append(this.editTextModal.rootElement);
+        // Add the text content from UE side and summon on-screen keyboard
+        this.editTextModal.showOnScreenKeyboard(ueTextboxContents);
+        // Bind to the confirm event
+        this.editTextModal.events.addEventListener("editConfirmed", (evt: Event) => {
+            const editTextEvent: EditConfirmedEvent = evt as EditConfirmedEvent;
+            this.stream.sendTextboxEntry(editTextEvent.confirmedText);
+        });
     }
 
     onSettingsChanged(event: SettingsChangedEvent) {
