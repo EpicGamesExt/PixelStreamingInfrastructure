@@ -27,6 +27,7 @@
         "@epicgames-ps/eslint-plugin-check-copyright": "*"
     },
     "dependencies": {
+        "@babel/runtime": "^7.26.10",
         "jss": "^10.10.0",
         "jss-plugin-camel-case": "^10.10.0",
         "jss-plugin-global": "^10.10.0"
