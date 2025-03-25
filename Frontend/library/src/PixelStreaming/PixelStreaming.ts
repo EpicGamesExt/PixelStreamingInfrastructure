@@ -7,7 +7,6 @@ import { WebRtcPlayerController } from '../WebRtcPlayer/WebRtcPlayerController';
 import { Flags, NumericParameters } from '../Config/Config';
 import { Logger } from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
 import { InitialSettings } from '../DataChannel/InitialSettings';
-import { OnScreenKeyboard } from '../UI/OnScreenKeyboard';
 import {
     PixelStreamingEventEmitter,
     InitialSettingsEvent,
@@ -78,8 +77,6 @@ export class PixelStreaming {
 
     private allowConsoleCommands = false;
 
-    private onScreenKeyboardHelper: OnScreenKeyboard;
-
     private _videoStartTime: number;
     private _inputController: boolean;
 
@@ -103,13 +100,6 @@ export class PixelStreaming {
 
         // setup WebRTC
         this.setWebRtcPlayerController(new WebRtcPlayerController(this.config, this));
-
-        // Onscreen keyboard
-        this.onScreenKeyboardHelper = new OnScreenKeyboard(this.videoElementParent);
-        this.onScreenKeyboardHelper.unquantizeAndDenormalizeUnsigned = (x: number, y: number) =>
-            this._webRtcController.requestUnquantizedAndDenormalizeUnsigned(x, y);
-        this._activateOnScreenKeyboard = (command: any) =>
-            this.onScreenKeyboardHelper.showOnScreenKeyboard(command);
 
         this._webXrController = new WebXRController(this._webRtcController);
 
@@ -275,15 +265,6 @@ export class PixelStreaming {
         );
 
         this.config._registerOnChangeEvents(this._eventEmitter);
-    }
-
-    /**
-     * Activate the on screen keyboard when receiving the command from the streamer
-     * @param command - the keyboard command
-     */
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    _activateOnScreenKeyboard(command: any): void {
-        throw new Error('Method not implemented.');
     }
 
     /**
@@ -816,6 +797,19 @@ export class PixelStreaming {
             return false;
         }
         this._webRtcController.emitConsoleCommand(command);
+        return true;
+    }
+
+    /**
+     * Sets the text contents of the currently focused UE text box widget.
+     * @param contents The new contents of the UE text box.
+     * @returns True if the message could be sent.
+     */
+    public sendTextboxEntry(contents: string) : boolean {
+        if (!this._webRtcController.videoPlayer.isVideoReady()) {
+            return false;
+        }
+        this._webRtcController.sendTextboxEntry(contents);
         return true;
     }
 

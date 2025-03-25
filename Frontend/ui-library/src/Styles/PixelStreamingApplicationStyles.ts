@@ -510,8 +510,19 @@ export class PixelStreamingApplicationStyle {
         },
         '.svgIcon': {
             fill: 'var(--color2)'
-        }
-        ,
+        },
+        '.modal': {
+            minWidth: "100vw",
+            minHeight: "100vh",
+            left: "0",
+            top: "0",
+            position: "fixed",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            color: "var(--color2)"
+        },
         '.innerModal': {
 			position: 'relative',
 			width: '500px',
@@ -520,7 +531,8 @@ export class PixelStreamingApplicationStyle {
 			display: 'flex',
 			flexDirection: 'column',
 			justifyContent: 'space-between',
-			alignItems: 'center'
+			alignItems: 'center',
+            borderRadius: '0.75em'
 		},
 		'.modalBtnContainer': {
 			display: 'flex',

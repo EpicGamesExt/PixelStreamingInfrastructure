@@ -5,7 +5,7 @@ export class EditConfirmedEvent extends CustomEvent<String> {
     confirmedText: string;
 
     constructor(confirmedText: string) {
-        super("EditConfirmed", {
+        super("editConfirmed", {
             detail: confirmedText,
             bubbles: true,
             cancelable: true
@@ -30,27 +30,62 @@ export class EditConfirmedEvent extends CustomEvent<String> {
  */
 export class EditTextModal {
     _rootElement: HTMLElement;
+    _innerModal: HTMLElement;
     _editTextHeading: HTMLElement;
     _textArea: HTMLTextAreaElement;
     _modalBtnContainer: HTMLElement;
     _cancelBtn: HTMLButtonElement;
     _confirmBtn: HTMLButtonElement;
-
-    // Bind to this if you want to handle edit confirmed
-    onEditConfirmed: EventTarget;
+    _events: EventTarget;
 
     constructor() {
         this._rootElement = this.rootElement;
+        this._events = new EventTarget();
 
         // When cancel is clicked, remove this modal from the DOM
-        this.cancelBtn.addEventListener("click", ()=> {
+        this.cancelBtn.addEventListener("click", (event)=> {
             this.rootElement.remove();
+
+            // Ensure the click/tap does not go back to UE
+            event.stopPropagation();
         });
 
-        // When confirm is clicked, send the contents of textarea to UE
-        this.confirmBtn.addEventListener("click", ()=> {
-            this.onEditConfirmed.dispatchEvent(new EditConfirmedEvent(this.textArea.value))
+        // When confirm is clicked, remove from DOM and send the contents of textarea to UE
+        this.confirmBtn.addEventListener("click", (event)=> {
+            this.events.dispatchEvent(new EditConfirmedEvent(this.textArea.value));
+            this.rootElement.remove();
+
+            // Ensure the click/tap does not go back to UE
+            event.stopPropagation();
         });
+
+        // When keyboard is typed into we want to ensure keys are not sent back to UE until we confirm
+        // Most keys are not sent back to UE on mobile keyboard anyway, but backspace is so we should
+        // prevent it from bubbling to our global the keyboard input controller.
+        this.textArea.addEventListener("keypress", (event) => {
+            event.stopPropagation();
+        });
+        this.textArea.addEventListener("keyup", (event) => {
+            event.stopPropagation();
+        });
+        this.textArea.addEventListener("keydown", (event) => {
+            event.stopPropagation();
+        });
+    }
+
+    // Bind to this if you want to handle edit confirmed
+    public get events() : EventTarget {
+        return this._events;
+    }
+
+    public showOnScreenKeyboard(existingTextAreaContents: string) {
+        // Populate text area with whatever was on the UE side
+        this.textArea.value = existingTextAreaContents;
+
+        // Bring focus to the text area.
+        // This will make the on-screen keyboard show if we are
+        // a device that has a native on-screen keyboard.
+        this.textArea.focus();
     }
 
     /**
@@ -58,13 +93,22 @@ export class EditTextModal {
      */
     public get rootElement(): HTMLElement {
         if (!this._rootElement) {
-            this._rootElement = document.createElement('div');
-            this._rootElement.classList.add('innerModal');
-            this._rootElement.appendChild(this.editTextHeading);
-            this._rootElement.appendChild(this.textArea);
-            this._rootElement.appendChild(this._modalBtnContainer);
+            this._rootElement = document.createElement("div");
+            this._rootElement.classList.add("modal");
+            this._rootElement.appendChild(this.innerModal);
         }
         return this._rootElement;
+    }
+
+    public get innerModal() : HTMLElement {
+        if (!this._innerModal) {
+            this._innerModal = document.createElement('div');
+            this._innerModal.classList.add('innerModal');
+            this._innerModal.appendChild(this.editTextHeading);
+            this._innerModal.appendChild(this.textArea);
+            this._innerModal.appendChild(this.modalBtnContainer);
+        }
+        return this._innerModal;
     }
 
     public get editTextHeading(): HTMLElement {
@@ -100,7 +144,7 @@ export class EditTextModal {
         if (!this._cancelBtn) {
             this._cancelBtn = document.createElement('button');
             this._cancelBtn.classList.add("btn-flat");
-            this._cancelBtn.value = "Cancel";
+            this._cancelBtn.innerText = "Cancel";
         }
         return this._cancelBtn;
     }
@@ -109,7 +153,7 @@ export class EditTextModal {
         if (!this._confirmBtn) {
             this._confirmBtn = document.createElement('button');
             this._confirmBtn.classList.add("btn-flat");
-            this._confirmBtn.value = "Confirm";
+            this._confirmBtn.innerText = "Confirm";
         }
         return this._confirmBtn;
     }
