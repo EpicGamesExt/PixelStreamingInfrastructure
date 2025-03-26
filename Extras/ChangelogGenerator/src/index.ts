@@ -1,86 +1,48 @@
 import { execSync } from 'child_process';
-import { readFileSync, writeFileSync } from 'fs';
-import { remark } from 'remark';
-import parse from 'remark-parse';
-import stringify from 'remark-stringify';
 import minimist from 'minimist';
-import { RootContent } from 'mdast';
+import { addVersionChanges, clearChanges } from './functions.js';
 
 const args = minimist(process.argv.slice(2));
 
-let currentTag: string;
-let previousTag: string;
-let versionLabel: string;
+const logPath = args['log'];
+const packagePath = args['package_path'];
+const currentTag = args['current'];
+const previousTag = args['previous'];
+const versionLabel = args['label'];
+const tagPrefix = args['prefix'];
+const init = args['init'];
 
-if (args._.length == 3) {
-    const tagPrefix = args._[2];
+if (init && logPath && packagePath && tagPrefix) {
+    // generates the changelog from all the tags matching prefix.
+
+    clearChanges(logPath);
+
+    const tags = execSync(`git tag -l ${tagPrefix}*`, { encoding: 'utf-8' }).trim().split('\n');
+    for (let i = 1; i < tags.length; ++i) {
+        const versionLabel = tags[i].slice(tagPrefix.length);
+        addVersionChanges(logPath, packagePath, tags[i - 1], tags[i], versionLabel);
+    }
+} else if (tagPrefix && logPath && packagePath) {
+    // gets the latest changes by getting the last tag matching the prefix and comparing it with the last
 
     // get current tag
-    currentTag = execSync(`git describe --tags --abbrev=0 --match "${tagPrefix}*"`, {
+    const currentTag = execSync(`git describe --tags --abbrev=0 --match "${tagPrefix}*"`, {
         encoding: 'utf-8'
     }).trim();
 
     // get previous tag
-    previousTag = execSync(`git describe --tags --abbrev=0 --match "${tagPrefix}*" ${currentTag}^`, {
+    const previousTag = execSync(`git describe --tags --abbrev=0 --match "${tagPrefix}*" ${currentTag}^`, {
         encoding: 'utf-8'
     }).trim();
 
-    versionLabel = currentTag.slice(tagPrefix.length);
-} else if (args._.length == 5) {
-    versionLabel = args._[2];
-    currentTag = args._[4];
-    previousTag = args._[3];
+    const versionLabel = currentTag.slice(tagPrefix.length);
+    addVersionChanges(logPath, packagePath, previousTag, currentTag, versionLabel);
+} else if (logPath && packagePath && previousTag && currentTag && versionLabel) {
+    // generates the change list from all the given tags
 
+    addVersionChanges(logPath, packagePath, previousTag, currentTag, versionLabel);
 } else {
-    console.log(`usage: changeloggenerator <log_path> <package_path> <tag_prefix>`);
-    console.log(`    or changeloggenerator <log_path> <package_path> <version_label> <previous_tag_or_commit> <new_tag_or_commit>`);
-    process.exit(1);
+    console.log(
+        `usage: changeloggenerator --log=<path> --package_path=<path> [--prefix=<tag_prefix> [--init]] [--current=<current_tag> --previous=<previous_tag> --label=<version_label>]`
+    );
 }
-
-const templatePath = args._[0];
-const packagePath = args._[1];
-
-// get log entries
-const logEntries = execSync(
-    `git log ${previousTag}..${currentTag} --oneline --pretty=format:%s ${packagePath}`,
-    { encoding: 'utf-8' }
-);
-
-// build the new changelog entry
-const newNodes: RootContent[] = [
-    {
-        type: 'heading',
-        depth: 2,
-        children: [{ type: 'text', value: `${versionLabel}` }]
-    },
-    {
-        type: 'list',
-        ordered: false,
-        spread: false,
-        children: logEntries.split('\n').map((comment) => {
-            return {
-                type: 'listItem',
-                spread: false,
-                children: [
-                    {
-                        type: 'paragraph',
-                        children: [{ type: 'text', value: comment }]
-                    }
-                ]
-            };
-        })
-    }
-];
-
-const template = readFileSync(templatePath);
-const tree = remark().use(parse).parse(template);
-
-tree.children.splice(
-    tree.children.findIndex((node) => node.type === 'html' && node.value.includes('<!-- BEGIN -->')) + 1,
-    0,
-    ...newNodes
-);
-
-const modifiedMarkdown = remark().use(stringify, { bullet: '-' }).stringify(tree);
-writeFileSync(templatePath, modifiedMarkdown);
-// console.log(modifiedMarkdown);
