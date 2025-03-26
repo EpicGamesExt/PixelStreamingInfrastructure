@@ -1,0 +1,19 @@
+{
+    "name": "changeloggenerator",
+    "version": "1.0.0",
+    "description": "CLI tool to generate changelogs for specific libraries",
+    "type": "module",
+    "main": "dist/index.js",
+    "scripts": {
+        "build": "tsc",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "minimist": "^1.2.8",
+        "remark": "^15.0.1",
+        "remark-parse": "^11.0.0",
+        "remark-stringify": "^11.0.0"
+    }
+}
