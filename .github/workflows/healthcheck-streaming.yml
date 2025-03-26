@@ -52,9 +52,13 @@ jobs:
     - name: Checkout source code
       uses: actions/checkout@v3
 
+    - name: Get node version
+      id: get_node_version
+      run: echo "node_version=$(cat NODE_VERSION)" >> $Env:GITHUB_OUTPUT
+
     - uses: actions/setup-node@v4
       with:
-        node-version: 'v18.17.0'
+        node-version: ${{ steps.get_node_version.outputs.node_version }}
 
     - name: Download streamer
       uses: robinraju/release-downloader@v1
@@ -103,20 +107,21 @@ jobs:
         npm install
         npm run build
 
-    - name: Run Signalling
-      working-directory: SignallingWebServer
-      run: Start-Process "npm" -ArgumentList "run","start","--","--rest_api","--player_port 999","--http_root ${{ github.workspace }}\www"
-
-    - name: Run Streamer
-      working-directory: Streamer
-      run: Start-Process ".\Minimal\Binaries\Win64\Minimal-Cmd.exe" -ArgumentList "-warp","-dx12","-windowed","-resx=1920","-resy=720","-PixelStreamingURL=ws://localhost:8888","-RenderOffScreen","-AllowSoftwareRendering","-PixelStreamingEncoderCodec=vp8", "-Log=Minimal.log"
-
     - name: Prepare test
       working-directory: Extras\MinimalStreamTester
       run: |
         npm install
         npx playwright install --with-deps
         npx playwright install chrome
+
+    - name: Run Signalling
+      working-directory: SignallingWebServer
+      # triple hyphen for npm script running issues. With double the arguments get mangled
+      run: Start-Process powershell.exe -ArgumentList "npm","run","start","---","--rest_api","--player_port 999","--http_root ${{ github.workspace }}\www"
+
+    - name: Run Streamer
+      working-directory: Streamer
+      run: Start-Process ".\Minimal\Binaries\Win64\Minimal-Cmd.exe" -ArgumentList "-warp","-dx12","-windowed","-resx=1920","-resy=720","-PixelStreamingURL=ws://localhost:8888","-RenderOffScreen","-AllowSoftwareRendering","-PixelStreamingEncoderCodec=vp8", "-Log=Minimal.log"
 
     - name: Wait for signalling to come up
       run: curl --retry 10 --retry-delay 20 --retry-connrefused http://localhost:999/api/status

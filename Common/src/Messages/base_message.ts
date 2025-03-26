@@ -1,3 +1,4 @@
+// Copyright Epic Games, Inc. All Rights Reserved.
 /**
  * All Pixel Streaming messages should adhere to this interface.
  */

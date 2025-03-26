@@ -17,7 +17,7 @@ export class SettingText<CustomIds extends string = TextParametersIds> extends S
         description: string,
         defaultTextValue: string,
         useUrlParams: boolean,
-         
+
         defaultOnChangeListener: (changedValue: unknown, setting: SettingBase) => void = () => {
             /* Do nothing, to be overridden. */
         }

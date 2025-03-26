@@ -6,7 +6,7 @@
 
 # Class: PlayerConnection
 
-Defined in: [Signalling/src/PlayerConnection.ts:27](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/PlayerConnection.ts#L27)
+Defined in: [Signalling/src/PlayerConnection.ts:27](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/PlayerConnection.ts#L27)
 
 A connection between the signalling server and a player connection.
 This is where messages expected to be handled by the player come in
@@ -29,7 +29,7 @@ subscribed to.
 
 > **new PlayerConnection**(`server`, `ws`, `remoteAddress`?): [`PlayerConnection`](PlayerConnection.md)
 
-Defined in: [Signalling/src/PlayerConnection.ts:50](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/PlayerConnection.ts#L50)
+Defined in: [Signalling/src/PlayerConnection.ts:50](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/PlayerConnection.ts#L50)
 
 Initializes a new connection with given and sane values. Adds listeners for the
 websocket close and error so it can react by unsubscribing and resetting itself.
@@ -64,7 +64,7 @@ The remote address of this connection. Only used as display.
 
 > **playerId**: `string`
 
-Defined in: [Signalling/src/PlayerConnection.ts:29](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/PlayerConnection.ts#L29)
+Defined in: [Signalling/src/PlayerConnection.ts:29](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/PlayerConnection.ts#L29)
 
 #### Implementation of
 
@@ -76,7 +76,7 @@ Defined in: [Signalling/src/PlayerConnection.ts:29](https://github.com/mcottonte
 
 > **protocol**: `SignallingProtocol`
 
-Defined in: [Signalling/src/PlayerConnection.ts:33](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/PlayerConnection.ts#L33)
+Defined in: [Signalling/src/PlayerConnection.ts:33](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/PlayerConnection.ts#L33)
 
 #### Implementation of
 
@@ -88,7 +88,7 @@ Defined in: [Signalling/src/PlayerConnection.ts:33](https://github.com/mcottonte
 
 > `optional` **remoteAddress**: `string`
 
-Defined in: [Signalling/src/PlayerConnection.ts:37](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/PlayerConnection.ts#L37)
+Defined in: [Signalling/src/PlayerConnection.ts:37](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/PlayerConnection.ts#L37)
 
 ***
 
@@ -96,7 +96,7 @@ Defined in: [Signalling/src/PlayerConnection.ts:37](https://github.com/mcottonte
 
 > **subscribedStreamer**: `null` \| [`IStreamer`](../../StreamerRegistry/interfaces/IStreamer.md)
 
-Defined in: [Signalling/src/PlayerConnection.ts:35](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/PlayerConnection.ts#L35)
+Defined in: [Signalling/src/PlayerConnection.ts:35](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/PlayerConnection.ts#L35)
 
 #### Implementation of
 
@@ -108,7 +108,7 @@ Defined in: [Signalling/src/PlayerConnection.ts:35](https://github.com/mcottonte
 
 > **transport**: `ITransport`
 
-Defined in: [Signalling/src/PlayerConnection.ts:31](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/PlayerConnection.ts#L31)
+Defined in: [Signalling/src/PlayerConnection.ts:31](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/PlayerConnection.ts#L31)
 
 ## Methods
 
@@ -116,7 +116,7 @@ Defined in: [Signalling/src/PlayerConnection.ts:31](https://github.com/mcottonte
 
 > **getPlayerInfo**(): [`IPlayerInfo`](../../PlayerRegistry/interfaces/IPlayerInfo.md)
 
-Defined in: [Signalling/src/PlayerConnection.ts:88](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/PlayerConnection.ts#L88)
+Defined in: [Signalling/src/PlayerConnection.ts:88](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/PlayerConnection.ts#L88)
 
 Returns a descriptive object for the REST API inspection operations.
 
@@ -136,7 +136,7 @@ An IPlayerInfo object containing viewable information about this connection.
 
 > **getReadableIdentifier**(): `string`
 
-Defined in: [Signalling/src/PlayerConnection.ts:71](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/PlayerConnection.ts#L71)
+Defined in: [Signalling/src/PlayerConnection.ts:71](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/PlayerConnection.ts#L71)
 
 Returns an identifier that is displayed in logs.
 
@@ -156,7 +156,7 @@ A string describing this connection.
 
 > **sendMessage**(`message`): `void`
 
-Defined in: [Signalling/src/PlayerConnection.ts:79](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/PlayerConnection.ts#L79)
+Defined in: [Signalling/src/PlayerConnection.ts:79](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/PlayerConnection.ts#L79)
 
 Sends a signalling message to the player.
 

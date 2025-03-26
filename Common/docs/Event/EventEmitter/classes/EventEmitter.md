@@ -6,7 +6,7 @@
 
 # Class: EventEmitter
 
-Defined in: [Event/EventEmitter.ts:63](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/5fb85fd65be1623aae0ff7d1b463a27836d35a34/Common/src/Event/EventEmitter.ts#L63)
+Defined in: [Event/EventEmitter.ts:63](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/e5168fb9b95d09ea76d485376bd036403b747ad2/Common/src/Event/EventEmitter.ts#L63)
 
 A feature-limited, but _mostly_ drop-in replacement for Node's EventEmitter type that is implemented using EventTarget.
 
@@ -55,7 +55,7 @@ myEmitter.emit('event');
 
 > **new EventEmitter**(): [`EventEmitter`](EventEmitter.md)
 
-Defined in: [Event/EventEmitter.ts:66](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/5fb85fd65be1623aae0ff7d1b463a27836d35a34/Common/src/Event/EventEmitter.ts#L66)
+Defined in: [Event/EventEmitter.ts:66](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/e5168fb9b95d09ea76d485376bd036403b747ad2/Common/src/Event/EventEmitter.ts#L66)
 
 #### Returns
 
@@ -71,7 +71,7 @@ Defined in: [Event/EventEmitter.ts:66](https://github.com/mcottontensor/PixelStr
 
 > **addListener**(`eventName`, `listener`): `this`
 
-Defined in: [Event/EventEmitter.ts:96](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/5fb85fd65be1623aae0ff7d1b463a27836d35a34/Common/src/Event/EventEmitter.ts#L96)
+Defined in: [Event/EventEmitter.ts:96](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/e5168fb9b95d09ea76d485376bd036403b747ad2/Common/src/Event/EventEmitter.ts#L96)
 
 Alias for `emitter.on(eventName, listener)`.
 
@@ -95,7 +95,7 @@ Alias for `emitter.on(eventName, listener)`.
 
 > **emit**(`eventName`, ...`args`): `boolean`
 
-Defined in: [Event/EventEmitter.ts:262](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/5fb85fd65be1623aae0ff7d1b463a27836d35a34/Common/src/Event/EventEmitter.ts#L262)
+Defined in: [Event/EventEmitter.ts:262](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/e5168fb9b95d09ea76d485376bd036403b747ad2/Common/src/Event/EventEmitter.ts#L262)
 
 Synchronously calls each of the listeners registered for the event named `eventName`, in the order they were registered, passing the supplied arguments
 to each.
@@ -155,7 +155,7 @@ myEmitter.emit('event', 1, 2, 3, 4, 5);
 
 > **off**(`eventName`, `listener`): `this`
 
-Defined in: [Event/EventEmitter.ts:196](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/5fb85fd65be1623aae0ff7d1b463a27836d35a34/Common/src/Event/EventEmitter.ts#L196)
+Defined in: [Event/EventEmitter.ts:196](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/e5168fb9b95d09ea76d485376bd036403b747ad2/Common/src/Event/EventEmitter.ts#L196)
 
 Alias for `emitter.removeListener()`.
 
@@ -179,7 +179,7 @@ Alias for `emitter.removeListener()`.
 
 > **on**(`eventName`, `listener`): `this`
 
-Defined in: [Event/EventEmitter.ts:115](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/5fb85fd65be1623aae0ff7d1b463a27836d35a34/Common/src/Event/EventEmitter.ts#L115)
+Defined in: [Event/EventEmitter.ts:115](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/e5168fb9b95d09ea76d485376bd036403b747ad2/Common/src/Event/EventEmitter.ts#L115)
 
 Adds the `listener` function to the end of the listeners array for the event
 named `eventName`.
@@ -216,7 +216,7 @@ The callback function
 
 > **once**(`eventName`, `listener`): `this`
 
-Defined in: [Event/EventEmitter.ts:148](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/5fb85fd65be1623aae0ff7d1b463a27836d35a34/Common/src/Event/EventEmitter.ts#L148)
+Defined in: [Event/EventEmitter.ts:148](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/e5168fb9b95d09ea76d485376bd036403b747ad2/Common/src/Event/EventEmitter.ts#L148)
 
 Adds a **one-time** `listener` function for the event named `eventName`. The
 next time `eventName` is triggered, this listener is removed and then invoked.
@@ -253,7 +253,7 @@ The callback function
 
 > **removeAllListeners**(`eventName`): `this`
 
-Defined in: [Event/EventEmitter.ts:204](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/5fb85fd65be1623aae0ff7d1b463a27836d35a34/Common/src/Event/EventEmitter.ts#L204)
+Defined in: [Event/EventEmitter.ts:204](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/e5168fb9b95d09ea76d485376bd036403b747ad2/Common/src/Event/EventEmitter.ts#L204)
 
 Removes all listeners, or those of the specified `eventName`.
 Returns a reference to the `EventEmitter`, so that calls can be chained.
@@ -274,7 +274,7 @@ Returns a reference to the `EventEmitter`, so that calls can be chained.
 
 > **removeListener**(`eventName`, `listener`): `this`
 
-Defined in: [Event/EventEmitter.ts:188](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/5fb85fd65be1623aae0ff7d1b463a27836d35a34/Common/src/Event/EventEmitter.ts#L188)
+Defined in: [Event/EventEmitter.ts:188](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/e5168fb9b95d09ea76d485376bd036403b747ad2/Common/src/Event/EventEmitter.ts#L188)
 
 Removes the specified `listener` from this EventEmitter.
 

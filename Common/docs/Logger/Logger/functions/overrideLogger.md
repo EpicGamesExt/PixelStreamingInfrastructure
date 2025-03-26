@@ -8,7 +8,7 @@
 
 > **overrideLogger**(`logger`): `void`
 
-Defined in: [Logger/Logger.ts:36](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/5fb85fd65be1623aae0ff7d1b463a27836d35a34/Common/src/Logger/Logger.ts#L36)
+Defined in: [Logger/Logger.ts:36](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/e5168fb9b95d09ea76d485376bd036403b747ad2/Common/src/Logger/Logger.ts#L36)
 
 ## Parameters
 

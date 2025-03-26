@@ -19,7 +19,7 @@ This package is also a good example of how to include the frontend libraries as 
 ```
 cd Frontend/implementations/typescript
 npm install
-npm run build-all
+npm run build
 ```
 
 ### Using the reference frontend

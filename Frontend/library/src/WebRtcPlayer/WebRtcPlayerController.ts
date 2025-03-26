@@ -236,8 +236,12 @@ export class WebRtcPlayerController {
 
             // Reset the list of all possible codecs on disconnect so that if the next connection has "NegotiateCodecs" on
             // then all codecs can be negotiated
-            this.config.getSettingOption(OptionParameters.PreferredCodec).options = BrowserUtils.getSupportedVideoCodecs();
-            
+            this.config.getSettingOption(OptionParameters.PreferredCodec).options =
+                BrowserUtils.getSupportedVideoCodecs();
+
+            this.config.getSettingOption(OptionParameters.PreferredCodec).options =
+                BrowserUtils.getSupportedVideoCodecs();
+
             this.pixelStreaming._onDisconnect(disconnectMessage, allowClickToReconnect);
 
             this.afkController.stopAfkWarningTimer();
@@ -338,6 +342,14 @@ export class WebRtcPlayerController {
 
             return signallingServerUrl;
         };
+    }
+
+    /**
+     * Destroys the video player and makes sure resources are freed. This helps to prevent the issue in chrome
+     * where it refuses to make new video players.
+     */
+    destroyVideoPlayer() {
+        this.videoPlayer.destroy();
     }
 
     /**
@@ -714,11 +726,11 @@ export class WebRtcPlayerController {
     }
 
     handleOnScreenKeyboardCommand(command: any) {
-        const data: ShowOnScreenKeyboardEvent["data"] = {
+        const data: ShowOnScreenKeyboardEvent['data'] = {
             showOnScreenKeyboard: command.showOnScreenKeyboard ?? true,
             x: command.x ?? 0,
             y: command.y ?? 0,
-            contents: command.contents ?? ""
+            contents: command.contents ?? ''
         };
         this.pixelStreaming.dispatchEvent(new ShowOnScreenKeyboardEvent(data));
     }
@@ -1786,9 +1798,7 @@ export class WebRtcPlayerController {
      */
     sendTextboxEntry(contents: string) {
         Logger.Info('----   Sending TextboxEntry message  ----');
-        this.streamMessageController.toStreamerHandlers.get('TextboxEntry')?.([
-            contents
-        ]);
+        this.streamMessageController.toStreamerHandlers.get('TextboxEntry')?.([contents]);
     }
 
     /**

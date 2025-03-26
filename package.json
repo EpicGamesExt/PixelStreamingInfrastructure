@@ -9,11 +9,12 @@
         "Signalling",
         "SignallingWebServer",
         "SFU",
-        "SFU/mediasoup-sdp-bridge",
         "Extras/JSStreamer",
         "Extras/FrontendTests",
         "Extras/MinimalStreamTester",
-        "Extras/SS_Test"
+        "Extras/SS_Test",
+        "Extras/mediasoup-sdp-bridge",
+        "Extras/eslint/plugin-check-copyright"
     ],
     "private": true,
     "scripts": {
@@ -27,6 +28,9 @@
         "pre-commit-lint"
     ],
     "devDependencies": {
+        "@epicgames-ps/eslint-plugin-check-copyright": "*",
+        "eslint": "^9.22.0",
+        "typescript-eslint": "^8.26.1",
         "lint-staged": "^15.3.0",
         "pre-commit": "^1.0.10"
     }

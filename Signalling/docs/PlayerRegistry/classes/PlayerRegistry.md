@@ -6,7 +6,7 @@
 
 # Class: PlayerRegistry
 
-Defined in: [Signalling/src/PlayerRegistry.ts:37](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/PlayerRegistry.ts#L37)
+Defined in: [Signalling/src/PlayerRegistry.ts:37](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/PlayerRegistry.ts#L37)
 
 Handles all the player connections of a signalling server and
 can be used to lookup connections by id etc.
@@ -25,7 +25,7 @@ Events:
 
 > **new PlayerRegistry**(): [`PlayerRegistry`](PlayerRegistry.md)
 
-Defined in: [Signalling/src/PlayerRegistry.ts:42](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/PlayerRegistry.ts#L42)
+Defined in: [Signalling/src/PlayerRegistry.ts:42](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/PlayerRegistry.ts#L42)
 
 #### Returns
 
@@ -41,7 +41,7 @@ Defined in: [Signalling/src/PlayerRegistry.ts:42](https://github.com/mcottontens
 
 > **add**(`player`): `void`
 
-Defined in: [Signalling/src/PlayerRegistry.ts:52](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/PlayerRegistry.ts#L52)
+Defined in: [Signalling/src/PlayerRegistry.ts:52](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/PlayerRegistry.ts#L52)
 
 Assigns a unique id to the player and adds it to the registry
 
@@ -89,7 +89,7 @@ Alias for `emitter.on(eventName, listener)`.
 
 > **count**(): `number`
 
-Defined in: [Signalling/src/PlayerRegistry.ts:105](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/PlayerRegistry.ts#L105)
+Defined in: [Signalling/src/PlayerRegistry.ts:105](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/PlayerRegistry.ts#L105)
 
 Gets the total number of connected players.
 
@@ -167,7 +167,7 @@ myEmitter.emit('event', 1, 2, 3, 4, 5);
 
 > **empty**(): `boolean`
 
-Defined in: [Signalling/src/PlayerRegistry.ts:98](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/PlayerRegistry.ts#L98)
+Defined in: [Signalling/src/PlayerRegistry.ts:98](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/PlayerRegistry.ts#L98)
 
 Returns true when the registry is empty.
 
@@ -181,7 +181,7 @@ Returns true when the registry is empty.
 
 > **get**(`playerId`): `undefined` \| [`IPlayer`](../interfaces/IPlayer.md)
 
-Defined in: [Signalling/src/PlayerRegistry.ts:87](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/PlayerRegistry.ts#L87)
+Defined in: [Signalling/src/PlayerRegistry.ts:87](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/PlayerRegistry.ts#L87)
 
 Gets a player from the registry using the player id.
 Returns undefined if the player doesn't exist.
@@ -202,7 +202,7 @@ Returns undefined if the player doesn't exist.
 
 > **has**(`playerId`): `boolean`
 
-Defined in: [Signalling/src/PlayerRegistry.ts:79](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/PlayerRegistry.ts#L79)
+Defined in: [Signalling/src/PlayerRegistry.ts:79](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/PlayerRegistry.ts#L79)
 
 Tests if a player id exists in the registry.
 
@@ -222,7 +222,7 @@ Tests if a player id exists in the registry.
 
 > **listPlayers**(): [`IPlayer`](../interfaces/IPlayer.md)[]
 
-Defined in: [Signalling/src/PlayerRegistry.ts:91](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/PlayerRegistry.ts#L91)
+Defined in: [Signalling/src/PlayerRegistry.ts:91](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/PlayerRegistry.ts#L91)
 
 #### Returns
 
@@ -344,7 +344,7 @@ The callback function
 
 > **remove**(`player`): `void`
 
-Defined in: [Signalling/src/PlayerRegistry.ts:64](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/PlayerRegistry.ts#L64)
+Defined in: [Signalling/src/PlayerRegistry.ts:64](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/PlayerRegistry.ts#L64)
 
 Removes a player from the registry. Does nothing if the id
 does not exist.

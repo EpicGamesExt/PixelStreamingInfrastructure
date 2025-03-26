@@ -6,7 +6,7 @@
 
 # Interface: IPlayerInfo
 
-Defined in: [Signalling/src/PlayerRegistry.ts:22](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/PlayerRegistry.ts#L22)
+Defined in: [Signalling/src/PlayerRegistry.ts:22](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/PlayerRegistry.ts#L22)
 
 Used by the API to describe the current state of the player.
 
@@ -16,7 +16,7 @@ Used by the API to describe the current state of the player.
 
 > **playerId**: `string`
 
-Defined in: [Signalling/src/PlayerRegistry.ts:23](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/PlayerRegistry.ts#L23)
+Defined in: [Signalling/src/PlayerRegistry.ts:23](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/PlayerRegistry.ts#L23)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [Signalling/src/PlayerRegistry.ts:23](https://github.com/mcottontens
 
 > **remoteAddress**: `undefined` \| `string`
 
-Defined in: [Signalling/src/PlayerRegistry.ts:26](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/PlayerRegistry.ts#L26)
+Defined in: [Signalling/src/PlayerRegistry.ts:26](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/PlayerRegistry.ts#L26)
 
 ***
 
@@ -32,7 +32,7 @@ Defined in: [Signalling/src/PlayerRegistry.ts:26](https://github.com/mcottontens
 
 > **subscribedTo**: `undefined` \| `string`
 
-Defined in: [Signalling/src/PlayerRegistry.ts:25](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/PlayerRegistry.ts#L25)
+Defined in: [Signalling/src/PlayerRegistry.ts:25](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/PlayerRegistry.ts#L25)
 
 ***
 
@@ -40,4 +40,4 @@ Defined in: [Signalling/src/PlayerRegistry.ts:25](https://github.com/mcottontens
 
 > **type**: `string`
 
-Defined in: [Signalling/src/PlayerRegistry.ts:24](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/PlayerRegistry.ts#L24)
+Defined in: [Signalling/src/PlayerRegistry.ts:24](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/PlayerRegistry.ts#L24)

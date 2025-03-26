@@ -1,3 +1,4 @@
+// Copyright Epic Games, Inc. All Rights Reserved.
 export class RTCUtils {
     static isVideoTransceiver(transceiver: RTCRtpTransceiver | undefined): boolean {
         return this.canTransceiverReceiveVideo(transceiver) || this.canTransceiverSendVideo(transceiver);

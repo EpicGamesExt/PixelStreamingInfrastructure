@@ -70,6 +70,18 @@ export class VideoPlayer {
         window.addEventListener('orientationchange', () => this.onOrientationChange());
     }
 
+    public destroy() {
+        this.videoElement.src = '';
+        this.videoElement.srcObject = null;
+        this.videoElement.remove();
+
+        if (this.audioElement) {
+            this.audioElement.src = '';
+            this.audioElement.srcObject = null;
+            this.audioElement.remove();
+        }
+    }
+
     public setAudioElement(audioElement: HTMLAudioElement): void {
         this.audioElement = audioElement;
     }
@@ -117,8 +129,8 @@ export class VideoPlayer {
      * Get the current context of the html video elements parent
      * @returns - the current context of the video elements parent
      */
-    getVideoParentElement(): HTMLElement {
-        return this.videoElement.parentElement;
+    getVideoParentElement(): HTMLElement | undefined {
+        return this.videoElement.parentElement ?? undefined;
     }
 
     /**

@@ -6,7 +6,7 @@
 
 # Interface: IServerConfig
 
-Defined in: [Signalling/src/SignallingServer.ts:17](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/SignallingServer.ts#L17)
+Defined in: [Signalling/src/SignallingServer.ts:17](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/SignallingServer.ts#L17)
 
 An interface describing the possible options to pass when creating
 a new SignallingServer object.
@@ -17,7 +17,7 @@ a new SignallingServer object.
 
 > `optional` **httpServer**: `Server`\<*typeof* `IncomingMessage`, *typeof* `ServerResponse`\>
 
-Defined in: [Signalling/src/SignallingServer.ts:19](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/SignallingServer.ts#L19)
+Defined in: [Signalling/src/SignallingServer.ts:19](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/SignallingServer.ts#L19)
 
 ***
 
@@ -25,7 +25,7 @@ Defined in: [Signalling/src/SignallingServer.ts:19](https://github.com/mcottonte
 
 > `optional` **httpsServer**: `Server`\<*typeof* `IncomingMessage`, *typeof* `ServerResponse`\>
 
-Defined in: [Signalling/src/SignallingServer.ts:22](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/SignallingServer.ts#L22)
+Defined in: [Signalling/src/SignallingServer.ts:22](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/SignallingServer.ts#L22)
 
 ***
 
@@ -33,7 +33,7 @@ Defined in: [Signalling/src/SignallingServer.ts:22](https://github.com/mcottonte
 
 > `optional` **maxSubscribers**: `number`
 
-Defined in: [Signalling/src/SignallingServer.ts:46](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/SignallingServer.ts#L46)
+Defined in: [Signalling/src/SignallingServer.ts:46](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/SignallingServer.ts#L46)
 
 ***
 
@@ -41,7 +41,7 @@ Defined in: [Signalling/src/SignallingServer.ts:46](https://github.com/mcottonte
 
 > **peerOptions**: `unknown`
 
-Defined in: [Signalling/src/SignallingServer.ts:34](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/SignallingServer.ts#L34)
+Defined in: [Signalling/src/SignallingServer.ts:34](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/SignallingServer.ts#L34)
 
 ***
 
@@ -49,7 +49,7 @@ Defined in: [Signalling/src/SignallingServer.ts:34](https://github.com/mcottonte
 
 > `optional` **playerPort**: `number`
 
-Defined in: [Signalling/src/SignallingServer.ts:28](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/SignallingServer.ts#L28)
+Defined in: [Signalling/src/SignallingServer.ts:28](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/SignallingServer.ts#L28)
 
 ***
 
@@ -57,7 +57,7 @@ Defined in: [Signalling/src/SignallingServer.ts:28](https://github.com/mcottonte
 
 > `optional` **playerWsOptions**: `ServerOptions`\<*typeof* `WebSocket`, *typeof* `IncomingMessage`\>
 
-Defined in: [Signalling/src/SignallingServer.ts:40](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/SignallingServer.ts#L40)
+Defined in: [Signalling/src/SignallingServer.ts:40](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/SignallingServer.ts#L40)
 
 ***
 
@@ -65,7 +65,7 @@ Defined in: [Signalling/src/SignallingServer.ts:40](https://github.com/mcottonte
 
 > `optional` **sfuPort**: `number`
 
-Defined in: [Signalling/src/SignallingServer.ts:31](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/SignallingServer.ts#L31)
+Defined in: [Signalling/src/SignallingServer.ts:31](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/SignallingServer.ts#L31)
 
 ***
 
@@ -73,7 +73,7 @@ Defined in: [Signalling/src/SignallingServer.ts:31](https://github.com/mcottonte
 
 > `optional` **sfuWsOptions**: `ServerOptions`\<*typeof* `WebSocket`, *typeof* `IncomingMessage`\>
 
-Defined in: [Signalling/src/SignallingServer.ts:43](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/SignallingServer.ts#L43)
+Defined in: [Signalling/src/SignallingServer.ts:43](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/SignallingServer.ts#L43)
 
 ***
 
@@ -81,7 +81,7 @@ Defined in: [Signalling/src/SignallingServer.ts:43](https://github.com/mcottonte
 
 > **streamerPort**: `number`
 
-Defined in: [Signalling/src/SignallingServer.ts:25](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/SignallingServer.ts#L25)
+Defined in: [Signalling/src/SignallingServer.ts:25](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/SignallingServer.ts#L25)
 
 ***
 
@@ -89,4 +89,4 @@ Defined in: [Signalling/src/SignallingServer.ts:25](https://github.com/mcottonte
 
 > `optional` **streamerWsOptions**: `ServerOptions`\<*typeof* `WebSocket`, *typeof* `IncomingMessage`\>
 
-Defined in: [Signalling/src/SignallingServer.ts:37](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/SignallingServer.ts#L37)
+Defined in: [Signalling/src/SignallingServer.ts:37](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/SignallingServer.ts#L37)

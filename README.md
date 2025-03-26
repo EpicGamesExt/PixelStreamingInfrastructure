@@ -43,7 +43,7 @@ To **build** and **run** everything you need to connect to the Pixel Streaming p
 If you want to work on a specific library within this monorepo then `cd` into that directory and run:
 
 `npm install`
-`npm run build-all`
+`npm run build`
 
 If you want to install all the dependencies and flush any existing `node_modules`, go to the root of the repo and run:
 

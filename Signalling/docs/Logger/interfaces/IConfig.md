@@ -6,7 +6,7 @@
 
 # Interface: IConfig
 
-Defined in: [Signalling/src/Logger.ts:20](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/Logger.ts#L20)
+Defined in: [Signalling/src/Logger.ts:20](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/Logger.ts#L20)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [Signalling/src/Logger.ts:20](https://github.com/mcottontensor/Pixel
 
 > `optional` **logDir**: `string`
 
-Defined in: [Signalling/src/Logger.ts:22](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/Logger.ts#L22)
+Defined in: [Signalling/src/Logger.ts:22](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/Logger.ts#L22)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [Signalling/src/Logger.ts:22](https://github.com/mcottontensor/Pixel
 
 > `optional` **logLevelConsole**: `string`
 
-Defined in: [Signalling/src/Logger.ts:28](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/Logger.ts#L28)
+Defined in: [Signalling/src/Logger.ts:28](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/Logger.ts#L28)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [Signalling/src/Logger.ts:28](https://github.com/mcottontensor/Pixel
 
 > `optional` **logLevelFile**: `string`
 
-Defined in: [Signalling/src/Logger.ts:31](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/Logger.ts#L31)
+Defined in: [Signalling/src/Logger.ts:31](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/Logger.ts#L31)
 
 ***
 
@@ -38,4 +38,4 @@ Defined in: [Signalling/src/Logger.ts:31](https://github.com/mcottontensor/Pixel
 
 > `optional` **logMessagesToConsole**: `string`
 
-Defined in: [Signalling/src/Logger.ts:25](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/Logger.ts#L25)
+Defined in: [Signalling/src/Logger.ts:25](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/Logger.ts#L25)

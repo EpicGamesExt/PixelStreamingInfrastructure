@@ -6,7 +6,7 @@
 
 # Enumeration: LogLevel
 
-Defined in: [Logger/Logger.ts:9](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/5fb85fd65be1623aae0ff7d1b463a27836d35a34/Common/src/Logger/Logger.ts#L9)
+Defined in: [Logger/Logger.ts:9](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/e5168fb9b95d09ea76d485376bd036403b747ad2/Common/src/Logger/Logger.ts#L9)
 
 ## Enumeration Members
 
@@ -14,7 +14,7 @@ Defined in: [Logger/Logger.ts:9](https://github.com/mcottontensor/PixelStreaming
 
 > **Debug**: `4`
 
-Defined in: [Logger/Logger.ts:14](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/5fb85fd65be1623aae0ff7d1b463a27836d35a34/Common/src/Logger/Logger.ts#L14)
+Defined in: [Logger/Logger.ts:14](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/e5168fb9b95d09ea76d485376bd036403b747ad2/Common/src/Logger/Logger.ts#L14)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [Logger/Logger.ts:14](https://github.com/mcottontensor/PixelStreamin
 
 > **Disabled**: `0`
 
-Defined in: [Logger/Logger.ts:10](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/5fb85fd65be1623aae0ff7d1b463a27836d35a34/Common/src/Logger/Logger.ts#L10)
+Defined in: [Logger/Logger.ts:10](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/e5168fb9b95d09ea76d485376bd036403b747ad2/Common/src/Logger/Logger.ts#L10)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [Logger/Logger.ts:10](https://github.com/mcottontensor/PixelStreamin
 
 > **Error**: `1`
 
-Defined in: [Logger/Logger.ts:11](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/5fb85fd65be1623aae0ff7d1b463a27836d35a34/Common/src/Logger/Logger.ts#L11)
+Defined in: [Logger/Logger.ts:11](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/e5168fb9b95d09ea76d485376bd036403b747ad2/Common/src/Logger/Logger.ts#L11)
 
 ***
 
@@ -38,7 +38,7 @@ Defined in: [Logger/Logger.ts:11](https://github.com/mcottontensor/PixelStreamin
 
 > **Info**: `3`
 
-Defined in: [Logger/Logger.ts:13](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/5fb85fd65be1623aae0ff7d1b463a27836d35a34/Common/src/Logger/Logger.ts#L13)
+Defined in: [Logger/Logger.ts:13](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/e5168fb9b95d09ea76d485376bd036403b747ad2/Common/src/Logger/Logger.ts#L13)
 
 ***
 
@@ -46,4 +46,4 @@ Defined in: [Logger/Logger.ts:13](https://github.com/mcottontensor/PixelStreamin
 
 > **Warning**: `2`
 
-Defined in: [Logger/Logger.ts:12](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/5fb85fd65be1623aae0ff7d1b463a27836d35a34/Common/src/Logger/Logger.ts#L12)
+Defined in: [Logger/Logger.ts:12](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/e5168fb9b95d09ea76d485376bd036403b747ad2/Common/src/Logger/Logger.ts#L12)

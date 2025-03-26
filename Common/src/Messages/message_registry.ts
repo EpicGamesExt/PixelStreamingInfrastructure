@@ -1,3 +1,4 @@
+// Copyright Epic Games, Inc. All Rights Reserved.
 import { IMessageType } from '@protobuf-ts/runtime';
 import * as Messages from './signalling_messages';
 import { BaseMessage } from './base_message';

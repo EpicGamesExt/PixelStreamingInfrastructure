@@ -6,7 +6,7 @@
 
 # Class: SFUConnection
 
-Defined in: [Signalling/src/SFUConnection.ts:32](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/SFUConnection.ts#L32)
+Defined in: [Signalling/src/SFUConnection.ts:32](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/SFUConnection.ts#L32)
 
 A SFU connection to the signalling server.
 An SFU can act as both a streamer and a player. It can subscribe to
@@ -38,7 +38,7 @@ streaming: True when the streamer is ready to accept subscriptions.
 
 > **new SFUConnection**(`server`, `ws`, `remoteAddress`?): [`SFUConnection`](SFUConnection.md)
 
-Defined in: [Signalling/src/SFUConnection.ts:63](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/SFUConnection.ts#L63)
+Defined in: [Signalling/src/SFUConnection.ts:63](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/SFUConnection.ts#L63)
 
 Construct a new SFU connection.
 
@@ -76,7 +76,7 @@ The remote address of this connection. Only used as display.
 
 > **maxSubscribers**: `number`
 
-Defined in: [Signalling/src/SFUConnection.ts:48](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/SFUConnection.ts#L48)
+Defined in: [Signalling/src/SFUConnection.ts:48](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/SFUConnection.ts#L48)
 
 #### Implementation of
 
@@ -88,7 +88,7 @@ Defined in: [Signalling/src/SFUConnection.ts:48](https://github.com/mcottontenso
 
 > **playerId**: `string`
 
-Defined in: [Signalling/src/SFUConnection.ts:34](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/SFUConnection.ts#L34)
+Defined in: [Signalling/src/SFUConnection.ts:34](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/SFUConnection.ts#L34)
 
 #### Implementation of
 
@@ -100,7 +100,7 @@ Defined in: [Signalling/src/SFUConnection.ts:34](https://github.com/mcottontenso
 
 > **protocol**: `SignallingProtocol`
 
-Defined in: [Signalling/src/SFUConnection.ts:40](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/SFUConnection.ts#L40)
+Defined in: [Signalling/src/SFUConnection.ts:40](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/SFUConnection.ts#L40)
 
 #### Implementation of
 
@@ -112,7 +112,7 @@ Defined in: [Signalling/src/SFUConnection.ts:40](https://github.com/mcottontenso
 
 > `optional` **remoteAddress**: `string`
 
-Defined in: [Signalling/src/SFUConnection.ts:46](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/SFUConnection.ts#L46)
+Defined in: [Signalling/src/SFUConnection.ts:46](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/SFUConnection.ts#L46)
 
 ***
 
@@ -120,7 +120,7 @@ Defined in: [Signalling/src/SFUConnection.ts:46](https://github.com/mcottontenso
 
 > **streamerId**: `string`
 
-Defined in: [Signalling/src/SFUConnection.ts:36](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/SFUConnection.ts#L36)
+Defined in: [Signalling/src/SFUConnection.ts:36](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/SFUConnection.ts#L36)
 
 #### Implementation of
 
@@ -132,7 +132,7 @@ Defined in: [Signalling/src/SFUConnection.ts:36](https://github.com/mcottontenso
 
 > **streaming**: `boolean`
 
-Defined in: [Signalling/src/SFUConnection.ts:42](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/SFUConnection.ts#L42)
+Defined in: [Signalling/src/SFUConnection.ts:42](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/SFUConnection.ts#L42)
 
 #### Implementation of
 
@@ -144,7 +144,7 @@ Defined in: [Signalling/src/SFUConnection.ts:42](https://github.com/mcottontenso
 
 > **subscribedStreamer**: `null` \| [`IStreamer`](../../StreamerRegistry/interfaces/IStreamer.md)
 
-Defined in: [Signalling/src/SFUConnection.ts:44](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/SFUConnection.ts#L44)
+Defined in: [Signalling/src/SFUConnection.ts:44](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/SFUConnection.ts#L44)
 
 #### Implementation of
 
@@ -156,7 +156,7 @@ Defined in: [Signalling/src/SFUConnection.ts:44](https://github.com/mcottontenso
 
 > **subscribers**: `Set`\<`string`\>
 
-Defined in: [Signalling/src/SFUConnection.ts:50](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/SFUConnection.ts#L50)
+Defined in: [Signalling/src/SFUConnection.ts:50](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/SFUConnection.ts#L50)
 
 #### Implementation of
 
@@ -168,7 +168,7 @@ Defined in: [Signalling/src/SFUConnection.ts:50](https://github.com/mcottontenso
 
 > **transport**: `ITransport`
 
-Defined in: [Signalling/src/SFUConnection.ts:38](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/SFUConnection.ts#L38)
+Defined in: [Signalling/src/SFUConnection.ts:38](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/SFUConnection.ts#L38)
 
 #### Implementation of
 
@@ -280,7 +280,7 @@ myEmitter.emit('event', 1, 2, 3, 4, 5);
 
 > **getPlayerInfo**(): [`IPlayerInfo`](../../PlayerRegistry/interfaces/IPlayerInfo.md)
 
-Defined in: [Signalling/src/SFUConnection.ts:125](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/SFUConnection.ts#L125)
+Defined in: [Signalling/src/SFUConnection.ts:125](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/SFUConnection.ts#L125)
 
 Returns a descriptive object for the REST API inspection operations.
 
@@ -300,7 +300,7 @@ An IPlayerInfo object containing viewable information about this connection.
 
 > **getReadableIdentifier**(): `string`
 
-Defined in: [Signalling/src/SFUConnection.ts:91](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/SFUConnection.ts#L91)
+Defined in: [Signalling/src/SFUConnection.ts:91](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/SFUConnection.ts#L91)
 
 Returns an identifier that is displayed in logs.
 
@@ -320,7 +320,7 @@ A string describing this connection.
 
 > **getStreamerInfo**(): [`IStreamerInfo`](../../StreamerRegistry/interfaces/IStreamerInfo.md)
 
-Defined in: [Signalling/src/SFUConnection.ts:108](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/SFUConnection.ts#L108)
+Defined in: [Signalling/src/SFUConnection.ts:108](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/SFUConnection.ts#L108)
 
 Returns a descriptive object for the REST API inspection operations.
 
@@ -533,7 +533,7 @@ Returns a reference to the `EventEmitter`, so that calls can be chained.
 
 > **sendMessage**(`message`): `void`
 
-Defined in: [Signalling/src/SFUConnection.ts:99](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/SFUConnection.ts#L99)
+Defined in: [Signalling/src/SFUConnection.ts:99](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/SFUConnection.ts#L99)
 
 Sends a signalling message to the SFU.
 

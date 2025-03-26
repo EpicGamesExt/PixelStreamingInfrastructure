@@ -6,7 +6,7 @@
 
 # Interface: IStreamer
 
-Defined in: [Signalling/src/StreamerRegistry.ts:17](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/StreamerRegistry.ts#L17)
+Defined in: [Signalling/src/StreamerRegistry.ts:17](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/StreamerRegistry.ts#L17)
 
 An interface that describes a streamer that can be added to the
 streamer registry.
@@ -21,7 +21,7 @@ streamer registry.
 
 > **maxSubscribers**: `number`
 
-Defined in: [Signalling/src/StreamerRegistry.ts:22](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/StreamerRegistry.ts#L22)
+Defined in: [Signalling/src/StreamerRegistry.ts:22](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/StreamerRegistry.ts#L22)
 
 ***
 
@@ -29,7 +29,7 @@ Defined in: [Signalling/src/StreamerRegistry.ts:22](https://github.com/mcottonte
 
 > **protocol**: `SignallingProtocol`
 
-Defined in: [Signalling/src/StreamerRegistry.ts:20](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/StreamerRegistry.ts#L20)
+Defined in: [Signalling/src/StreamerRegistry.ts:20](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/StreamerRegistry.ts#L20)
 
 ***
 
@@ -37,7 +37,7 @@ Defined in: [Signalling/src/StreamerRegistry.ts:20](https://github.com/mcottonte
 
 > **streamerId**: `string`
 
-Defined in: [Signalling/src/StreamerRegistry.ts:18](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/StreamerRegistry.ts#L18)
+Defined in: [Signalling/src/StreamerRegistry.ts:18](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/StreamerRegistry.ts#L18)
 
 ***
 
@@ -45,7 +45,7 @@ Defined in: [Signalling/src/StreamerRegistry.ts:18](https://github.com/mcottonte
 
 > **streaming**: `boolean`
 
-Defined in: [Signalling/src/StreamerRegistry.ts:21](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/StreamerRegistry.ts#L21)
+Defined in: [Signalling/src/StreamerRegistry.ts:21](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/StreamerRegistry.ts#L21)
 
 ***
 
@@ -53,7 +53,7 @@ Defined in: [Signalling/src/StreamerRegistry.ts:21](https://github.com/mcottonte
 
 > **subscribers**: `Set`\<`string`\>
 
-Defined in: [Signalling/src/StreamerRegistry.ts:23](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/StreamerRegistry.ts#L23)
+Defined in: [Signalling/src/StreamerRegistry.ts:23](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/StreamerRegistry.ts#L23)
 
 ***
 
@@ -61,7 +61,7 @@ Defined in: [Signalling/src/StreamerRegistry.ts:23](https://github.com/mcottonte
 
 > **transport**: `ITransport`
 
-Defined in: [Signalling/src/StreamerRegistry.ts:19](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/StreamerRegistry.ts#L19)
+Defined in: [Signalling/src/StreamerRegistry.ts:19](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/StreamerRegistry.ts#L19)
 
 ## Methods
 
@@ -161,7 +161,7 @@ myEmitter.emit('event', 1, 2, 3, 4, 5);
 
 > **getReadableIdentifier**(): `string`
 
-Defined in: [Signalling/src/LoggingUtils.ts:18](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/LoggingUtils.ts#L18)
+Defined in: [Signalling/src/LoggingUtils.ts:18](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/LoggingUtils.ts#L18)
 
 #### Returns
 
@@ -177,7 +177,7 @@ Defined in: [Signalling/src/LoggingUtils.ts:18](https://github.com/mcottontensor
 
 > **getStreamerInfo**(): [`IStreamerInfo`](IStreamerInfo.md)
 
-Defined in: [Signalling/src/StreamerRegistry.ts:26](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/StreamerRegistry.ts#L26)
+Defined in: [Signalling/src/StreamerRegistry.ts:26](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/StreamerRegistry.ts#L26)
 
 #### Returns
 
@@ -362,7 +362,7 @@ Returns a reference to the `EventEmitter`, so that calls can be chained.
 
 > **sendMessage**(`message`): `void`
 
-Defined in: [Signalling/src/StreamerRegistry.ts:25](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/StreamerRegistry.ts#L25)
+Defined in: [Signalling/src/StreamerRegistry.ts:25](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/StreamerRegistry.ts#L25)
 
 #### Parameters
 

@@ -1,5 +1,6 @@
 .git/
 **/build/
+**/dist/
 **/node_modules/
 SignallingWebServer/platform_scripts/cmd/coturn/
 SignallingWebServer/platform_scripts/cmd/node/

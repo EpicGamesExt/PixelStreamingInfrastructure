@@ -1,3 +1,4 @@
+// Copyright Epic Games, Inc. All Rights Reserved.
 /**
  * The base interface for all input controllers.
  * Since controllers mostly just register events and handle them the external interface is limited

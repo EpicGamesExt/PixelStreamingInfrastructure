@@ -7,7 +7,7 @@
     "types": "dist/types/pixelstreamingsignalling.d.ts",
     "scripts": {
         "clean": "rimraf ./dist",
-        "build:docs": "typedoc --tsconfig tsconfig.cjs.json",
+        "build:docs": "echo \"Make sure you're passing the right --gitRemote so the source links are correct!\" && typedoc --tsconfig tsconfig.cjs.json",
         "build:cjs": "tsc --project tsconfig.cjs.json",
         "build:esm": "tsc --project tsconfig.esm.json",
         "build": "npm run build:cjs && npm run build:esm",
@@ -28,10 +28,11 @@
         "eslint-plugin-tsdoc": "^0.4.0",
         "nodemon": "^3.1.9",
         "rimraf": "^6.0.1",
-        "typedoc": "^0.27.7",
+        "typedoc": "^0.28.0",
         "typedoc-plugin-markdown": "^4.4.2",
         "typescript": "^5.7.3",
-        "typescript-eslint": "^8.24.0"
+        "typescript-eslint": "^8.24.0",
+        "@epicgames-ps/eslint-plugin-check-copyright": "*"
     },
     "dependencies": {
         "express": "^4.21.2",

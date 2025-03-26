@@ -1,3 +1,4 @@
+// Copyright Epic Games, Inc. All Rights Reserved.
 /**
  * A case insensitive, partial implementation of URLSearchParams
  */

@@ -1,3 +1,4 @@
+// Copyright Epic Games, Inc. All Rights Reserved.
 export * from './Logger';
 export * from './LoggingUtils';
 export * from './PlayerConnection';

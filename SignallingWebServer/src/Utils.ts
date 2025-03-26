@@ -1,3 +1,4 @@
+// Copyright Epic Games, Inc. All Rights Reserved.
 import { jsonc } from 'jsonc';
 
 // A simple interface to describe the options from commander.js

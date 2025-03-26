@@ -1,3 +1,4 @@
+// Copyright Epic Games, Inc. All Rights Reserved.
 import http from 'http';
 import https from 'https';
 import * as wslib from 'ws';

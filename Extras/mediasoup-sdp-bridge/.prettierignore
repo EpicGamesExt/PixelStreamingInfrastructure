@@ -1,0 +1,6 @@
+# Originals from forked repo.
+.eslintrc.js
+npm-scripts.js
+
+# Auto-generated contents.
+src/BrowserRtpCapabilities.ts
