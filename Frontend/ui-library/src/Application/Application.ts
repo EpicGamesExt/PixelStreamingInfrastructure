@@ -375,7 +375,9 @@ export class Application {
         this.stream.addEventListener('webRtcTCPRelayDetected', () =>
             Logger.Warning(`Stream quailty degraded due to network enviroment, stream is relayed over TCP.`)
         );
-        this.stream.addEventListener('showOnScreenKeyboard', ({ data: { contents }}) => this.onShowOnScreenKeyboard(contents));
+        this.stream.addEventListener('showOnScreenKeyboard', ({ data: { contents } }) =>
+            this.onShowOnScreenKeyboard(contents)
+        );
     }
 
     /**
@@ -763,7 +765,7 @@ export class Application {
 
     onShowOnScreenKeyboard(ueTextboxContents: string) {
         const isTouchDevice = 'ontouchstart' in window;
-        if(!isTouchDevice) {
+        if (!isTouchDevice) {
             // If we are not on a touch device, no need to show the on-screen keyboard
             // We can just type into the type box as per normal with our attached keyboards
             return;
@@ -778,7 +780,7 @@ export class Application {
         // Add the text content from UE side and summon on-screen keyboard
         this.editTextModal.showOnScreenKeyboard(ueTextboxContents);
         // Bind to the confirm event
-        this.editTextModal.events.addEventListener("editConfirmed", (evt: Event) => {
+        this.editTextModal.events.addEventListener('editConfirmed', (evt: Event) => {
             const editTextEvent: EditConfirmedEvent = evt as EditConfirmedEvent;
             this.stream.sendTextboxEntry(editTextEvent.confirmedText);
         });

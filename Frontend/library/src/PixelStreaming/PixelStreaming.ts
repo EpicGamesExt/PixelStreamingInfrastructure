@@ -805,7 +805,7 @@ export class PixelStreaming {
      * @param contents The new contents of the UE text box.
      * @returns True if the message could be sent.
      */
-    public sendTextboxEntry(contents: string) : boolean {
+    public sendTextboxEntry(contents: string): boolean {
         if (!this._webRtcController.videoPlayer.isVideoReady()) {
             return false;
         }
