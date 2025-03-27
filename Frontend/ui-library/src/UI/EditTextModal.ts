@@ -16,6 +16,10 @@ export class EditConfirmedEvent extends CustomEvent<String> {
 
 /**
  * A modal that is shown when a UE widget is touched on mobile.
+ * or
+ * A hidden (offscreen) input field that is shown on non-touch devices (e.g. Desktop)
+ * when a UE widget is clicked. The hidden text field is used so non-latin character
+ * input can be composed using IME assistance (which requires an input field).
  *
  * The reason this modal is required is that on mobile typing uses
  * an on-screen keyboard, which requires a valid input text area/input
@@ -36,41 +40,14 @@ export class EditTextModal {
     _modalBtnContainer: HTMLElement;
     _cancelBtn: HTMLButtonElement;
     _confirmBtn: HTMLButtonElement;
+    _hiddenTextInput: HTMLInputElement;
     _events: EventTarget;
+    _isTouchDevice: boolean;
 
     constructor() {
         this._rootElement = this.rootElement;
         this._events = new EventTarget();
-
-        // When cancel is clicked, remove this modal from the DOM
-        this.cancelBtn.addEventListener('click', (event) => {
-            this.rootElement.remove();
-
-            // Ensure the click/tap does not go back to UE
-            event.stopPropagation();
-        });
-
-        // When confirm is clicked, remove from DOM and send the contents of textarea to UE
-        this.confirmBtn.addEventListener('click', (event) => {
-            this.events.dispatchEvent(new EditConfirmedEvent(this.textArea.value));
-            this.rootElement.remove();
-
-            // Ensure the click/tap does not go back to UE
-            event.stopPropagation();
-        });
-
-        // When keyboard is typed into we want to ensure keys are not sent back to UE until we confirm
-        // Most keys are not sent back to UE on mobile keyboard anyway, but backspace is so we should
-        // prevent it from bubbling to our global keyboard input controller.
-        this.textArea.addEventListener('keypress', (event) => {
-            event.stopPropagation();
-        });
-        this.textArea.addEventListener('keyup', (event) => {
-            event.stopPropagation();
-        });
-        this.textArea.addEventListener('keydown', (event) => {
-            event.stopPropagation();
-        });
+        this._isTouchDevice = 'ontouchstart' in window;
     }
 
     // Bind to this if you want to handle edit confirmed
@@ -79,25 +56,78 @@ export class EditTextModal {
     }
 
     public showOnScreenKeyboard(existingTextAreaContents: string) {
-        // Populate text area with whatever was on the UE side
-        this.textArea.value = existingTextAreaContents;
+        const editableText: HTMLInputElement | HTMLTextAreaElement = this._isTouchDevice
+            ? this.hiddenTextInput
+            : this.textArea;
+
+        // Populate input text area with whatever was on the UE side
+        editableText.value = existingTextAreaContents;
 
         // Bring focus to the text area.
         // This will make the on-screen keyboard show if we are
         // a device that has a native on-screen keyboard.
-        this.textArea.focus();
+        // If we are on a non-touch device this will give IME a valid
+        // input field to work with.
+        editableText.focus();
     }
 
     /**
-     * Get the the button containing the XR icon.
+     * Get the root element that contains either the modal (mobile) or hidden text input (desktop)
      */
     public get rootElement(): HTMLElement {
         if (!this._rootElement) {
             this._rootElement = document.createElement('div');
-            this._rootElement.classList.add('modal');
-            this._rootElement.appendChild(this.innerModal);
+
+            // Mobile/touch device
+            if (this._isTouchDevice) {
+                this._rootElement.classList.add('modal');
+                this._rootElement.appendChild(this.innerModal);
+            }
+            // Desktop/non-touch device
+            else {
+                this._rootElement.appendChild(this.hiddenTextInput);
+            }
         }
         return this._rootElement;
+    }
+
+    public get hiddenTextInput(): HTMLInputElement {
+        if (!this._hiddenTextInput) {
+            this._hiddenTextInput = document.createElement('input');
+            this._hiddenTextInput.id = 'hiddenInput';
+            this._hiddenTextInput.maxLength = 0;
+            this._hiddenTextInput.type = 'text';
+
+            // Set inline style as this is not a styling choice
+            // That should be customized, but is rather a functional
+            // choice to hide this input element offscreen
+            this._hiddenTextInput.style.position = 'absolute';
+            this._hiddenTextInput.style.left = '-10%';
+            this._hiddenTextInput.style.width = '0px';
+            this._hiddenTextInput.style.opacity = '0';
+
+            // When keyboard is typed into we want to ensure keys are not sent back to UE until we confirm
+            // Most keys are not sent back to UE on mobile keyboard anyway, but backspace is so we should
+            // prevent it from bubbling to our global keyboard input controller.
+            this._hiddenTextInput.addEventListener('keypress', (event) => {
+                event.stopPropagation();
+            });
+            this._hiddenTextInput.addEventListener('keyup', (event) => {
+                event.stopPropagation();
+            });
+            this._hiddenTextInput.addEventListener('keydown', (event) => {
+                event.stopPropagation();
+            });
+
+            // Add event listener for input changes, on each input change
+            // We will sent back the textbox entry message to update the UE
+            // text box
+            this._hiddenTextInput.addEventListener('input', (event) => {
+                this.events.dispatchEvent(new EditConfirmedEvent(this._hiddenTextInput.value));
+                event.stopPropagation();
+            });
+        }
+        return this._hiddenTextInput;
     }
 
     public get innerModal(): HTMLElement {
@@ -126,6 +156,19 @@ export class EditTextModal {
             this._textArea.classList.add('modalTextArea');
             this._textArea.title = 'Edit Text Area';
             this._textArea.placeholder = 'UE text widget value here...';
+
+            // When keyboard is typed into we want to ensure keys are not sent back to UE until we confirm
+            // Most keys are not sent back to UE on mobile keyboard anyway, but backspace is so we should
+            // prevent it from bubbling to our global keyboard input controller.
+            this.textArea.addEventListener('keypress', (event) => {
+                event.stopPropagation();
+            });
+            this.textArea.addEventListener('keyup', (event) => {
+                event.stopPropagation();
+            });
+            this.textArea.addEventListener('keydown', (event) => {
+                event.stopPropagation();
+            });
         }
         return this._textArea;
     }
@@ -145,6 +188,14 @@ export class EditTextModal {
             this._cancelBtn = document.createElement('button');
             this._cancelBtn.classList.add('btn-flat');
             this._cancelBtn.innerText = 'Cancel';
+
+            // When cancel is clicked, remove this modal from the DOM
+            this._cancelBtn.addEventListener('click', (event) => {
+                this.rootElement.remove();
+
+                // Ensure the click/tap does not go back to UE
+                event.stopPropagation();
+            });
         }
         return this._cancelBtn;
     }
@@ -154,6 +205,15 @@ export class EditTextModal {
             this._confirmBtn = document.createElement('button');
             this._confirmBtn.classList.add('btn-flat');
             this._confirmBtn.innerText = 'Confirm';
+
+            // When confirm is clicked, remove from DOM and send the contents of textarea to UE
+            this._confirmBtn.addEventListener('click', (event) => {
+                this.events.dispatchEvent(new EditConfirmedEvent(this.textArea.value));
+                this.rootElement.remove();
+
+                // Ensure the click/tap does not go back to UE
+                event.stopPropagation();
+            });
         }
         return this._confirmBtn;
     }
