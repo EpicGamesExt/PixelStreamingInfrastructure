@@ -61,7 +61,7 @@ export class EditTextModal {
 
         // When keyboard is typed into we want to ensure keys are not sent back to UE until we confirm
         // Most keys are not sent back to UE on mobile keyboard anyway, but backspace is so we should
-        // prevent it from bubbling to our global the keyboard input controller.
+        // prevent it from bubbling to our global keyboard input controller.
         this.textArea.addEventListener('keypress', (event) => {
             event.stopPropagation();
         });
