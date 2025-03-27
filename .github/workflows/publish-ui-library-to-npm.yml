@@ -21,6 +21,7 @@ jobs:
           sparse-checkout-cone-mode: false
 
       - name: Get node version
+        working-directory: .
         id: get_node_version
         run: echo "node_version=$(cat NODE_VERSION)" >> $GITHUB_OUTPUT
 
