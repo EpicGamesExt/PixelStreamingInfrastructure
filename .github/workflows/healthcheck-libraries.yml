@@ -19,9 +19,6 @@ on:
       - "Frontend/ui-library/**"
       - "Frontend/implementations/typescript/**"
 
-env:
-  NODE_VERSION: 18.17.x
-
 jobs:
   build-using-local-deps:
     if: github.repository == 'EpicGamesExt/PixelStreamingInfrastructure'
@@ -30,9 +27,13 @@ jobs:
     - name: Checkout source code
       uses: actions/checkout@v3
 
+    - name: Get node version
+      id: get_node_version
+      run: echo "node_version=$(cat NODE_VERSION)" >> $GITHUB_OUTPUT
+
     - uses: actions/setup-node@v4
       with:
-        node-version: "${{ env.NODE_VERSION }}"
+        node-version: "${{ steps.get_node_version.outputs.node_version }}"
         registry-url: 'https://registry.npmjs.org'
 
     - name: Clean build and lint checks on common library

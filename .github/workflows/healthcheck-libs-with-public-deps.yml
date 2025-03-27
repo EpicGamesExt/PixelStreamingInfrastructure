@@ -8,7 +8,6 @@ on:
 
 env:
   commitsha: "${{ github.event.inputs.commitsha || github.sha }}"
-  NODE_VERSION: 18.17.x
 
 jobs:
   build-using-public-deps:
@@ -21,9 +20,13 @@ jobs:
       with:
         ref: "${{ env.commitsha }}"
 
+    - name: Get node version
+      id: get_node_version
+      run: echo "node_version=$(cat NODE_VERSION)" >> $GITHUB_OUTPUT
+
     - uses: actions/setup-node@v4
       with:
-        node-version: "${{ env.NODE_VERSION }}"
+        node-version: "${{ steps.get_node_version.outputs.node_version }}"
         registry-url: 'https://registry.npmjs.org'
 
     - name: Remove NPM workspaces
