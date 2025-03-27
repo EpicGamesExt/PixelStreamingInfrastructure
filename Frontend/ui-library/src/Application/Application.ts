@@ -764,13 +764,6 @@ export class Application {
     }
 
     onShowOnScreenKeyboard(ueTextboxContents: string) {
-        const isTouchDevice = 'ontouchstart' in window;
-        if (!isTouchDevice) {
-            // If we are not on a touch device, no need to show the on-screen keyboard
-            // We can just type into the type box as per normal with our attached keyboards
-            return;
-        }
-
         // Remove any existing modal
         this.editTextModal?.rootElement.remove();
         // Make a new modal for editing the UE textbox on the browser side

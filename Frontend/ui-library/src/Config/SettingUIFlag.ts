@@ -39,6 +39,17 @@ export class SettingUIFlag<CustomIds extends string = FlagsIds> extends SettingU
         if (!this._checkbox) {
             this._checkbox = document.createElement('input');
             this._checkbox.type = 'checkbox';
+
+            // Block keypress/up/down propogation from text field typing going to UE
+            this._checkbox.addEventListener('keypress', (event) => {
+                event.stopPropagation();
+            });
+            this._checkbox.addEventListener('keyup', (event) => {
+                event.stopPropagation();
+            });
+            this._checkbox.addEventListener('keydown', (event) => {
+                event.stopPropagation();
+            });
         }
         return this._checkbox;
     }
