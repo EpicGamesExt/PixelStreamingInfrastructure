@@ -3,7 +3,7 @@ import { readFileSync, writeFileSync } from 'fs';
 import { remark } from 'remark';
 import parse from 'remark-parse';
 import stringify from 'remark-stringify';
-import { RootContent } from 'mdast';
+import { Root, RootContent } from 'mdast';
 
 function getUrl() {
     const gitRemote = execSync(`git remote get-url origin`, { encoding: 'utf-8' }).trim();
@@ -23,7 +23,7 @@ export function clearChanges(_logfilePath: string) {
     writeFileSync(_logfilePath, modifiedMarkdown);
 }
 
-export function addVersionChanges(
+export function getLatestChanges(
     logfilePath: string,
     packagePath: string,
     previousTag: string,
@@ -95,6 +95,10 @@ export function addVersionChanges(
         }
     ];
 
+    return newNodes;
+}
+
+export function mergeChanges(logfilePath: string, newNodes: RootContent[]) {
     const template = readFileSync(logfilePath);
     const tree = remark().use(parse).parse(template);
 
@@ -103,7 +107,15 @@ export function addVersionChanges(
         0,
         ...newNodes
     );
+    return tree;
+}
 
-    const modifiedMarkdown = remark().use(stringify, { bullet: '-' }).stringify(tree);
+export function stringifyChanges(tree: Root) {
+    return remark().use(stringify, { bullet: '-' }).stringify(tree);
+}
+
+export function writeToFile(logfilePath: string, tree: Root) {
+    const modifiedMarkdown = stringifyChanges(tree);
     writeFileSync(logfilePath, modifiedMarkdown);
 }
+
