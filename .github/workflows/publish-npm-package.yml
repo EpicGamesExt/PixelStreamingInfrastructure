@@ -1,7 +1,7 @@
 name: Publish NPM package
 
 on:
-  workflow_dispatch:
+  workflow_call:
     inputs:
       package_directory:
         required: true
@@ -15,7 +15,6 @@ env:
 
 jobs:
   build:
-    if: github.repository == 'EpicGamesExt/PixelStreamingInfrastructure'
     runs-on: ubuntu-latest
     steps:
       - name: Check out package
@@ -57,7 +56,7 @@ jobs:
           npm i
           npm run build
           cd ../..
-          node Extras/ChangelogGenerator --log=${{ inputs.package_directory }}/CHANGELOG.md --package_path=${{ inputs.package_directory }} --previous=${{ steps.last-tag.outputs.tag }} --current=${{ env.commitsha }} --label=${{ steps.build-label.outputs.label }}
+          node Extras/ChangelogGenerator --log=${{ inputs.package_directory }}/CHANGELOG.md --package_path=${{ inputs.package_directory }} --previous=${{ steps.last-tag.outputs.tag }} --current=`git rev-parse HEAD` --label=${{ steps.build-label.outputs.label }}
 
       - name: Commit changelog
         uses: EndBug/add-and-commit@v9
@@ -77,10 +76,29 @@ jobs:
           npm run build
           npm publish --access public
         
+      - name: Archive Release tar.gz
+        uses: thedoctor0/zip-release@0.7.1
+        with:
+          directory: '.'
+          path: ${{ inputs.package_directory }} 
+          type: 'tar'
+          filename: '${{ steps.build-label.outputs.label }}.tar.gz'
+          exclusions: >-
+            node_modules
+
+      - name: Archive Release tar.gz
+        uses: thedoctor0/zip-release@0.7.1
+        with:
+          directory: '.'
+          path: ${{ inputs.package_directory }} 
+          type: 'zip'
+          filename: '${{ steps.build-label.outputs.label }}.zip'
+          exclusions: >-
+            node_modules
+
       - name: "Make the release"
         uses: ncipollo/release-action@v1
         with:
           tag: "${{ steps.build-label.outputs.label }}"
           artifacts: "${{ steps.build-label.outputs.label }}.zip,${{ steps.build-label.outputs.label }}.tar.gz"
           bodyFile: ${{ inputs.package_directory }}/CHANGELOG.md
-          commit: "${{ steps.log-commit.outputs.commit_sha }}"

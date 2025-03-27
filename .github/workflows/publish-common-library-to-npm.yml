@@ -9,5 +9,5 @@ jobs:
   call-release:
     uses: ./.github/workflows/publish-npm-package.yml
     with:
-      package_path: Common
+      package_directory: Common
       tag_prefix: lib-common-
