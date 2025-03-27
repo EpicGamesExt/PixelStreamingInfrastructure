@@ -1,0 +1,86 @@
+name: Publish NPM package
+
+on:
+  workflow_dispatch:
+    inputs:
+      package_directory:
+        required: true
+        type: string
+      tag_prefix:
+        required: true
+        type: string
+
+env:
+  NODE_VERSION: 18.17.x
+
+jobs:
+  build:
+    if: github.repository == 'EpicGamesExt/PixelStreamingInfrastructure'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out package
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          
+      - name: Setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "${{ env.NODE_VERSION }}"
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Get package.json content for later use
+        working-directory: ${{ inputs.package_directory }}
+        id: get-package-json
+        run: |
+          package_content=`cat package.json`
+          echo "json<<EOF" >> $GITHUB_OUTPUT
+          echo $package_content >> $GITHUB_OUTPUT
+          echo 'EOF' >> $GITHUB_OUTPUT
+
+      - name: Obtain the branch indicating the UE version
+        id: extract_branch
+        run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
+
+      - name: Get the last release tag
+        id: last-tag
+        run: echo "tag=$(git describe --tags --abbrev=0 --match "${{ inputs.tag_prefix }}*")" >> $GITHUB_OUTPUT
+
+      - name: Build the version label
+        id: build-label
+        run: echo "label=${{ inputs.tag_prefix }}${{ steps.extract_branch.outputs.branch }}-${{ fromJson(steps.get-package-json.outputs.json).version }}" >> $GITHUB_OUTPUT
+
+      - name: Generate changelog
+        run: |
+          git pull
+          cd Extras/ChangelogGenerator
+          npm i
+          npm run build
+          cd ../..
+          node Extras/ChangelogGenerator --log=${{ inputs.package_directory }}/CHANGELOG.md --package_path=${{ inputs.package_directory }} --previous=${{ steps.last-tag.outputs.tag }} --current=${{ env.commitsha }} --label=${{ steps.build-label.outputs.label }}
+
+      - name: Commit changelog
+        uses: EndBug/add-and-commit@v9
+        id: log-commit
+        with:
+          add: ${{ inputs.package_directory }}/CHANGELOG.md
+          committer_name: CI
+          committer_email: git@git.com
+          message: 'chore: Updating changelog'
+
+      - name: Build and publish
+        working-directory: ${{ inputs.package_directory }}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          npm install
+          npm run build
+          npm publish --access public
+        
+      - name: "Make the release"
+        uses: ncipollo/release-action@v1
+        with:
+          tag: "${{ steps.build-label.outputs.label }}"
+          artifacts: "${{ steps.build-label.outputs.label }}.zip,${{ steps.build-label.outputs.label }}.tar.gz"
+          bodyFile: ${{ inputs.package_directory }}/CHANGELOG.md
+          commit: "${{ steps.log-commit.outputs.commit_sha }}"

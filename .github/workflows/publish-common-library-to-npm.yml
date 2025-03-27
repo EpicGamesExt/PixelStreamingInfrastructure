@@ -3,68 +3,11 @@ on:
   workflow_dispatch:
   push:
     branches: ['UE5.5']
-    paths: ['Common/package.json']
+    paths: ['Signalling/package.json']
 
 jobs:
-  build:
-    # if: github.repository == 'EpicGamesExt/PixelStreamingInfrastructure'
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: Common
-    steps:
-      - name: Check out common lib
-        uses: actions/checkout@v4
-        with:
-          sparse-checkout: |
-            NODE_VERSION
-            Common
-          sparse-checkout-cone-mode: false
-          
-      - name: Get node version
-        working-directory: .
-        id: get_node_version
-        run: echo "node_version=$(cat NODE_VERSION)" >> $GITHUB_OUTPUT
-
-      - name: Setup node
-        uses: actions/setup-node@v4
-        with:
-          node-version: "${{ steps.get_node_version.outputs.node_version }}"
-          registry-url: 'https://registry.npmjs.org'
-
-      - name: Build and publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: |
-          npm install
-          npm run build
-          npm publish --access public
-        
-      - name: Get package.json content for later use
-        id: get-package-json
-        run: |
-          package_content=`cat package.json`
-          echo "json<<EOF" >> $GITHUB_OUTPUT
-          echo $package_content >> $GITHUB_OUTPUT
-          echo 'EOF' >> $GITHUB_OUTPUT
-
-      - name: Obtain the branch indicating the UE version
-        id: extract_branch
-        run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
-
-      - name: Create tag for release
-        uses: actions/github-script@v5
-        with:
-          script: |
-            github.rest.git.createRef({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              ref: 'refs/tags/lib-common-${{ steps.extract_branch.outputs.branch }}-${{ fromJson(steps.get-package-json.outputs.json).version }}',
-              sha: context.sha
-            })
-            
-      - name: Generate changelog
-        working-directory: ../Extras/ChangelogGenerator
-        run: |
-          npm run build
-          node . --log=../../Common/CHANGELOG.md --package_path=../../Common --prefix=lib-common-
+  call-release:
+    uses: ./.github/workflows/publish-npm-package.yml
+    with:
+      package_path: Common
+      tag_prefix: lib-common-
