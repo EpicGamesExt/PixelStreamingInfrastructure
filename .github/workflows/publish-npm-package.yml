@@ -57,6 +57,7 @@ jobs:
           npm run build
           cd ../..
           node Extras/ChangelogGenerator --log=${{ inputs.package_directory }}/CHANGELOG.md --package_path=${{ inputs.package_directory }} --previous=${{ steps.last-tag.outputs.tag }} --current=`git rev-parse HEAD` --label=${{ steps.build-label.outputs.label }}
+          node Extras/ChangelogGenerator --single --package_path=${{ inputs.package_directory }} --previous=${{ steps.last-tag.outputs.tag }} --current=`git rev-parse HEAD` --label=${{ steps.build-label.outputs.label }} >_release.md
 
       - name: Commit changelog
         uses: EndBug/add-and-commit@v9
@@ -101,4 +102,4 @@ jobs:
         with:
           tag: "${{ steps.build-label.outputs.label }}"
           artifacts: "${{ steps.build-label.outputs.label }}.zip,${{ steps.build-label.outputs.label }}.tar.gz"
-          bodyFile: ${{ inputs.package_directory }}/CHANGELOG.md
+          bodyFile: _release.md
