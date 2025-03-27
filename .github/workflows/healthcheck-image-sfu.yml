@@ -4,9 +4,11 @@ on:
   workflow_dispatch:
   push:
     paths:
+      - ".github/workflow/healthcheck-image-sfu.yml"
       - "SFU/**"
   pull_request:
     paths:
+      - ".github/workflow/healthcheck-image-sfu.yml"
       - "SFU/**"
 
 jobs:

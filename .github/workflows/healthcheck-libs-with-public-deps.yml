@@ -8,7 +8,6 @@ on:
 
 env:
   commitsha: "${{ github.event.inputs.commitsha || github.sha }}"
-  NODE_VERSION: 18.17.x
 
 jobs:
   build-using-public-deps:
@@ -21,30 +20,36 @@ jobs:
       with:
         ref: "${{ env.commitsha }}"
 
+    - name: Get node version
+      id: get_node_version
+      run: echo "node_version=$(cat NODE_VERSION)" >> $GITHUB_OUTPUT
+
     - uses: actions/setup-node@v4
       with:
-        node-version: "${{ env.NODE_VERSION }}"
+        node-version: "${{ steps.get_node_version.outputs.node_version }}"
         registry-url: 'https://registry.npmjs.org'
 
     - name: Remove NPM workspaces
       run: rm package.json && rm package-lock.json
 
+    # Not linting or testing because some of those tools require the
+    # workspace dependencies. eg. eslint and its plugins.
     - name: Build signalling using published packages only
       if: always()
       working-directory: Signalling
-      run: npm install && npm run build && npm run lint
+      run: npm install && npm run build
     - name: Build Wilbur using published packages only
       if: always()
       working-directory: SignallingWebServer
-      run: npm install && npm run build && npm run lint
+      run: npm install && npm run build
     - name: Build Frontend/library using published packages only
       if: always()
       working-directory: Frontend/library
-      run: npm install && npm run build && npm run lint && npm run test
+      run: npm install && npm run build
     - name: Build Frontend/ui-library using published packages only
       if: always()
       working-directory: Frontend/ui-library
-      run: npm install && npm run build && npm run lint
+      run: npm install && npm run build
     - name: Build Frontend/implementations/typescript using published packages only
       if: always()
       working-directory: Frontend/implementations/typescript
