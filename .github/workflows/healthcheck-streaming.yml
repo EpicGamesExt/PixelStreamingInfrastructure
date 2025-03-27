@@ -4,6 +4,7 @@ on:
   workflow_dispatch:
   push:
     paths:
+      - ".github/workflows/healthcheck-streaming.yml"
       - "Common/**"
       - "Frontend/**"
       - "Signalling/**"
@@ -11,6 +12,7 @@ on:
       - "Extras/**"
   pull_request:
     paths:
+      - ".github/workflows/healthcheck-streaming.yml"
       - "Common/**"
       - "Frontend/**"
       - "Signalling/**"
