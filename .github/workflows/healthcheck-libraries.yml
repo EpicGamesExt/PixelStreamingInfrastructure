@@ -4,6 +4,7 @@ on:
   workflow_dispatch:
   push:
     paths:
+      - ".github/workflows/healthcheck-libraries.yml"
       - "Common/**"
       - "Signalling/**"
       - "SignallingWebServer/**"
@@ -12,6 +13,7 @@ on:
       - "Frontend/implementations/typescript/**"
   pull_request:
     paths:
+      - ".github/workflows/healthcheck-libraries.yml"
       - "Common/**"
       - "Signalling/**"
       - "SignallingWebServer/**"
