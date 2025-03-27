@@ -18,7 +18,11 @@ if (init && logPath && packagePath && tagPrefix) {
 
     clearChanges(logPath);
 
-    const tags = execSync(`git tag -l ${tagPrefix}*`, { encoding: 'utf-8' }).trim().split('\n');
+    const tags = execSync(`git tag -l ${tagPrefix}* | grep -E '^${tagPrefix}[^-]+-[^-]+$'`, {
+        encoding: 'utf-8'
+    })
+        .trim()
+        .split('\n');
     for (let i = 1; i < tags.length; ++i) {
         const versionLabel = tags[i].slice(tagPrefix.length);
         const changes = getLatestChanges(logPath, packagePath, tags[i - 1], tags[i], versionLabel);
@@ -28,15 +32,19 @@ if (init && logPath && packagePath && tagPrefix) {
 } else if (tagPrefix && packagePath) {
     // gets the latest changes by getting the last tag matching the prefix and comparing it with the last
 
+    // get all matching tags in order
+    const tags = execSync(
+        `git tag -l ${tagPrefix}* | grep -E '^${tagPrefix}[^-]+-[^-]+$' | sort -Vr`,
+        {
+            encoding: 'utf-8'
+        }
+    ).trim();
+
     // get current tag
-    const currentTag = execSync(`git describe --tags --abbrev=0 --match "${tagPrefix}*"`, {
-        encoding: 'utf-8'
-    }).trim();
+    const currentTag = tags[0];
 
     // get previous tag
-    const previousTag = execSync(`git describe --tags --abbrev=0 --match "${tagPrefix}*" ${currentTag}^`, {
-        encoding: 'utf-8'
-    }).trim();
+    const previousTag = tags[1];
 
     const versionLabel = currentTag.slice(tagPrefix.length);
     const changes = getLatestChanges(logPath, packagePath, previousTag, currentTag, versionLabel);

@@ -9,5 +9,5 @@ jobs:
   call-release:
     uses: ./.github/workflows/publish-npm-package.yml
     with:
-      package_path: Signalling
-      tag_prefix: lib-signalling-
+      package_directory: Signalling
+      tag_prefix: lib-signalling

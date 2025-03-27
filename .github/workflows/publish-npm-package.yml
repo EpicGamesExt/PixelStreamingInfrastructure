@@ -10,22 +10,29 @@ on:
         required: true
         type: string
 
-env:
-  NODE_VERSION: 18.17.x
-
 jobs:
   build:
+    if: github.repository == 'EpicGamesExt/PixelStreamingInfrastructure'
     runs-on: ubuntu-latest
     steps:
       - name: Check out package
         uses: actions/checkout@v4
         with:
+          sparse-checkout: |
+            ${{ inputs.package_directory }}
+            Extras/ChangelogGenerator
+            NODE_VERSION
+          sparse-checkout-cone-mode: false
           fetch-depth: 0
-          
+
+      - name: Get node version
+        id: get_node_version
+        run: echo "node_version=$(cat NODE_VERSION)" >> $GITHUB_OUTPUT
+
       - name: Setup node
         uses: actions/setup-node@v4
         with:
-          node-version: "${{ env.NODE_VERSION }}"
+          node-version: "${{ steps.get_node_version.outputs.node_version }}"
           registry-url: 'https://registry.npmjs.org'
 
       - name: Get package.json content for later use
@@ -43,13 +50,13 @@ jobs:
 
       - name: Get the last release tag
         id: last-tag
-        run: echo "tag=$(git describe --tags --abbrev=0 --match "${{ inputs.tag_prefix }}*")" >> $GITHUB_OUTPUT
+        run: echo "tag=$(git describe --tags --abbrev=0 --match "${{ inputs.tag_prefix }}-${{ steps.extract_branch.outputs.branch }}-*")" >> $GITHUB_OUTPUT
 
       - name: Build the version label
         id: build-label
-        run: echo "label=${{ inputs.tag_prefix }}${{ steps.extract_branch.outputs.branch }}-${{ fromJson(steps.get-package-json.outputs.json).version }}" >> $GITHUB_OUTPUT
+        run: echo "label=${{ inputs.tag_prefix }}-${{ steps.extract_branch.outputs.branch }}-${{ fromJson(steps.get-package-json.outputs.json).version }}" >> $GITHUB_OUTPUT
 
-      - name: Generate changelog
+      - name: Generate changelog and release notes
         run: |
           git pull
           cd Extras/ChangelogGenerator
@@ -95,7 +102,7 @@ jobs:
           type: 'zip'
           filename: '${{ steps.build-label.outputs.label }}.zip'
           exclusions: >-
-            node_modules
+            /${{ inputs.package_directory }}/node_modules/*
 
       - name: "Make the release"
         uses: ncipollo/release-action@v1

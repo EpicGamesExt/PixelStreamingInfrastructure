@@ -10,4 +10,4 @@ jobs:
     uses: ./.github/workflows/publish-npm-package.yml
     with:
       package_directory: Common
-      tag_prefix: lib-common-
+      tag_prefix: lib-common

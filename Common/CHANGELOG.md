@@ -1,4 +1,4 @@
-# Common library changelog.
+# Common library changelog
 
 <!-- BEGIN -->
 
