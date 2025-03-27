@@ -5,9 +5,6 @@ on:
     branches: ['UE5.5']
     paths: ['Signalling/package.json']
 
-env:
-  NODE_VERSION: 18.17.x
-
 jobs:
   build:
     if: github.repository == 'EpicGamesExt/PixelStreamingInfrastructure'
@@ -18,12 +15,18 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          sparse-checkout: 'Signalling'
+          sparse-checkout: 
+            NODE_VERSION
+            Signalling
           sparse-checkout-cone-mode: false
+
+      - name: Get node version
+        id: get_node_version
+        run: echo "node_version=$(cat NODE_VERSION)" >> $GITHUB_OUTPUT
 
       - uses: actions/setup-node@v4
         with:
-          node-version: "${{ env.NODE_VERSION }}"
+          node-version: "${{ steps.get_node_version.outputs.node_version }}"
           registry-url: 'https://registry.npmjs.org'
       - run: npm install && npm run build
       - run: npm publish --access public
