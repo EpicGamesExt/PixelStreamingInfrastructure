@@ -11,7 +11,10 @@ import {
     DataChannelLatencyTestResult,
     OptionParameters,
     SettingsChangedEvent,
-    LatencyInfo
+    LatencyInfo,
+    InputCoordTranslator,
+    ShowOnScreenKeyboardEvent,
+    UntranslatedCoordUnsigned
 } from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.5';
 import { OverlayBase } from '../Overlay/BaseOverlay';
 import { ActionOverlay } from '../Overlay/ActionOverlay';
@@ -238,7 +241,7 @@ export class Application {
                   controls.fullscreenIcon;
         if (fullScreenButton) {
             fullScreenButton.fullscreenElement = /iPad|iPhone|iPod/.test(navigator.userAgent)
-                ? this.stream.videoElementParent.getElementsByTagName('video')[0]
+                ? this.stream.videoPlayer.getVideoElement()
                 : this.rootElement;
         }
 
@@ -375,9 +378,25 @@ export class Application {
         this.stream.addEventListener('webRtcTCPRelayDetected', () =>
             Logger.Warning(`Stream quailty degraded due to network enviroment, stream is relayed over TCP.`)
         );
-        this.stream.addEventListener('showOnScreenKeyboard', ({ data: { contents } }) =>
-            this.onShowOnScreenKeyboard(contents)
-        );
+        this.stream.addEventListener('showOnScreenKeyboard', (event: ShowOnScreenKeyboardEvent) => {
+            const evtData: ShowOnScreenKeyboardEvent['data'] = event.data;
+            if (evtData.showOnScreenKeyboard) {
+                const playerElement = this.stream.videoPlayer.getVideoParentElement();
+                const videoElement = this.stream.videoPlayer.getVideoElement();
+                const inputCoordTranslator = new InputCoordTranslator();
+                inputCoordTranslator.reconfigure(
+                    { width: playerElement.clientWidth, height: playerElement.clientHeight },
+                    { width: videoElement.videoWidth, height: videoElement.videoHeight }
+                );
+
+                const coord: UntranslatedCoordUnsigned = inputCoordTranslator.untranslateUnsigned(
+                    evtData.x,
+                    evtData.y
+                );
+
+                this.onShowOnScreenKeyboard(evtData.contents, coord.x, coord.y);
+            }
+        });
     }
 
     /**
@@ -763,7 +782,7 @@ export class Application {
         }
     }
 
-    onShowOnScreenKeyboard(ueTextboxContents: string) {
+    onShowOnScreenKeyboard(ueTextboxContents: string, textBoxX: number, textBoxY: number) {
         // Remove any existing modal
         this.editTextModal?.rootElement.remove();
         // Make a new modal for editing the UE textbox on the browser side
@@ -771,7 +790,7 @@ export class Application {
         // Add it to the root of the Pixel Streaming application
         this.rootElement.append(this.editTextModal.rootElement);
         // Add the text content from UE side and summon on-screen keyboard
-        this.editTextModal.showOnScreenKeyboard(ueTextboxContents);
+        this.editTextModal.showOnScreenKeyboard(ueTextboxContents, textBoxX, textBoxY);
         // Bind to the confirm event
         this.editTextModal.events.addEventListener('editConfirmed', (evt: Event) => {
             const editTextEvent: EditConfirmedEvent = evt as EditConfirmedEvent;
