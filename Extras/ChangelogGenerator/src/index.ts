@@ -1,44 +1,42 @@
-import { execSync } from 'child_process';
 import minimist from 'minimist';
-import { clearChanges, getLatestChanges, mergeChanges, stringifyChanges, writeToFile } from './functions.js';
+import {
+    buildRangeMarkdown,
+    insertNewRange,
+    stringifyChanges,
+    serializeMarkdown,
+    deserializeMarkdown,
+    stripAllRanges
+} from './functions.js';
+import { getAllTags } from './git_calls.js';
 
 const args = minimist(process.argv.slice(2));
 
-const logPath = args['log'];
-const packagePath = args['package_path'];
-const currentTag = args['current'];
-const previousTag = args['previous'];
-const versionLabel = args['label'];
-const tagPrefix = args['prefix'];
-const init = args['init'];
-const single = args['single'];
+const logPath: string = args['log'];
+const packagePath: string = args['package_path'];
+const currentTag: string = args['current'];
+const previousTag: string = args['previous'];
+const versionLabel: string = args['label'];
+const tagPrefix: string = args['prefix'];
+const init: boolean = args['init'];
+const single: boolean = args['single'];
 
 if (init && logPath && packagePath && tagPrefix) {
     // generates the changelog from all the tags matching prefix.
 
-    clearChanges(logPath);
-
-    const tags = execSync(`git tag -l ${tagPrefix}* | grep -E '^${tagPrefix}[^-]+-[^-]+$'`, {
-        encoding: 'utf-8'
-    })
-        .trim()
-        .split('\n');
+    const markdown = deserializeMarkdown(logPath);
+    stripAllRanges(markdown);
+    const tags = getAllTags(tagPrefix, false); // oldest versions first because we insert at the top one by one
     for (let i = 1; i < tags.length; ++i) {
         const versionLabel = tags[i].slice(tagPrefix.length);
-        const changes = getLatestChanges(logPath, packagePath, tags[i - 1], tags[i], versionLabel);
-        const merged = mergeChanges(logPath, changes);
-        writeToFile(logPath, merged);
+        const rangeMarkdown = buildRangeMarkdown(packagePath, tags[i - 1], tags[i], versionLabel);
+        insertNewRange(markdown, rangeMarkdown);
     }
+    serializeMarkdown(logPath, markdown);
 } else if (tagPrefix && packagePath) {
     // gets the latest changes by getting the last tag matching the prefix and comparing it with the last
 
     // get all matching tags in order
-    const tags = execSync(
-        `git tag -l ${tagPrefix}* | grep -E '^${tagPrefix}[^-]+-[^-]+$' | sort -Vr`,
-        {
-            encoding: 'utf-8'
-        }
-    ).trim();
+    const tags = getAllTags(tagPrefix, true);
 
     // get current tag
     const currentTag = tags[0];
@@ -47,22 +45,24 @@ if (init && logPath && packagePath && tagPrefix) {
     const previousTag = tags[1];
 
     const versionLabel = currentTag.slice(tagPrefix.length);
-    const changes = getLatestChanges(logPath, packagePath, previousTag, currentTag, versionLabel);
+    const rangeMarkdown = buildRangeMarkdown(packagePath, previousTag, currentTag, versionLabel);
     if (!single) {
-        const merged = mergeChanges(logPath, changes);
-        writeToFile(logPath, merged);
+        const markdown = deserializeMarkdown(logPath);
+        insertNewRange(markdown, rangeMarkdown);
+        serializeMarkdown(logPath, markdown);
     } else {
-        console.log(stringifyChanges({ type: 'root', children: changes }));
+        console.log(stringifyChanges({ type: 'root', children: rangeMarkdown }));
     }
 } else if (packagePath && previousTag && currentTag && versionLabel) {
     // generates the change list from all the given tags
 
-    const changes = getLatestChanges(logPath, packagePath, previousTag, currentTag, versionLabel);
+    const rangeMarkdown = buildRangeMarkdown(packagePath, previousTag, currentTag, versionLabel);
     if (!single) {
-        const merged = mergeChanges(logPath, changes);
-        writeToFile(logPath, merged);
+        const markdown = deserializeMarkdown(logPath);
+        insertNewRange(markdown, rangeMarkdown);
+        serializeMarkdown(logPath, markdown);
     } else {
-        console.log(stringifyChanges({ type: 'root', children: changes }));
+        console.log(stringifyChanges({ type: 'root', children: rangeMarkdown }));
     }
 } else {
     console.log(
