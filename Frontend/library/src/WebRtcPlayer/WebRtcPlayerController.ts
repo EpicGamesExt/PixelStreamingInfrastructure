@@ -34,7 +34,7 @@ import { ResponseController } from '../UeInstanceMessage/ResponseController';
 import { SendMessageController } from '../UeInstanceMessage/SendMessageController';
 import { ToStreamerMessagesController } from '../UeInstanceMessage/ToStreamerMessagesController';
 import { DataChannelSender } from '../DataChannel/DataChannelSender';
-import { InputCoordTranslator, UntranslatedCoordUnsigned } from '../Util/InputCoordTranslator';
+import { InputCoordTranslator } from '../Util/InputCoordTranslator';
 import { PixelStreaming } from '../PixelStreaming/PixelStreaming';
 import {
     DataChannelCloseEvent,
@@ -347,15 +347,6 @@ export class WebRtcPlayerController {
      */
     destroyVideoPlayer() {
         this.videoPlayer.destroy();
-    }
-
-    /**
-     * Make a request to UnquantizedAndDenormalizeUnsigned coordinates
-     * @param x x axis coordinate
-     * @param y y axis coordinate
-     */
-    requestUnquantizedAndDenormalizeUnsigned(x: number, y: number): UntranslatedCoordUnsigned {
-        return this.coordinateConverter.untranslateUnsigned(x, y);
     }
 
     /**

@@ -55,10 +55,10 @@ export class EditTextModal {
         return this._events;
     }
 
-    public showOnScreenKeyboard(existingTextAreaContents: string) {
+    public showOnScreenKeyboard(existingTextAreaContents: string, textBoxX: number, textBoxY: number) {
         const editableText: HTMLInputElement | HTMLTextAreaElement = this._isTouchDevice
-            ? this.hiddenTextInput
-            : this.textArea;
+            ? this.textArea
+            : this.hiddenTextInput;
 
         // Populate input text area with whatever was on the UE side
         editableText.value = existingTextAreaContents;
@@ -69,6 +69,36 @@ export class EditTextModal {
         // If we are on a non-touch device this will give IME a valid
         // input field to work with.
         editableText.focus();
+
+        // Remove the hidden text input when we click on anything else
+        if (!this._isTouchDevice) {
+            // Position the input text field to roughly match UE
+            this._hiddenTextInput.style.top = `${textBoxY}px`;
+            this._hiddenTextInput.style.left = `${textBoxX}px`;
+
+            // "Clicked away" is when the user does their next click after the current one
+            // e.g. on the next "mousedown" remove the textbox
+            const onClickedAway = (event: Event) => {
+                if (this._hiddenTextInput && this._hiddenTextInput !== undefined) {
+                    if (event.target !== this._hiddenTextInput) {
+                        this._rootElement.remove();
+                    }
+                }
+            };
+
+            // Hack: UE x/y returned by this even is often really bad
+            // so use the browser mouse position for the box instead
+            const onMouseMove = (event: MouseEvent) => {
+                this._hiddenTextInput.style.top = `${event.clientY + 40}px`;
+                this._hiddenTextInput.style.left = `${event.clientX}px`;
+            };
+
+            // Idea: Show modal on composition start?
+
+            // Only fire these events once
+            window.addEventListener('mousedown', onClickedAway, { once: true });
+            window.addEventListener('mousemove', onMouseMove, { once: true });
+        }
     }
 
     /**
@@ -76,16 +106,15 @@ export class EditTextModal {
      */
     public get rootElement(): HTMLElement {
         if (!this._rootElement) {
-            this._rootElement = document.createElement('div');
-
             // Mobile/touch device
             if (this._isTouchDevice) {
+                this._rootElement = document.createElement('div');
                 this._rootElement.classList.add('modal');
                 this._rootElement.appendChild(this.innerModal);
             }
             // Desktop/non-touch device
             else {
-                this._rootElement.appendChild(this.hiddenTextInput);
+                this._rootElement = this.hiddenTextInput;
             }
         }
         return this._rootElement;
@@ -94,37 +123,18 @@ export class EditTextModal {
     public get hiddenTextInput(): HTMLInputElement {
         if (!this._hiddenTextInput) {
             this._hiddenTextInput = document.createElement('input');
-            this._hiddenTextInput.id = 'hiddenInput';
-            this._hiddenTextInput.maxLength = 0;
             this._hiddenTextInput.type = 'text';
 
             // Set inline style as this is not a styling choice
-            // That should be customized, but is rather a functional
+            // that should be customized, but is rather a functional
             // choice to hide this input element offscreen
             this._hiddenTextInput.style.position = 'absolute';
-            this._hiddenTextInput.style.left = '-10%';
-            this._hiddenTextInput.style.width = '0px';
-            this._hiddenTextInput.style.opacity = '0';
 
-            // When keyboard is typed into we want to ensure keys are not sent back to UE until we confirm
-            // Most keys are not sent back to UE on mobile keyboard anyway, but backspace is so we should
-            // prevent it from bubbling to our global keyboard input controller.
-            this._hiddenTextInput.addEventListener('keypress', (event) => {
-                event.stopPropagation();
-            });
+            // Ensure "Enter" key ends the text input
             this._hiddenTextInput.addEventListener('keyup', (event) => {
-                event.stopPropagation();
-            });
-            this._hiddenTextInput.addEventListener('keydown', (event) => {
-                event.stopPropagation();
-            });
-
-            // Add event listener for input changes, on each input change
-            // We will sent back the textbox entry message to update the UE
-            // text box
-            this._hiddenTextInput.addEventListener('input', (event) => {
-                this.events.dispatchEvent(new EditConfirmedEvent(this._hiddenTextInput.value));
-                event.stopPropagation();
+                if (event.key === 'Enter') {
+                    this._rootElement.remove();
+                }
             });
         }
         return this._hiddenTextInput;
