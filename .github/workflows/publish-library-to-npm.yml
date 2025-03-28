@@ -6,52 +6,9 @@ on:
     paths: ['Frontend/library/package.json']
 
 jobs:
-  build:
-    if: github.repository == 'EpicGamesExt/PixelStreamingInfrastructure'
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: Frontend/library
-    steps:
-      - uses: actions/checkout@v4
-        with:
-            sparse-checkout: |
-              NODE_VERSION
-              Frontend/library
-            sparse-checkout-cone-mode: false
-          
-      - name: Get node version
-        working-directory: .
-        id: get_node_version
-        run: echo "node_version=$(cat NODE_VERSION)" >> $GITHUB_OUTPUT
+  call-release:
+    uses: ./.github/workflows/publish-npm-package.yml
+    with:
+      package_directory: Frontend/library
+      tag_prefix: lib-frontend
 
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "${{ steps.get_node_version.outputs.node_version }}"
-          registry-url: 'https://registry.npmjs.org'
-      - run: npm install
-      - run: npm run build
-      - run: npm publish --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-      - id: get-package-json
-        run: |
-          package_content=`cat package.json`
-          echo "json<<EOF" >> $GITHUB_OUTPUT
-          echo $package_content >> $GITHUB_OUTPUT
-          echo 'EOF' >> $GITHUB_OUTPUT
-
-      - shell: bash
-        id: extract_branch
-        run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
-
-      - uses: actions/github-script@v5
-        with:
-          script: |
-            github.rest.git.createRef({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              ref: 'refs/tags/lib-frontend-${{ steps.extract_branch.outputs.branch }}-${{ fromJson(steps.get-package-json.outputs.json).version }}',
-              sha: context.sha
-            })

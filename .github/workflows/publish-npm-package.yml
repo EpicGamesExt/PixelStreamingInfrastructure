@@ -1,0 +1,112 @@
+name: Publish NPM package
+
+on:
+  workflow_call:
+    inputs:
+      package_directory:
+        required: true
+        type: string
+      tag_prefix:
+        required: true
+        type: string
+
+jobs:
+  build:
+    if: github.repository == 'EpicGamesExt/PixelStreamingInfrastructure'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out package
+        uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            ${{ inputs.package_directory }}
+            Extras/ChangelogGenerator
+            NODE_VERSION
+          sparse-checkout-cone-mode: false
+          fetch-depth: 0
+
+      - name: Get node version
+        id: get_node_version
+        run: echo "node_version=$(cat NODE_VERSION)" >> $GITHUB_OUTPUT
+
+      - name: Setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "${{ steps.get_node_version.outputs.node_version }}"
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Get package.json content for later use
+        working-directory: ${{ inputs.package_directory }}
+        id: get-package-json
+        run: |
+          package_content=`cat package.json`
+          echo "json<<EOF" >> $GITHUB_OUTPUT
+          echo $package_content >> $GITHUB_OUTPUT
+          echo 'EOF' >> $GITHUB_OUTPUT
+
+      - name: Obtain the branch indicating the UE version
+        id: extract_branch
+        run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
+
+      - name: Get the last release tag
+        id: last-tag
+        run: echo "tag=$(git describe --tags --abbrev=0 --match "${{ inputs.tag_prefix }}-${{ steps.extract_branch.outputs.branch }}-*")" >> $GITHUB_OUTPUT
+
+      - name: Build the version label
+        id: build-label
+        run: echo "label=${{ inputs.tag_prefix }}-${{ steps.extract_branch.outputs.branch }}-${{ fromJson(steps.get-package-json.outputs.json).version }}" >> $GITHUB_OUTPUT
+
+      - name: Generate changelog and release notes
+        run: |
+          git pull
+          cd Extras/ChangelogGenerator
+          npm i
+          npm run build
+          cd ../..
+          node Extras/ChangelogGenerator --log=${{ inputs.package_directory }}/CHANGELOG.md --package_path=${{ inputs.package_directory }} --previous=${{ steps.last-tag.outputs.tag }} --current=`git rev-parse HEAD` --label=${{ steps.build-label.outputs.label }}
+          node Extras/ChangelogGenerator --single --package_path=${{ inputs.package_directory }} --previous=${{ steps.last-tag.outputs.tag }} --current=`git rev-parse HEAD` --label=${{ steps.build-label.outputs.label }} >_release.md
+
+      - name: Commit changelog
+        uses: EndBug/add-and-commit@v9
+        id: log-commit
+        with:
+          add: ${{ inputs.package_directory }}/CHANGELOG.md
+          committer_name: CI
+          committer_email: git@git.com
+          message: 'chore: Updating changelog'
+
+      - name: Build and publish
+        working-directory: ${{ inputs.package_directory }}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          npm install
+          npm run build
+          npm publish --access public
+        
+      - name: Archive Release tar.gz
+        uses: thedoctor0/zip-release@0.7.1
+        with:
+          directory: '.'
+          path: ${{ inputs.package_directory }} 
+          type: 'tar'
+          filename: '${{ steps.build-label.outputs.label }}.tar.gz'
+          exclusions: >-
+            node_modules
+
+      - name: Archive Release tar.gz
+        uses: thedoctor0/zip-release@0.7.1
+        with:
+          directory: '.'
+          path: ${{ inputs.package_directory }} 
+          type: 'zip'
+          filename: '${{ steps.build-label.outputs.label }}.zip'
+          exclusions: >-
+            /${{ inputs.package_directory }}/node_modules/*
+
+      - name: "Make the release"
+        uses: ncipollo/release-action@v1
+        with:
+          tag: "${{ steps.build-label.outputs.label }}"
+          artifacts: "${{ steps.build-label.outputs.label }}.zip,${{ steps.build-label.outputs.label }}.tar.gz"
+          bodyFile: _release.md
