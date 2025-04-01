@@ -1,0 +1,57 @@
+name: Publish NPM packages
+
+on:
+  workflow_dispatch:
+  push:
+    branches: 
+      - 'UE5.5'
+    paths: 
+      - '**/CHANGELOG.md'
+
+concurrency: ${{ github.workflow }}-${{ github.ref }}
+
+jobs:
+  fetch-package-info:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.query-packages.outputs.matrix }}
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+
+      - name: Get package info
+        id: query-packages
+        run: |
+          echo "matrix=$(jq -r '.workspaces[]' package.json | xargs -I {} jq -c --arg path "{}" ' select(.private != true) | { path: $path, name: .name, version: .version }' {}/package.json | jq -cs)" >> $GITHUB_OUTPUT
+
+  publish:
+    runs-on: ubuntu-latest
+    needs: fetch-package-info
+    strategy:
+      max-parallel: 1
+      matrix:
+        package: ${{ fromJson(needs.fetch-package-info.outputs.matrix) }}
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js 20.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20.x
+
+      - name: Get published version
+        id: published-version
+        run: echo "version=$(npm show ${{ matrix.package.name }} version 2>/dev/null || echo "0.0.0")" >> $GITHUB_OUTPUT
+
+      - name: Publish ${{ matrix.package.name }}
+        if: ${{ steps.published-version.outputs.version != matrix.package.version }}
+        working-directory: ${{ matrix.package.path }}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          npm install
+          npm build
+          npm publish --access public
+
+
