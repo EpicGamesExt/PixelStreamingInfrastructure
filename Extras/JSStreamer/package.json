@@ -5,6 +5,7 @@
     "main": "dist/cjs/pixelstreamingjsstreamer.js",
     "types": "dist/types/pixelstreamingjsstreamer.d.ts",
     "module": "dist/esm/pixelstreamingjsstreamer.js",
+    "private": true,
     "scripts": {
         "clean": "rimraf ./dist",
         "develop": "webpack-dev-server --mode development",
