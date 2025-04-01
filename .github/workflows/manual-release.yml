@@ -2,8 +2,14 @@ name: Release
 
 on:
   workflow_dispatch:
+  push:
+    branches: ['master']
 
 concurrency: ${{ github.workflow }}-${{ github.ref }}
+
+permissions:
+  contents: write
+  pull-requests: write
 
 jobs:
   release:
@@ -13,18 +19,16 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@v3
 
-      - name: Get node version
-        id: get_node_version
-        run: echo "node_version=$(cat NODE_VERSION)" >> $GITHUB_OUTPUT
-
-      - uses: actions/setup-node@v4
+      - name: Setup Node.js 20.x
+        uses: actions/setup-node@v3
         with:
-          node-version: ${{ steps.get_node_version.outputs.node_version }}
+          node-version: 20.x
 
       - name: Install Dependencies
-        run: npm i
+        run: npm install
 
       - name: Create Release Pull Request
         uses: changesets/action@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+
