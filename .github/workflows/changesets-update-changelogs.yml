@@ -1,9 +1,10 @@
-name: Release
+name: Update Changelogs
 
 on:
   workflow_dispatch:
   push:
-    branches: ['master']
+    branches: 
+      - UE5.5
 
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
