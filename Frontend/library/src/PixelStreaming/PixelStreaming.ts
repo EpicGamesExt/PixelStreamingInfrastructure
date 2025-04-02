@@ -47,7 +47,6 @@ import {
 import { RTCUtils } from '../Util/RTCUtils';
 import { IURLSearchParams } from '../Util/IURLSearchParams';
 import { LatencyInfo } from '../PeerConnectionController/LatencyCalculator';
-import { VideoPlayer } from '../VideoPlayer/VideoPlayer';
 
 export interface PixelStreamingOverrides {
     /** The DOM element where Pixel Streaming video and user input event handlers are attached to.
@@ -122,13 +121,6 @@ export class PixelStreaming {
             this._videoElementParent.id = 'videoElementParent';
         }
         return this._videoElementParent;
-    }
-
-    /**
-     * Gets the video player
-     */
-    public get videoPlayer(): VideoPlayer {
-        return this._webRtcController.videoPlayer;
     }
 
     /**
