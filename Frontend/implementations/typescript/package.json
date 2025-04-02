@@ -3,6 +3,7 @@
     "version": "0.0.1",
     "description": "",
     "main": "./src/player.ts",
+    "private": true,
     "scripts": {
         "clean": "rimraf ./dist",
         "build": "npx webpack --config webpack.prod.js",
