@@ -17,7 +17,7 @@ If there is an existing Update CHANGELOG PR for the release branch you are targe
 3. If a public package is found to have a greater version number than what is published, the new version will be published.
 4. A tag for the release will be made and a Github release with archives will be created.
 
-If there is no PR for the release then no changesets have been added. If you still need to publish packages.
+If there is no PR for the release then no changesets have been added. If you still need to publish packages, then do the following:
 1. Make changes to the package.json files of the packages you require publishing.
 2. Make sure the version numbers are increases appropriately.
 3. Push these changes to the release branch.
