@@ -32,4 +32,7 @@ jobs:
         uses: changesets/action@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        with:
+          title: '[Bot] Update UE5.5 NPM Changelogs'
+          commit: 'Updated NPM changelogs'
 
