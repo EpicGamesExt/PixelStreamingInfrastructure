@@ -40,14 +40,11 @@ export class EditTextModal {
     _modalBtnContainer: HTMLElement;
     _cancelBtn: HTMLButtonElement;
     _confirmBtn: HTMLButtonElement;
-    _hiddenTextInput: HTMLInputElement;
     _events: EventTarget;
-    _isTouchDevice: boolean;
 
     constructor() {
         this._rootElement = this.rootElement;
         this._events = new EventTarget();
-        this._isTouchDevice = 'ontouchstart' in window;
     }
 
     // Bind to this if you want to handle edit confirmed
@@ -55,50 +52,22 @@ export class EditTextModal {
         return this._events;
     }
 
-    public showOnScreenKeyboard(existingTextAreaContents: string, textBoxX: number, textBoxY: number) {
-        const editableText: HTMLInputElement | HTMLTextAreaElement = this._isTouchDevice
-            ? this.textArea
-            : this.hiddenTextInput;
-
-        // Populate input text area with whatever was on the UE side
-        editableText.value = existingTextAreaContents;
+    public showOnScreenKeyboard(existingTextAreaContents: string) {
+        if (existingTextAreaContents) {
+            // Remove any null terminators from the string
+            existingTextAreaContents = existingTextAreaContents.replace(/\0/g, '');
+            this.textArea.value = existingTextAreaContents;
+        }
 
         // Bring focus to the text area.
         // This will make the on-screen keyboard show if we are
         // a device that has a native on-screen keyboard.
         // If we are on a non-touch device this will give IME a valid
         // input field to work with.
-        editableText.focus();
+        this.textArea.focus();
 
-        // Remove the hidden text input when we click on anything else
-        if (!this._isTouchDevice) {
-            // Position the input text field to roughly match UE
-            this._hiddenTextInput.style.top = `${textBoxY}px`;
-            this._hiddenTextInput.style.left = `${textBoxX}px`;
-
-            // "Clicked away" is when the user does their next click after the current one
-            // e.g. on the next "mousedown" remove the textbox
-            const onClickedAway = (event: Event) => {
-                if (this._hiddenTextInput && this._hiddenTextInput !== undefined) {
-                    if (event.target !== this._hiddenTextInput) {
-                        this._rootElement.remove();
-                    }
-                }
-            };
-
-            // Hack: UE x/y returned by this even is often really bad
-            // so use the browser mouse position for the box instead
-            const onMouseMove = (event: MouseEvent) => {
-                this._hiddenTextInput.style.top = `${event.clientY + 40}px`;
-                this._hiddenTextInput.style.left = `${event.clientX}px`;
-            };
-
-            // Idea: Show modal on composition start?
-
-            // Only fire these events once
-            window.addEventListener('mousedown', onClickedAway, { once: true });
-            window.addEventListener('mousemove', onMouseMove, { once: true });
-        }
+        // Put cursor to the end of the textarea
+        this.textArea.selectionStart = this.textArea.value.length;
     }
 
     /**
@@ -106,38 +75,11 @@ export class EditTextModal {
      */
     public get rootElement(): HTMLElement {
         if (!this._rootElement) {
-            // Mobile/touch device
-            if (this._isTouchDevice) {
-                this._rootElement = document.createElement('div');
-                this._rootElement.classList.add('modal');
-                this._rootElement.appendChild(this.innerModal);
-            }
-            // Desktop/non-touch device
-            else {
-                this._rootElement = this.hiddenTextInput;
-            }
+            this._rootElement = document.createElement('div');
+            this._rootElement.classList.add('modal');
+            this._rootElement.appendChild(this.innerModal);
         }
         return this._rootElement;
-    }
-
-    public get hiddenTextInput(): HTMLInputElement {
-        if (!this._hiddenTextInput) {
-            this._hiddenTextInput = document.createElement('input');
-            this._hiddenTextInput.type = 'text';
-
-            // Set inline style as this is not a styling choice
-            // that should be customized, but is rather a functional
-            // choice to hide this input element offscreen
-            this._hiddenTextInput.style.position = 'absolute';
-
-            // Ensure "Enter" key ends the text input
-            this._hiddenTextInput.addEventListener('keyup', (event) => {
-                if (event.key === 'Enter') {
-                    this._rootElement.remove();
-                }
-            });
-        }
-        return this._hiddenTextInput;
     }
 
     public get innerModal(): HTMLElement {
@@ -167,9 +109,7 @@ export class EditTextModal {
             this._textArea.title = 'Edit Text Area';
             this._textArea.placeholder = 'UE text widget value here...';
 
-            // When keyboard is typed into we want to ensure keys are not sent back to UE until we confirm
-            // Most keys are not sent back to UE on mobile keyboard anyway, but backspace is so we should
-            // prevent it from bubbling to our global keyboard input controller.
+            // When keyboard is typed into we want to ensure keys are not sent back to UE until we confirm.
             this.textArea.addEventListener('keypress', (event) => {
                 event.stopPropagation();
             });
@@ -177,6 +117,9 @@ export class EditTextModal {
                 event.stopPropagation();
             });
             this.textArea.addEventListener('keydown', (event) => {
+                event.stopPropagation();
+            });
+            this.textArea.addEventListener('compositionend', (event) => {
                 event.stopPropagation();
             });
         }
