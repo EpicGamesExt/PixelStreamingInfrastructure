@@ -10,7 +10,7 @@ There are multiple things in this repository that can be released:
 
 These releases are mostly handled by the changesets tooling.  
 
-If there is an existing Update CHANGELOG PR for the release branch you are targeting.
+If there is an existing Update CHANGELOG PR for the release branch you are targeting then do the following:
 
 1. Merging this PR into the release branch will consume change sets, update versions and changelogs.
 2. When a package.json file is pushed the [publish action](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/actions/workflows/changesets-publish-npm-packages.yml) will start scanning packages in the repo.
