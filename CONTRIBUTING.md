@@ -36,7 +36,7 @@ If you have a solution to a problem you've encountered or to any other open issu
 
 #### Note:
 
-All changes to NPM packages require a changeset. Changesets are used to describe the change that has happened in your PR and are added to the versions CHANGELOG file.  
+All changes to NPM packages require a [changeset](https://github.com/changesets/changesets). Changesets are used to describe the change that has happened in your PR and are added to the versions CHANGELOG file.  
 To create a changeset with your PR
 1. Run `npm run changeset` in the root of your branch and follow the prompts.
 2. Add the resulting changeset file(s) to your branch.
