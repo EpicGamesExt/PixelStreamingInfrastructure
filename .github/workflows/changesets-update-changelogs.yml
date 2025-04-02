@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   push:
     branches: 
-      - UE5.5
+      - 'UE*'
 
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
@@ -28,11 +28,15 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
+      - name: Obtain the branch indicating the UE version
+        id: extract-branch
+        run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
+        
       - name: Create Release Pull Request
         uses: changesets/action@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         with:
-          title: '[Bot] Update UE5.5 NPM Changelogs'
+          title: '[Bot] Update ${{ steps.extract-branch.outputs.branch }} NPM Changelogs'
           commit: 'Updated NPM changelogs'
 
