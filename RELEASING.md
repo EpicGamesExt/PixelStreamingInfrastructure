@@ -19,7 +19,7 @@ If there is an existing Update CHANGELOG PR for the release branch you are targe
 
 If there is no PR for the release then no changesets have been added. If you still need to publish packages, then do the following:
 1. Make changes to the package.json files of the packages you require publishing.
-2. Make sure the version numbers are increases appropriately.
+2. Make sure the version numbers are increased appropriately.
 3. Push these changes to the release branch.
 4. This will kick off the [publish action](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/actions/workflows/changesets-publish-npm-packages.yml) and publish as described in the previous steps.
 
