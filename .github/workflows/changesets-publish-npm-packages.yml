@@ -45,6 +45,8 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     needs: fetch-package-info
+    permissions:
+      contents: write
     strategy:
       max-parallel: 1
       matrix:
