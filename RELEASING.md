@@ -23,6 +23,10 @@ If there is no PR for the release then no changesets have been added. If you sti
 3. Push these changes to the release branch.
 4. This will kick off the [publish action](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/actions/workflows/changesets-publish-npm-packages.yml) and publish as described in the previous steps.
 
+### Note about release order
+
+The order of publishing packages comes from the order of packages listed in the workspaces of package.json in the root folder. Packages that depend on other packages should always appear below their dependencies.
+
 ## Signalling Server Container
 1. Switch to the target branch (e.g 5.5)
 2. Make/merge any changes into `/SignallingWebServer` directory
