@@ -89,11 +89,17 @@ jobs:
               sha: context.sha
             })
 
+      - name: Split up the archive paths so the path in the archives is nice.
+        id: split-paths
+        run: |
+          echo "basename=$(basename ${{ matrix.package.path }})" >> $GITHUB_OUTPUT
+          echo "dirname=$(dirname ${{ matrix.package.path }})" >> $GITHUB_OUTPUT
+
       - name: Archive Release tar.gz
         uses: thedoctor0/zip-release@0.7.1
         with:
-          directory: '.'
-          path: ${{ matrix.package.path }} 
+          directory: ${{ steps.split-paths.outputs.dirname }}
+          path: ${{ steps.split-paths.outputs.basename }}
           type: 'tar'
           filename: '${{ steps.build-label.outputs.label }}.tar.gz'
           exclusions: >-
@@ -102,17 +108,19 @@ jobs:
       - name: Archive Release zip
         uses: thedoctor0/zip-release@0.7.1
         with:
-          directory: '.'
-          path: ${{ matrix.package.path }} 
+          directory: ${{ steps.split-paths.outputs.dirname }}
+          path: ${{ steps.split-paths.outputs.basename }}
           type: 'zip'
           filename: '${{ steps.build-label.outputs.label }}.zip'
           exclusions: >-
-            /${{ matrix.package.path }}/node_modules/*
+            /${{ steps.split-paths.outputs.basename }}/node_modules/*
 
       - name: Make the release
         uses: ncipollo/release-action@v1
         with:
           tag: "${{ steps.build-label.outputs.label }}"
-          artifacts: "${{ steps.build-label.outputs.label }}.zip,${{ steps.build-label.outputs.label }}.tar.gz"
+          artifacts: >
+            ${{ steps.split-paths.outputs.dirname }}/${{ steps.build-label.outputs.label }}.zip,
+            ${{ steps.split-paths.outputs.dirname }}/${{ steps.build-label.outputs.label }}.tar.gz
           bodyFile: ${{ matrix.package.path }}/CHANGELOG.md
 
