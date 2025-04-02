@@ -34,6 +34,15 @@ If you have a solution to a problem you've encountered or to any other open issu
 8. If we do not hear from you after requesting more information within 30 days, the PR will auto-close. In this case, we might elect to open our own PR and re-use some of the changes that you proposed, supplemented with anything else that was required to be added in your original PR.
 9. If your PR fixes a problem in the previous [still-supported UE branches](https://github.com/EpicGamesExt/PixelStreamingInfrastructure#versions), feel free to add the `auto-backport` and `auto-backport-to-UEX.X` labels. You'll need to add a `auto-backport-to-UEX.X` label for each branch you wish your change to be merged back to. Note that if a change to any of the previous branches is not trivial and requires a lot of testing and compatibility checks, we might elect to close it if we do not think that it brings enough value to the branch.
 
+#### Note about changesets
+
+All changes to NPM packages require a [changeset](https://github.com/changesets/changesets). Changesets are used to describe the change that has happened in your PR and are added to the versions CHANGELOG file.  
+To create a changeset with your PR
+1. Run `npm run changeset` in the root of your branch and follow the prompts.
+2. Add the resulting changeset file(s) to your branch.
+3. Create your PR or push to update it.
+3. The changeset bot should let you know if everything is ok.
+
 ### Other ways to contribute
 
 - Keep an eye on our repo and stay active on existing issues and PRs; you can help by adding informative comments to the discussions, additional repro steps, repros in different environments, or any suggestions as to what could be causing the issue and how it could be solved.

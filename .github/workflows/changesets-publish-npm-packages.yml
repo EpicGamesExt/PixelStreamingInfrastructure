@@ -1,0 +1,126 @@
+name: Publish NPM packages
+
+on:
+  workflow_dispatch:
+  push:
+    branches: 
+      - 'UE*'
+    paths: 
+      - '**/package.json'
+
+concurrency: ${{ github.workflow }}-${{ github.ref }}
+
+jobs:
+  # gets all publishable npm packages.
+  fetch-package-info:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.query-packages.outputs.matrix }}
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+
+      - name: Get package info
+        id: query-packages
+        run: |
+          # get all publishable npm packages
+          public_packages=$(jq -r '.workspaces[]' package.json | xargs -I {} jq -c --arg path "{}" ' select(.private != true) | { path: $path, name: .name, version: .version }' {}/package.json)
+          to_publish=()
+          # filter out packages with older or matching versions to the published version
+          for row in $public_packages; do
+            package_name=$(echo $row | jq -r '.name')
+            package_short_name=${package_name#@epicgames-ps/}
+            package_version=$(echo $row | jq -r '.version')
+            package_published=$(npm show "$package_name" version 2>/dev/null || echo "0.0.0")
+            if [ "$(printf "%s\n%s" "$package_published" "$package_version" | sort -V | tail -n1)" = "$package_version" ] && [ "$package_version" != "$package_published" ]; then
+              to_publish+=($(echo $row | jq -c ". + { \"tag\": \"${package_short_name}\" }"))
+            fi
+          done
+          # change the list into a json list
+          publish_json_list=[$(IFS=,; echo "${to_publish[*]}")]
+          echo "matrix=$publish_json_list" >> $GITHUB_OUTPUT
+
+
+  # actually publishes the npm package.
+  publish:
+    runs-on: ubuntu-latest
+    needs: fetch-package-info
+    permissions:
+      contents: write
+    strategy:
+      max-parallel: 1
+      matrix:
+        package: ${{ fromJson(needs.fetch-package-info.outputs.matrix) }}
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+
+      - name: Get node version
+        id: get_node_version
+        run: echo "node_version=$(cat NODE_VERSION)" >> $GITHUB_OUTPUT
+
+      - name: Setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "${{ steps.get_node_version.outputs.node_version }}"
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Publish ${{ matrix.package.name }}
+        working-directory: ${{ matrix.package.path }}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          npm install
+          npm build
+          npm publish --access public
+
+      - name: Build the version label
+        id: build-label
+        run: echo "label=${{ matrix.package.tag }}-${{ matrix.package.version }}" >> $GITHUB_OUTPUT
+
+      - name: Create release tag
+        uses: actions/github-script@v5
+        with:
+          script: |
+            github.rest.git.createRef({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: 'refs/tags/${{ steps.build-label.outputs.label }}',
+              sha: context.sha
+            })
+
+      - name: Split up the archive paths so the path in the archives is nice.
+        id: split-paths
+        run: |
+          echo "basename=$(basename ${{ matrix.package.path }})" >> $GITHUB_OUTPUT
+          echo "dirname=$(dirname ${{ matrix.package.path }})" >> $GITHUB_OUTPUT
+
+      - name: Archive Release tar.gz
+        uses: thedoctor0/zip-release@0.7.1
+        with:
+          directory: ${{ steps.split-paths.outputs.dirname }}
+          path: ${{ steps.split-paths.outputs.basename }}
+          type: 'tar'
+          filename: '${{ steps.build-label.outputs.label }}.tar.gz'
+          exclusions: >-
+            node_modules
+
+      - name: Archive Release zip
+        uses: thedoctor0/zip-release@0.7.1
+        with:
+          directory: ${{ steps.split-paths.outputs.dirname }}
+          path: ${{ steps.split-paths.outputs.basename }}
+          type: 'zip'
+          filename: '${{ steps.build-label.outputs.label }}.zip'
+          exclusions: >-
+            /${{ steps.split-paths.outputs.basename }}/node_modules/*
+
+      - name: Make the release
+        uses: ncipollo/release-action@v1
+        with:
+          tag: "${{ steps.build-label.outputs.label }}"
+          artifacts: >
+            ${{ steps.split-paths.outputs.dirname }}/${{ steps.build-label.outputs.label }}.zip,
+            ${{ steps.split-paths.outputs.dirname }}/${{ steps.build-label.outputs.label }}.tar.gz
+          bodyFile: ${{ matrix.package.path }}/CHANGELOG.md
+

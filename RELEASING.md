@@ -2,41 +2,30 @@
 
 There are multiple things in this repository that can be released:
 
-- The signalling server container image
-- The `/library` NPM package
-- The `/ui-library` NPM package
+- The NPM packages listed in the workspace package.json file.
+- Several container images like the SignallingWebServer or SFU
 - The entire repo and built frontend as a Github release .zip/tar.gz archive
 
-## The `/Common` NPM package
-1. Switch to the target branch (e.g 5.5)
-2. Make/merge any changes into `/Common` directory
-3. Based on the changes made, bump the version number according to [semver](https://semver.org/) in the [`package.json`](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/master/Common/package.json#L3) file
-4. Commit the changes to the `package.json` file.
-5. This will automatically kick off a [this action](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/actions/workflows/publish-common-library-to-npm.yml) for a build+push to NPM.
+## NPM packages
 
-## The `/Signalling` NPM package
-1. Switch to the target branch (e.g 5.5)
-2. Make/merge any changes into `/Signalling` directory
-3. Based on the changes made, bump the version number according to [semver](https://semver.org/) in the [`package.json`](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/master/Signalling/package.json) file
-4. **Optional: Update the version of the common library in the package.json if it got bumped.
-5. Commit the changes to `package.json` and potentially the `package-lock.json` file.
-6. This will automatically kick off a [this action](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/actions/workflows/publish-signalling-library-to-npm.yml) for a build+push to NPM.
+These releases are mostly handled by the changesets tooling.  
 
-## The `/library` NPM package
-1. Switch to the target branch (e.g 5.5)
-2. Make/merge any changes into `/library` directory
-3. Based on the changes made, bump the version number according to [semver](https://semver.org/) in the [`package.json`](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/master/Frontend/library/package.json) file
-4. Commit the changes to the `package.json` file.
-5. This will automatically kick off a [this action](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/actions/workflows/publish-library-to-npm.yml) for a build+push to NPM.
+If there is an existing Update CHANGELOG PR for the release branch you are targeting then do the following:
 
-## The `ui-library` NPM package
-1. Switch to the target branch (e.g 5.5)
-2. Make/merge any changes into `/ui-library` directory
-3. Based on the changes made, bump the version number according to [semver](https://semver.org/) in the [`package.json`](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/master/Frontend/ui-library/package.json#L3) file
-4. **Optional: Update the version of the common library in the package.json if it got bumped ([here](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/master/Frontend/ui-library/package.json#L19)).**
-5. **Optional: Update the version of the frontent library in the package.json if it got bumped ([here](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/master/Frontend/ui-library/package.json#L20) & [here](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/master/Frontend/ui-library/package.json#L38)).**
-6. Commit the changes to `package.json` and potentially the `package-lock.json` file.
-7. This will automatically kick off a [this action](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/actions/workflows/publish-ui-library-to-npm.yml) for a build+push to NPM.
+1. Merging this PR into the release branch will consume change sets, update versions and changelogs.
+2. When a package.json file is pushed the [publish action](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/actions/workflows/changesets-publish-npm-packages.yml) will start scanning packages in the repo.
+3. If a public package is found to have a greater version number than what is published, the new version will be published.
+4. A tag for the release will be made and a Github release with archives will be created.
+
+If there is no PR for the release then no changesets have been added. If you still need to publish packages, then do the following:
+1. Make changes to the package.json files of the packages you require publishing.
+2. Make sure the version numbers are increased appropriately.
+3. Push these changes to the release branch.
+4. This will kick off the [publish action](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/actions/workflows/changesets-publish-npm-packages.yml) and publish as described in the previous steps.
+
+### Note about release order
+
+The order of publishing packages comes from the order of packages listed in the workspaces of package.json in the root folder. Packages that depend on other packages should always appear below their dependencies.
 
 ## Signalling Server Container
 1. Switch to the target branch (e.g 5.5)
@@ -53,12 +42,9 @@ There are multiple things in this repository that can be released:
 ## Handling multiple changes
 If multiple changes have been made, the order of releases should usually be like so:
 
-1. `/Common`
-2. `/Signalling`
-3. `/library`
-4. `/ui-library`
-5. `/SignallingWebServer`
-6. `RELEASE_VERSION` file
+1. NPM packages
+2. `/SignallingWebServer`
+3. `RELEASE_VERSION` file
 
 ## Github Actions is failing because of unpublished libraries
 You may get into a situation where a PR is failing Github Actions checks due to unpublished libraries, if you are certain everything is working and
