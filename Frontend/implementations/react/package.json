@@ -24,7 +24,6 @@
     },
     "dependencies": {
         "@epicgames-ps/lib-pixelstreamingfrontend-ue5.5": "*",
-        "@epicgames-ps/eslint-plugin-check-copyright": "*",
         "react": "^19.0.0",
         "react-dom": "^19.0.0"
     }

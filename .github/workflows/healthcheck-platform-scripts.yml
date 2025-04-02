@@ -4,9 +4,11 @@ on:
   workflow_dispatch:
   push:
     paths:
+      - ".github/workflows/healthcheck-platform-scripts.yml"
       - "SignallingWebServer/**"
   pull_request:
     paths:
+      - ".github/workflows/healthcheck-platform-scripts.yml"
       - "SignallingWebServer/**"
 
 jobs:

@@ -4,12 +4,14 @@ on:
   workflow_dispatch:
   push:
     paths:
+      - ".github/workflows/healthcheck-signalling-protocol.yml"
       - "Common/**"
       - "Signalling/**"
       - "SignallingWebServer/**"
       - "Extras/SS_Test/**"
   pull_request:
     paths:
+      - ".github/workflows/healthcheck-signalling-protocol.yml"
       - "Common/**"
       - "Signalling/**"
       - "SignallingWebServer/**"

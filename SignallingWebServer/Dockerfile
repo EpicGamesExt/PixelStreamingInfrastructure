@@ -4,7 +4,6 @@ FROM node:lts
 WORKDIR /SignallingWebServer
 COPY NODE_VERSION ./NODE_VERSION
 COPY package.json ./package.json
-COPY /Extras/eslint/plugin-check-copyright ./Extras/eslint/plugin-check-copyright
 COPY /Common ./Common
 COPY /Signalling ./Signalling
 COPY /SignallingWebServer ./SignallingWebServer

@@ -6,7 +6,6 @@ COPY NODE_VERSION ./NODE_VERSION
 COPY package.json ./package.json
 COPY Common/ ./Common
 COPY Extras/SS_Test/ ./Extras/SS_Test
-COPY Extras/eslint/plugin-check-copyright ./Extras/eslint/plugin-check-copyright
 
 RUN npm i
 RUN cd Common && npm i && npm run build
