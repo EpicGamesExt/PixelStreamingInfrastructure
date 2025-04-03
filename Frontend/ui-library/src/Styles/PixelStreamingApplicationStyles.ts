@@ -344,17 +344,6 @@ export class PixelStreamingApplicationStyle {
         '#UIInteractionButton': {
             cursor: 'pointer'
         },
-        '#hiddenInput': {
-            position: 'absolute',
-            left: '-10%',
-            width: '0px',
-            opacity: '0'
-        },
-        '#editTextButton': {
-            position: 'absolute',
-            height: '40px',
-            width: '40px'
-        },
         '.btn-overlay': {
             verticalAlign: 'middle',
             display: 'inline-block'
