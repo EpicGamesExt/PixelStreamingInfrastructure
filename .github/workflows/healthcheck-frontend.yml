@@ -2,14 +2,6 @@ name: Check health of frontend
 
 on:
   workflow_dispatch:
-  push:
-    paths:
-      - ".github/workflows/healthcheck-frontend.yml"
-      - "Common/**"
-      - "Frontend/**"
-      - "Signalling/**"
-      - "SignallingWebServer/**"
-      - "Extras/**"
   pull_request:
     paths:
       - ".github/workflows/healthcheck-frontend.yml"

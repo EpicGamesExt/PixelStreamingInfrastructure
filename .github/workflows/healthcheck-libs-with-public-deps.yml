@@ -34,22 +34,27 @@ jobs:
 
     # Not linting or testing because some of those tools require the
     # workspace dependencies. eg. eslint and its plugins.
+    
     - name: Build signalling using published packages only
       if: always()
       working-directory: Signalling
       run: npm install && npm run build
+
     - name: Build Wilbur using published packages only
       if: always()
       working-directory: SignallingWebServer
       run: npm install && npm run build
+
     - name: Build Frontend/library using published packages only
       if: always()
       working-directory: Frontend/library
       run: npm install && npm run build
+
     - name: Build Frontend/ui-library using published packages only
       if: always()
       working-directory: Frontend/ui-library
       run: npm install && npm run build
+
     - name: Build Frontend/implementations/typescript using published packages only
       if: always()
       working-directory: Frontend/implementations/typescript

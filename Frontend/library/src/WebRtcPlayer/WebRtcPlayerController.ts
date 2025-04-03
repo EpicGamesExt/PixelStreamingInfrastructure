@@ -239,9 +239,6 @@ export class WebRtcPlayerController {
             this.config.getSettingOption(OptionParameters.PreferredCodec).options =
                 BrowserUtils.getSupportedVideoCodecs();
 
-            this.config.getSettingOption(OptionParameters.PreferredCodec).options =
-                BrowserUtils.getSupportedVideoCodecs();
-
             this.pixelStreaming._onDisconnect(disconnectMessage, allowClickToReconnect);
 
             this.afkController.stopAfkWarningTimer();

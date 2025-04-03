@@ -2,8 +2,10 @@ name: Releases
 
 on: 
   push:
-    branches: ['UE5.5']
-    paths: ['RELEASE_VERSION']
+    branches: 
+      - 'UE*'
+    paths: 
+      - 'RELEASE_VERSION'
 
   workflow_dispatch:
     inputs:
@@ -47,31 +49,37 @@ jobs:
 
     - name: Get node version
       id: get_node_version
-      run: echo "node_version=$(cat NODE_VERSION)" >> $Env:GITHUB_OUTPUT
+      run: echo "node_version=$(cat NODE_VERSION)" >> $GITHUB_OUTPUT
 
     - uses: actions/setup-node@v3
       with:
         node-version: ${{ steps.get_node_version.outputs.node_version }}
         registry-url: 'https://registry.npmjs.org'
 
+    - name: Install dependencies.
+      run: npm install
+
     - name: Build common library
       working-directory: ./Common
-      run: npm install && npm run build
+      run: npm run build
 
     - name: Build frontend library
       working-directory: ./Frontend/library
-      run: npm install && npm run build
+      run: npm run build
 
     - name: Build frontend ui-library
       working-directory: ./Frontend/ui-library
-      run: npm install && npm run build
+      run: npm run build
 
-    - name: Install implementations/typescript deps
+    - name: Build typescript implementation
       working-directory: ./Frontend/implementations/typescript
-      run: npm install && npm run build
+      run: npm run build
 
     - name: Move all content into output directory for archiving
-      run: items=(*) && mkdir PixelStreamingInfrastructure-${{ github.ref_name }}-${{ steps.getversion.outputs.version }} && mv ${items[*]} PixelStreamingInfrastructure-${{ github.ref_name }}-${{ steps.getversion.outputs.version }}/
+      run: |
+        items=(*)
+        mkdir PixelStreamingInfrastructure-${{ github.ref_name }}-${{ steps.getversion.outputs.version }}
+        mv ${items[*]} PixelStreamingInfrastructure-${{ github.ref_name }}-${{ steps.getversion.outputs.version }}/
 
     - name: Archive Release tar.gz
       uses: thedoctor0/zip-release@0.7.1

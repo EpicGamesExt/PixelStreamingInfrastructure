@@ -2,15 +2,6 @@ name: Check health of libraries
 
 on:
   workflow_dispatch:
-  push:
-    paths:
-      - ".github/workflows/healthcheck-libraries.yml"
-      - "Common/**"
-      - "Signalling/**"
-      - "SignallingWebServer/**"
-      - "Frontend/library/**"
-      - "Frontend/ui-library/**"
-      - "Frontend/implementations/typescript/**"
   pull_request:
     paths:
       - ".github/workflows/healthcheck-libraries.yml"
@@ -38,30 +29,33 @@ jobs:
         node-version: "${{ steps.get_node_version.outputs.node_version }}"
         registry-url: 'https://registry.npmjs.org'
 
-    - name: Clean build and lint checks on common library
+    - name: Install dependencies
+      run: npm install
+
+    - name: Build and lint checks on common library
       working-directory: Common
-      run: npm install && npm run build && npm run lint
+      run: npm run build && npm run lint
 
-    - name: Clean build and lint checks on signalling library
+    - name: Build and lint checks on signalling library
       working-directory: Signalling
-      run: npm install && npm run build && npm run lint
+      run: npm run build && npm run lint
 
-    - name: Clean build and lint checks on wilbur
+    - name: Build and lint checks on wilbur
       working-directory: SignallingWebServer
-      run: npm install && npm run build && npm run lint
+      run: npm run build && npm run lint
 
-    - name: Clean build, lint and unit tests on frontend library
+    - name: Build, lint and unit tests on frontend library
       working-directory: Frontend/library
-      run: npm install && npm run build && npm run lint && npm run test
+      run: npm run build && npm run lint && npm run test
 
-    - name: Clean build and lint checks on frontend ui library
+    - name: Build and lint checks on frontend ui library
       working-directory: Frontend/ui-library
-      run: npm install && npm run build && npm run lint
+      run: npm run build && npm run lint
 
-    - name: Clean build of frontend implementation
+    - name: Build of frontend implementation
       working-directory: Frontend/implementations/typescript
-      run: npm install && npm run build
+      run: npm run build
 
-    - name: Clean build of frontend implementation as ES6
+    - name: Build of frontend implementation as ES6
       working-directory: Frontend/implementations/typescript
-      run: npm install && npm run build:esm
+      run: npm run build:esm
