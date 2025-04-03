@@ -26,15 +26,11 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
-      - name: Obtain the branch indicating the UE version
-        id: extract-branch
-        run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
-        
       - name: Create Release Pull Request
         uses: changesets/action@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         with:
-          title: '[Bot] Update ${{ steps.extract-branch.outputs.branch }} NPM Changelogs'
+          title: '[Bot] Update ${{ github.ref_name }} NPM Changelogs'
           commit: 'Updated NPM changelogs'
 
