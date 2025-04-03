@@ -24,7 +24,7 @@ function print_usage() {
                             Default value as above
         --build             Force a rebuild of the typescript frontend even if it already exists
         --frontend-dir      Sets the output path for the fontend build
-        --dev               Dev mode. (forces build of wilbur and its dependencies)
+        --build-wilbur      Force build of wilbur
 
     Other options: stored and passed to the server.  All parameters printed once the script values are set.
     Command line options might be omitted to run with defaults and it is a good practice to omit specific ones when just starting the TURN or the STUN server alone, not the whole set of scripts.
@@ -64,7 +64,7 @@ function parse_args() {
         --start-turn ) START_TURN=1; shift;;
         --publicip ) PUBLIC_IP="$2"; shift 2;;
         --frontend-dir ) FRONTEND_DIR="$(realpath "$2")"; shift 2;;
-        --dev ) BUILD_WILBUR=1; shift;;
+        --build-wilbur ) BUILD_WILBUR=1; shift;;
         --help ) print_usage;;
         * ) SERVER_ARGS+=" $1"; shift;;
         esac
@@ -130,6 +130,7 @@ function check_and_install() { #dep_name #get_version_string #version_min #insta
 		if [ "$?" -lt 2 ]; then
 			echo "$1 is installed."
             is_installed=1
+            return 0
 		else
 			echo "Required install of $1 not found installing"
 		fi
@@ -142,8 +143,11 @@ function check_and_install() { #dep_name #get_version_string #version_min #insta
 
 		if [ $? -ge 1 ]; then
 			echo "Installation of $1 failed try running 'export VERBOSE=1' then run this script again for more details"
+            return -1
 		fi
 	fi
+
+    return 1
 }
 
 function setup_node() {
@@ -161,7 +165,7 @@ function setup_node() {
     popd > /dev/null
 
     # navigate to project root
-    pushd "${SCRIPT_DIR}/../.." > /dev/null
+    pushd "${SCRIPT_DIR}/../../.." > /dev/null
 
     node_version=""
     if [[ -f "${SCRIPT_DIR}/node/bin/node" ]]; then
@@ -187,13 +191,33 @@ function setup_node() {
                                                                 && rm node.tar.xz
                                                                 && mv node-v*-*-* \"${SCRIPT_DIR}/node\""
 
-    PATH="${SCRIPT_DIR}/node/bin:$PATH"
+    if [ $? -eq 1 ]; then
+        echo "Installing dependencies..."
+        PATH="${SCRIPT_DIR}/node/bin:$PATH"
+        "${NPM}" install
+    fi
 
     popd > /dev/null
 }
 
-function setup_libaries() {
-    echo "no"
+function setup_libraries() {
+	set -e
+
+    if [[ ! -d "${SCRIPT_DIR}/../../../Common/dist/" ]]; then
+        pushd "${SCRIPT_DIR}/../../../Common" > /dev/null
+        echo "Building common library."
+        "${NPM}" run build:cjs
+        popd > /dev/null
+    fi
+
+    if [[ ! -d "${SCRIPT_DIR}/../../../Signalling/dist/" ]]; then
+        pushd "${SCRIPT_DIR}/../../../Signalling" > /dev/null
+        echo "Building signalling library."
+        "${NPM}" run build:cjs
+        popd > /dev/null
+    fi
+
+	set +e
 }
 
 function setup_frontend() {
@@ -208,35 +232,25 @@ function setup_frontend() {
 
 	# navigate to root
 	pushd "${SCRIPT_DIR}/../../.." > /dev/null
-    OLDPATH=$PATH
-	export PATH="${SCRIPT_DIR}/node/bin:$PATH"
 
 	# If player.html doesn't exist, or --build passed as arg, rebuild the frontend
-    echo Testing ${WEBPACK_OUTPUT_PATH}/player.html
-	if [ ! -f "${WEBPACK_OUTPUT_PATH}/player.html" ] || [ "$FORCE_BUILD" == "1" ] ; then
+    echo Testing ${WEBPACK_OUTPUT_PATH}
+	if [ ! -d "${WEBPACK_OUTPUT_PATH}" ] || [ "$FORCE_BUILD" == "1" ] ; then
 		echo "Building Typescript Frontend."
 		# Using our bundled NodeJS, build the web frontend files
-		pushd "${SCRIPT_DIR}/../../../Common" > /dev/null
-		"${SCRIPT_DIR}/node/bin/npm" install
-		"${SCRIPT_DIR}/node/bin/npm" run build:cjs
-		popd > /dev/null
 		pushd "${SCRIPT_DIR}/../../../Frontend/library" > /dev/null
-		"${SCRIPT_DIR}/node/bin/npm" install
-		"${SCRIPT_DIR}/node/bin/npm" run build:cjs
+		"${NPM}" run build:cjs
 		popd > /dev/null
 		pushd "${SCRIPT_DIR}/../../../Frontend/ui-library" > /dev/null
-		"${SCRIPT_DIR}/node/bin/npm" install
-		"${SCRIPT_DIR}/node/bin/npm" run build:cjs
+		"${NPM}" run build:cjs
 		popd > /dev/null
 		pushd "${SCRIPT_DIR}/../../../Frontend/implementations/typescript" > /dev/null
-		"${SCRIPT_DIR}/node/bin/npm" install
-		"${SCRIPT_DIR}/node/bin/npm" run build:cjs
+		"${NPM}" run build:cjs
 		popd > /dev/null
 	else
 		echo 'Skipping building Frontend because files already exist. Please run with "--build" to force a rebuild'
 	fi
 
-    export PATH=$OLDPATH
 	popd > /dev/null # root
 	set +e
 }
@@ -282,6 +296,7 @@ function setup_coturn() {
 function setup() {
     echo "Checking Pixel Streaming Server dependencies."
     setup_node
+    setup_libraries
     setup_frontend
     setup_coturn
 }
@@ -353,33 +368,19 @@ function start_process() {
 }
 
 # Assumes the following are set
-# SCRIPT_DIR = The path to the root of the PixelStreamingInfrastructure repo.
+# SCRIPT_DIR = The path to the platform_scripts
 # NPM = The npm command path
 function build_wilbur() {
-    pushd "${SCRIPT_DIR}/../../.." > /dev/null
-
-    pushd Common > /dev/null
-    echo Building common
-    "${NPM}" install
-    "${NPM}" run build:cjs
-    popd
-
-    pushd Signalling > /dev/null
-    echo Building signalling
-    "${NPM}" install
-    "${NPM}" run build:cjs
-    popd > /dev/null
-
-    pushd SignallingWebServer > /dev/null
-    echo Building wilbur
-    "${NPM}" install
-    "${NPM}" run build
-
-    popd > /dev/null
+    if [ ! -d "${SCRIPT_DIR}/../../dist" ] || [ "$BUILD_WILBUR" == "1" ] ; then
+        pushd "${SCRIPT_DIR}/../.." > /dev/null
+        echo Building wilbur
+        "${NPM}" run build
+        popd > /dev/null
+    fi
 }
 
 # Assumes the following are set
-# SCRIPT_DIR = The path to the root of the PixelStreamingInfrastructure repo.
+# SCRIPT_DIR = The path to the platform_scripts
 # NPM = The npm command path
 # SERVER_ARGS The arguments to be passed to the server
 function start_wilbur() {
