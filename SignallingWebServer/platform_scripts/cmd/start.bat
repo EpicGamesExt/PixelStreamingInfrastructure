@@ -31,10 +31,7 @@ IF "%CONTINUE%"=="1" (
 		set SERVER_ARGS=!SERVER_ARGS! --http_root="!FRONTEND_DIR!"
 	)
 	
-    if "%BUILD_WILBUR%"=="1" (
-        call :BuildWilbur
-    )
-    
+    call :BuildWilbur
     call :PrintConfig
 	call :StartWilbur
 	pause
