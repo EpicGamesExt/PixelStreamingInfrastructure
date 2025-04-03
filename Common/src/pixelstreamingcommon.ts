@@ -1,3 +1,4 @@
+// Copyright Epic Games, Inc. All Rights Reserved.
 export { Logger, LogLevel, ILogger, overrideLogger } from './Logger/Logger';
 export { ITransport } from './Transport/ITransport';
 export { WebSocketTransport } from './Transport/WebSocketTransport';

@@ -18,7 +18,7 @@ export class SettingBase {
         label: string,
         description: string,
         defaultSettingValue: unknown,
-         
+
         defaultOnChangeListener: (changedValue: unknown, setting: SettingBase) => void = () => {
             /* Do nothing, to be overridden. */
         }
