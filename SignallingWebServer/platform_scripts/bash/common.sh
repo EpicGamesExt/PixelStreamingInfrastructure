@@ -22,8 +22,10 @@ function print_usage() {
         --start-turn        Will launch the turnserver process.
         --stun              STUN server to be used, syntax: --stun stun.l.google.com:19302
                             Default value as above
-        --build             Force a rebuild of the typescript frontend even if it already exists
         --frontend-dir      Sets the output path for the fontend build
+        --build             Force a rebuild of the typescript frontend even if it already exists
+        --rebuild           Force a rebuild of everything
+        --build-libraries   Force a rebuild of shared libraries
         --build-wilbur      Force build of wilbur
 
     Other options: stored and passed to the server.  All parameters printed once the script values are set.
@@ -42,10 +44,11 @@ function parse_args() {
     IS_DEBUG=0
     NO_SUDO=0
     VERBOSE=0
-    FORCE_BUILD=0
+    BUILD_LIBRARIES=0
+    BUILD_FRONTEND=0
+    BUILD_WILBUR=0
     DEFAULT_STUN=0
     DEFAULT_TURN=0
-    BUILD_WILBUR=0
     if [[ ! -d "${SCRIPT_DIR}/../../dist/" ]]; then
         BUILD_WILBUR=1
     fi
@@ -54,7 +57,8 @@ function parse_args() {
         --debug ) IS_DEBUG=1; shift;;
         --nosudo ) NO_SUDO=1; shift;;
         --verbose ) VERBOSE=1; shift;;
-        --build ) FORCE_BUILD=1; shift;;
+        --build ) BUILD_FRONTEND=1; shift;;
+        --rebuild ) BUILD_LIBRARIES=1; BUILD_FRONTEND=1; BUILD_WILBUR=1; shift;;
         --default-stun ) DEFAULT_STUN=1; shift;;
         --default-turn ) DEFAULT_TURN=1; shift;;
         --stun ) STUN_SERVER="$2"; shift 2;;
@@ -65,6 +69,7 @@ function parse_args() {
         --publicip ) PUBLIC_IP="$2"; shift 2;;
         --frontend-dir ) FRONTEND_DIR="$(realpath "$2")"; shift 2;;
         --build-wilbur ) BUILD_WILBUR=1; shift;;
+        --build-libraries ) BUILD_LIBRARIES=1; shift;;
         --help ) print_usage;;
         * ) SERVER_ARGS+=" $1"; shift;;
         esac
@@ -203,14 +208,14 @@ function setup_node() {
 function setup_libraries() {
 	set -e
 
-    if [[ ! -d "${SCRIPT_DIR}/../../../Common/dist/" ]]; then
+    if [ ! -d "${SCRIPT_DIR}/../../../Common/dist/" ] || [ "$BUILD_LIBRARIES" == "1" ]; then
         pushd "${SCRIPT_DIR}/../../../Common" > /dev/null
         echo "Building common library."
         "${NPM}" run build:cjs
         popd > /dev/null
     fi
 
-    if [[ ! -d "${SCRIPT_DIR}/../../../Signalling/dist/" ]]; then
+    if [ ! -d "${SCRIPT_DIR}/../../../Signalling/dist/" ] || [ "$BUILD_LIBRARIES" == "1" ]; then
         pushd "${SCRIPT_DIR}/../../../Signalling" > /dev/null
         echo "Building signalling library."
         "${NPM}" run build:cjs
@@ -235,7 +240,7 @@ function setup_frontend() {
 
 	# If player.html doesn't exist, or --build passed as arg, rebuild the frontend
     echo Testing ${WEBPACK_OUTPUT_PATH}
-	if [ ! -d "${WEBPACK_OUTPUT_PATH}" ] || [ "$FORCE_BUILD" == "1" ] ; then
+	if [ ! -d "${WEBPACK_OUTPUT_PATH}" ] || [ "$BUILD_FRONTEND" == "1" ] ; then
 		echo "Building Typescript Frontend."
 		# Using our bundled NodeJS, build the web frontend files
 		pushd "${SCRIPT_DIR}/../../../Frontend/library" > /dev/null
