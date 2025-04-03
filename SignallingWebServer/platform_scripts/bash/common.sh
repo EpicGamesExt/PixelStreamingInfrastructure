@@ -27,6 +27,7 @@ function print_usage() {
         --rebuild           Force a rebuild of everything
         --build-libraries   Force a rebuild of shared libraries
         --build-wilbur      Force build of wilbur
+        --deps              Force reinstall of dependencies
 
     Other options: stored and passed to the server.  All parameters printed once the script values are set.
     Command line options might be omitted to run with defaults and it is a good practice to omit specific ones when just starting the TURN or the STUN server alone, not the whole set of scripts.
@@ -47,9 +48,7 @@ function parse_args() {
     BUILD_LIBRARIES=0
     BUILD_FRONTEND=0
     BUILD_WILBUR=0
-    if [[ ! -d "${SCRIPT_DIR}/../../dist/" ]]; then
-        BUILD_WILBUR=1
-    fi
+    INSTALL_DEPS=0
     while(($#)) ; do
         case "$1" in
         --debug ) IS_DEBUG=1; shift;;
@@ -66,6 +65,7 @@ function parse_args() {
         --frontend-dir ) FRONTEND_DIR="$(realpath "$2")"; shift 2;;
         --build-wilbur ) BUILD_WILBUR=1; shift;;
         --build-libraries ) BUILD_LIBRARIES=1; shift;;
+        --deps ) INSTALL_DEPS=1; shift;;
         --help ) print_usage;;
         * ) SERVER_ARGS+=" $1"; shift;;
         esac
@@ -192,7 +192,7 @@ function setup_node() {
                                                                 && rm node.tar.xz
                                                                 && mv node-v*-*-* \"${SCRIPT_DIR}/node\""
 
-    if [ $? -eq 1 ]; then
+    if [ $? -eq 1 ] || [ "$INSTALL_DEPS" == "1" ]; then
         echo "Installing dependencies..."
         PATH="${SCRIPT_DIR}/node/bin:$PATH"
         "${NPM}" install

@@ -24,10 +24,7 @@ if [[ ! -z "$FRONTEND_DIR" ]]; then
     SERVER_ARGS+=" --http_root='$FRONTEND_DIR'"
 fi
 
-if [[ "$BUILD_WILBUR" == "1" ]]; then
-    build_wilbur
-fi
-
+build_wilbur
 print_config
 start_wilbur
 
