@@ -9,6 +9,7 @@
         "build": "npx webpack --config webpack.prod.js",
         "build:dev": "npx webpack --config webpack.dev.js",
         "build:esm": "npx webpack --config webpack.esmodule.js",
+        "build:cjs": "npx webpack --config webpack.common.js",
         "rebuild": "npm run clean && npm run build",
         "watch": "webpack --watch --config webpack.dev.js",
         "serve": "webpack serve --config webpack.dev.js",
