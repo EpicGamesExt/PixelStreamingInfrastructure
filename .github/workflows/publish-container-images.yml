@@ -11,21 +11,18 @@ jobs:
     if: github.repository == 'EpicGamesExt/PixelStreamingInfrastructure'
     runs-on: ubuntu-latest
     permissions:
-      contents: read
-      packages: write
+      contents: write
     steps:
-      -
-        name: Checkout
+      - name: Checkout
         uses: actions/checkout@v3
 
-      -
-        name: Login to DockerHub
+      - name: Login to DockerHub
         uses: docker/login-action@v2
         with:
           username: pixelstreamingunofficial
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-      -
-        name: Build and push the Signalling Server container image
+
+      - name: Build and push the Signalling Server container image
         uses: docker/build-push-action@v3
         with:
           context: .

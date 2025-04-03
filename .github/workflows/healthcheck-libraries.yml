@@ -2,15 +2,6 @@ name: Check health of libraries
 
 on:
   workflow_dispatch:
-  push:
-    paths:
-      - ".github/workflows/healthcheck-libraries.yml"
-      - "Common/**"
-      - "Signalling/**"
-      - "SignallingWebServer/**"
-      - "Frontend/library/**"
-      - "Frontend/ui-library/**"
-      - "Frontend/implementations/typescript/**"
   pull_request:
     paths:
       - ".github/workflows/healthcheck-libraries.yml"
