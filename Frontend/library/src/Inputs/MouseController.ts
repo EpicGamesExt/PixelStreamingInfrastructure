@@ -58,22 +58,22 @@ export class MouseController implements IInputController {
     }
 
     registerMouseEnterAndLeaveEvents() {
-        const videoElementParent = this.videoPlayer.getVideoParentElement() as HTMLDivElement;
-        videoElementParent.addEventListener('mouseenter', this.onEnterListener);
-        videoElementParent.addEventListener('mouseleave', this.onLeaveListener);
+        const videoElementParent = this.videoPlayer.getVideoParentElement();
+        videoElementParent?.addEventListener('mouseenter', this.onEnterListener);
+        videoElementParent?.addEventListener('mouseleave', this.onLeaveListener);
     }
 
     unregisterMouseEnterAndLeaveEvents() {
-        const videoElementParent = this.videoPlayer.getVideoParentElement() as HTMLDivElement;
-        videoElementParent.removeEventListener('mouseenter', this.onEnterListener);
-        videoElementParent.removeEventListener('mouseleave', this.onLeaveListener);
+        const videoElementParent = this.videoPlayer.getVideoParentElement();
+        videoElementParent?.removeEventListener('mouseenter', this.onEnterListener);
+        videoElementParent?.removeEventListener('mouseleave', this.onLeaveListener);
     }
 
     private onMouseEnter(event: MouseEvent) {
         if (!this.videoPlayer.isVideoReady()) {
             return;
         }
-        this.streamMessageController.toStreamerHandlers.get('MouseEnter')();
+        this.streamMessageController.toStreamerHandlers.get('MouseEnter')?.();
         this.pressMouseButtons(event.buttons, event.x, event.y);
     }
 
@@ -81,7 +81,7 @@ export class MouseController implements IInputController {
         if (!this.videoPlayer.isVideoReady()) {
             return;
         }
-        this.streamMessageController.toStreamerHandlers.get('MouseLeave')();
+        this.streamMessageController.toStreamerHandlers.get('MouseLeave')?.();
         this.releaseMouseButtons(event.buttons, event.x, event.y);
     }
 
