@@ -192,6 +192,10 @@ function setup_node() {
     popd > /dev/null
 }
 
+function setup_libaries() {
+    echo "no"
+}
+
 function setup_frontend() {
 	set -e
 
@@ -214,19 +218,19 @@ function setup_frontend() {
 		# Using our bundled NodeJS, build the web frontend files
 		pushd "${SCRIPT_DIR}/../../../Common" > /dev/null
 		"${SCRIPT_DIR}/node/bin/npm" install
-		"${SCRIPT_DIR}/node/bin/npm" run build
+		"${SCRIPT_DIR}/node/bin/npm" run build:cjs
 		popd > /dev/null
 		pushd "${SCRIPT_DIR}/../../../Frontend/library" > /dev/null
 		"${SCRIPT_DIR}/node/bin/npm" install
-		"${SCRIPT_DIR}/node/bin/npm" run build
+		"${SCRIPT_DIR}/node/bin/npm" run build:cjs
 		popd > /dev/null
 		pushd "${SCRIPT_DIR}/../../../Frontend/ui-library" > /dev/null
 		"${SCRIPT_DIR}/node/bin/npm" install
-		"${SCRIPT_DIR}/node/bin/npm" run build
+		"${SCRIPT_DIR}/node/bin/npm" run build:cjs
 		popd > /dev/null
 		pushd "${SCRIPT_DIR}/../../../Frontend/implementations/typescript" > /dev/null
 		"${SCRIPT_DIR}/node/bin/npm" install
-		"${SCRIPT_DIR}/node/bin/npm" run build
+		"${SCRIPT_DIR}/node/bin/npm" run build:cjs
 		popd > /dev/null
 	else
 		echo 'Skipping building Frontend because files already exist. Please run with "--build" to force a rebuild'
@@ -357,13 +361,13 @@ function build_wilbur() {
     pushd Common > /dev/null
     echo Building common
     "${NPM}" install
-    "${NPM}" run build
+    "${NPM}" run build:cjs
     popd
 
     pushd Signalling > /dev/null
     echo Building signalling
     "${NPM}" install
-    "${NPM}" run build
+    "${NPM}" run build:cjs
     popd > /dev/null
 
     pushd SignallingWebServer > /dev/null
