@@ -16,12 +16,12 @@ function print_usage() {
         --publicip          Define public ip address (using default port) for turn server, syntax: --publicip ; it is used for 
                             Default value: Retrieved from 'curl https://api.ipify.org' or if unsuccessful then set to  127.0.0.1.  It is the IP address of the server and the default IP address of the TURN server
         --turn              TURN server to be used, syntax: --turn 127.0.0.1:19303
-                            Default value: as above, IP address downloaded from https://api.ipify.org; in case if download failure it is set to 127.0.0.1
+                            Default value: Retrieved from 'curl https://api.ipify.org' or if unsuccessful then set to  127.0.0.1.
         --turn-user         Sets the turn username when using a turn server.
         --turn-pass         Sets the turn password when using a turn server.
         --start-turn        Will launch the turnserver process.
         --stun              STUN server to be used, syntax: --stun stun.l.google.com:19302
-                            Default value as above
+                            Default value: stun.l.google.com:19302
         --frontend-dir      Sets the output path for the fontend build
         --build             Force a rebuild of the typescript frontend even if it already exists
         --rebuild           Force a rebuild of everything
@@ -47,8 +47,6 @@ function parse_args() {
     BUILD_LIBRARIES=0
     BUILD_FRONTEND=0
     BUILD_WILBUR=0
-    DEFAULT_STUN=0
-    DEFAULT_TURN=0
     if [[ ! -d "${SCRIPT_DIR}/../../dist/" ]]; then
         BUILD_WILBUR=1
     fi
@@ -59,8 +57,6 @@ function parse_args() {
         --verbose ) VERBOSE=1; shift;;
         --build ) BUILD_FRONTEND=1; shift;;
         --rebuild ) BUILD_LIBRARIES=1; BUILD_FRONTEND=1; BUILD_WILBUR=1; shift;;
-        --default-stun ) DEFAULT_STUN=1; shift;;
-        --default-turn ) DEFAULT_TURN=1; shift;;
         --stun ) STUN_SERVER="$2"; shift 2;;
         --turn ) TURN_SERVER="$2"; shift 2;;
         --turn-user ) TURN_USER="$2"; shift 2;;
@@ -319,13 +315,13 @@ function set_public_ip() {
 # Sets up the turn variables and optionally launches the turn server
 # Assumes PUBLIC_IP = public ip of this host
 function setup_turn_stun() {
-    if [[ "$DEFAULT_TURN" == "1" ]]; then
+    if [[ -z "$TURN_SERVER" ]]; then
         TURN_SERVER="${PUBLIC_IP}:19303"
         TURN_USER="PixelStreamingUser"
         TURN_PASS="AnotherTURNintheroad"
     fi
 
-    if [[ "$DEFAULT_STUN" == "1" ]]; then
+    if [[ -z "$STUN_SERVER" ]]; then
         STUN_SERVER="stun.l.google.com:19302"
     fi
 
