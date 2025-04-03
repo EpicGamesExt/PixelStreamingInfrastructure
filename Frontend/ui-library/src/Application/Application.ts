@@ -11,7 +11,8 @@ import {
     DataChannelLatencyTestResult,
     OptionParameters,
     SettingsChangedEvent,
-    LatencyInfo
+    LatencyInfo,
+    ShowOnScreenKeyboardEvent
 } from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.5';
 import { OverlayBase } from '../Overlay/BaseOverlay';
 import { ActionOverlay } from '../Overlay/ActionOverlay';
@@ -28,6 +29,7 @@ import { SettingsPanel } from '../UI/SettingsPanel';
 import { StatsPanel } from '../UI/StatsPanel';
 import { VideoQpIndicator } from '../UI/VideoQpIndicator';
 import { ConfigUI } from '../Config/ConfigUI';
+import { EditConfirmedEvent, EditTextModal } from '../UI/EditTextModal';
 import {
     UIElementCreationMode,
     isPanelEnabled,
@@ -99,6 +101,7 @@ export class Application {
     settingsPanel: SettingsPanel;
     statsPanel: StatsPanel;
     videoQpIndicator: VideoQpIndicator;
+    editTextModal: EditTextModal | null = null;
 
     configUI: ConfigUI;
 
@@ -373,6 +376,17 @@ export class Application {
         this.stream.addEventListener('webRtcTCPRelayDetected', () =>
             Logger.Warning(`Stream quailty degraded due to network enviroment, stream is relayed over TCP.`)
         );
+        this.stream.addEventListener('showOnScreenKeyboard', (event: ShowOnScreenKeyboardEvent) => {
+            // Only show the edit text modal if the flag is enabled
+            if (!this.stream.config.isFlagEnabled(Flags.UseModalForTextInput)) {
+                return;
+            }
+
+            const evtData: ShowOnScreenKeyboardEvent['data'] = event.data;
+            if (evtData.showOnScreenKeyboard) {
+                this.showEditTextModal(evtData.contents);
+            }
+        });
     }
 
     /**
@@ -756,6 +770,22 @@ export class Application {
         if (this.onColorModeChanged) {
             this.onColorModeChanged(isLightMode);
         }
+    }
+
+    showEditTextModal(ueTextboxContents: string) {
+        // Remove any existing modal
+        this.editTextModal?.rootElement.remove();
+        // Make a new modal for editing the UE textbox on the browser side
+        this.editTextModal = new EditTextModal();
+        // Add it to the root of the Pixel Streaming application
+        this.rootElement.append(this.editTextModal.rootElement);
+        // Add the text content from UE side and summon on-screen keyboard
+        this.editTextModal.showModal(ueTextboxContents);
+        // Bind to the confirm event
+        this.editTextModal.events.addEventListener('editConfirmed', (evt: Event) => {
+            const editTextEvent: EditConfirmedEvent = evt as EditConfirmedEvent;
+            this.stream.sendTextboxEntry(editTextEvent.confirmedText);
+        });
     }
 
     onSettingsChanged(event: SettingsChangedEvent) {

@@ -87,6 +87,17 @@ export class SettingUIOption<CustomIds extends string = OptionParametersIds> ext
                     this.setting.updateURLParams();
                 }
             };
+
+            // Block keypress/up/down propogation from text field typing going to UE
+            this.selector.addEventListener('keypress', (event) => {
+                event.stopPropagation();
+            });
+            this.selector.addEventListener('keyup', (event) => {
+                event.stopPropagation();
+            });
+            this.selector.addEventListener('keydown', (event) => {
+                event.stopPropagation();
+            });
         }
         return this._rootElement;
     }
