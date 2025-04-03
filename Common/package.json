@@ -24,7 +24,7 @@
     "devDependencies": {
         "@eslint/js": "^9.20.0",
         "@protobuf-ts/plugin": "^2.9.4",
-        "@types/node": "^22.13.17",
+        "@types/node": "^22.14.0",
         "concurrently": "^9.1.2",
         "eslint": "^9.20.0",
         "eslint-config-prettier": "^10.0.1",

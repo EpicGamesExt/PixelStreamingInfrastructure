@@ -17,6 +17,7 @@
     ],
     "private": true,
     "scripts": {
+        "changeset": "npx @changesets/cli",
         "clean": "npm run clean --ws",
         "build": "npm run build --ws",
         "build:all:cjs": "cd Common && npm run build:cjs && cd ../Signalling && npm run build:cjs && cd ../SignallingWebServer && npm run build && cd ../Frontend/library && npm run build:cjs && cd ../ui-library && npm run build:cjs && cd ../implementations/typescript && npm run build:dev",
@@ -27,9 +28,12 @@
         "pre-commit-lint"
     ],
     "devDependencies": {
+        "@changesets/cli": "^2.28.1",
+        "@types/node": "^22.14.0",
         "eslint": "^9.22.0",
-        "typescript-eslint": "^8.26.1",
+        "eslint-plugin-prettier": "^5.2.6",
         "lint-staged": "^15.3.0",
-        "pre-commit": "^1.0.10"
+        "pre-commit": "^1.0.10",
+        "typescript-eslint": "^8.26.1"
     }
 }

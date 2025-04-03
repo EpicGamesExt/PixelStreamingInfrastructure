@@ -5,6 +5,7 @@
     "main": "dist/cjs/pixelstreamingjsstreamer.js",
     "types": "dist/types/pixelstreamingjsstreamer.d.ts",
     "module": "dist/esm/pixelstreamingjsstreamer.js",
+    "private": true,
     "scripts": {
         "clean": "rimraf ./dist",
         "develop": "webpack-dev-server --mode development",
@@ -18,6 +19,7 @@
     "author": "Epic Games",
     "license": "MIT",
     "devDependencies": {
+        "@types/node": "^22.13.17",
         "copy-webpack-plugin": "^12.0.2",
         "eslint": "^9.20.1",
         "eslint-config-prettier": "^10.0.1",
