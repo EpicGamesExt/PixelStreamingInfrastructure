@@ -4,9 +4,11 @@ on:
   workflow_dispatch:
   push:
     paths:
+      - ".github/workflows/healthcheck-image-wilbur.yml"
       - "SignallingWebServer/**"
   pull_request:
     paths:
+      - ".github/workflows/healthcheck-image-wilbur.yml"
       - "SignallingWebServer/**"
 
 jobs:
