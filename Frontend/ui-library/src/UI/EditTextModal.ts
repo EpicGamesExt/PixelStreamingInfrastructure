@@ -52,7 +52,7 @@ export class EditTextModal {
         return this._events;
     }
 
-    public showOnScreenKeyboard(existingTextAreaContents: string) {
+    public showModal(existingTextAreaContents: string) {
         if (existingTextAreaContents) {
             // Remove any null terminators from the string
             existingTextAreaContents = existingTextAreaContents.replace(/\0/g, '');

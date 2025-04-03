@@ -377,9 +377,14 @@ export class Application {
             Logger.Warning(`Stream quailty degraded due to network enviroment, stream is relayed over TCP.`)
         );
         this.stream.addEventListener('showOnScreenKeyboard', (event: ShowOnScreenKeyboardEvent) => {
+            // Only show the edit text modal if the flag is enabled
+            if (!this.stream.config.isFlagEnabled(Flags.UseModalForTextInput)) {
+                return;
+            }
+
             const evtData: ShowOnScreenKeyboardEvent['data'] = event.data;
             if (evtData.showOnScreenKeyboard) {
-                this.onShowOnScreenKeyboard(evtData.contents);
+                this.showEditTextModal(evtData.contents);
             }
         });
     }
@@ -767,7 +772,7 @@ export class Application {
         }
     }
 
-    onShowOnScreenKeyboard(ueTextboxContents: string) {
+    showEditTextModal(ueTextboxContents: string) {
         // Remove any existing modal
         this.editTextModal?.rootElement.remove();
         // Make a new modal for editing the UE textbox on the browser side
@@ -775,7 +780,7 @@ export class Application {
         // Add it to the root of the Pixel Streaming application
         this.rootElement.append(this.editTextModal.rootElement);
         // Add the text content from UE side and summon on-screen keyboard
-        this.editTextModal.showOnScreenKeyboard(ueTextboxContents);
+        this.editTextModal.showModal(ueTextboxContents);
         // Bind to the confirm event
         this.editTextModal.events.addEventListener('editConfirmed', (evt: Event) => {
             const editTextEvent: EditConfirmedEvent = evt as EditConfirmedEvent;
