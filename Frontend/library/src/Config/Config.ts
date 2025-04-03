@@ -26,6 +26,7 @@ export class Flags {
     static StartVideoMuted = 'StartVideoMuted' as const;
     static SuppressBrowserKeys = 'SuppressBrowserKeys' as const;
     static UseMic = 'UseMic' as const;
+    static UseModalForTextInput = 'UseModalForTextInput' as const;
     static UseCamera = 'UseCamera' as const;
     static KeyboardInput = 'KeyboardInput' as const;
     static MouseInput = 'MouseInput' as const;
@@ -325,6 +326,19 @@ export class Config {
                 settings && Object.prototype.hasOwnProperty.call(settings, Flags.UseMic)
                     ? settings[Flags.UseMic]
                     : false,
+                useUrlParams
+            )
+        );
+
+        this.flags.set(
+            Flags.UseModalForTextInput,
+            new SettingFlag(
+                Flags.UseModalForTextInput,
+                'Use modal for text input',
+                'When entering input into a streamed UE text widget, use an input modal.',
+                settings && Object.prototype.hasOwnProperty.call(settings, Flags.UseModalForTextInput)
+                    ? settings[Flags.UseModalForTextInput]
+                    : true,
                 useUrlParams
             )
         );
