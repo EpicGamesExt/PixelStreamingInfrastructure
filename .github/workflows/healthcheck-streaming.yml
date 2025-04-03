@@ -64,41 +64,33 @@ jobs:
     - name: Extract streamer
       run: 7z x -oStreamer Minimal-PixelStreamer-5.5-Win64-Development.7z
 
+    - name: Install dependencies
+      run: npm install
+
     - name: Build Common
       working-directory: Common
-      run: |
-        npm install
-        npm run build
+      run: npm run build
 
     - name: Build Signalling
       working-directory: Signalling
-      run: |
-        npm install
-        npm run build
+      run: npm run build
 
     - name: Build Wilbur
       working-directory: SignallingWebServer
-      run: |
-        npm install
-        npm run build
+      run: npm run build
 
     - name: Build Frontend lib
       working-directory: Frontend/library
-      run: |
-        npm install
-        npm run build
+      run: npm run build
 
     - name: Build Frontend ui lib
       working-directory: Frontend/ui-library
-      run: |
-        npm install
-        npm run build
+      run: npm run build
 
     - name: Build Frontend implementation
       working-directory: Frontend/implementations/typescript
       run: |
         $Env:WEBPACK_OUTPUT_PATH='${{ github.workspace }}\www'
-        npm install
         npm run build
 
     - name: Prepare test
