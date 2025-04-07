@@ -15,7 +15,7 @@ Out the box the following is supported:
 
 Typing into a streamed UE widget works as follows:
 
-- On Desktop the user must be using `?HoveringMouse=true` (or configured in the settings panel/programmatically) so that the pointer remains.
+- On Desktop the user must be using either hovering mouse mode (e.g. `?HoveringMouse=true` or configured in the settings panel/programmatically) or be using locked mouse mode with software cursor enabled on the UE side so that the pointer remains.
 - A user then clicks/taps on the streamed UE text widget.
 - An input modal will appear.
 - The user can type, copy/paste, or use IME to input into the modal.
