@@ -223,7 +223,7 @@ IF "%BUILD_FRONTEND%"=="1" (
     call %NPM% run build:cjs
     popd
     pushd %CD%\Frontend\implementations\typescript
-    call %NPM% run build:cjs
+    call %NPM% run build:dev
     popd
     popd
 ) else (

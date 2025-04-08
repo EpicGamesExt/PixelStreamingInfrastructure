@@ -246,7 +246,7 @@ function setup_frontend() {
 		"${NPM}" run build:cjs
 		popd > /dev/null
 		pushd "${SCRIPT_DIR}/../../../Frontend/implementations/typescript" > /dev/null
-		"${NPM}" run build:cjs
+		"${NPM}" run build:dev
 		popd > /dev/null
 	else
 		echo 'Skipping building Frontend because files already exist. Please run with "--build" to force a rebuild'
