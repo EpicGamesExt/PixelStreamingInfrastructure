@@ -17,28 +17,35 @@ echo.
 echo    Usage:
 echo        %0 [--help] [--publicip ^<IP Address^>] [--turn ^<turn server^>] [--stun ^<stun server^>] [server options...]
 echo    Where:
-echo        --help                  Print this message and stop this script.
-echo        --publicip ^<ip^>         Define public ip address (using default port) for turn server
-echo                                Default value: Retrieved from 'curl https://api.ipify.org' or if unsuccessful then set to  127.0.0.1.
-echo        --turn ^<turn_ip^>        TURN server to be used
-echo        --default-turn          Uses IP address downloaded from https://api.ipify.org and sets up default turn parameters
-echo        --turn-user ^<username^>  Sets the turn username when using a turn server.
-echo        --turn-pass ^<password^>   Sets the turn password when using a turn server.
-echo        --start-turn            Will launch the turnserver process.
-echo        --stun ^<stun_ip^>        STUN server to be used
-echo        --default-stun          Uses IP address downloaded from https://api.ipify.org and sets up default stun parameters
-echo        --build                 Force a rebuild of the typescript frontend even if it already exists
-echo        --frontend-dir ^<path^>   Sets the output path for the fontend build
-echo        --dev                   Dev mode (forces build of wilbur and its dependencies)
+echo        --help              Print this message and stop this script.
+echo        --publicip          Define public ip address (using default port) for turn server, syntax: --publicip ; it is used for 
+echo                            Default value: Retrieved from 'curl https://api.ipify.org' or if unsuccessful then set to  127.0.0.1.  It is the IP address of the server and the default IP address of the TURN server
+echo        --turn              TURN server to be used, syntax: --turn 127.0.0.1:19303
+echo                            Default value: Retrieved from 'curl https://api.ipify.org' or if unsuccessful then set to  127.0.0.1.
+echo        --turn-user         Sets the turn username when using a turn server.
+echo        --turn-pass         Sets the turn password when using a turn server.
+echo        --start-turn        Will launch the turnserver process.
+echo        --stun              STUN server to be used, syntax: --stun stun.l.google.com:19302
+echo                            Default value: stun.l.google.com:19302
+echo        --frontend-dir      Sets the output path for the fontend build
+echo        --build             Force a rebuild of the typescript frontend even if it already exists
+echo        --rebuild           Force a rebuild of everything
+echo        --build-libraries   Force a rebuild of shared libraries
+echo        --build-wilbur      Force build of wilbur
+echo        --deps              Force reinstall of dependencies
 echo    Other options: stored and passed to the server.
+IF exist "%SCRIPT_DIR%..\..\dist" (
+    pushd %SCRIPT_DIR%..\..
+    call %NPM% run start --- --help
+    popd
+)
 set CONTINUE=0
 exit /b
 
 :ParseArgs
+set BUILD_LIBRARIES=0
 set BUILD_WILBUR=0
-set FORCE_BUILD=0
-set DEFAULT_STUN=0
-set DEFAULT_TURN=0
+set BUILD_FRONTEND=0
 set START_TURN=0
 set SERVER_ARGS=
 set FRONTEND_DIR=
@@ -47,15 +54,12 @@ set TURN_USER=
 set TURN_PASS=
 set STUN_SERVER=
 set PUBLIC_IP=
-if not exist "%SCRIPT_DIR%\..\..\dist\" (
-    set BUILD_WILBUR=1
-)
 :arg_loop
 IF NOT "%1"=="" (
     set HANDLED=0
     IF "%1"=="--help" (
         CALL :Usage
-        GOTO :eof
+        exit /b
     )
     IF "%1"=="--publicip" (
         set HANDLED=1
@@ -66,10 +70,6 @@ IF NOT "%1"=="" (
         set HANDLED=1
         set TURN_SERVER=%2
         SHIFT
-    )
-    IF "%1"=="--default-turn" (
-        set HANDLED=1
-        set DEFAULT_TURN=1
     )
     IF "%1"=="--turn-user" (
         set HANDLED=1
@@ -88,21 +88,32 @@ IF NOT "%1"=="" (
         set STUN_SERVER=%2
         SHIFT
     )
-    IF "%1"=="--default-stun" (
-        set HANDLED=1
-        set DEFAULT_STUN=1
-    )
-    IF "%1"=="--build" (
-        set HANDLED=1
-        set FORCE_BUILD=1
-    )
     IF "%1"=="--frontend-dir" (
         set HANDLED=1
         set FRONTEND_DIR=%~2
         SHIFT
     )
-    IF "%1"=="--dev" (
+    IF "%1"=="--build" (
+        set HANDLED=1
+        set BUILD_FRONTEND=1
+    )
+    IF "%1"=="--rebuild" (
+        set HANDLED=1
+        set BUILD_LIBRARIES=1
+        set BUILD_FRONTEND=1
         set BUILD_WILBUR=1
+    )
+    IF "%1"=="--build-libraries" (
+        set HANDLED=1
+        set BUILD_LIBRARIES=1
+    )
+    IF "%1"=="--build-wilbur" (
+        set HANDLED=1
+        set BUILD_WILBUR=1
+    )
+    IF "%1"=="--deps" (
+        set HANDLED=1
+        set INSTALL_DEPS=1
     )
     IF NOT "!HANDLED!"=="1" (
         set SERVER_ARGS=%SERVER_ARGS% %1
@@ -126,12 +137,52 @@ if exist node\ (
   %TAR% -xf node.zip
   ren "%NODE_NAME%\" "node"
   del node.zip
+  set INSTALL_DEPS=1
 )
 
 rem Print node version
 FOR /f %%A IN ('node\node.exe -v') DO set NODE_VERSION=%%A
 echo Node version: %NODE_VERSION%
 popd
+
+if "%INSTALL_DEPS%"=="1" (
+    echo Installing dependencies...
+    pushd %SCRIPT_DIR%..\..\..
+    call %NPM% install
+    popd
+)
+
+exit /b
+
+:SetupLibraries
+
+if "%BUILD_LIBRARIES%"=="1" (
+    set BUILD_COMMON=1
+    set BUILD_SIGNALLING=1
+)
+
+if NOT exist "%SCRIPT_DIR%..\..\..\Common\dist" (
+    set BUILD_COMMON=1
+)
+
+if NOT exist "%SCRIPT_DIR%..\..\..\Signalling\dist" (
+    set BUILD_SIGNALLING=1
+)
+
+IF "%BUILD_COMMON%"=="1" (
+    pushd %SCRIPT_DIR%..\..\..\Common
+    echo Building common library
+    call %NPM% run build:cjs
+    popd
+)
+
+IF "%BUILD_SIGNALLING%"=="1" (
+    pushd %SCRIPT_DIR%..\..\..\Signalling
+    echo Building signalling library
+    call %NPM% run build:cjs
+    popd
+)
+
 exit /b
 
 :SetupFrontend
@@ -155,38 +206,24 @@ set FRONTEND_DIR=%RETVAL%
 rem Set this for webpack
 set WEBPACK_OUTPUT_PATH=%FRONTEND_DIR%
 
-IF NOT exist "%FRONTEND_DIR%\player.html" (
-    set FORCE_BUILD=1
+IF NOT exist "%FRONTEND_DIR%" (
+    set BUILD_FRONTEND=1
 )
 
 set PATH=%NODE_DIR%;%PATH%
 
-IF "%FORCE_BUILD%"=="1" (
+IF "%BUILD_FRONTEND%"=="1" (
     rem We could replace this all with a single npm script that does all this. we do have several build-all scripts already
     rem but this does give a good reference about the dependency chain for all of this.
-    echo Building common library...
-    echo ----------------------------
-    pushd %CD%\Common
-    call "%SCRIPT_DIR%node\npm" install
-    call "%SCRIPT_DIR%node\npm" run build
-    popd
-    echo Building frontend library...
-    echo ----------------------------
+    echo Building Typescript frontend...
     pushd %CD%\Frontend\library
-    call "%SCRIPT_DIR%node\npm" install
-    call "%SCRIPT_DIR%node\npm" run build
+    call %NPM% run build:cjs
     popd
-    echo Building frontend-ui library...
-    echo ----------------------------
     pushd %CD%\Frontend\ui-library
-    call "%SCRIPT_DIR%node\npm" install
-    call "%SCRIPT_DIR%node\npm" run build
+    call %NPM% run build:cjs
     popd
-    echo Building Epic Games reference frontend...
-    echo ----------------------------
     pushd %CD%\Frontend\implementations\typescript
-    call "%SCRIPT_DIR%node\npm" install
-    call "%SCRIPT_DIR%node\npm" run build
+    call %NPM% run build:dev
     popd
     popd
 ) else (
@@ -218,6 +255,7 @@ goto :eof
 :Setup
 echo Checking Pixel Streaming Server dependencies
 call :SetupNode
+call :SetupLibraries
 call :SetupFrontend
 call :SetupCoturn
 exit /b
@@ -228,12 +266,12 @@ Echo External IP is : %PUBLIC_IP%
 exit /b
 
 :SetupTurnStun
-IF "%DEFAULT_TURN%"=="1" (
+IF "%TURN_SERVER%"=="" (
     set TURN_SERVER=%PUBLIC_IP%:19303
     set TURN_USER=PixelStreamingUser
     set TURN_PASS=AnotherTURNintheroad
 )
-IF "%DEFAULT_STUN%"=="1" (
+IF "%STUN_SERVER%"=="" (
     set STUN_SERVER=stun.l.google.com:19302
 )
 
@@ -276,24 +314,16 @@ echo.
 exit /b
 
 :BuildWilbur
-pushd %SCRIPT_DIR%\..\..\
-pushd ..\Common
-echo Building common library...
-echo ------------------------
-call "%SCRIPT_DIR%node\npm" install
-call "%SCRIPT_DIR%node\npm" run build
-popd
-echo Building signalling library...
-echo ----------------------------
-pushd ..\Signalling
-call "%SCRIPT_DIR%node\npm" install
-call "%SCRIPT_DIR%node\npm" run build
-popd
-echo Building wilbur...
-echo ----------------------------
-call "%SCRIPT_DIR%node\npm" install
-call "%SCRIPT_DIR%node\npm" run build
-popd
+IF NOT exist "%SCRIPT_DIR%..\..\dist" (
+    set BUILD_WILBUR=1
+)
+
+IF "%BUILD_WILBUR%"=="1" (
+    pushd %SCRIPT_DIR%\..\..\
+    echo Building wilbur...
+    call %NPM% run build
+    popd
+)
 exit /b
 
 :StartWilbur
