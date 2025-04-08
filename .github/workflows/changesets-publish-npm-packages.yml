@@ -71,7 +71,7 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           npm install
-          npm build
+          npm run build
           npm publish --access public
 
       - name: Build the version label
