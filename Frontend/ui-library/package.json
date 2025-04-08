@@ -26,12 +26,11 @@
         "typescript-eslint": "^8.24.0"
     },
     "dependencies": {
+        "@epicgames-ps/lib-pixelstreamingfrontend-ue5.5": "^1.0.2",
+        "@babel/runtime": "^7.26.10",
         "jss": "^10.10.0",
         "jss-plugin-camel-case": "^10.10.0",
         "jss-plugin-global": "^10.10.0"
-    },
-    "peerDependencies": {
-        "@epicgames-ps/lib-pixelstreamingfrontend-ue5.5": "^1.0.2"
     },
     "repository": {
         "type": "git",
