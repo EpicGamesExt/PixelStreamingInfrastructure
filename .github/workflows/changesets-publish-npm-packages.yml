@@ -24,7 +24,7 @@ jobs:
         id: query-packages
         run: |
           # get all publishable npm packages
-          public_packages=$(jq -r '.workspaces[]' package.json | xargs -I {} jq -c --arg path "{}" ' select(.private != true) | { path: $path, name: .name, version: .version }' {}/package.json)
+          public_packages=$(jq -r '.workspaces[]' package.json | xargs -I {} bash -c 'if [ -f "{}/package.json" ]; then jq -c --arg path "{}" "select(.private != true) | { path: \$path, name: .name, version: .version }" {}/package.json; fi')
           to_publish=()
           # filter out packages with older or matching versions to the published version
           for row in $public_packages; do
