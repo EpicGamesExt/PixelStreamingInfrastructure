@@ -64,11 +64,22 @@ export class SettingUIText<CustomIds extends string = TextParametersIds> extends
             wrapperLabel.appendChild(this.textbox);
 
             // setup on change from checkbox
-            this.textbox.addEventListener('input', () => {
+            this.textbox.addEventListener('input', (event) => {
                 if (this.setting.text !== this.textbox.value) {
                     this.setting.text = this.textbox.value;
                     this.setting.updateURLParams();
                 }
+                event.stopPropagation();
+            });
+            // Block keypress/up/down propogation from text field typing going to UE
+            this.textbox.addEventListener('keypress', (event) => {
+                event.stopPropagation();
+            });
+            this.textbox.addEventListener('keyup', (event) => {
+                event.stopPropagation();
+            });
+            this.textbox.addEventListener('keydown', (event) => {
+                event.stopPropagation();
             });
         }
         return this._rootElement;

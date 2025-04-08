@@ -52,6 +52,17 @@ export class SettingUINumber<CustomIds extends string = NumericParametersIds> ex
             this._spinner.value = this.setting.number.toString();
             this._spinner.title = this.setting.description;
             this._spinner.classList.add('form-control');
+
+            // Block keypress/up/down propogation from text field typing going to UE
+            this.spinner.addEventListener('keypress', (event) => {
+                event.stopPropagation();
+            });
+            this.spinner.addEventListener('keyup', (event) => {
+                event.stopPropagation();
+            });
+            this.spinner.addEventListener('keydown', (event) => {
+                event.stopPropagation();
+            });
         }
         return this._spinner;
     }
