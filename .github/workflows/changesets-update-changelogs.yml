@@ -31,7 +31,7 @@ jobs:
       - name: Create Release Pull Request
         uses: changesets/action@v1.4.10
         env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           title: '[Bot] Update ${{ github.ref_name }} NPM Changelogs'
           commit: 'Updated NPM changelogs'
