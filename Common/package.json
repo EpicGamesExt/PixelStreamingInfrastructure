@@ -9,7 +9,7 @@
     "scripts": {
         "clean": "rimraf ./dist",
         "build:docs:proto": "docker run --rm -v $(pwd)/docs:/out -v $(pwd)/protobuf:/protos pseudomuto/protoc-gen-doc --doc_opt=markdown,messages.md",
-        "build:docs:ts": "typedoc --tsconfig tsconfig.esm.json",
+        "build:docs:ts": "echo \"Make sure you're passing the right --gitRemote so the source links are correct!\" && typedoc --tsconfig tsconfig.esm.json",
         "build:docs": "npm run build:docs:proto && npm run build:docs:ts",
         "build:proto": "protoc --experimental_allow_proto3_optional --ts_out src/Messages --proto_path protobuf protobuf/signalling_messages.proto",
         "build:cjs": "tsc --project tsconfig.cjs.json",

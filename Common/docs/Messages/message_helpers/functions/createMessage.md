@@ -8,7 +8,7 @@
 
 > **createMessage**(`messageType`, `params`?): [`BaseMessage`](../../base_message/interfaces/BaseMessage.md)
 
-Defined in: [Messages/message\_helpers.ts:14](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/5fb85fd65be1623aae0ff7d1b463a27836d35a34/Common/src/Messages/message_helpers.ts#L14)
+Defined in: [Messages/message\_helpers.ts:14](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/e5168fb9b95d09ea76d485376bd036403b747ad2/Common/src/Messages/message_helpers.ts#L14)
 
 A helper for creating signalling messages. Takes in optional given parameters and
 includes them in a message object with the 'type' field set properly for the message

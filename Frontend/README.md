@@ -52,7 +52,7 @@ Once you have NodeJS installed:
 
 - `cd library`
 - `npm install`
-- `npm run build-all`
+- `npm run build`
 
 ### Building the UI-Library
 
@@ -60,7 +60,7 @@ The user interface library is provided in [/ui-library](/Frontend/ui-library) di
 - Follow the steps to build the library first
 - `cd ui-library`
 - `npm install`
-- `npm run build-all`
+- `npm run build`
 
 ### Building the default UI
 
@@ -69,7 +69,7 @@ The default user interface is provided under [/implementations/typescript](/Fron
 - Follow the steps to build the libary and ui-library first
 - `cd implementations/typescript`
 - `npm install`
-- `npm run build-all`
+- `npm run build`
 
 This will produce `player.html` and `player.js` under the `SignallingWebServer/Public` directory - this is the default UI.
 
@@ -78,7 +78,7 @@ This will produce `player.html` and `player.js` under the `SignallingWebServer/P
 We recommend studying [/ui-library](/Frontend/ui-library) and [player.ts](/Frontend/implementations/typescript/src/player.ts)/[player.html](/Frontend/implementations/typescript/src/player.html), or alternatively the sample React implementation in [implementations/react](/Frontend/implementations/react), then once you have copied and modified the [package.json](/Frontend/implementations/typescript/package.json) and `.ts` into your own `implementation/your_implementation` directory, the process is similar:
 
 - `cd implementation/your_implementation`
-- `npm run build-all`
+- `npm run build`
 
 ## Unit tests
 

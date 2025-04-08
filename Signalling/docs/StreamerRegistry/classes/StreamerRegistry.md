@@ -6,7 +6,7 @@
 
 # Class: StreamerRegistry
 
-Defined in: [Signalling/src/StreamerRegistry.ts:48](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/StreamerRegistry.ts#L48)
+Defined in: [Signalling/src/StreamerRegistry.ts:48](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/StreamerRegistry.ts#L48)
 
 Handles all the streamer connections of a signalling server and
 can be used to lookup connections by id etc.
@@ -25,7 +25,7 @@ Events:
 
 > **new StreamerRegistry**(): [`StreamerRegistry`](StreamerRegistry.md)
 
-Defined in: [Signalling/src/StreamerRegistry.ts:52](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/StreamerRegistry.ts#L52)
+Defined in: [Signalling/src/StreamerRegistry.ts:52](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/StreamerRegistry.ts#L52)
 
 #### Returns
 
@@ -41,7 +41,7 @@ Defined in: [Signalling/src/StreamerRegistry.ts:52](https://github.com/mcottonte
 
 > **defaultStreamerIdPrefix**: `string` = `'UnknownStreamer'`
 
-Defined in: [Signalling/src/StreamerRegistry.ts:50](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/StreamerRegistry.ts#L50)
+Defined in: [Signalling/src/StreamerRegistry.ts:50](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/StreamerRegistry.ts#L50)
 
 ***
 
@@ -49,7 +49,7 @@ Defined in: [Signalling/src/StreamerRegistry.ts:50](https://github.com/mcottonte
 
 > **streamers**: [`IStreamer`](../interfaces/IStreamer.md)[]
 
-Defined in: [Signalling/src/StreamerRegistry.ts:49](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/StreamerRegistry.ts#L49)
+Defined in: [Signalling/src/StreamerRegistry.ts:49](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/StreamerRegistry.ts#L49)
 
 ## Methods
 
@@ -57,7 +57,7 @@ Defined in: [Signalling/src/StreamerRegistry.ts:49](https://github.com/mcottonte
 
 > **add**(`streamer`): `boolean`
 
-Defined in: [Signalling/src/StreamerRegistry.ts:64](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/StreamerRegistry.ts#L64)
+Defined in: [Signalling/src/StreamerRegistry.ts:64](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/StreamerRegistry.ts#L64)
 
 Adds a streamer to the registry. If the streamer already has an id
 it will be sanitized (checked against existing ids and altered if
@@ -110,7 +110,7 @@ Alias for `emitter.on(eventName, listener)`.
 
 > **count**(): `number`
 
-Defined in: [Signalling/src/StreamerRegistry.ts:133](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/StreamerRegistry.ts#L133)
+Defined in: [Signalling/src/StreamerRegistry.ts:133](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/StreamerRegistry.ts#L133)
 
 Returns the total number of connected streamers.
 
@@ -188,7 +188,7 @@ myEmitter.emit('event', 1, 2, 3, 4, 5);
 
 > **empty**(): `boolean`
 
-Defined in: [Signalling/src/StreamerRegistry.ts:126](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/StreamerRegistry.ts#L126)
+Defined in: [Signalling/src/StreamerRegistry.ts:126](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/StreamerRegistry.ts#L126)
 
 Returns true when the registry is empty.
 
@@ -202,7 +202,7 @@ Returns true when the registry is empty.
 
 > **find**(`streamerId`): `undefined` \| [`IStreamer`](../interfaces/IStreamer.md)
 
-Defined in: [Signalling/src/StreamerRegistry.ts:106](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/StreamerRegistry.ts#L106)
+Defined in: [Signalling/src/StreamerRegistry.ts:106](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/StreamerRegistry.ts#L106)
 
 Attempts to find the given streamer id in the registry.
 
@@ -222,7 +222,7 @@ Attempts to find the given streamer id in the registry.
 
 > **getFirstStreamerId**(): `null` \| `string`
 
-Defined in: [Signalling/src/StreamerRegistry.ts:116](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/StreamerRegistry.ts#L116)
+Defined in: [Signalling/src/StreamerRegistry.ts:116](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/StreamerRegistry.ts#L116)
 
 Used by players who haven't subscribed but try to send a message.
 This is to cover legacy connections that do not know how to subscribe.
@@ -350,7 +350,7 @@ The callback function
 
 > **remove**(`streamer`): `boolean`
 
-Defined in: [Signalling/src/StreamerRegistry.ts:90](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/StreamerRegistry.ts#L90)
+Defined in: [Signalling/src/StreamerRegistry.ts:90](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/StreamerRegistry.ts#L90)
 
 Removes a streamer from the registry. If the streamer isn't found
 it does nothing.

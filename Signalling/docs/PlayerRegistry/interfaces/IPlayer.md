@@ -6,7 +6,7 @@
 
 # Interface: IPlayer
 
-Defined in: [Signalling/src/PlayerRegistry.ts:10](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/PlayerRegistry.ts#L10)
+Defined in: [Signalling/src/PlayerRegistry.ts:10](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/PlayerRegistry.ts#L10)
 
 An interface that describes a player that can be added to the
 player registry.
@@ -21,7 +21,7 @@ player registry.
 
 > **playerId**: `string`
 
-Defined in: [Signalling/src/PlayerRegistry.ts:11](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/PlayerRegistry.ts#L11)
+Defined in: [Signalling/src/PlayerRegistry.ts:11](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/PlayerRegistry.ts#L11)
 
 ***
 
@@ -29,7 +29,7 @@ Defined in: [Signalling/src/PlayerRegistry.ts:11](https://github.com/mcottontens
 
 > **protocol**: `SignallingProtocol`
 
-Defined in: [Signalling/src/PlayerRegistry.ts:12](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/PlayerRegistry.ts#L12)
+Defined in: [Signalling/src/PlayerRegistry.ts:12](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/PlayerRegistry.ts#L12)
 
 ***
 
@@ -37,7 +37,7 @@ Defined in: [Signalling/src/PlayerRegistry.ts:12](https://github.com/mcottontens
 
 > **subscribedStreamer**: `null` \| [`IStreamer`](../../StreamerRegistry/interfaces/IStreamer.md)
 
-Defined in: [Signalling/src/PlayerRegistry.ts:13](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/PlayerRegistry.ts#L13)
+Defined in: [Signalling/src/PlayerRegistry.ts:13](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/PlayerRegistry.ts#L13)
 
 ## Methods
 
@@ -45,7 +45,7 @@ Defined in: [Signalling/src/PlayerRegistry.ts:13](https://github.com/mcottontens
 
 > **getPlayerInfo**(): [`IPlayerInfo`](IPlayerInfo.md)
 
-Defined in: [Signalling/src/PlayerRegistry.ts:16](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/PlayerRegistry.ts#L16)
+Defined in: [Signalling/src/PlayerRegistry.ts:16](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/PlayerRegistry.ts#L16)
 
 #### Returns
 
@@ -57,7 +57,7 @@ Defined in: [Signalling/src/PlayerRegistry.ts:16](https://github.com/mcottontens
 
 > **getReadableIdentifier**(): `string`
 
-Defined in: [Signalling/src/LoggingUtils.ts:18](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/LoggingUtils.ts#L18)
+Defined in: [Signalling/src/LoggingUtils.ts:18](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/LoggingUtils.ts#L18)
 
 #### Returns
 
@@ -73,7 +73,7 @@ Defined in: [Signalling/src/LoggingUtils.ts:18](https://github.com/mcottontensor
 
 > **sendMessage**(`message`): `void`
 
-Defined in: [Signalling/src/PlayerRegistry.ts:15](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/PlayerRegistry.ts#L15)
+Defined in: [Signalling/src/PlayerRegistry.ts:15](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/PlayerRegistry.ts#L15)
 
 #### Parameters
 

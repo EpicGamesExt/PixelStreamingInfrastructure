@@ -6,7 +6,7 @@ NPM="${SCRIPT_DIR}/node/bin/npm"
 # Prints the arguments and their descriptions to the console
 function print_usage() {
     echo "
-    Usage:
+    Script usage:
         ${0} [--help] [--publicip <IP Address>] [--turn <turn server>] [--stun <stun server>] [server options...]
     Where:
         --help              Print this message and stop this script.
@@ -32,6 +32,12 @@ function print_usage() {
     Other options: stored and passed to the server.  All parameters printed once the script values are set.
     Command line options might be omitted to run with defaults and it is a good practice to omit specific ones when just starting the TURN or the STUN server alone, not the whole set of scripts.
     "
+    if [[ -d "${SCRIPT_DIR}/../../dist/" ]]; then
+        pushd "${SCRIPT_DIR}/../.."
+        echo "Server options:"
+        "${NPM}" run start -- --help
+        popd
+    fi
     exit 1
 }
 

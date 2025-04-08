@@ -6,7 +6,7 @@
 
 # Class: LoggerContext
 
-Defined in: [Logger/Logger.ts:23](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/5fb85fd65be1623aae0ff7d1b463a27836d35a34/Common/src/Logger/Logger.ts#L23)
+Defined in: [Logger/Logger.ts:23](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/e5168fb9b95d09ea76d485376bd036403b747ad2/Common/src/Logger/Logger.ts#L23)
 
 The global context for the logger configuration.
 This cannot be stored statically in the Logger class because we sometimes have multiple execution
@@ -29,7 +29,7 @@ to be shared with any Logger instances.
 
 > **includeStack**: `boolean` = `true`
 
-Defined in: [Logger/Logger.ts:25](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/5fb85fd65be1623aae0ff7d1b463a27836d35a34/Common/src/Logger/Logger.ts#L25)
+Defined in: [Logger/Logger.ts:25](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/e5168fb9b95d09ea76d485376bd036403b747ad2/Common/src/Logger/Logger.ts#L25)
 
 ***
 
@@ -37,4 +37,4 @@ Defined in: [Logger/Logger.ts:25](https://github.com/mcottontensor/PixelStreamin
 
 > **logLevel**: [`LogLevel`](../enumerations/LogLevel.md) = `LogLevel.Debug`
 
-Defined in: [Logger/Logger.ts:24](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/5fb85fd65be1623aae0ff7d1b463a27836d35a34/Common/src/Logger/Logger.ts#L24)
+Defined in: [Logger/Logger.ts:24](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/e5168fb9b95d09ea76d485376bd036403b747ad2/Common/src/Logger/Logger.ts#L24)

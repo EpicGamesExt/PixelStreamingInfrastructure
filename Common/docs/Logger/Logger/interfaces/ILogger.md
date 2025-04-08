@@ -6,7 +6,7 @@
 
 # Interface: ILogger
 
-Defined in: [Logger/Logger.ts:28](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/5fb85fd65be1623aae0ff7d1b463a27836d35a34/Common/src/Logger/Logger.ts#L28)
+Defined in: [Logger/Logger.ts:28](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/e5168fb9b95d09ea76d485376bd036403b747ad2/Common/src/Logger/Logger.ts#L28)
 
 ## Methods
 
@@ -14,7 +14,7 @@ Defined in: [Logger/Logger.ts:28](https://github.com/mcottontensor/PixelStreamin
 
 > **Debug**(`message`): `void`
 
-Defined in: [Logger/Logger.ts:30](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/5fb85fd65be1623aae0ff7d1b463a27836d35a34/Common/src/Logger/Logger.ts#L30)
+Defined in: [Logger/Logger.ts:30](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/e5168fb9b95d09ea76d485376bd036403b747ad2/Common/src/Logger/Logger.ts#L30)
 
 #### Parameters
 
@@ -32,7 +32,7 @@ Defined in: [Logger/Logger.ts:30](https://github.com/mcottontensor/PixelStreamin
 
 > **Error**(`message`): `void`
 
-Defined in: [Logger/Logger.ts:33](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/5fb85fd65be1623aae0ff7d1b463a27836d35a34/Common/src/Logger/Logger.ts#L33)
+Defined in: [Logger/Logger.ts:33](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/e5168fb9b95d09ea76d485376bd036403b747ad2/Common/src/Logger/Logger.ts#L33)
 
 #### Parameters
 
@@ -50,7 +50,7 @@ Defined in: [Logger/Logger.ts:33](https://github.com/mcottontensor/PixelStreamin
 
 > **Info**(`message`): `void`
 
-Defined in: [Logger/Logger.ts:31](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/5fb85fd65be1623aae0ff7d1b463a27836d35a34/Common/src/Logger/Logger.ts#L31)
+Defined in: [Logger/Logger.ts:31](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/e5168fb9b95d09ea76d485376bd036403b747ad2/Common/src/Logger/Logger.ts#L31)
 
 #### Parameters
 
@@ -68,7 +68,7 @@ Defined in: [Logger/Logger.ts:31](https://github.com/mcottontensor/PixelStreamin
 
 > **InitLogging**(`logLevel`, `includeStack`): `void`
 
-Defined in: [Logger/Logger.ts:29](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/5fb85fd65be1623aae0ff7d1b463a27836d35a34/Common/src/Logger/Logger.ts#L29)
+Defined in: [Logger/Logger.ts:29](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/e5168fb9b95d09ea76d485376bd036403b747ad2/Common/src/Logger/Logger.ts#L29)
 
 #### Parameters
 
@@ -90,7 +90,7 @@ Defined in: [Logger/Logger.ts:29](https://github.com/mcottontensor/PixelStreamin
 
 > **Warning**(`message`): `void`
 
-Defined in: [Logger/Logger.ts:32](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/5fb85fd65be1623aae0ff7d1b463a27836d35a34/Common/src/Logger/Logger.ts#L32)
+Defined in: [Logger/Logger.ts:32](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/e5168fb9b95d09ea76d485376bd036403b747ad2/Common/src/Logger/Logger.ts#L32)
 
 #### Parameters
 

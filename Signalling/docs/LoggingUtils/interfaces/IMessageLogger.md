@@ -6,7 +6,7 @@
 
 # Interface: IMessageLogger
 
-Defined in: [Signalling/src/LoggingUtils.ts:17](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/LoggingUtils.ts#L17)
+Defined in: [Signalling/src/LoggingUtils.ts:17](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/LoggingUtils.ts#L17)
 
 Most methods in here rely on connections implementing this interface so we can identify
 who is sending or receiving etc.
@@ -22,7 +22,7 @@ who is sending or receiving etc.
 
 > **getReadableIdentifier**(): `string`
 
-Defined in: [Signalling/src/LoggingUtils.ts:18](https://github.com/mcottontensor/PixelStreamingInfrastructure/blob/1c2e89b140492a0711bcb88268b18a037a27dc45/Signalling/src/LoggingUtils.ts#L18)
+Defined in: [Signalling/src/LoggingUtils.ts:18](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/4dc9339cfc185a91d37d078aa9dd0951dfbae1a5/Signalling/src/LoggingUtils.ts#L18)
 
 #### Returns
 
