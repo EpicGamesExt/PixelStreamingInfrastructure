@@ -1,6 +1,6 @@
-# @epicgames-ps/lib-pixelstreamingfrontend-ui-ue5.5
+# @epicgames-ps/lib-pixelstreamingfrontend-ue5.5
 
-## 1.2.0
+## 1.1.0
 
 ### Minor Changes
 
@@ -19,14 +19,3 @@
     - Docs: Added docs explaning this new edit text modal.
 
     Further details about the edit text modal as mentioned in this PR: https://github.com/EpicGamesExt/PixelStreamingInfrastructure/pull/564
-
-### Patch Changes
-
-- Updated dependencies [208d100]
-    - @epicgames-ps/lib-pixelstreamingfrontend-ue5.5@1.1.0
-
-## 1.1.0
-
-### Minor Changes
-
-- 8961c17: Frontend library is no longer a peer dependency but instead now a normal dependency.
