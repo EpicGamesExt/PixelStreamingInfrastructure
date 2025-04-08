@@ -501,51 +501,51 @@ export class PixelStreamingApplicationStyle {
             fill: 'var(--color2)'
         },
         '.modal': {
-            minWidth: "100vw",
-            minHeight: "100vh",
-            left: "0",
-            top: "0",
-            position: "fixed",
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-            color: "var(--color2)"
+            minWidth: '100vw',
+            minHeight: '100vh',
+            left: '0',
+            top: '0',
+            position: 'fixed',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+            color: 'var(--color2)'
         },
         '.innerModal': {
-			position: 'relative',
-			width: '500px',
-			height: '300px',
-			backgroundColor: 'var(--color0)',
-			display: 'flex',
-			flexDirection: 'column',
-			justifyContent: 'space-between',
-			alignItems: 'center',
+            position: 'relative',
+            width: '500px',
+            height: '300px',
+            backgroundColor: 'var(--color0)',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+            alignItems: 'center',
             borderRadius: '0.75em'
-		},
-		'.modalBtnContainer': {
-			display: 'flex',
-			flexDirection: 'row',
-			justifyContent: 'space-around',
-			width: '100%',
-			paddingTop: '1em',
-			paddingBottom: '1em'
-		},
-		'.modalTextArea': {
-			textAlign: 'left',
-			width: '95%',
-			height: '100%',
-			resize: 'none',
-			fontSize: '1rem',
-			border: '1px solid var(--color2)'
-		},
-		'.modalTextArea:focus-visible': {
-			outline: 'none !important',
-			border: '1px solid var(--color3)'
-		},
-		'.modal .btn-flat': {
-		 	fontSize: '1.0rem'
-		}
+        },
+        '.modalBtnContainer': {
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'space-around',
+            width: '100%',
+            paddingTop: '1em',
+            paddingBottom: '1em'
+        },
+        '.modalTextArea': {
+            textAlign: 'left',
+            width: '95%',
+            height: '100%',
+            resize: 'none',
+            fontSize: '1rem',
+            border: '1px solid var(--color2)'
+        },
+        '.modalTextArea:focus-visible': {
+            outline: 'none !important',
+            border: '1px solid var(--color3)'
+        },
+        '.modal .btn-flat': {
+            fontSize: '1.0rem'
+        }
     };
 
     customStyles?: Partial<Styles>;
