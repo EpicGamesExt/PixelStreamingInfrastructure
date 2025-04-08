@@ -55,6 +55,9 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@v3
 
+      - name: Remove workspace package
+        run: rm package.json
+
       - name: Get node version
         id: get_node_version
         run: echo "node_version=$(cat NODE_VERSION)" >> $GITHUB_OUTPUT
@@ -71,7 +74,7 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           npm install
-          npm build
+          npm run build
           npm publish --access public
 
       - name: Build the version label
