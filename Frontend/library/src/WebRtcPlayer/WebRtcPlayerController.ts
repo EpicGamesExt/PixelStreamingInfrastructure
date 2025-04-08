@@ -714,11 +714,11 @@ export class WebRtcPlayerController {
     }
 
     handleOnScreenKeyboardCommand(command: any) {
-        const data: ShowOnScreenKeyboardEvent["data"] = {
+        const data: ShowOnScreenKeyboardEvent['data'] = {
             showOnScreenKeyboard: command.showOnScreenKeyboard ?? true,
             x: command.x ?? 0,
             y: command.y ?? 0,
-            contents: command.contents ?? ""
+            contents: command.contents ?? ''
         };
         this.pixelStreaming.dispatchEvent(new ShowOnScreenKeyboardEvent(data));
     }
@@ -1786,9 +1786,7 @@ export class WebRtcPlayerController {
      */
     sendTextboxEntry(contents: string) {
         Logger.Info('----   Sending TextboxEntry message  ----');
-        this.streamMessageController.toStreamerHandlers.get('TextboxEntry')?.([
-            contents
-        ]);
+        this.streamMessageController.toStreamerHandlers.get('TextboxEntry')?.([contents]);
     }
 
     /**

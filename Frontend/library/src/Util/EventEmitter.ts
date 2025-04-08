@@ -434,10 +434,10 @@ export class LatencyCalculatedEvent extends Event {
 export class ShowOnScreenKeyboardEvent extends Event {
     override readonly type: 'showOnScreenKeyboard';
     readonly data: {
-        showOnScreenKeyboard: boolean,
-        x: number,
-        y: number,
-        contents: string
+        showOnScreenKeyboard: boolean;
+        x: number;
+        y: number;
+        contents: string;
     };
     constructor(data: ShowOnScreenKeyboardEvent['data']) {
         super('showOnScreenKeyboard');

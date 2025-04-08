@@ -6,7 +6,6 @@ import { UntranslatedCoordUnsigned } from '../Util/InputCoordTranslator';
  * Class for handling on screen keyboard usage
  */
 export class OnScreenKeyboard {
-
     // A modal is shown when the OnScreenKeyboard command is triggered.
     // We show this modal and focus the text area it contains to bring up the native on-device keyboard on mobile
     editTextModal: HTMLElement | null;
