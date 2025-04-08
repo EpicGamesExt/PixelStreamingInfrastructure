@@ -34,7 +34,7 @@ import { ResponseController } from '../UeInstanceMessage/ResponseController';
 import { SendMessageController } from '../UeInstanceMessage/SendMessageController';
 import { ToStreamerMessagesController } from '../UeInstanceMessage/ToStreamerMessagesController';
 import { DataChannelSender } from '../DataChannel/DataChannelSender';
-import { InputCoordTranslator, UntranslatedCoordUnsigned } from '../Util/InputCoordTranslator';
+import { InputCoordTranslator } from '../Util/InputCoordTranslator';
 import { PixelStreaming } from '../PixelStreaming/PixelStreaming';
 import {
     DataChannelCloseEvent,
@@ -45,6 +45,7 @@ import {
     PlayStreamErrorEvent,
     PlayStreamEvent,
     PlayStreamRejectedEvent,
+    ShowOnScreenKeyboardEvent,
     StreamerListMessageEvent,
     StreamerIDChangedMessageEvent
 } from '../Util/EventEmitter';
@@ -346,15 +347,6 @@ export class WebRtcPlayerController {
      */
     destroyVideoPlayer() {
         this.videoPlayer.destroy();
-    }
-
-    /**
-     * Make a request to UnquantizedAndDenormalizeUnsigned coordinates
-     * @param x x axis coordinate
-     * @param y y axis coordinate
-     */
-    requestUnquantizedAndDenormalizeUnsigned(x: number, y: number): UntranslatedCoordUnsigned {
-        return this.coordinateConverter.untranslateUnsigned(x, y);
     }
 
     /**
@@ -714,9 +706,21 @@ export class WebRtcPlayerController {
 
         Logger.Info('Data Channel Command: ' + commandAsString);
         const command = JSON.parse(commandAsString);
+
+        // Handle "onScreenKeyboard" event
         if (command.command === 'onScreenKeyboard') {
-            this.pixelStreaming._activateOnScreenKeyboard(command);
+            this.handleOnScreenKeyboardCommand(command);
         }
+    }
+
+    handleOnScreenKeyboardCommand(command: any) {
+        const data: ShowOnScreenKeyboardEvent['data'] = {
+            showOnScreenKeyboard: command.showOnScreenKeyboard ?? true,
+            x: command.x ?? 0,
+            y: command.y ?? 0,
+            contents: command.contents ?? ''
+        };
+        this.pixelStreaming.dispatchEvent(new ShowOnScreenKeyboardEvent(data));
     }
 
     /**
@@ -1774,6 +1778,15 @@ export class WebRtcPlayerController {
     sendRequestQualityControlOwnership(): void {
         Logger.Info('----   Sending Request to Control Quality  ----');
         this.toStreamerMessagesController.SendRequestQualityControl();
+    }
+
+    /**
+     * Send a `TextBoxEntry` message back to UE.
+     * @param contents The new contents of the UE side text box.
+     */
+    sendTextboxEntry(contents: string) {
+        Logger.Info('----   Sending TextboxEntry message  ----');
+        this.streamMessageController.toStreamerHandlers.get('TextboxEntry')?.([contents]);
     }
 
     /**
