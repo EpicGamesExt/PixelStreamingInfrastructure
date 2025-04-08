@@ -429,6 +429,23 @@ export class LatencyCalculatedEvent extends Event {
 }
 
 /**
+ * An event that is emitted when we receive the "onScreenKeyboard" command from UE.
+ */
+export class ShowOnScreenKeyboardEvent extends Event {
+    override readonly type: 'showOnScreenKeyboard';
+    readonly data: {
+        showOnScreenKeyboard: boolean;
+        x: number;
+        y: number;
+        contents: string;
+    };
+    constructor(data: ShowOnScreenKeyboardEvent['data']) {
+        super('showOnScreenKeyboard');
+        this.data = data;
+    }
+}
+
+/**
  * An event that is emitted when receiving data channel latency test response from server.
  * This event is handled by DataChannelLatencyTestController
  */
@@ -617,6 +634,7 @@ export type PixelStreamingEvent =
     | DataChannelCloseEvent
     | DataChannelErrorEvent
     | VideoInitializedEvent
+    | ShowOnScreenKeyboardEvent
     | StreamLoadingEvent
     | StreamPreConnectEvent
     | StreamReconnectEvent
