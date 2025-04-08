@@ -16,15 +16,18 @@ function print_usage() {
         --publicip          Define public ip address (using default port) for turn server, syntax: --publicip ; it is used for 
                             Default value: Retrieved from 'curl https://api.ipify.org' or if unsuccessful then set to  127.0.0.1.  It is the IP address of the server and the default IP address of the TURN server
         --turn              TURN server to be used, syntax: --turn 127.0.0.1:19303
-                            Default value: as above, IP address downloaded from https://api.ipify.org; in case if download failure it is set to 127.0.0.1
+                            Default value: Retrieved from 'curl https://api.ipify.org' or if unsuccessful then set to  127.0.0.1.
         --turn-user         Sets the turn username when using a turn server.
         --turn-pass         Sets the turn password when using a turn server.
         --start-turn        Will launch the turnserver process.
         --stun              STUN server to be used, syntax: --stun stun.l.google.com:19302
-                            Default value as above
-        --build             Force a rebuild of the typescript frontend even if it already exists
+                            Default value: stun.l.google.com:19302
         --frontend-dir      Sets the output path for the fontend build
-        --dev               Dev mode. (forces build of wilbur and its dependencies)
+        --build             Force a rebuild of the typescript frontend even if it already exists
+        --rebuild           Force a rebuild of everything
+        --build-libraries   Force a rebuild of shared libraries
+        --build-wilbur      Force build of wilbur
+        --deps              Force reinstall of dependencies
 
     Other options: stored and passed to the server.  All parameters printed once the script values are set.
     Command line options might be omitted to run with defaults and it is a good practice to omit specific ones when just starting the TURN or the STUN server alone, not the whole set of scripts.
@@ -36,21 +39,17 @@ function parse_args() {
     IS_DEBUG=0
     NO_SUDO=0
     VERBOSE=0
-    FORCE_BUILD=0
-    DEFAULT_STUN=0
-    DEFAULT_TURN=0
+    BUILD_LIBRARIES=0
+    BUILD_FRONTEND=0
     BUILD_WILBUR=0
-    if [[ ! -d "${SCRIPT_DIR}/../../dist/" ]]; then
-        BUILD_WILBUR=1
-    fi
+    INSTALL_DEPS=0
     while(($#)) ; do
         case "$1" in
         --debug ) IS_DEBUG=1; shift;;
         --nosudo ) NO_SUDO=1; shift;;
         --verbose ) VERBOSE=1; shift;;
-        --build ) FORCE_BUILD=1; shift;;
-        --default-stun ) DEFAULT_STUN=1; shift;;
-        --default-turn ) DEFAULT_TURN=1; shift;;
+        --build ) BUILD_FRONTEND=1; shift;;
+        --rebuild ) BUILD_LIBRARIES=1; BUILD_FRONTEND=1; BUILD_WILBUR=1; shift;;
         --stun ) STUN_SERVER="$2"; shift 2;;
         --turn ) TURN_SERVER="$2"; shift 2;;
         --turn-user ) TURN_USER="$2"; shift 2;;
@@ -58,7 +57,9 @@ function parse_args() {
         --start-turn ) START_TURN=1; shift;;
         --publicip ) PUBLIC_IP="$2"; shift 2;;
         --frontend-dir ) FRONTEND_DIR="$(realpath "$2")"; shift 2;;
-        --dev ) BUILD_WILBUR=1; shift;;
+        --build-wilbur ) BUILD_WILBUR=1; shift;;
+        --build-libraries ) BUILD_LIBRARIES=1; shift;;
+        --deps ) INSTALL_DEPS=1; shift;;
         --help ) print_usage;;
         * ) SERVER_ARGS+=" $1"; shift;;
         esac
@@ -124,6 +125,7 @@ function check_and_install() { #dep_name #get_version_string #version_min #insta
 		if [ "$?" -lt 2 ]; then
 			echo "$1 is installed."
             is_installed=1
+            return 0
 		else
 			echo "Required install of $1 not found installing"
 		fi
@@ -136,8 +138,11 @@ function check_and_install() { #dep_name #get_version_string #version_min #insta
 
 		if [ $? -ge 1 ]; then
 			echo "Installation of $1 failed try running 'export VERBOSE=1' then run this script again for more details"
+            return -1
 		fi
 	fi
+
+    return 1
 }
 
 function setup_node() {
@@ -155,7 +160,7 @@ function setup_node() {
     popd > /dev/null
 
     # navigate to project root
-    pushd "${SCRIPT_DIR}/../.." > /dev/null
+    pushd "${SCRIPT_DIR}/../../.." > /dev/null
 
     node_version=""
     if [[ -f "${SCRIPT_DIR}/node/bin/node" ]]; then
@@ -181,9 +186,33 @@ function setup_node() {
                                                                 && rm node.tar.xz
                                                                 && mv node-v*-*-* \"${SCRIPT_DIR}/node\""
 
-    PATH="${SCRIPT_DIR}/node/bin:$PATH"
+    if [ $? -eq 1 ] || [ "$INSTALL_DEPS" == "1" ]; then
+        echo "Installing dependencies..."
+        PATH="${SCRIPT_DIR}/node/bin:$PATH"
+        "${NPM}" install
+    fi
 
     popd > /dev/null
+}
+
+function setup_libraries() {
+	set -e
+
+    if [ ! -d "${SCRIPT_DIR}/../../../Common/dist/" ] || [ "$BUILD_LIBRARIES" == "1" ]; then
+        pushd "${SCRIPT_DIR}/../../../Common" > /dev/null
+        echo "Building common library."
+        "${NPM}" run build:cjs
+        popd > /dev/null
+    fi
+
+    if [ ! -d "${SCRIPT_DIR}/../../../Signalling/dist/" ] || [ "$BUILD_LIBRARIES" == "1" ]; then
+        pushd "${SCRIPT_DIR}/../../../Signalling" > /dev/null
+        echo "Building signalling library."
+        "${NPM}" run build:cjs
+        popd > /dev/null
+    fi
+
+	set +e
 }
 
 function setup_frontend() {
@@ -198,35 +227,25 @@ function setup_frontend() {
 
 	# navigate to root
 	pushd "${SCRIPT_DIR}/../../.." > /dev/null
-    OLDPATH=$PATH
-	export PATH="${SCRIPT_DIR}/node/bin:$PATH"
 
 	# If player.html doesn't exist, or --build passed as arg, rebuild the frontend
-    echo Testing ${WEBPACK_OUTPUT_PATH}/player.html
-	if [ ! -f "${WEBPACK_OUTPUT_PATH}/player.html" ] || [ "$FORCE_BUILD" == "1" ] ; then
+    echo Testing ${WEBPACK_OUTPUT_PATH}
+	if [ ! -d "${WEBPACK_OUTPUT_PATH}" ] || [ "$BUILD_FRONTEND" == "1" ] ; then
 		echo "Building Typescript Frontend."
 		# Using our bundled NodeJS, build the web frontend files
-		pushd "${SCRIPT_DIR}/../../../Common" > /dev/null
-		"${SCRIPT_DIR}/node/bin/npm" install
-		"${SCRIPT_DIR}/node/bin/npm" run build
-		popd > /dev/null
 		pushd "${SCRIPT_DIR}/../../../Frontend/library" > /dev/null
-		"${SCRIPT_DIR}/node/bin/npm" install
-		"${SCRIPT_DIR}/node/bin/npm" run build
+		"${NPM}" run build:cjs
 		popd > /dev/null
 		pushd "${SCRIPT_DIR}/../../../Frontend/ui-library" > /dev/null
-		"${SCRIPT_DIR}/node/bin/npm" install
-		"${SCRIPT_DIR}/node/bin/npm" run build
+		"${NPM}" run build:cjs
 		popd > /dev/null
 		pushd "${SCRIPT_DIR}/../../../Frontend/implementations/typescript" > /dev/null
-		"${SCRIPT_DIR}/node/bin/npm" install
-		"${SCRIPT_DIR}/node/bin/npm" run build
+		"${NPM}" run build:dev
 		popd > /dev/null
 	else
 		echo 'Skipping building Frontend because files already exist. Please run with "--build" to force a rebuild'
 	fi
 
-    export PATH=$OLDPATH
 	popd > /dev/null # root
 	set +e
 }
@@ -272,6 +291,7 @@ function setup_coturn() {
 function setup() {
     echo "Checking Pixel Streaming Server dependencies."
     setup_node
+    setup_libraries
     setup_frontend
     setup_coturn
 }
@@ -289,13 +309,13 @@ function set_public_ip() {
 # Sets up the turn variables and optionally launches the turn server
 # Assumes PUBLIC_IP = public ip of this host
 function setup_turn_stun() {
-    if [[ "$DEFAULT_TURN" == "1" ]]; then
+    if [[ -z "$TURN_SERVER" ]]; then
         TURN_SERVER="${PUBLIC_IP}:19303"
         TURN_USER="PixelStreamingUser"
         TURN_PASS="AnotherTURNintheroad"
     fi
 
-    if [[ "$DEFAULT_STUN" == "1" ]]; then
+    if [[ -z "$STUN_SERVER" ]]; then
         STUN_SERVER="stun.l.google.com:19302"
     fi
 
@@ -343,33 +363,19 @@ function start_process() {
 }
 
 # Assumes the following are set
-# SCRIPT_DIR = The path to the root of the PixelStreamingInfrastructure repo.
+# SCRIPT_DIR = The path to the platform_scripts
 # NPM = The npm command path
 function build_wilbur() {
-    pushd "${SCRIPT_DIR}/../../.." > /dev/null
-
-    pushd Common > /dev/null
-    echo Building common
-    "${NPM}" install
-    "${NPM}" run build
-    popd
-
-    pushd Signalling > /dev/null
-    echo Building signalling
-    "${NPM}" install
-    "${NPM}" run build
-    popd > /dev/null
-
-    pushd SignallingWebServer > /dev/null
-    echo Building wilbur
-    "${NPM}" install
-    "${NPM}" run build
-
-    popd > /dev/null
+    if [ ! -d "${SCRIPT_DIR}/../../dist" ] || [ "$BUILD_WILBUR" == "1" ] ; then
+        pushd "${SCRIPT_DIR}/../.." > /dev/null
+        echo Building wilbur
+        "${NPM}" run build
+        popd > /dev/null
+    fi
 }
 
 # Assumes the following are set
-# SCRIPT_DIR = The path to the root of the PixelStreamingInfrastructure repo.
+# SCRIPT_DIR = The path to the platform_scripts
 # NPM = The npm command path
 # SERVER_ARGS The arguments to be passed to the server
 function start_wilbur() {
