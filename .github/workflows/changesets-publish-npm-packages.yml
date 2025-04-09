@@ -47,6 +47,7 @@ jobs:
     needs: fetch-package-info
     permissions:
       contents: write
+    if: ${{ fromJSON(needs.fetch-package-info.outputs.matrix).length > 0 }}
     strategy:
       max-parallel: 1
       matrix:
