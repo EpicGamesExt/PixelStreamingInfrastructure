@@ -12,7 +12,8 @@
         "noImplicitReturns": true,
         "noPropertyAccessFromIndexSignature": true,
         "declaration": true,
-        "declarationDir": "./dist/types"
+        "declarationDir": "./dist/types",
+        "moduleResolution": "bundler"
     },
     "lib": ["es2015"],
     "include": ["./src/*.ts"],
