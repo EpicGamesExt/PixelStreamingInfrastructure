@@ -36,6 +36,7 @@ export class Flags {
     static WaitForStreamer = 'WaitForStreamer' as const;
     static HideUI = 'HideUI' as const;
     static EnableCaptureTimeExt = 'EnableCaptureTimeExt' as const;
+    static BrowserSendOffer = 'BrowserSendOffer' as const;
 }
 
 export type FlagsKeys = Exclude<keyof typeof Flags, 'prototype'>;
@@ -575,6 +576,19 @@ export class Config {
                 'Enables the abs-capture-time RTP header extension',
                 settings && Object.prototype.hasOwnProperty.call(settings, Flags.EnableCaptureTimeExt)
                     ? settings[Flags.EnableCaptureTimeExt]
+                    : false,
+                useUrlParams
+            )
+        );
+
+        this.flags.set(
+            Flags.BrowserSendOffer,
+            new SettingFlag(
+                Flags.BrowserSendOffer,
+                'Browser send offer (4.27 ONLY)',
+                'Browser will initiate the WebRTC handshake by sending the offer to the streamer (4.27 ONLY)',
+                settings && Object.prototype.hasOwnProperty.call(settings, Flags.BrowserSendOffer)
+                    ? settings[Flags.BrowserSendOffer]
                     : false,
                 useUrlParams
             )
