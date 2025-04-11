@@ -140,8 +140,13 @@ if exist node\ (
   set INSTALL_DEPS=1
 )
 
+rem NOTE: We want to use our NodeJS (not system NodeJS!) to build the web frontend files.
+rem Save our current directory (the NodeJS dir) in a variable
+set NODE_DIR=%SCRIPT_DIR%node
+set PATH=%NODE_DIR%;%PATH%
+
 rem Print node version
-FOR /f %%A IN ('node\node.exe -v') DO set NODE_VERSION=%%A
+FOR /f %%A IN ('node.exe -v') DO set NODE_VERSION=%%A
 echo Node version: %NODE_VERSION%
 popd
 
@@ -189,10 +194,6 @@ exit /b
 rem Start in the repo dir
 pushd %SCRIPT_DIR%..\..\..\
 
-rem NOTE: We want to use our NodeJS (not system NodeJS!) to build the web frontend files.
-rem Save our current directory (the NodeJS dir) in a variable
-set NODE_DIR=%SCRIPT_DIR%node
-
 IF "%FRONTEND_DIR%"=="" (
     set FRONTEND_DIR="%SCRIPT_DIR%..\..\www"
 ) else (
@@ -210,7 +211,6 @@ IF NOT exist "%FRONTEND_DIR%" (
     set BUILD_FRONTEND=1
 )
 
-set PATH=%NODE_DIR%;%PATH%
 
 IF "%BUILD_FRONTEND%"=="1" (
     rem We could replace this all with a single npm script that does all this. we do have several build-all scripts already
