@@ -11,6 +11,7 @@ import {
 import { AggregatedStats } from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.5';
 import { MathUtils } from '../Util/MathUtils';
 import { DataChannelLatencyTest } from './DataChannelLatencyTest';
+import { SessionTest } from './SessionTest';
 import {
     isSectionEnabled,
     StatsSections,
@@ -41,6 +42,7 @@ export class StatsPanel {
     _latencyResult: HTMLElement;
     _config: StatsPanelConfiguration;
 
+    sessionTest: SessionTest;
     latencyTest: LatencyTest;
     dataChannelLatencyTest: DataChannelLatencyTest;
 
@@ -50,6 +52,7 @@ export class StatsPanel {
     constructor(config: StatsPanelConfiguration) {
         this._config = config;
 
+        this.sessionTest = new SessionTest();
         this.latencyTest = new LatencyTest();
         this.dataChannelLatencyTest = new DataChannelLatencyTest();
     }
@@ -111,6 +114,7 @@ export class StatsPanel {
 
             this._statsContentElement.appendChild(streamToolStats);
             streamToolStats.appendChild(controlStats);
+            controlStats.appendChild(this.sessionTest.rootElement);
             controlStats.appendChild(statistics);
             controlStats.appendChild(latencyStats);
 
@@ -266,6 +270,8 @@ export class StatsPanel {
         const numberFormat = new Intl.NumberFormat(window.navigator.language, {
             maximumFractionDigits: 0
         });
+
+        this.sessionTest.handleStats(stats);
 
         // Inbound data
         const inboundData = MathUtils.formatBytes(stats.inboundVideoStats.bytesReceived, 2);
