@@ -139,7 +139,8 @@ export class SessionTest {
             return;
         }
 
-        this.records.push(stats);
+        const statsCopy = structuredClone(stats);
+        this.records.push(statsCopy);
     }
 
     private onCollectingFinished() {
