@@ -53,9 +53,7 @@ type StatsIds =
 type AggregatedStatsKeys = Exclude<keyof typeof AggregatedStats, 'prototype'>;
 type AggregatedStatsIds = (typeof AggregatedStats)[AggregatedStatsKeys];
 
-type TempIds = AggregatedStatsIds | StatsIds;
-
-type ElementType<T extends Iterable<any>> = T extends Iterable<infer E> ? E : never;
+type AllIds = AggregatedStatsIds | StatsIds;
 /**
  * Session test UI elements and results handling.
  */
@@ -103,7 +101,7 @@ export class SessionTest {
                 'How long the test runs for (seconds)',
                 0 /*min*/,
                 3600 /*max*/,
-                1 /*default*/,
+                60 /*default*/,
                 false
             );
             const testTimeFrameSetting = new SettingUINumber(this._testTimeFrameSetting);
@@ -148,7 +146,6 @@ export class SessionTest {
         Logger.Warning(`Finished session test`);
 
         const csvHeader: string[] = [];
-        let csvBody = '';
 
         this.records.forEach((record) => {
             for (const i in record) {
@@ -161,8 +158,6 @@ export class SessionTest {
                             if (csvHeader.indexOf(`${i}.${j}.${k}`) === -1) {
                                 csvHeader.push(`${i}.${j}.${k}`);
                             }
-
-                            csvBody += `"${arrayVal[k]}",`;
                         }
                     }
                 } else if (obj instanceof Map) {
@@ -172,8 +167,6 @@ export class SessionTest {
                             if (csvHeader.indexOf(`${i}.${j}.${k}`) === -1) {
                                 csvHeader.push(`${i}.${j}.${k}`);
                             }
-
-                            csvBody += `"${mapVal[k]}",`;
                         }
                     }
                 } else {
@@ -181,12 +174,21 @@ export class SessionTest {
                         if (csvHeader.indexOf(`${i}.${j}`) === -1) {
                             csvHeader.push(`${i}.${j}`);
                         }
-
-                        csvBody += `"${obj[j as StatsIds]}",`;
                     }
                 }
             }
-            csvBody += '\n';
+        });
+
+        let csvBody = '';
+        this.records.forEach((record) =>{
+            csvHeader.forEach((field) => {
+                try {
+                    csvBody += `"${field.split('.').reduce((o, k) => o[k as AllIds], record)}",`;
+                } catch (_) {
+                    csvBody += `"",`;
+                }
+            });
+            csvBody += `\n`;
         });
 
         const file = new Blob([`${csvHeader.join(',')}\n${csvBody}`], { type: 'text/plain' });
