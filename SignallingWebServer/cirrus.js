@@ -385,7 +385,6 @@ streamerServer.on('connection', function (ws, req) {
 				}
 			} else {
 				console.error(`unsupported Streamer message type: ${msg.type}`);
-				streamer.close(1008, 'Unsupported message type');
 			}
 		} catch(err) {
 			console.error(`ERROR: ws.on message error: ${err.message}`);
@@ -584,10 +583,10 @@ playerServer.on('connection', function (ws, req) {
 		} else if (msg.type == "peerDataChannelsReady") {
 			msg.playerId = playerId;
 			sendMessageToController(msg, skipSFU, true);
-		}
-		else {
+		} else if (msg.type == 'ping') {
+			ws.send(JSON.stringify({ type: 'pong', time: msg.time}));
+		} else {
 			console.error(`player ${playerId}: unsupported message type: ${msg.type}`);
-			ws.close(1008, 'Unsupported message type');
 			return;
 		}
 	});
