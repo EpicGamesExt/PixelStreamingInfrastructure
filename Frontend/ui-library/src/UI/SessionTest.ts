@@ -2,58 +2,11 @@
 
 import {
     AggregatedStats,
-    InboundVideoStats,
-    InboundAudioStats,
+    LatencyInfo,
     Logger,
-    SettingNumber,
-    CandidatePairStats,
-    DataChannelStats,
-    OutboundRTPStats,
-    CandidateStat,
-    RemoteOutboundRTPStats
+    SettingNumber
 } from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.5';
-import { StatsSections } from './UIConfigurationTypes';
 import { SettingUINumber } from '../Config/SettingUINumber';
-import { InboundRTPStats } from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.5/dist/types/PeerConnectionController/InboundRTPStats';
-
-type InboundRTPStatsKeys = Exclude<keyof typeof InboundRTPStats, 'prototype'>;
-type InboundRTPStatsIds = (typeof InboundRTPStats)[InboundRTPStatsKeys];
-
-type InboundVideoStatsKeys = Exclude<keyof typeof InboundVideoStats, 'prototype'>;
-type InboundVideoStatsIds = (typeof InboundVideoStats)[InboundVideoStatsKeys];
-
-type InboundAudioStatsKeys = Exclude<keyof typeof InboundAudioStats, 'prototype'>;
-type InboundAudioStatsIds = (typeof InboundAudioStats)[InboundAudioStatsKeys];
-
-type CandidatePairStatsKeys = Exclude<keyof typeof CandidatePairStats, 'prototype'>;
-type CandidatePairStatsIds = (typeof CandidatePairStats)[CandidatePairStatsKeys];
-
-type DataChannelStatsKeys = Exclude<keyof typeof DataChannelStats, 'prototype'>;
-type DataChannelStatsIds = (typeof DataChannelStats)[DataChannelStatsKeys];
-
-type CandidateStatKeys = Exclude<keyof typeof CandidateStat, 'prototype'>;
-type CandidateStatKeysIds = (typeof CandidateStat)[CandidateStatKeys];
-
-type OutboundRTPStatsKeys = Exclude<keyof typeof OutboundRTPStats, 'prototype'>;
-type OutboundRTPStatsIds = (typeof OutboundRTPStats)[OutboundRTPStatsKeys];
-
-type RemoteOutboundRTPStatsKeys = Exclude<keyof typeof RemoteOutboundRTPStats, 'prototype'>;
-type RemoteOutboundRTPStatsIds = (typeof RemoteOutboundRTPStats)[RemoteOutboundRTPStatsKeys];
-
-type StatsIds =
-    | InboundRTPStatsIds
-    | InboundVideoStatsIds
-    | InboundAudioStatsIds
-    | CandidatePairStatsIds
-    | DataChannelStatsIds
-    | OutboundRTPStatsIds
-    | CandidateStatKeysIds
-    | RemoteOutboundRTPStatsIds;
-
-type AggregatedStatsKeys = Exclude<keyof typeof AggregatedStats, 'prototype'>;
-type AggregatedStatsIds = (typeof AggregatedStats)[AggregatedStatsKeys];
-
-type AllIds = AggregatedStatsIds | StatsIds;
 /**
  * Session test UI elements and results handling.
  */
@@ -65,6 +18,7 @@ export class SessionTest {
     isCollectingStats: boolean;
 
     records: AggregatedStats[];
+    latencyRecords: LatencyInfo[];
 
     constructor() {
         this.isCollectingStats = false;
@@ -122,6 +76,7 @@ export class SessionTest {
 
             this._latencyTestButton.onclick = () => {
                 this.records = [];
+                this.latencyRecords = [];
                 this.isCollectingStats = true;
                 Logger.Warning(`Starting session test. Duration: [${this._testTimeFrameSetting.number}]`);
                 setTimeout(() => {
@@ -141,15 +96,29 @@ export class SessionTest {
         this.records.push(statsCopy);
     }
 
+    public handleLatencyInfo(latencyInfo: LatencyInfo) {
+        if (!this.isCollectingStats) {
+            return;
+        }
+
+        const latencyInfoCopy = structuredClone(latencyInfo);
+        this.latencyRecords.push(latencyInfoCopy);
+    }
+
     private onCollectingFinished() {
         this.isCollectingStats = false;
         Logger.Warning(`Finished session test`);
 
+        this.generateStatsCsv();
+        this.generateLatencyCsv();
+    }
+
+    private generateStatsCsv() {
         const csvHeader: string[] = [];
 
         this.records.forEach((record) => {
             for (const i in record) {
-                const obj: {} = record[i as AggregatedStatsIds];
+                const obj: {} = record[i as never];
 
                 if (Array.isArray(obj)) {
                     for (const j in obj) {
@@ -180,10 +149,10 @@ export class SessionTest {
         });
 
         let csvBody = '';
-        this.records.forEach((record) =>{
+        this.records.forEach((record) => {
             csvHeader.forEach((field) => {
                 try {
-                    csvBody += `"${field.split('.').reduce((o, k) => o[k as AllIds], record)}",`;
+                    csvBody += `"${field.split('.').reduce((o, k) => o[k as never], record)}",`;
                 } catch (_) {
                     csvBody += `"",`;
                 }
@@ -195,7 +164,51 @@ export class SessionTest {
         const a = document.createElement('a');
         const url = URL.createObjectURL(file);
         a.href = url;
-        a.download = 'test_results.csv';
+        a.download = 'stats.csv';
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(function () {
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+        }, 0);
+    }
+
+    private generateLatencyCsv() {
+        const csvHeader: string[] = [];
+
+        this.latencyRecords.forEach((record) => {
+            for (const i in record) {
+                const obj = record[i as never];
+
+                if (typeof obj === 'object') {
+                    for (const j in obj as object) {
+                        if (csvHeader.indexOf(`${i}.${j}`) === -1) {
+                            csvHeader.push(`${i}.${j}`);
+                        }
+                    }
+                } else if (csvHeader.indexOf(`${i}`) === -1) {
+                    csvHeader.push(`${i}`);
+                }
+            }
+        });
+
+        let csvBody = '';
+        this.latencyRecords.forEach((record) => {
+            csvHeader.forEach((field) => {
+                try {
+                    csvBody += `"${field.split('.').reduce((o, k) => o[k as never], record)}",`;
+                } catch (_) {
+                    csvBody += `"",`;
+                }
+            });
+            csvBody += `\n`;
+        });
+
+        const file = new Blob([`${csvHeader.join(',')}\n${csvBody}`], { type: 'text/plain' });
+        const a = document.createElement('a');
+        const url = URL.createObjectURL(file);
+        a.href = url;
+        a.download = 'latency.csv';
         document.body.appendChild(a);
         a.click();
         setTimeout(function () {

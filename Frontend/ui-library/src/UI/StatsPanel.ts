@@ -389,6 +389,8 @@ export class StatsPanel {
     }
 
     public handleLatencyInfo(latencyInfo: LatencyInfo) {
+        this.sessionTest.handleLatencyInfo(latencyInfo);
+
         if (latencyInfo.frameTiming !== undefined) {
             // Encoder latency
             if (latencyInfo.frameTiming.encoderLatencyMs !== undefined) {
