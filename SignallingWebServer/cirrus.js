@@ -583,8 +583,9 @@ playerServer.on('connection', function (ws, req) {
 		} else if (msg.type == "peerDataChannelsReady") {
 			msg.playerId = playerId;
 			sendMessageToController(msg, skipSFU, true);
-		}
-		else {
+		} else if (msg.type == 'ping') {
+			ws.send(JSON.stringify({ type: 'pong', time: msg.time}));
+		} else {
 			console.error(`player ${playerId}: unsupported message type: ${msg.type}`);
 			return;
 		}
