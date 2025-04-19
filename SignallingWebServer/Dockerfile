@@ -10,6 +10,7 @@ COPY /SignallingWebServer ./SignallingWebServer
 COPY /Frontend ./Frontend
 # Install the dependencies for the signalling server and build the frontend
 RUN apt-get update
+RUN npm install typescript
 RUN SignallingWebServer/platform_scripts/bash/setup.sh --build
 
 # Expose TCP ports 80 and 443 for player WebSocket connections and web server HTTP(S) access
