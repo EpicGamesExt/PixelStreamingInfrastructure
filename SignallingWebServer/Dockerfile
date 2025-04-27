@@ -4,6 +4,7 @@ FROM node:lts
 WORKDIR /SignallingWebServer
 COPY NODE_VERSION ./NODE_VERSION
 COPY package.json ./package.json
+COPY package-lock.json ./package-lock.json
 COPY /Common ./Common
 COPY /Signalling ./Signalling
 COPY /SignallingWebServer ./SignallingWebServer
