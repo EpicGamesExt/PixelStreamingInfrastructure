@@ -115,6 +115,7 @@ function check_version() { #current_version #min_version
 function check_and_install() { #dep_name #get_version_string #version_min #install_command
 	local is_installed=0
 
+    echo PATH=$PATH
 	echo "Checking for required $1 install"
 
 	local current=$(echo $2 | sed -E 's/[^0-9.]//g')
