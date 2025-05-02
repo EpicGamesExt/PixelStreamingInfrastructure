@@ -169,10 +169,8 @@ function setup_node() {
     # navigate to project root
     pushd "${SCRIPT_DIR}/../../.." > /dev/null
 
-    node_version=""
-    if [[ -f "${SCRIPT_DIR}/node/bin/node" ]]; then
-        node_version=$("${SCRIPT_DIR}/node/bin/node" --version)
-    fi
+    PATH="${SCRIPT_DIR}/node/bin:$PATH"
+    node_version=$(node --version)
 
     node_url=""
     if [ "$(uname)" == "Darwin" ]; then
@@ -195,7 +193,6 @@ function setup_node() {
 
     if [ $? -eq 1 ] || [ "$INSTALL_DEPS" == "1" ]; then
         echo "Installing dependencies..."
-        PATH="${SCRIPT_DIR}/node/bin:$PATH"
         "${NPM}" install
     fi
 
