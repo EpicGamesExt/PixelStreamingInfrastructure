@@ -46,6 +46,19 @@ jobs:
           ./platform_scripts/bash/start.sh --rest_api --player_port 999 &
           curl --retry 10 --retry-delay 20 --retry-connrefused http://localhost:999/api/status
 
+  run-multiple-script-macos:
+    if: github.repository == 'EpicGamesExt/PixelStreamingInfrastructure'
+    runs-on: macos-latest
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v3
+      - name: Launch and query signalling server using the REST API
+        working-directory: SignallingWebServer
+        run: |
+          ./platform_scripts/bash/setup.sh
+          ./platform_scripts/bash/start.sh --rest_api --player_port 999 &
+          curl --retry 10 --retry-delay 20 --retry-connrefused http://localhost:999/api/status
+
   run-script-windows:
     if: github.repository == 'EpicGamesExt/PixelStreamingInfrastructure'
     runs-on: windows-latest
@@ -55,6 +68,19 @@ jobs:
       - name: Launch and query signalling server using the REST API
         working-directory: SignallingWebServer
         run: |
+          Start-Process -NoNewWindow ".\platform_scripts\cmd\start.bat" -ArgumentList "--rest_api","--player_port 999"
+          curl --retry 10 --retry-delay 20 --retry-connrefused http://localhost:999/api/status
+
+  run-multiple-script-windows:
+    if: github.repository == 'EpicGamesExt/PixelStreamingInfrastructure'
+    runs-on: windows-latest
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v3
+      - name: Launch and query signalling server using the REST API
+        working-directory: SignallingWebServer
+        run: |
+          Start-Process -NoNewWindow ".\platform_scripts\cmd\setup.bat"
           Start-Process -NoNewWindow ".\platform_scripts\cmd\start.bat" -ArgumentList "--rest_api","--player_port 999"
           curl --retry 10 --retry-delay 20 --retry-connrefused http://localhost:999/api/status
 
