@@ -168,6 +168,9 @@ function setup_node() {
     # navigate to project root
     pushd "${SCRIPT_DIR}/../../.." > /dev/null
 
+    # setup the path so we're using our node. required when calling npm
+    PATH="${SCRIPT_DIR}/node/bin:$PATH"
+
     node_version=""
     if [[ -f "${SCRIPT_DIR}/node/bin/node" ]]; then
         node_version=$("${SCRIPT_DIR}/node/bin/node" --version)
@@ -187,14 +190,13 @@ function setup_node() {
     else
         node_url="https://nodejs.org/dist/$NODE_VERSION/node-$NODE_VERSION-linux-x64.tar.gz"
     fi
-    check_and_install "node" "$node_version" "$NODE_VERSION" "curl $node_url --output node.tar.xz
+    check_and_install "${SCRIPT_DIR}/node/bin/node" "$node_version" "$NODE_VERSION" "curl $node_url --output node.tar.xz
                                                                 && tar -xf node.tar.xz
                                                                 && rm node.tar.xz
                                                                 && mv node-v*-*-* \"${SCRIPT_DIR}/node\""
 
     if [ $? -eq 1 ] || [ "$INSTALL_DEPS" == "1" ]; then
         echo "Installing dependencies..."
-        PATH="${SCRIPT_DIR}/node/bin:$PATH"
         "${NPM}" install
     fi
 
