@@ -184,6 +184,10 @@ function setup_node() {
         npm install
     fi
 
+    # log node version for audits
+    echo "Using node version: $(node --version)"
+    echo "Using NPM version: $(npm --version)"
+
     popd > /dev/null
 }
 
