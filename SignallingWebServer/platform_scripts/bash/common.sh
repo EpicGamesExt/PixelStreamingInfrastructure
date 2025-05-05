@@ -76,40 +76,21 @@ function parse_args() {
 }
 
 function check_version() { #current_version #min_version
-	#check if same string
-	if [ -z "$2" ] || [ "$1" = "$2" ]; then
+    local current="$1"
+    local minimum="$2"
+
+    # Check if no minimum or both are the same
+	if [ -z "$minimum" ] || [ "$current" = "$minimum" ]; then
 		return 0
 	fi
 
-	local i current minimum
+    local ordered=$(printf "%s\n%s\n" "$minimum" "$current" | sort -V | head -n1)
 
-	IFS="." read -r -a current <<< $1
-	IFS="." read -r -a minimum <<< $2
-
-	# fill empty fields in current with zeros
-	for ((i=${#current[@]}; i<${#minimum[@]}; i++))
-	do
-		current[i]=0
-	done
-
-	for ((i=0; i<${#current[@]}; i++))
-	do
-		if [[ -z ${minimum[i]} ]]; then
-			# fill empty fields in minimum with zeros
-			minimum[i]=0
-    	fi
-
-		if ((10#${current[i]} > 10#${minimum[i]})); then
-			return 1
-	    fi
-
-		if ((10#${current[i]} < 10#${minimum[i]})); then
-			return 2
-    	fi
-	done
-
-	# if got this far string is the same once we added missing 0
-	return 0
+    if [ "$ordered" = "$minimum" ]; then
+        return 1
+    else
+        return 2
+    fi
 }
 
 function check_and_install() { #dep_name #get_version_string #version_min #install_command
@@ -169,14 +150,11 @@ function setup_node() {
     pushd "${SCRIPT_DIR}/../../.." > /dev/null
 
     # setup the path so we're using our node. required when calling npm
-    PATH="${SCRIPT_DIR}/node/bin:$PATH"
+    # PATH="${SCRIPT_DIR}/node/bin:$PATH"
 
-    node_version=""
-    if [[ -f "${SCRIPT_DIR}/node/bin/node" ]]; then
-        node_version=$("${SCRIPT_DIR}/node/bin/node" --version)
-    fi
+    local node_version=$("node" --version)
 
-    node_url=""
+    local node_url=""
     if [ "$(uname)" == "Darwin" ]; then
         arch=$(uname -m)
         if [[ $arch == x86_64* ]]; then
@@ -196,6 +174,7 @@ function setup_node() {
                                                                 && mv node-v*-*-* \"${SCRIPT_DIR}/node\""
 
     if [ $? -eq 1 ] || [ "$INSTALL_DEPS" == "1" ]; then
+        PATH="${SCRIPT_DIR}/node/bin:$PATH"
         echo "Installing dependencies..."
         "${NPM}" install
     fi
