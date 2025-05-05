@@ -168,7 +168,6 @@ function setup_node() {
         node_url="https://nodejs.org/dist/$NODE_VERSION/node-$NODE_VERSION-linux-x64.tar.gz"
     fi
 
-    node_version="101.1.1" #TEMP debug testing
     check_and_install "node" "$node_version" "$NODE_VERSION" "curl $node_url --output node.tar.xz
                                                                 && tar -xf node.tar.xz
                                                                 && rm node.tar.xz
