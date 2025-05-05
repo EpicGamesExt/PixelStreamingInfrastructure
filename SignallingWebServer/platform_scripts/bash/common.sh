@@ -148,9 +148,6 @@ function setup_node() {
     # navigate to project root
     pushd "${SCRIPT_DIR}/../../.." > /dev/null
 
-    # setup the path so we're using our node. required when calling npm
-    # PATH="${SCRIPT_DIR}/node/bin:$PATH"
-
     local node_version=$("node" --version)
 
     local node_url=""
@@ -378,7 +375,6 @@ function start_wilbur() {
     echo "Starting wilbur signalling server use ctrl-c to exit"
     echo "----------------------------------"
     
-    echo "sudo env \"PATH=$PATH\" npm start -- ${SERVER_ARGS}"
     start_process "sudo env \"PATH=$PATH\" npm start -- ${SERVER_ARGS}"
 
     popd > /dev/null
