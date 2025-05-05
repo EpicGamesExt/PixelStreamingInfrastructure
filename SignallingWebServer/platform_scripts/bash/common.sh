@@ -1,7 +1,7 @@
 #!/bin/bash
 
 NODE_VERSION=$(<"${SCRIPT_DIR}/../../../NODE_VERSION")
-NPM="${SCRIPT_DIR}/node/bin/npm"
+NPM="npm"
 
 # Prints the arguments and their descriptions to the console
 function print_usage() {
