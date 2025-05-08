@@ -145,6 +145,9 @@ function setup_node() {
 
     popd > /dev/null
 
+    # setup path with our possibly locally installed node
+    PATH="${SCRIPT_DIR}/node/bin:$PATH"
+
     # navigate to project root
     pushd "${SCRIPT_DIR}/../../.." > /dev/null
 
@@ -169,11 +172,6 @@ function setup_node() {
                                                                 && tar -xf node.tar.xz
                                                                 && rm node.tar.xz
                                                                 && mv node-v*-*-* \"${SCRIPT_DIR}/node\""
-
-    if [ $? -eq 1 ]; then
-        # installed node, point PATH to it
-        PATH="${SCRIPT_DIR}/node/bin:$PATH"
-    fi
 
     # if node_modules doesnt exist or the package-lock file is newer than node_modules, install deps
     if [ ! -d node_modules ] || [ ../package-lock.json -nt node_modules ] || [ "$INSTALL_DEPS" == "1" ]; then
