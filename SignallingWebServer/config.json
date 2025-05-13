@@ -14,6 +14,8 @@
 	"ssl_cert_path": "certificates/client-cert.pem",
 	"https_redirect": true,
 	"rest_api": false,
+	"reverse_proxy": false,
+	"reverse_proxy_num_proxies": 1,
 	"peer_options": "",
 	"log_config": true,
 	"stdin": false,

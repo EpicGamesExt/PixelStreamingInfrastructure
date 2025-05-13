@@ -148,6 +148,19 @@ program
             .default(config_file.peer_options || '')
     )
     .option(
+        '--reverse-proxy',
+        'Enables reverse proxy mode. This will trust the X-Forwarded-For header.',
+        config_file.reverse_proxy || false
+    )
+    .addOption(
+        new Option(
+            '--reverse-proxy-num-proxies <number>',
+            'Sets the number of proxies to trust. This is used to calculate the real client IP address.'
+        )
+            .implies({ reverse_proxy: true })
+            .default(config_file.reverse_proxy_num_proxies || 1)
+    )
+    .option(
         '--log_config',
         'Will print the program configuration on startup.',
         config_file.log_config || false
@@ -197,6 +210,9 @@ if (options.log_config) {
 }
 
 const app = express();
+if (options.reverse_proxy) {
+    app.set('trust proxy', options.reverse_proxy_num_proxies);
+}
 
 const serverOpts: IServerConfig = {
     streamerPort: options.streamer_port,
