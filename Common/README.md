@@ -8,7 +8,7 @@ For examples of how to implement this library.
 - Also see [Wilbur](/SignallingWebServer) which uses the signalling library to implement a full signalling server.
 
 ### Adding it to your project
-`npm i @epicgames-ps/lib-pixelstreamingcommon-ue5.5`
+`npm i @epicgames-ps/lib-pixelstreamingcommon-ue5.6`
 
 ## Documentation
 The API is documented [here](docs).
