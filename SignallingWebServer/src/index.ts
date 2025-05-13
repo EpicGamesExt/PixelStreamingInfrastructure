@@ -147,9 +147,16 @@ program
             .argParser(JSON.parse)
             .default(config_file.peer_options || '')
     )
-    .option('--reverse-proxy', 'Enables reverse proxy mode. This will trust the X-Forwarded-For header.', config_file.reverse_proxy || false)
+    .option(
+        '--reverse-proxy',
+        'Enables reverse proxy mode. This will trust the X-Forwarded-For header.',
+        config_file.reverse_proxy || false
+    )
     .addOption(
-        new Option('--reverse-proxy-num-proxies <number>', 'Sets the number of proxies to trust. This is used to calculate the real client IP address.')
+        new Option(
+            '--reverse-proxy-num-proxies <number>',
+            'Sets the number of proxies to trust. This is used to calculate the real client IP address.'
+        )
             .implies({ reverse_proxy: true })
             .default(config_file.reverse_proxy_num_proxies || 1)
     )
