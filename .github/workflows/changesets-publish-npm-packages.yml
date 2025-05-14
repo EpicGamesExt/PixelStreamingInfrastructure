@@ -37,17 +37,9 @@ jobs:
             fi
           done
           # change the list into a json list
-          publish_json_list=[$(IFS=,; echo "${to_publish[*]}")]
+          publish_json_list="{\"count\": ${#to_publish[@]}, \"list\": [$(IFS=,; echo "${to_publish[*]}")]}"
           echo "matrix=$publish_json_list" >> $GITHUB_OUTPUT
           echo $publish_json_list | jq
-      
-      - name: Debug output 1
-        run: |
-          test_json="[{\"x\":1},{\"x\":2}]"
-          echo '${{ fromJSON($test_json).length }}'
-
-      - name: Debug output 2
-        run: echo '${{ fromJSON(steps.query-packages.outputs.matrix).length }}'
 
   # actually publishes the npm package.
   publish:
@@ -55,11 +47,11 @@ jobs:
     needs: fetch-package-info
     permissions:
       contents: write
-    if: ${{ fromJSON(needs.fetch-package-info.outputs.matrix).length > 0 }}
+    if: ${{ fromJSON(needs.fetch-package-info.outputs.matrix).count > 0 }}
     strategy:
       max-parallel: 1
       matrix:
-        package: ${{ fromJson(needs.fetch-package-info.outputs.matrix) }}
+        package: ${{ fromJson(needs.fetch-package-info.outputs.matrix).list }}
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v3
