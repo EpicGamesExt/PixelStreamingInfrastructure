@@ -41,7 +41,10 @@ jobs:
           echo "matrix=$publish_json_list" >> $GITHUB_OUTPUT
           echo $publish_json_list | jq
       
-      - name: Debug output
+      - name: Debug output 1
+        run: echo '${{ fromJSON("[{\"x\":1},{\"x\":2}]").length }}'
+
+      - name: Debug output 2
         run: echo '${{ fromJSON(steps.query-packages.outputs.matrix).length }}'
 
   # actually publishes the npm package.
