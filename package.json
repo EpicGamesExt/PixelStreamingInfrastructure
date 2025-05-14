@@ -41,7 +41,5 @@
             "glob": "7.2.3"
         }
     },
-    "dependencies": {
-        "fs-routes": "^12.1.3"
-    }
+    "dependencies": {}
 }
