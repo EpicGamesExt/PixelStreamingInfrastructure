@@ -58,7 +58,7 @@ jobs:
 
       - name: Carry over workspace deps and overrides
         run: |
-          jq -s '.[0] * {dependencies: .[1].dependencies, overrides: .[1].overrides}' package.json ${{ matrix.package.path }}/package.json >temp_package.json
+          jq -s '.[1] * {dependencies: .[0].dependencies, overrides: .[0].overrides}' package.json ${{ matrix.package.path }}/package.json >temp_package.json
           mv temp_package.json ${{ matrix.package.path }}/package.json
 
       - name: Remove workspace package
