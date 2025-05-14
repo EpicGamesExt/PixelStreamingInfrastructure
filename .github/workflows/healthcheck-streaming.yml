@@ -2,6 +2,9 @@ name: Check health of streaming
 
 on:
   workflow_dispatch:
+  push:
+    paths:
+      - ".github/workflows/healthcheck-streaming.yml"
   pull_request:
     paths:
       - ".github/workflows/healthcheck-streaming.yml"
