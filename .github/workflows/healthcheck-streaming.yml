@@ -103,7 +103,8 @@ jobs:
     - name: Run Signalling
       working-directory: SignallingWebServer
       # triple hyphen for npm script running issues. With double the arguments get mangled
-      run: Start-Process powershell.exe -ArgumentList "npm","run","start","---","--rest_api","--player_port 999","--http_root ${{ github.workspace }}\www"
+      # run: Start-Process powershell.exe -ArgumentList "npm","run","start","---","--rest_api","--player_port 999","--http_root ${{ github.workspace }}\www"
+      run: npm run start -- --rest_api --player_port 999 --http_root ${{ github.workspace }}\www
 
     - name: Run Streamer
       working-directory: Streamer
