@@ -42,7 +42,9 @@ jobs:
           echo $publish_json_list | jq
       
       - name: Debug output 1
-        run: echo '${{ fromJSON("[{\"x\":1},{\"x\":2}]").length }}'
+        run: |
+          test_json="[{\"x\":1},{\"x\":2}]"
+          echo '${{ fromJSON($test_json).length }}'
 
       - name: Debug output 2
         run: echo '${{ fromJSON(steps.query-packages.outputs.matrix).length }}'
