@@ -60,7 +60,7 @@ jobs:
         run: rm package.json
 
       - name: Copy the lockfile to the package
-        run: cp package-lock.json ${{ matrix.package_path }}
+        run: cp package-lock.json ${{ matrix.package.path }}
 
       - name: Get node version
         id: get_node_version
