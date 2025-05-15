@@ -12,8 +12,15 @@ env:
 jobs:
   build-using-public-deps:
     runs-on: ubuntu-latest
-    outputs:
-      continue: ${{ steps.set_output.outputs.continue }}
+    strategy:
+      matrix:
+        path: 
+          - Common
+          - Signalling
+          - Frontend/library
+          - Frontend/ui-library
+          - Frontend/implementations/typescript
+
     steps:
     - name: Checkout source code
       uses: actions/checkout@v3
@@ -29,37 +36,21 @@ jobs:
         node-version: "${{ steps.get_node_version.outputs.node_version }}"
         registry-url: 'https://registry.npmjs.org'
 
+    - name: Carry over workspace deps and overrides
+      run: |
+        jq -s '.[1] * {dependencies: .[0].dependencies, overrides: .[0].overrides}' package.json ${{ matrix.path }}/package.json >temp_package.json
+        mv temp_package.json ${{ matrix.path }}/package.json
+
     - name: Remove NPM workspaces
-      run: rm package.json && rm package-lock.json
+      run: |
+        rm package.json
+        cp package-lock.json ${{ matrix.path }}
 
     # Not linting or testing because some of those tools require the
     # workspace dependencies. eg. eslint and its plugins.
     
-    - name: Build signalling using published packages only
-      if: always()
-      working-directory: Signalling
-      run: npm install && npm run build
-
-    - name: Build Wilbur using published packages only
-      if: always()
-      working-directory: SignallingWebServer
-      run: npm install && npm run build
-
-    - name: Build Frontend/library using published packages only
-      if: always()
-      working-directory: Frontend/library
-      run: npm install && npm run build
-
-    - name: Build Frontend/ui-library using published packages only
-      if: always()
-      working-directory: Frontend/ui-library
-      run: npm install && npm run build
-
-    - name: Build Frontend/implementations/typescript using published packages only
-      if: always()
-      working-directory: Frontend/implementations/typescript
-      run: npm install && npm run build
-
-    - id: set_output
-      run: echo "continue=true" >> $GITHUB_ENV
-
+    - name: Build ${{ matrix.path }}
+      working-directory: ${{ matrix.path }}
+      run: |
+        npm install
+        npm run build
