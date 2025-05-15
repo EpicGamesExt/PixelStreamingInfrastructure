@@ -1,5 +1,8 @@
 name: Check health of streaming
 
+permissions:
+  contents: read
+
 on:
   workflow_dispatch:
   push:
