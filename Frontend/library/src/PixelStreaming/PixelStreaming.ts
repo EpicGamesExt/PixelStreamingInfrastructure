@@ -5,7 +5,7 @@ import { LatencyTestResults } from '../DataChannel/LatencyTestResults';
 import { AggregatedStats } from '../PeerConnectionController/AggregatedStats';
 import { WebRtcPlayerController } from '../WebRtcPlayer/WebRtcPlayerController';
 import { Flags, NumericParameters } from '../Config/Config';
-import { Logger } from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
+import { Logger } from '@epicgames-ps/lib-pixelstreamingcommon-ue5.6';
 import { InitialSettings } from '../DataChannel/InitialSettings';
 import {
     PixelStreamingEventEmitter,

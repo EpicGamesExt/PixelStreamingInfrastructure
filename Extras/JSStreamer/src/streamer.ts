@@ -7,7 +7,7 @@ import {
     BaseMessage,
     EventEmitter,
     SDPUtils
-} from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
+} from '@epicgames-ps/lib-pixelstreamingcommon-ue5.6';
 import { DataProtocol } from './protocol';
 
 interface PixelStreamingSettings {

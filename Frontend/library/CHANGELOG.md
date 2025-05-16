@@ -1,4 +1,4 @@
-# @epicgames-ps/lib-pixelstreamingfrontend-ue5.5
+# @epicgames-ps/lib-pixelstreamingfrontend-ue5.6
 
 ## 1.1.0
 
