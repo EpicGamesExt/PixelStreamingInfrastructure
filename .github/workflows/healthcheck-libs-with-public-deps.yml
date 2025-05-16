@@ -15,16 +15,11 @@ jobs:
     strategy:
       matrix:
         package: 
-          - path: Common
-            needs-lock: true
-          - path: Signalling
-            needs-lock: true
-          - path: Frontend/library
-            needs-lock: true
-          - path: Frontend/ui-library
-            needs-lock: true
-          - path: Frontend/implementations/typescript
-            needs-lock: false
+          - Common
+          - Signalling
+          - Frontend/library
+          - Frontend/ui-library
+          - Frontend/implementations/typescript
 
     steps:
     - name: Checkout source code
@@ -41,23 +36,14 @@ jobs:
         node-version: "${{ steps.get_node_version.outputs.node_version }}"
         registry-url: 'https://registry.npmjs.org'
 
-    - name: Carry over workspace deps and overrides
-      run: |
-        jq -s '.[1] * {dependencies: .[0].dependencies, overrides: .[0].overrides}' package.json ${{ matrix.package.path }}/package.json >temp_package.json
-        mv temp_package.json ${{ matrix.package.path }}/package.json
-
     - name: Remove NPM workspaces
       run: rm package.json
-
-    - name: Copy package-lock
-      if: ${{ matrix.package.needs-lock }}
-      run: cp package-lock.json ${{ matrix.package.path }}
 
     # Not linting or testing because some of those tools require the
     # workspace dependencies. eg. eslint and its plugins.
     
-    - name: Build ${{ matrix.package.path }}
-      working-directory: ${{ matrix.package.path }}
+    - name: Build ${{ matrix.package }}
+      working-directory: ${{ matrix.package }}
       run: |
         npm install
         npm run build

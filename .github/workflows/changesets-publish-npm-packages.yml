@@ -56,16 +56,8 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@v3
 
-      - name: Carry over workspace deps and overrides
-        run: |
-          jq -s '.[1] * {dependencies: .[0].dependencies, overrides: .[0].overrides}' package.json ${{ matrix.package.path }}/package.json >temp_package.json
-          mv temp_package.json ${{ matrix.package.path }}/package.json
-
       - name: Remove workspace package
         run: rm package.json
-
-      - name: Copy the lockfile to the package
-        run: cp package-lock.json ${{ matrix.package.path }}
 
       - name: Get node version
         id: get_node_version
