@@ -8,6 +8,7 @@ on:
     paths: 
       - '**/package.json'
 
+# This makes the matrix of jobs to run one at a time.
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
 jobs:
@@ -57,7 +58,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Remove workspace package
-        run: rm package.json
+        run: rm package.json package-lock.json
 
       - name: Get node version
         id: get_node_version
@@ -127,4 +128,8 @@ jobs:
             ${{ steps.split-paths.outputs.dirname }}/${{ steps.build-label.outputs.label }}.zip,
             ${{ steps.split-paths.outputs.dirname }}/${{ steps.build-label.outputs.label }}.tar.gz
           bodyFile: ${{ matrix.package.path }}/CHANGELOG.md
+
+      # Sometimes the next job will fail because npm reports that the dependency just published cant be found
+      - name: Allow publication to propagate
+        run: sleep 10
 
