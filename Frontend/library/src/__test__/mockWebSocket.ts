@@ -1,4 +1,4 @@
-import { BaseMessage } from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
+import { BaseMessage } from '@epicgames-ps/lib-pixelstreamingcommon-ue5.6';
 
 export interface MockWebSocketSpyFunctions {
     constructorSpy: null | ((url: string) => void);

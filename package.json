@@ -35,5 +35,11 @@
         "lint-staged": "^15.3.0",
         "pre-commit": "^1.0.10",
         "typescript-eslint": "^8.26.1"
-    }
+    },
+    "overrides": {
+        "fs-routes": {
+            "glob": "7.2.3"
+        }
+    },
+    "dependencies": {}
 }

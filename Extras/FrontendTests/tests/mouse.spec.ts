@@ -6,7 +6,7 @@ import {
     getEventSetFrom,
 } from './extras';
 import * as helpers from './helpers';
-import { InputCoordTranslator, TranslatedCoordUnsigned } from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.5';
+import { InputCoordTranslator, TranslatedCoordUnsigned } from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.6';
 
 test('Test mouse enter/leave', {
     tag: ['@mouse'],
