@@ -12,6 +12,9 @@ on:
       - "Frontend/ui-library/**"
       - "Frontend/implementations/typescript/**"
 
+permissions:
+  contents: read
+
 jobs:
   build-using-local-deps:
     if: github.repository == 'EpicGamesExt/PixelStreamingInfrastructure'
