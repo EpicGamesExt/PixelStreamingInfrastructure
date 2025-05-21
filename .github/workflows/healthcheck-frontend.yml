@@ -11,6 +11,9 @@ on:
       - "SignallingWebServer/**"
       - "Extras/**"
 
+permissions:
+  contents: write
+
 jobs:
   streaming-test-linux:
     if: github.repository == 'EpicGamesExt/PixelStreamingInfrastructure'

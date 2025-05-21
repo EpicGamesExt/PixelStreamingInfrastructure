@@ -10,6 +10,9 @@ on:
       - "SignallingWebServer/**"
       - "Extras/SS_Test/**"
 
+permissions:
+  contents: read
+
 jobs:
   signalling-protocol-test:
     if: github.repository == 'EpicGamesExt/PixelStreamingInfrastructure'

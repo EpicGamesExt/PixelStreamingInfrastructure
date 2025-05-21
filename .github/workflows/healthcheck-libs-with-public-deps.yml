@@ -6,6 +6,9 @@ on:
       commitsha:
         description: "Commit SHA for the release (if blank use latest on this branch)"
 
+permissions:
+  contents: read
+
 env:
   commitsha: "${{ github.event.inputs.commitsha || github.sha }}"
 

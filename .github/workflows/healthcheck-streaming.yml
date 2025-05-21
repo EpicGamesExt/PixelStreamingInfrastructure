@@ -1,8 +1,5 @@
 name: Check health of streaming
 
-permissions:
-  contents: read
-
 on:
   workflow_dispatch:
   push:
@@ -16,6 +13,9 @@ on:
       - "Signalling/**"
       - "SignallingWebServer/**"
       - "Extras/**"
+
+permissions:
+  contents: read
 
 jobs:
   # Uncomment when we can Linux test to capture a non-black screenshot using software renderer.
