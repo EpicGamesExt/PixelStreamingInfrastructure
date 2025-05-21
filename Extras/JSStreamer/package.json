@@ -39,6 +39,9 @@
     "dependencies": {
         "@epicgames-ps/lib-pixelstreamingcommon-ue5.5": "*"
     },
+    "overrides": {
+        "http-proxy-middleware": "2.0.8"
+    },
     "repository": {
         "type": "git",
         "url": "https://github.com/EpicGames/PixelStreamingInfrastructure.git"
