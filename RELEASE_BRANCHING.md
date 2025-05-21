@@ -1,0 +1,32 @@
+# Creating a new release branch
+
+- Make sure master branch is up to date.
+- Make sure the previous release branch has been merged back into master if needed.
+- Create the new release branch. `git checkout -b UEx.x`
+- Update the source code imports to update the package names.
+	- Can usually be done with a grep/swap.
+	- There are several exports that also need to be updated in `implementations/typescript`
+- Update version references in github actions.
+	- `.github/workflows/healthcheck-streaming.yml`
+	- `.github/workflows/healthcheck-frontend.yml`
+- Update the readme in master to update all the mentioned versions and push them all by one release.
+	- Health checks
+	- NPM packages
+	- NPM getting started
+	- Versions
+- Rebuild, package and upload the Minimal Streamer bundles for the tests to succeed. These are hosted on the minimal-streamer internal github repo.
+- Update the NPM package names, reset their versions and update their dependencies.
+	- lib-pixelstreamingcommon-uex.x
+	- lib-pixelstreamingsignalling-uex.x
+	- lib-pixelstreamingfrontend-uex.x
+	- lib-pixelstreamingfrontend-ui-uex.x
+	- reference-pixelstreamingfrontend-uex.x
+	- react-pixelstreamingfrontend-react-uex.x
+	- This should trigger the publish action on github when pushed
+- Update the RELEASE_VERSION file to reset the version for the new branch.
+	- This should trigger the release action on github when pushed
+- Update the .backportrc.json with the new branch.
+- Create a PR to merge the changes back into master.
+- Make sure all the tests are passing and green.
+- When merging back to main, don't squash the commits so that github can report the commits ahead/behind in the future.
+
