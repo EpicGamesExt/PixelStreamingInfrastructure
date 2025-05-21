@@ -14,6 +14,8 @@ concurrency: ${{ github.workflow }}-${{ github.ref }}
 jobs:
   # gets all publishable npm packages.
   fetch-package-info:
+    permissions:
+      contents: read
     runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.query-packages.outputs.matrix }}
