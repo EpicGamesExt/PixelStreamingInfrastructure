@@ -5,6 +5,10 @@ on:
   # schedule:
   #   - cron: '0 0 * * *'
 
+permissions:
+  contents: read
+  issues: write
+
 jobs:
   linkChecker:
     if: github.repository == 'EpicGamesExt/PixelStreamingInfrastructure'
