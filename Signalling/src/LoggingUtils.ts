@@ -1,5 +1,5 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
-import { BaseMessage } from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
+import { BaseMessage } from '@epicgames-ps/lib-pixelstreamingcommon-ue5.6';
 import { Logger } from './Logger';
 
 export interface IProtoLogObj {

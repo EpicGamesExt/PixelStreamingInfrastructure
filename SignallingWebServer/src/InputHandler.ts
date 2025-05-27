@@ -1,5 +1,5 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
-import { SignallingServer } from '@epicgames-ps/lib-pixelstreamingsignalling-ue5.5';
+import { SignallingServer } from '@epicgames-ps/lib-pixelstreamingsignalling-ue5.6';
 import { IProgramOptions, beautify } from './Utils';
 
 interface IHandlerFunc {

@@ -1,10 +1,10 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
-import { Config, Flags, PixelStreaming, Logger, LogLevel } from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.5';
+import { Config, Flags, PixelStreaming, Logger, LogLevel } from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.6';
 import {
     Application,
     PixelStreamingApplicationStyle
-} from '@epicgames-ps/lib-pixelstreamingfrontend-ui-ue5.5';
+} from '@epicgames-ps/lib-pixelstreamingfrontend-ui-ue5.6';
 const PixelStreamingApplicationStyles = new PixelStreamingApplicationStyle();
 PixelStreamingApplicationStyles.applyStyleSheet();
 

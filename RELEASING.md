@@ -50,3 +50,8 @@ If multiple changes have been made, the order of releases should usually be like
 You may get into a situation where a PR is failing Github Actions checks due to unpublished libraries, if you are certain everything is working and
 up to date except that the libraries have not been published you can add this magic string to your commit `#bypass-publish-check` that will skip the check
 of building everything using published libraries. Once the PR is landed, this check will run again and you can bump the library versions in a separate PR/commit.
+
+## Post release
+If releasing for the latest UE version it is a good idea to merge the changes back into master. This can be done with a PR or simply with the git cli. When merging back to master, don't squash the commits.
+This will allow github to properly report how many commits ahead/behind the branch is.
+

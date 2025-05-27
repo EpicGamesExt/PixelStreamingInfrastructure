@@ -8,11 +8,14 @@ on:
     paths: 
       - '**/package.json'
 
+# This makes the matrix of jobs to run one at a time.
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
 jobs:
   # gets all publishable npm packages.
   fetch-package-info:
+    permissions:
+      contents: read
     runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.query-packages.outputs.matrix }}
@@ -37,9 +40,9 @@ jobs:
             fi
           done
           # change the list into a json list
-          publish_json_list=[$(IFS=,; echo "${to_publish[*]}")]
+          publish_json_list="{\"count\": ${#to_publish[@]}, \"list\": [$(IFS=,; echo "${to_publish[*]}")]}"
           echo "matrix=$publish_json_list" >> $GITHUB_OUTPUT
-
+          echo $publish_json_list | jq
 
   # actually publishes the npm package.
   publish:
@@ -47,17 +50,17 @@ jobs:
     needs: fetch-package-info
     permissions:
       contents: write
-    if: ${{ fromJSON(needs.fetch-package-info.outputs.matrix).length > 0 }}
+    if: ${{ fromJSON(needs.fetch-package-info.outputs.matrix).count > 0 }}
     strategy:
       max-parallel: 1
       matrix:
-        package: ${{ fromJson(needs.fetch-package-info.outputs.matrix) }}
+        package: ${{ fromJson(needs.fetch-package-info.outputs.matrix).list }}
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v3
 
       - name: Remove workspace package
-        run: rm package.json
+        run: rm package.json package-lock.json
 
       - name: Get node version
         id: get_node_version
@@ -127,4 +130,8 @@ jobs:
             ${{ steps.split-paths.outputs.dirname }}/${{ steps.build-label.outputs.label }}.zip,
             ${{ steps.split-paths.outputs.dirname }}/${{ steps.build-label.outputs.label }}.tar.gz
           bodyFile: ${{ matrix.package.path }}/CHANGELOG.md
+
+      # Sometimes the next job will fail because npm reports that the dependency just published cant be found
+      - name: Allow publication to propagate
+        run: sleep 10
 

@@ -2,6 +2,9 @@ name: Check health of streaming
 
 on:
   workflow_dispatch:
+  push:
+    paths:
+      - ".github/workflows/healthcheck-streaming.yml"
   pull_request:
     paths:
       - ".github/workflows/healthcheck-streaming.yml"
@@ -10,6 +13,9 @@ on:
       - "Signalling/**"
       - "SignallingWebServer/**"
       - "Extras/**"
+
+permissions:
+  contents: read
 
 jobs:
   # Uncomment when we can Linux test to capture a non-black screenshot using software renderer.
@@ -58,11 +64,11 @@ jobs:
       uses: robinraju/release-downloader@v1
       with:
         repository: 'EpicGamesExt/PixelStreamingInfrastructure'
-        tag: 'minimal-streamer-5.5'
-        fileName: 'Minimal-PixelStreamer-5.5-Win64-Development.7z'
+        tag: 'minimal-streamer-5.6'
+        fileName: 'Minimal-PixelStreamer-5.6-Win64-Development.7z'
 
     - name: Extract streamer
-      run: 7z x -oStreamer Minimal-PixelStreamer-5.5-Win64-Development.7z
+      run: 7z x -oStreamer Minimal-PixelStreamer-5.6-Win64-Development.7z
 
     - name: Install dependencies
       run: npm install
@@ -110,11 +116,15 @@ jobs:
       run: Start-Process ".\Minimal\Binaries\Win64\Minimal-Cmd.exe" -ArgumentList "-warp","-dx12","-windowed","-resx=1920","-resy=720","-PixelStreamingURL=ws://localhost:8888","-RenderOffScreen","-AllowSoftwareRendering","-PixelStreamingEncoderCodec=vp8", "-Log=Minimal.log"
 
     - name: Wait for signalling to come up
-      run: curl --retry 10 --retry-delay 20 --retry-connrefused http://localhost:999/api/status
+      run: curl --fail-with-body --retry-all-errors --retry 10 --retry-delay 20 --retry-connrefused http://localhost:999/api/status
 
 
     - name: Wait for streamer to come up
-      run: curl --retry 10 --retry-delay 20 --retry-connrefused http://localhost:999/api/streamers/DefaultStreamer
+      run: curl --fail-with-body --retry-all-errors --retry 10 --retry-delay 20 --retry-connrefused http://localhost:999/api/streamers/DefaultStreamer
+
+    - name: Output signalling logs
+      working-directory: SignallingWebServer
+      run: ls .\logs\ && cat .\logs\*.log
 
     - name: Output streamer logs
       working-directory: Streamer
