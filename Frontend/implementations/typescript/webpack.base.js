@@ -32,7 +32,7 @@ module.exports = {
             /node_modules/,
           ],
           options: {
-            configFile: "tsconfig.cjs.json"
+            configFile: "tsconfig.esm.json"
           }
         },
         {
