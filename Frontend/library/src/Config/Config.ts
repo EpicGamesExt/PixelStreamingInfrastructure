@@ -37,6 +37,7 @@ export class Flags {
     static HideUI = 'HideUI' as const;
     static EnableCaptureTimeExt = 'EnableCaptureTimeExt' as const;
     static BrowserSendOffer = 'BrowserSendOffer' as const;
+    static LatencyCSV = 'LatencyCSV' as const;
 }
 
 export type FlagsKeys = Exclude<keyof typeof Flags, 'prototype'>;
@@ -589,6 +590,19 @@ export class Config {
                 'Browser will initiate the WebRTC handshake by sending the offer to the streamer (4.27 ONLY)',
                 settings && Object.prototype.hasOwnProperty.call(settings, Flags.BrowserSendOffer)
                     ? settings[Flags.BrowserSendOffer]
+                    : false,
+                useUrlParams
+            )
+        );
+
+        this.flags.set(
+            Flags.LatencyCSV,
+            new SettingFlag(
+                Flags.LatencyCSV,
+                'Export Latency CSV',
+                'Shows a button in the stats panel that allows to run a latency test and export the results to a CSV file.',
+                settings && Object.prototype.hasOwnProperty.call(settings, Flags.LatencyCSV)
+                    ? settings[Flags.LatencyCSV]
                     : false,
                 useUrlParams
             )

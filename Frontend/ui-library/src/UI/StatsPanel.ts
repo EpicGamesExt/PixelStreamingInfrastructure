@@ -3,10 +3,12 @@
 import { LatencyTest } from './LatencyTest';
 import {
     CandidatePairStats,
+    Config,
     LatencyInfo,
     Logger,
     PixelStreaming,
-    PixelStreamingSettings
+    PixelStreamingSettings,
+    Flags
 } from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.6';
 import { AggregatedStats } from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.6';
 import { MathUtils } from '../Util/MathUtils';
@@ -42,17 +44,18 @@ export class StatsPanel {
     _latencyResult: HTMLElement;
     _config: StatsPanelConfiguration;
 
-    sessionTest: SessionTest;
+    sessionTest: SessionTest | null = null;
     latencyTest: LatencyTest;
     dataChannelLatencyTest: DataChannelLatencyTest;
 
     /* A map stats we are storing/rendering */
     statsMap = new Map<string, Stat>();
 
-    constructor(config: StatsPanelConfiguration) {
+    constructor(config: StatsPanelConfiguration, streamConfig: Config) {
         this._config = config;
 
-        this.sessionTest = new SessionTest();
+        // Only create the session test class/ui-elements if the ?LatencyCSV flag is enabled.
+        this.sessionTest = streamConfig.isFlagEnabled(Flags.LatencyCSV) ? new SessionTest() : null;
         this.latencyTest = new LatencyTest();
         this.dataChannelLatencyTest = new DataChannelLatencyTest();
     }
@@ -114,7 +117,12 @@ export class StatsPanel {
 
             this._statsContentElement.appendChild(streamToolStats);
             streamToolStats.appendChild(controlStats);
-            controlStats.appendChild(this.sessionTest.rootElement);
+
+            // Add sesssion test to the UI if ?LatencyCSV flag is enabled and config allows it.
+            if (this.sessionTest && isSectionEnabled(this._config, StatsSections.SessionTest)) {
+                controlStats.appendChild(this.sessionTest.rootElement);
+            }
+
             controlStats.appendChild(statistics);
             controlStats.appendChild(latencyStats);
 
@@ -271,7 +279,9 @@ export class StatsPanel {
             maximumFractionDigits: 0
         });
 
-        this.sessionTest.handleStats(stats);
+        if (this.sessionTest) {
+            this.sessionTest.handleStats(stats);
+        }
 
         // Inbound data
         const inboundData = MathUtils.formatBytes(stats.inboundVideoStats.bytesReceived, 2);
@@ -389,7 +399,9 @@ export class StatsPanel {
     }
 
     public handleLatencyInfo(latencyInfo: LatencyInfo) {
-        this.sessionTest.handleLatencyInfo(latencyInfo);
+        if (this.sessionTest) {
+            this.sessionTest.handleLatencyInfo(latencyInfo);
+        }
 
         if (latencyInfo.frameTiming !== undefined) {
             // Encoder latency
