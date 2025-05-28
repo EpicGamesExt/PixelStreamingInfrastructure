@@ -5,10 +5,14 @@ import {
     LatencyInfo,
     Logger,
     SettingNumber
-} from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.5';
+} from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.6';
 import { SettingUINumber } from '../Config/SettingUINumber';
+
 /**
  * Session test UI elements and results handling.
+ * Creates a button to start the test and collects stats and latency info during the test.
+ * After the test is finished, it generates CSV files for stats and latency info.
+ * The test runs for a specified time frame, which can be set in the UI.
  */
 export class SessionTest {
     _rootElement: HTMLElement;
@@ -25,7 +29,7 @@ export class SessionTest {
     }
 
     /**
-     * Get the the button containing the stats icon.
+     * Make the elements for the session test: e.g. button and test time input.
      */
     public get rootElement(): HTMLElement {
         if (!this._rootElement) {
@@ -78,9 +82,13 @@ export class SessionTest {
                 this.records = [];
                 this.latencyRecords = [];
                 this.isCollectingStats = true;
-                Logger.Warning(`Starting session test. Duration: [${this._testTimeFrameSetting.number}]`);
+                this._latencyTestButton.disabled = true;
+                this._latencyTestButton.value = 'Running...';
+                Logger.Info(`Starting session test. Duration: [${this._testTimeFrameSetting.number}]`);
                 setTimeout(() => {
                     this.onCollectingFinished();
+                    this._latencyTestButton.disabled = false;
+                    this._latencyTestButton.value = 'Run Test';
                 }, this._testTimeFrameSetting.number * 1000);
             };
         }
@@ -107,7 +115,7 @@ export class SessionTest {
 
     private onCollectingFinished() {
         this.isCollectingStats = false;
-        Logger.Warning(`Finished session test`);
+        Logger.Info(`Finished session test`);
 
         this.generateStatsCsv();
         this.generateLatencyCsv();
@@ -116,12 +124,12 @@ export class SessionTest {
     private generateStatsCsv() {
         const csvHeader: string[] = [];
 
-        this.records.forEach((record) => {
+        this.records.forEach((record: AggregatedStats) => {
             for (const i in record) {
                 const obj: {} = record[i as never];
 
                 if (Array.isArray(obj)) {
-                    for (const j in obj) {
+                    for (let j = 0; j < obj.length; j++) {
                         const arrayVal = obj[j];
                         for (const k in arrayVal) {
                             if (csvHeader.indexOf(`${i}.${j}.${k}`) === -1) {
