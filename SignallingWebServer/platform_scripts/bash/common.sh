@@ -224,11 +224,14 @@ function setup_frontend() {
 	if [ ! -d "${WEBPACK_OUTPUT_PATH}" ] || [ "$BUILD_FRONTEND" == "1" ] ; then
 		echo "Building Typescript Frontend."
 		# Using our bundled NodeJS, build the web frontend files
+        pushd "${SCRIPT_DIR}/../../../Common" > /dev/null
+		npm run build:esm
+		popd > /dev/null
 		pushd "${SCRIPT_DIR}/../../../Frontend/library" > /dev/null
-		npm run build:cjs
+		npm run build:esm
 		popd > /dev/null
 		pushd "${SCRIPT_DIR}/../../../Frontend/ui-library" > /dev/null
-		npm run build:cjs
+		npm run build:esm
 		popd > /dev/null
 		pushd "${SCRIPT_DIR}/../../../Frontend/implementations/typescript" > /dev/null
 		npm run build:dev
