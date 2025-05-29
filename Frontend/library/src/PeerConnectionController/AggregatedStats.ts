@@ -34,7 +34,10 @@ export class AggregatedStats {
     constructor() {
         this.inboundVideoStats = new InboundVideoStats();
         this.inboundAudioStats = new InboundAudioStats();
+        this.candidatePairs = new Array<CandidatePairStats>();
         this.datachannelStats = new DataChannelStats();
+        this.localCandidates = new Array<CandidateStat>();
+        this.remoteCandidates = new Array<CandidateStat>();
         this.outboundVideoStats = new OutboundRTPStats();
         this.outboundAudioStats = new OutboundRTPStats();
         this.remoteOutboundAudioStats = new RemoteOutboundRTPStats();

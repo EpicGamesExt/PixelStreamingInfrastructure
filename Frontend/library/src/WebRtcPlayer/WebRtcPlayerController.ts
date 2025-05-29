@@ -206,8 +206,11 @@ export class WebRtcPlayerController {
             this.handleIceCandidate(iceCandidateMessage.candidate);
         });
         this.protocol.transport.addListener('open', () => {
-            const message = MessageHelpers.createMessage(Messages.listStreamers);
-            this.protocol.sendMessage(message);
+            const BrowserSendOffer = this.config.isFlagEnabled(Flags.BrowserSendOffer);
+            if (!BrowserSendOffer) {
+                const message = MessageHelpers.createMessage(Messages.listStreamers);
+                this.protocol.sendMessage(message);
+            }
             this.reconnectAttempt = 0;
             this.isReconnecting = false;
         });
@@ -1151,6 +1154,19 @@ export class WebRtcPlayerController {
         /* RTC Peer Connection on Track event -> handle on track */
         this.peerConnectionController.onTrack = (trackEvent: RTCTrackEvent) =>
             this.streamController.handleOnTrack(trackEvent);
+
+        const BrowserSendOffer = this.config.isFlagEnabled(Flags.BrowserSendOffer);
+        if (BrowserSendOffer) {
+            // If browser is sending the offer, create an offer and send it to the streamer
+            this.sendrecvDataChannelController.createDataChannel(
+                this.peerConnectionController.peerConnection,
+                'cirrus',
+                this.datachannelOptions
+            );
+            this.sendrecvDataChannelController.handleOnMessage = (ev: MessageEvent<ArrayBuffer>) =>
+                this.handleOnMessage(ev);
+            this.peerConnectionController.createOffer(this.sdpConstraints, this.config);
+        }
     }
 
     /**
