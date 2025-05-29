@@ -205,7 +205,7 @@ Logger.info(`${pjson.name} v${pjson.version} starting...`);
 if (options.log_config) {
     Logger.info('Config:');
     for (const key in options) {
-        Logger.info(`"${key}": "${options[key]}"`);
+        Logger.info(`"${key}": ${JSON.stringify(options[key])}`);
     }
 }
 
