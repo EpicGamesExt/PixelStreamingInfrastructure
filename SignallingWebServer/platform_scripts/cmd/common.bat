@@ -9,13 +9,12 @@ set SCRIPT_DIR=%~dp0
 set /p NODE_VERSION=<"%SCRIPT_DIR%/../../../NODE_VERSION"
 set NPM="%SCRIPT_DIR%/node/npm"
 set TAR="%SystemRoot%\System32\tar.exe"
-set CONTINUE=1
 GOTO :eof
 
 :Usage
 echo.
 echo    Usage:
-echo        %0 [--help] [--publicip ^<IP Address^>] [--turn ^<turn server^>] [--stun ^<stun server^>] [server options...]
+echo        %0 [--help] [--publicip ^<IP Address^>] [--turn ^<turn server^>] [--stun ^<stun server^>] -- [server options...]
 echo    Where:
 echo        --help              Print this message and stop this script.
 echo        --publicip          Define public ip address (using default port) for turn server, syntax: --publicip ; it is used for 
@@ -39,8 +38,7 @@ IF exist "%SCRIPT_DIR%..\..\dist" (
     call %NPM% run start --- --help
     popd
 )
-set CONTINUE=0
-exit /b
+exit /b 1
 
 :ParseArgs
 set BUILD_LIBRARIES=0
@@ -54,73 +52,84 @@ set TURN_USER=
 set TURN_PASS=
 set STUN_SERVER=
 set PUBLIC_IP=
+echo ARGS %*
 :arg_loop
-IF NOT "%1"=="" (
-    set HANDLED=0
-    IF "%1"=="--help" (
-        CALL :Usage
-        exit /b
-    )
-    IF "%1"=="--publicip" (
-        set HANDLED=1
-        set PUBLIC_IP=%2
-        SHIFT
-    )
-    IF "%1"=="--turn" (
-        set HANDLED=1
-        set TURN_SERVER=%2
-        SHIFT
-    )
-    IF "%1"=="--turn-user" (
-        set HANDLED=1
-        set TURN_USER=1
-    )
-    IF "%1"=="--turn-pass" (
-        set HANDLED=1
-        set TURN_PASS=1
-    )
-    if "%1"=="--start-turn" (
-        set HANDLED=1
-        set START_TURN=1
-    )
-    IF "%1"=="--stun" (
-        set HANDLED=1
-        set STUN_SERVER=%2
-        SHIFT
-    )
-    IF "%1"=="--frontend-dir" (
-        set HANDLED=1
-        set FRONTEND_DIR=%~2
-        SHIFT
-    )
-    IF "%1"=="--build" (
-        set HANDLED=1
-        set BUILD_FRONTEND=1
-    )
-    IF "%1"=="--rebuild" (
-        set HANDLED=1
-        set BUILD_LIBRARIES=1
-        set BUILD_FRONTEND=1
-        set BUILD_WILBUR=1
-    )
-    IF "%1"=="--build-libraries" (
-        set HANDLED=1
-        set BUILD_LIBRARIES=1
-    )
-    IF "%1"=="--build-wilbur" (
-        set HANDLED=1
-        set BUILD_WILBUR=1
-    )
-    IF "%1"=="--deps" (
-        set HANDLED=1
-        set INSTALL_DEPS=1
-    )
-    IF NOT "!HANDLED!"=="1" (
-        set SERVER_ARGS=%SERVER_ARGS% %1
-    )
-    SHIFT
-    GOTO :arg_loop
+IF "%1"=="" GOTO LoopExit
+IF "%1"=="--" GOTO PostArgs
+set HANDLED=0
+IF "%1"=="--help" (
+    CALL :Usage
+    exit /b
 )
+IF "%1"=="--publicip" (
+    set HANDLED=1
+    set PUBLIC_IP=%2
+    SHIFT
+)
+IF "%1"=="--turn" (
+    set HANDLED=1
+    set TURN_SERVER=%2
+    SHIFT
+)
+IF "%1"=="--turn-user" (
+    set HANDLED=1
+    set TURN_USER=1
+)
+IF "%1"=="--turn-pass" (
+    set HANDLED=1
+    set TURN_PASS=1
+)
+if "%1"=="--start-turn" (
+    set HANDLED=1
+    set START_TURN=1
+)
+IF "%1"=="--stun" (
+    set HANDLED=1
+    set STUN_SERVER=%2
+    SHIFT
+)
+IF "%1"=="--frontend-dir" (
+    set HANDLED=1
+    set FRONTEND_DIR=%~2
+    SHIFT
+)
+IF "%1"=="--build" (
+    set HANDLED=1
+    set BUILD_FRONTEND=1
+)
+IF "%1"=="--rebuild" (
+    set HANDLED=1
+    set BUILD_LIBRARIES=1
+    set BUILD_FRONTEND=1
+    set BUILD_WILBUR=1
+)
+IF "%1"=="--build-libraries" (
+    set HANDLED=1
+    set BUILD_LIBRARIES=1
+)
+IF "%1"=="--build-wilbur" (
+    set HANDLED=1
+    set BUILD_WILBUR=1
+)
+IF "%1"=="--deps" (
+    set HANDLED=1
+    set INSTALL_DEPS=1
+)
+IF NOT "!HANDLED!"=="1" (
+    echo Unknown arg %1
+    exit /b 1
+)
+SHIFT
+GOTO :arg_loop
+
+:PostArgs
+SHIFT
+IF "%1"=="" GOTO LoopExit
+set SERVER_ARGS=%SERVER_ARGS% %1
+GOTO PostArgs
+
+:LoopExit
+echo SERVER_ARGS = %SERVER_ARGS%
 exit /b
 
 :SetupNode

@@ -6,7 +6,7 @@ services:
       context: ../../
       dockerfile: ./SignallingWebServer/Dockerfile
     image: signalling
-    command: --rest_api
+    command: -- --rest_api
     networks:
       - testing
     healthcheck:
