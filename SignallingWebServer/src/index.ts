@@ -147,6 +147,12 @@ program
             .argParser(JSON.parse)
             .default(config_file.peer_options || '')
     )
+    .addOption(
+        new Option(
+            '--peer_options_file <filename>',
+            'Additional JSON data to send in peerConnectionOptions of the config message. This allows you to provide JSON data without having to deal with it on the command line.'
+        ).default(config_file.peer_options_file || '')
+    )
     .option(
         '--reverse-proxy',
         'Enables reverse proxy mode. This will trust the X-Forwarded-For header.',
@@ -199,6 +205,20 @@ InitLogging({
     logLevelConsole: options.log_level_console,
     logLevelFile: options.log_level_file
 });
+
+// read the peer_options_file
+if (options.peer_options_file) {
+    if (!fs.existsSync(options.peer_options_file)) {
+        Logger.error(`peer_options_file "${options.peer_options_file}" does not exist.`);
+        throw Error('Failed.');
+    }
+
+    options.peer_options = JSON.parse(fs.readFileSync(options.peer_options_file, 'utf-8'));
+} else if (options.peer_options) {
+    Logger.warn(
+        `The --peer_options cli flag has many issues with passing JSON data on the command line. It is recommended that you use --peer_options_file instead.`
+    );
+}
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
 Logger.info(`${pjson.name} v${pjson.version} starting...`);
