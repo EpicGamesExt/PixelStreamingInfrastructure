@@ -3,6 +3,8 @@
 '@epicgames-ps/lib-pixelstreamingfrontend-ue5.6': minor
 ---
 
+Changes for regression/latency testing.
+
 ## Latency Session Test and dump to csv
 
 Added a new feature to run a variable length latency test session (e.g. a 60s window)
