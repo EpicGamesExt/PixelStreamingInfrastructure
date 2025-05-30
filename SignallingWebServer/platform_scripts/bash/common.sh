@@ -6,7 +6,7 @@ NODE_VERSION=$(<"${SCRIPT_DIR}/../../../NODE_VERSION")
 function print_usage() {
     echo "
     Script usage:
-        ${0} [--help] [--publicip <IP Address>] [--turn <turn server>] [--stun <stun server>] [server options...]
+        ${0} [--help] [--publicip <IP Address>] [--turn <turn server>] [--stun <stun server>] -- [server options...]
     Where:
         --help              Print this message and stop this script.
         --debug             Run all scripts with --inspect
@@ -66,11 +66,16 @@ function parse_args() {
         --build-libraries ) BUILD_LIBRARIES=1; shift;;
         --deps ) INSTALL_DEPS=1; shift;;
         --help ) print_usage;;
-        * ) SERVER_ARGS+=" $1"; shift;;
+        -- ) shift; break;;
+        * )
+            echo "Unknown argument: $1"
+            exit 1
+            ;;
         esac
     done
-    if [[ ! -z "${SERVER_ARGS}" ]]; then
-        echo "Parameters being passed to server: ${SERVER_ARGS}"
+    SERVER_ARGS+=$@
+    if [[ ! -z "$@" ]]; then
+        echo "Parameters being passed to server: $@"
     fi
 }
 
