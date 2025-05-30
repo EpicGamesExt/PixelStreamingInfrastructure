@@ -210,7 +210,7 @@ InitLogging({
 if (options.peer_options_file) {
     if (!fs.existsSync(options.peer_options_file)) {
         Logger.error(`peer_options_file "${options.peer_options_file}" does not exist.`);
-        throw Error('Failed.');
+        throw Error(`Failed to find a peer options config file a file called ${options.peer_options_file}.`);
     }
 
     options.peer_options = JSON.parse(fs.readFileSync(options.peer_options_file, 'utf-8'));
