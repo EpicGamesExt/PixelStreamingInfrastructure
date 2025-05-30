@@ -2,6 +2,8 @@
 '@epicgames-ps/wilbur': minor
 ---
 
+Updates to platform_scripts to fix argument passing to Wilbur.
+
 - Added separator between script parameters and signalling server parameters when using platform scripts
   - From now on, anything after the `--` marker on the command line is passed directly to Wilbur.
   - Parameters before this marker are intended for the scripts. These parameters are validated and unknown parameters will cause an error.
