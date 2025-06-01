@@ -2,4 +2,4 @@
 @echo off
 setlocal enabledelayedexpansion
 
-call "%~dp0start.bat" --default-stun --default-turn --start-turn %*
+call "%~dp0start.bat" --start-turn %*
