@@ -33,6 +33,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          title: '[Bot] Update ${{ github.ref_name }} NPM Changelogs'
+          title: '[Bot] NPM Packages Release ${{ github.ref_name }}'
           commit: 'Updated NPM changelogs'
 
