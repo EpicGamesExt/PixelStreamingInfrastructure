@@ -13,3 +13,4 @@ Tips:
 
 - Please note that scripts intended to run need to be executable:  $ chmod +x *.sh  will do that job.
 - You can provide --help to start.sh to get a list of customizable arguments.
+- start_with_turn.sh has issues terminating with CTRL+C on Ubuntu 22.04 when run with the default port. Run start_with_stun.sh and start_turn.sh separately instead or set the player port above port 1024 and run with `SERVER_ARGS="player_port=8000" ./start_with_turn.sh --nosudo`.
