@@ -52,7 +52,6 @@ set TURN_USER=
 set TURN_PASS=
 set STUN_SERVER=
 set PUBLIC_IP=
-echo ARGS %*
 :arg_loop
 IF "%1"=="" GOTO LoopExit
 IF "%1"=="--" GOTO PostArgs
@@ -129,7 +128,6 @@ set SERVER_ARGS=%SERVER_ARGS% %1
 GOTO PostArgs
 
 :LoopExit
-echo SERVER_ARGS = %SERVER_ARGS%
 exit /b
 
 :SetupNode
