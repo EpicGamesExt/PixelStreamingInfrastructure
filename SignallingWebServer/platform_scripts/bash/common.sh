@@ -6,8 +6,8 @@ NODE_VERSION=$(<"${SCRIPT_DIR}/../../../NODE_VERSION")
 function print_usage() {
     echo "
     Script usage:
-        ${0} [--help] [--publicip <IP Address>] [--turn <turn server>] [--stun <stun server>] -- [server options...]
-    Where:
+        start.sh [script options...] -- [server options...]
+    Script options:
         --help              Print this message and stop this script.
         --debug             Run all scripts with --inspect
         --nosudo            Run all scripts without \`sudo\` command useful for when run in containers.
@@ -28,7 +28,7 @@ function print_usage() {
         --build-wilbur      Force build of wilbur
         --deps              Force reinstall of dependencies
 
-    Other options: stored and passed to the server.  All parameters printed once the script values are set.
+    Anything after -- is passed directly to the signalling server.
     Command line options might be omitted to run with defaults and it is a good practice to omit specific ones when just starting the TURN or the STUN server alone, not the whole set of scripts.
     "
     if [[ -d "${SCRIPT_DIR}/../../dist/" ]]; then
