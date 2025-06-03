@@ -14,7 +14,7 @@ GOTO :eof
 :Usage
 echo.
 echo    Usage:
-echo        %0 [--help] [--publicip ^<IP Address^>] [--turn ^<turn server^>] [--stun ^<stun server^>] -- [server options...]
+echo        start.sh [--help] [--publicip ^<IP Address^>] [--turn ^<turn server^>] [--stun ^<stun server^>] -- [server options...]
 echo    Where:
 echo        --help              Print this message and stop this script.
 echo        --publicip          Define public ip address (using default port) for turn server, syntax: --publicip ; it is used for 
@@ -32,7 +32,7 @@ echo        --rebuild           Force a rebuild of everything
 echo        --build-libraries   Force a rebuild of shared libraries
 echo        --build-wilbur      Force build of wilbur
 echo        --deps              Force reinstall of dependencies
-echo    Other options: stored and passed to the server.
+echo    Everything after -- is passed directly to the signalling server executable.
 IF exist "%SCRIPT_DIR%..\..\dist" (
     pushd %SCRIPT_DIR%..\..
     call %NPM% run start --- --help
