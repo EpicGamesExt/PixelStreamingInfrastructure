@@ -748,7 +748,7 @@ function onSFUMessageStartStreaming(sfuPlayer, msg) {
 function onSFUMessageStopStreaming(sfuPlayer, msg) {
 	const sfuStreamerComponent = sfuPlayer.getSFUStreamerComponent();
 	logIncoming(sfuStreamerComponent.id, msg);
-if (!streamers.has(sfuStreamerComponent.id)) {
+	if (!streamers.has(sfuStreamerComponent.id)) {
 		console.error(`SFU ${sfuStreamerComponent.id} is not registered as a streamer or streaming.`)
 		return;
 	}
@@ -880,6 +880,10 @@ function forwardPlayerMessage(player, msg) {
 	player.sendFrom(msg);
 }
 
+function onPlayerMessagePong(player, msg) {
+	logIncoming(player.id, msg);
+}
+
 function onPlayerDisconnected(playerId) {
 	const player = players.get(playerId);
 	player.unsubscribe();
@@ -897,6 +901,7 @@ playerMessageHandlers.set('offer', forwardPlayerMessage);
 playerMessageHandlers.set('answer', forwardPlayerMessage);
 playerMessageHandlers.set('iceCandidate', forwardPlayerMessage);
 playerMessageHandlers.set('listStreamers', onPlayerMessageListStreamers);
+playerMessageHandlers.set('pong', onPlayerMessagePong);
 // sfu related messages
 playerMessageHandlers.set('dataChannelRequest', forwardPlayerMessage);
 playerMessageHandlers.set('peerDataChannelsReady', forwardPlayerMessage);
@@ -921,6 +926,15 @@ playerServer.on('connection', function (ws, req) {
 	console.logColor(logging.Green, `player ${playerId} (${req.connection.remoteAddress}) connected`);
 	let player = new Player(playerId, ws, PlayerType.Regular, whoSendsOffer);
 	players.set(playerId, player);
+
+	// Set up a ping interval to keep the connection alive
+	const pingInterval = setInterval(() => {
+		if (player.ws.readyState === 1 /* OPEN */) {
+			const pingMsg = { type: 'ping', time: new Date().getTime() };
+			logOutgoing(player.id, pingMsg);
+			player.ws.send(JSON.stringify(pingMsg));
+		}
+	}, 10000); // 10 seconds
 
 	ws.on('message', (msgRaw) =>{
 		var msg;
@@ -953,12 +967,14 @@ playerServer.on('connection', function (ws, req) {
 
 	ws.on('close', function(code, reason) {
 		console.logColor(logging.Yellow, `player ${playerId} connection closed: ${code} - ${reason}`);
+		clearInterval(pingInterval);
 		onPlayerDisconnected(playerId);
 	});
 
 	ws.on('error', function(error) {
 		console.error(`player ${playerId} connection error: ${error}`);
 		ws.close(1006 /* abnormal closure */, `player ${playerId} connection error: ${error}`);
+		clearInterval(pingInterval);
 		onPlayerDisconnected(playerId);
 
 		console.logColor(logging.Red, `Trying to reconnect...`);
