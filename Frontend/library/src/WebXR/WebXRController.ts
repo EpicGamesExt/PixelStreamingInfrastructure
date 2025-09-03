@@ -3,26 +3,58 @@
 import { Logger } from '@epicgames-ps/lib-pixelstreamingcommon-ue5.6';
 import { WebRtcPlayerController } from '../WebRtcPlayer/WebRtcPlayerController';
 import { XRGamepadController } from '../Inputs/XRGamepadController';
-import { XrFrameEvent } from '../Util/EventEmitter';
+import {
+    StatsReceivedEvent,
+    XrFrameEvent,
+    XrSessionEndedEvent,
+    XrSessionStartedEvent
+} from '../Util/EventEmitter';
 import { Flags } from '../Config/Config';
+import WebXRLayersPolyfill from '@epicgames-ps/webxr-layers-polyfill';
+import { vec3, quat } from 'gl-matrix';
 
 export class WebXRController {
     private xrSession: XRSession;
     private xrRefSpace: XRReferenceSpace;
     private gl: WebGL2RenderingContext;
     private xrViewerPose: XRViewerPose = null;
+
+    // Media layers polyfill for WebXR
+    // This is used to support media layers in browsers that do not support them natively.
+    private xrLayersPolyfill: WebXRLayersPolyfill = null;
+    private xrGLFactory: XRWebGLBinding;
+    private xrMediaFactory: XRMediaBinding;
+    private xrProjectionLayer: XRProjectionLayer = null;
+    private xrQuadLayer: XRQuadLayer = null;
+    private quadDist = 1.0;
+    private useMediaLayers: Boolean = false;
+    private useMediaFactory: Boolean = false;
+    private xrLayers: XRLayer[] = [];
+
     // Used for comparisons to ensure two numbers are close enough.
     private EPSILON = 0.0000001;
 
     private positionLocation: number;
     private texcoordLocation: number;
+    private uniformXOffsetLocation: WebGLUniformLocation;
 
     private positionBuffer: WebGLBuffer;
     private texcoordBuffer: WebGLBuffer;
 
+    private videoElement: HTMLVideoElement = null;
     private videoTexture: WebGLTexture = null;
+    private hasVideoFrameUpdate: boolean = false;
     private prevVideoWidth: number = 0;
     private prevVideoHeight: number = 0;
+
+    private showDebugInfo: boolean = true;
+    private debugCanvas: HTMLCanvasElement = null;
+    private debugLastRenderTime: DOMHighResTimeStamp = 0;
+    private debugFPS: number = 0;
+    private debugNumFrames: number = 0;
+    private debugVideoFPS: number = 0;
+    private debugStreamFPS: number = 0;
+    private debugLastVideoFrameTime: DOMHighResTimeStamp = 0;
 
     private webRtcController: WebRtcPlayerController;
     private xrGamepadController: XRGamepadController;
@@ -36,16 +68,13 @@ export class WebXRController {
     private lastSentRelativeLeftEyePos: DOMPointReadOnly = null;
     private lastSentRelativeRightEyePos: DOMPointReadOnly = null;
 
-    onSessionStarted: EventTarget;
-    onSessionEnded: EventTarget;
     onFrame: EventTarget;
+    onVideoFrameEventName: string = 'onVideoFrame';
 
     constructor(webRtcPlayerController: WebRtcPlayerController) {
         this.xrSession = null;
         this.webRtcController = webRtcPlayerController;
         this.xrGamepadController = new XRGamepadController(this.webRtcController.streamMessageController);
-        this.onSessionEnded = new EventTarget();
-        this.onSessionStarted = new EventTarget();
         this.onFrame = new EventTarget();
     }
 
@@ -56,9 +85,16 @@ export class WebXRController {
                 return;
             }
 
+            // Apply the XR Polyfill before we start XR
+            if (this.useMediaLayers && this.xrLayersPolyfill == null) {
+                this.xrLayersPolyfill = new WebXRLayersPolyfill();
+            }
+
             navigator.xr
-                /* Request immersive-vr session without any optional features. */
-                .requestSession('immersive-vr', { optionalFeatures: [] })
+                /* Request immersive-vr session with 'media layers' feature if our device supports it.
+                 * This will allow us to render smooth video streams in stereo on the XR device.
+                 */
+                .requestSession('immersive-vr', { optionalFeatures: this.useMediaLayers ? ['layers'] : [] })
                 .then((session: XRSession) => {
                     this.onXrSessionStarted(session);
                 });
@@ -70,7 +106,52 @@ export class WebXRController {
     onXrSessionEnded() {
         Logger.Info('XR Session ended');
         this.xrSession = null;
-        this.onSessionEnded.dispatchEvent(new Event('xrSessionEnded'));
+        this.resetVideoElement();
+        this.webRtcController.pixelStreaming.dispatchEvent(new XrSessionEndedEvent());
+
+        if (this.showDebugInfo) {
+            this.webRtcController.pixelStreaming.removeEventListener(
+                'statsReceived',
+                this.storeDebugStreamFPS.bind(this)
+            );
+        }
+    }
+
+    storeDebugStreamFPS(statsEvent: StatsReceivedEvent) {
+        this.debugStreamFPS = statsEvent.data.aggregatedStats.inboundVideoStats.framesPerSecond;
+    }
+
+    resetVideoElement() {
+        this.videoElement = null;
+        this.hasVideoFrameUpdate = false;
+        // Resume the main video element playback
+        this.webRtcController.videoPlayer.getVideoElement().play();
+    }
+
+    initVideoElement() {
+        // Make an offscreen video element that we can use to playback the video.
+        this.videoElement = document.createElement('video');
+        this.videoElement.disablePictureInPicture = true;
+        this.videoElement.playsInline = true;
+        //this.videoElement.srcObject = this.webRtcController.videoPlayer.getVideoElement().srcObject;
+        this.videoElement.src = './images/bike_1814x1080@90.mkv';
+        this.videoElement.loop = true;
+        // Pause the main video element to avoid double playback
+        this.webRtcController.videoPlayer.getVideoElement().pause();
+        this.videoElement.play();
+    }
+
+    initDebugCanvas() {
+        if (!this.showDebugInfo) {
+            return;
+        }
+
+        this.debugCanvas = document.createElement('canvas');
+
+        this.webRtcController.pixelStreaming.addEventListener(
+            'statsReceived',
+            this.storeDebugStreamFPS.bind(this)
+        );
     }
 
     initGL() {
@@ -82,8 +163,195 @@ export class WebXRController {
             xrCompatible: true
         });
 
-        // Set our clear color
+        // Set our clear color and clear depth
         this.gl.clearColor(0.0, 0.0, 0.0, 1);
+        this.gl.clearDepth(1.0);
+    }
+
+    initLayers() {
+        if (!this.xrSession || !this.useMediaLayers) {
+            return;
+        }
+
+        this.xrGLFactory = new XRWebGLBinding(this.xrSession, this.gl);
+
+        // Projection layer for debug UI
+        if (this.showDebugInfo) {
+            this.xrProjectionLayer = this.xrGLFactory.createProjectionLayer({
+                textureType: 'texture',
+                depthFormat: 0
+            });
+            this.xrLayers.push(this.xrProjectionLayer);
+        }
+
+        this.xrSession.updateRenderState({ layers: this.xrLayers });
+    }
+
+    initQuadLayer() {
+        if (!this.leftView || !this.rightView) {
+            Logger.Error('Left and right views are not initialized. Cannot create quad layer.');
+            return;
+        }
+        if (!this.xrSession) {
+            Logger.Error('XR Session is not initialized. Cannot create quad layer.');
+            return;
+        }
+        if (!this.videoElement) {
+            Logger.Error('Video element is not initialized. Cannot create quad layer.');
+            return;
+        }
+
+        const l = vec3.fromValues(
+            this.leftView.transform.position.x,
+            this.leftView.transform.position.y,
+            this.leftView.transform.position.z
+        );
+
+        const r = vec3.fromValues(
+            this.rightView.transform.position.x,
+            this.rightView.transform.position.y,
+            this.rightView.transform.position.z
+        );
+
+        const IPD = vec3.distance(l, r);
+
+        // Set quad width to 1.0 in XR space, based its height and distance from eyes on this constant
+        const quadWidth = 1.0;
+        const nearClip = this.leftView.projectionMatrix[14] / (this.leftView.projectionMatrix[10] - 1.0);
+        const x = quadWidth * 0.5 - IPD * 0.5;
+        const halfHFOVRads = Math.atan(1.0 / this.leftView.projectionMatrix[0]);
+        const halfVFOVRads = Math.atan(1.0 / this.leftView.projectionMatrix[5]);
+
+        // Calculate distance the quad layer should be from the eyes so it covers the entire horizontal field of view (account for perspective)
+        const screenSpaceWidth = (x * nearClip) / (2.0 * Math.tan(halfHFOVRads));
+        this.quadDist = (x * nearClip) / screenSpaceWidth / 2.0;
+
+        // Calculate the height of the quad layer to cover the entire vertical field of view (account for perspective)
+        let quadHeight = Math.tan(halfVFOVRads) * this.quadDist * 2.0;
+        const screenSpaceHeight = (quadHeight * nearClip) / (2.0 * Math.tan(halfVFOVRads));
+        quadHeight = (quadHeight * nearClip) / screenSpaceHeight / 2.0;
+
+        const transform: XRRigidTransform = new XRRigidTransform(
+            // Position
+            {
+                x: 0,
+                y: 0,
+                z: -this.quadDist,
+                w: 1
+            },
+            // Direction
+            {
+                x: 0,
+                y: 0,
+                z: 0,
+                w: 1
+            }
+        );
+
+        if (this.useMediaFactory) {
+            this.xrMediaFactory = new XRMediaBinding(this.xrSession);
+
+            this.xrQuadLayer = this.xrMediaFactory.createQuadLayer(this.videoElement, {
+                space: this.xrRefSpace,
+                layout: 'stereo-left-right',
+                transform: transform,
+                width: quadWidth,
+                height: quadHeight
+            });
+        } else {
+            this.xrQuadLayer = this.xrGLFactory.createQuadLayer({
+                space: this.xrRefSpace,
+                layout: 'stereo-left-right',
+                transform: transform,
+                viewPixelWidth: this.videoElement.videoWidth,
+                viewPixelHeight: this.videoElement.videoHeight
+            });
+        }
+
+        this.xrLayers.push(this.xrQuadLayer);
+
+        this.xrSession.updateRenderState({ layers: this.xrLayers });
+    }
+
+    private updateXRQuad(frame: XRFrame) {
+        if (!this.xrViewerPose) {
+            Logger.Error('XR Viewer Pose is not initialized. Cannot update quad layer.');
+            return;
+        }
+
+        if (this.xrQuadLayer == null) {
+            this.initQuadLayer();
+        }
+
+        const quadPos = vec3.create();
+
+        const hmdPos = vec3.fromValues(
+            this.xrViewerPose.transform.position.x,
+            this.xrViewerPose.transform.position.y,
+            this.xrViewerPose.transform.position.z
+        );
+
+        // Find the HMD's forward vector
+        const hmdRot = quat.fromValues(
+            this.xrViewerPose.transform.orientation.x,
+            this.xrViewerPose.transform.orientation.y,
+            this.xrViewerPose.transform.orientation.z,
+            this.xrViewerPose.transform.orientation.w
+        );
+
+        const hmdForward = vec3.create();
+        vec3.transformQuat(hmdForward, vec3.fromValues(0, 0, 1), hmdRot);
+
+        // Find the HMD's up vector
+        const hmdUp = vec3.create();
+        vec3.transformQuat(hmdUp, vec3.fromValues(0, 1, 0), hmdRot);
+
+        // Find the new quad position using hmd's forward vector and quad's distance away
+        const hmdOffset = vec3.create();
+        vec3.scale(hmdOffset, hmdForward, -this.quadDist);
+        vec3.add(quadPos, hmdPos, hmdOffset);
+
+        const transform: XRRigidTransform = new XRRigidTransform(
+            // position
+            {
+                x: quadPos[0],
+                y: quadPos[1],
+                z: quadPos[2],
+                w: 1
+            },
+            // rotation
+            {
+                x: hmdRot[0],
+                y: hmdRot[1],
+                z: hmdRot[2],
+                w: hmdRot[3]
+            }
+        );
+        this.xrQuadLayer.transform = transform;
+
+        // Update quad with video texture if we are not using the xrMediaFactory
+        if (!this.useMediaFactory) {
+            const glayer = this.xrGLFactory.getSubImage(this.xrQuadLayer, frame);
+            this.videoTexture = glayer.colorTexture;
+
+            this.gl.bindTexture(this.gl.TEXTURE_2D, this.videoTexture);
+            this.gl.pixelStorei(this.gl.UNPACK_FLIP_Y_WEBGL, true);
+            this.gl.texSubImage2D(
+                this.gl.TEXTURE_2D,
+                0,
+                0,
+                0,
+                this.videoElement.videoWidth,
+                this.videoElement.videoHeight,
+                this.gl.RGBA,
+                this.gl.UNSIGNED_BYTE,
+                this.videoElement
+            );
+
+            this.updateDebugText();
+
+            this.gl.bindTexture(this.gl.TEXTURE_2D, null);
+        }
     }
 
     initShaders() {
@@ -109,11 +377,16 @@ export class WebXRController {
         // our texture
         uniform sampler2D u_image;
 
+        // xoffset for eye video texture
+        uniform float u_xOffset;
+
         // the texCoords passed in from the vertex shader.
         varying vec2 v_texCoord;
 
         void main() {
-           gl_FragColor = texture2D(u_image, v_texCoord);
+            // Adjust the texture coordinates based on the xOffset
+            vec2 adjustedTexCoord = vec2(v_texCoord.x * 0.5 + u_xOffset, v_texCoord.y);
+            gl_FragColor = texture2D(u_image, adjustedTexCoord);
         }
         `;
 
@@ -137,9 +410,101 @@ export class WebXRController {
         // look up where vertex data needs to go
         this.positionLocation = this.gl.getAttribLocation(shaderProgram, 'a_position');
         this.texcoordLocation = this.gl.getAttribLocation(shaderProgram, 'a_texCoord');
+        // look up uniform locations
+        this.uniformXOffsetLocation = this.gl.getUniformLocation(shaderProgram, 'u_xOffset');
+    }
+
+    updateNewVideoFrameFlag() {
+        if (!this.xrSession || !this.videoElement) {
+            return;
+        }
+
+        // Update the video frame flag to indicate that we have a new video frame
+        this.hasVideoFrameUpdate = true;
+
+        if (this.showDebugInfo) {
+            const now = performance.now();
+            if (this.debugVideoFPS === 0 || this.debugNumFrames % 60 === 0) {
+                this.debugVideoFPS = Math.round(1000.0 / (now - this.debugLastVideoFrameTime));
+            }
+            this.debugLastVideoFrameTime = now;
+        }
+
+        this.videoElement.requestVideoFrameCallback(this.updateNewVideoFrameFlag.bind(this));
+
+        this.onFrame.dispatchEvent(new Event(this.onVideoFrameEventName));
+    }
+
+    drawDebugText(text: string) {
+        if (!this.showDebugInfo || !this.debugCanvas) {
+            Logger.Error('Debug canvas is not initialized or debug info is disabled.');
+            return;
+        }
+        if (!this.videoTexture) {
+            Logger.Error('Video texture is not initialized. Cannot update debug text.');
+            return;
+        }
+
+        const ctx = this.debugCanvas.getContext('2d');
+
+        // Set the canvas context for text rendering
+        ctx.font = '24px serif';
+
+        const metrics: TextMetrics = ctx.measureText(text);
+        this.debugCanvas.width = metrics.width;
+        this.debugCanvas.height = metrics.fontBoundingBoxAscent + metrics.fontBoundingBoxDescent;
+
+        // Canvas background
+        ctx.fillStyle = 'rgb(0, 0, 0)';
+        ctx.fillRect(0, 0, this.debugCanvas.width, this.debugCanvas.height);
+
+        // Canvas text
+        ctx.fillStyle = 'rgb(0, 255, 0)';
+        ctx.font = '24px serif';
+        const textHeight = metrics.actualBoundingBoxAscent + metrics.actualBoundingBoxDescent;
+        const textVerticalOffset = this.debugCanvas.height - textHeight;
+        ctx.fillText(text, 0, textVerticalOffset / 2 + textHeight);
+
+        const yOffset = this.videoElement.videoHeight / 2;
+        const xOffset = this.debugCanvas.width / 2;
+
+        // We assume video texture is already created and bound, we will write a sub-region on top of it for left and right eye views.
+        this.gl.texSubImage2D(
+            this.gl.TEXTURE_2D,
+            0,
+            xOffset,
+            yOffset,
+            this.debugCanvas.width,
+            this.debugCanvas.height,
+            this.gl.RGBA,
+            this.gl.UNSIGNED_BYTE,
+            this.debugCanvas
+        );
+
+        // Right eye
+        this.gl.texSubImage2D(
+            this.gl.TEXTURE_2D,
+            0,
+            xOffset + this.videoElement.videoWidth / 2,
+            yOffset,
+            this.debugCanvas.width,
+            this.debugCanvas.height,
+            this.gl.RGBA,
+            this.gl.UNSIGNED_BYTE,
+            this.debugCanvas
+        );
     }
 
     updateVideoTexture() {
+        if (
+            !this.xrSession ||
+            !this.gl ||
+            !this.videoElement ||
+            !(this.videoElement.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA)
+        ) {
+            return;
+        }
+
         if (!this.videoTexture) {
             // Create our texture that we use in our shader
             // and bind it once because we never use any other texture.
@@ -153,40 +518,40 @@ export class WebXRController {
             this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_MAG_FILTER, this.gl.LINEAR);
         }
 
-        const videoHeight = this.webRtcController.videoPlayer.getVideoElement().videoHeight;
-        const videoWidth = this.webRtcController.videoPlayer.getVideoElement().videoWidth;
+        const videoResolutionChanged =
+            this.prevVideoWidth !== this.videoElement.videoWidth ||
+            this.prevVideoHeight !== this.videoElement.videoHeight;
 
-        if (this.prevVideoHeight != videoHeight || this.prevVideoWidth != videoWidth) {
-            // Do full update of texture if dimensions do not match
+        if (videoResolutionChanged) {
+            // If the video dimensions have changed, we need to recreate the texture
+            this.prevVideoWidth = this.videoElement.videoWidth;
+            this.prevVideoHeight = this.videoElement.videoHeight;
+            this.gl.bindTexture(this.gl.TEXTURE_2D, this.videoTexture);
+            // Create a new texture with the new video dimensions
             this.gl.texImage2D(
                 this.gl.TEXTURE_2D,
-                0,
-                this.gl.RGBA,
-                videoWidth,
-                videoHeight,
-                0,
-                this.gl.RGBA,
-                this.gl.UNSIGNED_BYTE,
-                this.webRtcController.videoPlayer.getVideoElement()
+                0, // level
+                this.gl.RGBA, // internalFormat
+                this.videoElement.videoWidth, // width
+                this.videoElement.videoHeight, // height
+                0, // border
+                this.gl.RGBA, // format
+                this.gl.UNSIGNED_BYTE, // type
+                this.videoElement
             );
         } else {
-            // If dimensions match just update the sub region
             this.gl.texSubImage2D(
                 this.gl.TEXTURE_2D,
                 0,
                 0,
                 0,
-                videoWidth,
-                videoHeight,
+                this.videoElement.videoWidth,
+                this.videoElement.videoHeight,
                 this.gl.RGBA,
                 this.gl.UNSIGNED_BYTE,
-                this.webRtcController.videoPlayer.getVideoElement()
+                this.videoElement
             );
         }
-
-        // Update prev video width/height
-        this.prevVideoHeight = videoHeight;
-        this.prevVideoWidth = videoWidth;
     }
 
     initBuffers() {
@@ -261,17 +626,30 @@ export class WebXRController {
         });
 
         // Initialization
+        this.initVideoElement();
         this.initGL();
+        this.initLayers();
         this.initShaders();
         this.initBuffers();
+        this.initDebugCanvas();
 
         session.requestReferenceSpace('local').then((refSpace) => {
             this.xrRefSpace = refSpace;
 
-            // Set up our base layer (i.e. a projection layer that fills the entire XR viewport).
-            this.xrSession.updateRenderState({
-                baseLayer: new XRWebGLLayer(this.xrSession, this.gl)
-            });
+            // If we are not using media layers, we will create a base layer for our XR session.
+            if (!this.useMediaLayers) {
+                // Set up our base layer (i.e. a projection layer that fills the entire XR viewport).
+                const baseLayer = new XRWebGLLayer(this.xrSession, this.gl, {
+                    /* Because we render stereo video depth is not helpful to the device */
+                    ignoreDepthValues: true,
+                    depth: false,
+                    stencil: false
+                });
+
+                this.xrSession.updateRenderState({
+                    baseLayer: baseLayer
+                });
+            }
 
             // Update target framerate to 90 fps if 90 fps is supported in this XR device
             if (this.xrSession.supportedFrameRates) {
@@ -283,10 +661,13 @@ export class WebXRController {
             }
 
             // Binding to each new frame to get latest XR updates
-            this.xrSession.requestAnimationFrame(this.onXrFrame.bind(this));
+            this.videoElement.requestVideoFrameCallback(this.updateNewVideoFrameFlag.bind(this));
+            this.xrSession.requestAnimationFrame((time, frame) => {
+                this.onXrFrame(time, frame);
+            });
         });
 
-        this.onSessionStarted.dispatchEvent(new Event('xrSessionStarted'));
+        this.webRtcController.pixelStreaming.dispatchEvent(new XrSessionStartedEvent());
     }
 
     areArraysEqual(a: Float32Array, b: Float32Array): boolean {
@@ -393,6 +774,8 @@ export class WebXRController {
                 hmdTrans[1], hmdTrans[5], hmdTrans[9],  hmdTrans[13],
                 hmdTrans[2], hmdTrans[6], hmdTrans[10], hmdTrans[14],
                 hmdTrans[3], hmdTrans[7], hmdTrans[11], hmdTrans[15],
+                // Timestamp
+                performance.now(),
             ]);
             this.lastSentLeftEyeProj = leftEyeProj;
             this.lastSentRightEyeProj = rightEyeProj;
@@ -417,9 +800,40 @@ export class WebXRController {
                 hmdTrans[3],
                 hmdTrans[7],
                 hmdTrans[11],
-                hmdTrans[15]
+                hmdTrans[15],
+                // Timestamp
+                performance.now()
             ]);
         }
+    }
+
+    updateDebugTimings() {
+        if (this.showDebugInfo) {
+            this.debugNumFrames++;
+            const now = performance.now();
+
+            if (this.debugLastRenderTime != 0 && this.debugNumFrames % 60 === 0) {
+                const deltaTime = now - this.debugLastRenderTime;
+                // Convert to FPS
+                this.debugFPS = Math.round(1000.0 / deltaTime);
+            }
+
+            this.debugLastRenderTime = now;
+        }
+    }
+
+    updateDebugText() {
+        if (!this.showDebugInfo) {
+            Logger.Error('Debug info is not enabled. Cannot draw debug text.');
+            return;
+        }
+        if (!this.videoTexture) {
+            Logger.Error('Video texture is not initialized. Cannot draw debug text.');
+            return;
+        }
+        this.drawDebugText(
+            `WebXR FPS: ${this.debugFPS} | Video FPS: ${this.debugVideoFPS} | Stream FPS: ${this.debugStreamFPS}`
+        );
     }
 
     onXrFrame(time: DOMHighResTimeStamp, frame: XRFrame) {
@@ -430,9 +844,24 @@ export class WebXRController {
                 return;
             }
 
+            if (this.showDebugInfo) {
+                this.updateDebugTimings();
+            }
+
+            if (this.hasVideoFrameUpdate || (this.useMediaLayers && this.xrQuadLayer.needsRedraw)) {
+                this.hasVideoFrameUpdate = false;
+                if (this.useMediaLayers) {
+                    // Use the quad media layer to show the video
+                    this.updateXRQuad(frame);
+                } else {
+                    // Render the video to each eye ourselves
+                    this.updateVideoTexture();
+                    this.updateDebugText();
+                    this.render();
+                }
+            }
+
             this.sendXRDataToUE();
-            this.updateVideoTexture();
-            this.render();
         }
 
         if (this.webRtcController.config.isFlagEnabled(Flags.XRControllerInput)) {
@@ -444,9 +873,9 @@ export class WebXRController {
             );
         }
 
-        this.xrSession.requestAnimationFrame((time: DOMHighResTimeStamp, frame: XRFrame) =>
-            this.onXrFrame(time, frame)
-        );
+        this.xrSession.requestAnimationFrame((time: DOMHighResTimeStamp, frame: XRFrame) => {
+            this.onXrFrame(time, frame);
+        });
 
         this.onFrame.dispatchEvent(new XrFrameEvent({ time, frame }));
     }
@@ -469,15 +898,43 @@ export class WebXRController {
             return;
         }
 
+        this.gl.disable(this.gl.SCISSOR_TEST);
+        this.gl.disable(this.gl.DEPTH_TEST);
+        this.gl.disable(this.gl.STENCIL_TEST);
+        this.gl.disable(this.gl.CULL_FACE);
+        this.gl.disable(this.gl.BLEND);
+        this.gl.disable(this.gl.DITHER);
+        this.gl.colorMask(true, true, true, true);
+        this.gl.depthMask(false);
+
+        // Clear the canvas
+        this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
+
         // Bind the framebuffer to the base layer's framebuffer
         const glLayer = this.xrSession.renderState.baseLayer;
         this.gl.bindFramebuffer(this.gl.FRAMEBUFFER, glLayer.framebuffer);
+        this.gl.invalidateFramebuffer(this.gl.FRAMEBUFFER, [
+            this.gl.COLOR_ATTACHMENT0,
+            this.gl.DEPTH_ATTACHMENT
+        ]);
 
-        // Set the relevant portion of clip space
-        this.gl.viewport(0, 0, glLayer.framebufferWidth, glLayer.framebufferHeight);
+        for (const view of this.xrViewerPose.views) {
+            if (view.eye === 'none') {
+                continue;
+            }
 
-        // Draw the rectangle we will show the video stream texture on
-        this.gl.drawArrays(this.gl.TRIANGLES /*primitiveType*/, 0 /*offset*/, 6 /*count*/);
+            const viewport: XRViewport = glLayer.getViewport(view);
+
+            // Set the relevant portion of clip space
+            this.gl.viewport(viewport.x, viewport.y, viewport.width, viewport.height);
+
+            // Set the xOffset based on the eye
+            const xOffset = view.eye === 'left' ? 0.0 : 0.5;
+            this.gl.uniform1f(this.uniformXOffsetLocation, xOffset);
+
+            // Draw the rectangle we will show the video stream texture on
+            this.gl.drawArrays(this.gl.TRIANGLES /*primitiveType*/, 0 /*offset*/, 6 /*count*/);
+        }
     }
 
     static isSessionSupported(mode: XRSessionMode): Promise<boolean> {
