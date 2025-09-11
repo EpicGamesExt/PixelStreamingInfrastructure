@@ -1106,7 +1106,7 @@ export class WebRtcPlayerController {
             this.pixelStreaming._onLatencyCalculated(latencyInfo);
         };
 
-        /* When our PeerConnection sends want to send an offer call our handler */
+        /* When our PeerConnection wants to send an offer call our handler */
         this.peerConnectionController.onSendWebRTCOffer = (offer: RTCSessionDescriptionInit) => {
             this.handleSendWebRTCOffer(offer);
         };
