@@ -1106,19 +1106,35 @@ export class WebRtcPlayerController {
             this.pixelStreaming._onLatencyCalculated(latencyInfo);
         };
 
-        /* When the Peer Connection wants to send an offer have it handled */
+        /* When our PeerConnection wants to send an offer call our handler */
         this.peerConnectionController.onSendWebRTCOffer = (offer: RTCSessionDescriptionInit) => {
             this.handleSendWebRTCOffer(offer);
         };
 
-        /* Set event handler for when local answer description is set */
-        this.peerConnectionController.onSetLocalDescription = (answer: RTCSessionDescriptionInit) => {
-            this.handleSendWebRTCAnswer(answer);
+        /* Set event handler for when local description is set */
+        this.peerConnectionController.onSetLocalDescription = (sdp: RTCSessionDescriptionInit) => {
+            if (sdp.type === 'offer') {
+                this.handleSendWebRTCOffer(sdp);
+            } else if (sdp.type === 'answer') {
+                this.handleSendWebRTCAnswer(sdp);
+            } else {
+                Logger.Error(
+                    `PeerConnectionController onSetLocalDescription was called with unexpected type ${sdp.type}`
+                );
+            }
         };
 
-        /* Set event handler for when remote offer description is set */
-        this.peerConnectionController.onSetRemoteDescription = (offer: RTCSessionDescriptionInit) => {
-            this.pixelStreaming._onWebRtcSdpOffer(offer);
+        /* Event handler for when PeerConnection's remote description is set */
+        this.peerConnectionController.onSetRemoteDescription = (sdp: RTCSessionDescriptionInit) => {
+            if (sdp.type === 'offer') {
+                this.pixelStreaming._onWebRtcSdpOffer(sdp);
+            } else if (sdp.type === 'answer') {
+                this.pixelStreaming._onWebRtcSdpAnswer(sdp);
+            } else {
+                Logger.Error(
+                    `PeerConnectionController onSetRemoteDescription was called with unexpected type ${sdp.type}`
+                );
+            }
         };
 
         /* When the Peer Connection ice candidate is added have it handled */
@@ -1463,14 +1479,22 @@ export class WebRtcPlayerController {
     }
 
     /**
-     * When an ice Candidate is received from the Signaling server add it to the Peer Connection Client
-     * @param iceCandidate - Ice Candidate from Server
+     * Handler for when a remote ICE candidate is received.
+     * @param iceCandidateInit - Initialization data used to make the actual ICE Candidate.
      */
-    handleIceCandidate(iceCandidate: RTCIceCandidateInit) {
-        Logger.Info('Web RTC Controller: onWebRtcIce');
+    handleIceCandidate(iceCandidateInit: RTCIceCandidateInit) {
+        Logger.Info(`Remote ICE candidate information received: ${JSON.stringify(iceCandidateInit)}`);
 
-        const candidate = new RTCIceCandidate(iceCandidate);
-        this.peerConnectionController.handleOnIce(candidate);
+        // We are using "bundle" policy for media lines so we remove the sdpMid and sdpMLineIndex attributes
+        // from ICE candidates as these are legacy attributes for when bundle is not used.
+        // If we don't do this the browser may be unable to form a media connection
+        // because some browsers are brittle if the bundle master (e.g. commonly mid=0) doesn't get a candidate first.
+        const remoteIceCandidate = new RTCIceCandidate({
+            candidate: iceCandidateInit.candidate,
+            sdpMid: ''
+        });
+
+        this.peerConnectionController.handleOnIce(remoteIceCandidate);
     }
 
     /**
@@ -1478,8 +1502,8 @@ export class WebRtcPlayerController {
      * @param iceEvent - RTC Peer ConnectionIceEvent) {
      */
     handleSendIceCandidate(iceEvent: RTCPeerConnectionIceEvent) {
-        Logger.Info('OnIceCandidate');
         if (iceEvent.candidate && iceEvent.candidate.candidate) {
+            Logger.Info(`Local ICE candidate generated: ` + JSON.stringify(iceEvent.candidate));
             this.protocol.sendMessage(
                 MessageHelpers.createMessage(Messages.iceCandidate, { candidate: iceEvent.candidate })
             );
@@ -1504,6 +1528,13 @@ export class WebRtcPlayerController {
      * @param offer - RTC Session Description
      */
     handleSendWebRTCOffer(offer: RTCSessionDescriptionInit) {
+        if (offer.type !== 'offer') {
+            Logger.Error(
+                `handleSendWebRTCOffer was called with type ${offer.type} - it only expects "offer"`
+            );
+            return;
+        }
+
         Logger.Info('Sending the offer to the Server');
 
         const extraParams = {
@@ -1513,6 +1544,9 @@ export class WebRtcPlayerController {
         };
 
         this.protocol.sendMessage(MessageHelpers.createMessage(Messages.offer, extraParams));
+
+        // Send offer back to Pixel Streaming main class for event dispatch
+        this.pixelStreaming._onWebRtcSdpOffer(offer);
     }
 
     /**
@@ -1520,6 +1554,13 @@ export class WebRtcPlayerController {
      * @param answer - RTC Session Description
      */
     handleSendWebRTCAnswer(answer: RTCSessionDescriptionInit) {
+        if (answer.type !== 'answer') {
+            Logger.Error(
+                `handleSendWebRTCAnswer was called with type ${answer.type} - it only expects "answer"`
+            );
+            return;
+        }
+
         Logger.Info('Sending the answer to the Server');
 
         const extraParams = {
