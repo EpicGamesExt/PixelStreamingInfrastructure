@@ -94,7 +94,7 @@ export class FileUtil {
              *
              * This code reconstructs the received data into the original file based on the mime type and extension provided and then downloads the reconstructed file
              */
-            const received = new Blob(file.data, { type: file.mimetype });
+            const received = new Blob([...file.data], { type: file.mimetype });
             const a = document.createElement('a');
             a.setAttribute('href', URL.createObjectURL(received));
             a.setAttribute('download', `transfer.${file.extension}`);
