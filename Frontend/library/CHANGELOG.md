@@ -1,5 +1,11 @@
 # @epicgames-ps/lib-pixelstreamingfrontend-ue5.6
 
+## 0.2.1
+
+### Patch Changes
+
+- d90b39f: When building the frontend library not in this repository it would fail due requiring newer node types, so these were added a dev dep.
+
 ## 0.2.0
 
 ### Minor Changes
