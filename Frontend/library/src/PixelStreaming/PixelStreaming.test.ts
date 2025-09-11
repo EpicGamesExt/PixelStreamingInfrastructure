@@ -322,7 +322,14 @@ describe('PixelStreaming', () => {
         triggerSdpOfferMessage();
         triggerIceCandidateMessage();
 
-        expect(rtcPeerConnectionSpyFunctions.addIceCandidateSpy).toHaveBeenCalledWith(iceCandidate)
+        // Expect ice candidate to be stripped even if passed in with sdpMid and sdpMLineIndex
+        // as these values are not required when using bundle (which we assume)
+        const strippedIceCandidate = new RTCIceCandidate({
+            candidate: iceCandidate.candidate,
+            sdpMid: ""
+        });
+
+        expect(rtcPeerConnectionSpyFunctions.addIceCandidateSpy).toHaveBeenCalledWith(strippedIceCandidate)
     });
 
     it('should emit webRtcConnected event when ICE connection state is connected', () => {
