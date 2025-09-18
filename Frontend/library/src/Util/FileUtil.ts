@@ -94,13 +94,13 @@ export class FileUtil {
              *
              * This code reconstructs the received data into the original file based on the mime type and extension provided and then downloads the reconstructed file
              */
-            const received = new Blob(file.data, { type: file.mimetype });
-            const a = document.createElement('a');
-            a.setAttribute('href', URL.createObjectURL(received));
-            a.setAttribute('download', `transfer.${file.extension}`);
-            document.body.append(a);
+            // const received = new Blob([...file.data], { type: file.mimetype });
+            // const a = document.createElement('a');
+            // a.setAttribute('href', URL.createObjectURL(received));
+            // a.setAttribute('download', `transfer.${file.extension}`);
+            // document.body.append(a);
             // if you are so inclined to make it auto-download, do something like: a.click();
-            a.remove();
+            //a.remove();
         } else if (file.data.length > file.chunks) {
             file.receiving = false;
             Logger.Error(`Received bigger file than advertised: ${file.data.length}/${file.chunks}`);
