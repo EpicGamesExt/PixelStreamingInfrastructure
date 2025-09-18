@@ -64,11 +64,11 @@ jobs:
       uses: robinraju/release-downloader@v1
       with:
         repository: 'EpicGamesExt/PixelStreamingInfrastructure'
-        tag: 'minimal-streamer-5.6'
-        fileName: 'Minimal-PixelStreamer-5.6-Win64-Development.7z'
+        tag: 'minimal-streamer-5.7'
+        fileName: 'Minimal-PixelStreamer-5.7-Win64-Development.7z'
 
     - name: Extract streamer
-      run: 7z x -oStreamer Minimal-PixelStreamer-5.6-Win64-Development.7z
+      run: 7z x -oStreamer Minimal-PixelStreamer-5.7-Win64-Development.7z
 
     - name: Install dependencies
       run: npm install
