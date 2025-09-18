@@ -1,6 +1,6 @@
 {
     "name": "frontend-tests",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "",
     "main": "index.js",
     "private": true,
@@ -19,7 +19,7 @@
     },
     "dependencies": {
         "@epicgames-ps/js-streamer": "^0.0.4",
-        "@epicgames-ps/lib-pixelstreamingfrontend-ue5.6": "*",
+        "@epicgames-ps/lib-pixelstreamingfrontend-ue5.7": "*",
         "dotenv": "^16.4.5",
         "node-fetch": "^2.7.0",
         "uuid": "^9.0.0"
