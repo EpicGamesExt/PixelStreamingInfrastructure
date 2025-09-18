@@ -1,9 +1,9 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
-export * from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.6';
-export * from '@epicgames-ps/lib-pixelstreamingfrontend-ui-ue5.6';
-import { Config, PixelStreaming, Logger, LogLevel } from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.6';
-import { Application, PixelStreamingApplicationStyle } from '@epicgames-ps/lib-pixelstreamingfrontend-ui-ue5.6';
+export * from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.7';
+export * from '@epicgames-ps/lib-pixelstreamingfrontend-ui-ue5.7';
+import { Config, PixelStreaming, Logger, LogLevel } from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.7';
+import { Application, PixelStreamingApplicationStyle } from '@epicgames-ps/lib-pixelstreamingfrontend-ui-ue5.7';
 const PixelStreamingApplicationStyles =
     new PixelStreamingApplicationStyle();
 PixelStreamingApplicationStyles.applyStyleSheet();

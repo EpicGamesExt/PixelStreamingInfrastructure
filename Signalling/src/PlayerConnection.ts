@@ -7,7 +7,7 @@ import {
     MessageHelpers,
     Messages,
     BaseMessage
-} from '@epicgames-ps/lib-pixelstreamingcommon-ue5.6';
+} from '@epicgames-ps/lib-pixelstreamingcommon-ue5.7';
 import { IPlayer, IPlayerInfo } from './PlayerRegistry';
 import { IStreamer } from './StreamerRegistry';
 import { Logger } from './Logger';

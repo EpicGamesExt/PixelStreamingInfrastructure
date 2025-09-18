@@ -1,6 +1,6 @@
 import { TestContext, SignallingConnection } from './signalling_tester';
 import WebSocket from 'ws';
-import { Messages } from '@epicgames-ps/lib-pixelstreamingcommon-ue5.6';
+import { Messages } from '@epicgames-ps/lib-pixelstreamingcommon-ue5.7';
 import config from './config';
 
 function logFunction(connection: SignallingConnection, message: string): void {
