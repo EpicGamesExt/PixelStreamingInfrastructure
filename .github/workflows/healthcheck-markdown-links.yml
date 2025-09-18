@@ -18,7 +18,7 @@ jobs:
 
       - name: Link Checker
         id: lychee
-        uses: lycheeverse/lychee-action@v1.9.0
+        uses: lycheeverse/lychee-action@v2.0.2
         with:
           args: --github-token ${{ secrets.WORKFLOW_TOKEN }} --exclude 'localhost' --exclude 'github.com/EpicGames/UnrealEngine' --exclude '.png' --exclude '.jpg' --exclude-path 'SFU/mediasoup-sdp-bridge/README.md' './**/*.md'
 
