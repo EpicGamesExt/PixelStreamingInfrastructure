@@ -321,8 +321,6 @@ async function setupMultiplexPeerDataChannels(peer) {
 
     const dataProducerId = await dataRouter.handlePlayer(peer.peerDataProducer, peer.id);
     peer.peerDataConsumer = await peer.transport.consumeData({ dataProducerId });
-    //TODO: Why exactly do we need to do this?
-    peer.transport._sctpStreamIds[nextPeerSCTPStreamId] = 1;
     console.log('peerProducerId %s, peerConsumerId %s', peer.peerDataProducer.id, peer.peerDataConsumer.id);
 
     const peerSignal = {
@@ -385,13 +383,6 @@ function onPeerDisconnected(peerId) {
             peer.peerDataProducer.close();
         }
         if (peer.streamerDataConsumer) {
-            // Set the streamer sctp id we generated back to zero indicating it can be reused.
-            if (streamer && streamer.transport && streamer.transport._sctpStreamIds) {
-                const allocatedStreamId = peer.streamerDataProducer.sctpStreamParameters.streamId;
-                const allocatedPeerStreamId = peer.peerDataProducer.sctpStreamParameters.streamId;
-                streamer.transport._sctpStreamIds[allocatedStreamId] = 0;
-                streamer.transport._sctpStreamIds[allocatedPeerStreamId] = 0;
-            }
             peer.streamerDataConsumer.close();
             peer.streamerDataProducer.close();
         }
@@ -485,7 +476,6 @@ async function onICEStateChange(identifier, iceState) {
                 label: 'send-datachannel',
                 sctpStreamParameters: { streamId: nextStreamerSCTPStreamId, ordered: true }
             });
-            streamer.transport._sctpStreamIds[nextStreamerSCTPStreamId] = 1;
             const dataProducerId = await dataRouter.handleStreamer(producer);
             const streamerDataConsumer = await streamer.transport.consumeData({ dataProducerId });
             console.log('Setting up sctp for the streamer, producer sctp id %s, consumer sctp id %s', producer.sctpStreamParameters.streamId, streamerDataConsumer.sctpStreamParameters.streamId);
