@@ -1,6 +1,6 @@
 {
     "name": "@epicgames-ps/wilbur",
-    "version": "2.3.0",
+    "version": "3.0.0",
     "description": "A basic signalling server application for Unreal Engine's Pixel Streaming applications.",
     "main": "dist/index.js",
     "private": true,
@@ -29,7 +29,7 @@
         "typescript-eslint": "^8.24.0"
     },
     "dependencies": {
-        "@epicgames-ps/lib-pixelstreamingsignalling-ue5.6": "*",
+        "@epicgames-ps/lib-pixelstreamingsignalling-ue5.7": "*",
         "commander": "^12.0.0",
         "express": "^4.21.2",
         "express-openapi": "^12.1.3",

@@ -1,6 +1,6 @@
 {
     "name": "@epicgames-ps/js-streamer",
-    "version": "0.0.4",
+    "version": "0.0.5",
     "description": "A Node JS implementation of a webrtc streamer for testing.",
     "main": "dist/cjs/pixelstreamingjsstreamer.js",
     "types": "dist/types/pixelstreamingjsstreamer.d.ts",
@@ -37,7 +37,7 @@
         "webpack-node-externals": "^3.0.0"
     },
     "dependencies": {
-        "@epicgames-ps/lib-pixelstreamingcommon-ue5.6": "*"
+        "@epicgames-ps/lib-pixelstreamingcommon-ue5.7": "*"
     },
     "overrides": {
         "http-proxy-middleware": "2.0.8"

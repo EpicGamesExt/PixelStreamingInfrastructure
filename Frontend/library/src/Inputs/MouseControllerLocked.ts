@@ -1,5 +1,5 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
-import { Logger } from '@epicgames-ps/lib-pixelstreamingcommon-ue5.6';
+import { Logger } from '@epicgames-ps/lib-pixelstreamingcommon-ue5.7';
 import { StreamMessageController } from '../UeInstanceMessage/StreamMessageController';
 import { InputCoordTranslator, TranslatedCoordUnsigned } from '../Util/InputCoordTranslator';
 import { VideoPlayer } from '../VideoPlayer/VideoPlayer';

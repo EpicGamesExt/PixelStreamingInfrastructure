@@ -6,6 +6,8 @@ These versions are currently being supported with security updates.
 
 | Version | Supported          |
 | ------- | ------------------ |
+| 5.7     | :white_check_mark: |
+| 5.6     | :white_check_mark: |
 | 5.5     | :white_check_mark: |
 | 5.4     | :white_check_mark: |
 | 5.3     | :white_check_mark: |

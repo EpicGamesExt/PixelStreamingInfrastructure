@@ -9,7 +9,7 @@ import {
     InitLogging,
     Logger,
     IWebServerConfig
-} from '@epicgames-ps/lib-pixelstreamingsignalling-ue5.6';
+} from '@epicgames-ps/lib-pixelstreamingsignalling-ue5.7';
 import { beautify, IProgramOptions } from './Utils';
 import { initInputHandler } from './InputHandler';
 import { Command, Option } from 'commander';

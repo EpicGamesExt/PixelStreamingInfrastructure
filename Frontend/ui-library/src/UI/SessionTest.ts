@@ -5,7 +5,7 @@ import {
     LatencyInfo,
     Logger,
     SettingNumber
-} from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.6';
+} from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.7';
 import { SettingUINumber } from '../Config/SettingUINumber';
 
 /**

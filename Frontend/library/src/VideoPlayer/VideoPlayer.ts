@@ -1,7 +1,7 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 import { Config, Flags } from '../Config/Config';
-import { Logger } from '@epicgames-ps/lib-pixelstreamingcommon-ue5.6';
+import { Logger } from '@epicgames-ps/lib-pixelstreamingcommon-ue5.7';
 
 /**
  * Extra types for the HTMLElement

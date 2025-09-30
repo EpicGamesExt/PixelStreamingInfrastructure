@@ -3,7 +3,7 @@ import { IMessageType,
          MessageRegistry,
          MessageHelpers,
          WebSocketTransportNJS,
-         SignallingProtocol } from '@epicgames-ps/lib-pixelstreamingcommon-ue5.6';
+         SignallingProtocol } from '@epicgames-ps/lib-pixelstreamingcommon-ue5.7';
 import WebSocket from 'ws';
 
 export interface ExpectedMessage {

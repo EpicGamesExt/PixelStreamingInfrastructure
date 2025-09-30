@@ -1,6 +1,6 @@
 {
-    "name": "@epicgames-ps/reference-pixelstreamingfrontend-ue5.6",
-    "version": "0.0.1",
+    "name": "@epicgames-ps/reference-pixelstreamingfrontend-ue5.7",
+    "version": "0.1.0",
     "description": "",
     "main": "./src/player.ts",
     "private": true,
@@ -23,7 +23,7 @@
         "webpack-cli": "^6.0.1"
     },
     "dependencies": {
-        "@epicgames-ps/lib-pixelstreamingfrontend-ue5.6": "*",
-        "@epicgames-ps/lib-pixelstreamingfrontend-ui-ue5.6": "*"
+        "@epicgames-ps/lib-pixelstreamingfrontend-ue5.7": "*",
+        "@epicgames-ps/lib-pixelstreamingfrontend-ui-ue5.7": "*"
     }
 }
