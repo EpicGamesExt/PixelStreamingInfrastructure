@@ -1485,13 +1485,13 @@ export class WebRtcPlayerController {
     handleIceCandidate(iceCandidateInit: RTCIceCandidateInit) {
         Logger.Info(`Remote ICE candidate information received: ${JSON.stringify(iceCandidateInit)}`);
 
-        // We are using "bundle" policy for media lines so we remove the sdpMid and sdpMLineIndex attributes
-        // from ICE candidates as these are legacy attributes for when bundle is not used.
+        // We are using "bundle" policy for media lines so we manually set the sdpMLineIndex attribute to 0 (our assumed bundle master media line)
         // If we don't do this the browser may be unable to form a media connection
-        // because some browsers are brittle if the bundle master (e.g. commonly mid=0) doesn't get a candidate first.
+        // because some browsers are brittle if the bundle master doesn't get a candidate first.
+        // Note: This assumes we are using bundle and that the bundle master is the first media line (0).
         const remoteIceCandidate = new RTCIceCandidate({
             candidate: iceCandidateInit.candidate,
-            sdpMid: ''
+            sdpMLineIndex: 0
         });
 
         this.peerConnectionController.handleOnIce(remoteIceCandidate);
