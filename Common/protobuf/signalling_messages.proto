@@ -293,6 +293,9 @@ message layerPreference {
 message dataChannelRequest {
   // Should always be 'dataChannelRequest'
   string type = 1;
+
+  // The player ID this message refers to.
+  optional string playerId = 2;
 }
 
 /**
@@ -317,6 +320,9 @@ message peerDataChannels {
 message peerDataChannelsReady {
   // Should always be 'peerDataChannelsReady'
   string type = 1;
+
+  // The player ID this message refers to.
+  optional string playerId = 2;
 }
 
 /**
@@ -332,6 +338,8 @@ message streamerDataChannels {
   int32 sendStreamId = 3;
   // The channel ID to use for receiving data.
   int32 recvStreamId = 4;
+  // The player ID this message refers to.
+  string playerId = 5;
 }
 
 /**
