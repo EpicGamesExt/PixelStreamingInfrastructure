@@ -246,7 +246,7 @@ message ping {
   // Should always be 'ping'
   string type = 1;
   // The current time
-  int32 time = 2;
+  int64 time = 2;
 }
 
 /**
@@ -257,7 +257,7 @@ message pong {
   // Should always be 'pong'
   string type = 1;
   // The echoed time from the ping message
-  int32 time = 2;
+  int64 time = 2;
 }
 
 /**
