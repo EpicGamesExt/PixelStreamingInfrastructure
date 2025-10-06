@@ -131,12 +131,12 @@ message unsubscribe {
 /**
  * Sent in response to a subscribe message when something goes wrong.
  */
- message subscribeFailed {
-     // Should always be 'subscribeFailed'
-     string type = 1;
-     // A description of what went wrong.
-     string message = 2;
- }
+message subscribeFailed {
+  // Should always be 'subscribeFailed'
+  string type = 1;
+  // A description of what went wrong.
+  string message = 2;
+}
 
 /**
  * A message sent to a streamer to notify it that a player has just
