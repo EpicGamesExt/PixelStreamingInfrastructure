@@ -1,23 +1,23 @@
 ## lib-pixelstreamingfrontend-ui
 
-A plugin library that add UI support to the `lib-pixelstreamingfrontend` library.
-
-This UI library depends on a the base library as a peer dependency, so you should include both as dependencies in your application
-if you want to use this library.
-
-### Key features
-- Stock Pixel Streaming frontend
-- Setting panel
-- Info panel
+A library that adds UI support to the `lib-pixelstreamingfrontend` library.
 
 ### Adding it to your project
-`npm i @epicgames-ps/lib-pixelstreamingfrontend-ue5.5`
-`npm i @epicgames-ps/lib-pixelstreamingfrontend-ui-ue5.5`
 
-### How this library is built
-The NPM packages supports:
-- ES6 module usage
-- CommonJS usage
+This UI library depends on a the frontend library, so to include this library in your project:
+
+`npm i @epicgames-ps/lib-pixelstreamingfrontend-ue5.7`
+
+`npm i @epicgames-ps/lib-pixelstreamingfrontend-ui-ue5.7`
+
+### Key features
+- Default Pixel Streaming frontend look-and-feel
+- Settings panel
+- Info panel
+
+### NPM package contents
+- ES6 modules
+- CommonJS
 - Type definitions
 - Source maps
 
