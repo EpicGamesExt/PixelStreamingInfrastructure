@@ -1,5 +1,11 @@
 # @epicgames-ps/lib-pixelstreamingfrontend-ue5.6
 
+## 0.1.1
+
+### Patch Changes
+
+- 7e5dfb7: Some versions of Firefox were unable to connect due the changes in PR#694 to overcome this issue and preserve the connectivity fixes from PR#694 we now assume the sdpMLineIndex is always 0 for bundle master media line. This change was tested on many browsers and restores connectivity with FireFox.
+
 ## 0.2.2
 
 ### Patch Changes
