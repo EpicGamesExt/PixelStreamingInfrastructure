@@ -2,22 +2,21 @@
 
 The core library for the browser/client side of Pixel Streaming experiences. **This library contains no UI.**
 
-See [lib-pixelstreamingfrontend-ui](/Frontend/implementations/typescript) for an example of how to build UI on top of this library.
+See the [reference Pixel Streaming web player](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/tree/master/Frontend/implementations/typescript) for an example of how to build a Pixel Streaming web application, with custom UI, on top of this library.
 
 ### Key features
-- Create a websocket connection to communicate with the signalling server.
-- Create a WebRTC peer connection that displays the Unreal Engine video and audio.
-- Handling of input from the user and transmitting it back to Unreal Engine.
-- Opens a data channel connection sending and receiving custom data (in addition to input).
-- Programmable and url specified settings.
+- Create a WebSocket connection to communicate with the signalling server.
+- Create a WebRTC peer connection that displays the Pixel Streaming video and audio.
+- Handling of input from the user and transmitting it back to Pixel Streaming application.
+- Opens a data channel connection for sending and receiving custom data (in addition to input).
+- Programmable (or url specified) settings.
 
 ### Adding it to your project
-`npm install @epicgames-ps/lib-pixelstreamingfrontend-ue5.5`
+`npm install @epicgames-ps/lib-pixelstreamingfrontend-ue5.7`
 
-### How this library is built
-The NPM packages supports:
-- ES6 module usage
-- CommonJS usage
+### NPM package contents
+- ES6 modules usage
+- CommonJS lib
 - Type definitions
 - Source maps
 
