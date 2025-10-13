@@ -131,12 +131,12 @@ message unsubscribe {
 /**
  * Sent in response to a subscribe message when something goes wrong.
  */
- message subscribeFailed {
-     // Should always be 'subscribeFailed'
-     string type = 1;
-     // A description of what went wrong.
-     string message = 2;
- }
+message subscribeFailed {
+  // Should always be 'subscribeFailed'
+  string type = 1;
+  // A description of what went wrong.
+  string message = 2;
+}
 
 /**
  * A message sent to a streamer to notify it that a player has just
@@ -246,7 +246,7 @@ message ping {
   // Should always be 'ping'
   string type = 1;
   // The current time
-  int32 time = 2;
+  int64 time = 2;
 }
 
 /**
@@ -257,7 +257,7 @@ message pong {
   // Should always be 'pong'
   string type = 1;
   // The echoed time from the ping message
-  int32 time = 2;
+  int64 time = 2;
 }
 
 /**
@@ -293,6 +293,9 @@ message layerPreference {
 message dataChannelRequest {
   // Should always be 'dataChannelRequest'
   string type = 1;
+
+  // The player ID this message refers to.
+  optional string playerId = 2;
 }
 
 /**
@@ -317,6 +320,9 @@ message peerDataChannels {
 message peerDataChannelsReady {
   // Should always be 'peerDataChannelsReady'
   string type = 1;
+
+  // The player ID this message refers to.
+  optional string playerId = 2;
 }
 
 /**
@@ -332,6 +338,8 @@ message streamerDataChannels {
   int32 sendStreamId = 3;
   // The channel ID to use for receiving data.
   int32 recvStreamId = 4;
+  // The player ID this message refers to.
+  string playerId = 5;
 }
 
 /**
