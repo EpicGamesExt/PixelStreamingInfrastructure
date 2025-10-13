@@ -1,21 +1,20 @@
 # lib-pixelstreamingcommon
 
-The common library for the browser/client side of Pixel Streaming experiences. This library exposes common functionality for frontend applications of the pixel streaming ecosystem.
+This library exposes common functionality for Pixel Streaming web applications. Examples include message protocols, logging, events, and various utilities.
 
-For examples of how to implement this library.
-- See [lib-pixelstreamingfrontend](/Frontend/library)
-- See [lib-pixelstreamingsignalling](/Signalling)
-- Also see [Wilbur](/SignallingWebServer) which uses the signalling library to implement a full signalling server.
+For examples of how to implement this library, see:
+- [lib-pixelstreamingfrontend](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/tree/master/Frontend/library)
+- [lib-pixelstreamingsignalling](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/tree/master/Signalling)
+- [Wilbur](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/tree/master/SignallingWebServer) (the reference Pixel Streaming signalling server)
 
 ### Adding it to your project
-`npm i @epicgames-ps/lib-pixelstreamingcommon-ue5.6`
+`npm i @epicgames-ps/lib-pixelstreamingcommon-ue5.5`
 
 ## Documentation
-The API is documented [here](docs).
+The API is documented [here](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/tree/master/Common/docs).
 
-### How this library is built
-The NPM packages supports:
-- ES6 module usage
-- CommonJS usage
+### NPM package contents
+- ES6 modules
+- CommonJS
 - Type definitions
 - Source maps

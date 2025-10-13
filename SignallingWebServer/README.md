@@ -1,10 +1,6 @@
-# Wilbur
+# Reference Signalling/Web Server (Wilbur)
 
-A Direct replacement for cirrus.
-
-Wilbur is a small intermediary application that sits between streamers and other peers. It handles the initial connection negotiations and some other small ongoing control messages between peers as well as acting as a simple web server for serving the [Frontend](/Frontend/README.md) web application.
-
-Differences of behaviour from the old cirrus are described [here](from_cirrus.md).
+Wilbur is the reference signalling/web server that is shipped with the Pixel Streaming plugin. It is a small intermediary application that sits between streamers and other peers. It handles the initial connection negotiations and some other small ongoing control messages between peers, while also acting as a basic http web server to serve the [Frontend](/Frontend/README.md) web application.
 
 ## Building
 Building is handled by `npm` and `tsc`. However, the easiest method to install and build everything is to invoke:
@@ -30,7 +26,7 @@ In the `/common`, `/Signalling`, and `/SignallingWebServer` directories (in that
 Each of these will output built files into the `build` or `dist` directory.
 
 ## Running
-After you have build the server you can run it with both `node` directly or the `npm start` script.
+After you have built the server you can run it with both `node` directly or the `npm start` script.
 ```
 npm start -- [arguments]
 ```
@@ -95,8 +91,8 @@ Note that `www` being used as the http root assumes your Frontend is in that dir
 This implementation is built on the [Signalling](../Signalling) library which is supplied as a library for developing signalling applications. Visit its [documentation](../Signalling/docs) for more information.
 
 A development mode that watches for changes to libraries, frontend and source exists in this project. To utilize it you can invoke `npm run develop`. This will kick off a series of watchers that all watch the individual components of the signalling server and frontend for changes and will auto build and restart the signalling server, or in the case of frontend changes, redeploy the frontend for the signalling server to serve.
-#### Note
-By default, when the signalling server launches in this mode, the port to access the frontend changes to 1025 and so you will need to visit `http://localhost:1025` to access the frontend. This is to get around the need for elevated permissions for port 80.
+
+**Note:** By default, when the signalling server launches in this mode, the port to access the frontend changes to 1025 and so you will need to visit `http://localhost:1025` to access the frontend. This is to get around the need for elevated permissions for port 80 on Linux.
 
 ### Self-signed certificates
 During development it may be useful to work with self-signed SSL certificates (e.g. HTTPS is required for some features like XR and microphone usage). Self signed certificates can be generated using the following instructions:
@@ -115,4 +111,9 @@ During development it may be useful to work with self-signed SSL certificates (e
 ## Further Documentation
 - [Protocol Messages](../Common/docs/messages.md)
 - [Protocol Negotiation](../Common/docs/Protocol.md)
+
+## Migrating from Cirrus
+The previous reference signalling server was called Cirrus (UE 5.4 and earlier). Wilbur is a direct replacement for Cirrus.
+
+Differences of behaviour from the old Cirrus server are described [here](from_cirrus.md).
 
