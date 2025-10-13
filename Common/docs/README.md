@@ -1,8 +1,6 @@
-**@epicgames-ps/lib-pixelstreamingcommon-ue5.5**
 
-***
 
-# @epicgames-ps/lib-pixelstreamingcommon-ue5.5
+# lib-pixelstreamingcommon
 
 ## Modules
 
