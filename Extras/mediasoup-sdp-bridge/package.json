@@ -1,6 +1,6 @@
 {
   "name": "@epicgames-ps/mediasoup-sdp-bridge",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Node.js library to allow integration of SDP based clients with mediasoup",
   "contributors": [
     "Iñaki Baz Castillo <ibc@aliax.net> (https://inakibaz.me)",
@@ -22,6 +22,7 @@
   "engines": {
     "node": ">=16.0"
   },
+  "private": true,
   "scripts": {
     "prepare": "npm run build",
     "build": "npm run typescript:build",
