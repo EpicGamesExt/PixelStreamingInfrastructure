@@ -55,7 +55,7 @@ To create a changeset with your PR
 
 ## Coding style
  - TypeScript should be used over JavaScript.
- - All TypeScript should adhere to the following [linting rules](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/master/Frontend/library/.eslintrc.js).
+ - All TypeScript should pass our `npm run lint`.
  - Names should follow US English spelling.
  - All public functions/API should have comments.
  - Code formatting should adhere to the following [whitespace and indentation rules](https://github.com/EpicGamesExt/PixelStreamingInfrastructure/blob/master/.prettierrc.json).
@@ -74,4 +74,4 @@ Documentation should be broken up into separate `.md` files per directory, ideal
 
 ## Legal
 
-© 2004-2025, Epic Games, Inc. Unreal and its logo are Epic’s trademarks or registered trademarks in the US and elsewhere.
+Copyright Epic Games, Inc. Unreal and its logo are Epic’s trademarks or registered trademarks in the US and elsewhere.

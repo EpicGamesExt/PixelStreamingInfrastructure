@@ -1,7 +1,4 @@
-# mediasoup-sdp-bridge v3
-
-[![][npm-shield-mediasoup-sdp-bridge]][npm-mediasoup-sdp-bridge]
-[![][travis-ci-shield-mediasoup-sdp-bridge]][travis-ci-mediasoup-sdp-bridge]
+# mediasoup-sdp-bridge v3 (FORK)
 
 Node.js library to allow integration of SDP based clients with [mediasoup][mediasoup-website].
 

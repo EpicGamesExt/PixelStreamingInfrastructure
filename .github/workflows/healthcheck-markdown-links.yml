@@ -2,8 +2,12 @@ name: Check health of document links
 
 on: 
   workflow_dispatch:
-  # schedule:
-  #   - cron: '0 0 * * *'
+  pull_request:
+    paths:
+      - "**.md" # Trigger only when md files are in a PR
+  push:
+    paths:
+      - '**.md'  # Trigger only when md files are pushed
 
 permissions:
   contents: read
@@ -18,9 +22,9 @@ jobs:
 
       - name: Link Checker
         id: lychee
-        uses: lycheeverse/lychee-action@v1.9.0
+        uses: lycheeverse/lychee-action@v2.0.2
         with:
-          args: --github-token ${{ secrets.WORKFLOW_TOKEN }} --exclude 'localhost' --exclude 'github.com/EpicGames/UnrealEngine' --exclude '.png' --exclude '.jpg' --exclude-path 'SFU/mediasoup-sdp-bridge/README.md' './**/*.md'
+          args: --user-agent 'GHA/PixelStreamingInfrastructure' --accept '100..=103,200..=299,403,429' --github-token ${{ secrets.WORKFLOW_TOKEN }} --exclude 'localhost' --exclude 'github.com/EpicGames/UnrealEngine' --exclude '.png' --exclude '.jpg' --exclude-path 'SFU/mediasoup-sdp-bridge/README.md' './**/*.md'
 
       - name: Create Issue From File
         if: env.lychee_exit_code != 0

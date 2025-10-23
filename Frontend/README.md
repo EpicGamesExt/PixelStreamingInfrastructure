@@ -66,4 +66,4 @@ Many of the libraries, such as [/frontend/library/](/Frontend/library), contain 
 
 ## Legal
 
-Copyright &copy; 2025, Epic Games. Licensed under the MIT License, see the file [LICENSE](/LICENSE.md) for details.
+Copyright Epic Games. Licensed under the MIT License, see the file [LICENSE](/LICENSE.md) for details.
