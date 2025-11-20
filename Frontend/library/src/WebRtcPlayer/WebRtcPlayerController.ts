@@ -109,6 +109,7 @@ export class WebRtcPlayerController {
     signallingUrlBuilder: () => string;
     autoJoinTimer: ReturnType<typeof setTimeout> = undefined;
     keepalive: KeepaliveMonitor;
+    playerId: string | null = null;
 
     /**
      *
@@ -1358,6 +1359,11 @@ export class WebRtcPlayerController {
     handleWebRtcAnswer(Answer: Messages.answer) {
         Logger.Info(`Got answer sdp ${Answer.sdp}`);
 
+        // Extract the player id if it is present
+        if (Answer.playerId) {
+            this.playerId = Answer.playerId;
+        }
+
         const sdpAnswer: RTCSessionDescriptionInit = {
             sdp: Answer.sdp,
             type: 'answer'
@@ -1373,6 +1379,11 @@ export class WebRtcPlayerController {
      */
     handleWebRtcOffer(Offer: Messages.offer) {
         Logger.Info(`Got offer sdp ${Offer.sdp}`);
+
+        // Extract the player id if it is present
+        if (Offer.playerId) {
+            this.playerId = Offer.playerId;
+        }
 
         this.isUsingSFU = Offer.sfu ? Offer.sfu : false;
         this.isUsingSVC = Offer.scalabilityMode ? Offer.scalabilityMode != 'L1T1' : false;
