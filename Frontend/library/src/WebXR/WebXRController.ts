@@ -485,12 +485,12 @@ export class WebXRController {
             Logger.Info('WebXR requires https, if you want WebXR use https.');
         }
 
-        if (navigator.xr) {
-            return navigator.xr.isSessionSupported(mode);
-        } else {
-            return new Promise<boolean>(() => {
-                return false;
-            });
-        }
+        try {
+            if (navigator.xr) {
+                return navigator.xr.isSessionSupported(mode);
+            }
+        } catch {}
+
+        return Promise.resolve(false);
     }
 }
