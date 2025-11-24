@@ -1,5 +1,12 @@
 # @epicgames-ps/lib-pixelstreamingfrontend-ui-ue5.6
 
+## 0.1.2
+
+### Patch Changes
+
+- Updated dependencies [05bebea]
+    - @epicgames-ps/lib-pixelstreamingfrontend-ue5.7@0.2.0
+
 ## 0.2.0
 
 ### Minor Changes
