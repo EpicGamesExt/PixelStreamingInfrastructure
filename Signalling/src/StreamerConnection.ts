@@ -136,7 +136,6 @@ export class StreamerConnection extends EventEmitter implements IStreamer, LogUt
         } else {
             const player = this.server.playerRegistry.get(message.playerId);
             if (player) {
-                delete message.playerId;
                 LogUtils.logForward(this, player, message);
                 player.protocol.sendMessage(message);
             }
