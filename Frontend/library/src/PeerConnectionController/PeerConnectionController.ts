@@ -171,7 +171,7 @@ export class PeerConnectionController {
      * Generate Aggregated Stats and then fire a onVideo Stats event
      */
     generateStats() {
-        this.peerConnection.getStats().then((statsData: RTCStatsReport) => {
+        this.peerConnection?.getStats().then((statsData: RTCStatsReport) => {
             this.aggregatedStats.processStats(statsData);
 
             this.onVideoStats(this.aggregatedStats);
