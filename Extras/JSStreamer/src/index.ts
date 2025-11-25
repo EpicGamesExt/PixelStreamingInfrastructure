@@ -1,3 +1,4 @@
+// Copyright Epic Games, Inc. All Rights Reserved.
 import { Streamer } from './streamer';
 
 // TS doesn't like the captureStream method. FF also names it differently
