@@ -485,12 +485,16 @@ export class WebXRController {
             Logger.Info('WebXR requires https, if you want WebXR use https.');
         }
 
-        if (navigator.xr) {
-            return navigator.xr.isSessionSupported(mode);
-        } else {
-            return new Promise<boolean>(() => {
-                return false;
-            });
+        // Wrap in try-catch because access to XR object can be denied due
+        // to browser security permissions (e.g. streaming from an iframe)
+        try {
+            if (navigator.xr) {
+                return navigator.xr.isSessionSupported(mode);
+            }
+        } catch {
+            return Promise.resolve(false);
         }
+
+        return Promise.resolve(false);
     }
 }
