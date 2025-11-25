@@ -1,5 +1,11 @@
 # @epicgames-ps/lib-pixelstreamingfrontend-ue5.6
 
+## 0.2.5
+
+### Patch Changes
+
+- 5ac48b0: [UE5.6] Fix: Streaming in iframe broken due to SecurityError checking if XR is supported (#734)
+
 ## 0.2.3
 
 ### Patch Changes
