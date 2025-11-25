@@ -491,7 +491,9 @@ export class WebXRController {
             if (navigator.xr) {
                 return navigator.xr.isSessionSupported(mode);
             }
-        } catch {}
+        } catch {
+            return Promise.resolve(false);
+        }
 
         return Promise.resolve(false);
     }
