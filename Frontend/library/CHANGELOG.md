@@ -1,5 +1,12 @@
 # @epicgames-ps/lib-pixelstreamingfrontend-ue5.6
 
+## 0.2.1
+
+### Patch Changes
+
+- c37e0f3: [UE5.7] QoL: Change `this.peerConnection.getStats()` access to the safer `this.peerConnection?.getStats()` (#719)
+- 81031a8: [UE5.7] Fix: Streaming in iframe broken due to SecurityError checking if XR is supported (#734)
+
 ## 0.2.0
 
 ### Minor Changes
