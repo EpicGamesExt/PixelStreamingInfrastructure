@@ -5,4 +5,4 @@
 '@epicgames-ps/lib-pixelstreamingcommon-ue5.7': patch
 ---
 
-Addressing security issues raised by dependabot. (glob, js-yaml, playwright)
+Addressing security issues raised by dependabot. (glob, js-yaml, playwright).
