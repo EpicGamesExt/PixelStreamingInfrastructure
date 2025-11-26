@@ -1,3 +1,4 @@
+// Copyright Epic Games, Inc. All Rights Reserved.
 import {
     ITransport,
     WebSocketTransport,
@@ -32,7 +33,7 @@ interface WebRTCSettings {
     MaxBitrate: number;
     LowQP: number;
     HighQP: number;
-    AbsCaptureTimeHeaderExt: boolean
+    AbsCaptureTimeHeaderExt: boolean;
 }
 
 interface Settings {
@@ -134,14 +135,14 @@ export class Streamer extends EventEmitter {
     }
 
     stopStreaming() {
-        this.transport.disconnect(1000, "Normal shutdown by calling stopStreaming");
-        for(let peer of this.playerMap.values()) {
+        this.transport.disconnect(1000, 'Normal shutdown by calling stopStreaming');
+        for (const peer of this.playerMap.values()) {
             peer.peerConnection.close();
         }
     }
 
     handleConfigMessage(msg: Messages.config) {
-        if(msg.peerConnectionOptions !== undefined) {
+        if (msg.peerConnectionOptions !== undefined) {
             this.peerConnectionOptions = msg.peerConnectionOptions;
         }
     }
@@ -224,13 +225,12 @@ export class Streamer extends EventEmitter {
                 dataChannel: dataChannel
             };
 
-            const offerOptions: RTCOfferOptions = { offerToReceiveAudio: true, offerToReceiveVideo: true }
+            const offerOptions: RTCOfferOptions = { offerToReceiveAudio: true, offerToReceiveVideo: true };
 
             peerConnection
                 .createOffer(offerOptions)
                 .then((offer) => {
-
-                    if(offer.sdp == undefined) {
+                    if (offer.sdp == undefined) {
                         return;
                     }
 
@@ -268,12 +268,19 @@ export class Streamer extends EventEmitter {
                             /* eslint-enable @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment */
                         });
                         const nowTime = Date.now();
-                        if (newPlayer.lastStatsTime != undefined && newPlayer.lastQpSum !== undefined && qpSum !== undefined && fps !== undefined) {
+                        if (
+                            newPlayer.lastStatsTime != undefined &&
+                            newPlayer.lastQpSum !== undefined &&
+                            qpSum !== undefined &&
+                            fps !== undefined
+                        ) {
                             const deltaMillis = nowTime - newPlayer.lastStatsTime;
                             const qpDelta = (qpSum - newPlayer.lastQpSum) * (deltaMillis / 1000);
                             const qpAvg = qpDelta / fps;
 
-                            newPlayer.dataChannel.send(this.constructMessage(DataProtocol.FromStreamer.VideoEncoderAvgQP, qpAvg));
+                            newPlayer.dataChannel.send(
+                                this.constructMessage(DataProtocol.FromStreamer.VideoEncoderAvgQP, qpAvg)
+                            );
                         }
                         newPlayer.lastQpSum = qpSum;
                         newPlayer.lastStatsTime = nowTime;
@@ -314,8 +321,8 @@ export class Streamer extends EventEmitter {
         }
     }
 
-    mungeOffer(offerSDP: string) : string {
-        if(this.settings.WebRTC.AbsCaptureTimeHeaderExt) {
+    mungeOffer(offerSDP: string): string {
+        if (this.settings.WebRTC.AbsCaptureTimeHeaderExt) {
             // Add the abs-capture-time header extension to the sdp extmap
             const kAbsCaptureTime = 'http://www.webrtc.org/experiments/rtp-hdrext/abs-capture-time';
             return SDPUtils.addVideoHeaderExtensionToSdp(offerSDP, kAbsCaptureTime);
@@ -374,7 +381,9 @@ export class Streamer extends EventEmitter {
         let argIndex = 0;
 
         if (messageDef.structure.length != args.length) {
-            throw new Error(`Incorrect number of parameters given to constructMessage. Got ${args.length}, expected ${messageDef.structure.length}`);
+            throw new Error(
+                `Incorrect number of parameters given to constructMessage. Got ${args.length}, expected ${messageDef.structure.length}`
+            );
         }
 
         dataSize += 1; // message type

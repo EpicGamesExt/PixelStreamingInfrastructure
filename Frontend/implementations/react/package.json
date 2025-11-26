@@ -11,7 +11,8 @@
         "rebuild": "npm run clean && npm run build",
         "watch": "npx webpack --watch",
         "serve": "webpack serve --config webpack.dev.js",
-        "serve-prod": "webpack serve --config webpack.prod.js"
+        "serve-prod": "webpack serve --config webpack.prod.js",
+        "lint": ""
     },
     "devDependencies": {
         "@types/react": "^19.0.8",
