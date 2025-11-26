@@ -9,7 +9,8 @@
         "clean": "rimraf ./dist",
         "build": "tsc",
         "rebuild": "npm run clean && npm run build",
-        "start": "npm run build && node ./dist/index.js"
+        "start": "npm run build && node ./dist/index.js",
+        "lint": ""
     },
     "author": "",
     "license": "ISC",
@@ -23,6 +24,6 @@
         "@types/node": "^22.14.0",
         "@types/ws": "^8.5.10",
         "rimraf": "^6.0.0",
-        "typescript": "^5.7.3"
+        "typescript": "^5.3.2"
     }
 }
