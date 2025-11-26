@@ -23,7 +23,7 @@
         "@types/assert": "^1.5.10",
         "@types/node": "^20.10.1",
         "@types/ws": "^8.5.10",
-        "rimraf": "^5.0.5",
+        "rimraf": "^6.0.0",
         "typescript": "^5.3.2"
     }
 }
