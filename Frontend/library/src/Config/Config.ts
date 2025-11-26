@@ -65,6 +65,7 @@ export class NumericParameters {
     static MaxReconnectAttempts = 'MaxReconnectAttempts' as const;
     static StreamerAutoJoinInterval = 'StreamerAutoJoinInterval' as const;
     static KeepaliveDelay = 'KeepaliveDelay' as const;
+    static ViewportResolutionScale = 'ViewportResScale' as const;
 }
 
 export type NumericParametersKeys = Exclude<keyof typeof NumericParameters, 'prototype'>;
@@ -818,6 +819,22 @@ export class Config {
                 settings && Object.prototype.hasOwnProperty.call(settings, NumericParameters.KeepaliveDelay)
                     ? settings[NumericParameters.KeepaliveDelay]
                     : 30000 /*value*/,
+                useUrlParams
+            )
+        );
+
+        this.numericParameters.set(
+            NumericParameters.ViewportResolutionScale,
+            new SettingNumber(
+                NumericParameters.ViewportResolutionScale,
+                'Viewport Resolution Scale',
+                'Scale factor for viewport resolution when MatchViewportResolution is enabled. 1.0 = 100%, 0.5 = 50%, 2.0 = 200%.',
+                0.1 /*min*/,
+                10.0 /*max*/,
+                settings &&
+                Object.prototype.hasOwnProperty.call(settings, NumericParameters.ViewportResolutionScale)
+                    ? settings[NumericParameters.ViewportResolutionScale]
+                    : 1.0 /*value*/,
                 useUrlParams
             )
         );
