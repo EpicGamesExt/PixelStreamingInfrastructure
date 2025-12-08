@@ -11,6 +11,10 @@ on:
 # This makes the matrix of jobs to run one at a time.
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
+permissions:
+  id-token: write # Required for OIDC
+  contents: read
+
 jobs:
   # gets all publishable npm packages.
   fetch-package-info:
@@ -49,7 +53,6 @@ jobs:
     runs-on: ubuntu-latest
     needs: fetch-package-info
     permissions:
-      id-token: write # Required for OIDC
       contents: write
     if: ${{ fromJSON(needs.fetch-package-info.outputs.matrix).count > 0 }}
     strategy:
