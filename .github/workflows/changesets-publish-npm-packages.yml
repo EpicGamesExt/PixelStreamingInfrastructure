@@ -77,23 +77,16 @@ jobs:
           node-version: "${{ steps.get_node_version.outputs.node_version }}"
           registry-url: 'https://registry.npmjs.org'
 
-      - name: Show Node and npm versions
-        run: |
-          node -v
-          npm -v
-          env
-
-      - name: Update npm for OIDC
-        run: |
-          corepack enable
-          corepack prepare npm@latest --activate
+      # Ensure npm 11.5.1 or later is installed for OIDC
+      - name: Update npm
+        run: npm install -g npm@latest
 
       - name: Publish ${{ matrix.package.name }}
         working-directory: ${{ matrix.package.path }}
         run: |
           npm install
           npm run build
-          npm publish
+          npm publish --access public
 
       - name: Build the version label
         id: build-label

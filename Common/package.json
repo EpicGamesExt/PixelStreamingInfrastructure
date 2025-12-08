@@ -1,6 +1,6 @@
 {
     "name": "@epicgames-ps/lib-pixelstreamingcommon-ue5.7",
-    "version": "0.1.2",
+    "version": "0.1.3",
     "description": "Common utilities library for Unreal Engine 5.7 Pixel Streaming",
     "main": "dist/cjs/pixelstreamingcommon.js",
     "module": "dist/esm/pixelstreamingcommon.js",
@@ -44,6 +44,10 @@
     },
     "author": "Epic Games",
     "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/EpicGamesExt/PixelStreamingInfrastructure"
+    },
     "publishConfig": {
         "access": "public"
     }
