@@ -81,6 +81,7 @@ jobs:
         run: |
           node -v
           npm -v
+          env
 
       - name: Update npm for OIDC
         run: |
