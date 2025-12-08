@@ -1,5 +1,14 @@
 # @epicgames-ps/lib-pixelstreamingsignalling-ue5.6
 
+## 0.2.1
+
+### Patch Changes
+
+- 812a419: - Addressing security issues raised by dependabot. (glob, js-yaml, playwright)
+    - Added lint npm script to the root project. Running `npm run lint` will now run linting over all packages.
+- Updated dependencies [812a419]
+    - @epicgames-ps/lib-pixelstreamingcommon-ue5.7@0.1.4
+
 ## 0.2.0
 
 ### Minor Changes
