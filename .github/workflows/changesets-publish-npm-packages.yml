@@ -77,6 +77,16 @@ jobs:
           node-version: "${{ steps.get_node_version.outputs.node_version }}"
           registry-url: 'https://registry.npmjs.org'
 
+      - name: Show Node and npm versions
+        run: |
+          node -v
+          npm -v
+
+      - name: Update npm for OIDC
+        run: |
+          corepack enable
+          corepack prepare npm@latest --activate
+
       - name: Publish ${{ matrix.package.name }}
         working-directory: ${{ matrix.package.path }}
         run: |
