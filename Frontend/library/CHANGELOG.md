@@ -1,5 +1,23 @@
 # @epicgames-ps/lib-pixelstreamingfrontend-ue5.6
 
+## 0.2.1
+
+### Patch Changes
+
+- c37e0f3: [UE5.7] QoL: Change `this.peerConnection.getStats()` access to the safer `this.peerConnection?.getStats()` (#719)
+- 81031a8: [UE5.7] Fix: Streaming in iframe broken due to SecurityError checking if XR is supported (#734)
+
+## 0.2.0
+
+### Minor Changes
+
+- 05bebea: Add: Ability to access player id on the frontend.
+  QoL: Remove player id stripping from the signalling library.
+
+    It is useful to be able to use the player id as a unique identifier that is common between UE side stats and frontend side stats; however, the player id is not actually exposed to TS/JS because the SS strips it out of signalling messages.
+
+    This change is a backport of "Exposed playerid" (#728)
+
 ## 0.1.1
 
 ### Patch Changes
