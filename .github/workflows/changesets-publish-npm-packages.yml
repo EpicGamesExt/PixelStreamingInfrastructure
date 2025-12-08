@@ -53,6 +53,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: fetch-package-info
     permissions:
+      id-token: write # Required for OIDC
       contents: write
     if: ${{ fromJSON(needs.fetch-package-info.outputs.matrix).count > 0 }}
     strategy:
