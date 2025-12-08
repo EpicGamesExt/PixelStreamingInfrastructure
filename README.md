@@ -91,10 +91,10 @@ The following are `unofficial` NPM packages (official ones coming soon):
 
 | NPM Package | 5.7 | 5.6 | 5.5 |
 |-------------|-----|-----|-----|
-| Frontend lib | [lib-pixelstreamingfrontend-ue5.6](https://www.npmjs.com/package/@epicgames-ps/lib-pixelstreamingfrontend-ue5.7) | [lib-pixelstreamingfrontend-ue5.6](https://www.npmjs.com/package/@epicgames-ps/lib-pixelstreamingfrontend-ue5.6) | [lib-pixelstreamingfrontend-ue5.5](https://www.npmjs.com/package/@epicgames-ps/lib-pixelstreamingfrontend-ue5.5) |
-| Frontend-ui lib | [lib-pixelstreamingfrontend-ui-ue5.6](https://www.npmjs.com/package/@epicgames-ps/lib-pixelstreamingfrontend-ui-ue5.7) | [lib-pixelstreamingfrontend-ui-ue5.6](https://www.npmjs.com/package/@epicgames-ps/lib-pixelstreamingfrontend-ui-ue5.6) | [lib-pixelstreamingfrontend-ui-ue5.5](https://www.npmjs.com/package/@epicgames-ps/lib-pixelstreamingfrontend-ui-ue5.5) |
-| Signalling lib  | [lib-pixelstreamingsignalling-ue5.6](https://www.npmjs.com/package/@epicgames-ps/lib-pixelstreamingsignalling-ue5.7)  | [lib-pixelstreamingsignalling-ue5.6](https://www.npmjs.com/package/@epicgames-ps/lib-pixelstreamingsignalling-ue5.6)  | `N/A` |
-| Common lib  | [lib-pixelstreamingcommon-ue5.6](https://www.npmjs.com/package/@epicgames-ps/lib-pixelstreamingcommon-ue5.7)  | [lib-pixelstreamingcommon-ue5.6](https://www.npmjs.com/package/@epicgames-ps/lib-pixelstreamingcommon-ue5.6)  | `N/A` |
+| Frontend lib | [lib-pixelstreamingfrontend-ue5.7](https://www.npmjs.com/package/@epicgames-ps/lib-pixelstreamingfrontend-ue5.7) | [lib-pixelstreamingfrontend-ue5.6](https://www.npmjs.com/package/@epicgames-ps/lib-pixelstreamingfrontend-ue5.6) | [lib-pixelstreamingfrontend-ue5.5](https://www.npmjs.com/package/@epicgames-ps/lib-pixelstreamingfrontend-ue5.5) |
+| Frontend-ui lib | [lib-pixelstreamingfrontend-ui-ue5.7](https://www.npmjs.com/package/@epicgames-ps/lib-pixelstreamingfrontend-ui-ue5.7) | [lib-pixelstreamingfrontend-ui-ue5.6](https://www.npmjs.com/package/@epicgames-ps/lib-pixelstreamingfrontend-ui-ue5.6) | [lib-pixelstreamingfrontend-ui-ue5.5](https://www.npmjs.com/package/@epicgames-ps/lib-pixelstreamingfrontend-ui-ue5.5) |
+| Signalling lib  | [lib-pixelstreamingsignalling-ue5.7](https://www.npmjs.com/package/@epicgames-ps/lib-pixelstreamingsignalling-ue5.7)  | [lib-pixelstreamingsignalling-ue5.6](https://www.npmjs.com/package/@epicgames-ps/lib-pixelstreamingsignalling-ue5.6)  | `N/A` |
+| Common lib  | [lib-pixelstreamingcommon-ue5.7](https://www.npmjs.com/package/@epicgames-ps/lib-pixelstreamingcommon-ue5.7)  | [lib-pixelstreamingcommon-ue5.6](https://www.npmjs.com/package/@epicgames-ps/lib-pixelstreamingcommon-ue5.6)  | `N/A` |
 
 ### NPM getting started
 
