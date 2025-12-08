@@ -96,13 +96,13 @@ export class WebServer {
                             if (config.httpsPort != 443) {
                                 hostAddress = `${hostAddress}:${config.httpsPort}`;
                             }
-                            // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+
                             return res.redirect(['https://', hostAddress, req.originalUrl].join(''));
                         } else {
                             Logger.error(
                                 `Unable to get host name from header. Requestor ${req.ip}, url path: '${req.originalUrl}', available headers ${JSON.stringify(req.headers)}`
                             );
-                            // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+
                             return res.status(400).send('Bad Request');
                         }
                     }

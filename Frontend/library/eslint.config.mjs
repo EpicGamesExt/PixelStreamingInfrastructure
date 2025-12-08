@@ -12,7 +12,7 @@ export default tseslint.config(
         languageOptions: {
             parser: tseslint.parser,
             parserOptions: {
-                project: 'tsconfig.json',
+                project: 'Frontend/library/tsconfig.json',
             },
         },
         files: ["src/**/*.ts"],
