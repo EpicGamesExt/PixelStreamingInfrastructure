@@ -81,7 +81,7 @@ jobs:
         run: |
           npm install
           npm run build
-          npm publish --access public
+          npm publish
 
       - name: Build the version label
         id: build-label
