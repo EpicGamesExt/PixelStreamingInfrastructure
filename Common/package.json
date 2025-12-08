@@ -44,6 +44,10 @@
     },
     "author": "Epic Games",
     "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/EpicGamesExt/PixelStreamingInfrastructure"
+    },
     "publishConfig": {
         "access": "public"
     }
