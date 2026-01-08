@@ -73,21 +73,34 @@ export class DataChannelLatencyTest {
          * Check we have results, NaN would mean that UE version we talk to doesn't support our test
          */
         if (isNaN(result.dataChannelRtt)) {
-            this.latencyTestResultsElement.innerHTML = '<div>Not supported</div>';
+            // Clear any previous content and show a simple "Not supported" message.
+            this.latencyTestResultsElement.textContent = '';
+            const notSupportedDiv = document.createElement('div');
+            notSupportedDiv.textContent = 'Not supported';
+            this.latencyTestResultsElement.appendChild(notSupportedDiv);
             return;
         }
-        let latencyStatsInnerHTML = '';
-        latencyStatsInnerHTML += '<div>Data channel RTT (ms): ' + result.dataChannelRtt + '</div>';
+
+        // Clear previous results before showing new ones.
+        this.latencyTestResultsElement.textContent = '';
+
+        const rttDiv = document.createElement('div');
+        rttDiv.textContent = 'Data channel RTT (ms): ' + result.dataChannelRtt;
+        this.latencyTestResultsElement.appendChild(rttDiv);
         /**
          * Separate path time discovery works only when UE and Player clocks have been synchronized.
          */
         if (result.playerToStreamerTime >= 0 && result.streamerToPlayerTime >= 0) {
-            latencyStatsInnerHTML +=
-                '<div>Player to Streamer path (ms): ' + result.playerToStreamerTime + '</div>';
-            latencyStatsInnerHTML +=
-                '<div>Streamer to Player path (ms): ' + result.streamerToPlayerTime + '</div>';
+            const playerToStreamerDiv = document.createElement('div');
+            playerToStreamerDiv.textContent =
+                'Player to Streamer path (ms): ' + result.playerToStreamerTime;
+            this.latencyTestResultsElement.appendChild(playerToStreamerDiv);
+
+            const streamerToPlayerDiv = document.createElement('div');
+            streamerToPlayerDiv.textContent =
+                'Streamer to Player path (ms): ' + result.streamerToPlayerTime;
+            this.latencyTestResultsElement.appendChild(streamerToPlayerDiv);
         }
-        this.latencyTestResultsElement.innerHTML = latencyStatsInnerHTML;
         //setup button to download the detailed results
         const downloadButton: HTMLInputElement = document.createElement('input');
         downloadButton.type = 'button';
@@ -111,6 +124,10 @@ export class DataChannelLatencyTest {
     }
 
     public handleTestStart() {
-        this.latencyTestResultsElement.innerHTML = '<div>Test in progress</div>';
+        // Clear any previous results and show a "Test in progress" message.
+        this.latencyTestResultsElement.textContent = '';
+        const inProgressDiv = document.createElement('div');
+        inProgressDiv.textContent = 'Test in progress';
+        this.latencyTestResultsElement.appendChild(inProgressDiv);
     }
 }
