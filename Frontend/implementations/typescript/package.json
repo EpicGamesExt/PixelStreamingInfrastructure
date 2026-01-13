@@ -13,7 +13,8 @@
         "rebuild": "npm run clean && npm run build",
         "watch": "webpack --watch --config webpack.dev.js",
         "serve": "webpack serve --config webpack.dev.js",
-        "serve-prod": "webpack serve --config webpack.prod.js"
+        "serve-prod": "webpack serve --config webpack.prod.js",
+        "lint": ""
     },
     "devDependencies": {
         "html-loader": "^5.1.0",
@@ -25,5 +26,9 @@
     "dependencies": {
         "@epicgames-ps/lib-pixelstreamingfrontend-ue5.7": "*",
         "@epicgames-ps/lib-pixelstreamingfrontend-ui-ue5.7": "*"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/EpicGamesExt/PixelStreamingInfrastructure"
     }
 }
