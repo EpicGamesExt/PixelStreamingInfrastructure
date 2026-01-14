@@ -44,6 +44,9 @@ export class AFKOverlay extends ActionOverlay {
      * @param countdown - the count down number to be inserted into the span for updating
      */
     public updateCountdown(countdown: number): void {
-        this.textElement.innerHTML = `<center>No activity detected<br>Disconnecting in <span id="afkCountDownNumber">${countdown}</span> seconds<br>Click to continue<br></center>`;
+        const countDownSpan = this.textElement.querySelector('#afkCountDownNumber') as HTMLSpanElement | null;
+        if (countDownSpan) {
+            countDownSpan.textContent = String(countdown);
+        }
     }
 }
