@@ -62,7 +62,6 @@ export class SendMessageController {
         }
 
         let byteLength = 0;
-        const textEncoder = new TextEncoder();
         // One loop to calculate the length in bytes of all of the provided data
         messageData.forEach((element: number | string, idx: number) => {
             const type = messageFormat.structure[idx];
@@ -90,8 +89,8 @@ export class SendMessageController {
                 case 'string':
                     // 2 bytes for string length
                     byteLength += 2;
-                    // 2 bytes per characters
-                    byteLength += 2 * textEncoder.encode(element as string).length;
+                    // 2 bytes per character
+                    byteLength += 2 * (element as string).length;
                     break;
             }
         });
