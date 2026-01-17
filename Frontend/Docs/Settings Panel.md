@@ -76,4 +76,5 @@ Although Pixel Streaming adapts the quality of the stream to match the available
 
 ## Legal
 
-Copyright &copy; 2025, Epic Games. Licensed under the MIT License, see the file [LICENSE](../../LICENSE.md) for details.
+Copyright &copy; 2026, Epic Games. Licensed under the MIT License, see the file [LICENSE](../../LICENSE.md) for details.
+
