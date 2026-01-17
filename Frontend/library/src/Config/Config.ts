@@ -830,7 +830,7 @@ export class Config {
                 'Viewport Resolution Scale',
                 'Scale factor for viewport resolution when MatchViewportResolution is enabled. 1.0 = 100%, 0.5 = 50%, 2.0 = 200%.',
                 0.1 /*min*/,
-                10.0 /*max*/,
+                3.0 /*max*/,
                 settings &&
                 Object.prototype.hasOwnProperty.call(settings, NumericParameters.ViewportResolutionScale)
                     ? settings[NumericParameters.ViewportResolutionScale]

@@ -30,8 +30,8 @@ This page will be updated with new features and commands as they become availabl
 ### UI
 | **Setting** | **Description** |
 | --- | --- |
-| **Match viewport resolution** | Resizes the Unreal Engine application resolution to match the browser's video element size.|
-| **Viewport Resolution Scale** | Scale factor for viewport resolution when Match Viewport Resolution is enabled. Range: 0.1-10.0, Default: 1.0. Values above 1.0 (e.g., 1.5, 2.0) can improve visual quality on small screens by requesting higher resolution streams. |
+| **Match viewport resolution** | Resizes the Unreal Engine application resolution to match the browser's video element size. (Note: We recommend using `-windowed` on the UE side to allow scaling beyond monitor size.)|
+| **Viewport Resolution Scale** | Scale factor for viewport resolution when Match Viewport Resolution is enabled. Range: 0.1-3.0, Default: 1.0 (no scaling).  Values above 1.0 (e.g., 1.5, 2.0) can improve visual quality on small screens by requesting higher resolution streams. |
 | **Control scheme** | If the scheme is `locked mouse` the browser will use `pointerlock` to capture your mouse, whereas if the scheme is `hovering mouse` you will retain your OS/browser cursor. |
 | **Color scheme** | Allows you to switch between light mode and dark mode. |
 
