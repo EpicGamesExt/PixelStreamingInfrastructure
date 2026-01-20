@@ -1,7 +1,12 @@
 FROM node:20-bookworm
 
+WORKDIR /js-streamer
+COPY /Extras/JSStreamer .
+RUN npm install && npm run build
+
 WORKDIR /tester
 COPY /Extras/FrontendTests .
+RUN npm link ../js-streamer
 
 RUN npm install
 RUN npx playwright install firefox
