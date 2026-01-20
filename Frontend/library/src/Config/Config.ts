@@ -193,11 +193,11 @@ export class Config {
                 settings && Object.prototype.hasOwnProperty.call(settings, TextParameters.SignallingServerUrl)
                     ? settings[TextParameters.SignallingServerUrl]
                     : (location.protocol === 'https:' ? 'wss://' : 'ws://') +
-                          window.location.hostname +
-                          // for readability, we omit the port if it's 80
-                          (window.location.port === '80' || window.location.port === ''
-                              ? ''
-                              : `:${window.location.port}`),
+                      window.location.hostname +
+                      // for readability, we omit the port if it's 80
+                      (window.location.port === '80' || window.location.port === ''
+                          ? ''
+                          : `:${window.location.port}`),
                 useUrlParams
             )
         );
@@ -649,7 +649,7 @@ export class Config {
                 0 /*min*/,
                 999 /*max*/,
                 settings &&
-                    Object.prototype.hasOwnProperty.call(settings, NumericParameters.MaxReconnectAttempts)
+                Object.prototype.hasOwnProperty.call(settings, NumericParameters.MaxReconnectAttempts)
                     ? settings[NumericParameters.MaxReconnectAttempts]
                     : 3 /*value*/,
                 useUrlParams
@@ -800,7 +800,7 @@ export class Config {
                 500 /*min*/,
                 900000 /*max*/,
                 settings &&
-                    Object.prototype.hasOwnProperty.call(settings, NumericParameters.StreamerAutoJoinInterval)
+                Object.prototype.hasOwnProperty.call(settings, NumericParameters.StreamerAutoJoinInterval)
                     ? settings[NumericParameters.StreamerAutoJoinInterval]
                     : 3000 /*value*/,
                 useUrlParams
