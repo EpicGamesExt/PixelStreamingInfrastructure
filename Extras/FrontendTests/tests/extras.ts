@@ -1,5 +1,5 @@
 import { Page } from 'playwright';
-import { Streamer, DataProtocol } from '@epicgames-ps/js-streamer';
+import { Streamer, DataProtocol } from '@epicgames-ps/js-streamer-ue5.7';
 import { delay } from './helpers';
 import { PixelStreaming, WebRtcSdpAnswerEvent } from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.7';
 
