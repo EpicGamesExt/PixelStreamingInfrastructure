@@ -45,7 +45,7 @@
     "awaitqueue": "^2.1.1",
     "debug": "^4.1.1",
     "h264-profile-level-id": "^1.0.1",
-    "lodash": "^4.0.0",
+    "lodash": "^4.17.23",
     "sdp-transform": "^2.14.0",
     "supports-color": "^7.1.0",
     "uuid": "^8.1.0"
