@@ -40,7 +40,8 @@
     "overrides": {
         "fs-routes": {
             "glob": "7.2.3"
-        }
+        },
+        "tar": "7.5.7"
     },
     "dependencies": {}
 }
