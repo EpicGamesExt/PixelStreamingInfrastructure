@@ -272,8 +272,10 @@ call :SetupCoturn
 exit /b
 
 :SetPublicIP
-FOR /f %%A IN ('curl --silent http://api.ipify.org') DO set PUBLIC_IP=%%A
-Echo External IP is : %PUBLIC_IP%
+IF "%PUBLIC_IP%"=="" (
+    FOR /f %%A IN ('curl --silent http://api.ipify.org') DO set PUBLIC_IP=%%A
+    Echo External IP is : %PUBLIC_IP%
+)
 exit /b
 
 :SetupTurnStun
