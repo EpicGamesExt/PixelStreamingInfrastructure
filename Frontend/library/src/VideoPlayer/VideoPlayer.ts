@@ -1,6 +1,6 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
-import { Config, Flags } from '../Config/Config';
+import { Config, Flags, NumericParameters } from '../Config/Config';
 import { Logger } from '@epicgames-ps/lib-pixelstreamingcommon-ue5.7';
 
 /**
@@ -222,9 +222,13 @@ export class VideoPlayer {
                 return;
             }
 
+            const viewportResolutionScale = this.config.getNumericSettingValue(
+                NumericParameters.ViewportResolutionScale
+            );
+
             this.onMatchViewportResolutionCallback(
-                videoElementParent.clientWidth,
-                videoElementParent.clientHeight
+                videoElementParent.clientWidth * viewportResolutionScale,
+                videoElementParent.clientHeight * viewportResolutionScale
             );
 
             this.lastTimeResized = new Date().getTime();
