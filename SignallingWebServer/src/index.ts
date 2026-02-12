@@ -234,6 +234,20 @@ if (options.reverse_proxy) {
     app.set('trust proxy', options.reverse_proxy_num_proxies);
 }
 
+// --- CORS Support ---
+if (config_file.UseCors) {
+    const allowed = Array.isArray(config_file.AllowedCorsOrigins) ? config_file.AllowedCorsOrigins : ['*'];
+
+    app.use((req, res, next) => {
+        res.header('Access-Control-Allow-Origin', allowed.join(','));
+        res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
+        res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+        if (req.method === 'OPTIONS') {
+            return res.sendStatus(200);
+        }
+        next();
+    });
+}
 const serverOpts: IServerConfig = {
     streamerPort: options.streamer_port,
     playerPort: options.player_port,

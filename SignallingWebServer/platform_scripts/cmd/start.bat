@@ -16,7 +16,7 @@ call :SetPublicIP
 call :SetupTurnStun bg
 
 set PEER_OPTIONS=
-set SERVER_ARGS=!SERVER_ARGS! --serve --console_messages verbose --https_redirect --log_config --public_ip=!PUBLIC_IP!
+set SERVER_ARGS=!SERVER_ARGS! --log_config --serve --console_messages verbose --https_redirect --log_config --public_ip=!PUBLIC_IP! --rest_api
 IF NOT "!STUN_SERVER!"=="" (
 	IF NOT "!TURN_SERVER!"=="" (
 		set PEER_OPTIONS={\"iceServers\":[{\"urls\":[\"stun:!STUN_SERVER!\",\"turn:!TURN_SERVER!\"],\"username\":\"!TURN_USER!\",\"credential\":\"!TURN_PASS!\"}]}
