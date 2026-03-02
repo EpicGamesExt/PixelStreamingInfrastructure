@@ -42,7 +42,7 @@
             "glob": "7.2.3"
         },
         "tar": "7.5.8",
-        "serialize-javascript": "7.0.2"
+        "serialize-javascript": "7.0.3"
     },
     "dependencies": {}
 }
