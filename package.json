@@ -41,7 +41,7 @@
         "fs-routes": {
             "glob": "7.2.3"
         },
-        "tar": "7.5.8",
+        "tar": "7.5.11",
         "serialize-javascript": "7.0.3"
     },
     "dependencies": {}
