@@ -54,10 +54,10 @@ export class VideoPlayer {
         // set play for video (and audio)
         this.videoElement.onclick = () => {
             if (this.audioElement != undefined && this.audioElement.paused) {
-                this.audioElement.play();
+                void this.audioElement.play();
             }
             if (this.videoElement.paused) {
-                this.videoElement.play();
+                void this.videoElement.play();
             }
         };
 

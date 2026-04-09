@@ -78,13 +78,13 @@ export class PeerConnectionController {
             );
         }
 
-        this.setupTransceiversAsync(useMic, useCamera).finally(() => {
+        void this.setupTransceiversAsync(useMic, useCamera).finally(() => {
             this.peerConnection
                 ?.createOffer(offerOptions)
                 .then((offer: RTCSessionDescriptionInit) => {
                     this.showTextOverlayConnecting();
                     offer.sdp = this.mungeSDP(offer.sdp, useMic);
-                    this.peerConnection?.setLocalDescription(offer);
+                    void this.peerConnection?.setLocalDescription(offer);
                     this.onSendWebRTCOffer(offer);
                 })
                 .catch(() => {
@@ -110,7 +110,7 @@ export class PeerConnectionController {
             );
         }
 
-        this.peerConnection?.setRemoteDescription(offer).then(() => {
+        void this.peerConnection?.setRemoteDescription(offer).then(() => {
             // Fire event for when remote offer description is set
             this.onSetRemoteDescription(offer);
 
@@ -136,7 +136,7 @@ export class PeerConnectionController {
                 this.fuzzyIntersectUEAndBrowserCodecs(offer)
             );
 
-            this.setupTransceiversAsync(useMic, useCamera).finally(() => {
+            void this.setupTransceiversAsync(useMic, useCamera).finally(() => {
                 this.peerConnection
                     ?.createAnswer()
                     .then((Answer: RTCSessionDescriptionInit) => {
@@ -158,7 +158,7 @@ export class PeerConnectionController {
      * @param answer - RTC Session Descriptor from the Signaling Server
      */
     receiveAnswer(answer: RTCSessionDescriptionInit) {
-        this.peerConnection?.setRemoteDescription(answer);
+        void this.peerConnection?.setRemoteDescription(answer);
 
         // Add our list of preferred codecs, in order of preference
         this.config.setOptionSettingOptions(
@@ -171,7 +171,7 @@ export class PeerConnectionController {
      * Generate Aggregated Stats and then fire a onVideo Stats event
      */
     generateStats() {
-        this.peerConnection?.getStats().then((statsData: RTCStatsReport) => {
+        void this.peerConnection?.getStats().then((statsData: RTCStatsReport) => {
             this.aggregatedStats.processStats(statsData);
             this.onVideoStats(this.aggregatedStats);
 
@@ -297,7 +297,7 @@ export class PeerConnectionController {
             }
         }
 
-        this.peerConnection?.addIceCandidate(iceCandidate);
+        void this.peerConnection?.addIceCandidate(iceCandidate);
     }
 
     /**
@@ -543,7 +543,7 @@ export class PeerConnectionController {
                     if (RTCUtils.canTransceiverReceiveVideo(transceiver)) {
                         for (const track of stream.getTracks()) {
                             if (track.kind && track.kind == 'video') {
-                                transceiver.sender.replaceTrack(track);
+                                void transceiver.sender.replaceTrack(track);
                                 transceiver.direction = 'sendrecv';
                             }
                         }
@@ -592,7 +592,7 @@ export class PeerConnectionController {
                     if (RTCUtils.canTransceiverReceiveAudio(transceiver)) {
                         for (const track of stream.getTracks()) {
                             if (track.kind && track.kind == 'audio') {
-                                transceiver.sender.replaceTrack(track);
+                                void transceiver.sender.replaceTrack(track);
                                 transceiver.direction = 'sendrecv';
                             }
                         }
