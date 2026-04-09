@@ -28,7 +28,7 @@ export class ActionOverlay extends OverlayBase {
      * @param text - the update text to be inserted into the overlay
      */
     public update(text: string): void {
-        if (text != null || text != undefined) {
+        if (text != null) {
             this.textElement.innerHTML = text;
         }
     }

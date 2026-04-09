@@ -468,7 +468,7 @@ export class PixelStreamingApplicationStyle {
             top: '0',
             right: '2%',
             zIndex: '100',
-            border: '4px solid var(--colour8)',
+            border: '4px solid var(--color8)',
             borderTopWidth: '0px'
         },
         '.settingsHeader': {
@@ -478,7 +478,7 @@ export class PixelStreamingApplicationStyle {
             display: 'flex',
             flexDirection: 'row',
             justifyContent: 'space-between',
-            borderBottom: '1px solid var(--colour8)',
+            borderBottom: '1px solid var(--color8)',
             backgroundColor: 'var(--color7)'
         },
         '.streamTools': {

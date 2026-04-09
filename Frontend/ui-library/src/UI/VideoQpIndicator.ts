@@ -160,7 +160,7 @@ export class VideoQpIndicator {
             opacity -= 0.1;
             this.qualityText.style.opacity = String(Math.abs((opacity - 0.5) * 2));
             if (opacity <= 0.1) {
-                if (--iteration == 0) {
+                if (--iteration === 0) {
                     clearInterval(tickID);
                 } else {
                     opacity = 1;
@@ -200,7 +200,7 @@ export class VideoQpIndicator {
             this.statsText = `<div style="color: ${this.color}">Not connected</div>`;
         } else {
             this.color = 'lime';
-            this.qualityStatus.style.opacity = this.config?.hideWhenGood == true ? '0' : '1';
+            this.qualityStatus.style.opacity = this.config?.hideWhenGood === true ? '0' : '1';
             this.statsText = `<div style="color: ${this.color}">Clear encoding quality</div>`;
             this.outer.setAttributeNS(null, 'fill', this.color);
             this.middle.setAttributeNS(null, 'fill', this.color);
