@@ -4,12 +4,11 @@
         "noImplicitAny": true,
         "module": "commonjs",
         "esModuleInterop": true,
-        "target": "es5",
+        "target": "ES6",
         "moduleResolution": "node",
         "sourceMap": true,
         "allowJs": true,
         "declaration": false
     },
-    "lib": ["es2015"],
     "include": ["./src/*.ts"]
 }
