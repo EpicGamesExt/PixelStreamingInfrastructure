@@ -60,7 +60,7 @@ export class PeerConnectionController {
      * Create an offer for the Web RTC handshake and send the offer to the signaling server via websocket
      * @param offerOptions - RTC Offer Options
      */
-    async createOffer(offerOptions: RTCOfferOptions, config: Config) {
+    createOffer(offerOptions: RTCOfferOptions, config: Config) {
         Logger.Info('Create Offer');
 
         const isLocalhostConnection = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
@@ -96,7 +96,7 @@ export class PeerConnectionController {
     /**
      * Receive offer from UE side and process it as the remote description of this peer connection
      */
-    async receiveOffer(offer: RTCSessionDescriptionInit, config: Config) {
+    receiveOffer(offer: RTCSessionDescriptionInit, config: Config) {
         Logger.Info('Receive Offer');
 
         // If UE or JSStreamer did send abs-capture-time RTP header extension to a non-Chrome browser
@@ -304,8 +304,8 @@ export class PeerConnectionController {
      * When the RTC Peer Connection Signaling server state Changes
      * @param state - Signaling Server State Change Event
      */
-    handleSignalStateChange(state: Event) {
-        Logger.Info('signaling state change: ' + state);
+    handleSignalStateChange(_state: Event) {
+        Logger.Info('signaling state change: ' + this.peerConnection?.signalingState);
     }
 
     /**
@@ -313,7 +313,7 @@ export class PeerConnectionController {
      * @param state - Ice Connection State
      */
     handleIceConnectionStateChange(state: Event) {
-        Logger.Info('ice connection state change: ' + state);
+        Logger.Info('ice connection state change: ' + this.peerConnection?.iceConnectionState);
         this.onIceConnectionStateChange(state);
     }
 

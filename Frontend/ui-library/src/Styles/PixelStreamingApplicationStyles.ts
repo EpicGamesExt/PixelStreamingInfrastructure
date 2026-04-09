@@ -588,7 +588,7 @@ export class PixelStreamingApplicationStyle {
     }
 
     applyPalette(palette: ColorPalette) {
-        const rootElement = document.querySelector(':root') as HTMLElement;
+        const rootElement = document.documentElement;
         rootElement.style.setProperty('--color0', palette['--color0']);
         rootElement.style.setProperty('--color1', palette['--color1']);
         rootElement.style.setProperty('--color2', palette['--color2']);
