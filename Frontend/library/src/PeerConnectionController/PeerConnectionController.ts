@@ -330,13 +330,13 @@ export class PeerConnectionController {
      * @param event - The webRtc track event
      */
     handleOnTrack(event: RTCTrackEvent) {
-        if (event.streams.length < 1 || event.streams[0].id == 'probator') {
+        if (event.streams.length < 1 || event.streams[0].id === 'probator') {
             return;
         }
-        if (event.track.kind == 'video') {
+        if (event.track.kind === 'video') {
             this.videoTrack = event.track;
         }
-        if (event.track.kind == 'audio') {
+        if (event.track.kind === 'audio') {
             this.audioTrack = event.track;
         }
         this.onTrack(event);
@@ -542,7 +542,7 @@ export class PeerConnectionController {
                 for (const transceiver of this.peerConnection?.getTransceivers() ?? []) {
                     if (RTCUtils.canTransceiverReceiveVideo(transceiver)) {
                         for (const track of stream.getTracks()) {
-                            if (track.kind && track.kind == 'video') {
+                            if (track.kind === 'video') {
                                 void transceiver.sender.replaceTrack(track);
                                 transceiver.direction = 'sendrecv';
                             }
@@ -551,7 +551,7 @@ export class PeerConnectionController {
                 }
             } else {
                 for (const track of stream.getTracks()) {
-                    if (track.kind && track.kind == 'video') {
+                    if (track.kind === 'video') {
                         this.peerConnection?.addTransceiver(track, {
                             direction: 'sendrecv'
                         });
@@ -591,7 +591,7 @@ export class PeerConnectionController {
                 for (const transceiver of this.peerConnection?.getTransceivers() ?? []) {
                     if (RTCUtils.canTransceiverReceiveAudio(transceiver)) {
                         for (const track of stream.getTracks()) {
-                            if (track.kind && track.kind == 'audio') {
+                            if (track.kind === 'audio') {
                                 void transceiver.sender.replaceTrack(track);
                                 transceiver.direction = 'sendrecv';
                             }
@@ -600,7 +600,7 @@ export class PeerConnectionController {
                 }
             } else {
                 for (const track of stream.getTracks()) {
-                    if (track.kind && track.kind == 'audio') {
+                    if (track.kind === 'audio') {
                         this.peerConnection?.addTransceiver(track, {
                             direction: 'sendrecv'
                         });
@@ -696,7 +696,7 @@ export class PeerConnectionController {
                         .join(';');
                 const match = matcher.exec(str);
                 if (match !== null) {
-                    if (c.name == 'VP9') {
+                    if (c.name === 'VP9') {
                         // UE answers don't specify profile but we know we want profile 0
                         c.parameters = {
                             'profile-id': '0'
