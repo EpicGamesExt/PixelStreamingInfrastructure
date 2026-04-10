@@ -1,10 +1,10 @@
 name: Releases
 
-on: 
+on:
   push:
-    branches: 
+    branches:
       - 'UE*'
-    paths: 
+    paths:
       - 'RELEASE_VERSION'
 
   workflow_dispatch:
@@ -36,35 +36,6 @@ jobs:
       id: getversion
       run: echo "version=$(cat RELEASE_VERSION)" >> $GITHUB_OUTPUT
 
-    - name: Get node version
-      id: get_node_version
-      run: echo "node_version=$(cat NODE_VERSION)" >> $GITHUB_OUTPUT
-
-    - uses: actions/setup-node@v4
-      with:
-        node-version: ${{ steps.get_node_version.outputs.node_version }}
-        registry-url: 'https://registry.npmjs.org'
-        cache: 'npm'
-
-    - name: Install dependencies.
-      run: npm install
-
-    - name: Build common library
-      working-directory: ./Common
-      run: npm run build
-
-    - name: Build frontend library
-      working-directory: ./Frontend/library
-      run: npm run build
-
-    - name: Build frontend ui-library
-      working-directory: ./Frontend/ui-library
-      run: npm run build
-
-    - name: Build typescript implementation
-      working-directory: ./Frontend/implementations/typescript
-      run: npm run build
-
     - name: Move all content into output directory for archiving
       run: |
         items=(*)
@@ -81,30 +52,12 @@ jobs:
         exclusions: >-
           .git
           .github
-          output
-          node_modules
-          Common/dist
-          Common/docs
-          Common/node_modules
           Docs
-          Extras
-          Frontend/Docs
-          Frontend/implementations/typescript/node_modules
-          Frontend/implementations/typescript/dist
-          Frontend/library/dist
-          Frontend/library/node_modules
-          Frontend/library/types
-          Frontend/ui-library/dist
-          Frontend/ui-library/node_modules
-          Frontend/ui-library/types
-          SFU/Docs
-          SFU/node_modules
-          Signalling/dist
+          Common/docs
           Signalling/docs
-          Signalling/node_modules
-          SignallingWebServer/dist
-          SignallingWebServer/node_modules
-          Extras/SS_Test
+          SFU/Docs
+          Frontend/Docs
+          Extras
 
     - name: Archive Release .zip
       uses: thedoctor0/zip-release@0.7.1
@@ -116,29 +69,12 @@ jobs:
         exclusions: >-
           */.git/*
           */.github/*
-          */node_modules/*
-          /*/node_modules/*
-          */output/*
-          /*/Common/dist/*
-          /*/Common/docs/*
-          /*/Common/node_modules/*
           /*/Docs/*
-          /*/Extras/*
-          /*/Frontend/Docs/*
-          /*/Frontend/node_modules/*
-          /*/Frontend/library/dist/*
-          /*/Frontend/library/types/*
-          /*/Frontend/ui-library/dist/*
-          /*/Frontend/ui-library/types/*
-          /*/Frontend/ui-library/node_modules/*
-          /*/Frontend/implementations/typescript/node_modules
-          /*/Frontend/implementations/typescript/dist
-          /*/SFU/Docs/*
-          /*/Signalling/dist/*
+          /*/Common/docs/*
           /*/Signalling/docs/*
-          /*/Signalling/node_modules/*
-          /*/SignallingWebServer/dist/*
-          /*/SignallingWebServer/node_modules/*
+          /*/SFU/Docs/*
+          /*/Frontend/Docs/*
+          /*/Extras/*
 
     - name: "Make the release"
       uses: ncipollo/release-action@v1
