@@ -138,7 +138,18 @@ jobs:
             ${{ steps.split-paths.outputs.dirname }}/${{ steps.build-label.outputs.label }}.tar.gz
           bodyFile: ${{ matrix.package.path }}/CHANGELOG.md
 
-      # Sometimes the next job will fail because npm reports that the dependency just published cant be found
-      - name: Allow publication to propagate
-        run: sleep 10
+      - name: Wait for package to propagate on npm registry
+        run: |
+          PACKAGE="${{ matrix.package.name }}"
+          VERSION="${{ matrix.package.version }}"
+          for i in $(seq 1 30); do
+            if npm view "${PACKAGE}@${VERSION}" version 2>/dev/null | grep -qF "${VERSION}"; then
+              echo "${PACKAGE}@${VERSION} is available on npm"
+              exit 0
+            fi
+            echo "Waiting for ${PACKAGE}@${VERSION} to propagate... (attempt $i/30)"
+            sleep 10
+          done
+          echo "ERROR: ${PACKAGE}@${VERSION} did not become available within 5 minutes"
+          exit 1
 
