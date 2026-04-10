@@ -26,7 +26,7 @@ jobs:
 
     steps:
     - name: Checkout source code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         ref: "${{ env.commitsha }}"
 
@@ -38,6 +38,7 @@ jobs:
       with:
         node-version: "${{ steps.get_node_version.outputs.node_version }}"
         registry-url: 'https://registry.npmjs.org'
+        cache: 'npm'
 
     - name: Remove NPM workspaces
       run: rm package.json

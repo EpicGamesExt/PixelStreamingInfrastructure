@@ -28,7 +28,7 @@ jobs:
 
     steps:
     - name: "Checkout source code"
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         ref: "${{ env.commitsha }}"
 
@@ -51,10 +51,11 @@ jobs:
       id: get_node_version
       run: echo "node_version=$(cat NODE_VERSION)" >> $GITHUB_OUTPUT
 
-    - uses: actions/setup-node@v3
+    - uses: actions/setup-node@v4
       with:
         node-version: ${{ steps.get_node_version.outputs.node_version }}
         registry-url: 'https://registry.npmjs.org'
+        cache: 'npm'
 
     - name: Install dependencies.
       run: npm install
