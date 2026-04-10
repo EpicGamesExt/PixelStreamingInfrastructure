@@ -45,12 +45,28 @@ jobs:
           echo $package_content >> $GITHUB_OUTPUT
           echo 'EOF' >> $GITHUB_OUTPUT
 
-      - uses: actions/github-script@v5
+      - name: Create or update release tag
+        uses: actions/github-script@v5
         with:
           script: |
-            github.rest.git.createRef({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              ref: 'refs/tags/signalling-webserver-${{ github.ref_name }}-${{ fromJson(steps.get-package-json.outputs.json).version }}',
-              sha: context.sha
-            })
+            const tag = 'refs/tags/signalling-webserver-${{ github.ref_name }}-${{ fromJson(steps.get-package-json.outputs.json).version }}';
+            try {
+              await github.rest.git.createRef({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                ref: tag,
+                sha: context.sha
+              });
+            } catch (e) {
+              if (e.status === 422) {
+                await github.rest.git.updateRef({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  ref: tag.replace('refs/', ''),
+                  sha: context.sha,
+                  force: true
+                });
+              } else {
+                throw e;
+              }
+            }
