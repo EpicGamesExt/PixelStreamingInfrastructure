@@ -85,7 +85,7 @@ export class MouseControllerLocked extends MouseController {
     }
 
     private onRequestLock() {
-        this.videoElementParent.requestPointerLock();
+        void this.videoElementParent.requestPointerLock();
     }
 
     private onLockStateChange() {

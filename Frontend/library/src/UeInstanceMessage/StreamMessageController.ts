@@ -8,8 +8,8 @@ export class ToStreamerMessage {
 }
 
 export class StreamMessageController {
-    toStreamerHandlers: Map<string, (messageData?: Array<number | string> | undefined) => void>;
-    fromStreamerHandlers: Map<string, (messageType: string, messageData?: ArrayBuffer | undefined) => void>;
+    toStreamerHandlers: Map<string, (messageData?: Array<number | string>) => void>;
+    fromStreamerHandlers: Map<string, (messageType: string, messageData?: ArrayBuffer) => void>;
     //                        Type      Format
     toStreamerMessages: Map<string, ToStreamerMessage>;
     //                         ID      Type
@@ -204,7 +204,7 @@ export class StreamMessageController {
     registerMessageHandler(
         messageDirection: MessageDirection,
         messageType: string,
-        messageHandler: (messageData?: unknown | undefined) => void
+        messageHandler: (messageData?: unknown) => void
     ) {
         switch (messageDirection) {
             case MessageDirection.ToStreamer:
