@@ -64,13 +64,13 @@ export class FullScreenIconBase {
             document.msFullscreenElement
         ) {
             if (document.exitFullscreen) {
-                document.exitFullscreen();
+                void document.exitFullscreen();
             } else if (document.mozCancelFullScreen) {
-                document.mozCancelFullScreen();
+                void document.mozCancelFullScreen();
             } else if (document.webkitExitFullscreen) {
-                document.webkitExitFullscreen();
+                void document.webkitExitFullscreen();
             } else if (document.msExitFullscreen) {
-                document.msExitFullscreen();
+                void document.msExitFullscreen();
             }
         } else {
             const element = this.fullscreenElement;
@@ -79,13 +79,13 @@ export class FullScreenIconBase {
                 return;
             }
             if (element.requestFullscreen) {
-                element.requestFullscreen();
+                void element.requestFullscreen();
             } else if (element.mozRequestFullscreen) {
-                element.mozRequestFullscreen();
+                void element.mozRequestFullscreen();
             } else if (element.webkitRequestFullscreen) {
-                element.webkitRequestFullscreen();
+                void element.webkitRequestFullscreen();
             } else if (element.msRequestFullscreen) {
-                element.msRequestFullscreen();
+                void element.msRequestFullscreen();
             } else if (element.webkitEnterFullscreen) {
                 element.webkitEnterFullscreen(); //for iphone this code worked
             }

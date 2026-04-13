@@ -282,7 +282,7 @@ export class Config {
                 'Preferred Quality',
                 'The preferred quality of the stream (only applicable when using the SFU)',
                 settings && Object.prototype.hasOwnProperty.call(settings, OptionParameters.PreferredQuality)
-                    ? settings[OptionParameters.PreferredQuality]!
+                    ? settings[OptionParameters.PreferredQuality]
                     : 'Default',
                 ['Default'],
                 useUrlParams
@@ -923,7 +923,7 @@ export class Config {
      * @returns True if the flag is enabled.
      */
     isFlagEnabled(id: FlagsIds): boolean {
-        return this.flags.get(id).flag as boolean;
+        return this.flags.get(id).flag;
     }
 
     /**

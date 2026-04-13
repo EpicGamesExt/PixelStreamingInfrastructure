@@ -118,6 +118,15 @@ export class SignallingServer {
         }
     }
 
+    private sendConfigMessage(connection: { sendMessage(msg: Messages.config): void }): void {
+        // peer connection options is a general field with all optional fields;
+        // it doesnt play nice with mergePartial so we just add it verbatim
+        const message: Messages.config = MessageHelpers.createMessage(Messages.config, this.protocolConfig);
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        message.peerConnectionOptions = this.protocolConfig['peerConnectionOptions'];
+        connection.sendMessage(message);
+    }
+
     private onStreamerConnected(ws: wslib.WebSocket, request: http.IncomingMessage) {
         Logger.info(`New streamer connection: %s`, request.socket.remoteAddress);
 
@@ -135,12 +144,7 @@ export class SignallingServer {
             );
         });
 
-        // because peer connection options is a general field with all optional fields
-        // it doesnt play nice with mergePartial so we just add it verbatim
-        const message: Messages.config = MessageHelpers.createMessage(Messages.config, this.protocolConfig);
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        message.peerConnectionOptions = this.protocolConfig['peerConnectionOptions'];
-        newStreamer.sendMessage(message);
+        this.sendConfigMessage(newStreamer);
     }
 
     private onPlayerConnected(ws: wslib.WebSocket, request: http.IncomingMessage) {
@@ -155,12 +159,7 @@ export class SignallingServer {
             Logger.info(`Player %s (%s) disconnected.`, newPlayer.playerId, request.socket.remoteAddress);
         });
 
-        // because peer connection options is a general field with all optional fields
-        // it doesnt play nice with mergePartial so we just add it verbatim
-        const message: Messages.config = MessageHelpers.createMessage(Messages.config, this.protocolConfig);
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        message.peerConnectionOptions = this.protocolConfig['peerConnectionOptions'];
-        newPlayer.sendMessage(message);
+        this.sendConfigMessage(newPlayer);
     }
 
     private onSFUConnected(ws: wslib.WebSocket, request: http.IncomingMessage) {
@@ -176,11 +175,6 @@ export class SignallingServer {
             Logger.info(`SFU %s (%s) disconnected.`, newSFU.streamerId, request.socket.remoteAddress);
         });
 
-        // because peer connection options is a general field with all optional fields
-        // it doesnt play nice with mergePartial so we just add it verbatim
-        const message: Messages.config = MessageHelpers.createMessage(Messages.config, this.protocolConfig);
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        message.peerConnectionOptions = this.protocolConfig['peerConnectionOptions'];
-        newSFU.sendMessage(message);
+        this.sendConfigMessage(newSFU);
     }
 }

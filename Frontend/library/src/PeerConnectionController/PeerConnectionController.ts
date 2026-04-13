@@ -60,7 +60,7 @@ export class PeerConnectionController {
      * Create an offer for the Web RTC handshake and send the offer to the signaling server via websocket
      * @param offerOptions - RTC Offer Options
      */
-    async createOffer(offerOptions: RTCOfferOptions, config: Config) {
+    createOffer(offerOptions: RTCOfferOptions, config: Config) {
         Logger.Info('Create Offer');
 
         const isLocalhostConnection = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
@@ -78,13 +78,13 @@ export class PeerConnectionController {
             );
         }
 
-        this.setupTransceiversAsync(useMic, useCamera).finally(() => {
+        void this.setupTransceiversAsync(useMic, useCamera).finally(() => {
             this.peerConnection
                 ?.createOffer(offerOptions)
                 .then((offer: RTCSessionDescriptionInit) => {
                     this.showTextOverlayConnecting();
                     offer.sdp = this.mungeSDP(offer.sdp, useMic);
-                    this.peerConnection?.setLocalDescription(offer);
+                    void this.peerConnection?.setLocalDescription(offer);
                     this.onSendWebRTCOffer(offer);
                 })
                 .catch(() => {
@@ -96,7 +96,7 @@ export class PeerConnectionController {
     /**
      * Receive offer from UE side and process it as the remote description of this peer connection
      */
-    async receiveOffer(offer: RTCSessionDescriptionInit, config: Config) {
+    receiveOffer(offer: RTCSessionDescriptionInit, config: Config) {
         Logger.Info('Receive Offer');
 
         // If UE or JSStreamer did send abs-capture-time RTP header extension to a non-Chrome browser
@@ -110,7 +110,7 @@ export class PeerConnectionController {
             );
         }
 
-        this.peerConnection?.setRemoteDescription(offer).then(() => {
+        void this.peerConnection?.setRemoteDescription(offer).then(() => {
             // Fire event for when remote offer description is set
             this.onSetRemoteDescription(offer);
 
@@ -136,7 +136,7 @@ export class PeerConnectionController {
                 this.fuzzyIntersectUEAndBrowserCodecs(offer)
             );
 
-            this.setupTransceiversAsync(useMic, useCamera).finally(() => {
+            void this.setupTransceiversAsync(useMic, useCamera).finally(() => {
                 this.peerConnection
                     ?.createAnswer()
                     .then((Answer: RTCSessionDescriptionInit) => {
@@ -158,7 +158,7 @@ export class PeerConnectionController {
      * @param answer - RTC Session Descriptor from the Signaling Server
      */
     receiveAnswer(answer: RTCSessionDescriptionInit) {
-        this.peerConnection?.setRemoteDescription(answer);
+        void this.peerConnection?.setRemoteDescription(answer);
 
         // Add our list of preferred codecs, in order of preference
         this.config.setOptionSettingOptions(
@@ -171,7 +171,7 @@ export class PeerConnectionController {
      * Generate Aggregated Stats and then fire a onVideo Stats event
      */
     generateStats() {
-        this.peerConnection?.getStats().then((statsData: RTCStatsReport) => {
+        void this.peerConnection?.getStats().then((statsData: RTCStatsReport) => {
             this.aggregatedStats.processStats(statsData);
 
             this.onVideoStats(this.aggregatedStats);
@@ -293,15 +293,15 @@ export class PeerConnectionController {
             }
         }
 
-        this.peerConnection?.addIceCandidate(iceCandidate);
+        void this.peerConnection?.addIceCandidate(iceCandidate);
     }
 
     /**
      * When the RTC Peer Connection Signaling server state Changes
      * @param state - Signaling Server State Change Event
      */
-    handleSignalStateChange(state: Event) {
-        Logger.Info('signaling state change: ' + state);
+    handleSignalStateChange(_state: Event) {
+        Logger.Info('signaling state change: ' + this.peerConnection?.signalingState);
     }
 
     /**
@@ -309,7 +309,7 @@ export class PeerConnectionController {
      * @param state - Ice Connection State
      */
     handleIceConnectionStateChange(state: Event) {
-        Logger.Info('ice connection state change: ' + state);
+        Logger.Info('ice connection state change: ' + this.peerConnection?.iceConnectionState);
         this.onIceConnectionStateChange(state);
     }
 
@@ -326,13 +326,13 @@ export class PeerConnectionController {
      * @param event - The webRtc track event
      */
     handleOnTrack(event: RTCTrackEvent) {
-        if (event.streams.length < 1 || event.streams[0].id == 'probator') {
+        if (event.streams.length < 1 || event.streams[0].id === 'probator') {
             return;
         }
-        if (event.track.kind == 'video') {
+        if (event.track.kind === 'video') {
             this.videoTrack = event.track;
         }
-        if (event.track.kind == 'audio') {
+        if (event.track.kind === 'audio') {
             this.audioTrack = event.track;
         }
         this.onTrack(event);
@@ -538,8 +538,8 @@ export class PeerConnectionController {
                 for (const transceiver of this.peerConnection?.getTransceivers() ?? []) {
                     if (RTCUtils.canTransceiverReceiveVideo(transceiver)) {
                         for (const track of stream.getTracks()) {
-                            if (track.kind && track.kind == 'video') {
-                                transceiver.sender.replaceTrack(track);
+                            if (track.kind === 'video') {
+                                void transceiver.sender.replaceTrack(track);
                                 transceiver.direction = 'sendrecv';
                             }
                         }
@@ -547,7 +547,7 @@ export class PeerConnectionController {
                 }
             } else {
                 for (const track of stream.getTracks()) {
-                    if (track.kind && track.kind == 'video') {
+                    if (track.kind === 'video') {
                         this.peerConnection?.addTransceiver(track, {
                             direction: 'sendrecv'
                         });
@@ -587,8 +587,8 @@ export class PeerConnectionController {
                 for (const transceiver of this.peerConnection?.getTransceivers() ?? []) {
                     if (RTCUtils.canTransceiverReceiveAudio(transceiver)) {
                         for (const track of stream.getTracks()) {
-                            if (track.kind && track.kind == 'audio') {
-                                transceiver.sender.replaceTrack(track);
+                            if (track.kind === 'audio') {
+                                void transceiver.sender.replaceTrack(track);
                                 transceiver.direction = 'sendrecv';
                             }
                         }
@@ -596,7 +596,7 @@ export class PeerConnectionController {
                 }
             } else {
                 for (const track of stream.getTracks()) {
-                    if (track.kind && track.kind == 'audio') {
+                    if (track.kind === 'audio') {
                         this.peerConnection?.addTransceiver(track, {
                             direction: 'sendrecv'
                         });
@@ -692,7 +692,7 @@ export class PeerConnectionController {
                         .join(';');
                 const match = matcher.exec(str);
                 if (match !== null) {
-                    if (c.name == 'VP9') {
+                    if (c.name === 'VP9') {
                         // UE answers don't specify profile but we know we want profile 0
                         c.parameters = {
                             'profile-id': '0'
