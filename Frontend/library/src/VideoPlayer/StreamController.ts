@@ -27,7 +27,7 @@ export class StreamController {
         Logger.Info('handleOnTrack ' + JSON.stringify(rtcTrackEvent.streams));
         // Do not add the track if the ID is `probator` as this is special track created by mediasoup for bitrate probing.
         // Refer to https://github.com/EpicGamesExt/PixelStreamingInfrastructure/pull/86 for more details.
-        if (rtcTrackEvent.streams.length < 1 || rtcTrackEvent.streams[0].id == 'probator') {
+        if (rtcTrackEvent.streams.length < 1 || rtcTrackEvent.streams[0].id === 'probator') {
             return;
         }
 
@@ -44,11 +44,11 @@ export class StreamController {
             );
         }
 
-        if (rtcTrackEvent.track.kind == 'audio') {
+        if (rtcTrackEvent.track.kind === 'audio') {
             this.CreateAudioTrack(rtcTrackEvent.streams[0]);
             return;
         } else if (
-            rtcTrackEvent.track.kind == 'video' &&
+            rtcTrackEvent.track.kind === 'video' &&
             videoElement.srcObject !== rtcTrackEvent.streams[0]
         ) {
             videoElement.srcObject = rtcTrackEvent.streams[0];

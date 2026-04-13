@@ -2,7 +2,6 @@
 
 import {
     Config,
-    FlagsIds,
     NumericParametersIds,
     OptionParametersIds,
     TextParametersIds,
@@ -12,9 +11,6 @@ import {
     NumericParameters,
     SettingsChangedEvent,
     SettingFlag,
-    SettingNumber,
-    SettingText,
-    SettingOption,
     Logger,
     SettingBase,
     isFlagId,
@@ -345,59 +341,51 @@ export class ConfigUI {
 
     onSettingsChanged({ data: { id, target, type } }: SettingsChangedEvent) {
         if (type === 'flag') {
-            const _id = id as FlagsIds;
-            const _target = target as SettingFlag;
-            const setting = this.flagsUi.get(_id);
+            const setting = this.flagsUi.get(id);
             if (setting) {
-                if (setting.flag !== _target.flag) {
-                    setting.flag = _target.flag;
+                if (setting.flag !== target.flag) {
+                    setting.flag = target.flag;
                 }
-                if (setting.label !== _target.label) {
-                    setting.label = _target.label;
+                if (setting.label !== target.label) {
+                    setting.label = target.label;
                 }
             }
         } else if (type === 'number') {
-            const _id = id as NumericParametersIds;
-            const _target = target as SettingNumber;
-            const setting = this.numericParametersUi.get(_id);
+            const setting = this.numericParametersUi.get(id);
             if (setting) {
-                if (setting.number !== _target.number) {
-                    setting.number = _target.number;
+                if (setting.number !== target.number) {
+                    setting.number = target.number;
                 }
-                if (setting.label !== _target.label) {
-                    setting.label = _target.label;
+                if (setting.label !== target.label) {
+                    setting.label = target.label;
                 }
             }
         } else if (type === 'text') {
-            const _id = id as TextParametersIds;
-            const _target = target as SettingText;
-            const setting = this.textParametersUi.get(_id);
+            const setting = this.textParametersUi.get(id);
             if (setting) {
-                if (setting.text !== _target.text) {
-                    setting.text = _target.text;
+                if (setting.text !== target.text) {
+                    setting.text = target.text;
                 }
-                if (setting.label !== _target.label) {
-                    setting.label = _target.label;
+                if (setting.label !== target.label) {
+                    setting.label = target.label;
                 }
             }
         } else if (type === 'option') {
-            const _id = id as OptionParametersIds;
-            const _target = target as SettingOption;
-            const setting = this.optionParametersUi.get(_id);
+            const setting = this.optionParametersUi.get(id);
             if (setting) {
                 const uiOptions = setting.options;
-                const targetOptions = _target.options;
+                const targetOptions = target.options;
                 if (
                     uiOptions.length !== targetOptions.length ||
                     !uiOptions.every((value) => targetOptions.includes(value))
                 ) {
-                    setting.options = _target.options;
+                    setting.options = target.options;
                 }
-                if (setting.selected !== _target.selected) {
-                    setting.selected = _target.selected;
+                if (setting.selected !== target.selected) {
+                    setting.selected = target.selected;
                 }
-                if (setting.label !== _target.label) {
-                    setting.label = _target.label;
+                if (setting.label !== target.label) {
+                    setting.label = target.label;
                 }
             }
         }
@@ -439,7 +427,7 @@ export class ConfigUI {
      * @returns True if the flag is enabled.
      */
     isCustomFlagEnabled(id: ExtraFlagsIds): boolean {
-        return this.customFlags.get(id).flag as boolean;
+        return this.customFlags.get(id).flag;
     }
 
     disableSetting(id: OptionIdsExtended): void {

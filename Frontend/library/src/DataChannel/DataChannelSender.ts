@@ -19,7 +19,7 @@ export class DataChannelSender {
     canSend(): boolean {
         return (
             this.dataChannelProvider.getDataChannelInstance().dataChannel !== undefined &&
-            this.dataChannelProvider.getDataChannelInstance().dataChannel.readyState == 'open'
+            this.dataChannelProvider.getDataChannelInstance().dataChannel.readyState === 'open'
         );
     }
 
@@ -31,7 +31,7 @@ export class DataChannelSender {
         // reset the afk inactivity
         const dataChannelInstance = this.dataChannelProvider.getDataChannelInstance();
 
-        if (dataChannelInstance.dataChannel.readyState == 'open') {
+        if (dataChannelInstance.dataChannel.readyState === 'open') {
             dataChannelInstance.dataChannel.send(data);
             Logger.Info(`Message Sent: ${new Uint8Array(data)}`);
             this.resetAfkWarningTimerOnDataSend();
