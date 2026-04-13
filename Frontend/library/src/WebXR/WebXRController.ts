@@ -56,14 +56,14 @@ export class WebXRController {
                 return;
             }
 
-            navigator.xr
+            void navigator.xr
                 /* Request immersive-vr session without any optional features. */
                 .requestSession('immersive-vr', { optionalFeatures: [] })
                 .then((session: XRSession) => {
                     this.onXrSessionStarted(session);
                 });
         } else {
-            this.xrSession.end();
+            void this.xrSession.end();
         }
     }
 
@@ -265,11 +265,11 @@ export class WebXRController {
         this.initShaders();
         this.initBuffers();
 
-        session.requestReferenceSpace('local').then((refSpace) => {
+        void session.requestReferenceSpace('local').then((refSpace) => {
             this.xrRefSpace = refSpace;
 
             // Set up our base layer (i.e. a projection layer that fills the entire XR viewport).
-            this.xrSession.updateRenderState({
+            void this.xrSession.updateRenderState({
                 baseLayer: new XRWebGLLayer(this.xrSession, this.gl)
             });
 
@@ -277,7 +277,7 @@ export class WebXRController {
             if (this.xrSession.supportedFrameRates) {
                 for (const frameRate of this.xrSession.supportedFrameRates) {
                     if (frameRate == 90) {
-                        session.updateTargetFrameRate(90);
+                        void session.updateTargetFrameRate(90);
                     }
                 }
             }

@@ -13,7 +13,8 @@ export default function (signallingServer: SignallingServer) {
     function GET(req: any, res: any, _next: any) {
         const streamer = signallingServer.streamerRegistry.find(req.params.streamerId);
         if (!streamer) {
-            throw new Error(`No streamer id matches ${req.params.streamerId}.`);
+            res.status(404).json({ message: `No streamer id matches ${req.params.streamerId}.` });
+            return;
         }
         res.status(200).json(streamer.getStreamerInfo());
     }

@@ -194,8 +194,8 @@ export class Application {
             navigator.vendor &&
             navigator.vendor.indexOf('Apple') > -1 &&
             navigator.userAgent &&
-            navigator.userAgent.indexOf('CriOS') == -1 &&
-            navigator.userAgent.indexOf('FxiOS') == -1;
+            navigator.userAgent.indexOf('CriOS') === -1 &&
+            navigator.userAgent.indexOf('FxiOS') === -1;
 
         // In some cases we want to disable fullscreen button if it is not explicitly requested:
 
@@ -737,7 +737,7 @@ export class Application {
                     }
                     allowRestart = true;
                 }
-            } else if (messageStreamingList.ids.length == 0) {
+            } else if (messageStreamingList.ids.length === 0) {
                 if (isReconnecting) {
                     message = `Waiting for a streamer to become available.`;
                     allowRestart = false;
@@ -798,7 +798,7 @@ export class Application {
             data: { id, target, type }
         } = event;
         // Explicitly handle specific setting behaviour
-        if (id == OptionParameters.PreferredQuality) {
+        if (id === OptionParameters.PreferredQuality) {
             const preferredQualityOption = this.stream.config.getSettingOption(
                 OptionParameters.PreferredQuality
             );

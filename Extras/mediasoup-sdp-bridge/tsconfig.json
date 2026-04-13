@@ -3,6 +3,7 @@
 
   "compileOnSave": true,
   "compilerOptions": {
+    "moduleResolution": "Node16",
     "baseUrl": "./",
     "declaration": true,
     "declarationMap": true,
