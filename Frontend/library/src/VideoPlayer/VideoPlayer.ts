@@ -43,21 +43,21 @@ export class VideoPlayer {
         videoElementParent.appendChild(this.videoElement);
 
         this.onResizePlayerCallback = () => {
-            console.log('Resolution changed, restyling player, did you forget to override this function?');
+            Logger.Warning('Resolution changed, restyling player, did you forget to override this function?');
         };
         this.onMatchViewportResolutionCallback = () => {
-            console.log(
+            Logger.Warning(
                 'Resolution changed and match viewport resolution is turned on, did you forget to override this function?'
             );
         };
 
         // set play for video (and audio)
         this.videoElement.onclick = () => {
-            if (this.audioElement != undefined && this.audioElement.paused) {
-                this.audioElement.play();
+            if (this.audioElement !== undefined && this.audioElement.paused) {
+                void this.audioElement.play();
             }
             if (this.videoElement.paused) {
-                this.videoElement.play();
+                void this.videoElement.play();
             }
         };
 

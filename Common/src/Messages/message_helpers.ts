@@ -46,7 +46,7 @@ export function validateMessage(msg: BaseMessage): IMessageType<BaseMessage> | n
             if (!field.opt) {
                 if (!Object.prototype.hasOwnProperty.call(msg, field.name)) {
                     Logger.Error(
-                        `Message "${msg.type}"" is missing required field "${field.name}". Rejected.`
+                        `Message "${msg.type}" is missing required field "${field.name}". Rejected.`
                     );
                     valid = false;
                 }
@@ -55,7 +55,7 @@ export function validateMessage(msg: BaseMessage): IMessageType<BaseMessage> | n
     }
 
     for (const fieldName in msg) {
-        const found = messageType.fields.find((field) => field.name === fieldName);
+        const found = messageType.fields?.find((field) => field.name === fieldName);
         if (!found) {
             Logger.Error(`Message "${msg.type}" contains unknown field "${fieldName}". Rejected.`);
             valid = false;

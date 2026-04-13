@@ -13,7 +13,8 @@ export default function (signallingServer: SignallingServer) {
     function GET(req: any, res: any, _next: any) {
         const player = signallingServer.playerRegistry.get(req.params.playerId);
         if (!player) {
-            throw new Error(`No player ID matches ${req.params.playerId}.`);
+            res.status(404).json({ message: `No player ID matches ${req.params.playerId}.` });
+            return;
         }
         res.status(200).json(player.getPlayerInfo());
     }

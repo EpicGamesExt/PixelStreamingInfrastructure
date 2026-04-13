@@ -3,7 +3,7 @@ let passedPublicIP = null;
 for(let arg of process.argv){
   if(arg && arg.startsWith("--PublicIP=")){
     let splitArr = arg.split("=");
-    if(splitArr.length == 2){
+    if(splitArr.length === 2){
       passedPublicIP = splitArr[1];
       console.log("--PublicIP=" + passedPublicIP);
     }
@@ -79,7 +79,7 @@ const config = {
     // localhost so you might have to specify a proper
     // private or public ip here.
     webRtcTransport: {
-      listenIps: passedPublicIP != null ? [{ ip: "0.0.0.0", announcedIp: passedPublicIP}] : getLocalListenIps(), 
+      listenIps: passedPublicIP !== null ? [{ ip: "0.0.0.0", announcedIp: passedPublicIP}] : getLocalListenIps(),
       // 100 megabits
       initialAvailableOutgoingBitrate: 100_000_000,
     },

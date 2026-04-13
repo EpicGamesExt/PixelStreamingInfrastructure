@@ -248,7 +248,7 @@ export class WebRtcPlayerController {
             this.afkController.stopAfkWarningTimer();
 
             // stop sending stats on interval if we have closed our connection
-            if (this.statsTimerHandle && this.statsTimerHandle !== undefined) {
+            if (this.statsTimerHandle) {
                 window.clearInterval(this.statsTimerHandle);
             }
 

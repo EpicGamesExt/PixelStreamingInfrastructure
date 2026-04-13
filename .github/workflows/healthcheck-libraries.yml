@@ -21,7 +21,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout source code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Get node version
       id: get_node_version
@@ -31,6 +31,7 @@ jobs:
       with:
         node-version: "${{ steps.get_node_version.outputs.node_version }}"
         registry-url: 'https://registry.npmjs.org'
+        cache: 'npm'
 
     - name: Install dependencies
       run: npm install

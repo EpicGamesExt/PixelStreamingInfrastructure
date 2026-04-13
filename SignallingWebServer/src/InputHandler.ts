@@ -24,9 +24,9 @@ export function initInputHandler(options: IProgramOptions, signallingServer: Sig
     // on any data into stdin
     stdin.on('data', (keyBuffer) => {
         const key = keyBuffer.toString();
-        if (key == 'q' || key == '\u0003') {
+        if (key === 'q' || key === '\u0003') {
             process.exit();
-        } else if (key == 'h') {
+        } else if (key === 'h') {
             process.stdout.write('Help:\n');
             for (const [handlerKey, handlerInfo] of Object.entries(handlers)) {
                 process.stdout.write(`\t${handlerKey} - ${handlerInfo.desc}\n`);
