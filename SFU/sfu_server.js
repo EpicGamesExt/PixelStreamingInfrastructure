@@ -51,7 +51,7 @@ async function createDataRouter() {
                 playerId: ""
             };
         }
-        const length = message.readUint16LE(1);
+        const length = message.readUInt16LE(1);
         const headerEnd = length + 3;
         return {
             playerId: new TextDecoder("utf-16").decode(message.subarray(3, headerEnd)),
@@ -176,7 +176,7 @@ async function onIdentify(msg) {
 async function onStreamerOffer(msg) {
     console.log("Got offer from streamer");
 
-    if (streamer != null) {
+    if (streamer !== null) {
         signalServer.close(1013 /* Try again later */, 'Producer is already connected');
         return;
     }
@@ -205,7 +205,7 @@ function onStreamerDisconnected() {
     console.log("Streamer disconnected");
     disconnectAllPeers();
 
-    if (streamer != null) {
+    if (streamer !== null) {
         for (const mediaProducer of streamer.producers) {
             mediaProducer.close();
         }
@@ -222,7 +222,7 @@ function onStreamerDisconnected() {
 async function onPeerConnected(peerId) {
     console.log("Player %s joined", peerId);
 
-    if (streamer == null) {
+    if (streamer === null) {
         console.log("No streamer connected, ignoring player.");
         return;
     }
@@ -374,8 +374,8 @@ async function onPeerAnswer(peerId, sdp) {
 function onPeerDisconnected(peerId) {
     console.log("Player %s disconnected", peerId);
     const peer = peers.get(peerId);
-    if (peer != null) {
-        for (consumer of peer.consumers) {
+    if (peer !== null) {
+        for (const consumer of peer.consumers) {
             consumer.close();
         }
         if (peer.peerDataConsumer) {
@@ -401,8 +401,8 @@ function disconnectAllPeers() {
 function onLayerPreference(msg) {
     console.log("onLayerPreference: " + JSON.stringify(msg));
     const peer = peers.get(`${msg.playerId}`);
-    if (peer != null) {
-        for (consumer of peer.consumers) {
+    if (peer !== null) {
+        for (const consumer of peer.consumers) {
             consumer.setPreferredLayers({ spatialLayer: msg.spatialLayer, temporalLayer: msg.temporalLayer });
         }
     }
@@ -410,36 +410,42 @@ function onLayerPreference(msg) {
 
 async function onSignallingMessage(message) {
     //console.log(`Got MSG: ${message}`);
-    const msg = JSON.parse(message);
+    let msg;
+    try {
+        msg = JSON.parse(message);
+    } catch (e) {
+        console.error('Failed to parse signalling message: %s', e.message);
+        return;
+    }
 
-    if (msg.type == 'offer') {
+    if (msg.type === 'offer') {
         onStreamerOffer(msg);
     }
-    else if (msg.type == 'answer') {
+    else if (msg.type === 'answer') {
         onPeerAnswer(msg.playerId, msg.sdp);
     }
-    else if (msg.type == 'playerConnected') {
+    else if (msg.type === 'playerConnected') {
         onPeerConnected(msg.playerId);
     }
-    else if (msg.type == 'playerDisconnected') {
+    else if (msg.type === 'playerDisconnected') {
         onPeerDisconnected(msg.playerId);
     }
-    else if (msg.type == 'streamerDisconnected') {
+    else if (msg.type === 'streamerDisconnected') {
         onStreamerDisconnected();
     }
-    else if (msg.type == 'dataChannelRequest') {
+    else if (msg.type === 'dataChannelRequest') {
         setupPeerDataChannels(msg.playerId);
     }
-    else if (msg.type == 'peerDataChannelsReady') {
+    else if (msg.type === 'peerDataChannelsReady') {
         setupStreamerDataChannelsForPeer(msg.playerId);
     }
-    else if (msg.type == 'layerPreference') {
+    else if (msg.type === 'layerPreference') {
         onLayerPreference(msg);
     }
-    else if (msg.type == 'streamerList') {
+    else if (msg.type === 'streamerList') {
         onStreamerList(msg);
     }
-    else if (msg.type == 'identify') {
+    else if (msg.type === 'identify') {
         onIdentify(msg);
     }
 }
@@ -466,7 +472,7 @@ async function startMediasoup() {
 async function onICEStateChange(identifier, iceState) {
     console.log("%s ICE state changed to %s", identifier, iceState);
 
-    if (identifier == 'Streamer' && iceState == 'completed') {
+    if (identifier === 'Streamer' && iceState === 'completed') {
         if (streamer.multiplexChannels) {
             const nextStreamerSCTPStreamId = streamer.transport.getNextSctpStreamId();
             //this will always be 0 since we are using one producer only

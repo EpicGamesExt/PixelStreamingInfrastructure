@@ -37,13 +37,11 @@ export interface IPlayerInfo {
  */
 export class PlayerRegistry extends EventEmitter {
     private players: Map<string, IPlayer> = new Map();
-    private playerCount: number;
     private nextPlayerId: number;
 
     constructor() {
         super();
         this.players = new Map();
-        this.playerCount = 0;
         this.nextPlayerId = 0;
     }
 
@@ -53,7 +51,6 @@ export class PlayerRegistry extends EventEmitter {
     add(player: IPlayer): void {
         player.playerId = this.getUniquePlayerId();
         this.players.set(player.playerId, player);
-        this.playerCount++;
         this.emit('added', player.playerId);
         Logger.info(`Registered new player: ${player.playerId}`);
     }
@@ -69,7 +66,6 @@ export class PlayerRegistry extends EventEmitter {
 
         this.emit('removed', player.playerId);
         this.players.delete(player.playerId);
-        this.playerCount--;
 
         Logger.info(`Unregistered player: ${player.playerId}`);
     }
@@ -97,7 +93,7 @@ export class PlayerRegistry extends EventEmitter {
      * Returns true when the registry is empty.
      */
     empty(): boolean {
-        return this.players.size == 0;
+        return this.players.size === 0;
     }
 
     /**

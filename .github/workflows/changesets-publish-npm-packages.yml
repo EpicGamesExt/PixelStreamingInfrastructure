@@ -25,7 +25,7 @@ jobs:
       matrix: ${{ steps.query-packages.outputs.matrix }}
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Get package info
         id: query-packages
@@ -61,7 +61,7 @@ jobs:
         package: ${{ fromJson(needs.fetch-package-info.outputs.matrix).list }}
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Remove workspace package
         run: rm package.json package-lock.json
@@ -76,6 +76,10 @@ jobs:
           node-version: "${{ steps.get_node_version.outputs.node_version }}"
           registry-url: 'https://registry.npmjs.org'
 
+      # Ensure npm 11.5.1 or later is installed for OIDC
+      - name: Update npm
+        run: npm install -g npm@11.5.1
+
       - name: Publish ${{ matrix.package.name }}
         working-directory: ${{ matrix.package.path }}
         env:
@@ -89,16 +93,31 @@ jobs:
         id: build-label
         run: echo "label=${{ matrix.package.tag }}-${{ matrix.package.version }}" >> $GITHUB_OUTPUT
 
-      - name: Create release tag
+      - name: Create or update release tag
         uses: actions/github-script@v5
         with:
           script: |
-            github.rest.git.createRef({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              ref: 'refs/tags/${{ steps.build-label.outputs.label }}',
-              sha: context.sha
-            })
+            const tag = 'refs/tags/${{ steps.build-label.outputs.label }}';
+            try {
+              await github.rest.git.createRef({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                ref: tag,
+                sha: context.sha
+              });
+            } catch (e) {
+              if (e.status === 422) {
+                await github.rest.git.updateRef({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  ref: tag.replace('refs/', ''),
+                  sha: context.sha,
+                  force: true
+                });
+              } else {
+                throw e;
+              }
+            }
 
       - name: Split up the archive paths so the path in the archives is nice.
         id: split-paths
@@ -135,7 +154,18 @@ jobs:
             ${{ steps.split-paths.outputs.dirname }}/${{ steps.build-label.outputs.label }}.tar.gz
           bodyFile: ${{ matrix.package.path }}/CHANGELOG.md
 
-      # Sometimes the next job will fail because npm reports that the dependency just published cant be found
-      - name: Allow publication to propagate
-        run: sleep 10
+      - name: Wait for package to propagate on npm registry
+        run: |
+          PACKAGE="${{ matrix.package.name }}"
+          VERSION="${{ matrix.package.version }}"
+          for i in $(seq 1 30); do
+            if npm view "${PACKAGE}@${VERSION}" version 2>/dev/null | grep -qF "${VERSION}"; then
+              echo "${PACKAGE}@${VERSION} is available on npm"
+              exit 0
+            fi
+            echo "Waiting for ${PACKAGE}@${VERSION} to propagate... (attempt $i/30)"
+            sleep 10
+          done
+          echo "ERROR: ${PACKAGE}@${VERSION} did not become available within 5 minutes"
+          exit 1
 

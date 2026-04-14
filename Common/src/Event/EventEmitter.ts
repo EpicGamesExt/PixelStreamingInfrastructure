@@ -153,7 +153,7 @@ export class EventEmitter extends EventTarget {
         // so we can use it with event target and remove it from event target when this function completes.
         const eventListenerWrapper: PixelStreamingEventListener = new PixelStreamingEventListener(
             (...args: any[]) => {
-                listener(args);
+                listener(...args);
                 this.removeListenerInternal(eventName, listener);
             }
         );

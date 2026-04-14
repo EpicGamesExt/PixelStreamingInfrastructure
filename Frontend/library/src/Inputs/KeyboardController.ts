@@ -50,7 +50,7 @@ export class KeyboardController implements IInputController {
         }
 
         const toStreamerHandlers = this.streamMessageController.toStreamerHandlers;
-        toStreamerHandlers.get('KeyDown')?.([this.getKeycode(keyboardEvent)!, keyboardEvent.repeat ? 1 : 0]);
+        toStreamerHandlers.get('KeyDown')?.([this.getKeycode(keyboardEvent), keyboardEvent.repeat ? 1 : 0]);
         const activeKeys = this.activeKeys.getActiveKeys();
         activeKeys.push(keyCode);
 
