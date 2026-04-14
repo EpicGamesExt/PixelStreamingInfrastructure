@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   pull_request:
     paths:
-      - ".github/workflow/healthcheck-image-sfu.yml"
+      - ".github/workflows/healthcheck-image-sfu.yml"
       - "SFU/**"
 
 jobs:
@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Build the SFU container image
         uses: docker/build-push-action@v3

@@ -14,6 +14,12 @@ import { beautify, IProgramOptions } from './Utils';
 import { initInputHandler } from './InputHandler';
 import { Command, Option } from 'commander';
 import { initialize } from 'express-openapi';
+import configHandler from './paths/config';
+import playersHandler from './paths/players';
+import playerByIdHandler from './paths/players/{playerId}';
+import statusHandler from './paths/status';
+import streamersHandler from './paths/streamers';
+import streamerByIdHandler from './paths/streamers/{streamerId}';
 
 // eslint-disable-next-line  @typescript-eslint/no-unsafe-assignment
 const pjson = require('../package.json');
@@ -255,14 +261,21 @@ if (options.stdin) {
 }
 
 if (options.rest_api) {
-    void initialize({
+    initialize({
         app,
         docsPath: '/api-definition',
         exposeApiDocs: true,
         apiDoc: './apidoc/api-definition-base.yml',
-        paths: './dist/paths',
+        paths: [
+            { path: '/config', module: configHandler },
+            { path: '/players', module: playersHandler },
+            { path: '/players/{playerId}', module: playerByIdHandler },
+            { path: '/status', module: statusHandler },
+            { path: '/streamers', module: streamersHandler },
+            { path: '/streamers/{streamerId}', module: streamerByIdHandler }
+        ],
         dependencies: {
             signallingServer
         }
-    });
+    }).catch((err: unknown) => Logger.error(`REST API initialization failed: ${String(err)}`));
 }

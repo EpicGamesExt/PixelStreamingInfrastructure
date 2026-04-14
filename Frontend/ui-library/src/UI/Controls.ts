@@ -23,7 +23,7 @@ export type ControlsUIConfiguration = {
 
 // If there isn't a type provided, default behaviour is to create the element.
 function shouldCreateButton(type: UIElementConfig | undefined): boolean {
-    return type == undefined ? true : type.creationMode === UIElementCreationMode.CreateDefaultElement;
+    return type === undefined ? true : type.creationMode === UIElementCreationMode.CreateDefaultElement;
 }
 
 /**

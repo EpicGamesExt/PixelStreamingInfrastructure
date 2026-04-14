@@ -26,7 +26,7 @@ export default function (signallingServer: SignallingServer) {
 
     GET.apiDoc = {
         summary: 'Returns the current status of the server.',
-        operationId: 'getConfig',
+        operationId: 'getStatus',
         responses: {
             200: {
                 description: 'The current status of the server.',

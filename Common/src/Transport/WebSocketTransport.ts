@@ -57,7 +57,7 @@ export class WebSocketTransport extends EventEmitter implements ITransport {
             this.webSocket.onmessagebinary = (event: MessageEvent<Blob>) => this.handleOnMessageBinary(event);
             return true;
         } catch (error) {
-            Logger.Error(error as string);
+            Logger.Error(error instanceof Error ? error.message : String(error));
             return false;
         }
     }

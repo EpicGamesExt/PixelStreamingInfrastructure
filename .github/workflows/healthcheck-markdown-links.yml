@@ -1,6 +1,6 @@
 name: Check health of document links
 
-on: 
+on:
   workflow_dispatch:
   # schedule:
   #   - cron: '0 0 * * *'
@@ -18,10 +18,39 @@ jobs:
         with:
           args: --github-token ${{ secrets.WORKFLOW_TOKEN }} --exclude 'localhost' --exclude 'github.com/EpicGames/UnrealEngine' --exclude '.png' --exclude '.jpg' --exclude-path 'SFU/mediasoup-sdp-bridge/README.md' './**/*.md'
 
-      - name: Create Issue From File
+      - name: Find existing link checker issue
+        id: find-issue
+        if: always()
+        uses: actions/github-script@v5
+        with:
+          result-encoding: string
+          script: |
+            const issues = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              labels: 'automated issue',
+            });
+            const existing = issues.data.find(i => i.title === 'Link Checker Report');
+            return existing ? String(existing.number) : '';
+
+      - name: Create or update link checker issue
         if: env.lychee_exit_code != 0
         uses: peter-evans/create-issue-from-file@v4
         with:
           title: Link Checker Report
           content-filepath: ./lychee/out.md
           labels: report, automated issue
+          issue-number: ${{ steps.find-issue.outputs.result }}
+
+      - name: Close existing issue if all links pass
+        if: env.lychee_exit_code == 0 && steps.find-issue.outputs.result != ''
+        uses: actions/github-script@v5
+        with:
+          script: |
+            await github.rest.issues.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: ${{ steps.find-issue.outputs.result }},
+              state: 'closed'
+            });

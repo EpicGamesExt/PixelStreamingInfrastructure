@@ -90,7 +90,7 @@ export class StreamerRegistry extends EventEmitter {
      */
     remove(streamer: IStreamer): boolean {
         const index = this.streamers.indexOf(streamer);
-        if (index == -1) {
+        if (index === -1) {
             Logger.debug(
                 `StreamerRegistry: Tried to remove streamer ${streamer.streamerId} but it doesn't exist`
             );
@@ -105,7 +105,7 @@ export class StreamerRegistry extends EventEmitter {
      * Attempts to find the given streamer id in the registry.
      */
     find(streamerId: string): IStreamer | undefined {
-        return this.streamers.find((streamer) => streamer.streamerId == streamerId);
+        return this.streamers.find((streamer) => streamer.streamerId === streamerId);
     }
 
     /**
@@ -125,7 +125,7 @@ export class StreamerRegistry extends EventEmitter {
      * Returns true when the registry is empty.
      */
     empty(): boolean {
-        return this.streamers.length == 0;
+        return this.streamers.length === 0;
     }
 
     /**
@@ -163,7 +163,7 @@ export class StreamerRegistry extends EventEmitter {
 
             const [, baseId, postfix] = streamer.streamerId.match(idMatchRegex)!;
             // if the id is numeric then base id will be empty and we need to compare with the postfix
-            if ((baseId != '' && baseId != id) || (baseId == '' && postfix != id)) {
+            if ((baseId !== '' && baseId !== id) || (baseId === '' && postfix !== id)) {
                 continue;
             }
             const numPostfix = Number(postfix);
