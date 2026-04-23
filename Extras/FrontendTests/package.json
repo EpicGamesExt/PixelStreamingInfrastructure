@@ -22,6 +22,6 @@
         "@epicgames-ps/lib-pixelstreamingfrontend-ue5.6": "*",
         "dotenv": "^16.4.5",
         "node-fetch": "^2.7.0",
-        "uuid": "^9.0.0"
+        "uuid": "^14.0.0"
     }
 }
