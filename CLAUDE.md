@@ -107,3 +107,11 @@ Key subdirectories: `PixelStreaming/` (main client class), `PeerConnectionContro
 ## Releases and versioning
 
 Uses **Changesets** (`@changesets/cli`) for versioning and changelogs. The `.backportrc.json` enables automatic backporting to prior UE version branches. NPM publishing and Docker image builds are automated via GitHub Actions on release branches.
+
+## Commit conventions
+
+Use **Conventional Commits**. The subject line should be a short, imperative title prefixed with a type (`feat`, `fix`, `chore`, `ci`, `docs`, `refactor`, `test`, `build`, `perf`, `style`), optionally with a scope — e.g. `fix(wilbur): serve REST API without static files`. Keep titles short (roughly ≤ 72 chars).
+
+After a blank line, add a very short brief (one or two sentences) explaining what the commit does and, if non-obvious, why. Skip the brief only for truly trivial commits (typo fixes, lockfile bumps).
+
+Never add a `Co-Authored-By:` trailer. Commit messages should carry only the human author.
