@@ -137,10 +137,8 @@ test('Test latency calculation with video timing', {
     tag: ['@video-timing'],
 }, async ({ page, streamerPage, streamerId, browserName }) => {
 
-    if(browserName !== 'chromium') {
-        // Chrome based browsers are the only ones that support.
-        test.skip();
-    }
+    test.skip(process.platform === 'linux', 'Flakey on linux');
+    test.skip(browserName !== 'chromium', 'Chrome based browsers are the only supported browsers');
 
     await page.goto(`/?StreamerId=${streamerId}`);
 

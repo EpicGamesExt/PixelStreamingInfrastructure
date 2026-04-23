@@ -7,7 +7,8 @@
     "scripts": {
         "test": "npx playwright test",
         "build": "",
-        "clean": ""
+        "clean": "",
+        "lint": ""
     },
     "keywords": [],
     "author": "Epic Games",
