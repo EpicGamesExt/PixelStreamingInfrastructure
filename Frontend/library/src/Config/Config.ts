@@ -65,7 +65,7 @@ export class NumericParameters {
     static MaxReconnectAttempts = 'MaxReconnectAttempts' as const;
     static StreamerAutoJoinInterval = 'StreamerAutoJoinInterval' as const;
     static KeepaliveDelay = 'KeepaliveDelay' as const;
-    static ViewportResolutionScale = 'ViewportResScale' as const;
+    static ViewportResScale = 'ViewportResScale' as const;
 }
 
 export type NumericParametersKeys = Exclude<keyof typeof NumericParameters, 'prototype'>;
@@ -824,16 +824,15 @@ export class Config {
         );
 
         this.numericParameters.set(
-            NumericParameters.ViewportResolutionScale,
+            NumericParameters.ViewportResScale,
             new SettingNumber(
-                NumericParameters.ViewportResolutionScale,
+                NumericParameters.ViewportResScale,
                 'Viewport Resolution Scale',
                 'Scale factor for viewport resolution when MatchViewportResolution is enabled. 1.0 = 100%, 0.5 = 50%, 2.0 = 200%.',
                 0.1 /*min*/,
                 3.0 /*max*/,
-                settings &&
-                Object.prototype.hasOwnProperty.call(settings, NumericParameters.ViewportResolutionScale)
-                    ? settings[NumericParameters.ViewportResolutionScale]
+                settings && Object.prototype.hasOwnProperty.call(settings, NumericParameters.ViewportResScale)
+                    ? settings[NumericParameters.ViewportResScale]
                     : 1.0 /*value*/,
                 useUrlParams
             )
@@ -873,6 +872,14 @@ export class Config {
         } else {
             throw new Error(`There is no numeric setting with the id of ${id}`);
         }
+    }
+
+    /**
+     * @param id The id of the numeric setting to check for.
+     * @returns True if the numeric setting is registered in this Config.
+     */
+    hasNumericSetting(id: NumericParametersIds): boolean {
+        return this.numericParameters.has(id);
     }
 
     /**

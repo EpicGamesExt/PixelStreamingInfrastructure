@@ -203,10 +203,10 @@ export class ConfigUI {
             if (isSettingEnabled(settingsConfig, Flags.MatchViewportResolution))
                 this.addSettingFlag(viewSettingsSection, this.flagsUi.get(Flags.MatchViewportResolution));
 
-            if (isSettingEnabled(settingsConfig, NumericParameters.ViewportResolutionScale))
+            if (isSettingEnabled(settingsConfig, NumericParameters.ViewportResScale))
                 this.addSettingNumeric(
                     viewSettingsSection,
-                    this.numericParametersUi.get(NumericParameters.ViewportResolutionScale)
+                    this.numericParametersUi.get(NumericParameters.ViewportResScale)
                 );
 
             if (isSettingEnabled(settingsConfig, Flags.HoveringMouseMode))
