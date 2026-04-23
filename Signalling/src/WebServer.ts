@@ -40,7 +40,11 @@ export interface IWebServerConfig {
     // If true, connections to http will be redirected to https.
     https_redirect?: boolean;
 
-    serve?: boolean;
+    // If true, serve static content from `root` and a homepage handler at `/`.
+    // Defaults to false. When false, the HTTP listener still runs (so routes
+    // registered by other subsystems, such as a REST API, remain reachable),
+    // but no static files are served.
+    serveStatic?: boolean;
 }
 
 /**
@@ -113,7 +117,17 @@ export class WebServer {
             }
         }
 
-        if (config.serve) {
+        const limiter = RateLimit({
+            windowMs: 60 * 1000, // 1 minute
+            max: config.perMinuteRateLimit ? config.perMinuteRateLimit : 3000
+        });
+
+        // apply rate limiter to all requests. Registered before any route
+        // handler so that static files, the homepage route, and any routes
+        // registered on `app` by downstream code are all subject to it.
+        app.use(limiter);
+
+        if (config.serveStatic) {
             app.use(express.static(config.root));
 
             // Request has been sent to site root, send the homepage file
@@ -133,14 +147,6 @@ export class WebServer {
                 return;
             });
         }
-
-        const limiter = RateLimit({
-            windowMs: 60 * 1000, // 1 minute
-            max: config.perMinuteRateLimit ? config.perMinuteRateLimit : 3000
-        });
-
-        // apply rate limiter to all requests
-        app.use(limiter);
 
         /* eslint-enable @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access */
     }
