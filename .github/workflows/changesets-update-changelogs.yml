@@ -29,42 +29,10 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
-      # Changesets authored on master reference the current UE suffix (e.g.
-      # "@epicgames-ps/lib-pixelstreamingfrontend-ue5.7"). Auto-backport copies
-      # those files verbatim onto older UE release branches where the matching
-      # package has a different suffix (e.g. "...-ue5.6", "...-ue5.5"), and the
-      # changesets CLI then fails with:
-      #   Found changeset ... for package ...-ue5.7 which is not in the workspace
-      # Normalize any "-ueX.Y" suffix inside .changeset/*.md to match the branch
-      # this workflow is running on. Idempotent: a no-op when suffixes already
-      # match. The rewrite lives only in the workflow's working tree; the
-      # changesets action consumes and removes these files as part of the
-      # release PR, so nothing needs to be committed back to the branch.
-      - name: Normalize changeset package suffixes to branch version
-        shell: bash
-        run: |
-          set -euo pipefail
-          branch="${{ github.ref_name }}"
-          if [[ ! "$branch" =~ ^UE([0-9]+\.[0-9]+)$ ]]; then
-            echo "Branch '$branch' is not UEx.y; skipping suffix normalization."
-            exit 0
-          fi
-          ver="${BASH_REMATCH[1]}"
-          echo "Normalizing -ue* suffixes in .changeset/*.md to ue${ver}"
-          shopt -s nullglob
-          rewrote=0
-          for f in .changeset/*.md; do
-            [[ "$(basename "$f")" == "README.md" ]] && continue
-            before="$(cat "$f")"
-            after="$(sed -E "s|(-ue)[0-9]+\.[0-9]+|\1${ver}|g" "$f")"
-            if [[ "$before" != "$after" ]]; then
-              printf '%s' "$after" > "$f"
-              echo "  rewrote $f"
-              rewrote=$((rewrote + 1))
-            fi
-          done
-          echo "Normalized ${rewrote} file(s)."
-
+      # The `version:` script below normalizes "-ueX.Y" suffixes in backported
+      # changeset files so the changesets CLI can resolve them against this
+      # branch's workspace. It runs inside the action's release-branch worktree
+      # (after its internal `git reset --hard`) so the rewrites survive.
       - name: Create Release Pull Request
         uses: changesets/action@v1.4.10
         env:
@@ -72,4 +40,5 @@ jobs:
         with:
           title: '[Bot] NPM Packages Release ${{ github.ref_name }}'
           commit: 'Updated NPM changelogs'
+          version: bash .github/scripts/version-with-normalized-suffixes.sh
 
