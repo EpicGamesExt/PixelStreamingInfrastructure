@@ -1,6 +1,6 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
-import { Config, Flags } from '../Config/Config';
+import { Config, Flags, NumericParameters } from '../Config/Config';
 import { Logger } from '@epicgames-ps/lib-pixelstreamingcommon-ue5.5';
 
 /**
@@ -16,6 +16,9 @@ declare global {
  * The video player html element
  */
 export class VideoPlayer {
+    // Common H.264 maximum encoding dimension. Streams beyond this commonly fail to encode.
+    private static readonly maxEncoderDimension = 4096;
+
     private config: Config;
     private videoElement: HTMLVideoElement;
     private audioElement?: HTMLAudioElement;
@@ -222,10 +225,23 @@ export class VideoPlayer {
                 return;
             }
 
-            this.onMatchViewportResolutionCallback(
-                videoElementParent.clientWidth,
-                videoElementParent.clientHeight
-            );
+            const viewportResolutionScale = this.config.hasNumericSetting(NumericParameters.ViewportResScale)
+                ? this.config.getNumericSettingValue(NumericParameters.ViewportResScale)
+                : 1.0;
+
+            const scaledWidth = Math.round(videoElementParent.clientWidth * viewportResolutionScale);
+            const scaledHeight = Math.round(videoElementParent.clientHeight * viewportResolutionScale);
+
+            if (
+                scaledWidth > VideoPlayer.maxEncoderDimension ||
+                scaledHeight > VideoPlayer.maxEncoderDimension
+            ) {
+                Logger.Warning(
+                    `Requested stream resolution (${scaledWidth}x${scaledHeight}) exceeds the common H.264 encoder limit of ${VideoPlayer.maxEncoderDimension}x${VideoPlayer.maxEncoderDimension}; encoding may fail. Lower ViewportResScale or disable MatchViewportResolution.`
+                );
+            }
+
+            this.onMatchViewportResolutionCallback(scaledWidth, scaledHeight);
 
             this.lastTimeResized = new Date().getTime();
         } else {
