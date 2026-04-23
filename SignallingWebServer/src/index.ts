@@ -248,12 +248,21 @@ const serverOpts: IServerConfig = {
     maxSubscribers: options.max_players
 };
 
-if (options.serve) {
+const shouldServerStart = options.serve || options.rest_api;
+if (shouldServerStart) {
     const webserverOptions: IWebServerConfig = {
         httpPort: options.player_port,
         root: options.http_root,
-        homepageFile: options.homepage
+        homepageFile: options.homepage,
+        serveStatic: options.serve
     };
+
+    if (options.serve) {
+        Logger.info('Static file serving enabled.');
+    } else if (options.rest_api) {
+        Logger.info('REST API enabled; static file serving disabled.');
+    }
+
     if (options.https) {
         webserverOptions.httpsPort = options.https_port;
         const sslKeyPath = path.join(__dirname, '..', options.ssl_key_path);
