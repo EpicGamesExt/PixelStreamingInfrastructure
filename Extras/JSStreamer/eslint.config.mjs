@@ -13,7 +13,8 @@ export default tseslint.config(
         languageOptions: {
             parser: tseslint.parser,
             parserOptions: {
-                project: 'Extras/JSStreamer/tsconfig.cjs.json',
+                project: 'tsconfig.cjs.json',
+                tsconfigRootDir: import.meta.dirname,
             },
         },
         files: ["src/**/*.ts"],
