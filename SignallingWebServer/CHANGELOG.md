@@ -1,11 +1,21 @@
 # @epicgames-ps/wilbur
 
+## 3.0.2
+
+### Patch Changes
+
+- 5696f2e: Make `npm run lint` work regardless of the directory it's invoked from. Each workspace's `eslint.config.mjs` now pins `parserOptions.tsconfigRootDir` to `import.meta.dirname`, so `parserOptions.project` resolves relative to the config file's own directory rather than whichever CWD `typescript-eslint` happens to pick by default. Previously the six workspace configs prefixed `project` with the workspace directory (e.g. `'Common/tsconfig.cjs.json'`), which only worked under one specific `typescript-eslint` version's resolution behavior and broke CI when run from within the workspace.
+- 9308aa4: Make the REST API reachable when Wilbur is started with `--rest_api` but without `--serve`. Previously the Express app that hosts the `/api/*` routes was only bound to an HTTP listener inside the `serve` branch, so with `--serve=false --rest_api=true` the listener never started and requests were answered by the WebSocket upgrade handler on the player port (`426 Upgrade Required`). The HTTP listener now starts whenever `rest_api` or `serve` is set. Static file serving and the homepage route are gated by a new `IWebServerConfig.serveStatic` flag (the port listener runs independently of static serving), and the rate limiter is registered before any route handlers so the homepage and any downstream-registered routes are all rate-limited. Wilbur logs at startup which mode it is running in.
+- Updated dependencies [c3e46a8]
+- Updated dependencies [5696f2e]
+- Updated dependencies [9308aa4]
+    - @epicgames-ps/lib-pixelstreamingsignalling-ue5.7@0.3.0
+
 ## 2.3.0
 
 ### Minor Changes
 
 - 3bb3101: Updates to platform_scripts to fix argument passing to Wilbur.
-
     - Added separator between script parameters and signalling server parameters when using platform scripts
         - From now on, anything after the `--` marker on the command line is passed directly to Wilbur.
         - Parameters before this marker are intended for the scripts. These parameters are validated and unknown parameters will cause an error.
