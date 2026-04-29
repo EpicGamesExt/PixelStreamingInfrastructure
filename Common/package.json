@@ -26,16 +26,16 @@
         "@protobuf-ts/plugin": "^2.9.4",
         "@types/node": "^22.14.0",
         "concurrently": "^9.1.2",
-        "eslint": "^9.20.0",
+        "eslint": "^9.39.0",
         "eslint-config-prettier": "^10.0.1",
         "eslint-plugin-prettier": "^5.2.3",
         "eslint-plugin-tsdoc": "^0.4.0",
         "nodemon": "^3.1.9",
         "rimraf": "^6.0.1",
-        "typedoc": "^0.28.0",
+        "typedoc": "~0.28.18",
         "typedoc-plugin-markdown": "^4.4.2",
         "typescript": "^5.7.3",
-        "typescript-eslint": "^8.24.0"
+        "typescript-eslint": "8.57.2"
     },
     "dependencies": {
         "@protobuf-ts/runtime": "^2.9.4",

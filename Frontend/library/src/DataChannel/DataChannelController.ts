@@ -35,7 +35,7 @@ export class DataChannelController {
         this.label = label;
         this.datachannelOptions = datachannelOptions;
         if (datachannelOptions == null) {
-            this.datachannelOptions = {} as RTCDataChannelInit;
+            this.datachannelOptions = {};
             this.datachannelOptions.ordered = true;
         }
 
@@ -74,7 +74,7 @@ export class DataChannelController {
      */
     handleOnMessage(event: MessageEvent) {
         // Higher log level to prevent log spam with messages received
-        Logger.Info(`Data Channel (${this.label}) message: ${event}`);
+        Logger.Info(`Data Channel (${this.label}) message: ${event.type}`);
     }
 
     /**
@@ -82,7 +82,7 @@ export class DataChannelController {
      * @param event - Error Event
      */
     handleOnError(event: Event) {
-        Logger.Info(`Data Channel (${this.label}) error: ${event}`);
+        Logger.Info(`Data Channel (${this.label}) error: ${event.type}`);
         this.onError(this.dataChannel?.label, event);
     }
 

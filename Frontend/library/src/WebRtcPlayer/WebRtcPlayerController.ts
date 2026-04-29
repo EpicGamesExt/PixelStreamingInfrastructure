@@ -175,7 +175,7 @@ export class WebRtcPlayerController {
         this.transport = new WebSocketTransport(config.webSocketProtocols);
         this.protocol = new SignallingProtocol(this.transport);
         this.protocol.addListener(Messages.config.typeName, (msg: BaseMessage) =>
-            this.handleOnConfigMessage(msg as Messages.config)
+            this.handleOnConfigMessage(msg)
         );
         this.protocol.addListener(Messages.ping.typeName, (msg: BaseMessage) =>
             this.handlePingMessage(msg as Messages.ping)
@@ -248,7 +248,7 @@ export class WebRtcPlayerController {
             this.afkController.stopAfkWarningTimer();
 
             // stop sending stats on interval if we have closed our connection
-            if (this.statsTimerHandle && this.statsTimerHandle !== undefined) {
+            if (this.statsTimerHandle) {
                 window.clearInterval(this.statsTimerHandle);
             }
 

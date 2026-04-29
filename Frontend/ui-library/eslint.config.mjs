@@ -12,7 +12,8 @@ export default tseslint.config(
         languageOptions: {
             parser: tseslint.parser,
             parserOptions: {
-                project: 'Frontend/ui-library/tsconfig.json',
+                project: 'tsconfig.json',
+                tsconfigRootDir: import.meta.dirname,
             },
         },
         files: ["src/**/*.ts"],
@@ -26,17 +27,9 @@ export default tseslint.config(
             "@typescript-eslint/no-unsafe-assignment": "off",
             "@typescript-eslint/no-unsafe-argument": "off",
             "@typescript-eslint/no-unsafe-return": "off",
-            "@typescript-eslint/no-floating-promises": "off",
             "@typescript-eslint/restrict-plus-operands": "off",
             "@typescript-eslint/unbound-method": "off",
-            "@typescript-eslint/no-duplicate-type-constituents": "off",
-            "@typescript-eslint/no-redundant-type-constituents": "off",
             "@typescript-eslint/restrict-template-expressions": "off",
-            "@typescript-eslint/no-unnecessary-type-assertion": "off",
-            "@typescript-eslint/no-array-delete": "off",
-            "@typescript-eslint/no-unsafe-enum-comparison": "off",
-            "@typescript-eslint/require-await": "off",
-            "@typescript-eslint/no-base-to-string": "off",
             "no-unused-vars": "off",
             "@typescript-eslint/no-unused-vars": [
                 "error",

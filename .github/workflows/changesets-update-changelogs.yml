@@ -18,16 +18,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup Node.js 20.x
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 20.x
+          cache: 'npm'
 
       - name: Install Dependencies
         run: npm install
 
+      # The `version:` script below normalizes "-ueX.Y" suffixes in backported
+      # changeset files so the changesets CLI can resolve them against this
+      # branch's workspace. It runs inside the action's release-branch worktree
+      # (after its internal `git reset --hard`) so the rewrites survive.
       - name: Create Release Pull Request
         uses: changesets/action@v1.4.10
         env:
@@ -35,4 +40,5 @@ jobs:
         with:
           title: '[Bot] NPM Packages Release ${{ github.ref_name }}'
           commit: 'Updated NPM changelogs'
+          version: bash .github/scripts/version-with-normalized-suffixes.sh
 

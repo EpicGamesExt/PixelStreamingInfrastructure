@@ -15,7 +15,7 @@
     "license": "MIT",
     "devDependencies": {
         "@playwright/test": "^1.49.1",
-        "@types/node": "^20.12.7",
+        "@types/node": "^22.14.0",
         "@types/uuid": "^9.0.8"
     },
     "dependencies": {
@@ -23,6 +23,6 @@
         "@epicgames-ps/lib-pixelstreamingfrontend-ue5.7": "*",
         "dotenv": "^16.4.5",
         "node-fetch": "^2.7.0",
-        "uuid": "^9.0.0"
+        "uuid": "^14.0.0"
     }
 }
