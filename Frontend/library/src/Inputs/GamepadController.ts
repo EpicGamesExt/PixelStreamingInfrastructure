@@ -170,10 +170,10 @@ export class GamepadController implements IInputController {
                 const previousButton = controller.prevState.buttons[i];
                 if (currentButton.pressed) {
                     // press
-                    if (i === Number(GamepadLayout.LeftTrigger)) {
+                    if ((i as GamepadLayout) === GamepadLayout.LeftTrigger) {
                         // UEs left analog has a button index of 5
                         toStreamerHandlers.get('GamepadAnalog')([controllerId, 5, currentButton.value]);
-                    } else if (i === Number(GamepadLayout.RightTrigger)) {
+                    } else if ((i as GamepadLayout) === GamepadLayout.RightTrigger) {
                         // UEs right analog has a button index of 6
                         toStreamerHandlers.get('GamepadAnalog')([controllerId, 6, currentButton.value]);
                     } else {
@@ -185,10 +185,10 @@ export class GamepadController implements IInputController {
                     }
                 } else if (!currentButton.pressed && previousButton.pressed) {
                     // release
-                    if (i === Number(GamepadLayout.LeftTrigger)) {
+                    if ((i as GamepadLayout) === GamepadLayout.LeftTrigger) {
                         // UEs left analog has a button index of 5
                         toStreamerHandlers.get('GamepadAnalog')([controllerId, 5, 0]);
-                    } else if (i === Number(GamepadLayout.RightTrigger)) {
+                    } else if ((i as GamepadLayout) === GamepadLayout.RightTrigger) {
                         // UEs right analog has a button index of 6
                         toStreamerHandlers.get('GamepadAnalog')([controllerId, 6, 0]);
                     } else {

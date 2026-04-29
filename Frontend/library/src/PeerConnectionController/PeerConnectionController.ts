@@ -173,8 +173,12 @@ export class PeerConnectionController {
     generateStats() {
         void this.peerConnection?.getStats().then((statsData: RTCStatsReport) => {
             this.aggregatedStats.processStats(statsData);
-
             this.onVideoStats(this.aggregatedStats);
+
+            // Connection might have been closed in the meantime
+            if (!this.peerConnection) {
+                return;
+            }
 
             // Calculate latency using stats and video receivers and then call the handling function
             const latencyInfo: LatencyInfo = this.latencyCalculator.calculate(
