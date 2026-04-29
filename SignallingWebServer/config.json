@@ -3,7 +3,7 @@
 	"log_level_console": "info",
 	"log_level_file": "info",
 	"streamer_port": "8888",
-	"player_port": "80",
+	"player_port": "88",
 	"sfu_port": "8889",
 	"serve": true,
 	"http_root": "D:\\PixelStreamingInfrastructure\\SignallingWebServer\\www",
