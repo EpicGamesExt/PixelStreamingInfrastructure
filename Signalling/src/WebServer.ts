@@ -5,11 +5,39 @@ import fs from 'fs';
 import http from 'http';
 import https from 'https';
 import helmet from 'helmet';
+import cors from 'cors';
 import { Logger } from './Logger';
 import RateLimit from 'express-rate-limit';
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 const hsts = require('hsts');
+
+/**
+ * Options for configuring CORS on the Express app. When `enabled` is true the
+ * `cors` middleware is registered so that browser-based clients hosted on a
+ * different origin (e.g. a custom frontend) can call the REST API or other
+ * routes mounted on the app. Use `allowedOrigins` to restrict which origins
+ * are accepted; an empty / unset list means "allow all origins" (`*`).
+ */
+export interface ICorsConfig {
+    // If false (or unset) no CORS headers are added. Defaults to false.
+    enabled?: boolean;
+
+    // List of origins to allow. If empty/unset, all origins are allowed.
+    allowedOrigins?: string[];
+
+    // List of HTTP methods to allow. Defaults to the `cors` package default
+    // (`GET,HEAD,PUT,PATCH,POST,DELETE`).
+    allowedMethods?: string[];
+
+    // List of request headers to allow. If unset, the `cors` package mirrors
+    // the request's `Access-Control-Request-Headers` header.
+    allowedHeaders?: string[];
+
+    // Whether the request can include credentials (cookies, auth headers).
+    // Defaults to false.
+    credentials?: boolean;
+}
 
 /**
  * An interface that describes the possible options to pass to
@@ -45,6 +73,11 @@ export interface IWebServerConfig {
     // registered by other subsystems, such as a REST API, remain reachable),
     // but no static files are served.
     serveStatic?: boolean;
+
+    // Optional CORS configuration. When `cors.enabled` is true the cors
+    // middleware is registered before the rate limiter and any route handlers,
+    // so that all routes mounted on the app respond with CORS headers.
+    cors?: ICorsConfig;
 }
 
 /**
@@ -115,6 +148,33 @@ export class WebServer {
                     next();
                 });
             }
+        }
+
+        if (config.cors?.enabled) {
+            const corsOptions: cors.CorsOptions = {};
+
+            if (config.cors.allowedOrigins && config.cors.allowedOrigins.length > 0) {
+                corsOptions.origin = config.cors.allowedOrigins;
+            }
+            if (config.cors.allowedMethods && config.cors.allowedMethods.length > 0) {
+                corsOptions.methods = config.cors.allowedMethods;
+            }
+            if (config.cors.allowedHeaders && config.cors.allowedHeaders.length > 0) {
+                corsOptions.allowedHeaders = config.cors.allowedHeaders;
+            }
+            if (config.cors.credentials) {
+                corsOptions.credentials = true;
+            }
+
+            // Register cors before the rate limiter so that preflight (OPTIONS)
+            // requests are answered with CORS headers even when an origin is
+            // close to the rate limit, and before any route handlers so the
+            // homepage, static files, and the REST API all respond uniformly.
+            app.use(cors(corsOptions));
+
+            Logger.info(
+                `CORS enabled. Allowed origins: ${corsOptions.origin ? JSON.stringify(corsOptions.origin) : '*'}`
+            );
         }
 
         const limiter = RateLimit({
