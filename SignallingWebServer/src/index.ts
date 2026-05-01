@@ -145,6 +145,31 @@ program
         'Enables the rest API interface that can be accessed at <server_url>/api/api-definition',
         config_file.rest_api || false
     )
+    .option(
+        '--cors',
+        'Enables CORS headers on the webserver. Required for browser-based clients hosted on a different origin to call routes such as the REST API.',
+        config_file.cors || false
+    )
+    .option(
+        '--cors_allowed_origins <origins>',
+        'Comma-separated list of allowed origins (e.g. "https://example.com,https://other.example.com"). If omitted, all origins are allowed.',
+        config_file.cors_allowed_origins || ''
+    )
+    .option(
+        '--cors_allowed_methods <methods>',
+        'Comma-separated list of allowed HTTP methods. Defaults to the cors middleware default if omitted.',
+        config_file.cors_allowed_methods || ''
+    )
+    .option(
+        '--cors_allowed_headers <headers>',
+        "Comma-separated list of allowed request headers. If omitted, the request's Access-Control-Request-Headers value is mirrored.",
+        config_file.cors_allowed_headers || ''
+    )
+    .option(
+        '--cors_credentials',
+        'Allow credentials (cookies, authorization headers) on cross-origin requests.',
+        config_file.cors_credentials || false
+    )
     .addOption(
         new Option(
             '--peer_options <json-string>',
@@ -256,6 +281,24 @@ if (shouldServerStart) {
         homepageFile: options.homepage,
         serveStatic: options.serve
     };
+
+    if (options.cors) {
+        const splitCsv = (value: unknown): string[] => {
+            if (typeof value !== 'string' || value.length === 0) return [];
+            return value
+                .split(',')
+                .map((s) => s.trim())
+                .filter((s) => s.length > 0);
+        };
+
+        webserverOptions.cors = {
+            enabled: true,
+            allowedOrigins: splitCsv(options.cors_allowed_origins),
+            allowedMethods: splitCsv(options.cors_allowed_methods),
+            allowedHeaders: splitCsv(options.cors_allowed_headers),
+            credentials: !!options.cors_credentials
+        };
+    }
 
     if (options.serve) {
         Logger.info('Static file serving enabled.');
