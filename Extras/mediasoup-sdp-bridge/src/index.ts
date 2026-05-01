@@ -1,6 +1,6 @@
-import * as MsSdpUtils from "mediasoup-client/lib/handlers/sdp/commonUtils";
-import { RemoteSdp } from "mediasoup-client/lib/handlers/sdp/RemoteSdp";
-import { IceCandidate as ClientIceCandidate } from "mediasoup-client/lib/Transport";
+import * as MsSdpUtils from "mediasoup-client/handlers/sdp/commonUtils";
+import { RemoteSdp } from "mediasoup-client/handlers/sdp/RemoteSdp";
+import { IceCandidate as ClientIceCandidate } from "mediasoup-client/types";
 
 import {
   Consumer,
@@ -208,7 +208,6 @@ export class SdpEndpoint {
         offerRtpParameters: this.producerOfferParams[i],
         answerRtpParameters: this.producers[i].rtpParameters,
         codecOptions: undefined,
-        extmapAllowMixed: false,
       });
     }
 
