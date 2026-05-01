@@ -19,7 +19,13 @@ jobs:
       - name: Backport Action
         uses: sqren/backport-github-action@v8.9.3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          # Prefer a PAT when configured. PRs opened with the default
+          # GITHUB_TOKEN don't trigger downstream `pull_request` workflows
+          # (anti-recursion limit), which means CI does not run on backport
+          # PRs. Configure a repo or org secret named BACKPORT_PAT
+          # (PAT with `repo` scope) to fix that. Falls back to GITHUB_TOKEN
+          # if the secret is not set, preserving the prior behavior.
+          github_token: ${{ secrets.BACKPORT_PAT || secrets.GITHUB_TOKEN }}
           auto_backport_label_prefix: auto-backport-to-
           add_original_reviewers: true
 
