@@ -64,7 +64,7 @@
     "jest": "^29.7.0",
     "jest-tobetype": "^1.2.3",
     "mediasoup": "3.15.5",
-    "mediasoup-client": "3.9.1",
+    "mediasoup-client": "~3.10.0",
     "open-cli": "^6.0.1",
     "prettier": "~2.5.0",
     "tsc-watch": "^4.2.8",
@@ -72,6 +72,6 @@
   },
   "peerDependencies": {
     "mediasoup": "^3.0.0",
-    "mediasoup-client": "^3.0.0"
+    "mediasoup-client": ">=3.10.0 <3.11.0"
   }
 }
