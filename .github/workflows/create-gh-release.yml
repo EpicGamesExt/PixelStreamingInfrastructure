@@ -36,6 +36,21 @@ jobs:
       id: getversion
       run: echo "version=$(cat RELEASE_VERSION)" >> $GITHUB_OUTPUT
 
+    - name: Setup Node.js 20.x
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20.x
+
+    - name: Aggregate workspace CHANGELOGs
+      id: aggchangelog
+      run: |
+        # Build an aggregated changelog from each workspace's CHANGELOG.md
+        # (#596). Written to a file so it can be appended to release notes
+        # via the release-action `body` input below.
+        node .github/scripts/aggregate-changelogs.mjs --branch '${{ github.ref_name }}' \
+          > /tmp/aggregated-changelog.md
+        echo "path=/tmp/aggregated-changelog.md" >> $GITHUB_OUTPUT
+
     - name: Move all content into output directory for archiving
       run: |
         items=(*)
@@ -81,5 +96,8 @@ jobs:
       with:
         tag: "${{ github.ref_name }}-${{ steps.getversion.outputs.version }}"
         artifacts: "${{ github.ref_name }}-${{ steps.getversion.outputs.version }}.zip,${{ github.ref_name }}-${{ steps.getversion.outputs.version }}.tar.gz"
+        # Auto-generated PR list, plus the aggregated workspace CHANGELOGs
+        # appended below via `bodyFile` (#596).
         generateReleaseNotes: true
+        bodyFile: ${{ steps.aggchangelog.outputs.path }}
         commit: "${{ env.commitsha }}"
