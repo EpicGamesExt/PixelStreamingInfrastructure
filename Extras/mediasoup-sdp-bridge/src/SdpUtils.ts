@@ -1,10 +1,10 @@
 // TODO, FIXME: Here we're assuming that Unified Plan is the correct way to
 // handle the SDP messages. For a more robust handling, this should probably
 // depend on the actual type of SDP: plain, PlanB, or UnifiedPlan.
-import * as MsSdpUnifiedPlanUtils from "mediasoup-client/lib/handlers/sdp/unifiedPlanUtils";
+import * as MsSdpUnifiedPlanUtils from "mediasoup-client/handlers/sdp/unifiedPlanUtils";
 
-import * as MsSdpUtils from "mediasoup-client/lib/handlers/sdp/commonUtils";
-import * as MsOrtc from "mediasoup-client/lib/ortc";
+import * as MsSdpUtils from "mediasoup-client/handlers/sdp/commonUtils";
+import * as MsOrtc from "mediasoup-client/ortc";
 import {
   MediaKind,
   RtpCapabilities,
