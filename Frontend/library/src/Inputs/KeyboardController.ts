@@ -130,6 +130,16 @@ export class KeyboardController implements IInputController {
             return SpecialKeyCodes.rightControl;
         } else if (keyboardEvent.keyCode === SpecialKeyCodes.alt && keyboardEvent.code === 'AltRight') {
             return SpecialKeyCodes.rightAlt;
+        } else if (keyboardEvent.code === 'MetaLeft' || keyboardEvent.code === 'OSLeft') {
+            // Browsers disagree on the legacy keyCode for the left Cmd/Win
+            // key (Chrome/Safari report 91, Firefox on Mac reports 224).
+            // Normalize using `code`. UE LeftWindowKey is 91.
+            return CodeToKeyCode['MetaLeft'];
+        } else if (keyboardEvent.code === 'MetaRight' || keyboardEvent.code === 'OSRight') {
+            // Right Cmd/Win has the same browser disagreement, and on
+            // Chrome/Safari it shares keyCode 93 with the ContextMenu key.
+            // Normalize to 92 (UE RightWindowKey).
+            return CodeToKeyCode['MetaRight'];
         } else {
             return keyboardEvent.keyCode;
         }
