@@ -110,5 +110,17 @@ export const CodeToKeyCode: ICodeToKeyCode = Object.freeze({
     PageDown: 34,
     Insert: 45,
     Delete: 46,
-    ContextMenu: 93
+    ContextMenu: 93,
+    // macOS Command and Windows Meta keys. The UE side maps key codes 91/92
+    // to LeftWindowKey/RightWindowKey (currently routed to EKeys::Invalid in
+    // stock UE — Epic-internal ticket UE-228795 enables them). Sending the
+    // codes from the frontend is harmless when UE has no binding and lets
+    // applications that patch UE handle Cmd/Win shortcuts.
+    MetaLeft: 91,
+    MetaRight: 92,
+    // Legacy KeyboardEvent.code values some browsers historically emitted
+    // for the same physical keys. Keep them mapped so we don't drop input
+    // on older browsers.
+    OSLeft: 91,
+    OSRight: 92
 });
