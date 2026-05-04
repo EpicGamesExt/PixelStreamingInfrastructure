@@ -4,6 +4,7 @@ import { InputCoordTranslator } from '../Util/InputCoordTranslator';
 import { VideoPlayer } from '../VideoPlayer/VideoPlayer';
 import type { ActiveKeys } from './InputClassesFactory';
 import { MouseController } from './MouseController';
+import { Config, Flags } from '../Config/Config';
 
 /**
  * A mouse controller that allows the mouse to freely float over the video document.
@@ -22,9 +23,10 @@ export class MouseControllerHovering extends MouseController {
         streamMessageController: StreamMessageController,
         videoPlayer: VideoPlayer,
         coordinateConverter: InputCoordTranslator,
-        activeKeys: ActiveKeys
+        activeKeys: ActiveKeys,
+        config: Config
     ) {
-        super(streamMessageController, videoPlayer, coordinateConverter, activeKeys);
+        super(streamMessageController, videoPlayer, coordinateConverter, activeKeys, config);
         this.videoElementParent = videoPlayer.getVideoParentElement() as HTMLDivElement;
         this.onMouseUpListener = this.onMouseUp.bind(this);
         this.onMouseDownListener = this.onMouseDown.bind(this);
@@ -115,5 +117,16 @@ export class MouseControllerHovering extends MouseController {
         }
         const coord = this.coordinateConverter.translateUnsigned(event.offsetX, event.offsetY);
         this.streamMessageController.toStreamerHandlers.get('MouseDouble')([event.button, coord.x, coord.y]);
+
+        // The streamer plugin treats `MouseDouble` as a press-class event (it routes to
+        // Slate's RoutePointerDoubleClickEvent / IGenericApplicationMessageHandler::OnMouseDoubleClick)
+        // but never synthesizes the matching release. The browser's preceding `mouseup` was
+        // already consumed by the prior `MouseUp` message, so without this UE is left thinking
+        // the button is still held — manifesting as e.g. camera pans that latch on after a
+        // double-click. See issue #10.
+        // Disable Flags.MouseDoubleClickAutoRelease to restore the pre-fix behaviour.
+        if (this.config.isFlagEnabled(Flags.MouseDoubleClickAutoRelease)) {
+            this.streamMessageController.toStreamerHandlers.get('MouseUp')([event.button, coord.x, coord.y]);
+        }
     }
 }
