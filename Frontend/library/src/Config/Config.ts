@@ -33,6 +33,7 @@ export class Flags {
     static TouchInput = 'TouchInput' as const;
     static GamepadInput = 'GamepadInput' as const;
     static XRControllerInput = 'XRControllerInput' as const;
+    static AutoEnterVR = 'AutoEnterVR' as const;
     static WaitForStreamer = 'WaitForStreamer' as const;
     static HideUI = 'HideUI' as const;
     static EnableCaptureTimeExt = 'EnableCaptureTimeExt' as const;
@@ -538,6 +539,19 @@ export class Config {
                 settings && Object.prototype.hasOwnProperty.call(settings, Flags.XRControllerInput)
                     ? settings[Flags.XRControllerInput]
                     : true,
+                useUrlParams
+            )
+        );
+
+        this.flags.set(
+            Flags.AutoEnterVR,
+            new SettingFlag(
+                Flags.AutoEnterVR,
+                'Auto enter VR',
+                'When the video is ready and an immersive-vr session is supported, request the WebXR session automatically. May fail if the browser requires a user gesture to start a WebXR session.',
+                settings && Object.prototype.hasOwnProperty.call(settings, Flags.AutoEnterVR)
+                    ? settings[Flags.AutoEnterVR]
+                    : false,
                 useUrlParams
             )
         );
