@@ -518,6 +518,32 @@ export class PixelStreaming {
     _onVideoInitialized() {
         this._eventEmitter.dispatchEvent(new VideoInitializedEvent());
         this._videoStartTime = Date.now();
+        this.checkForAutoEnterVR();
+    }
+
+    /**
+     * If the AutoEnterVR flag is set and an immersive-vr session is supported,
+     * request the WebXR session. Browsers typically require a user gesture for
+     * `requestSession`; if no gesture is currently active the request will be
+     * rejected and a warning is logged. Callers that need a guaranteed entry
+     * (e.g. AutoConnect from a fresh page load) should still wire up a button.
+     */
+    private checkForAutoEnterVR() {
+        if (!this.config.isFlagEnabled(Flags.AutoEnterVR)) {
+            return;
+        }
+        WebXRController.isSessionSupported('immersive-vr')
+            .then((supported: boolean) => {
+                if (!supported) {
+                    Logger.Info('AutoEnterVR is on but immersive-vr is not supported on this device.');
+                    return;
+                }
+                this._webXrController.xrClicked();
+            })
+            .catch((err: unknown) => {
+                const msg = err instanceof Error ? err.message : JSON.stringify(err);
+                Logger.Warning(`AutoEnterVR check failed: ${msg}`);
+            });
     }
 
     /**
