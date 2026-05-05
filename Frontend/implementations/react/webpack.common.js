@@ -59,7 +59,12 @@ module.exports = {
       filename: '[name].js',
       library: 'epicgames-react-frontend',
       libraryTarget: 'umd',
-      path: path.resolve(__dirname, '../../../SignallingWebServer/www'),
+      // Output to a local dist/ rather than SignallingWebServer/www so this build
+      // doesn't clobber the TypeScript reference frontend that Wilbur serves by default.
+      // To have Wilbur serve this bundle, point it at dist/ via --http_root.
+      path: process.env.WEBPACK_OUTPUT_PATH
+          ? path.resolve(process.env.WEBPACK_OUTPUT_PATH)
+          : path.resolve(__dirname, './dist'),
       clean: true,
       globalObject: 'this',
       hashFunction: 'xxhash64',
@@ -69,7 +74,7 @@ module.exports = {
     },
 	devServer: {
     	static: {
-    		directory: path.join(__dirname, '../../../SignallingWebServer/www'),
+    		directory: path.join(__dirname, './dist'),
     	},
     },
 }
