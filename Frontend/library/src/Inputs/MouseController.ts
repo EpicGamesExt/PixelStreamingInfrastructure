@@ -5,6 +5,7 @@ import { InputCoordTranslator } from '../Util/InputCoordTranslator';
 import { VideoPlayer } from '../VideoPlayer/VideoPlayer';
 import type { ActiveKeys } from './InputClassesFactory';
 import { IInputController } from './IInputController';
+import { Config } from '../Config/Config';
 
 /**
  * Extra types for Document and WheelEvent
@@ -29,6 +30,7 @@ export class MouseController implements IInputController {
     streamMessageController: StreamMessageController;
     coordinateConverter: InputCoordTranslator;
     activeKeys: ActiveKeys;
+    config: Config;
 
     // bound listeners
     onEnterListener: (event: MouseEvent) => void;
@@ -38,12 +40,14 @@ export class MouseController implements IInputController {
         streamMessageController: StreamMessageController,
         videoPlayer: VideoPlayer,
         coordinateConverter: InputCoordTranslator,
-        activeKeys: ActiveKeys
+        activeKeys: ActiveKeys,
+        config: Config
     ) {
         this.streamMessageController = streamMessageController;
         this.coordinateConverter = coordinateConverter;
         this.videoPlayer = videoPlayer;
         this.activeKeys = activeKeys;
+        this.config = config;
 
         this.onEnterListener = this.onMouseEnter.bind(this);
         this.onLeaveListener = this.onMouseLeave.bind(this);
