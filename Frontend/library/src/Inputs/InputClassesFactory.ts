@@ -56,7 +56,7 @@ export class InputClassesFactory {
      * register mouse events based on a control type
      * @param controlScheme - if the mouse is either hovering or locked
      */
-    registerMouse(controlScheme: ControlSchemeType) {
+    registerMouse(controlScheme: ControlSchemeType, config: Config) {
         Logger.Info('Register Mouse Events');
         let mouseController: MouseController;
         if (controlScheme == ControlSchemeType.HoveringMouse) {
@@ -64,14 +64,16 @@ export class InputClassesFactory {
                 this.toStreamerMessagesProvider,
                 this.videoElementProvider,
                 this.coordinateConverter,
-                this.activeKeys
+                this.activeKeys,
+                config
             );
         } else {
             mouseController = new MouseControllerLocked(
                 this.toStreamerMessagesProvider,
                 this.videoElementProvider,
                 this.coordinateConverter,
-                this.activeKeys
+                this.activeKeys,
+                config
             );
         }
 
