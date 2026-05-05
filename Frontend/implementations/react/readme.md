@@ -15,3 +15,16 @@ To build and run the React application, run:
 - `npm install`
 - `npm run build-all`
 - `npm run serve`
+
+### Serving via Wilbur
+
+Webpack outputs this bundle to `Frontend/implementations/react/dist/` (rather than `SignallingWebServer/www/`, which is reserved for the TypeScript reference frontend). To have Wilbur serve the React bundle, pass its path via `--http_root`:
+
+```bash
+# Build the React bundle, then start Wilbur pointed at it
+npm run build --workspace Frontend/implementations/react
+./SignallingWebServer/platform_scripts/bash/start.sh \
+    --http_root="$(pwd)/Frontend/implementations/react/dist"
+```
+
+If you want webpack to write somewhere else (for example, to drop the bundle directly into a deploy directory), set `WEBPACK_OUTPUT_PATH` before running the build.
