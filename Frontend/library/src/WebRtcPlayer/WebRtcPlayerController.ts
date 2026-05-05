@@ -1952,7 +1952,7 @@ export class WebRtcPlayerController {
             const mouseMode = this.config.isFlagEnabled(Flags.HoveringMouseMode)
                 ? ControlSchemeType.HoveringMouse
                 : ControlSchemeType.LockedMouse;
-            this.mouseController = this.inputClassesFactory.registerMouse(mouseMode);
+            this.mouseController = this.inputClassesFactory.registerMouse(mouseMode, this.config);
         }
     }
 

@@ -220,6 +220,12 @@ export class ConfigUI {
             if (isSettingEnabled(settingsConfig, Flags.MouseInput))
                 this.addSettingFlag(inputSettingsSection, this.flagsUi.get(Flags.MouseInput));
 
+            if (isSettingEnabled(settingsConfig, Flags.MouseDoubleClickAutoRelease))
+                this.addSettingFlag(
+                    inputSettingsSection,
+                    this.flagsUi.get(Flags.MouseDoubleClickAutoRelease)
+                );
+
             if (isSettingEnabled(settingsConfig, Flags.FakeMouseWithTouches))
                 this.addSettingFlag(inputSettingsSection, this.flagsUi.get(Flags.FakeMouseWithTouches));
 

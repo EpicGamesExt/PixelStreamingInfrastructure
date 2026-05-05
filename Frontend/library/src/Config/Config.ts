@@ -30,6 +30,7 @@ export class Flags {
     static UseCamera = 'UseCamera' as const;
     static KeyboardInput = 'KeyboardInput' as const;
     static MouseInput = 'MouseInput' as const;
+    static MouseDoubleClickAutoRelease = 'MouseDoubleClickAutoRelease' as const;
     static TouchInput = 'TouchInput' as const;
     static GamepadInput = 'GamepadInput' as const;
     static XRControllerInput = 'XRControllerInput' as const;
@@ -499,6 +500,19 @@ export class Config {
                 'If enabled, send mouse events to streamer',
                 settings && Object.prototype.hasOwnProperty.call(settings, Flags.MouseInput)
                     ? settings[Flags.MouseInput]
+                    : true,
+                useUrlParams
+            )
+        );
+
+        this.flags.set(
+            Flags.MouseDoubleClickAutoRelease,
+            new SettingFlag(
+                Flags.MouseDoubleClickAutoRelease,
+                'Auto release after double-click',
+                'After sending a MouseDouble message, also send a matching MouseUp so the streamer’s pressed-button state stays balanced. Disable to restore pre-fix behaviour if your project handles the doubleclick release itself.',
+                settings && Object.prototype.hasOwnProperty.call(settings, Flags.MouseDoubleClickAutoRelease)
+                    ? settings[Flags.MouseDoubleClickAutoRelease]
                     : true,
                 useUrlParams
             )
